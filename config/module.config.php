@@ -6,6 +6,7 @@ return [
         'invokables' => [
             'compareProjects' => Site\BlockLayout\CompareProjects::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
+            'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,
         ],
     ],
     'resource_page_block_layouts' => [

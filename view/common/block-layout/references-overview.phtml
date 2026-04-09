@@ -1,0 +1,42 @@
+<?php
+/**
+ * References Overview page block.
+ *
+ * Fetches the full `references` subset (~864 rows) live from the
+ * Hugging Face datasets-server API and renders a 5-panel dashboard.
+ * No precompute step — the chart JS paginates through the /rows
+ * endpoint (9 parallel requests of 100 rows each) and aggregates
+ * everything in the browser.
+ *
+ * Page blocks are not served by the Item/ItemSet controllers, so this
+ * template has to enqueue the module's assets itself.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+// Stylesheet
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+);
+
+// CDN libraries
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+
+// IWAC infrastructure — order matters: i18n → theme → core → chart
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/references-overview.js', 'IwacVisualizations'));
+
+$siteSlug = $this->currentSite()->slug();
+?>
+
+<div class="iwac-vis-block iwac-vis-references-overview"
+     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
+     data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+    <div class="iwac-vis-loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $this->translate('Loading references overview') ?>&hellip;</span>
+    </div>
+</div>

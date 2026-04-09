@@ -35,7 +35,7 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
 - **HF dataset audit** (2026-04) — full schema for all 6 subsets
   documented in `DATA_NOTES.md`.
 - **Collection Overview page block** (2026-04) — first end-to-end
-  visualization:
+  visualization, precompute-backed:
   - `scripts/generate_collection_overview.py` pulls summary stats,
     timeline by year × country, country / language distributions, and
     top-N entities per type from the `index` subset
@@ -46,6 +46,22 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
     big-number row
   - Responsive grid: single column on mobile, two columns above 800 px,
     full-width panels for the timeline and entities
+- **Hybrid data strategy** (2026-04) — module now supports two data
+  paths chosen per block:
+  * **Live fetch** — paginated parallel calls to the Hugging Face
+    datasets-server `/rows` endpoint, aggregation in the browser. Used
+    when the source subset is small enough (< ~5k rows) and doesn't
+    carry large per-row blobs.
+  * **Precompute** — Python script reads HF dataset, writes JSON to
+    `asset/data/`. Used for heavy subsets (articles with 12k rows +
+    embeddings), networks, and cross-subset joins.
+- **References Overview page block** (2026-04) — live-fetch exemplar:
+  - `asset/js/charts/references-overview.js` paginates the `references`
+    subset (864 rows, 9 parallel requests), then aggregates in the
+    browser into summary / timeline-by-type / types / languages /
+    top authors / top subjects
+  - No Python step — drop the module in, activate, add the block
+  - Registered as `referencesOverview` block layout
 
 ## Next up
 
@@ -53,9 +69,17 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
       mapping. Needed before implementing any resource-page block
       (knowledge graph, per-item dashboards). User will point at the
       templates directly.
-- [ ] **Decide per-item JSON hosting**: commit ~5k entity dashboards to
-      git, or generate into an Omeka volume at deploy time. Check how
-      iwac-dashboard handles its `static/data/` volume.
+- [ ] **Per-entity page block** (live-fetch): the `index` subset is only
+      4,697 rows with pre-aggregated `frequency` / `first_occurrence` /
+      `last_occurrence` / `countries` — a good fit for the live-fetch
+      path. One block per entity, keyed by `data-item-id` = Omeka
+      `o:id`, fetching just the row that matches then optionally
+      pulling related articles from a precomputed file.
+- [ ] **Decide per-item JSON hosting** for precompute-backed per-item
+      dashboards: commit ~5k entity dashboards to git, or generate
+      into an Omeka volume at deploy time. Only relevant if the
+      per-entity block ends up using precompute (e.g. for
+      co-occurrence joins against articles).
 - [ ] **Per-entity dashboard** (resource-page block attached to the
       `index`-backed item templates): timeline of mentions, top
       newspapers, co-occurring entities, geographic footprint.
