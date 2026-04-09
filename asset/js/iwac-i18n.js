@@ -68,8 +68,35 @@
             'Year': 'Year',
             'Total': 'Total',
 
+            // Collection overview — summary labels
+            'Articles': 'Articles',
+            'Publications': 'Publications',
+            'Documents': 'Documents',
+            'Audiovisual': 'Audiovisual',
+            'References': 'References',
+            'Entities': 'Entities',
+            'Countries': 'Countries',
+            'Languages': 'Languages',
+            'Words': 'Words',
+
+            // Collection overview — chart titles
+            'Items per year, by country': 'Items per year, by country',
+            'Content by country': 'Content by country',
+            'Languages represented': 'Languages represented',
+            'Most-cited entities': 'Most-cited entities',
+            'Across': 'Across',
+
+            // Entity type tabs (must match INDEX_TYPES in the generator)
+            'Persons': 'Persons',
+            'Organizations': 'Organizations',
+            'Places': 'Places',
+            'Subjects': 'Subjects',
+            'Events': 'Events',
+
             // Plural-ish
             'items_count': '{count} items',
+            'mentions_count': '{count} mentions',
+            'year_range': '{min} to {max}',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -90,7 +117,34 @@
             'Year': 'Ann\u00e9e',
             'Total': 'Total',
 
+            // Collection overview — summary labels
+            'Articles': 'Articles',
+            'Publications': 'Publications',
+            'Documents': 'Documents',
+            'Audiovisual': 'Audiovisuel',
+            'References': 'R\u00e9f\u00e9rences',
+            'Entities': 'Entit\u00e9s',
+            'Countries': 'Pays',
+            'Languages': 'Langues',
+            'Words': 'Mots',
+
+            // Collection overview — chart titles
+            'Items per year, by country': '\u00c9l\u00e9ments par ann\u00e9e, par pays',
+            'Content by country': 'Contenu par pays',
+            'Languages represented': 'Langues repr\u00e9sent\u00e9es',
+            'Most-cited entities': 'Entit\u00e9s les plus cit\u00e9es',
+            'Across': 'Sur',
+
+            // Entity type tabs
+            'Persons': 'Personnes',
+            'Organizations': 'Organisations',
+            'Places': 'Lieux',
+            'Subjects': 'Sujets',
+            'Events': '\u00c9v\u00e9nements',
+
             'items_count': '{count} \u00e9l\u00e9ments',
+            'mentions_count': '{count} mentions',
+            'year_range': '{min} \u00e0 {max}',
         }
     };
 

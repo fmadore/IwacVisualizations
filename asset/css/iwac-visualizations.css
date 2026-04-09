@@ -192,3 +192,138 @@
 .compare-block .compare-container {
     min-height: 300px;
 }
+
+/* ------------------------------------------------------------------- */
+/*  Collection overview block                                           */
+/* ------------------------------------------------------------------- */
+
+.iwac-vis-overview {
+    min-height: 420px;
+}
+
+.iwac-vis-overview-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1.25rem);
+}
+
+.iwac-vis-overview-subtitle {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+}
+
+/* Summary cards */
+
+.iwac-vis-overview-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 600px) {
+    .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 900px) {
+    .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
+}
+
+.iwac-vis-summary-card {
+    background: var(--surface-raised, #f9f7f3);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 8px);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-summary-card__value {
+    font-size: var(--text-2xl, 1.6rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-summary-card__label {
+    font-size: var(--text-sm, 0.85rem);
+    color: var(--muted, #6e7a82);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Charts grid */
+
+.iwac-vis-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 800px) {
+    .iwac-vis-overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .iwac-vis-overview-grid .iwac-vis-panel--wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel h4 {
+    margin: 0;
+}
+
+.iwac-vis-overview-grid .iwac-vis-chart {
+    min-height: 280px;
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel--wide .iwac-vis-chart {
+    min-height: 360px;
+}
+
+/* Entity tabs */
+
+.iwac-vis-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-tab {
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    background: transparent;
+    color: var(--muted, #6e7a82);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.iwac-vis-tab:hover {
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-tab:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-tab--active {
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}

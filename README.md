@@ -1,43 +1,198 @@
 # IWAC Visualizations
 
-An [Omeka S](https://omeka.org/s/) module that adds interactive visualizations to the [Islam West Africa Collection (IWAC)](https://islam.zmo.de/) using [ECharts](https://echarts.apache.org/) and [MapLibre GL](https://maplibre.org/).
+An [Omeka S](https://omeka.org/s/) module that adds interactive visualizations to the [Islam West Africa Collection (IWAC)](https://islam.zmo.de/) digital archive at ZMO. Charts are powered by [ECharts 6](https://echarts.apache.org/) and [MapLibre GL](https://maplibre.org/), and the underlying data is precomputed from the public Hugging Face dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection).
 
-**Status:** scaffolding. Initial structure is forked from [ResourceVisualizations](https://github.com/fmadore/ResourceVisualizations); charts, layouts, and precompute pipeline will be rewritten against IWAC's data.
+The module is designed to drop into the [IWAC theme](https://github.com/fmadore/IWAC-theme) (a fork of Freedom). It reads the theme's CSS custom properties at runtime so chart colors track the site's configured `--primary` / `--ink` / `--surface` tokens, and it respects the IWAC dark/light toggle (`body[data-theme]`) as well as the Internationalisation module's language switching (English / French).
 
-## Data source
+**Status:** early development. Scaffolded from [ResourceVisualizations](https://github.com/fmadore/ResourceVisualizations) (2026-04), theme + i18n infrastructure in place, first chart (Collection Overview page block) implemented as of 2026-04-09. Anything under the inherited `asset/js/dashboard-*.js` files that isn't listed under "Active assets" below is **orphaned reference code** from the source module — not loaded, not wired, kept only as a pattern library during the rewrite.
 
-Unlike ResourceVisualizations, which queries a local Omeka S MySQL database, IWAC Visualizations will work with data hosted on **Hugging Face**. The precompute scripts will fetch from the HF dataset and generate JSON files under `asset/data/`.
+## Features
 
-## Installation
+### Collection Overview (page block)
 
-Not yet released. For local development, place this directory under your Omeka S `modules/` folder and activate in **Admin > Modules**.
+A bird's-eye summary of the whole IWAC collection, designed to drop onto a site page:
 
-## Architecture (inherited; to be adapted)
+- **Summary cards** — total articles, publications, entities, references, countries, languages
+- **Timeline** — stacked bar chart of content items per year, split by country, with a data-zoom slider when the range exceeds 20 years
+- **Country distribution** — horizontal bar chart of the top 10 countries by content count
+- **Languages represented** — horizontal bar chart of the top 10 languages
+- **Most-cited entities** — tabbed horizontal bar chart across the `index` subset, with tabs for Persons / Organizations / Places / Subjects / Events. Clicking a bar navigates to the corresponding Omeka item.
+
+All labels honor the current site locale; all colors come from the IWAC theme's CSS custom properties; the light/dark toggle re-renders every ECharts chart automatically.
+
+### Knowledge Graph, Linked Items Dashboard, Item Set Dashboard, Compare Projects
+
+**Not yet implemented for IWAC.** Placeholder PHTMLs exist so Omeka recognizes the block layouts and resource-page block layouts, but they render a loading spinner only — no charts are wired yet. They'll be implemented in follow-up passes once the first data pipeline is validated end-to-end with the Collection Overview.
+
+## Architecture
 
 ```
 IwacVisualizations/
-├── Module.php                          # Asset injection (ECharts, MapLibre CDN)
+├── Module.php                       # Asset loader hook (item/item-set controllers)
 ├── config/
-│   ├── module.ini                      # Module metadata
-│   └── module.config.php               # Resource page block registration
+│   ├── module.ini                   # Module metadata
+│   └── module.config.php            # Block layout + resource-page block registration
 ├── src/Site/
-│   ├── BlockLayout/                    # Page block layouts
-│   └── ResourcePageBlockLayout/        # Resource page block layouts
-├── view/common/                        # PHTML templates (async containers)
+│   ├── BlockLayout/
+│   │   ├── CollectionOverview.php   # Page block — implemented
+│   │   └── CompareProjects.php      # Page block — stub
+│   └── ResourcePageBlockLayout/
+│       ├── KnowledgeGraph.php       # stub
+│       ├── LinkedItemsDashboard.php # stub
+│       └── ItemSetDashboard.php     # stub
+├── view/common/                     # PHTML templates
+│   ├── block-layout/
+│   │   ├── collection-overview.phtml  # Active — enqueues assets, mounts container
+│   │   └── compare-projects.phtml     # Stub
+│   └── resource-page-block-layout/
+│       ├── knowledge-graph.phtml
+│       ├── linked-items-dashboard.phtml
+│       └── item-set-dashboard.phtml
 ├── asset/
-│   ├── js/                             # Chart builders + orchestrator
-│   ├── css/iwac-visualizations.css     # Styles with CSS custom properties
-│   └── data/                           # Precomputed JSON (to be populated)
-└── scripts/                            # Precompute pipeline (to be rewritten for HF data)
+│   ├── css/
+│   │   └── iwac-visualizations.css  # Uses IWAC theme tokens (--primary, --ink, ...)
+│   ├── js/
+│   │   ├── iwac-i18n.js             # Locale detection + en/fr dictionary + t()
+│   │   ├── iwac-theme.js            # ECharts theme built from live CSS vars
+│   │   ├── dashboard-core.js        # IWACVis namespace, chart tracking, theme observer
+│   │   ├── charts/
+│   │   │   └── collection-overview.js  # Collection overview block implementation
+│   │   └── dashboard-*.js           # ORPHANED — legacy from source module, not loaded
+│   └── data/
+│       ├── collection-overview.json     # Generated by scripts/generate_collection_overview.py
+│       ├── item-dashboards/.gitkeep     # Future per-item JSON
+│       └── knowledge-graphs/.gitkeep    # Future knowledge-graph JSON
+├── scripts/
+│   ├── iwac_utils.py                # Shared helpers — ported verbatim from iwac-dashboard
+│   ├── generate_collection_overview.py
+│   ├── requirements.txt             # datasets, pandas, pyarrow, huggingface-hub, ...
+│   └── README.md                    # Precompute pipeline docs
+├── language/
+│   ├── template.pot                 # Gettext template for PHP-rendered strings
+│   ├── fr.po                        # French translations
+│   └── README.md                    # Translation workflow
+├── DATA_NOTES.md                    # Full HF dataset schema + visualization ideas
+├── ROADMAP.md
+└── README.md
 ```
 
-## Dependencies
+### Load order (runtime)
 
-Loaded via CDN:
+When an Omeka site serves a page with the Collection Overview block, the following scripts are appended to `<head>` in order:
 
-- [ECharts 6](https://echarts.apache.org/)
-- [echarts-wordcloud 2](https://github.com/ecomfe/echarts-wordcloud)
-- [MapLibre GL 5](https://maplibre.org/)
+1. `https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js` (CDN)
+2. `asset/js/iwac-i18n.js` — no deps, reads `<html lang>` and exposes `IWACVis.t()`
+3. `asset/js/iwac-theme.js` — reads IWAC CSS custom properties via `getComputedStyle`, builds `iwac-light` / `iwac-dark` ECharts themes and registers them
+4. `asset/js/dashboard-core.js` — wires the `IWACVis` namespace, tracks charts, observes `body[data-theme]` and re-renders charts on toggle
+5. `asset/js/charts/collection-overview.js` — fetches the JSON, builds the DOM scaffolding, and registers each ECharts chart via `IWACVis.registerChart(el, renderFn)` so theme swaps are automatic
+
+Item and item-set controllers load steps 1–4 automatically via `Module.php`'s `addAssets()` listener. Page-block controllers don't fire that listener, so each block's PHTML enqueues its own asset stack.
+
+### Data flow (Collection Overview block)
+
+```
+Hugging Face Hub
+   │
+   │  (manual, ~monthly)
+   ▼
+scripts/generate_collection_overview.py
+   │
+   │  loads 6 subsets via datasets lib
+   │  aggregates summary / timeline / countries / languages / entities
+   ▼
+asset/data/collection-overview.json  (~30–80 KB)
+   │
+   │  fetch() from the browser at page load
+   ▼
+asset/js/charts/collection-overview.js
+   │
+   │  builds DOM + ECharts instances via IWACVis.registerChart
+   ▼
+Rendered dashboard on the site page
+```
+
+## Installation
+
+Not yet released. For local development:
+
+1. Place this directory (or a clone of the repo) under your Omeka S `modules/` folder.
+2. Install Python deps for the precompute pipeline: see `scripts/README.md`.
+3. Generate the data: `python3 scripts/generate_collection_overview.py` — writes `asset/data/collection-overview.json`.
+4. Activate the module in **Admin > Modules**.
+5. On any site page, add the **Collection Overview** block from the page editor.
+
+### Requirements
+
+- **PHP/Omeka S:** Omeka S 4.0+ (declared in `config/module.ini`)
+- **Python (for precompute):** Python 3.9+ with `datasets`, `pandas`, `pyarrow`, `huggingface-hub`, `numpy`. See `scripts/requirements.txt`.
+- **Theme:** [IWAC theme](https://github.com/fmadore/IWAC-theme). The module works without it (CSS fallback values + ECharts theme fallback constants), but colors will look generic and the dark-mode toggle will only follow the OS preference.
+
+### IWAC theme integration
+
+The module consumes these CSS custom properties from the IWAC theme:
+
+| Token | Used for |
+|---|---|
+| `--primary` | First palette color + accents (dataZoom handle, hover borders, …) |
+| `--ink` | Primary text |
+| `--ink-light` | Axis labels, legend text |
+| `--muted` | Secondary text, tabs, subtitle |
+| `--surface` | Tooltip background, button background |
+| `--surface-raised` | Panel background, card background |
+| `--border` / `--border-light` | Axis lines, borders, split lines |
+| `--space-*` / `--text-*` / `--radius-md` | Spacing, typography, corner radius |
+
+If you add new theme-dependent properties, register them in `iwac-theme.js`'s `readTokens()` and provide a fallback in `FALLBACK_LIGHT` / `FALLBACK_DARK`. **Never hardcode hex values in chart code** — the IWAC theme's `--primary` is admin-configurable per site.
+
+## Internationalization
+
+Two layers:
+
+1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `msgfmt language/fr.po -o language/fr.mo`. See `language/README.md`.
+2. **JavaScript (`IWACVis.t()`)** — chart labels, tooltips, summary card labels, tab names. Dictionary lives inline in `asset/js/iwac-i18n.js`. Detect locale from `document.documentElement.lang` (populated by Omeka's Internationalisation module).
+
+Language switching in IWAC is a full page navigation (the Internationalisation module links to equivalent URLs under each locale), so no runtime switch is needed — `IWACVis.t()` just reads the locale at render time.
+
+## Theme switching
+
+- Signal: `body[data-theme="light" | "dark"]`, owned by the IWAC theme's `theme-toggle.js` (persisted in `localStorage['iwac-theme-preference']`).
+- `dashboard-core.js` attaches a `MutationObserver` to `document.body` filtered on `data-theme` changes.
+- On change, it calls `IWACVis.refreshThemes()` (rebuild + re-register the ECharts theme from the live CSS vars) then iterates `IWACVis._charts` to dispose every tracked ECharts instance and re-run its render function.
+- ECharts 6 removed `chart.setTheme()`, which is why we use dispose + reinit. MapLibre instances get `setStyle()` pointed at the Carto positron/dark-matter URL.
+
+To register a new chart so it auto-updates on toggle:
+
+```js
+IWACVis.registerChart(el, function (el, chart) {
+    chart.setOption({
+        // ... use IWACVis.t() for labels,
+        //     don't set explicit colors —
+        //     the registered theme supplies them
+    });
+});
+```
+
+## Precompute pipeline
+
+See **`scripts/README.md`** for the full workflow. Short version:
+
+```bash
+cd /path/to/IwacVisualizations
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r scripts/requirements.txt
+python3 scripts/generate_collection_overview.py
+```
+
+The HF dataset updates roughly monthly, so this is a manual developer step, not a scheduled job. When adding a new visualization, add a new `generate_*.py` generator next to the existing one and document it in `scripts/README.md`.
+
+**Canonical reference:** the sibling project [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard) has ~3,200 lines of working Python that reads the same dataset (`scripts/generate_*.py`, `scripts/iwac_utils.py`). **Consult it before writing new generators here** — most normalization / aggregation work is already solved there. The shared `iwac_utils.py` in this module is copied verbatim from it.
+
+## Related projects
+
+- [IWAC Theme](https://github.com/fmadore/IWAC-theme) — the Omeka S theme this module targets
+- [iwac-dashboard](https://github.com/fmadore/iwac-dashboard) — standalone SvelteKit dashboard with the canonical Python data pipeline
+- [ResourceVisualizations](https://github.com/fmadore/ResourceVisualizations) — the module this was scaffolded from
+- Hugging Face dataset: [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)
 
 ## License
 
