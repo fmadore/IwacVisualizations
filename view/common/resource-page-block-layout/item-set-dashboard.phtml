@@ -2,34 +2,25 @@
 /**
  * Item Set Dashboard resource page block.
  *
- * Fetches all items in the item set and renders aggregated visualizations.
+ * Async container. Aggregated visualizations for an item set are expected
+ * to load from a precomputed JSON file. ECharts + IWAC theme/i18n assets
+ * are injected by Module.php on item-set controllers.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemSetRepresentation $resource
  */
 
-$itemSetId = $resource->id();
-$allItems = [];
-$page = 1;
-
-do {
-    $response = $this->api()->search('items', [
-        'item_set_id' => $itemSetId,
-        'per_page'    => 100,
-        'page'        => $page,
-    ]);
-    $items = $response->getContent();
-    $allItems = array_merge($allItems, $items);
-    $page++;
-} while (count($items) === 100);
-
-if (empty($allItems)) {
-    return;
-}
+$siteSlug = $this->currentSite()->slug();
 ?>
 
-<div class="resource-vis-block dashboard-block">
-    <?= $this->partial('common/resource-page-block-layout/partials/dashboard-charts', [
-        'items' => $allItems,
-    ]) ?>
+<div class="iwac-vis-block dashboard-block">
+    <div class="dashboard-async-container"
+         data-item-set-id="<?= $resource->id() ?>"
+         data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
+         data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+        <div class="iwac-vis-loading">
+            <div class="iwac-vis-spinner"></div>
+            <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
+        </div>
+    </div>
 </div>

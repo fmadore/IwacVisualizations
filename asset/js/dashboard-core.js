@@ -1,57 +1,177 @@
 /**
- * Dashboard core: shared design tokens, helpers, and utilities.
+ * IWAC Visualizations — Dashboard core
  *
- * Initialises the window.RV namespace and exposes THEME, COLORS,
- * and helper functions used by all chart modules.
+ * Bootstraps the `window.IWACVis` namespace, wires chart initialization
+ * through the IWAC ECharts theme (iwac-theme.js) and i18n helper
+ * (iwac-i18n.js), and watches `body[data-theme]` so that ECharts and
+ * MapLibre instances re-render when the user toggles light/dark mode.
+ *
+ * Load order (set by Module.php):
+ *   1. https://cdn.jsdelivr.net/npm/echarts@6/...
+ *   2. asset/js/iwac-i18n.js     (no deps)
+ *   3. asset/js/iwac-theme.js    (needs echarts)
+ *   4. asset/js/dashboard-core.js (this file — needs all of the above)
  */
 (function () {
     'use strict';
 
-    var ns = window.RV = window.RV || {};
+    var ns = window.IWACVis = window.IWACVis || {};
 
-    ns.COLORS = [
-        '#22817b', '#e07c3e', '#6b5b95', '#d4a574', '#2c5f7c',
-        '#c5504d', '#4a8c6f', '#8b6f47', '#7c5295', '#cc8963',
-        '#5ba3a0', '#d49b6a', '#8e7cb8', '#e6c9a8', '#4a8aab',
-        '#d87e7a', '#6fb08e', '#a68e6d', '#9e7bb8', '#e0a88a'
-    ];
+    // Ensure themes are registered even if iwac-theme.js loaded before ECharts.
+    if (typeof ns.registerEChartsThemes === 'function') {
+        ns.registerEChartsThemes();
+    }
 
-    ns.THEME = {
-        darkModeEnabled: false,
-        accent: '#22817b',
-        accentDark: '#4db6ac',
-        accentLight: '#b2dfdb',
-        gradientEnd: '#b2dfdb',
-        text: '#333',
-        textMuted: '#666',
-        border: '#fff',
-        fontSize: 11,
-        fontSizeTitle: 14,
-        fontSizeEmphasis: 13,
-        labelMaxLen: 30,
-        barMaxWidth: 24,
-        barMaxWidthWide: 40
-    };
+    /* ----------------------------------------------------------------- */
+    /*  Chart tracking                                                    */
+    /* ----------------------------------------------------------------- */
 
-    /* -- Dark mode detection (gated by THEME.darkModeEnabled) -- */
+    /**
+     * Each registered chart is an object of the form
+     *   { el, render, instance, kind }
+     * where `render(el, instance)` is called with a fresh instance after
+     * theme changes. `kind` is 'echarts' | 'maplibre' — other types
+     * can be added later.
+     */
+    ns._charts = [];
 
-    var _darkQuery = ns.THEME.darkModeEnabled && window.matchMedia
-        ? window.matchMedia('(prefers-color-scheme: dark)') : null;
-    ns._darkMode = _darkQuery ? _darkQuery.matches : false;
-    ns._allCharts = [];
-
-    /** Init an ECharts instance with the correct theme, tracking for dark mode. */
+    /**
+     * Create an ECharts instance with the current IWAC theme applied.
+     * Returns the ECharts instance. Caller is responsible for setOption().
+     * Not normally called directly — prefer `ns.registerChart()`.
+     */
     ns.initChart = function (el) {
-        var chart = echarts.init(el, ns._darkMode ? 'dark' : null);
-        ns._allCharts.push(chart);
-        return chart;
+        if (typeof echarts === 'undefined') {
+            console.warn('IWACVis: ECharts not loaded');
+            return null;
+        }
+        return echarts.init(el, ns.getChartTheme ? ns.getChartTheme() : null);
     };
 
-    /** Get the appropriate basemap style URL for the current color scheme. */
-    ns.getBasemapStyle = function () {
-        return ns._darkMode
-            ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-            : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+    /**
+     * Register a chart so it re-renders on theme change.
+     *
+     * @param {HTMLElement} el
+     * @param {function(HTMLElement, echarts.ECharts): void} render
+     *   Called with (el, instance) on first render and after every theme swap.
+     *   Typically this calls `instance.setOption({...})`.
+     * @returns {echarts.ECharts|null}
+     */
+    ns.registerChart = function (el, render) {
+        var instance = ns.initChart(el);
+        if (!instance) return null;
+        var entry = { el: el, render: render, instance: instance, kind: 'echarts' };
+        ns._charts.push(entry);
+        try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
+        return instance;
+    };
+
+    /**
+     * Register a MapLibre GL map so it gets a new basemap style on theme change.
+     *
+     * @param {maplibregl.Map} map
+     * @param {HTMLElement} [el]  Optional container reference (for dispose tracking)
+     */
+    ns.registerMap = function (map, el) {
+        if (!map) return;
+        ns._charts.push({ el: el || null, instance: map, kind: 'maplibre' });
+    };
+
+    /** Remove disposed/detached charts from the tracking array. */
+    ns.pruneCharts = function () {
+        ns._charts = ns._charts.filter(function (c) {
+            if (c.kind === 'echarts') return c.instance && !c.instance.isDisposed();
+            if (c.kind === 'maplibre') return c.instance && !c.instance._removed;
+            return false;
+        });
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Theme change handling                                             */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Re-render every tracked chart against the current theme.
+     *
+     * For ECharts we rebuild the theme from the current CSS variables
+     * (via refreshThemes) and then dispose + reinit each chart, because
+     * ECharts 6 no longer supports `chart.setTheme()`. For MapLibre we
+     * swap the style URL.
+     */
+    ns.applyThemeToCharts = function () {
+        if (typeof ns.refreshThemes === 'function') ns.refreshThemes();
+        ns.pruneCharts();
+        var themeName = ns.getChartTheme ? ns.getChartTheme() : null;
+        ns._charts.forEach(function (entry) {
+            if (entry.kind === 'echarts') {
+                if (!entry.render || !entry.el) return; // can't re-render untracked charts
+                try {
+                    entry.instance.dispose();
+                    entry.instance = echarts.init(entry.el, themeName);
+                    entry.render(entry.el, entry.instance);
+                } catch (e) {
+                    console.error('IWACVis: theme swap failed', e);
+                }
+            } else if (entry.kind === 'maplibre') {
+                try { entry.instance.setStyle(ns.getBasemapStyle()); }
+                catch (e) { console.error('IWACVis: basemap swap failed', e); }
+            }
+        });
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  body[data-theme] observer                                         */
+    /* ----------------------------------------------------------------- */
+
+    var _lastTheme = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
+
+    function handleThemeChange() {
+        var now = ns.getCurrentTheme();
+        if (now === _lastTheme) return;
+        _lastTheme = now;
+        ns.applyThemeToCharts();
+    }
+
+    function observeTheme() {
+        var observer = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                if (mutations[i].attributeName === 'data-theme') {
+                    handleThemeChange();
+                    break;
+                }
+            }
+        });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+
+        // Follow OS pref too, but only while no explicit body attribute is set.
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                if (!document.body.getAttribute('data-theme')) handleThemeChange();
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', observeTheme);
+    } else {
+        observeTheme();
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Shared helpers                                                    */
+    /* ----------------------------------------------------------------- */
+
+    /** Truncate a string with ellipsis if it exceeds maxLen. */
+    ns.truncateLabel = function (str, maxLen) {
+        if (!str) return '';
+        return str.length > maxLen ? str.substring(0, maxLen) + '\u2026' : str;
+    };
+
+    /** Convert either {key: value} or array format to [{ name, value, itemId? }]. */
+    ns.toEntries = function (data) {
+        if (!data) return [];
+        if (Array.isArray(data)) return data;
+        return Object.keys(data).map(function (k) { return { name: k, value: data[k] }; });
     };
 
     /** Build a dataZoom config (slider + scroll) for timeline-type charts. */
@@ -63,20 +183,7 @@
         ];
     };
 
-    /** Truncate a string with ellipsis if it exceeds maxLen. */
-    ns.truncateLabel = function (str, maxLen) {
-        if (!str) return '';
-        return str.length > maxLen ? str.substring(0, maxLen) + '\u2026' : str;
-    };
-
-    /** Convert either format to array of { name, value, itemId? }. */
-    ns.toEntries = function (data) {
-        if (!data) return [];
-        if (Array.isArray(data)) return data;
-        return Object.keys(data).map(function (k) { return { name: k, value: data[k] }; });
-    };
-
-    /** Add click-to-navigate and pointer cursor on chart elements. */
+    /** Add click-to-navigate on chart elements pointing at Omeka items. */
     ns.addClickHandler = function (chart, entries, siteBase) {
         if (!siteBase) return;
         chart.on('click', function (params) {
@@ -89,80 +196,4 @@
             chart.getZr().setCursorStyle(e.target ? 'pointer' : 'default');
         });
     };
-
-    /* -- Global decal toggle state -- */
-
-    ns._decalEnabled = false;
-
-    /** Remove disposed charts from the tracking array. */
-    ns.pruneCharts = function () {
-        ns._allCharts = ns._allCharts.filter(function (c) { return !c.isDisposed(); });
-    };
-
-    /** Toggle decal patterns on all tracked ECharts instances (skips charts flagged _noDecal). */
-    ns.toggleDecals = function () {
-        ns._decalEnabled = !ns._decalEnabled;
-        ns.pruneCharts();
-        ns._allCharts.forEach(function (c) {
-            if (c._noDecal) return;
-            c.setOption({ aria: { enabled: true, decal: { show: ns._decalEnabled } } });
-        });
-        // Update all toggle button states.
-        document.querySelectorAll('[data-action="decal"]').forEach(function (btn) {
-            btn.classList.toggle('rv-toolbar-btn-active', ns._decalEnabled);
-            btn.title = ns._decalEnabled ? 'Hide patterns' : 'Show patterns';
-        });
-    };
-
-    /** Attach HTML-level toolbar (save + decal toggle) to a chart panel header. */
-    ns.attachToolbar = function (panel, chart) {
-        if (!chart || !chart.getDataURL) return;
-        var showDecal = !chart._noDecal;
-        var bar = document.createElement('span');
-        bar.className = 'rv-chart-toolbar';
-        bar.innerHTML = (showDecal
-            ? '<button type="button" class="rv-toolbar-btn' + (ns._decalEnabled ? ' rv-toolbar-btn-active' : '') + '" data-action="decal" title="' + (ns._decalEnabled ? 'Hide patterns' : 'Show patterns') + '">'
-            + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/><line x1="4" y1="14" x2="14" y2="4"/><line x1="4" y1="8" x2="8" y2="4"/><line x1="10" y1="20" x2="20" y2="10"/><line x1="16" y1="20" x2="20" y2="16"/></svg>'
-            + '</button>'
-            : '')
-            + '<button type="button" class="rv-toolbar-btn" data-action="save" title="Save as image">'
-            + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-            + '</button>';
-        var h4 = panel.querySelector('h4');
-        if (h4) h4.appendChild(bar);
-        bar.addEventListener('click', function (e) {
-            var btn = e.target.closest('[data-action]');
-            if (!btn) return;
-            if (btn.dataset.action === 'save') {
-                var url = chart.getDataURL({ pixelRatio: 2, backgroundColor: '#fff' });
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = (panel.querySelector('h4').textContent || 'chart').trim() + '.png';
-                a.click();
-            } else if (btn.dataset.action === 'decal') {
-                ns.toggleDecals();
-            }
-        });
-    };
-
-    /** Backward-compatible helpers bundle for external chart modules. */
-    ns.helpers = {
-        THEME: ns.THEME, COLORS: ns.COLORS,
-        initChart: ns.initChart, truncateLabel: ns.truncateLabel
-    };
-
-    /* -- Dark mode listener -- */
-
-    if (_darkQuery) {
-        if (ns._darkMode) document.documentElement.classList.add('rv-dark-mode');
-        _darkQuery.addEventListener('change', function () {
-            ns._darkMode = _darkQuery.matches;
-            document.documentElement.classList.toggle('rv-dark-mode', ns._darkMode);
-            ns.pruneCharts();
-            var theme = ns._darkMode ? 'dark' : 'default';
-            ns._allCharts.forEach(function (c) {
-                c.setTheme(theme);
-            });
-        });
-    }
 })();

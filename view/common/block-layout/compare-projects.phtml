@@ -2,58 +2,40 @@
 /**
  * Compare Projects page block.
  *
- * Side-by-side comparison of two projects: select from dropdowns,
- * fetch both dashboard JSONs, and render paired charts with overlap stats.
+ * Async container for side-by-side project comparison. Page blocks are
+ * not served by the Item/ItemSet controllers, so this template has to
+ * enqueue the module's assets itself.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// CDN assets (not injected by Module.php on page controllers).
+// Stylesheet
 $this->headLink()->appendStylesheet(
     $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
 );
-$this->headScript()->appendFile(
-    'https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js'
-);
-$this->headScript()->appendFile(
-    'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js'
-);
 
-// Module JS.
+// CDN libraries
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js');
+$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js');
+
+// IWAC infrastructure — order matters: i18n → theme → core
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-layouts.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-timeline.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-pie.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-bar.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-wordcloud.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-gantt.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-heatmap.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-chord.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-sankey.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-sunburst.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-stacked-timeline.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-beeswarm.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-map.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-collab-network.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-contributor-network.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-stacked-area.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-treemap.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-geo-flows.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-registry.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-compare-unify.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-compare.js', 'IwacVisualizations'));
 
 $siteSlug = $this->currentSite()->slug();
 ?>
 
-<div class="resource-vis-block compare-block">
+<div class="iwac-vis-block compare-block">
     <div class="compare-container"
          data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
          data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-        <div class="rv-loading">
-            <div class="rv-spinner"></div>
-            <span><?= $this->translate('Loading project comparison…') ?></span>
+        <div class="iwac-vis-loading">
+            <div class="iwac-vis-spinner"></div>
+            <span><?= $this->translate('Loading project comparison') ?>&hellip;</span>
         </div>
     </div>
 </div>

@@ -2,25 +2,23 @@
 /**
  * Knowledge Graph resource page block.
  *
- * Renders a lightweight container. All data fetching and graph building
- * happens asynchronously in JavaScript via the Omeka S REST API,
- * so the page loads instantly.
+ * Async container. ECharts + IWAC theme/i18n assets are injected by
+ * Module.php on item controllers. Chart code (to be written for IWAC)
+ * should consume window.IWACVis and call IWACVis.registerChart().
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-$this->headScript()->appendFile($this->assetUrl('js/knowledge-graph.js', 'IwacVisualizations'));
-
 $siteSlug = $this->currentSite()->slug();
-$resourceClass = $resource->resourceClass();
 ?>
 
-<div class="resource-vis-block knowledge-graph-block">
+<div class="iwac-vis-block knowledge-graph-block">
     <h3><?= $this->translate('Knowledge Graph') ?></h3>
     <div class="knowledge-graph-toolbar">
-        <button type="button" class="rv-btn rv-fullscreen-toggle" aria-label="<?= $this->escapeHtmlAttr($this->translate('Toggle fullscreen')) ?>">
-            <span class="rv-icon-expand">&#x26F6;</span>
+        <button type="button" class="iwac-vis-btn iwac-vis-fullscreen-toggle"
+                aria-label="<?= $this->escapeHtmlAttr($this->translate('Toggle fullscreen')) ?>">
+            <span class="iwac-vis-icon-expand">&#x26F6;</span>
         </button>
     </div>
     <div class="knowledge-graph-container"
@@ -28,9 +26,9 @@ $resourceClass = $resource->resourceClass();
          data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
          data-api-base="<?= $this->escapeHtmlAttr($this->basePath() . '/api') ?>"
          data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-        <div class="rv-loading">
-            <div class="rv-spinner"></div>
-            <span><?= $this->translate('Loading knowledge graph…') ?></span>
+        <div class="iwac-vis-loading">
+            <div class="iwac-vis-spinner"></div>
+            <span><?= $this->translate('Loading knowledge graph') ?>&hellip;</span>
         </div>
     </div>
 </div>
