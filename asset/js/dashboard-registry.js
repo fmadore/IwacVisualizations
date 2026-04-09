@@ -1,0 +1,122 @@
+/**
+ * Chart registry: maps data keys to builder functions, labels, and descriptions.
+ *
+ * Reads chart builders from window.RV.charts (populated by the chart modules).
+ */
+(function () {
+    'use strict';
+
+    var ns = window.RV;
+    var c = ns.charts;
+
+    ns.CHART_MAP = {
+        'selfLocation':        c.buildMiniMap,
+        'stackedTimeline':     c.buildStackedTimeline,
+        'timeline':            c.buildTimeline,
+        'gantt':               c.buildGantt,
+        'beeswarm':            c.buildBeeswarm,
+        'types':               c.buildPieChart,
+        'heatmap':             c.buildHeatmap,
+        'sankey':              c.buildSankey,
+        'sunburst':            c.buildSunburst,
+        'treemap':             c.buildTreemap,
+        'locations':           c.buildMap,
+        'languages':           c.buildBarChart,
+        'subjects':            c.buildWordCloud,
+        'subjectTrends':       c.buildSubjectTrends,
+        'languageTimeline':    c.buildLanguageTimeline,
+        'chord':               c.buildChord,
+        'collabNetwork':       c.buildCollabNetwork,
+        'contributorNetwork':  c.buildContributorNetwork,
+        'affiliationNetwork':  c.buildAffiliationNetwork,
+        'roles':               c.buildBarChart,
+        'genres':              c.buildBarChart,
+        'topLanguages':        c.buildBarChart,
+        'topResourceTypes':    c.buildBarChart,
+        'topAudiences':        c.buildBarChart,
+        'topPersons':          c.buildBarChart,
+        'topInstitutions':     c.buildBarChart,
+        'topGroups':           c.buildBarChart,
+        'topSubjects':         c.buildBarChart,
+        'topTags':             c.buildBarChart,
+        'topProjects':         c.buildBarChart,
+        'contributors':        c.buildBarChart,
+        'coAuthors':           c.buildBarChart,
+        'coSubjects':          c.buildBarChart,
+        'projects':            c.buildBarChart
+    };
+
+    ns.CHART_LABELS = {
+        'selfLocation':        'Location',
+        'stackedTimeline':     'Items by Year and Type',
+        'timeline':            'Timeline',
+        'gantt':               'Project Timelines',
+        'beeswarm':            'Projects by Year',
+        'types':               'Resource Types',
+        'heatmap':             'Resource Type \u00d7 Language',
+        'languages':           'Languages',
+        'subjects':            'Subjects',
+        'subjectTrends':       'Subject Trends over Time',
+        'languageTimeline':    'Languages over Time',
+        'treemap':             'Project \u00d7 Type Breakdown',
+        'chord':               'Subject Co-occurrence',
+        'collabNetwork':       'Collaboration Network',
+        'contributorNetwork':  'Contributor Network',
+        'affiliationNetwork':  'Affiliation Network',
+        'roles':               'Contributor Roles',
+        'genres':              'Genres',
+        'topLanguages':        'Languages',
+        'topResourceTypes':    'Resource Types',
+        'topAudiences':        'Target Audiences',
+        'topPersons':          'Top Persons',
+        'topInstitutions':     'Top Institutions',
+        'topGroups':           'Top Groups',
+        'topSubjects':         'Top LCSH Subjects',
+        'topTags':             'Top Tags',
+        'topProjects':         'Top Projects',
+        'contributors':        'Top Associated Persons',
+        'sankey':              'Contributor \u2192 Project \u2192 Type',
+        'sunburst':            'Type \u2192 Language \u2192 Subject',
+        'locations':           'Geographic Origins & Current Locations',
+        'coAuthors':           'Co-authors',
+        'coSubjects':          'Co-occurring Subjects',
+        'projects':            'Items per Project'
+    };
+
+    ns.CHART_DESCRIPTIONS = {
+        'timeline':            'Number of research items collected per year.',
+        'types':               'Distribution of items by resource type (audio, text, image, etc.).',
+        'languages':           'Languages represented across all research items.',
+        'subjects':            'Most frequent subject keywords across all items.',
+        'selfLocation':        '',
+        'stackedTimeline':     'Items per year, broken down by resource type.',
+        'gantt':               'Duration of each project within this research section.',
+        'beeswarm':            'Each dot is a project \u2014 position shows start year, size indicates number of research items.',
+        'heatmap':             'Cross-tabulation showing item counts for each type-language combination.',
+        'sankey':              'Flow from contributors through projects to resource types.',
+        'sunburst':            'Hierarchical view: resource type, then language, then top subjects.',
+        'treemap':             'Proportional view of items grouped by project and resource type.',
+        'subjectTrends':       'How the top research subjects evolve over time.',
+        'languageTimeline':    'How the language distribution of research items changes over years.',
+        'locations':           'Geographic origins of research items and their current locations, with flow lines showing movement.',
+        'chord':               'Subjects that frequently appear together across research items.',
+        'collabNetwork':       'Institutions connected through shared research items.',
+        'contributorNetwork':  'Persons linked to projects they contributed to.',
+        'affiliationNetwork':  'Persons connected to the institutions they are affiliated with.',
+        'roles':               'Distribution of contributor roles (author, collector, photographer, etc.).',
+        'genres':              'Most frequent genre classifications across research items.',
+        'topLanguages':        'Languages ranked by number of associated research items.',
+        'topResourceTypes':    'Resource types ranked by number of associated items.',
+        'topAudiences':        'Target audiences ranked by number of associated items.',
+        'topPersons':          'Persons ranked by number of associated research items.',
+        'topInstitutions':     'Institutions ranked by number of associated research items.',
+        'topGroups':           'Groups ranked by number of associated research items.',
+        'topSubjects':         'LCSH subjects ranked by number of associated research items.',
+        'topTags':             'Tags ranked by number of associated research items.',
+        'topProjects':         'Research projects ranked by number of associated items.',
+        'contributors':        'Persons most frequently associated with research items.',
+        'coAuthors':           'Persons who most frequently appear alongside this person.',
+        'coSubjects':          'Subjects that most frequently appear alongside this one.',
+        'projects':            'Number of research items collected per project in this section.'
+    };
+})();

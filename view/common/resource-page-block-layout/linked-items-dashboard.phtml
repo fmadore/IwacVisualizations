@@ -1,0 +1,46 @@
+<?php
+/**
+ * Linked Items Dashboard resource page block.
+ *
+ * Loads precomputed dashboard data asynchronously.
+ * For research sections: shows timeline, types, languages, subjects,
+ * contributors, and items-per-project charts.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ */
+
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-layouts.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-pie.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-bar.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-wordcloud.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-gantt.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-heatmap.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-chord.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-sankey.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-sunburst.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-stacked-timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-beeswarm.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-map.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-collab-network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-contributor-network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-stacked-area.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-treemap.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-charts-geo-flows.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-registry.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard.js', 'IwacVisualizations'));
+$siteSlug = $this->currentSite()->slug();
+?>
+
+<div class="resource-vis-block dashboard-block">
+    <div class="dashboard-async-container"
+         data-item-id="<?= $resource->id() ?>"
+         data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
+         data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+        <div class="rv-loading">
+            <div class="rv-spinner"></div>
+            <span><?= $this->translate('Loading dashboard…') ?></span>
+        </div>
+    </div>
+</div>
