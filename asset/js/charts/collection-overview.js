@@ -8,17 +8,17 @@
  * Panels in render order:
  *   1. Summary cards row (inline)
  *   2. Period covered subtitle (inline)
- *   3. Recent additions table              → recent-additions.js
- *   4. Items per year, by country          (inline, existing C.timeline)
- *   5. Items by type, over time            → types-over-time.js
- *   6. Collection growth over time         → growth.js
- *   7. Newspaper coverage (Gantt)          → gantt.js
- *   8. Content by country                  (inline, existing C.horizontalBar)
- *   9. Languages represented               → languages.js (with facets)
- *  10. Most-cited entities                 → entities.js (tabs + pagination)
- *  11. Collection breakdown                (inline, C.treemap with fix)
- *  12. French word cloud                   → wordcloud.js (lazy sidecar)
- *  13. World map                           → map.js (lazy sidecar)
+ *   3. Items per year, by country          (inline, existing C.timeline)
+ *   4. Items by type, over time            → types-over-time.js
+ *   5. Collection growth over time         → growth.js
+ *   6. Newspaper coverage (Gantt)          → gantt.js
+ *   7. Content by country                  (inline, existing C.horizontalBar)
+ *   8. Languages represented               → languages.js (with facets)
+ *   9. Most-cited entities                 → entities.js (tabs + pagination)
+ *  10. Collection breakdown                (inline, C.treemap with fix)
+ *  11. French word cloud                   → wordcloud.js (lazy sidecar)
+ *  12. World map                           → map.js (lazy sidecar)
+ *  13. Recent additions table              → recent-additions.js (last)
  */
 (function () {
     'use strict';
@@ -57,15 +57,7 @@
         var subtitle = P.buildPeriodSubtitle(summary.year_min, summary.year_max);
         if (subtitle) root.appendChild(subtitle);
 
-        // 3. Recent additions — wide panel above the charts grid
-        var recentPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
-                                       P.t('Recent additions'));
-        root.appendChild(recentPanel.panel);
-        if (ns.collectionOverview && ns.collectionOverview.recentAdditions) {
-            ns.collectionOverview.recentAdditions.render(recentPanel.chart, data, ctx);
-        }
-
-        // 4–13. Charts grid
+        // 3–13. Charts grid (recent additions rendered last)
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
@@ -80,13 +72,21 @@
         var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
         var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('French word cloud'));
         var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'));
+        var recentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
+                                          P.t('Recent additions'));
 
         [
             timelinePanel, typesPanel, growthPanel, ganttPanel,
             countryPanel, languagePanel,
             entitiesPanel, treemapPanel,
-            wordcloudPanel, mapPanel
+            wordcloudPanel, mapPanel,
+            recentPanel
         ].forEach(function (p) { grid.appendChild(p.panel); });
+
+        // Recent additions renders immediately (no facets / lazy loading)
+        if (ns.collectionOverview && ns.collectionOverview.recentAdditions) {
+            ns.collectionOverview.recentAdditions.render(recentPanel.chart, data, ctx);
+        }
 
         return {
             timeline:  timelinePanel,
