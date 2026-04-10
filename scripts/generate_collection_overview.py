@@ -226,6 +226,338 @@ def compute_language_distribution(
     ]
 
 
+def compute_languages_faceted(
+    dataframes: Dict[str, pd.DataFrame],
+    top_n: int,
+) -> Dict[str, Any]:
+    """
+    Language distribution, faceted three ways:
+        {
+          "global":     [{"name": "French", "count": 11234}, ...],
+          "by_type":    { "article": [...], "publication": [...], ... },
+          "by_country": { "Burkina Faso": [...], ... }
+        }
+    Each list is sorted by count desc, top N.
+    """
+    global_counter: Counter = Counter()
+    by_type: Dict[str, Counter] = defaultdict(Counter)
+    by_country: Dict[str, Counter] = defaultdict(Counter)
+
+    subset_to_type = {
+        "articles":     "article",
+        "publications": "publication",
+        "documents":    "document",
+        "audiovisual":  "audiovisual",
+        "references":   "reference",
+    }
+
+    for subset, type_key in subset_to_type.items():
+        df = dataframes.get(subset)
+        if df is None or df.empty or "language" not in df.columns:
+            continue
+        country_col = "country" if "country" in df.columns else None
+
+        for idx in range(len(df)):
+            langs = parse_pipe_separated(df["language"].iat[idx])
+            if not langs:
+                continue
+            country_val = None
+            if country_col is not None:
+                raw_country = df[country_col].iat[idx]
+                if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
+                    country_val = str(raw_country).strip()
+                    if not country_val or country_val.lower() == "unknown":
+                        country_val = None
+
+            for lang in langs:
+                lang = lang.strip()
+                if not lang:
+                    continue
+                global_counter[lang] += 1
+                by_type[type_key][lang] += 1
+                if country_val:
+                    by_country[country_val][lang] += 1
+
+    def to_sorted_list(counter: Counter) -> List[Dict[str, int]]:
+        return [
+            {"name": name, "count": int(count)}
+            for name, count in counter.most_common(top_n)
+        ]
+
+    return {
+        "global": to_sorted_list(global_counter),
+        "by_type": {k: to_sorted_list(v) for k, v in by_type.items()},
+        "by_country": {k: to_sorted_list(v) for k, v in by_country.items()},
+    }
+
+
+def compute_growth(
+    dataframes: Dict[str, pd.DataFrame],
+) -> Dict[str, Any]:
+    """
+    Monthly additions to the collection, using the `added_date` column
+    present on every content subset. The ``index`` subset is excluded —
+    authority records are not additions of content.
+
+    Returns:
+        {
+          "months": ["2020-01", ...],            # YYYY-MM ordered
+          "monthly_additions": [45, 67, ...],     # per-month counts
+          "cumulative_total": [45, 112, ...]
+        }
+    """
+    monthly: Counter = Counter()
+    subsets_for_growth = ["articles", "publications", "documents", "audiovisual", "references"]
+    for subset in subsets_for_growth:
+        df = dataframes.get(subset)
+        if df is None or df.empty or "added_date" not in df.columns:
+            continue
+        for value in df["added_date"].dropna():
+            s = str(value).strip()
+            if len(s) >= 7:
+                month = s[:7]  # YYYY-MM
+                if month[4] == "-":  # basic sanity check
+                    monthly[month] += 1
+
+    if not monthly:
+        return {"months": [], "monthly_additions": [], "cumulative_total": []}
+
+    months = sorted(monthly.keys())
+    additions = [int(monthly[m]) for m in months]
+    cumulative: List[int] = []
+    running = 0
+    for n in additions:
+        running += n
+        cumulative.append(running)
+    return {
+        "months": months,
+        "monthly_additions": additions,
+        "cumulative_total": cumulative,
+    }
+
+
+def compute_types_over_time(
+    dataframes: Dict[str, pd.DataFrame],
+    year_min: int,
+    year_max: int,
+) -> Dict[str, Any]:
+    """
+    Items per year broken down by item type, faceted globally and per
+    country. Used by the "Items by type, over time" stacked bar chart.
+
+    Returns:
+        {
+          "years": [1980, 1981, ...],
+          "types": ["article", "publication", "document", "audiovisual", "reference"],
+          "series_global":     { "article": [counts_per_year], ... },
+          "series_by_country": { "Burkina Faso": { "article": [...], ... }, ... }
+        }
+    """
+    subset_to_type = {
+        "articles":     "article",
+        "publications": "publication",
+        "documents":    "document",
+        "audiovisual":  "audiovisual",
+        "references":   "reference",
+    }
+    types = list(subset_to_type.values())
+
+    # (year, type) -> count (global)
+    global_counts: Dict[int, Counter] = defaultdict(Counter)
+    # (country, year, type) -> count
+    country_counts: Dict[str, Dict[int, Counter]] = defaultdict(lambda: defaultdict(Counter))
+    seen_years: set = set()
+
+    for subset, type_key in subset_to_type.items():
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        date_col = "pub_date" if "pub_date" in df.columns else None
+        if date_col is None:
+            continue
+        country_col = "country" if "country" in df.columns else None
+
+        for idx in range(len(df)):
+            year = extract_year(df[date_col].iat[idx], min_year=year_min, max_year=year_max)
+            if year is None:
+                continue
+            global_counts[year][type_key] += 1
+            seen_years.add(year)
+
+            if country_col is not None:
+                raw_country = df[country_col].iat[idx]
+                if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
+                    country = str(raw_country).strip()
+                    if country and country.lower() != "unknown":
+                        country_counts[country][year][type_key] += 1
+
+    if not seen_years:
+        return {"years": [], "types": types, "series_global": {}, "series_by_country": {}}
+
+    years = sorted(seen_years)
+
+    def series_from(counts_by_year: Dict[int, Counter]) -> Dict[str, List[int]]:
+        return {
+            t: [int(counts_by_year.get(y, Counter()).get(t, 0)) for y in years]
+            for t in types
+        }
+
+    return {
+        "years": years,
+        "types": types,
+        "series_global": series_from(global_counts),
+        "series_by_country": {
+            country: series_from(cts) for country, cts in country_counts.items()
+        },
+    }
+
+
+def compute_newspaper_coverage(
+    dataframes: Dict[str, pd.DataFrame],
+    year_min: int,
+    year_max: int,
+) -> Dict[str, Any]:
+    """
+    Gantt-ready newspaper coverage: one entry per newspaper with its
+    year range, country, type (article | publication), and total item
+    count. Empty newspapers and "Unknown" are skipped.
+
+    Returns:
+        {
+          "coverage": [
+            { "name": "Sidwaya", "country": "Burkina Faso", "type": "article",
+              "year_min": 1984, "year_max": 2025, "total": 3421 },
+            ...
+          ]
+        }
+    """
+    # (name, type) -> { years: set, total: int, countries: Counter }
+    agg: Dict[tuple, Dict[str, Any]] = {}
+
+    for subset, type_key in (("articles", "article"), ("publications", "publication")):
+        df = dataframes.get(subset)
+        if df is None or df.empty or "newspaper" not in df.columns:
+            continue
+        date_col = "pub_date" if "pub_date" in df.columns else None
+        country_col = "country" if "country" in df.columns else None
+
+        for idx in range(len(df)):
+            raw_name = df["newspaper"].iat[idx]
+            if raw_name is None or (isinstance(raw_name, float) and pd.isna(raw_name)):
+                continue
+            for name in parse_pipe_separated(raw_name):
+                name = name.strip()
+                if not name or name.lower() == "unknown":
+                    continue
+                key = (name, type_key)
+                entry = agg.setdefault(key, {
+                    "years": set(),
+                    "total": 0,
+                    "countries": Counter(),
+                })
+                entry["total"] += 1
+                if date_col is not None:
+                    year = extract_year(df[date_col].iat[idx], min_year=year_min, max_year=year_max)
+                    if year is not None:
+                        entry["years"].add(year)
+                if country_col is not None:
+                    raw_country = df[country_col].iat[idx]
+                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
+                        country = str(raw_country).strip()
+                        if country and country.lower() != "unknown":
+                            entry["countries"][country] += 1
+
+    coverage: List[Dict[str, Any]] = []
+    for (name, type_key), entry in agg.items():
+        years = entry["years"]
+        if not years:
+            continue
+        most_common_country = entry["countries"].most_common(1)
+        coverage.append({
+            "name": name,
+            "country": most_common_country[0][0] if most_common_country else None,
+            "type": type_key,
+            "year_min": min(years),
+            "year_max": max(years),
+            "total": int(entry["total"]),
+        })
+
+    # Sort: by country, then by year_min, then by name — stable visual order
+    coverage.sort(key=lambda e: (e["country"] or "", e["year_min"], e["name"]))
+    return {"coverage": coverage}
+
+
+def compute_recent_additions(
+    dataframes: Dict[str, pd.DataFrame],
+    limit: int = 100,
+) -> List[Dict[str, Any]]:
+    """
+    Latest items added to the collection. Uses ``added_date`` desc.
+    Includes articles + publications + documents + audiovisual + references
+    (the ``index`` subset is excluded — authority records are not "items"
+    in the user-facing sense).
+
+    Each row: { o_id, title, source, type, added_date, thumbnail }
+    ``thumbnail`` may be None when the dataset has no value.
+    """
+    subset_to_type = {
+        "articles":     "article",
+        "publications": "publication",
+        "documents":    "document",
+        "audiovisual":  "audiovisual",
+        "references":   "reference",
+    }
+    rows: List[Dict[str, Any]] = []
+    for subset, type_key in subset_to_type.items():
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        if "added_date" not in df.columns or "o:id" not in df.columns:
+            continue
+        for idx in range(len(df)):
+            added = df["added_date"].iat[idx]
+            if added is None or (isinstance(added, float) and pd.isna(added)):
+                continue
+            added_str = str(added).strip()
+            if not added_str:
+                continue
+            title = ""
+            for title_col in ("Titre", "title", "dcterms:title", "identifier"):
+                if title_col in df.columns:
+                    raw = df[title_col].iat[idx]
+                    if raw is not None and not (isinstance(raw, float) and pd.isna(raw)):
+                        title = str(raw).strip()
+                        if title:
+                            break
+            source = ""
+            for source_col in ("newspaper", "source", "dcterms:publisher"):
+                if source_col in df.columns:
+                    raw = df[source_col].iat[idx]
+                    if raw is not None and not (isinstance(raw, float) and pd.isna(raw)):
+                        source = str(raw).strip()
+                        if source and source.lower() != "unknown":
+                            break
+                        source = ""
+            thumbnail = None
+            if "thumbnail" in df.columns:
+                raw = df["thumbnail"].iat[idx]
+                if raw is not None and not (isinstance(raw, float) and pd.isna(raw)):
+                    t = str(raw).strip()
+                    if t:
+                        thumbnail = t
+            rows.append({
+                "o_id": _int_or_none(df["o:id"].iat[idx]),
+                "title": title,
+                "source": source,
+                "type": type_key,
+                "added_date": added_str[:10],  # normalize to YYYY-MM-DD
+                "thumbnail": thumbnail,
+            })
+
+    rows.sort(key=lambda r: r["added_date"], reverse=True)
+    return rows[:limit]
+
+
 def compute_newspapers(
     dataframes: Dict[str, pd.DataFrame],
     top_n: int,
@@ -445,33 +777,105 @@ def compute_top_entities(
 
 def compute_summary(
     subset_summaries: Dict[str, Dict[str, int]],
+    dataframes: Dict[str, pd.DataFrame],
     timeline: Dict[str, Any],
     country_distribution: List[Dict[str, Any]],
-    language_distribution: List[Dict[str, int]],
+    language_distribution: Any,
     newspapers: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """Top-level counters rendered in the summary cards row."""
-    counts = {subset: subset_summaries.get(subset, {}).get("total_records", 0) for subset in subset_summaries}
-    total_content = sum(
-        counts.get(s, 0) for s in CONTENT_SUBSETS
-    )
-    total_words = sum(s.get("total_words", 0) for s in subset_summaries.values())
+    """Top-level counters rendered in the summary cards row.
+
+    The ``publications`` key is intentionally dropped from the summary —
+    it was confusing in the UI because the ``publications`` subset contains
+    ~1,500 ITEMS from Islamic magazines, not 1,500 distinct publications.
+    """
+    counts = {s: subset_summaries.get(s, {}).get("total_records", 0) for s in subset_summaries}
+
+    # Total words — articles only (publications/documents rarely have nb_mots)
+    articles_df = dataframes.get("articles")
+    total_words = 0
+    if articles_df is not None and not articles_df.empty and "nb_mots" in articles_df.columns:
+        total_words = int(
+            pd.to_numeric(articles_df["nb_mots"], errors="coerce").fillna(0).sum()
+        )
+
+    # Total pages — tries `nb_pages` first, falls back to None if column absent
+    total_pages = 0
+    pages_column_found = False
+    for subset in ("publications", "documents"):
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        if "nb_pages" in df.columns:
+            pages_column_found = True
+            total_pages += int(pd.to_numeric(df["nb_pages"], errors="coerce").fillna(0).sum())
+
+    # Unique sources — `source` column on articles + audiovisual + publications.
+    # References are explicitly excluded per the spec.
+    sources: set = set()
+    for subset in ("articles", "audiovisual", "publications"):
+        df = dataframes.get(subset)
+        if df is None or df.empty or "source" not in df.columns:
+            continue
+        for value in df["source"].dropna():
+            for src in parse_pipe_separated(value):
+                src = src.strip()
+                if src and src.lower() != "unknown":
+                    sources.add(src)
+
+    # Document types — distinct values of `o:resource_class` across content subsets
+    doc_types: set = set()
+    for subset in ("articles", "publications", "documents", "audiovisual"):
+        df = dataframes.get(subset)
+        if df is None or df.empty or "o:resource_class" not in df.columns:
+            continue
+        for value in df["o:resource_class"].dropna():
+            v = str(value).strip()
+            if v and v.lower() != "unknown":
+                doc_types.add(v)
+
+    # Audiovisual duration (minutes)
+    av_minutes = 0
+    av_df = dataframes.get("audiovisual")
+    if av_df is not None and not av_df.empty and "duration" in av_df.columns:
+        # `duration` may be in seconds, minutes, or HH:MM:SS — try numeric first
+        numeric = pd.to_numeric(av_df["duration"], errors="coerce").fillna(0)
+        if numeric.sum() > 0:
+            # Heuristic: if the median > 500, assume seconds; else minutes
+            median = float(numeric[numeric > 0].median()) if (numeric > 0).any() else 0
+            if median > 500:
+                av_minutes = int(numeric.sum() / 60)
+            else:
+                av_minutes = int(numeric.sum())
+
     years = timeline.get("years") or []
-    return {
+    summary: Dict[str, Any] = {
         "articles": counts.get("articles", 0),
-        "publications": counts.get("publications", 0),
-        "documents": counts.get("documents", 0),
-        "audiovisual": counts.get("audiovisual", 0),
-        "references": counts.get("references", 0),
         "index_entries": counts.get("index", 0),
-        "total_content": total_content,
         "total_words": int(total_words),
+        "unique_sources": len(sources),
+        "document_types": len(doc_types),
+        "audiovisual_minutes": int(av_minutes),
+        "references_count": counts.get("references", 0),
         "newspapers": newspapers.get("total", 0),
         "countries": len(country_distribution),
-        "languages": len(language_distribution),
+        "languages": _count_languages(language_distribution),
         "year_min": years[0] if years else None,
         "year_max": years[-1] if years else None,
     }
+    if pages_column_found:
+        summary["total_pages"] = int(total_pages)
+    return summary
+
+
+def _count_languages(language_distribution: Any) -> int:
+    """Count distinct languages from either the old list-of-dicts shape or
+    the new dict-with-facets shape (see compute_languages_faceted)."""
+    if isinstance(language_distribution, list):
+        return len(language_distribution)
+    if isinstance(language_distribution, dict):
+        return len(language_distribution.get("global", []))
+    return 0
 
 
 def build_overview(
@@ -496,19 +900,26 @@ def build_overview(
 
     timeline = compute_timeline(dataframes, year_min=year_min, year_max=year_max)
     country_distribution = compute_country_distribution(dataframes)
-    language_distribution = compute_language_distribution(dataframes, top_n=top_n)
-    newspapers = compute_newspapers(dataframes, top_n=15, year_min=year_min, year_max=year_max)
-    top_entities = compute_top_entities(dataframes.get("index"), top_n=top_n)
+    languages = compute_languages_faceted(dataframes, top_n=top_n)
+    growth = compute_growth(dataframes)
+    types_over_time = compute_types_over_time(dataframes, year_min=year_min, year_max=year_max)
+    newspaper_coverage = compute_newspaper_coverage(dataframes, year_min=year_min, year_max=year_max)
+    recent = compute_recent_additions(dataframes, limit=100)
+    # Keep legacy newspapers structure for the old bar chart fallback + summary count
+    newspapers_legacy = compute_newspapers(dataframes, top_n=15, year_min=year_min, year_max=year_max)
+    # 50 entities per type (was 10) — enables client-side pagination
+    top_entities = compute_top_entities(dataframes.get("index"), top_n=50)
     treemap = compute_treemap(dataframes)
     summary = compute_summary(
-        subset_summaries, timeline, country_distribution, language_distribution, newspapers
+        subset_summaries, dataframes, timeline,
+        country_distribution, languages, newspapers_legacy,
     )
 
     metadata = create_metadata_block(
-        total_records=summary["total_content"] + summary["index_entries"],
+        total_records=summary.get("articles", 0) + summary.get("index_entries", 0),
         data_source=repo_id,
         script="generate_collection_overview.py",
-        script_version="0.2.0",
+        script_version="0.3.0",
         top_n=top_n,
     )
 
@@ -516,11 +927,17 @@ def build_overview(
         "metadata": metadata,
         "summary": summary,
         "timeline": timeline,
+        "growth": growth,
+        "types_over_time": types_over_time,
         "countries": country_distribution,
-        "languages": language_distribution,
-        "newspapers": newspapers,
+        "languages": languages,
+        "newspapers": {
+            "coverage": newspaper_coverage["coverage"],
+            "total": newspapers_legacy.get("total", 0),  # kept for summary card count
+        },
         "top_entities": top_entities,
         "treemap": treemap,
+        "recent_additions": recent,
     }
 
 
