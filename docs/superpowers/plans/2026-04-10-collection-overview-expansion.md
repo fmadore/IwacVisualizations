@@ -675,6 +675,7 @@ from iwac_utils import (
     create_metadata_block,
     extract_year,
     load_dataset_safe,
+    parse_pipe_separated,
     save_json,
 )
 
@@ -767,12 +768,16 @@ def build_wordcloud(
         total_articles += 1
         global_counter.update(tokens)
 
-        country = None
+        # country may be pipe-separated — split so each country gets its own
+        # bucket and composite "Benin|Burkina Faso" keys don't leak out.
+        countries: List[str] = []
         if "country" in df.columns:
             raw = df["country"].iat[idx]
-            if isinstance(raw, str) and raw.strip() and raw.strip().lower() != "unknown":
-                country = raw.strip()
-        if country:
+            for c in parse_pipe_separated(raw):
+                c = c.strip()
+                if c and c.lower() != "unknown":
+                    countries.append(c)
+        for country in countries:
             by_country[country].update(tokens)
             country_article_totals[country] += 1
 
@@ -926,6 +931,7 @@ import logging
 import re
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -1055,7 +1061,7 @@ def main() -> None:
     args = parser.parse_args()
 
     result = build_map(repo_id=args.repo)
-    save_json(args.output, result)
+    save_json(result, Path(args.output), minify=False)
     logging.getLogger(__name__).info("Wrote %s", args.output)
 
 
