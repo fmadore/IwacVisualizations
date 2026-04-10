@@ -26,13 +26,33 @@ $this->headLink()->appendStylesheet(
 
 // CDN libraries
 $this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js');
+$this->headScript()->appendFile('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js');
+$this->headLink()->appendStylesheet('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css');
 
-// IWAC infrastructure — order matters: i18n → theme → core → shared → chart
+// IWAC infrastructure — order matters: i18n → theme → core → shared primitives → panels → orchestrator
 $this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+
+// Shared primitives (panels.js first, then primitives that depend on it)
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'));
+
+// Collection Overview panels (self-registering IIFE modules)
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/recent-additions.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/entities.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/languages.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/growth.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/types-over-time.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/gantt.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/wordcloud.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/map.js', 'IwacVisualizations'));
+
+// Orchestrator — LAST
 $this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview.js', 'IwacVisualizations'));
 
 $siteSlug = $this->currentSite()->slug();
