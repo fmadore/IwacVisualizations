@@ -360,13 +360,19 @@ def compute_languages_faceted(
             langs = parse_pipe_separated(df["language"].iat[idx])
             if not langs:
                 continue
-            country_val = None
+            # ``country`` can be pipe-separated (a single item can be tagged
+            # with multiple countries). Split it so each country gets its own
+            # by_country bucket — otherwise composite keys like
+            # "Benin|Burkina Faso" leak into the output and downstream
+            # consumers indexing by plain country names miss the data.
+            country_list: List[str] = []
             if country_col is not None:
                 raw_country = df[country_col].iat[idx]
                 if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
-                    country_val = str(raw_country).strip()
-                    if not country_val or country_val.lower() == "unknown":
-                        country_val = None
+                    for c in parse_pipe_separated(raw_country):
+                        c = c.strip()
+                        if c and c.lower() != "unknown":
+                            country_list.append(c)
 
             for lang in langs:
                 lang = lang.strip()
@@ -374,7 +380,7 @@ def compute_languages_faceted(
                     continue
                 global_counter[lang] += 1
                 by_type[type_key][lang] += 1
-                if country_val:
+                for country_val in country_list:
                     by_country[country_val][lang] += 1
 
     def to_sorted_list(counter: Counter) -> List[Dict[str, int]]:
@@ -486,9 +492,13 @@ def compute_types_over_time(
             if country_col is not None:
                 raw_country = df[country_col].iat[idx]
                 if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
-                    country = str(raw_country).strip()
-                    if country and country.lower() != "unknown":
-                        country_counts[country][year][type_key] += 1
+                    # Split pipe-separated country values so multi-tagged
+                    # items contribute to each country's series rather than
+                    # producing a composite "Benin|Burkina Faso" bucket.
+                    for country in parse_pipe_separated(raw_country):
+                        country = country.strip()
+                        if country and country.lower() != "unknown":
+                            country_counts[country][year][type_key] += 1
 
     if not seen_years:
         return {"years": [], "types": types, "series_global": {}, "series_by_country": {}}
@@ -653,7 +663,11 @@ def compute_recent_additions(
                 "thumbnail": thumbnail,
             })
 
-    rows.sort(key=lambda r: r["added_date"], reverse=True)
+    # Sort by added_date desc, with o_id desc as a tie-breaker. Without the
+    # secondary key, same-day bulk imports get Python's stable-sort insertion
+    # order (articles first), which produces a 100% articles "recent" list
+    # even though other subsets have items from the same day.
+    rows.sort(key=lambda r: (r["added_date"], r.get("o_id") or 0), reverse=True)
     return rows[:limit]
 
 
