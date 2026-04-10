@@ -75,9 +75,9 @@ NEWSPAPER_SUBSETS = ["articles", "publications"]
 # in the treemap hierarchy (matches the convention from iwac-dashboard).
 SUBSET_TO_DOC_TYPE = {
     "articles":     "Article de presse",
-    "publications": "Publication islamique",
+    "publications": "P\u00e9riodique islamique",
     "documents":    "Document",
-    "audiovisual":  "Audiovisuel",
+    "audiovisual":  "Enregistrement audio-visuel",
 }
 
 # Candidate column names for "document type" / "resource class" on content
@@ -922,30 +922,29 @@ def compute_summary(
                 if src and src.lower() != "unknown":
                     sources.add(src)
 
-    # Document types — try a per-record resource_class column first (only
-    # ``documents`` currently has one, named ``type``). For subsets that lack
-    # such a column we fall back to the subset-level label from
-    # ``SUBSET_TO_DOC_TYPE``, which is how iwac-dashboard models the treemap.
+    # Document types — content subsets contribute one type each via the
+    # hardcoded ``SUBSET_TO_DOC_TYPE`` labels (articles/publications/documents/
+    # audiovisual → 4 types). References contribute their own per-record types
+    # from the ``type`` column (bibliographic types: Livre, Article de revue,
+    # Th\u00e8se, etc.), so the final count reflects both the content catalog
+    # and the bibliography.
     doc_types: set = set()
     for subset in ("articles", "publications", "documents", "audiovisual"):
         df = dataframes.get(subset)
         if df is None or df.empty:
             continue
-        col = _first_present_column(df, DOC_TYPE_COLUMN_CANDIDATES)
-        found_any = False
-        if col is not None:
-            for value in df[col].dropna():
+        label = SUBSET_TO_DOC_TYPE.get(subset)
+        if label:
+            doc_types.add(label)
+
+    references_df = dataframes.get("references")
+    if references_df is not None and not references_df.empty:
+        ref_type_col = _first_present_column(references_df, DOC_TYPE_COLUMN_CANDIDATES)
+        if ref_type_col is not None:
+            for value in references_df[ref_type_col].dropna():
                 v = str(value).strip()
                 if v and v.lower() != "unknown":
                     doc_types.add(v)
-                    found_any = True
-        if not found_any:
-            # No per-record type column (or column was all empty) — fall
-            # back to the subset-level label so every populated subset still
-            # contributes one document type.
-            label = SUBSET_TO_DOC_TYPE.get(subset)
-            if label:
-                doc_types.add(label)
 
     # Audiovisual duration (minutes)
     av_minutes = 0.0
