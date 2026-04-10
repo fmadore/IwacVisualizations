@@ -132,6 +132,55 @@
             'publications_count': '{count} publications',
             'references_count': '{count} references',
             'mentions_count': '{count} mentions',
+
+            // Collection overview v2 — summary cards
+            'Index': 'Index',
+            'Total words': 'Total words',
+            'Total pages': 'Total pages',
+            'Scanned pages': 'Scanned pages',
+            'Unique sources': 'Unique sources',
+            'Document types': 'Document types',
+            'Audiovisual minutes': 'Audiovisual minutes',
+            'References count': 'References',
+
+            // Collection overview v2 — new chart titles
+            'Recent additions': 'Recent additions',
+            'Collection growth over time': 'Collection growth over time',
+            'Items by type, over time': 'Items by type, over time',
+            'French word cloud': 'French word cloud',
+            'World map': 'World map',
+
+            // Collection overview v2 — facet controls & misc UI
+            'Global': 'Global',
+            'By type': 'By type',
+            'By country': 'By country',
+            'By year': 'By year',
+            'All countries': 'All countries',
+            'All types': 'All types',
+            'Country': 'Country',
+            'Previous': 'Previous',
+            'Next': 'Next',
+            'Page': 'Page',
+            'Title': 'Title',
+            'Source': 'Source',
+            'Type': 'Type',
+            'Added': 'Added',
+            'Month': 'Month',
+            'Monthly': 'Monthly',
+            'Cumulative': 'Cumulative',
+            'Monthly additions': 'Monthly additions',
+            'Cumulative total': 'Cumulative total',
+            'No recent additions': 'No recent additions',
+            'Loading': 'Loading',
+            'unique words': 'unique words',
+            'Map library unavailable': 'Map library unavailable',
+
+            // Item type badges (labels match user's preferred wording for the dataset)
+            'item_type_article':     'News article',
+            'item_type_publication': 'Islamic periodical',
+            'item_type_document':    'Document',
+            'item_type_audiovisual': 'Audio-visual recording',
+            'item_type_reference':   'Reference',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -215,6 +264,55 @@
             'publications_count': '{count} publications',
             'references_count': '{count} r\u00e9f\u00e9rences',
             'mentions_count': '{count} mentions',
+
+            // Collection overview v2 — summary cards
+            'Index': 'Index',
+            'Total words': 'Mots totaux',
+            'Total pages': 'Pages totales',
+            'Scanned pages': 'Pages num\u00e9ris\u00e9es',
+            'Unique sources': 'Sources uniques',
+            'Document types': 'Types de documents',
+            'Audiovisual minutes': 'Minutes audiovisuelles',
+            'References count': 'R\u00e9f\u00e9rences',
+
+            // Collection overview v2 — new chart titles
+            'Recent additions': 'Ajouts r\u00e9cents',
+            'Collection growth over time': 'Croissance de la collection dans le temps',
+            'Items by type, over time': '\u00c9l\u00e9ments par type, dans le temps',
+            'French word cloud': 'Nuage de mots fran\u00e7ais',
+            'World map': 'Carte du monde',
+
+            // Collection overview v2 — facet controls & misc UI
+            'Global': 'Global',
+            'By type': 'Par type',
+            'By country': 'Par pays',
+            'By year': 'Par ann\u00e9e',
+            'All countries': 'Tous les pays',
+            'All types': 'Tous les types',
+            'Country': 'Pays',
+            'Previous': 'Pr\u00e9c\u00e9dent',
+            'Next': 'Suivant',
+            'Page': 'Page',
+            'Title': 'Titre',
+            'Source': 'Source',
+            'Type': 'Type',
+            'Added': 'Ajout\u00e9',
+            'Month': 'Mois',
+            'Monthly': 'Mensuel',
+            'Cumulative': 'Cumul\u00e9',
+            'Monthly additions': 'Ajouts mensuels',
+            'Cumulative total': 'Total cumul\u00e9',
+            'No recent additions': 'Aucun ajout r\u00e9cent',
+            'Loading': 'Chargement',
+            'unique words': 'mots uniques',
+            'Map library unavailable': 'Biblioth\u00e8que de cartographie indisponible',
+
+            // Item type badges (user's preferred French labels)
+            'item_type_article':     'Article de presse',
+            'item_type_publication': 'P\u00e9riodique islamique',
+            'item_type_document':    'Document',
+            'item_type_audiovisual': 'Enregistrement audio-visuel',
+            'item_type_reference':   'R\u00e9f\u00e9rence',
         }
     };
 
