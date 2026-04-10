@@ -68,7 +68,11 @@ selon ainsi cependant effet toutefois outre certes ailleurs notamment
 
 STOPWORDS = FR_STOPWORDS | CUSTOM_STOPWORDS
 
-TOKEN_RE = re.compile(r"[a-zàâäéèêëïîôöùûüç]+", re.IGNORECASE)
+# Unicode letter class — catches all accented Latin letters including
+# œ, æ, ÿ, ñ that the original ASCII-plus-diacritics class missed. Common
+# French words like cœur, sœur, œuvre, bœuf fragmented into sub-4-char
+# tokens under the old regex and vanished entirely from the counts.
+TOKEN_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
 
 
 def tokenize(text: str) -> List[str]:
