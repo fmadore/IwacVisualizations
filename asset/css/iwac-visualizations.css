@@ -351,3 +351,240 @@
     color: var(--ink, #18202a);
     border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
 }
+
+/* =================================================================== */
+/*  Reusable table                                                      */
+/* =================================================================== */
+
+.iwac-vis-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.iwac-vis-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm, 0.9rem);
+}
+
+.iwac-vis-table__header {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    background: var(--surface-raised, #f9f7f3);
+    border-bottom: 2px solid var(--border, #dcd7ce);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    position: sticky;
+    top: 0;
+}
+
+.iwac-vis-table__row {
+    border-bottom: 1px solid var(--border, #dcd7ce);
+    transition: background 0.12s ease;
+}
+
+.iwac-vis-table__row:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 4%, transparent);
+}
+
+.iwac-vis-table__cell {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-table__cell--thumbnail {
+    width: 56px;
+    padding: 0.25rem 0.5rem;
+}
+
+.iwac-vis-table__thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--radius-sm, 4px);
+    display: block;
+}
+
+.iwac-vis-thumb-placeholder {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface, #f4f2ed);
+    border: 1px dashed var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    color: var(--border, #a9a49a);
+}
+
+.iwac-vis-table__link {
+    color: var(--primary, #e67a14);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.iwac-vis-table__link:hover {
+    text-decoration: underline;
+}
+
+/* =================================================================== */
+/*  Badges (item type pills used inside tables)                         */
+/* =================================================================== */
+
+.iwac-vis-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+}
+
+.iwac-vis-badge--article     { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+.iwac-vis-badge--publication { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+.iwac-vis-badge--document    { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+.iwac-vis-badge--audiovisual { background: #fce7f3; color: #9d174d; border-color: #fbcfe8; }
+.iwac-vis-badge--reference   { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+
+body[data-theme="dark"] .iwac-vis-badge--article     { background: #78350f; color: #fef3c7; border-color: #92400e; }
+body[data-theme="dark"] .iwac-vis-badge--publication { background: #1e3a8a; color: #dbeafe; border-color: #1e40af; }
+body[data-theme="dark"] .iwac-vis-badge--document    { background: #4c1d95; color: #ede9fe; border-color: #5b21b6; }
+body[data-theme="dark"] .iwac-vis-badge--audiovisual { background: #831843; color: #fce7f3; border-color: #9d174d; }
+body[data-theme="dark"] .iwac-vis-badge--reference   { background: #064e3b; color: #d1fae5; border-color: #065f46; }
+
+/* =================================================================== */
+/*  Pagination control                                                  */
+/* =================================================================== */
+
+.iwac-vis-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-pagination__btn {
+    padding: 0.35rem 0.9rem;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    cursor: pointer;
+    font-size: var(--text-sm, 0.9rem);
+    transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.iwac-vis-pagination__btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--primary, #e67a14) 8%, var(--surface-raised, #f9f7f3));
+    border-color: var(--primary, #e67a14);
+}
+
+.iwac-vis-pagination__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.iwac-vis-pagination__btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-pagination__indicator {
+    font-size: var(--text-sm, 0.9rem);
+    color: var(--ink-muted, #5a6472);
+    min-width: 8ch;
+    text-align: center;
+}
+
+/* =================================================================== */
+/*  Facet buttons                                                       */
+/* =================================================================== */
+
+.iwac-vis-facets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.iwac-vis-facets__main,
+.iwac-vis-facets__sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.iwac-vis-facets__btn,
+.iwac-vis-facets__sub-btn {
+    padding: 0.3rem 0.8rem;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    cursor: pointer;
+    font-size: var(--text-sm, 0.85rem);
+    transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.iwac-vis-facets__btn:hover,
+.iwac-vis-facets__sub-btn:hover {
+    border-color: var(--primary, #e67a14);
+}
+
+.iwac-vis-facets__btn--active,
+.iwac-vis-facets__sub-btn--active {
+    background: var(--primary, #e67a14);
+    color: #fff;
+    border-color: var(--primary, #e67a14);
+}
+
+.iwac-vis-facets__select {
+    padding: 0.3rem 0.6rem;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-sm, 0.85rem);
+    max-width: 18rem;
+}
+
+/* =================================================================== */
+/*  Recent additions wide panel                                         */
+/* =================================================================== */
+
+.iwac-vis-recent-additions {
+    grid-column: 1 / -1;
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table-wrapper {
+    max-height: 100%;
+}
+
+/* =================================================================== */
+/*  Map panel (MapLibre container)                                      */
+/* =================================================================== */
+
+.iwac-vis-map {
+    width: 100%;
+    height: 480px;
+    border-radius: var(--radius-sm, 4px);
+    overflow: hidden;
+    position: relative;
+}
+
+.iwac-vis-map .maplibregl-popup-content {
+    font-size: var(--text-sm, 0.85rem);
+    padding: 0.75rem 1rem;
+    color: #111;
+}
