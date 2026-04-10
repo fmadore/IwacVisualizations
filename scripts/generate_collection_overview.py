@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -78,6 +79,104 @@ SUBSET_TO_DOC_TYPE = {
     "documents":    "Document",
     "audiovisual":  "Audiovisuel",
 }
+
+# Candidate column names for "document type" / "resource class" on content
+# subsets. The HF dataset currently exposes a per-record type column only on
+# ``documents`` (``type``); the other subsets have no per-record type field.
+# The candidate list is kept in priority order so future dataset updates that
+# introduce ``o:resource_class`` (or its HF-safe variants) Just Work.
+DOC_TYPE_COLUMN_CANDIDATES = (
+    "o:resource_class",
+    "o__resource_class",
+    "resource_class",
+    "dcterms:type",
+    "dcterms__type",
+    "type",
+)
+
+# Candidate column names for audiovisual "duration". The HF dataset exposes
+# ``extent`` with ISO 8601 values like ``PT571M`` — but we also fall back to
+# more conventional names for robustness.
+DURATION_COLUMN_CANDIDATES = (
+    "duration",
+    "dcterms:extent",
+    "dcterms__extent",
+    "extent",
+    "runtime",
+)
+
+# Matches ISO 8601 duration strings like ``PT1H30M15S``, ``PT571M``, ``PT45S``.
+_ISO8601_DURATION_RE = re.compile(
+    r"^P(?:(?P<days>\d+(?:\.\d+)?)D)?"
+    r"(?:T"
+    r"(?:(?P<hours>\d+(?:\.\d+)?)H)?"
+    r"(?:(?P<minutes>\d+(?:\.\d+)?)M)?"
+    r"(?:(?P<seconds>\d+(?:\.\d+)?)S)?"
+    r")?$"
+)
+
+# Matches ``HH:MM:SS`` or ``MM:SS``.
+_HMS_RE = re.compile(r"^(?:(\d+):)?(\d{1,2}):(\d{2})$")
+
+
+def _parse_duration_to_minutes(value: Any) -> float:
+    """Parse a duration value into minutes.
+
+    Handles:
+
+    * Numeric values — returns them as-is (caller applies seconds/minutes
+      heuristic on the aggregate).
+    * ISO 8601 durations such as ``PT1H30M``, ``PT571M``, ``PT45S``.
+    * ``HH:MM:SS`` / ``MM:SS`` strings.
+
+    Returns ``0.0`` for anything unparseable.
+    """
+    if value is None:
+        return 0.0
+    if isinstance(value, float) and pd.isna(value):
+        return 0.0
+    # Numeric path — return as-is; aggregate heuristic decides units.
+    if isinstance(value, (int, float)):
+        return float(value)
+
+    s = str(value).strip()
+    if not s:
+        return 0.0
+
+    # Pure numeric string
+    try:
+        return float(s)
+    except ValueError:
+        pass
+
+    # ISO 8601 duration (PnDTnHnMnS, with any combination)
+    m = _ISO8601_DURATION_RE.match(s)
+    if m and any(m.group(g) for g in ("days", "hours", "minutes", "seconds")):
+        days = float(m.group("days") or 0)
+        hours = float(m.group("hours") or 0)
+        minutes = float(m.group("minutes") or 0)
+        seconds = float(m.group("seconds") or 0)
+        return days * 24 * 60 + hours * 60 + minutes + seconds / 60.0
+
+    # HH:MM:SS or MM:SS
+    m = _HMS_RE.match(s)
+    if m:
+        hours = float(m.group(1) or 0)
+        minutes = float(m.group(2) or 0)
+        seconds = float(m.group(3) or 0)
+        return hours * 60 + minutes + seconds / 60.0
+
+    return 0.0
+
+
+def _first_present_column(
+    df: pd.DataFrame, candidates: tuple,
+) -> Optional[str]:
+    """Return the first candidate column that exists in ``df``, or None."""
+    for col in candidates:
+        if col in df.columns:
+            return col
+    return None
 
 
 def _int_or_none(value: Any) -> Optional[int]:
@@ -823,30 +922,53 @@ def compute_summary(
                 if src and src.lower() != "unknown":
                     sources.add(src)
 
-    # Document types — distinct values of `o:resource_class` across content subsets
+    # Document types — try a per-record resource_class column first (only
+    # ``documents`` currently has one, named ``type``). For subsets that lack
+    # such a column we fall back to the subset-level label from
+    # ``SUBSET_TO_DOC_TYPE``, which is how iwac-dashboard models the treemap.
     doc_types: set = set()
     for subset in ("articles", "publications", "documents", "audiovisual"):
         df = dataframes.get(subset)
-        if df is None or df.empty or "o:resource_class" not in df.columns:
+        if df is None or df.empty:
             continue
-        for value in df["o:resource_class"].dropna():
-            v = str(value).strip()
-            if v and v.lower() != "unknown":
-                doc_types.add(v)
+        col = _first_present_column(df, DOC_TYPE_COLUMN_CANDIDATES)
+        found_any = False
+        if col is not None:
+            for value in df[col].dropna():
+                v = str(value).strip()
+                if v and v.lower() != "unknown":
+                    doc_types.add(v)
+                    found_any = True
+        if not found_any:
+            # No per-record type column (or column was all empty) — fall
+            # back to the subset-level label so every populated subset still
+            # contributes one document type.
+            label = SUBSET_TO_DOC_TYPE.get(subset)
+            if label:
+                doc_types.add(label)
 
     # Audiovisual duration (minutes)
-    av_minutes = 0
+    av_minutes = 0.0
     av_df = dataframes.get("audiovisual")
-    if av_df is not None and not av_df.empty and "duration" in av_df.columns:
-        # `duration` may be in seconds, minutes, or HH:MM:SS — try numeric first
-        numeric = pd.to_numeric(av_df["duration"], errors="coerce").fillna(0)
-        if numeric.sum() > 0:
-            # Heuristic: if the median > 500, assume seconds; else minutes
-            median = float(numeric[numeric > 0].median()) if (numeric > 0).any() else 0
-            if median > 500:
-                av_minutes = int(numeric.sum() / 60)
+    if av_df is not None and not av_df.empty:
+        duration_col = _first_present_column(av_df, DURATION_COLUMN_CANDIDATES)
+        if duration_col is not None:
+            # First try purely numeric (legacy datasets may store seconds or
+            # minutes directly).
+            numeric = pd.to_numeric(av_df[duration_col], errors="coerce")
+            numeric_sum = float(numeric.fillna(0).sum())
+            if numeric_sum > 0 and numeric.notna().any():
+                positive = numeric[numeric > 0]
+                median = float(positive.median()) if not positive.empty else 0.0
+                # Heuristic: if the median > 500, assume seconds; else minutes
+                if median > 500:
+                    av_minutes = numeric_sum / 60.0
+                else:
+                    av_minutes = numeric_sum
             else:
-                av_minutes = int(numeric.sum())
+                # String path — ISO 8601 (``PT571M``), ``HH:MM:SS``, etc.
+                parsed = av_df[duration_col].map(_parse_duration_to_minutes)
+                av_minutes = float(parsed.fillna(0).sum())
 
     years = timeline.get("years") or []
     summary: Dict[str, Any] = {
