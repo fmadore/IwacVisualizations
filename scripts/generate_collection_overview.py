@@ -66,6 +66,19 @@ INDEX_TYPES = [
     "\u00c9v\u00e9nements",  # Événements
 ]
 
+# Subsets with a `newspaper` field (dcterms:publisher) — used for the
+# "newspaper coverage" panel.
+NEWSPAPER_SUBSETS = ["articles", "publications"]
+
+# Mapping from HF subset names to human-readable document type labels used
+# in the treemap hierarchy (matches the convention from iwac-dashboard).
+SUBSET_TO_DOC_TYPE = {
+    "articles":     "Article de presse",
+    "publications": "Publication islamique",
+    "documents":    "Document",
+    "audiovisual":  "Audiovisuel",
+}
+
 
 def _int_or_none(value: Any) -> Optional[int]:
     """Return an int or None if the value isn't usable."""
@@ -118,7 +131,9 @@ def compute_timeline(
             year = extract_year(pub_date, min_year=year_min, max_year=year_max)
             if year is None:
                 continue
-            country_value = (str(country).strip() if country is not None else "") or "Unknown"
+            country_value = str(country).strip() if country is not None else ""
+            if not country_value or country_value.lower() == "unknown":
+                continue  # skip items without a resolvable country
             per_year_country[year][country_value] += 1
             seen_years.add(year)
             seen_countries.add(country_value)
@@ -156,7 +171,12 @@ def compute_timeline(
 def compute_country_distribution(
     dataframes: Dict[str, pd.DataFrame],
 ) -> List[Dict[str, Any]]:
-    """Content counts per country, broken down by subset."""
+    """
+    Content counts per country, broken down by subset. Items without a
+    resolvable country are skipped entirely — the overview block is a
+    geographic distribution and an "Unknown" bucket is not meaningful
+    there.
+    """
     totals: Dict[str, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
     for subset in CONTENT_SUBSETS:
         df = dataframes.get(subset)
@@ -165,8 +185,11 @@ def compute_country_distribution(
         # ``country`` is usually single-value but can contain pipe-separated
         # values. Handle both uniformly.
         for value in df["country"]:
-            countries = parse_pipe_separated(value) or ["Unknown"]
+            countries = parse_pipe_separated(value)
             for country in countries:
+                country = country.strip()
+                if not country or country.lower() == "unknown":
+                    continue
                 totals[country][subset] += 1
                 totals[country]["total"] += 1
 
@@ -201,6 +224,178 @@ def compute_language_distribution(
         {"name": name, "count": int(count)}
         for name, count in counter.most_common(top_n)
     ]
+
+
+def compute_newspapers(
+    dataframes: Dict[str, pd.DataFrame],
+    top_n: int,
+    year_min: int,
+    year_max: int,
+) -> Dict[str, Any]:
+    """
+    Aggregate the `newspaper` field (dcterms:publisher) across articles
+    and publications. For each newspaper returns total count, per-subset
+    counts, year range, and the most common country it's published from.
+
+    Returns a dict with two keys:
+        {
+          "total": N,          # total unique newspapers (all, not truncated)
+          "top": [              # top N entries sorted by total desc
+            {
+              "name": "...",
+              "total": 12,
+              "articles": 10,
+              "publications": 2,
+              "year_min": 2005,
+              "year_max": 2024,
+              "country": "Burkina Faso"
+            },
+            ...
+          ]
+        }
+
+    Empty newspaper values and "Unknown" are skipped.
+    """
+    # name -> { total, articles, publications, years: set, countries: Counter }
+    agg: Dict[str, Dict[str, Any]] = {}
+
+    for subset in NEWSPAPER_SUBSETS:
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        if "newspaper" not in df.columns:
+            continue
+        pub_date_col = "pub_date" if "pub_date" in df.columns else None
+        country_col = "country" if "country" in df.columns else None
+
+        for idx in range(len(df)):
+            raw_name = df["newspaper"].iat[idx]
+            if raw_name is None or (isinstance(raw_name, float) and pd.isna(raw_name)):
+                continue
+            # `newspaper` is usually single-valued but allow pipe-separated
+            for name in parse_pipe_separated(raw_name):
+                name = name.strip()
+                if not name or name.lower() == "unknown":
+                    continue
+                entry = agg.setdefault(name, {
+                    "total": 0,
+                    "articles": 0,
+                    "publications": 0,
+                    "years": set(),
+                    "countries": Counter(),
+                })
+                entry["total"] += 1
+                entry[subset] = entry.get(subset, 0) + 1
+
+                if pub_date_col is not None:
+                    year = extract_year(df[pub_date_col].iat[idx], min_year=year_min, max_year=year_max)
+                    if year is not None:
+                        entry["years"].add(year)
+
+                if country_col is not None:
+                    raw_country = df[country_col].iat[idx]
+                    if raw_country is not None and not (isinstance(raw_country, float) and pd.isna(raw_country)):
+                        country_str = str(raw_country).strip()
+                        if country_str and country_str.lower() != "unknown":
+                            entry["countries"][country_str] += 1
+
+    # Flatten into sorted list
+    sorted_names = sorted(
+        agg.items(), key=lambda kv: (-kv[1]["total"], kv[0])
+    )
+    top_entries: List[Dict[str, Any]] = []
+    for name, entry in sorted_names[:top_n]:
+        years = entry["years"]
+        most_common_country = entry["countries"].most_common(1)
+        top_entries.append({
+            "name": name,
+            "total": int(entry["total"]),
+            "articles": int(entry.get("articles", 0)),
+            "publications": int(entry.get("publications", 0)),
+            "year_min": min(years) if years else None,
+            "year_max": max(years) if years else None,
+            "country": most_common_country[0][0] if most_common_country else None,
+        })
+
+    return {
+        "total": len(agg),
+        "top": top_entries,
+    }
+
+
+def compute_treemap(
+    dataframes: Dict[str, pd.DataFrame],
+) -> Dict[str, Any]:
+    """
+    Build a hierarchical treemap of the collection:
+
+        Countries
+        └── country
+            └── document type
+                └── newspaper (only for articles + publications)
+
+    Mirrors the shape used by iwac-dashboard's treemap-countries.json so
+    the same visualization patterns can be reused. Items without a
+    country are skipped.
+    """
+    # country -> type -> { value, newspapers: Counter }
+    hierarchy: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+    for subset, doc_type in SUBSET_TO_DOC_TYPE.items():
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        if "country" not in df.columns:
+            continue
+        has_newspaper = "newspaper" in df.columns
+
+        for idx in range(len(df)):
+            raw_country = df["country"].iat[idx]
+            if raw_country is None or (isinstance(raw_country, float) and pd.isna(raw_country)):
+                continue
+            country = str(raw_country).strip()
+            if not country or country.lower() == "unknown":
+                continue
+
+            country_bucket = hierarchy.setdefault(country, {})
+            type_bucket = country_bucket.setdefault(doc_type, {"value": 0, "newspapers": Counter()})
+            type_bucket["value"] += 1
+
+            if has_newspaper:
+                raw_paper = df["newspaper"].iat[idx]
+                if raw_paper is not None and not (isinstance(raw_paper, float) and pd.isna(raw_paper)):
+                    paper = str(raw_paper).strip()
+                    if paper and paper.lower() != "unknown":
+                        type_bucket["newspapers"][paper] += 1
+
+    # Build the tree, sorted by value desc at each level
+    children: List[Dict[str, Any]] = []
+    for country in sorted(hierarchy.keys(), key=lambda c: -sum(t["value"] for t in hierarchy[c].values())):
+        type_children: List[Dict[str, Any]] = []
+        for doc_type in sorted(hierarchy[country].keys(), key=lambda dt: -hierarchy[country][dt]["value"]):
+            type_bucket = hierarchy[country][doc_type]
+            type_node: Dict[str, Any] = {
+                "name": doc_type,
+                "value": type_bucket["value"],
+            }
+            newspapers = type_bucket["newspapers"]
+            if newspapers:
+                type_node["children"] = [
+                    {"name": name, "value": int(count)}
+                    for name, count in newspapers.most_common()
+                ]
+            type_children.append(type_node)
+        country_total = sum(t["value"] for t in hierarchy[country].values())
+        children.append({
+            "name": country,
+            "value": country_total,
+            "children": type_children,
+        })
+
+    return {
+        "name": "Collection",
+        "children": children,
+    }
 
 
 def compute_top_entities(
@@ -253,6 +448,7 @@ def compute_summary(
     timeline: Dict[str, Any],
     country_distribution: List[Dict[str, Any]],
     language_distribution: List[Dict[str, int]],
+    newspapers: Dict[str, Any],
 ) -> Dict[str, Any]:
     """Top-level counters rendered in the summary cards row."""
     counts = {subset: subset_summaries.get(subset, {}).get("total_records", 0) for subset in subset_summaries}
@@ -270,6 +466,7 @@ def compute_summary(
         "index_entries": counts.get("index", 0),
         "total_content": total_content,
         "total_words": int(total_words),
+        "newspapers": newspapers.get("total", 0),
         "countries": len(country_distribution),
         "languages": len(language_distribution),
         "year_min": years[0] if years else None,
@@ -300,16 +497,18 @@ def build_overview(
     timeline = compute_timeline(dataframes, year_min=year_min, year_max=year_max)
     country_distribution = compute_country_distribution(dataframes)
     language_distribution = compute_language_distribution(dataframes, top_n=top_n)
+    newspapers = compute_newspapers(dataframes, top_n=15, year_min=year_min, year_max=year_max)
     top_entities = compute_top_entities(dataframes.get("index"), top_n=top_n)
+    treemap = compute_treemap(dataframes)
     summary = compute_summary(
-        subset_summaries, timeline, country_distribution, language_distribution
+        subset_summaries, timeline, country_distribution, language_distribution, newspapers
     )
 
     metadata = create_metadata_block(
         total_records=summary["total_content"] + summary["index_entries"],
         data_source=repo_id,
         script="generate_collection_overview.py",
-        script_version="0.1.0",
+        script_version="0.2.0",
         top_n=top_n,
     )
 
@@ -319,7 +518,9 @@ def build_overview(
         "timeline": timeline,
         "countries": country_distribution,
         "languages": language_distribution,
+        "newspapers": newspapers,
         "top_entities": top_entities,
+        "treemap": treemap,
     }
 
 

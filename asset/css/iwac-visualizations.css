@@ -82,14 +82,18 @@
 /* ------------------------------------------------------------------- */
 
 .iwac-vis-panel {
-    background: var(--surface-raised, #f9f7f3);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: var(--panel-border, 1px solid var(--border, #dcd7ce));
+    border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
     padding: var(--space-4, 1rem);
+    /* Prevent ECharts canvas from forcing grid overflow */
+    min-width: 0;
 }
 
 .iwac-vis-panel > .iwac-vis-chart {
     width: 100%;
+    min-width: 0;
     min-height: 320px;
 }
 
@@ -136,9 +140,9 @@
 .knowledge-graph-container {
     position: relative;
     min-height: 500px;
-    background: var(--surface-raised, #f9f7f3);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: var(--panel-border, 1px solid var(--border, #dcd7ce));
+    border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
     overflow: hidden;
 }
 
@@ -229,29 +233,46 @@
     .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
 }
 
+/*
+ * Summary cards follow the IWAC theme's metadata-property card pattern:
+ * --panel-bg, --shadow-xs, --radius-md, accent left border, primary-
+ * tinted labels. See IWAC-theme _metadata.scss + _tokens.scss.
+ */
 .iwac-vis-summary-card {
-    background: var(--surface-raised, #f9f7f3);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-left: var(--accent-line-md, 3px) solid color-mix(in srgb, var(--primary, #e67a14) var(--accent-mix-medium, 40%), var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 0.25rem);
+    transition:
+        box-shadow var(--transition-fast, 150ms ease),
+        background-color var(--transition-fast, 150ms ease),
+        border-color var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-summary-card:hover {
+    border-left-color: var(--primary, #e67a14);
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(0,0,0,0.08));
 }
 
 .iwac-vis-summary-card__value {
-    font-size: var(--text-2xl, 1.6rem);
-    font-weight: 600;
+    font-size: var(--text-2xl, clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem));
+    font-weight: 700;
     color: var(--ink, #18202a);
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
 }
 
 .iwac-vis-summary-card__label {
-    font-size: var(--text-sm, 0.85rem);
-    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9375rem);
+    color: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--muted, #6e7a82));
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.025em;
+    font-weight: 600;
 }
 
 /* Charts grid */
@@ -275,6 +296,9 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
+    /* Prevent ECharts canvas from bloating the column */
+    min-width: 0;
+    overflow: hidden;
 }
 
 .iwac-vis-overview-grid .iwac-vis-panel h4 {

@@ -2,9 +2,9 @@
   "metadata": {
     "totalRecords": 18556,
     "dataSource": "fmadore/islam-west-africa-collection",
-    "generatedAt": "2026-04-09T16:03:26.490514Z",
+    "generatedAt": "2026-04-10T05:03:57.414896Z",
     "script": "generate_collection_overview.py",
-    "script_version": "0.1.0",
+    "script_version": "0.2.0",
     "top_n": 10
   },
   "summary": {
@@ -16,7 +16,8 @@
     "index_entries": 4697,
     "total_content": 13859,
     "total_words": 28142934,
-    "countries": 7,
+    "newspapers": 79,
+    "countries": 6,
     "languages": 5,
     "year_min": 1961,
     "year_max": 2025
@@ -95,8 +96,7 @@
       "Benin",
       "Togo",
       "Niger",
-      "Nigeria",
-      "Unknown"
+      "Nigeria"
     ],
     "series": {
       "Côte d'Ivoire": [
@@ -500,73 +500,6 @@
         0,
         0,
         0
-      ],
-      "Unknown": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
       ]
     },
     "totals": [
@@ -628,7 +561,7 @@
       493,
       686,
       469,
-      664,
+      663,
       663,
       429,
       441,
@@ -685,14 +618,6 @@
       "publications": 0,
       "documents": 0,
       "audiovisual": 45
-    },
-    {
-      "name": "Unknown",
-      "total": 1,
-      "articles": 0,
-      "publications": 0,
-      "documents": 1,
-      "audiovisual": 0
     }
   ],
   "languages": [
@@ -717,6 +642,146 @@
       "count": 2
     }
   ],
+  "newspapers": {
+    "total": 79,
+    "top": [
+      {
+        "name": "Sidwaya",
+        "total": 1167,
+        "articles": 1167,
+        "publications": 0,
+        "year_min": 1984,
+        "year_max": 2024,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Togo-Presse",
+        "total": 1129,
+        "articles": 1129,
+        "publications": 0,
+        "year_min": 1963,
+        "year_max": 2024,
+        "country": "Togo"
+      },
+      {
+        "name": "Le Sahel",
+        "total": 1061,
+        "articles": 1061,
+        "publications": 0,
+        "year_min": 2018,
+        "year_max": 2024,
+        "country": "Niger"
+      },
+      {
+        "name": "Fraternité Matin",
+        "total": 931,
+        "articles": 931,
+        "publications": 0,
+        "year_min": 1970,
+        "year_max": 2018,
+        "country": "Côte d'Ivoire"
+      },
+      {
+        "name": "Le Patriote",
+        "total": 861,
+        "articles": 861,
+        "publications": 0,
+        "year_min": 1992,
+        "year_max": 2019,
+        "country": "Côte d'Ivoire"
+      },
+      {
+        "name": "La Nation",
+        "total": 852,
+        "articles": 852,
+        "publications": 0,
+        "year_min": 1990,
+        "year_max": 2024,
+        "country": "Benin"
+      },
+      {
+        "name": "Le Jour Plus",
+        "total": 736,
+        "articles": 736,
+        "publications": 0,
+        "year_min": 2003,
+        "year_max": 2017,
+        "country": "Côte d'Ivoire"
+      },
+      {
+        "name": "LeFaso.net",
+        "total": 709,
+        "articles": 709,
+        "publications": 0,
+        "year_min": 2004,
+        "year_max": 2021,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Le Pays",
+        "total": 707,
+        "articles": 707,
+        "publications": 0,
+        "year_min": 1992,
+        "year_max": 2021,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Islam Info",
+        "total": 695,
+        "articles": 0,
+        "publications": 695,
+        "year_min": 2005,
+        "year_max": 2024,
+        "country": "Côte d'Ivoire"
+      },
+      {
+        "name": "L'Observateur Paalga",
+        "total": 509,
+        "articles": 509,
+        "publications": 0,
+        "year_min": 1991,
+        "year_max": 2021,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Notre Voie",
+        "total": 438,
+        "articles": 438,
+        "publications": 0,
+        "year_min": 1999,
+        "year_max": 2020,
+        "country": "Côte d'Ivoire"
+      },
+      {
+        "name": "An-Nasr Vendredi",
+        "total": 318,
+        "articles": 0,
+        "publications": 318,
+        "year_min": 2004,
+        "year_max": 2020,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Burkina 24",
+        "total": 279,
+        "articles": 279,
+        "publications": 0,
+        "year_min": 2011,
+        "year_max": 2021,
+        "country": "Burkina Faso"
+      },
+      {
+        "name": "Agence Togolaise de Presse",
+        "total": 260,
+        "articles": 260,
+        "publications": 0,
+        "year_min": 2020,
+        "year_max": 2024,
+        "country": "Togo"
+      }
+    ]
+  },
   "top_entities": {
     "Personnes": [
       {
@@ -1336,6 +1401,447 @@
         ],
         "first_occurrence": "2018-03-25",
         "last_occurrence": "2019-01-17"
+      }
+    ]
+  },
+  "treemap": {
+    "name": "Collection",
+    "children": [
+      {
+        "name": "Côte d'Ivoire",
+        "value": 4804,
+        "children": [
+          {
+            "name": "Article de presse",
+            "value": 3994,
+            "children": [
+              {
+                "name": "Fraternité Matin",
+                "value": 931
+              },
+              {
+                "name": "Le Patriote",
+                "value": 861
+              },
+              {
+                "name": "Le Jour Plus",
+                "value": 736
+              },
+              {
+                "name": "Notre Voie",
+                "value": 438
+              },
+              {
+                "name": "Le Jour",
+                "value": 238
+              },
+              {
+                "name": "La Voie",
+                "value": 190
+              },
+              {
+                "name": "APA News",
+                "value": 173
+              },
+              {
+                "name": "Nord-Sud",
+                "value": 90
+              },
+              {
+                "name": "Fraternité Hebdo",
+                "value": 74
+              },
+              {
+                "name": "Plume Libre",
+                "value": 64
+              },
+              {
+                "name": "Le Temps",
+                "value": 46
+              },
+              {
+                "name": "Alif",
+                "value": 38
+              },
+              {
+                "name": "Ivoire Dimanche",
+                "value": 34
+              },
+              {
+                "name": "Le Débat Ivoirien",
+                "value": 27
+              },
+              {
+                "name": "L'Intelligent d'Abidjan",
+                "value": 16
+              },
+              {
+                "name": "L'Alternative",
+                "value": 10
+              },
+              {
+                "name": "L'Expression",
+                "value": 10
+              },
+              {
+                "name": "Le Nouvel Horizon",
+                "value": 8
+              },
+              {
+                "name": "Notre Temps",
+                "value": 5
+              },
+              {
+                "name": "L'Inter",
+                "value": 5
+              }
+            ]
+          },
+          {
+            "name": "Publication islamique",
+            "value": 810,
+            "children": [
+              {
+                "name": "Islam Info",
+                "value": 695
+              },
+              {
+                "name": "Plume Libre",
+                "value": 49
+              },
+              {
+                "name": "Alif",
+                "value": 32
+              },
+              {
+                "name": "Al-Azan",
+                "value": 13
+              },
+              {
+                "name": "Al Minbar",
+                "value": 12
+              },
+              {
+                "name": "AJMCI Infos",
+                "value": 4
+              },
+              {
+                "name": "Al Muwassat Info",
+                "value": 2
+              },
+              {
+                "name": "Allahou Akbar",
+                "value": 1
+              },
+              {
+                "name": "Bulletin d'information du CNI",
+                "value": 1
+              },
+              {
+                "name": "Les Échos de l'AEEMCI",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Burkina Faso",
+        "value": 4138,
+        "children": [
+          {
+            "name": "Article de presse",
+            "value": 3659,
+            "children": [
+              {
+                "name": "Sidwaya",
+                "value": 1167
+              },
+              {
+                "name": "LeFaso.net",
+                "value": 709
+              },
+              {
+                "name": "Le Pays",
+                "value": 707
+              },
+              {
+                "name": "L'Observateur Paalga",
+                "value": 509
+              },
+              {
+                "name": "Burkina 24",
+                "value": 279
+              },
+              {
+                "name": "FasoZine",
+                "value": 116
+              },
+              {
+                "name": "L'Observateur",
+                "value": 61
+              },
+              {
+                "name": "L'Evénement",
+                "value": 45
+              },
+              {
+                "name": "Carrefour africain",
+                "value": 44
+              },
+              {
+                "name": "Mutations",
+                "value": 13
+              },
+              {
+                "name": "San Finna",
+                "value": 9
+              }
+            ]
+          },
+          {
+            "name": "Publication islamique",
+            "value": 460,
+            "children": [
+              {
+                "name": "An-Nasr Vendredi",
+                "value": 318
+              },
+              {
+                "name": "L'Appel",
+                "value": 48
+              },
+              {
+                "name": "La Preuve",
+                "value": 28
+              },
+              {
+                "name": "An-Nasr Trimestriel",
+                "value": 16
+              },
+              {
+                "name": "Le vrai visage de l'islam",
+                "value": 15
+              },
+              {
+                "name": "Le CERFIste",
+                "value": 13
+              },
+              {
+                "name": "Al Mawadda",
+                "value": 11
+              },
+              {
+                "name": "L'Autre Regard",
+                "value": 11
+              }
+            ]
+          },
+          {
+            "name": "Document",
+            "value": 19
+          }
+        ]
+      },
+      {
+        "name": "Benin",
+        "value": 2138,
+        "children": [
+          {
+            "name": "Article de presse",
+            "value": 2003,
+            "children": [
+              {
+                "name": "La Nation",
+                "value": 852
+              },
+              {
+                "name": "Matin Libre",
+                "value": 190
+              },
+              {
+                "name": "Ehuzu",
+                "value": 165
+              },
+              {
+                "name": "Fraternité",
+                "value": 134
+              },
+              {
+                "name": "24 Heures au Bénin",
+                "value": 131
+              },
+              {
+                "name": "Agence Bénin Presse",
+                "value": 91
+              },
+              {
+                "name": "Le Matinal",
+                "value": 85
+              },
+              {
+                "name": "La Nouvelle Tribune",
+                "value": 71
+              },
+              {
+                "name": "L'Evénement Précis",
+                "value": 64
+              },
+              {
+                "name": "Daho-Express",
+                "value": 53
+              },
+              {
+                "name": "Boulevard des Infos",
+                "value": 48
+              },
+              {
+                "name": "Banouto",
+                "value": 43
+              },
+              {
+                "name": "Bénin Intelligent",
+                "value": 42
+              },
+              {
+                "name": "Visages du Bénin",
+                "value": 24
+              },
+              {
+                "name": "La Perche du Nord",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "name": "Publication islamique",
+            "value": 133,
+            "children": [
+              {
+                "name": "Islam Hebdo",
+                "value": 122
+              },
+              {
+                "name": "ASSALAM",
+                "value": 11
+              }
+            ]
+          },
+          {
+            "name": "Document",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "name": "Togo",
+        "value": 1658,
+        "children": [
+          {
+            "name": "Article de presse",
+            "value": 1570,
+            "children": [
+              {
+                "name": "Togo-Presse",
+                "value": 1129
+              },
+              {
+                "name": "Agence Togolaise de Presse",
+                "value": 260
+              },
+              {
+                "name": "La Nouvelle Marche",
+                "value": 154
+              },
+              {
+                "name": "La Lettre de Tchaoudjo",
+                "value": 9
+              },
+              {
+                "name": "Forum Hebdo",
+                "value": 7
+              },
+              {
+                "name": "Courrier du Golfe",
+                "value": 4
+              },
+              {
+                "name": "L'éveil du Peuple",
+                "value": 4
+              },
+              {
+                "name": "Atopani Express",
+                "value": 2
+              },
+              {
+                "name": "Le Démocrate",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Publication islamique",
+            "value": 84,
+            "children": [
+              {
+                "name": "Le Rendez-Vous",
+                "value": 78
+              },
+              {
+                "name": "Le Pacific",
+                "value": 6
+              }
+            ]
+          },
+          {
+            "name": "Document",
+            "value": 4
+          }
+        ]
+      },
+      {
+        "name": "Niger",
+        "value": 1075,
+        "children": [
+          {
+            "name": "Article de presse",
+            "value": 1061,
+            "children": [
+              {
+                "name": "Le Sahel",
+                "value": 1061
+              }
+            ]
+          },
+          {
+            "name": "Publication islamique",
+            "value": 14,
+            "children": [
+              {
+                "name": "Al Maoulid Info",
+                "value": 7
+              },
+              {
+                "name": "Al Maoulid Magazine",
+                "value": 5
+              },
+              {
+                "name": "Al Maoulid Magazine (arabe)",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Nigeria",
+        "value": 45,
+        "children": [
+          {
+            "name": "Audiovisuel",
+            "value": 45
+          }
+        ]
       }
     ]
   }

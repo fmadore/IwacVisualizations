@@ -23,10 +23,12 @@ $this->headLink()->appendStylesheet(
 // CDN libraries
 $this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
 
-// IWAC infrastructure — order matters: i18n → theme → core → chart
+// IWAC infrastructure — order matters: i18n → theme → core → shared → chart
 $this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/references-overview.js', 'IwacVisualizations'));
 
 $siteSlug = $this->currentSite()->slug();

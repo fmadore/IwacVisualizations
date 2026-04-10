@@ -151,10 +151,44 @@
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', observeTheme);
-    } else {
+    /* ----------------------------------------------------------------- */
+    /*  Window resize -> chart.resize()                                   */
+    /* ----------------------------------------------------------------- */
+    //
+    // ECharts canvases do NOT auto-resize when their container shrinks or
+    // grows. Without this, the chart keeps its initial pixel size and
+    // overflows its grid cell on window resize. Debounced so we don't
+    // thrash during the drag.
+
+    var _resizeTimer = null;
+    function handleWindowResize() {
+        if (_resizeTimer) clearTimeout(_resizeTimer);
+        _resizeTimer = setTimeout(function () {
+            ns.pruneCharts();
+            ns._charts.forEach(function (entry) {
+                try {
+                    if (entry.kind === 'echarts' && entry.instance) entry.instance.resize();
+                    else if (entry.kind === 'maplibre' && entry.instance) entry.instance.resize();
+                } catch (e) {
+                    // Swallow — a disposed chart shouldn't take the whole page down
+                }
+            });
+        }, 120);
+    }
+
+    function observeResize() {
+        window.addEventListener('resize', handleWindowResize, { passive: true });
+    }
+
+    function bootstrapObservers() {
         observeTheme();
+        observeResize();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootstrapObservers);
+    } else {
+        bootstrapObservers();
     }
 
     /* ----------------------------------------------------------------- */

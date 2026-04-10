@@ -78,13 +78,18 @@
             'Countries': 'Countries',
             'Languages': 'Languages',
             'Words': 'Words',
+            'Newspapers': 'Newspapers',
+            'Unknown': 'Unknown',
 
             // Collection overview — chart titles
             'Items per year, by country': 'Items per year, by country',
             'Content by country': 'Content by country',
             'Languages represented': 'Languages represented',
             'Most-cited entities': 'Most-cited entities',
-            'Across': 'Across',
+            'Newspaper coverage': 'Newspaper coverage',
+            'Collection breakdown': 'Collection breakdown',
+            'period_covered': 'Period covered: {min} – {max}',
+            'coverage_range': '{min} – {max}',
 
             // Entity type tabs (must match INDEX_TYPES in the generator)
             'Persons': 'Persons',
@@ -123,9 +128,10 @@
 
             // Plural-ish
             'items_count': '{count} items',
+            'articles_count': '{count} articles',
+            'publications_count': '{count} publications',
             'references_count': '{count} references',
             'mentions_count': '{count} mentions',
-            'year_range': '{min} to {max}',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -156,13 +162,18 @@
             'Countries': 'Pays',
             'Languages': 'Langues',
             'Words': 'Mots',
+            'Newspapers': 'Journaux',
+            'Unknown': 'Inconnu',
 
             // Collection overview — chart titles
             'Items per year, by country': '\u00c9l\u00e9ments par ann\u00e9e, par pays',
             'Content by country': 'Contenu par pays',
             'Languages represented': 'Langues repr\u00e9sent\u00e9es',
             'Most-cited entities': 'Entit\u00e9s les plus cit\u00e9es',
-            'Across': 'Sur',
+            'Newspaper coverage': 'Couverture des journaux',
+            'Collection breakdown': 'R\u00e9partition de la collection',
+            'period_covered': 'P\u00e9riode couverte : {min} \u2013 {max}',
+            'coverage_range': '{min} \u2013 {max}',
 
             // Entity type tabs
             'Persons': 'Personnes',
@@ -200,9 +211,10 @@
             'ref_type_Unknown':             'Inconnu',
 
             'items_count': '{count} \u00e9l\u00e9ments',
+            'articles_count': '{count} articles',
+            'publications_count': '{count} publications',
             'references_count': '{count} r\u00e9f\u00e9rences',
             'mentions_count': '{count} mentions',
-            'year_range': '{min} \u00e0 {max}',
         }
     };
 
