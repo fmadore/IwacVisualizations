@@ -63,6 +63,46 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
   - No Python step — drop the module in, activate, add the block
   - Registered as `referencesOverview` block layout
 
+- **Collection Overview v0.2 expansion** (2026-04-10) — 13-panel block,
+  hybrid architecture with shared primitives and per-panel modules:
+  - Refreshed summary row: **11 cards** (Articles, Index, Total words,
+    Total pages, Scanned pages, Unique sources, Document types,
+    Audiovisual minutes, References, Countries, Languages). Dropped the
+    confusing "1,501 Publications" card.
+  - **Reusable primitives** under `asset/js/charts/shared/`:
+    `pagination.js` (`P.buildPagination`), `table.js` (`P.buildTable`
+    with text/link/date/badge/thumbnail/number render modes + client
+    pagination), `facet-buttons.js` (`P.buildFacetButtons` with
+    buttons-or-select auto rule + per-facet override).
+  - **New ECharts builders** in `chart-options.js`: `C.gantt` (custom
+    series, horizontal period bars), `C.wordcloud` (echarts-wordcloud
+    with horizontal-bar fallback), `C.growthBar` (dual-axis bar +
+    cumulative line), `C.stackedBar` (generic stacked bar).
+  - **Treemap crash fixed** via defensive tree sanitization + dynamic
+    `levels[]` array sized to max tree depth.
+  - **Entities revamp**: 50 per type (was 10), client pagination at
+    10/page, middle-ellipsis label truncation via `maxLabelLength: 30`.
+  - **New panels** under `asset/js/charts/collection-overview/`:
+    recent-additions (table with thumbnail/title/source/type/date,
+    20/page), languages (facets: global / by type / by country),
+    growth (monthly additions + cumulative), types-over-time
+    (stacked, country facet), gantt (newspaper coverage periods,
+    country + type facets), wordcloud (lazy, global / by country /
+    by year facets), map (lazy MapLibre bubbles with type facet,
+    GeoJSON plumbed for future choropleth).
+  - **Three Python generators** emit `collection-overview.json`
+    (extended), `collection-wordcloud.json`, `collection-map.json`.
+    Wordcloud uses Unicode letter class to preserve `œ/æ/ÿ/ñ`.
+    Country handling uses `parse_pipe_separated` across all aggregators
+    so multi-tagged items contribute to each country independently.
+  - **i18n**: new EN+FR keys for summary labels, chart titles, facet UI,
+    item type badges. French labels use "Article de presse",
+    "Périodique islamique", "Enregistrement audio-visuel".
+  - **Lazy loading**: word cloud + map panels use `IntersectionObserver`
+    with 200px rootMargin so sidecar JSONs only fetch when in view.
+  - Design spec: `docs/superpowers/specs/2026-04-10-collection-overview-expansion-design.md`
+  - Plan: `docs/superpowers/plans/2026-04-10-collection-overview-expansion.md`
+
 ## Next up
 
 - [ ] **Audit Omeka resource templates** on islam.zmo.de → HF subset
