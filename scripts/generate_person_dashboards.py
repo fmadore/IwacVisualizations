@@ -143,6 +143,7 @@ class PersonDashboardGenerator:
             )
         alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
         coord_col = find_column(df, ["Coordonnées", "coordinates"])
+        countries_col = find_column(df, ["countries", "country"])
 
         for _, row in df.iterrows():
             o_id = row.get(id_col)
@@ -183,7 +184,7 @@ class PersonDashboardGenerator:
             if entity_type == "Lieux" and coord_col:
                 coords = parse_coordinates(row.get(coord_col))
                 if coords is not None:
-                    country_list = parse_pipe_separated(row.get("countries"))
+                    country_list = parse_pipe_separated(row.get(countries_col)) if countries_col else []
                     country = country_list[0] if country_list else ""
                     self.lieux_rows[o_id] = (coords[0], coords[1], country)
 
