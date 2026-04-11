@@ -441,6 +441,171 @@ class PersonDashboardGenerator:
             by_role[role] = entries
         return {"by_role": by_role}
 
+    # ------------------------------------------------------------------
+    # TF-IDF document frequency — computed once across all persons
+    # ------------------------------------------------------------------
+
+    def build_document_frequency(self) -> None:
+        """df[entity_o_id] = number of Persons whose item set touches it.
+
+        Computed once up front so the per-person network builder can
+        look up the IDF component in O(1).
+        """
+        for person_o_id, role_items in self.persons_items.items():
+            touched: Set[int] = set()
+            for item_key in role_items["subject"] | role_items["creator"]:
+                roles = self.item_entities.get(item_key, {})
+                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                    if o_id != person_o_id:
+                        touched.add(o_id)
+            for o_id in touched:
+                self.df[o_id] = self.df.get(o_id, 0) + 1
+        logger.info(f"Document frequency: {len(self.df)} distinct entities")
+
+    def compute_network(self, person_o_id: int) -> Dict[str, Any]:
+        """TF-IDF ranked neighbor graph, per role.
+
+        Nodes[0] is the person themselves (type='center', score=null).
+        Neighbors are sorted by TF-IDF score descending, capped at
+        ``TOP_N_NEIGHBORS``.
+        """
+        person_info = self.persons[person_o_id]
+        by_role: Dict[str, Any] = {}
+
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            cooc: Counter = Counter()
+            for key in item_keys:
+                roles = self.item_entities.get(key, {})
+                seen_here: Set[int] = set()
+                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                    if o_id == person_o_id:
+                        continue
+                    if o_id in seen_here:
+                        continue
+                    seen_here.add(o_id)
+                    cooc[o_id] += 1
+
+            # Filter + score
+            scored: List[Dict[str, Any]] = []
+            for o_id, count in cooc.items():
+                if count < MIN_COOCCURRENCE:
+                    continue
+                df_x = max(self.df.get(o_id, 1), 1)
+                if df_x >= self.n_persons:
+                    continue  # everyone has it, it's noise
+                idf = math.log(self.n_persons / df_x)
+                score = count * idf
+                if score <= 0:
+                    continue
+                entity = self.id_to_entity.get(o_id)
+                if not entity:
+                    continue
+                scored.append({
+                    "o_id": o_id,
+                    "title": entity["title"],
+                    "type": entity["type"],
+                    "cooc": count,
+                    "score": round(score, 4),
+                })
+
+            scored.sort(key=lambda e: e["score"], reverse=True)
+            scored = scored[:TOP_N_NEIGHBORS]
+
+            nodes: List[Dict[str, Any]] = [{
+                "o_id": person_o_id,
+                "title": person_info["title"],
+                "type": "center",
+                "cooc": None,
+                "score": None,
+            }]
+            nodes.extend(scored)
+
+            edges: List[Dict[str, Any]] = [{
+                "source": person_o_id,
+                "target": n["o_id"],
+                "weight": n["score"],
+                "cooc": n["cooc"],
+            } for n in scored]
+
+            by_role[role] = {"nodes": nodes, "edges": edges}
+
+        return {"by_role": by_role}
+
+    # ------------------------------------------------------------------
+    # Per-person JSON assembly + fan-out
+    # ------------------------------------------------------------------
+
+    def _build_person_header(self, person_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract the handful of person-scoped fields that the header
+        card needs (the block PHTML reads most fields from the Omeka
+        representation directly; this is for JS-side labels only)."""
+        row = person_info["row"]
+        prenom_col = find_column(self.index_df, ["Prénom", "foaf:firstName"])
+        nom_col = find_column(self.index_df, ["Nom", "foaf:lastName"])
+        genre_col = find_column(self.index_df, ["Genre", "foaf:gender"])
+
+        countries = parse_pipe_separated(row.get("countries"))
+        first = str(row.get("first_occurrence") or "").strip() or None
+        last = str(row.get("last_occurrence") or "").strip() or None
+
+        return {
+            "o_id": person_info["o_id"],
+            "title": person_info["title"],
+            "prenom": str(row.get(prenom_col) or "").strip() if prenom_col else "",
+            "nom": str(row.get(nom_col) or "").strip() if nom_col else "",
+            "genre": str(row.get(genre_col) or "").strip() if genre_col else "",
+            "countries": countries,
+            "first_occurrence": first,
+            "last_occurrence": last,
+        }
+
+    def build_person_json(self, person_o_id: int) -> Dict[str, Any]:
+        person_info = self.persons[person_o_id]
+
+        summary = self.compute_summary(person_o_id)
+        timeline = self.compute_timeline(person_o_id)
+        newspapers = self.compute_newspapers(person_o_id)
+        countries = self.compute_countries(person_o_id)
+        network = self.compute_network(person_o_id)
+        locations = self.compute_locations(person_o_id)
+
+        # Backfill neighbors_count into summary now that network exists
+        for role in ("all", "subject", "creator"):
+            nodes = network["by_role"][role]["nodes"]
+            summary["by_role"][role]["neighbors_count"] = max(0, len(nodes) - 1)
+
+        return {
+            "version": 1,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "person": self._build_person_header(person_info),
+            "summary": summary,
+            "timeline": timeline,
+            "newspapers": newspapers,
+            "countries": countries,
+            "network": network,
+            "locations": locations,
+        }
+
+    def generate_all(self) -> int:
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        targets = list(self.persons_items.keys())
+        if self.limit:
+            targets = targets[: self.limit]
+
+        written = 0
+        for person_o_id in targets:
+            if person_o_id not in self.persons:
+                continue
+            data = self.build_person_json(person_o_id)
+            out_path = self.output_dir / f"{person_o_id}.json"
+            save_json(data, out_path)
+            written += 1
+            if written % 100 == 0:
+                logger.info(f"  {written} person JSONs written")
+        logger.info(f"Done — {written} person JSONs written to {self.output_dir}")
+        return written
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -479,7 +644,9 @@ def main() -> int:
     gen.build_entity_lookup()
     gen.resolve_items()
 
-    logger.info("Skeleton run complete — aggregation stages will be added in later tasks")
+    gen.build_document_frequency()
+    written = gen.generate_all()
+    logger.info(f"Finished: {written} person dashboards emitted")
     return 0
 
 
