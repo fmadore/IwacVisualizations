@@ -74,6 +74,9 @@ TOP_N_NEIGHBORS = 50
 # Omeka resource template id for ``Personnes`` on islam.zmo.de.
 PERSON_TEMPLATE_TYPE = "Personnes"
 
+# Module-level logger. Populated by ``main()`` via ``global logger``.
+logger: Optional[logging.Logger] = None
+
 
 class PersonDashboardGenerator:
     """Builds one JSON per Person in the index subset."""
