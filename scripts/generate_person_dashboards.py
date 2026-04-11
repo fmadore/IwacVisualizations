@@ -101,6 +101,11 @@ class PersonDashboardGenerator:
         self.df: Dict[int, int] = {}  # document frequency for TF-IDF
         self.n_persons: int = 0
 
+        # Cached column names for _build_person_header — populated in build_entity_lookup
+        self.prenom_col: Optional[str] = None
+        self.nom_col: Optional[str] = None
+        self.genre_col: Optional[str] = None
+
     # ------------------------------------------------------------------
     # Loaders
     # ------------------------------------------------------------------
@@ -144,6 +149,10 @@ class PersonDashboardGenerator:
         alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
         coord_col = find_column(df, ["Coordonnées", "coordinates"])
         countries_col = find_column(df, ["countries", "country"])
+
+        self.prenom_col = find_column(df, ["Prénom", "foaf:firstName"])
+        self.nom_col = find_column(df, ["Nom", "foaf:lastName"])
+        self.genre_col = find_column(df, ["Genre", "foaf:gender"])
 
         for _, row in df.iterrows():
             o_id = row.get(id_col)
@@ -541,9 +550,9 @@ class PersonDashboardGenerator:
         card needs (the block PHTML reads most fields from the Omeka
         representation directly; this is for JS-side labels only)."""
         row = person_info["row"]
-        prenom_col = find_column(self.index_df, ["Prénom", "foaf:firstName"])
-        nom_col = find_column(self.index_df, ["Nom", "foaf:lastName"])
-        genre_col = find_column(self.index_df, ["Genre", "foaf:gender"])
+        prenom_col = self.prenom_col
+        nom_col = self.nom_col
+        genre_col = self.genre_col
 
         countries = parse_pipe_separated(row.get("countries"))
         first = str(row.get("first_occurrence") or "").strip() or None
