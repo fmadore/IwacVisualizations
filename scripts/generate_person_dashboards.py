@@ -274,6 +274,173 @@ class PersonDashboardGenerator:
             return first if first and first.lower() != "unknown" else ""
         return ""
 
+    # ------------------------------------------------------------------
+    # Per-person aggregates
+    # ------------------------------------------------------------------
+
+    EMPTY_SUMMARY = {
+        "total_mentions": 0,
+        "year_min": None,
+        "year_max": None,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0,
+    }
+
+    def _items_for_role(
+        self, person_o_id: int, role: str
+    ) -> List[str]:
+        """Return item_keys for this person + role. 'all' = union."""
+        if role == "all":
+            return sorted(
+                self.persons_items[person_o_id]["subject"]
+                | self.persons_items[person_o_id]["creator"]
+            )
+        return sorted(self.persons_items[person_o_id][role])
+
+    def compute_summary(self, person_o_id: int) -> Dict[str, Any]:
+        by_role: Dict[str, Dict[str, Any]] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            if not item_keys:
+                by_role[role] = dict(self.EMPTY_SUMMARY)
+                continue
+            years: List[int] = []
+            newspapers: Set[str] = set()
+            countries: Set[str] = set()
+            for key in item_keys:
+                meta = self.items_meta.get(key, {})
+                y = extract_year(meta.get("pub_date"))
+                if y is not None:
+                    years.append(y)
+                if meta.get("newspaper"):
+                    newspapers.add(meta["newspaper"])
+                if meta.get("country"):
+                    countries.add(meta["country"])
+            by_role[role] = {
+                "total_mentions": len(item_keys),
+                "year_min": min(years) if years else None,
+                "year_max": max(years) if years else None,
+                "newspapers_count": len(newspapers),
+                "countries_count": len(countries),
+                "neighbors_count": 0,  # filled in after network is built
+            }
+        return {"by_role": by_role}
+
+    def compute_timeline(self, person_o_id: int) -> Dict[str, Any]:
+        """Year × country stacked series, mirrors C.timeline shape."""
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            year_country: Dict[Tuple[int, str], int] = Counter()
+            countries: Set[str] = set()
+            years_seen: Set[int] = set()
+            for key in item_keys:
+                meta = self.items_meta.get(key, {})
+                y = extract_year(meta.get("pub_date"))
+                c = meta.get("country") or ""
+                if y is None or not c:
+                    continue
+                year_country[(y, c)] += 1
+                countries.add(c)
+                years_seen.add(y)
+            if not years_seen:
+                by_role[role] = {"years": [], "countries": [], "series": {}}
+                continue
+            years = sorted(years_seen)
+            countries_sorted = sorted(countries)
+            series = {
+                c: [year_country.get((y, c), 0) for y in years]
+                for c in countries_sorted
+            }
+            by_role[role] = {
+                "years": years,
+                "countries": countries_sorted,
+                "series": series,
+            }
+        return {"by_role": by_role}
+
+    def compute_newspapers(self, person_o_id: int, top_n: int = 15) -> Dict[str, Any]:
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            stats: Dict[str, Dict[str, Any]] = {}
+            for key in item_keys:
+                meta = self.items_meta.get(key, {})
+                name = meta.get("newspaper")
+                if not name:
+                    continue
+                s = stats.setdefault(name, {
+                    "name": name,
+                    "total": 0,
+                    "articles": 0,
+                    "publications": 0,
+                    "country": meta.get("country") or "",
+                    "year_min": None,
+                    "year_max": None,
+                })
+                s["total"] += 1
+                if meta.get("subset") == "articles":
+                    s["articles"] += 1
+                elif meta.get("subset") == "publications":
+                    s["publications"] += 1
+                y = extract_year(meta.get("pub_date"))
+                if y is not None:
+                    s["year_min"] = y if s["year_min"] is None else min(s["year_min"], y)
+                    s["year_max"] = y if s["year_max"] is None else max(s["year_max"], y)
+            entries = sorted(stats.values(), key=lambda e: e["total"], reverse=True)[:top_n]
+            by_role[role] = entries
+        return {"by_role": by_role}
+
+    def compute_countries(self, person_o_id: int) -> Dict[str, Any]:
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            counter: Counter = Counter()
+            for key in item_keys:
+                c = self.items_meta.get(key, {}).get("country") or ""
+                if c:
+                    counter[c] += 1
+            entries = [{"name": name, "count": count} for name, count in counter.most_common()]
+            by_role[role] = entries
+        return {"by_role": by_role}
+
+    def compute_locations(self, person_o_id: int) -> Dict[str, Any]:
+        """Join mentioned Lieux entities to their Coordonnées.
+
+        ``self.lieux_rows`` is precomputed in ``build_entity_lookup``
+        (o_id → (lat, lng, country)). ``self.id_to_entity`` gives the
+        O(1) title lookup.
+        """
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            loc_counter: Counter = Counter()
+            for key in item_keys:
+                roles = self.item_entities.get(key, {})
+                seen_here: Set[int] = set()
+                for entity_o_id in roles.get("subject", []) + roles.get("creator", []):
+                    if entity_o_id not in self.lieux_rows:
+                        continue
+                    if entity_o_id in seen_here:
+                        continue
+                    seen_here.add(entity_o_id)
+                    loc_counter[entity_o_id] += 1
+            entries = []
+            for entity_o_id, count in loc_counter.most_common():
+                lat, lng, country = self.lieux_rows[entity_o_id]
+                info = self.id_to_entity.get(entity_o_id, {})
+                entries.append({
+                    "o_id": entity_o_id,
+                    "name": info.get("title", f"#{entity_o_id}"),
+                    "lat": lat,
+                    "lng": lng,
+                    "country": country,
+                    "count": count,
+                })
+            by_role[role] = entries
+        return {"by_role": by_role}
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
