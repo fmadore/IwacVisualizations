@@ -33,11 +33,10 @@
 
         var tbl = P.buildTable({
             columns: [
-                { key: 'thumbnail',  label: '',                render: 'thumbnail', width: '64px' },
+                { key: 'thumbnail',  label: '',                render: 'thumbnail', width: '72px' },
                 { key: 'title',      label: P.t('Title'),      render: 'link', linkKey: 'url' },
                 { key: 'source',     label: P.t('Source') },
-                { key: 'type',       label: P.t('Type'),       render: 'badge', i18nPrefix: 'item_type_' },
-                { key: 'added_date', label: P.t('Added'),      render: 'date' }
+                { key: 'added_date', label: P.t('Added'),      render: 'date', width: '140px' }
             ],
             rows: enriched,
             pageSize: 20,

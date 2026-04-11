@@ -577,13 +577,110 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { background: #064e3b; colo
 
 .iwac-vis-recent-additions {
     grid-column: 1 / -1;
-    max-height: 480px;
-    overflow-y: auto;
-    padding: 0;
 }
 
+.iwac-vis-recent-additions > h4 {
+    margin: 0 0 0.75rem;
+}
+
+/* Give the table its own breathing room inside the panel and let it
+   scroll vertically if the list ever grows. */
 .iwac-vis-recent-additions .iwac-vis-table-wrapper {
-    max-height: 100%;
+    max-height: 560px;
+    overflow-y: auto;
+    padding: 0.25rem 0.5rem 0.5rem;
+    border-radius: var(--radius-sm, 4px);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table {
+    /* Slightly larger cells so rows don't feel compressed */
+    font-size: var(--text-sm, 0.92rem);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__header {
+    padding: 0.75rem 1rem;
+    background: var(--surface-raised, #f9f7f3);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__cell {
+    padding: 0.85rem 1rem;
+    line-height: 1.4;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+    width: 72px;
+    padding: 0.6rem 0.5rem 0.6rem 1rem;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__thumb,
+.iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+    width: 56px;
+    height: 56px;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__link {
+    /* Clamp long titles to 2 lines on desktop */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+.iwac-vis-recent-additions .iwac-vis-pagination {
+    padding: 0.75rem 1rem 0.25rem;
+}
+
+/* ---- Responsive ---- */
+
+/* Tablet: reduce padding, shrink thumbnail, hide source column */
+@media (max-width: 900px) {
+    .iwac-vis-recent-additions .iwac-vis-table {
+        font-size: var(--text-xs, 0.85rem);
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__header,
+    .iwac-vis-recent-additions .iwac-vis-table__cell {
+        padding: 0.6rem 0.75rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+        width: 60px;
+        padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__thumb,
+    .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+        width: 48px;
+        height: 48px;
+    }
+    /* Hide the Source column (3rd visible column after thumb + title) */
+    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(3),
+    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Mobile: also hide the Added date column so only thumb + title remain */
+@media (max-width: 560px) {
+    .iwac-vis-recent-additions .iwac-vis-table__header,
+    .iwac-vis-recent-additions .iwac-vis-table__cell {
+        padding: 0.5rem 0.6rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+        width: 52px;
+        padding: 0.4rem 0.2rem 0.4rem 0.6rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__thumb,
+    .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+        width: 40px;
+        height: 40px;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(4),
+    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(4) {
+        display: none;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__link {
+        -webkit-line-clamp: 3;
+    }
 }
 
 /* =================================================================== */
