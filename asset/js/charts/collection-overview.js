@@ -70,7 +70,7 @@
         var entitiesPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most-cited entities'));
         entitiesPanel.panel.classList.add('iwac-vis-entities-panel');
         var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
-        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('French word cloud'));
+        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'));
         var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'));
         var recentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
                                           P.t('Recent additions'));

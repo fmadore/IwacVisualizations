@@ -356,56 +356,34 @@
     C.treemap = function (tree, opts) {
         opts = opts || {};
 
+        // Sanitize: only leaves carry value, parents only carry children.
+        // This sidesteps an ECharts 6 bug in the treemap layout where
+        // `upperLabel` on non-leaf levels + value-carrying parents crashes
+        // with `Cannot set properties of undefined (setting '2')` in di().
         function sanitize(node, depth, depthRef) {
             if (!node || typeof node !== 'object') return null;
             depthRef.max = Math.max(depthRef.max, depth);
-            var out = { name: node.name || '' };
             var kids = node.children;
             if (Array.isArray(kids) && kids.length > 0) {
                 var cleanKids = [];
-                var sum = 0;
                 for (var i = 0; i < kids.length; i++) {
                     var c = sanitize(kids[i], depth + 1, depthRef);
-                    if (c && (c.value == null || c.value > 0 || (c.children && c.children.length))) {
-                        cleanKids.push(c);
-                        sum += (c.value || 0);
-                    }
+                    if (c) cleanKids.push(c);
                 }
                 if (cleanKids.length > 0) {
-                    out.children = cleanKids;
-                    out.value = (node.value != null) ? Number(node.value) : sum;
-                    return out;
+                    return { name: node.name || '', children: cleanKids };
                 }
-                // kids array was effectively empty → treat as leaf
+                // kids array was effectively empty → treat as leaf if it has value
             }
-            if (node.value != null) {
-                out.value = Number(node.value);
-                return out.value > 0 ? out : null;
+            if (node.value != null && Number(node.value) > 0) {
+                return { name: node.name || '', value: Number(node.value) };
             }
             return null;
-        }
-
-        function buildLevels(depth) {
-            var levels = [];
-            for (var i = 0; i <= depth; i++) {
-                if (i === 0) {
-                    levels.push({ itemStyle: { borderWidth: 0, gapWidth: 3 } });
-                } else if (i === 1) {
-                    levels.push({ itemStyle: { gapWidth: 2 }, upperLabel: { show: true } });
-                } else {
-                    levels.push({
-                        colorSaturation: [0.35, 0.5],
-                        itemStyle: { gapWidth: 1, borderColorSaturation: 0.6 }
-                    });
-                }
-            }
-            return levels;
         }
 
         var depthRef = { max: 0 };
         var sanitized = sanitize(tree || { children: [] }, 0, depthRef);
         var children = (sanitized && sanitized.children) || [];
-        var levels = buildLevels(Math.max(1, depthRef.max));
 
         return {
             tooltip: {
@@ -421,11 +399,15 @@
                     name: opts.rootName || (tree && tree.name) || 'Root',
                     roam: false,
                     nodeClick: 'zoomToNode',
+                    leafDepth: 2,
                     breadcrumb: { show: true, bottom: 4 },
                     label: { show: true, formatter: '{b}' },
-                    upperLabel: { show: true, height: 22 },
-                    itemStyle: { borderWidth: 1, gapWidth: 2 },
-                    levels: levels,
+                    itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: '#fff' },
+                    levels: [
+                        { itemStyle: { borderWidth: 0, gapWidth: 3 } },
+                        { itemStyle: { gapWidth: 2 } },
+                        { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1 } }
+                    ],
                     data: children
                 }
             ]
@@ -703,6 +685,14 @@
     }
 
     /**
+     * French word cloud, ported from ResourceVisualizations'
+     * dashboard-charts-wordcloud.js. Uses a shape function that behaves
+     * like a rectangle but fills the panel much better than the stock
+     * `shape: 'rectangle'` (which collapses everything to a diagonal arc
+     * in echarts-wordcloud 2). Size range + grid adapt to the word count;
+     * color is randomized from a small palette pulled from the live IWAC
+     * theme.
+     *
      * @param {Array<[string, number]>} pairs
      * @param {Object} [opts]
      */
@@ -717,30 +707,61 @@
                 { nameKey: 'name', valueKey: 'count' }
             );
         }
+
+        var count = data.length;
+        var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
+        var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
+        var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
+
+        // Palette pulled from the live IWAC theme when available, with a
+        // warm-to-cool default set as fallback. Randomized per-word so the
+        // cloud has visual variety instead of one flat colour.
+        var palette = (window.IWACVis && window.IWACVis.getPalette && window.IWACVis.getPalette())
+            || ['#e67a14', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
+
         return {
             tooltip: {
+                confine: true,
                 formatter: function (p) {
-                    return '<strong>' + esc(p.name) + '</strong><br>' + fmt(p.value);
+                    return '<strong>' + esc(p.name) + '</strong>: ' + fmt(p.value);
                 }
             },
+            aria: { enabled: true },
             series: [{
                 type: 'wordCloud',
-                shape: 'rectangle',
+                // Inverse-square shape function: behaves as a rectangle but
+                // lets the wordcloud layout actually fill the box.
+                shape: function (theta) {
+                    var cos = Math.abs(Math.cos(theta));
+                    var sin = Math.abs(Math.sin(theta));
+                    return 1 / Math.max(cos, sin);
+                },
                 left: 'center',
                 top: 'center',
-                width: '96%',
-                height: '92%',
+                width: '100%',
+                height: '100%',
                 right: null,
                 bottom: null,
-                sizeRange: [12, 58],
-                rotationRange: [-30, 30],
+                sizeRange: [minFont, maxFont],
+                rotationRange: [-45, 45],
                 rotationStep: 15,
-                gridSize: 8,
+                gridSize: grid,
                 drawOutOfBound: false,
-                layoutAnimation: true,
+                shrinkToFit: true,
+                layoutAnimation: count <= 100,
                 textStyle: {
-                    fontFamily: 'inherit',
-                    fontWeight: 'bold'
+                    fontFamily: 'sans-serif',
+                    fontWeight: 'bold',
+                    color: function () {
+                        return palette[Math.floor(Math.random() * palette.length)];
+                    }
+                },
+                emphasis: {
+                    textStyle: {
+                        fontWeight: 'bold',
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0,0,0,0.3)'
+                    }
                 },
                 data: data
             }]

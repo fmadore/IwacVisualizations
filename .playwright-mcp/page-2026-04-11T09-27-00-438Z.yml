@@ -1,0 +1,538 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Advanced search" [ref=e5] [cursor=pointer]:
+        - /url: /s/westafrica/item/search
+      - search "Search" [ref=e7]:
+        - textbox "Search Query" [ref=e8]:
+          - /placeholder: Enter a search term
+        - button "Submit" [ref=e9] [cursor=pointer]
+      - generic [ref=e10]:
+        - button "Select language" [ref=e12] [cursor=pointer]:
+          - img [ref=e14]
+          - generic [ref=e17]: EN
+        - button "Switch to dark mode" [ref=e18] [cursor=pointer]:
+          - img [ref=e20]
+    - separator [ref=e22]
+    - navigation [ref=e24]:
+      - list [ref=e26]:
+        - listitem [ref=e27] [cursor=pointer]:
+          - link "Home" [ref=e28]:
+            - /url: /s/westafrica/page/home
+        - listitem [ref=e29] [cursor=pointer]:
+          - link "Browse" [ref=e30]:
+            - /url: /s/westafrica/page/sub-collections
+          - button "show submenu for “Browse”" [ref=e31]:
+            - generic [ref=e32]: show submenu for “Browse”
+        - listitem [ref=e33] [cursor=pointer]:
+          - link "Exhibits" [ref=e34]:
+            - /url: /s/westafrica/page/exhibits
+          - button "show submenu for “Exhibits”" [ref=e35]:
+            - generic [ref=e36]: show submenu for “Exhibits”
+        - listitem [ref=e37] [cursor=pointer]:
+          - link "Map browse" [ref=e38]:
+            - /url: /s/westafrica/page/map-browse
+        - listitem [ref=e39] [cursor=pointer]:
+          - link "References" [ref=e40]:
+            - /url: /s/westafrica/faceted-browse/7
+          - button "show submenu for “References”" [ref=e41]:
+            - generic [ref=e42]: show submenu for “References”
+        - listitem [ref=e43] [cursor=pointer]:
+          - link "Index" [ref=e44]:
+            - /url: /s/westafrica/page/index
+          - button "show submenu for “Index”" [ref=e45]:
+            - generic [ref=e46]: show submenu for “Index”
+        - listitem [ref=e47] [cursor=pointer]:
+          - link "Digital humanities & AI" [ref=e48]:
+            - /url: /s/westafrica/page/digital-humanities-ai
+          - button "show submenu for “Digital humanities & AI”" [ref=e49]:
+            - generic [ref=e50]: show submenu for “Digital humanities & AI”
+        - listitem [ref=e51] [cursor=pointer]:
+          - link "About" [ref=e52]:
+            - /url: /s/westafrica/page/about
+          - button "show submenu for “About”" [ref=e53]:
+            - generic [ref=e54]: show submenu for “About”
+  - generic [ref=e55]:
+    - img [ref=e56]
+    - heading "Islam West Africa Collection" [level=2] [ref=e58]
+  - main [ref=e59]:
+    - navigation [ref=e60]:
+      - link "Browse" [ref=e61] [cursor=pointer]:
+        - /url: /s/westafrica/page/sub-collections
+      - text: ">"
+      - generic [ref=e62]: Overview
+    - generic [ref=e64]:
+      - heading "Overview" [level=1] [ref=e67]
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - generic [ref=e73]: 12,287
+            - generic [ref=e74]: Articles
+          - generic [ref=e75]:
+            - generic [ref=e76]: 4,697
+            - generic [ref=e77]: Index
+          - generic [ref=e78]:
+            - generic [ref=e79]: 8,007,144
+            - generic [ref=e80]: Total words
+          - generic [ref=e81]:
+            - generic [ref=e82]: 16,466
+            - generic [ref=e83]: Total pages
+          - generic [ref=e84]:
+            - generic [ref=e85]: "20"
+            - generic [ref=e86]: Unique sources
+          - generic [ref=e87]:
+            - generic [ref=e88]: "13"
+            - generic [ref=e89]: Document types
+          - generic [ref=e90]:
+            - generic [ref=e91]: 9,315
+            - generic [ref=e92]: Audiovisual minutes
+          - generic [ref=e93]:
+            - generic [ref=e94]: "864"
+            - generic [ref=e95]: References
+          - generic [ref=e96]:
+            - generic [ref=e97]: "6"
+            - generic [ref=e98]: Countries
+          - generic [ref=e99]:
+            - generic [ref=e100]: "9"
+            - generic [ref=e101]: Languages
+        - paragraph [ref=e102]: "Period covered: 1961 – 2025"
+        - generic [ref=e103]:
+          - heading "Recent additions" [level=4] [ref=e104]
+          - generic [ref=e106]:
+            - table [ref=e107]:
+              - rowgroup [ref=e108]:
+                - row "Title Source Type Added" [ref=e109]:
+                  - columnheader [ref=e110]
+                  - columnheader "Title" [ref=e111]
+                  - columnheader "Source" [ref=e112]
+                  - columnheader "Type" [ref=e113]
+                  - columnheader "Added" [ref=e114]
+              - rowgroup [ref=e115]:
+                - 'row "Tentative d''enlèvement du président du CNI : le gouvernement se fourvoie La Voie News article Dec 22, 2025" [ref=e116]':
+                  - cell [ref=e117]
+                  - 'cell "Tentative d''enlèvement du président du CNI : le gouvernement se fourvoie" [ref=e118]':
+                    - 'link "Tentative d''enlèvement du président du CNI : le gouvernement se fourvoie" [ref=e119] [cursor=pointer]':
+                      - /url: /s/westafrica/item/78006
+                  - cell "La Voie" [ref=e120]
+                  - cell "News article" [ref=e121]:
+                    - generic [ref=e122]: News article
+                  - cell "Dec 22, 2025" [ref=e123]
+                - row "Communiqué de presse du CNI La Voie News article Dec 22, 2025" [ref=e124]:
+                  - cell [ref=e125]
+                  - cell "Communiqué de presse du CNI" [ref=e126]:
+                    - link "Communiqué de presse du CNI" [ref=e127] [cursor=pointer]:
+                      - /url: /s/westafrica/item/78005
+                  - cell "La Voie" [ref=e128]
+                  - cell "News article" [ref=e129]:
+                    - generic [ref=e130]: News article
+                  - cell "Dec 22, 2025" [ref=e131]
+                - row "Provocation, agressions, attentats contre la communauté musulmane et ses dirigeants La Voie News article Dec 22, 2025" [ref=e132]:
+                  - cell [ref=e133]
+                  - cell "Provocation, agressions, attentats contre la communauté musulmane et ses dirigeants" [ref=e134]:
+                    - link "Provocation, agressions, attentats contre la communauté musulmane et ses dirigeants" [ref=e135] [cursor=pointer]:
+                      - /url: /s/westafrica/item/78004
+                  - cell "La Voie" [ref=e136]
+                  - cell "News article" [ref=e137]:
+                    - generic [ref=e138]: News article
+                  - cell "Dec 22, 2025" [ref=e139]
+                - row "Le pouvoir veut l'intégrisme La Voie News article Dec 22, 2025" [ref=e140]:
+                  - cell [ref=e141]
+                  - cell "Le pouvoir veut l'intégrisme" [ref=e142]:
+                    - link "Le pouvoir veut l'intégrisme" [ref=e143] [cursor=pointer]:
+                      - /url: /s/westafrica/item/78003
+                  - cell "La Voie" [ref=e144]
+                  - cell "News article" [ref=e145]:
+                    - generic [ref=e146]: News article
+                  - cell "Dec 22, 2025" [ref=e147]
+                - 'row "El Hadj Idriss Koudouss à BBC : \"Je suis menacé\" La Voie News article Dec 22, 2025" [ref=e148]':
+                  - cell [ref=e149]
+                  - 'cell "El Hadj Idriss Koudouss à BBC : \"Je suis menacé\"" [ref=e150]':
+                    - 'link "El Hadj Idriss Koudouss à BBC : \"Je suis menacé\"" [ref=e151] [cursor=pointer]':
+                      - /url: /s/westafrica/item/78002
+                  - cell "La Voie" [ref=e152]
+                  - cell "News article" [ref=e153]:
+                    - generic [ref=e154]: News article
+                  - cell "Dec 22, 2025" [ref=e155]
+                - 'row "Tentative d''enlèvement d''Idriss Koudouss (président du CNI) : le film des événements La Voie News article Dec 22, 2025" [ref=e156]':
+                  - cell [ref=e157]
+                  - 'cell "Tentative d''enlèvement d''Idriss Koudouss (président du CNI) : le film des événements" [ref=e158]':
+                    - 'link "Tentative d''enlèvement d''Idriss Koudouss (président du CNI) : le film des événements" [ref=e159] [cursor=pointer]':
+                      - /url: /s/westafrica/item/78001
+                  - cell "La Voie" [ref=e160]
+                  - cell "News article" [ref=e161]:
+                    - generic [ref=e162]: News article
+                  - cell "Dec 22, 2025" [ref=e163]
+                - row "Au nom de la laïcité le ministre Kipré Pierre interdit les activités de l'AEEMCI dans les lycées et collèges Alif News article Dec 17, 2025" [ref=e164]:
+                  - cell [ref=e165]
+                  - cell "Au nom de la laïcité le ministre Kipré Pierre interdit les activités de l'AEEMCI dans les lycées et collèges" [ref=e166]:
+                    - link "Au nom de la laïcité le ministre Kipré Pierre interdit les activités de l'AEEMCI dans les lycées et collèges" [ref=e167] [cursor=pointer]:
+                      - /url: /s/westafrica/item/77955
+                  - cell "Alif" [ref=e168]
+                  - cell "News article" [ref=e169]:
+                    - generic [ref=e170]: News article
+                  - cell "Dec 17, 2025" [ref=e171]
+                - 'row "À propos d''intégrisme : les niaiseries de Zadi Zaourou Plume Libre News article Dec 17, 2025" [ref=e172]':
+                  - cell [ref=e173]
+                  - 'cell "À propos d''intégrisme : les niaiseries de Zadi Zaourou" [ref=e174]':
+                    - 'link "À propos d''intégrisme : les niaiseries de Zadi Zaourou" [ref=e175] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77953
+                  - cell "Plume Libre" [ref=e176]
+                  - cell "News article" [ref=e177]:
+                    - generic [ref=e178]: News article
+                  - cell "Dec 17, 2025" [ref=e179]
+                - 'row "Divo : les cadres musulmans se donnent un siège social Plume Libre News article Dec 17, 2025" [ref=e180]':
+                  - cell [ref=e181]
+                  - 'cell "Divo : les cadres musulmans se donnent un siège social" [ref=e182]':
+                    - 'link "Divo : les cadres musulmans se donnent un siège social" [ref=e183] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77951
+                  - cell "Plume Libre" [ref=e184]
+                  - cell "News article" [ref=e185]:
+                    - generic [ref=e186]: News article
+                  - cell "Dec 17, 2025" [ref=e187]
+                - 'row "Insolite : le PDCI et les Dioula de Bonoua Plume Libre News article Dec 17, 2025" [ref=e188]':
+                  - cell [ref=e189]
+                  - 'cell "Insolite : le PDCI et les Dioula de Bonoua" [ref=e190]':
+                    - 'link "Insolite : le PDCI et les Dioula de Bonoua" [ref=e191] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77949
+                  - cell "Plume Libre" [ref=e192]
+                  - cell "News article" [ref=e193]:
+                    - generic [ref=e194]: News article
+                  - cell "Dec 17, 2025" [ref=e195]
+                - 'row "Le PDCI et les musulmans : des cris de détresse ! Plume Libre News article Dec 17, 2025" [ref=e196]':
+                  - cell [ref=e197]
+                  - 'cell "Le PDCI et les musulmans : des cris de détresse !" [ref=e198]':
+                    - 'link "Le PDCI et les musulmans : des cris de détresse !" [ref=e199] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77947
+                  - cell "Plume Libre" [ref=e200]
+                  - cell "News article" [ref=e201]:
+                    - generic [ref=e202]: News article
+                  - cell "Dec 17, 2025" [ref=e203]
+                - 'row "Déclaration de l''AJMCI (Association des Jeunes Musulmans de Côte d''ivoire) : Plume Libre News article Dec 17, 2025" [ref=e204]':
+                  - cell [ref=e205]
+                  - cell "Déclaration de l'AJMCI (Association des Jeunes Musulmans de Côte d'ivoire) :" [ref=e206]:
+                    - link "Déclaration de l'AJMCI (Association des Jeunes Musulmans de Côte d'ivoire) :" [ref=e207] [cursor=pointer]:
+                      - /url: /s/westafrica/item/77945
+                  - cell "Plume Libre" [ref=e208]
+                  - cell "News article" [ref=e209]:
+                    - generic [ref=e210]: News article
+                  - cell "Dec 17, 2025" [ref=e211]
+                - 'row "Méga-Kadr : l''Islam, symbole de tolérance Plume Libre News article Dec 17, 2025" [ref=e212]':
+                  - cell [ref=e213]
+                  - 'cell "Méga-Kadr : l''Islam, symbole de tolérance" [ref=e214]':
+                    - 'link "Méga-Kadr : l''Islam, symbole de tolérance" [ref=e215] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77943
+                  - cell "Plume Libre" [ref=e216]
+                  - cell "News article" [ref=e217]:
+                    - generic [ref=e218]: News article
+                  - cell "Dec 17, 2025" [ref=e219]
+                - row "La défense confond le parquet Plume Libre News article Dec 17, 2025" [ref=e220]:
+                  - cell [ref=e221]
+                  - cell "La défense confond le parquet" [ref=e222]:
+                    - link "La défense confond le parquet" [ref=e223] [cursor=pointer]:
+                      - /url: /s/westafrica/item/77941
+                  - cell "Plume Libre" [ref=e224]
+                  - cell "News article" [ref=e225]:
+                    - generic [ref=e226]: News article
+                  - cell "Dec 17, 2025" [ref=e227]
+                - 'row "Combat contre l''Islam : les nouvelles alliances Plume Libre News article Dec 17, 2025" [ref=e228]':
+                  - cell [ref=e229]
+                  - 'cell "Combat contre l''Islam : les nouvelles alliances" [ref=e230]':
+                    - 'link "Combat contre l''Islam : les nouvelles alliances" [ref=e231] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77939
+                  - cell "Plume Libre" [ref=e232]
+                  - cell "News article" [ref=e233]:
+                    - generic [ref=e234]: News article
+                  - cell "Dec 17, 2025" [ref=e235]
+                - 'row "Chasse aux cadres musulmans : l''épuration ethnique continue! Plume Libre News article Dec 17, 2025" [ref=e236]':
+                  - cell [ref=e237]
+                  - 'cell "Chasse aux cadres musulmans : l''épuration ethnique continue!" [ref=e238]':
+                    - 'link "Chasse aux cadres musulmans : l''épuration ethnique continue!" [ref=e239] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77937
+                  - cell "Plume Libre" [ref=e240]
+                  - cell "News article" [ref=e241]:
+                    - generic [ref=e242]: News article
+                  - cell "Dec 17, 2025" [ref=e243]
+                - 'row "Mission parlementaire ivoirienne au Koweït : que faisait Diaby Koweït dans la délégation ? Plume Libre News article Dec 17, 2025" [ref=e244]':
+                  - cell [ref=e245]
+                  - 'cell "Mission parlementaire ivoirienne au Koweït : que faisait Diaby Koweït dans la délégation ?" [ref=e246]':
+                    - 'link "Mission parlementaire ivoirienne au Koweït : que faisait Diaby Koweït dans la délégation ?" [ref=e247] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77935
+                  - cell "Plume Libre" [ref=e248]
+                  - cell "News article" [ref=e249]:
+                    - generic [ref=e250]: News article
+                  - cell "Dec 17, 2025" [ref=e251]
+                - 'row "Les musulmans ivoiriens : cette \"minorité\" qui gêne Plume Libre News article Dec 17, 2025" [ref=e252]':
+                  - cell [ref=e253]
+                  - 'cell "Les musulmans ivoiriens : cette \"minorité\" qui gêne" [ref=e254]':
+                    - 'link "Les musulmans ivoiriens : cette \"minorité\" qui gêne" [ref=e255] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77933
+                  - cell "Plume Libre" [ref=e256]
+                  - cell "News article" [ref=e257]:
+                    - generic [ref=e258]: News article
+                  - cell "Dec 17, 2025" [ref=e259]
+                - row "Il faut tenir ! Plume Libre News article Dec 17, 2025" [ref=e260]:
+                  - cell [ref=e261]
+                  - cell "Il faut tenir !" [ref=e262]:
+                    - link "Il faut tenir !" [ref=e263] [cursor=pointer]:
+                      - /url: /s/westafrica/item/77931
+                  - cell "Plume Libre" [ref=e264]
+                  - cell "News article" [ref=e265]:
+                    - generic [ref=e266]: News article
+                  - cell "Dec 17, 2025" [ref=e267]
+                - 'row "\"Complot à trois têtes\" : un tissu de mensonges ! Plume Libre News article Dec 17, 2025" [ref=e268]':
+                  - cell [ref=e269]
+                  - 'cell "\"Complot à trois têtes\" : un tissu de mensonges !" [ref=e270]':
+                    - 'link "\"Complot à trois têtes\" : un tissu de mensonges !" [ref=e271] [cursor=pointer]':
+                      - /url: /s/westafrica/item/77929
+                  - cell "Plume Libre" [ref=e272]
+                  - cell "News article" [ref=e273]:
+                    - generic [ref=e274]: News article
+                  - cell "Dec 17, 2025" [ref=e275]
+            - generic [ref=e276]:
+              - button "Previous" [disabled] [ref=e277]
+              - generic [ref=e278]: Page 1 / 5
+              - button "Next" [ref=e279] [cursor=pointer]
+        - generic [ref=e280]:
+          - heading "Items per year, by country" [level=4] [ref=e282]
+          - generic [ref=e286]:
+            - heading "Items by type, over time" [level=4] [ref=e287]
+            - generic [ref=e288]:
+              - button "Country" [ref=e290] [cursor=pointer]
+              - combobox [ref=e292]:
+                - option "All countries" [selected]
+                - option "Benin"
+                - option "Burkina Faso"
+                - option "Côte d'Ivoire"
+                - option "Niger"
+                - option "Nigeria"
+                - option "Togo"
+          - heading "Collection growth over time" [level=4] [ref=e297]
+          - generic [ref=e301]:
+            - heading "Newspaper coverage" [level=4] [ref=e302]
+            - generic [ref=e303]:
+              - generic [ref=e304]:
+                - button "Country" [ref=e306] [cursor=pointer]
+                - combobox [ref=e308]:
+                  - option "All countries" [selected]
+                  - option "Benin"
+                  - option "Burkina Faso"
+                  - option "Côte d'Ivoire"
+                  - option "Niger"
+                  - option "Togo"
+              - generic [ref=e309]:
+                - button "Type" [ref=e311] [cursor=pointer]
+                - generic [ref=e312]:
+                  - button "All types" [ref=e313] [cursor=pointer]
+                  - button "News article" [ref=e314] [cursor=pointer]
+                  - button "Islamic periodical" [ref=e315] [cursor=pointer]
+          - heading "Content by country" [level=4] [ref=e320]
+          - generic [ref=e324]:
+            - heading "Languages represented" [level=4] [ref=e325]
+            - generic [ref=e327]:
+              - button "Global" [ref=e328] [cursor=pointer]
+              - button "By type" [ref=e329] [cursor=pointer]
+              - button "By country" [ref=e330] [cursor=pointer]
+          - generic [ref=e334]:
+            - heading "Most-cited entities" [level=4] [ref=e335]
+            - generic [ref=e336]:
+              - button "Persons" [ref=e337] [cursor=pointer]
+              - button "Organizations" [ref=e338] [cursor=pointer]
+              - button "Places" [ref=e339] [cursor=pointer]
+              - button "Subjects" [ref=e340] [cursor=pointer]
+              - button "Events" [ref=e341] [cursor=pointer]
+            - generic [ref=e345]:
+              - button "Previous" [disabled] [ref=e346]
+              - generic [ref=e347]: Page 1 / 5
+              - button "Next" [ref=e348] [cursor=pointer]
+          - heading "Collection breakdown" [level=4] [ref=e350]
+          - generic [ref=e354]:
+            - heading "French word cloud" [level=4] [ref=e355]
+            - generic [ref=e484]:
+              - button "Global" [ref=e485] [cursor=pointer]
+              - button "By country" [ref=e486] [cursor=pointer]
+              - button "By year" [ref=e487] [cursor=pointer]
+            - generic [ref=e490]: 12,272 articles · 31,941 unique words
+          - generic [ref=e360]:
+            - heading "World map" [level=4] [ref=e361]
+            - generic [ref=e491]:
+              - button "Type" [ref=e493] [cursor=pointer]
+              - generic [ref=e494]:
+                - button "All types" [ref=e495] [cursor=pointer]
+                - button "News article" [ref=e496] [cursor=pointer]
+                - button "Islamic periodical" [ref=e497] [cursor=pointer]
+                - button "Document" [ref=e498] [cursor=pointer]
+                - button "Audio-visual recording" [ref=e499] [cursor=pointer]
+                - button "Reference" [ref=e500] [cursor=pointer]
+            - generic [ref=e501]:
+              - region "Map" [ref=e502]
+              - group [ref=e503]:
+                - generic "Toggle attribution" [ref=e504] [cursor=pointer]
+                - generic [ref=e505]:
+                  - text: ©
+                  - link "CARTO" [ref=e506] [cursor=pointer]:
+                    - /url: https://carto.com/about-carto/
+                  - text: ", ©"
+                  - link "OpenStreetMap" [ref=e507] [cursor=pointer]:
+                    - /url: http://www.openstreetmap.org/about/
+                  - text: contributors
+  - contentinfo [ref=e366]:
+    - generic [ref=e368]:
+      - generic [ref=e369]:
+        - generic [ref=e370]:
+          - link "Leibniz-Zentrum Moderner Orient" [ref=e371] [cursor=pointer]:
+            - /url: https://www.zmo.de/en
+            - img "Leibniz-Zentrum Moderner Orient" [ref=e372]
+          - link "Berlin Senate Department" [ref=e373] [cursor=pointer]:
+            - /url: https://www.berlin.de/sen/wgp/
+            - img "Berlin Senate Department" [ref=e374]
+          - link "Africa Multiple Cluster of Excellence - University of Bayreuth" [ref=e375] [cursor=pointer]:
+            - /url: https://www.africamultiple.uni-bayreuth.de/en/index.html
+            - img "Africa Multiple Cluster of Excellence - University of Bayreuth" [ref=e376]
+        - generic [ref=e377]: An open-access digital database on Islam and Muslims in Benin, Burkina Faso, Côte d'Ivoire, Niger, Nigeria, and Togo.
+      - list [ref=e379]:
+        - listitem [ref=e380]:
+          - link "Home" [ref=e381] [cursor=pointer]:
+            - /url: /s/westafrica/page/home
+        - listitem [ref=e382]:
+          - link "Browse" [ref=e383] [cursor=pointer]:
+            - /url: /s/westafrica/page/sub-collections
+          - list [ref=e384]:
+            - listitem [ref=e385]:
+              - link "Overview" [ref=e386] [cursor=pointer]:
+                - /url: /s/westafrica/page/overview
+            - listitem [ref=e387]:
+              - link "Benin" [ref=e388] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/1
+            - listitem [ref=e389]:
+              - link "Burkina Faso" [ref=e390] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/2
+            - listitem [ref=e391]:
+              - link "Côte d'Ivoire" [ref=e392] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/3
+            - listitem [ref=e393]:
+              - link "Niger" [ref=e394] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/4
+            - listitem [ref=e395]:
+              - link "Nigeria" [ref=e396] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/5
+            - listitem [ref=e397]:
+              - link "Togo" [ref=e398] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/6
+        - listitem [ref=e399]:
+          - link "Exhibits" [ref=e400] [cursor=pointer]:
+            - /url: /s/westafrica/page/exhibits
+          - list [ref=e401]:
+            - listitem [ref=e402]:
+              - link "Hajj in Burkina Faso" [ref=e403] [cursor=pointer]:
+                - /url: /s/westafrica/page/hajj-bf
+            - listitem [ref=e404]:
+              - link "Intégrisme in Côte d'Ivoire" [ref=e405] [cursor=pointer]:
+                - /url: /s/westafrica/page/integrisme-cote-d-ivoire
+            - listitem [ref=e406]:
+              - link "Student activism in Burkina Faso" [ref=e407] [cursor=pointer]:
+                - /url: /s/westafrica/page/student-activism-bf
+        - listitem [ref=e408]:
+          - link "Map browse" [ref=e409] [cursor=pointer]:
+            - /url: /s/westafrica/page/map-browse
+        - listitem [ref=e410]:
+          - link "References" [ref=e411] [cursor=pointer]:
+            - /url: /s/westafrica/faceted-browse/7
+          - list [ref=e412]:
+            - listitem [ref=e413]:
+              - link "Browse" [ref=e414] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/7
+            - listitem [ref=e415]:
+              - link "References visualisations" [ref=e416] [cursor=pointer]:
+                - /url: /s/westafrica/page/references_visualisations
+            - listitem [ref=e417]:
+              - link "Submit" [ref=e418] [cursor=pointer]:
+                - /url: /s/westafrica/page/submit-a-reference
+        - listitem [ref=e419]:
+          - link "Index" [ref=e420] [cursor=pointer]:
+            - /url: /s/westafrica/page/index
+          - list [ref=e421]:
+            - listitem [ref=e422]:
+              - link "Events" [ref=e423] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/8
+            - listitem [ref=e424]:
+              - link "Locations" [ref=e425] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/9
+            - listitem [ref=e426]:
+              - link "Organizations" [ref=e427] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/10
+            - listitem [ref=e428]:
+              - link "Persons" [ref=e429] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/11
+            - listitem [ref=e430]:
+              - link "Topics" [ref=e431] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/12
+            - listitem [ref=e432]:
+              - link "Languages" [ref=e433] [cursor=pointer]:
+                - /url: /s/westafrica/faceted-browse/13
+        - listitem [ref=e434]:
+          - link "Digital humanities & AI" [ref=e435] [cursor=pointer]:
+            - /url: /s/westafrica/page/digital-humanities-ai
+          - list [ref=e436]:
+            - listitem [ref=e437]:
+              - link "Keywords explorer" [ref=e438] [cursor=pointer]:
+                - /url: /s/westafrica/page/iwac-keyword-explorer
+            - listitem [ref=e439]:
+              - link "Topic modelling" [ref=e440] [cursor=pointer]:
+                - /url: /s/westafrica/page/topic-modelling
+            - listitem [ref=e441]:
+              - link "Sentiment analysis" [ref=e442] [cursor=pointer]:
+                - /url: /s/westafrica/page/sentiment-analysis
+            - listitem [ref=e443]:
+              - link "Spatial & network visualisation" [ref=e444] [cursor=pointer]:
+                - /url: /s/westafrica/page/spatial-network-visualisation
+            - listitem [ref=e445]:
+              - link "IWAC chatbot" [ref=e446] [cursor=pointer]:
+                - /url: /s/westafrica/page/iwac-chatbot
+        - listitem [ref=e447]:
+          - link "About" [ref=e448] [cursor=pointer]:
+            - /url: /s/westafrica/page/about
+          - list [ref=e449]:
+            - listitem [ref=e450]:
+              - link "Why newspapers?" [ref=e451] [cursor=pointer]:
+                - /url: /s/westafrica/page/why_newspapers
+            - listitem [ref=e452]:
+              - link "Languages" [ref=e453] [cursor=pointer]:
+                - /url: /s/westafrica/page/languages
+            - listitem [ref=e454]:
+              - link "Presentations" [ref=e455] [cursor=pointer]:
+                - /url: /s/westafrica/page/presentations
+            - listitem [ref=e456]:
+              - link "Award and mentions" [ref=e457] [cursor=pointer]:
+                - /url: /s/westafrica/page/award-and-mentions
+            - listitem [ref=e458]:
+              - link "Copyrights & data (re)use" [ref=e459] [cursor=pointer]:
+                - /url: /s/westafrica/page/copyrights_data_reuse
+            - listitem [ref=e460]:
+              - link "Optical character recognition" [ref=e461] [cursor=pointer]:
+                - /url: /s/westafrica/page/ocr
+            - listitem [ref=e462]:
+              - link "News and release notes" [ref=e463] [cursor=pointer]:
+                - /url: /s/westafrica/page/news
+    - generic [ref=e465]:
+      - generic [ref=e466]:
+        - link "Facebook" [ref=e467] [cursor=pointer]:
+          - /url: https://www.facebook.com/ZentrumModernerOrient/
+          - img [ref=e468]
+        - link "Linkedin" [ref=e470] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/leibniz-zentrum-moderner-orient/
+          - img [ref=e471]
+        - link "Youtube" [ref=e473] [cursor=pointer]:
+          - /url: https://www.youtube.com/channel/UC4SPBj7yBRYGOOC97ZwKwXQ
+          - img [ref=e474]
+        - link "Bluesky" [ref=e476] [cursor=pointer]:
+          - /url: https://bsky.app/profile/zmo-berlin.bsky.social
+          - img [ref=e477]
+      - paragraph [ref=e480]:
+        - text: Site resources may be protected by copyright law and have been used here with permission or under a claim of
+        - link "fair use" [ref=e481] [cursor=pointer]:
+          - /url: https://copyrightalliance.org/faqs/what-is-fair-use/
+        - text: . Original material made available under a
+        - link "Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)" [ref=e482] [cursor=pointer]:
+          - /url: https://creativecommons.org/licenses/by-nc/4.0/

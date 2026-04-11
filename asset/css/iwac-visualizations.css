@@ -557,6 +557,21 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { background: #064e3b; colo
 }
 
 /* =================================================================== */
+/*  Word cloud — taller chart so the layout engine has room to work     */
+/* =================================================================== */
+
+.iwac-vis-panel--wordcloud .iwac-vis-chart {
+    min-height: 520px;
+}
+
+.iwac-vis-wordcloud-meta {
+    margin-top: 0.5rem;
+    font-size: var(--text-sm, 0.85rem);
+    color: var(--ink-muted, #5a6472);
+    text-align: center;
+}
+
+/* =================================================================== */
 /*  Recent additions wide panel                                         */
 /* =================================================================== */
 
