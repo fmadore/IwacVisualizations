@@ -97,29 +97,11 @@
         var mapContainer = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(mapContainer);
 
-        var styleUrl = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
-        var map = new maplibregl.Map({
-            container: mapContainer,
-            style: styleUrl,
-            center: [2, 10],
-            zoom: 3.2,
-            attributionControl: { compact: true }
-        });
-
-        if (ns.registerMap) {
-            ns.registerMap(map, mapContainer);
-        }
-
         function filteredFeatures() {
             return {
                 type: 'FeatureCollection',
                 features: locations
-                    .filter(function (loc) {
-                        // v1: type facet is a visual filter — locations don't
-                        // carry per-type breakdowns, so "all" includes everything
-                        // and a specific type keeps any location with a count.
-                        return loc.count > 0;
-                    })
+                    .filter(function (loc) { return loc.count > 0; })
                     .map(function (loc) {
                         return {
                             type: 'Feature',
@@ -134,43 +116,48 @@
             };
         }
 
-        function updateSource() {
-            var src = map.getSource('locations');
-            if (src) src.setData(filteredFeatures());
-        }
+        // Pre-compute the max count so the radius interpolation is stable
+        // across theme swaps (onStyleReady runs multiple times).
+        var maxCount = 1;
+        (mapData.locations || []).forEach(function (l) {
+            if (l.count > maxCount) maxCount = l.count;
+        });
 
-        map.on('load', function () {
-            map.addSource('locations', { type: 'geojson', data: filteredFeatures() });
+        function onStyleReady(map) {
+            // Custom sources + layers get wiped by every setStyle call,
+            // so we re-add them on every style.load. Guard with getSource
+            // in case the callback fires twice for the same load.
+            if (!map.getSource('locations')) {
+                map.addSource('locations', { type: 'geojson', data: filteredFeatures() });
+            }
+            if (!map.getSource('countries')) {
+                map.addSource('countries', { type: 'geojson', data: geoUrl });
+            }
+            if (!map.getLayer('location-circles')) {
+                map.addLayer({
+                    id: 'location-circles',
+                    type: 'circle',
+                    source: 'locations',
+                    paint: {
+                        'circle-radius': [
+                            'interpolate', ['linear'], ['get', 'count'],
+                            1, 3,
+                            maxCount, 28
+                        ],
+                        'circle-color': '#d97706',
+                        'circle-opacity': 0.75,
+                        'circle-stroke-width': 1.5,
+                        'circle-stroke-color': '#78350f'
+                    }
+                });
+            }
 
-            // Load country GeoJSON (hidden by default — plumbed for a future
-            // choropleth overlay).
-            map.addSource('countries', { type: 'geojson', data: geoUrl });
-
-            var maxCount = 1;
-            (mapData.locations || []).forEach(function (l) {
-                if (l.count > maxCount) maxCount = l.count;
-            });
-            map.addLayer({
-                id: 'location-circles',
-                type: 'circle',
-                source: 'locations',
-                paint: {
-                    'circle-radius': [
-                        'interpolate', ['linear'], ['get', 'count'],
-                        1, 3,
-                        maxCount, 28
-                    ],
-                    'circle-color': '#d97706',
-                    'circle-opacity': 0.65,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#78350f'
-                }
-            });
-
+            // Layer-bound handlers need to be re-attached on each style
+            // load because the target layer is recreated.
             map.on('click', 'location-circles', function (e) {
                 var f = e.features && e.features[0];
                 if (!f) return;
-                new maplibregl.Popup({ closeButton: true })
+                P.createIwacPopup({ closeButton: true, closeOnClick: true })
                     .setLngLat(f.geometry.coordinates)
                     .setHTML(
                         '<strong>' + P.escapeHtml(f.properties.name) + '</strong><br>' +
@@ -181,7 +168,21 @@
             });
             map.on('mouseenter', 'location-circles', function () { map.getCanvas().style.cursor = 'pointer'; });
             map.on('mouseleave', 'location-circles', function () { map.getCanvas().style.cursor = ''; });
+        }
+
+        var map = P.createIwacMap(mapContainer, {
+            center: [2, 10],
+            zoom: 3.2,
+            globe: true,
+            navigation: true,
+            onStyleReady: onStyleReady
         });
+
+        function updateSource() {
+            if (!map) return;
+            var src = map.getSource('locations');
+            if (src) src.setData(filteredFeatures());
+        }
     }
 
     ns.collectionOverview = ns.collectionOverview || {};

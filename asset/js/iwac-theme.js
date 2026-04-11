@@ -113,6 +113,9 @@
         return {
             color: palette,
             backgroundColor: 'transparent',
+            // Accessibility — ECharts generates an aria-label summary of
+            // every chart unless a caller explicitly disables it.
+            aria: { enabled: true },
             textStyle: {
                 color: tokens.ink,
                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
@@ -130,7 +133,17 @@
                 borderColor: tokens.border,
                 borderWidth: 1,
                 textStyle: { color: tokens.ink },
-                extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-radius: 6px;'
+                extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-radius: 6px;',
+                // Prevent hover tooltips from being clipped by panels with
+                // `overflow: hidden` (recent-additions scrollbox, grid
+                // cells) or extending beyond the chart on narrow screens.
+                // `appendTo: 'body'` escapes ancestor overflow clipping
+                // (ECharts ≥ 5.5); `confine: true` then keeps the tooltip
+                // within the chart's own view rect so it doesn't drift off
+                // the page on mobile. Both are theme-level defaults so
+                // every builder inherits without per-call configuration.
+                confine: true,
+                appendTo: 'body'
             },
             axisPointer: {
                 lineStyle: { color: tokens.muted },
