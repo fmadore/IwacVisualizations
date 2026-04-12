@@ -767,4 +767,161 @@
             }]
         };
     };
+
+    /* ----------------------------------------------------------------- */
+    /*  Entity neighbor network (force-directed graph)                    */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Force-layout graph for a center entity + its top-N neighbors.
+     *
+     * Expected shape (produced by the Python generator):
+     *   graph = {
+     *     nodes: [
+     *       { o_id, title, type, cooc, score }   // nodes[0] is the center
+     *       ...
+     *     ],
+     *     edges: [
+     *       { source, target, weight, cooc }
+     *       ...
+     *     ]
+     *   }
+     *
+     * @param {Object} graph
+     * @param {Object} [opts]
+     * @param {number} [opts.maxLabelLength=24]   Middle-ellipsis cutoff
+     * @param {Object} [opts.typeColors]          { typeName: hex }
+     */
+    C.network = function (graph, opts) {
+        opts = opts || {};
+        var maxLen = opts.maxLabelLength || 24;
+        var nodes = (graph && graph.nodes) || [];
+        var edges = (graph && graph.edges) || [];
+
+        var palette = (ns.getPalette && ns.getPalette())
+            || ['#d97706', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
+        var TYPE_COLORS = {
+            'center':        palette[0],
+            'Personnes':     palette[1],
+            'Organisations': palette[2],
+            'Lieux':         palette[3],
+            'Sujets':        palette[4],
+            '\u00c9v\u00e9nements': palette[5]
+        };
+        if (opts.typeColors) {
+            for (var k in opts.typeColors) {
+                if (Object.prototype.hasOwnProperty.call(opts.typeColors, k)) {
+                    TYPE_COLORS[k] = opts.typeColors[k];
+                }
+            }
+        }
+
+        function truncate(name) {
+            if (!name || name.length <= maxLen) return name || '';
+            var head = Math.floor((maxLen - 1) / 2);
+            var tail = maxLen - 1 - head;
+            return name.slice(0, head) + '\u2026' + name.slice(-tail);
+        }
+
+        var scores = nodes.map(function (n) { return n.score || 0; });
+        var maxScore = Math.max.apply(null, scores.concat([1]));
+        var weights = edges.map(function (e) { return e.weight || 0; });
+        var maxWeight = Math.max.apply(null, weights.concat([1]));
+
+        var graphNodes = nodes.map(function (n, idx) {
+            var isCenter = n.type === 'center';
+            var normScore = isCenter ? 1 : Math.max(0, Math.min(1, (n.score || 0) / maxScore));
+            var symbolSize = isCenter ? 46 : 14 + Math.sqrt(normScore) * 26;
+            return {
+                id: String(n.o_id),
+                name: truncate(n.title || ''),
+                fullTitle: n.title || '',
+                entityType: n.type,
+                o_id: n.o_id,
+                cooc: n.cooc,
+                score: n.score,
+                symbolSize: symbolSize,
+                itemStyle: { color: TYPE_COLORS[n.type] || palette[idx % palette.length] },
+                fixed: isCenter,
+                x: isCenter ? 0 : undefined,
+                y: isCenter ? 0 : undefined,
+                label: { show: true, position: 'right', formatter: '{b}' }
+            };
+        });
+
+        var graphEdges = edges.map(function (e) {
+            var normWeight = Math.max(0, Math.min(1, (e.weight || 0) / maxWeight));
+            return {
+                source: String(e.source),
+                target: String(e.target),
+                value: e.weight,
+                cooc: e.cooc,
+                lineStyle: {
+                    width: 1 + Math.sqrt(normWeight) * 4,
+                    opacity: 0.55
+                }
+            };
+        });
+
+        var uniqueTypes = {};
+        nodes.forEach(function (n) { if (n.type && n.type !== 'center') uniqueTypes[n.type] = true; });
+        var legendData = Object.keys(uniqueTypes).map(function (type) {
+            return {
+                name: t('entity_type_' + type),
+                itemStyle: { color: TYPE_COLORS[type] }
+            };
+        });
+
+        return {
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    if (p.dataType === 'node') {
+                        var data = p.data || {};
+                        var lines = ['<strong>' + esc(data.fullTitle || '') + '</strong>'];
+                        if (data.entityType && data.entityType !== 'center') {
+                            lines.push(t('entity_type_' + data.entityType));
+                        }
+                        if (data.cooc != null) {
+                            lines.push(t('mentions_count', { count: fmt(data.cooc) }));
+                        }
+                        if (data.score != null) {
+                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(data.score * 10) / 10));
+                        }
+                        return lines.join('<br>');
+                    }
+                    if (p.dataType === 'edge') {
+                        var e = p.data || {};
+                        return t('mentions_count', { count: fmt(e.cooc || 0) });
+                    }
+                    return '';
+                }
+            },
+            legend: legendData.length ? [{
+                data: legendData,
+                top: 4,
+                itemWidth: 12,
+                itemHeight: 10
+            }] : [],
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                roam: true,
+                draggable: true,
+                focusNodeAdjacency: true,
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: { width: 3 }
+                },
+                force: {
+                    repulsion: 180,
+                    edgeLength: [40, 120],
+                    gravity: 0.05
+                },
+                data: graphNodes,
+                links: graphEdges,
+                cursor: 'pointer'
+            }]
+        };
+    };
 })();
