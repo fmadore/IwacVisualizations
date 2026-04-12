@@ -109,21 +109,19 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
       mapping. Needed before implementing any resource-page block
       (knowledge graph, per-item dashboards). User will point at the
       templates directly.
-- [ ] **Per-entity page block** (live-fetch): the `index` subset is only
-      4,697 rows with pre-aggregated `frequency` / `first_occurrence` /
-      `last_occurrence` / `countries` — a good fit for the live-fetch
-      path. One block per entity, keyed by `data-item-id` = Omeka
-      `o:id`, fetching just the row that matches then optionally
-      pulling related articles from a precomputed file.
+- [x] **Per-Person resource-page block** (2026-04-11) — precomputed,
+      TF-IDF neighbor network, global creator/subject facet,
+      MapLibre locations map. See
+      `scripts/generate_person_dashboards.py` and
+      `asset/js/charts/person-dashboard.js`.
+- [ ] **Per-Organisation / Lieux / Sujets / Événements resource-page
+      blocks** — reuse the Person skeleton (generator + orchestrator
+      + `C.network`). One new block layout class per Type.
 - [ ] **Decide per-item JSON hosting** for precompute-backed per-item
       dashboards: commit ~5k entity dashboards to git, or generate
       into an Omeka volume at deploy time. Only relevant if the
       per-entity block ends up using precompute (e.g. for
       co-occurrence joins against articles).
-- [ ] **Per-entity dashboard** (resource-page block attached to the
-      `index`-backed item templates): timeline of mentions, top
-      newspapers, co-occurring entities, geographic footprint.
-      Generator will be `scripts/generate_entity_dashboards.py`.
 - [ ] **Per-article page** (resource-page block attached to the
       "article de presse" template): 3-model AI sentiment comparison
       panel (centrality, polarity, subjectivity), LDA topic badge,

@@ -177,3 +177,24 @@ Constants: `DATASET_ID = "fmadore/islam-west-africa-collection"` and
 - **Long-running `articles` aggregation** — most time is spent
   downloading + parsing parquet. Subsequent runs use the HF cache so
   they're fast.
+
+## generate_person_dashboards.py
+
+Produces one JSON per Person in the `index` subset, consumed by the
+`personDashboard` resource-page block. Output goes to
+`asset/data/person-dashboards/{o_id}.json`.
+
+```bash
+python3 scripts/generate_person_dashboards.py              # all persons (~2,600 files)
+python3 scripts/generate_person_dashboards.py --limit 5    # smoke test
+python3 scripts/generate_person_dashboards.py -v           # debug logging
+```
+
+Neighbor ranking is TF-IDF (`score = cooc × log(N_persons / df)`) with
+a minimum co-occurrence floor of 2 and a top-50 cap per role slice,
+so distinctive relationships outrank globally-common entities.
+
+The generator joins back into content subsets via string-match on
+`subject` (role: `subject`) and `author` (role: `creator`) fields
+using the same Unicode normalization as
+`iwac-dashboard/scripts/generate_entity_spatial.py`.
