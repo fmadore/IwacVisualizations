@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.310780+00:00",
+  "person": {
+    "o_id": 61355,
+    "title": "Valence Djebi",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1994-03-17",
+    "last_occurrence": "1994-08-18"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1994,
+        "year_max": 1994,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1994,
+        "year_max": 1994,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61355,
+            "title": "Valence Djebi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46245,
+            "title": "Adzopé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.4592
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 61355,
+            "target": 46245,
+            "weight": 7.4592,
+            "cooc": 2
+          },
+          {
+            "source": 61355,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 61355,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61355,
+            "title": "Valence Djebi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61355,
+            "title": "Valence Djebi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46245,
+            "title": "Adzopé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.4592
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 61355,
+            "target": 46245,
+            "weight": 7.4592,
+            "cooc": 2
+          },
+          {
+            "source": 61355,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 61355,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

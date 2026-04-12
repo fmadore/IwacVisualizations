@@ -1,0 +1,918 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.220833+00:00",
+  "person": {
+    "o_id": 61352,
+    "title": "Gnaka Lagoké",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1994-01-28",
+    "last_occurrence": "1998-12-31"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 1994,
+        "year_max": 1998,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 27
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 10,
+        "year_min": 1994,
+        "year_max": 1998,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 27
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994,
+          1995,
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            6,
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1994,
+          1995,
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            6,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1995
+        },
+        {
+          "name": "Le Nouvel Horizon",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1998,
+          "year_max": 1998
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1995
+        },
+        {
+          "name": "Le Nouvel Horizon",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1998,
+          "year_max": 1998
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 10
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61352,
+            "title": "Gnaka Lagoké",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 13.3924
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 11.6123
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.2064
+          },
+          {
+            "o_id": 46178,
+            "title": "Front populaire ivoirien",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 10.8417
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 10.1498
+          },
+          {
+            "o_id": 43052,
+            "title": "Procès CNI-CSI",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 9.3003
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.9151
+          },
+          {
+            "o_id": 14536,
+            "title": "Justice",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 8.1316
+          },
+          {
+            "o_id": 76285,
+            "title": "Laurent Dona-Fologo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6119
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 23504,
+            "title": "Moustapha Diaby",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 43062,
+            "title": "Émile Constant Bombet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.9435
+          },
+          {
+            "o_id": 75964,
+            "title": "Tribalisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9209
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.8744
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5395
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.8729
+          },
+          {
+            "o_id": 46214,
+            "title": "Rassemblement des républicains de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.204
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7171
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 61352,
+            "target": 59,
+            "weight": 13.3924,
+            "cooc": 6
+          },
+          {
+            "source": 61352,
+            "target": 653,
+            "weight": 11.6123,
+            "cooc": 6
+          },
+          {
+            "source": 61352,
+            "target": 46268,
+            "weight": 11.2064,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 46178,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 1057,
+            "weight": 10.8417,
+            "cooc": 5
+          },
+          {
+            "source": 61352,
+            "target": 23601,
+            "weight": 10.1498,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 43052,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 43055,
+            "weight": 9.3003,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 23606,
+            "weight": 8.9151,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 14536,
+            "weight": 8.1316,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 76285,
+            "weight": 7.6119,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 46274,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 23504,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 43062,
+            "weight": 6.9435,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 75964,
+            "weight": 6.9209,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76042,
+            "weight": 6.8744,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 76268,
+            "weight": 6.5395,
+            "cooc": 5
+          },
+          {
+            "source": 61352,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 83,
+            "weight": 5.8729,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 46214,
+            "weight": 5.204,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 46194,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 5,
+            "weight": 4.7171,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61352,
+            "title": "Gnaka Lagoké",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61352,
+            "title": "Gnaka Lagoké",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 13.3924
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 11.6123
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.2064
+          },
+          {
+            "o_id": 46178,
+            "title": "Front populaire ivoirien",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 10.8417
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 10.1498
+          },
+          {
+            "o_id": 43052,
+            "title": "Procès CNI-CSI",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 9.3003
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.9151
+          },
+          {
+            "o_id": 14536,
+            "title": "Justice",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 8.1316
+          },
+          {
+            "o_id": 76285,
+            "title": "Laurent Dona-Fologo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6119
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 23504,
+            "title": "Moustapha Diaby",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 43062,
+            "title": "Émile Constant Bombet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.9435
+          },
+          {
+            "o_id": 75964,
+            "title": "Tribalisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9209
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.8744
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5395
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.8729
+          },
+          {
+            "o_id": 46214,
+            "title": "Rassemblement des républicains de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.204
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7171
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 61352,
+            "target": 59,
+            "weight": 13.3924,
+            "cooc": 6
+          },
+          {
+            "source": 61352,
+            "target": 653,
+            "weight": 11.6123,
+            "cooc": 6
+          },
+          {
+            "source": 61352,
+            "target": 46268,
+            "weight": 11.2064,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 46178,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 1057,
+            "weight": 10.8417,
+            "cooc": 5
+          },
+          {
+            "source": 61352,
+            "target": 23601,
+            "weight": 10.1498,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 43052,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 43055,
+            "weight": 9.3003,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 23606,
+            "weight": 8.9151,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 14536,
+            "weight": 8.1316,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 76285,
+            "weight": 7.6119,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 46274,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 23504,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 43062,
+            "weight": 6.9435,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 75964,
+            "weight": 6.9209,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76042,
+            "weight": 6.8744,
+            "cooc": 4
+          },
+          {
+            "source": 61352,
+            "target": 76268,
+            "weight": 6.5395,
+            "cooc": 5
+          },
+          {
+            "source": 61352,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 83,
+            "weight": 5.8729,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 46214,
+            "weight": 5.204,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 46194,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 5,
+            "weight": 4.7171,
+            "cooc": 3
+          },
+          {
+            "source": 61352,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 61352,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

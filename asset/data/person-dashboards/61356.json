@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.116840+00:00",
+  "person": {
+    "o_id": 61356,
+    "title": "Oumar Coulibaly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1975-10-15",
+    "last_occurrence": "1995-02-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1975,
+        "year_max": 1995,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1975,
+        "year_max": 1975,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1977,
+        "year_max": 1995,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1975,
+          1977,
+          1987,
+          1995
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1975
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1977,
+          1987,
+          1995
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Hebdo",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1977,
+          "year_max": 1987
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1975,
+          "year_max": 1975
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1975,
+          "year_max": 1975
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Hebdo",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1977,
+          "year_max": 1987
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61356,
+            "title": "Oumar Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.4571
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 61356,
+            "target": 43069,
+            "weight": 8.4571,
+            "cooc": 4
+          },
+          {
+            "source": 61356,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 61356,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61356,
+            "title": "Oumar Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61356,
+            "title": "Oumar Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 61356,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 61356,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

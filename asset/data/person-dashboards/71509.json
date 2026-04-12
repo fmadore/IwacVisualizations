@@ -1,0 +1,224 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:06.653341+00:00",
+  "person": {
+    "o_id": 71509,
+    "title": "S. F.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1994-12-23",
+    "last_occurrence": "1997-01-30"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1994,
+        "year_max": 1997,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1994,
+        "year_max": 1997,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994,
+          1996,
+          1997
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1994,
+          1996,
+          1997
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1997
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Jour",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1994,
+          "year_max": 1997
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71509,
+            "title": "S. F.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 71509,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 71509,
+            "title": "S. F.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 71509,
+            "title": "S. F.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 71509,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

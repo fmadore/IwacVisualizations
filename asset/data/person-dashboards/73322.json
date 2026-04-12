@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:53.495942+00:00",
+  "person": {
+    "o_id": 73322,
+    "title": "Hassan Rohani",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Burkina Faso",
+      "Togo"
+    ],
+    "first_occurrence": "2015-02-12",
+    "last_occurrence": "2019-03-18"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2015,
+        "year_max": 2019,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 2015,
+        "year_max": 2019,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            3,
+            2,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2016,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            3,
+            2,
+            0
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        },
+        {
+          "name": "LeFaso.net",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        },
+        {
+          "name": "LeFaso.net",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 5
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 5
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73322,
+            "title": "Hassan Rohani",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 69261,
+            "title": "Mahamat Idriss Déby Itno",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.5366
+          },
+          {
+            "o_id": 73324,
+            "title": "Mahmoud Abbas",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 20.4635
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 15.9152
+          },
+          {
+            "o_id": 73323,
+            "title": "Abdel Fattah Al-Sissi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.5295
+          },
+          {
+            "o_id": 73316,
+            "title": "Salmane ben Abdelaziz Al Saoud",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 73330,
+            "title": "Abdelaziz Bouteflika",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.9151
+          }
+        ],
+        "edges": [
+          {
+            "source": 73322,
+            "target": 69261,
+            "weight": 21.5366,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 73324,
+            "weight": 20.4635,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 73322,
+            "target": 894,
+            "weight": 15.9152,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 73323,
+            "weight": 15.5295,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 73316,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 73330,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 23606,
+            "weight": 8.9151,
+            "cooc": 4
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 73322,
+            "title": "Hassan Rohani",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 69261,
+            "title": "Mahamat Idriss Déby Itno",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.5366
+          },
+          {
+            "o_id": 73324,
+            "title": "Mahmoud Abbas",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 20.4635
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 15.9152
+          },
+          {
+            "o_id": 73323,
+            "title": "Abdel Fattah Al-Sissi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.5295
+          },
+          {
+            "o_id": 73316,
+            "title": "Salmane ben Abdelaziz Al Saoud",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 73330,
+            "title": "Abdelaziz Bouteflika",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.9151
+          }
+        ],
+        "edges": [
+          {
+            "source": 73322,
+            "target": 69261,
+            "weight": 21.5366,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 73324,
+            "weight": 20.4635,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 73322,
+            "target": 894,
+            "weight": 15.9152,
+            "cooc": 4
+          },
+          {
+            "source": 73322,
+            "target": 73323,
+            "weight": 15.5295,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 73316,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 73330,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73322,
+            "target": 23606,
+            "weight": 8.9151,
+            "cooc": 4
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 73322,
+            "title": "Hassan Rohani",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

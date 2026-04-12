@@ -1,0 +1,419 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.238714+00:00",
+  "person": {
+    "o_id": 2102,
+    "title": "El Hadj Tâzi Sant-Anna",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1970-06-11",
+    "last_occurrence": "1981-07-02"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 1970,
+        "year_max": 1983,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1970,
+        "year_max": 1983,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "creator": {
+        "total_mentions": 6,
+        "year_min": 1976,
+        "year_max": 1981,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1976,
+          1977,
+          1981,
+          1983
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            3,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1983
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1976,
+          1977,
+          1981
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1977
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1981,
+          "year_max": 1983
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1983,
+          "year_max": 1983
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1970
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1976,
+          "year_max": 1977
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1981,
+          "year_max": 1981
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2102,
+            "title": "El Hadj Tâzi Sant-Anna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13236,
+            "title": "Abstinence",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.5204
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 35,
+            "title": "Zakat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.4772
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          }
+        ],
+        "edges": [
+          {
+            "source": 2102,
+            "target": 13236,
+            "weight": 8.5204,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 2102,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 35,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 29,
+            "weight": 4.4772,
+            "cooc": 4
+          },
+          {
+            "source": 2102,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2102,
+            "title": "El Hadj Tâzi Sant-Anna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 2102,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2102,
+            "title": "El Hadj Tâzi Sant-Anna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13236,
+            "title": "Abstinence",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.5204
+          },
+          {
+            "o_id": 35,
+            "title": "Zakat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3579
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          }
+        ],
+        "edges": [
+          {
+            "source": 2102,
+            "target": 13236,
+            "weight": 8.5204,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 35,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 29,
+            "weight": 3.3579,
+            "cooc": 3
+          },
+          {
+            "source": 2102,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 2102,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

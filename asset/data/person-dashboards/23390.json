@@ -1,0 +1,306 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.892865+00:00",
+  "person": {
+    "o_id": 23390,
+    "title": "Joël C. Tokponou",
+    "prenom": "Joël C.",
+    "nom": "Tokponou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2023-11-09",
+    "last_occurrence": "2024-01-18"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2023,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2023,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2023,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2023,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2024
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23390,
+            "title": "Joël C. Tokponou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0876
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 23390,
+            "target": 1417,
+            "weight": 6.0876,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23390,
+            "title": "Joël C. Tokponou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23390,
+            "title": "Joël C. Tokponou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0876
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 23390,
+            "target": 1417,
+            "weight": 6.0876,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 23390,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.883562+00:00",
+  "person": {
+    "o_id": 67753,
+    "title": "M. T.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire",
+      "Togo"
+    ],
+    "first_occurrence": "1987-09-10",
+    "last_occurrence": "2002-06-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1987,
+        "year_max": 2002,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1987,
+        "year_max": 2002,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1989,
+          1998,
+          2002
+        ],
+        "countries": [
+          "Côte D'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "Togo": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1987,
+          1989,
+          1998,
+          2002
+        ],
+        "countries": [
+          "Côte D'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "Togo": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1998
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1998
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67753,
+            "title": "M. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 67753,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 67753,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67753,
+            "title": "M. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67753,
+            "title": "M. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 67753,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 67753,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.862292+00:00",
+  "person": {
+    "o_id": 1949,
+    "title": "Augustin Honvoh",
+    "prenom": "Augustin",
+    "nom": "Honvoh",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1979-10-09",
+    "last_occurrence": "1979-11-23"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 1979,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 1979,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1979
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1979,
+          "year_max": 1979
+        }
+      ],
+      "subject": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1979,
+          "year_max": 1979
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1949,
+            "title": "Augustin Honvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 1949,
+            "target": 108,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 1949,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1949,
+            "title": "Augustin Honvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 1949,
+            "target": 108,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 1949,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1949,
+            "title": "Augustin Honvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

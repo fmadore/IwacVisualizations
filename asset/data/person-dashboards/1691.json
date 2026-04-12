@@ -1,0 +1,208 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.200055+00:00",
+  "person": {
+    "o_id": 1691,
+    "title": "Robert S. Glew",
+    "prenom": "Robert S.",
+    "nom": "Glew",
+    "genre": "Homme",
+    "countries": [
+      "Niger"
+    ],
+    "first_occurrence": "1996",
+    "last_occurrence": "2000"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1996,
+        "year_max": 2000,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1996,
+        "year_max": 2000,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1996,
+          1997,
+          1998,
+          2000
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1996,
+          1997,
+          1998,
+          2000
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Niger",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Niger",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1691,
+            "title": "Robert S. Glew",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63439,
+            "title": "Zinder",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 20.5514
+          }
+        ],
+        "edges": [
+          {
+            "source": 1691,
+            "target": 63439,
+            "weight": 20.5514,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1691,
+            "title": "Robert S. Glew",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1691,
+            "title": "Robert S. Glew",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63439,
+            "title": "Zinder",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 20.5514
+          }
+        ],
+        "edges": [
+          {
+            "source": 1691,
+            "target": 63439,
+            "weight": 20.5514,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 63439,
+          "name": "Zinder",
+          "lat": 13.8,
+          "lng": 8.9833333333333,
+          "country": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 63439,
+          "name": "Zinder",
+          "lat": 13.8,
+          "lng": 8.9833333333333,
+          "country": "Benin",
+          "count": 3
+        }
+      ]
+    }
+  }
+}

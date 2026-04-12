@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.734081+00:00",
+  "person": {
+    "o_id": 46209,
+    "title": "Guy Joël Broh",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2003-03-18",
+    "last_occurrence": "2003-05-14"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2003,
+        "year_max": 2003,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2003,
+        "year_max": 2003,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2003
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2003
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46209,
+            "title": "Guy Joël Broh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46209,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46209,
+            "title": "Guy Joël Broh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46209,
+            "title": "Guy Joël Broh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46209,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

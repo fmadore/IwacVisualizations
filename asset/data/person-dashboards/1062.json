@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.530715+00:00",
+  "person": {
+    "o_id": 1062,
+    "title": "Ismaël Démé",
+    "prenom": "Ismaël",
+    "nom": "Démé",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2009-09-01",
+    "last_occurrence": "2015-12-01"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 2009,
+        "year_max": 2015,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 14
+      },
+      "subject": {
+        "total_mentions": 7,
+        "year_min": 2009,
+        "year_max": 2015,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 14
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2009,
+          2010,
+          2012,
+          2013,
+          2015
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2009,
+          2010,
+          2012,
+          2013,
+          2015
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2013
+        },
+        {
+          "name": "LeFaso.net",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2015
+        }
+      ],
+      "subject": [
+        {
+          "name": "Sidwaya",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2013
+        },
+        {
+          "name": "LeFaso.net",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2015
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1062,
+            "title": "Ismaël Démé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 705,
+            "title": "Organisation Culturelle pour le Développement Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 25.3586
+          },
+          {
+            "o_id": 1100,
+            "title": "Mahamadi Tiégna",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 24.7668
+          },
+          {
+            "o_id": 710,
+            "title": "Qatar Charity",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 116,
+            "title": "Secte",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.9173
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.9791
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9762
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1062,
+            "target": 705,
+            "weight": 25.3586,
+            "cooc": 4
+          },
+          {
+            "source": 1062,
+            "target": 1100,
+            "weight": 24.7668,
+            "cooc": 5
+          },
+          {
+            "source": 1062,
+            "target": 710,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 116,
+            "weight": 5.9173,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 2013,
+            "weight": 3.9791,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 81,
+            "weight": 3.9762,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1062,
+            "title": "Ismaël Démé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 705,
+            "title": "Organisation Culturelle pour le Développement Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 25.3586
+          },
+          {
+            "o_id": 1100,
+            "title": "Mahamadi Tiégna",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 24.7668
+          },
+          {
+            "o_id": 710,
+            "title": "Qatar Charity",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 116,
+            "title": "Secte",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.9173
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.9791
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9762
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1062,
+            "target": 705,
+            "weight": 25.3586,
+            "cooc": 4
+          },
+          {
+            "source": 1062,
+            "target": 1100,
+            "weight": 24.7668,
+            "cooc": 5
+          },
+          {
+            "source": 1062,
+            "target": 710,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 116,
+            "weight": 5.9173,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 2013,
+            "weight": 3.9791,
+            "cooc": 3
+          },
+          {
+            "source": 1062,
+            "target": 81,
+            "weight": 3.9762,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1062,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1062,
+            "title": "Ismaël Démé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

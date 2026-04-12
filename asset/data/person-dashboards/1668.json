@@ -1,0 +1,486 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.887763+00:00",
+  "person": {
+    "o_id": 1668,
+    "title": "Mamady Zango",
+    "prenom": "Mamady",
+    "nom": "Zango",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2015-09-10",
+    "last_occurrence": "2020-01-22"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            4,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2015,
+          2016,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            4,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2020
+        },
+        {
+          "name": "Burkina 24",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2020
+        },
+        {
+          "name": "Burkina 24",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 8
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1668,
+            "title": "Mamady Zango",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15649,
+            "title": "Fondation Mohammed VI des Oulémas africains",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.9598
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.9364
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 8,
+            "title": "Charia",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.8113
+          },
+          {
+            "o_id": 944,
+            "title": "Aboubacar Doukouré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 1668,
+            "target": 15649,
+            "weight": 13.9598,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 894,
+            "weight": 11.9364,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 8,
+            "weight": 5.8113,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 944,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1668,
+            "title": "Mamady Zango",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1668,
+            "title": "Mamady Zango",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15649,
+            "title": "Fondation Mohammed VI des Oulémas africains",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.9598
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.9364
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 8,
+            "title": "Charia",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.8113
+          },
+          {
+            "o_id": 944,
+            "title": "Aboubacar Doukouré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 1668,
+            "target": 15649,
+            "weight": 13.9598,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 894,
+            "weight": 11.9364,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 8,
+            "weight": 5.8113,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 944,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 1668,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1668,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

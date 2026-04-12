@@ -1,0 +1,378 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.541144+00:00",
+  "person": {
+    "o_id": 46305,
+    "title": "Bruno Kouadio",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2008-06-26",
+    "last_occurrence": "2017-03-21"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2008,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 6,
+        "year_min": 2008,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2009,
+          2014,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2008,
+          2009,
+          2014,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46305,
+            "title": "Bruno Kouadio",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.7552
+          },
+          {
+            "o_id": 76527,
+            "title": "Spiritualité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6985
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.6351
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 46305,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 662,
+            "weight": 5.7552,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 76527,
+            "weight": 5.6985,
+            "cooc": 2
+          },
+          {
+            "source": 46305,
+            "target": 14425,
+            "weight": 5.6351,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 46305,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46305,
+            "title": "Bruno Kouadio",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46305,
+            "title": "Bruno Kouadio",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.7552
+          },
+          {
+            "o_id": 76527,
+            "title": "Spiritualité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6985
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.6351
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 46305,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 662,
+            "weight": 5.7552,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 76527,
+            "weight": 5.6985,
+            "cooc": 2
+          },
+          {
+            "source": 46305,
+            "target": 14425,
+            "weight": 5.6351,
+            "cooc": 3
+          },
+          {
+            "source": 46305,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 46305,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

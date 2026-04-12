@@ -1,0 +1,404 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.160656+00:00",
+  "person": {
+    "o_id": 1738,
+    "title": "Amadou Soumana",
+    "prenom": "Amadou",
+    "nom": "Soumana",
+    "genre": "",
+    "countries": [
+      "Burkina Faso",
+      "Niger"
+    ],
+    "first_occurrence": "1993-02-17",
+    "last_occurrence": "2006-02-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1993,
+        "year_max": 2006,
+        "newspapers_count": 3,
+        "countries_count": 2,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 1993,
+        "year_max": 2006,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2001,
+        "year_max": 2001,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          1994,
+          2000,
+          2001,
+          2006
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          "Niger": [
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1993,
+          1994,
+          2000,
+          2006
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2001
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 2006
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
+      "subject": [
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 2006
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        },
+        {
+          "name": "Niger",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "creator": [
+        {
+          "name": "Niger",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1738,
+            "title": "Amadou Soumana",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 18.7972
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 5.3054
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1738,
+            "target": 609,
+            "weight": 18.7972,
+            "cooc": 5
+          },
+          {
+            "source": 1738,
+            "target": 76335,
+            "weight": 13.893,
+            "cooc": 5
+          },
+          {
+            "source": 1738,
+            "target": 2013,
+            "weight": 5.3054,
+            "cooc": 4
+          },
+          {
+            "source": 1738,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 1738,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 1738,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1738,
+            "title": "Amadou Soumana",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 18.7972
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 5.3054
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1738,
+            "target": 609,
+            "weight": 18.7972,
+            "cooc": 5
+          },
+          {
+            "source": 1738,
+            "target": 76335,
+            "weight": 13.893,
+            "cooc": 5
+          },
+          {
+            "source": 1738,
+            "target": 2013,
+            "weight": 5.3054,
+            "cooc": 4
+          },
+          {
+            "source": 1738,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 1738,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 1738,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1738,
+            "title": "Amadou Soumana",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

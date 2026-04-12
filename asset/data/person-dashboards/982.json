@@ -1,0 +1,380 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.930800+00:00",
+  "person": {
+    "o_id": 982,
+    "title": "Alkassoum Maïga",
+    "prenom": "Alkassoum",
+    "nom": "Maïga",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2018-08-02",
+    "last_occurrence": "2021-02-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2018,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2018,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2018,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "LeFaso.net",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2021
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Burkina 24",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [
+        {
+          "name": "LeFaso.net",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2021
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Burkina 24",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 982,
+            "title": "Alkassoum Maïga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1193,
+            "title": "Stanislas Ouaro",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 18.472
+          },
+          {
+            "o_id": 581,
+            "title": "Organisation du Monde Islamique pour l'Éducation, les Sciences et la Culture",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.1112
+          },
+          {
+            "o_id": 728,
+            "title": "UNESCO",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.1542
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          }
+        ],
+        "edges": [
+          {
+            "source": 982,
+            "target": 1193,
+            "weight": 18.472,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 581,
+            "weight": 12.1112,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 728,
+            "weight": 10.1542,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 982,
+            "title": "Alkassoum Maïga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1193,
+            "title": "Stanislas Ouaro",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 18.472
+          },
+          {
+            "o_id": 581,
+            "title": "Organisation du Monde Islamique pour l'Éducation, les Sciences et la Culture",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.1112
+          },
+          {
+            "o_id": 728,
+            "title": "UNESCO",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.1542
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          }
+        ],
+        "edges": [
+          {
+            "source": 982,
+            "target": 1193,
+            "weight": 18.472,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 581,
+            "weight": 12.1112,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 728,
+            "weight": 10.1542,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 982,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 982,
+            "title": "Alkassoum Maïga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,417 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.851323+00:00",
+  "person": {
+    "o_id": 1824,
+    "title": "Bawa El-Rachidi",
+    "prenom": "Bawa",
+    "nom": "El-Rachidi",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2004",
+    "last_occurrence": "2012-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2004,
+        "year_max": 2012,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2011,
+        "year_max": 2012,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2011,
+          2012
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2011,
+          2012
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "ASSALAM",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2012
+        }
+      ],
+      "subject": [
+        {
+          "name": "ASSALAM",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2012
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1824,
+            "title": "Bawa El-Rachidi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2064,
+            "title": "Abdoul-Karim Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.9284
+          },
+          {
+            "o_id": 758,
+            "title": "Communauté Islamique Universitaire du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 761,
+            "title": "Amicale des Intellectuels Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.382
+          },
+          {
+            "o_id": 1952,
+            "title": "Djibril Boussou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.1636
+          },
+          {
+            "o_id": 587,
+            "title": "Association Culturelle des Étudiants et Élèves Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 1824,
+            "target": 2064,
+            "weight": 10.9284,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 758,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 761,
+            "weight": 9.382,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 1952,
+            "weight": 9.1636,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 587,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1824,
+            "title": "Bawa El-Rachidi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2064,
+            "title": "Abdoul-Karim Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.9284
+          },
+          {
+            "o_id": 758,
+            "title": "Communauté Islamique Universitaire du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 761,
+            "title": "Amicale des Intellectuels Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.382
+          },
+          {
+            "o_id": 1952,
+            "title": "Djibril Boussou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.1636
+          },
+          {
+            "o_id": 587,
+            "title": "Association Culturelle des Étudiants et Élèves Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 1824,
+            "target": 2064,
+            "weight": 10.9284,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 758,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 761,
+            "weight": 9.382,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 1952,
+            "weight": 9.1636,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 587,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 1824,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1824,
+            "title": "Bawa El-Rachidi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

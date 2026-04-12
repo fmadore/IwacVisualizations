@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:53.379316+00:00",
+  "person": {
+    "o_id": 14858,
+    "title": "Justine Bonkoungou",
+    "prenom": "Justine",
+    "nom": "Bonkoungou",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2016-10-25",
+    "last_occurrence": "2019-03-14"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 2016,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 10,
+        "year_min": 2016,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            6,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            6,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "LeFaso.net",
+          "total": 10,
+          "articles": 10,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2019
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "LeFaso.net",
+          "total": 10,
+          "articles": 10,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 14858,
+            "title": "Justine Bonkoungou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 885,
+            "title": "Hélène Marie Laurence Ilboudo-Marchal",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 583,
+            "title": "Organisation de la Coopération Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.9977
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.6449
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8235
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 14858,
+            "target": 885,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 583,
+            "weight": 7.9977,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 36,
+            "weight": 6.6449,
+            "cooc": 4
+          },
+          {
+            "source": 14858,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 571,
+            "weight": 4.8235,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 14858,
+            "title": "Justine Bonkoungou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 14858,
+            "title": "Justine Bonkoungou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 885,
+            "title": "Hélène Marie Laurence Ilboudo-Marchal",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 583,
+            "title": "Organisation de la Coopération Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.9977
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.6449
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8235
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 14858,
+            "target": 885,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 583,
+            "weight": 7.9977,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 36,
+            "weight": 6.6449,
+            "cooc": 4
+          },
+          {
+            "source": 14858,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 571,
+            "weight": 4.8235,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 14858,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 14858,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

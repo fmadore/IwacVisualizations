@@ -1,0 +1,448 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.121662+00:00",
+  "person": {
+    "o_id": 62207,
+    "title": "Boua Bi Sémien",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1997-07-07",
+    "last_occurrence": "1998-11-17"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1997,
+        "year_max": 1998,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1997,
+        "year_max": 1998,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1997,
+        "year_max": 1998,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1997,
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1997,
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1997,
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1997,
+          "year_max": 1998
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Jour",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1997,
+          "year_max": 1998
+        }
+      ],
+      "creator": [
+        {
+          "name": "Le Jour",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1997,
+          "year_max": 1998
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62207,
+            "title": "Boua Bi Sémien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62126,
+            "title": "Congrès mondial islamique",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 75966,
+            "title": "Division",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.2424
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 62207,
+            "target": 62126,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 46268,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 75966,
+            "weight": 5.2424,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 23601,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62207,
+            "title": "Boua Bi Sémien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62126,
+            "title": "Congrès mondial islamique",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 75966,
+            "title": "Division",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.2424
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 62207,
+            "target": 62126,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 46268,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 75966,
+            "weight": 5.2424,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 23601,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62207,
+            "title": "Boua Bi Sémien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62126,
+            "title": "Congrès mondial islamique",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 75966,
+            "title": "Division",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.2424
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 62207,
+            "target": 62126,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 46268,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 75966,
+            "weight": 5.2424,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 23601,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 62207,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

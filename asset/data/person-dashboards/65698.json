@@ -1,0 +1,319 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.496021+00:00",
+  "person": {
+    "o_id": 65698,
+    "title": "Ossara Koffi Agourna",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2015-04-09",
+    "last_occurrence": "2016-09-13"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            3
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 5
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65698,
+            "title": "Ossara Koffi Agourna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          }
+        ],
+        "edges": [
+          {
+            "source": 65698,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65698,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65698,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65698,
+            "title": "Ossara Koffi Agourna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          }
+        ],
+        "edges": [
+          {
+            "source": 65698,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65698,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65698,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65698,
+            "title": "Ossara Koffi Agourna",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          }
+        ],
+        "edges": [
+          {
+            "source": 65698,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65698,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65698,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

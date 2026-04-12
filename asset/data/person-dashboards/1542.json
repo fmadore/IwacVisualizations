@@ -1,0 +1,202 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.983008+00:00",
+  "person": {
+    "o_id": 1542,
+    "title": "Léon Brathier",
+    "prenom": "Léon",
+    "nom": "Brathier",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1987-02-02",
+    "last_occurrence": "1988-11-04"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1987,
+        "year_max": 1988,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1987,
+        "year_max": 1988,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1988
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1987,
+          1988
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1987,
+          "year_max": 1988
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1987,
+          "year_max": 1988
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1542,
+            "title": "Léon Brathier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 1542,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1542,
+            "title": "Léon Brathier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1542,
+            "title": "Léon Brathier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 1542,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

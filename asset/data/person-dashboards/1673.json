@@ -1,0 +1,991 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.581845+00:00",
+  "person": {
+    "o_id": 1673,
+    "title": "Aziz Mossi",
+    "prenom": "Aziz",
+    "nom": "Mossi",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2019-09-16",
+    "last_occurrence": "2023-01-31"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 12,
+        "year_min": 2019,
+        "year_max": 2023,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 25
+      },
+      "subject": {
+        "total_mentions": 11,
+        "year_min": 2019,
+        "year_max": 2020,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 25
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2023,
+        "year_max": 2023,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            8,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2019,
+          2020
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            8
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Matin Libre",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Bénin Intelligent",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [
+        {
+          "name": "Matin Libre",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Bénin Intelligent",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 12
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 11
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1673,
+            "title": "Aziz Mossi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 372,
+            "title": "Nikki",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 50.7916
+          },
+          {
+            "o_id": 398,
+            "title": "Tanguiéta",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 50.7916
+          },
+          {
+            "o_id": 356,
+            "title": "Malanville",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 42.0223
+          },
+          {
+            "o_id": 305,
+            "title": "Djougou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 38.8584
+          },
+          {
+            "o_id": 333,
+            "title": "Kandi",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 38.8584
+          },
+          {
+            "o_id": 370,
+            "title": "Natitingou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 35.0326
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 31.8353
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 30.559
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 11,
+            "score": 22.8467
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 11,
+            "score": 20.2139
+          },
+          {
+            "o_id": 43,
+            "title": "Salafisme",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 15.419
+          },
+          {
+            "o_id": 15318,
+            "title": "Cohabitation religieuse",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 15.0372
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 9,
+            "score": 13.5733
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 10.1779
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.9523
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 7.6455
+          },
+          {
+            "o_id": 62,
+            "title": "Rivalités et tensions imams",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.3449
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.16
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.0129
+          },
+          {
+            "o_id": 13361,
+            "title": "Chômage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9895
+          },
+          {
+            "o_id": 728,
+            "title": "UNESCO",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7695
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.2895
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1673,
+            "target": 372,
+            "weight": 50.7916,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 398,
+            "weight": 50.7916,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 356,
+            "weight": 42.0223,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 305,
+            "weight": 38.8584,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 333,
+            "weight": 38.8584,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 370,
+            "weight": 35.0326,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 2008,
+            "weight": 31.8353,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 379,
+            "weight": 30.559,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 63372,
+            "weight": 22.8467,
+            "cooc": 11
+          },
+          {
+            "source": 1673,
+            "target": 63530,
+            "weight": 20.2139,
+            "cooc": 11
+          },
+          {
+            "source": 1673,
+            "target": 43,
+            "weight": 15.419,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 15318,
+            "weight": 15.0372,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 33,
+            "weight": 13.5733,
+            "cooc": 9
+          },
+          {
+            "source": 1673,
+            "target": 56,
+            "weight": 10.1779,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 81,
+            "weight": 7.9523,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 55,
+            "weight": 7.6455,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 62,
+            "weight": 7.3449,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 76274,
+            "weight": 7.16,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 15033,
+            "weight": 7.0129,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 13361,
+            "weight": 6.9895,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 728,
+            "weight": 6.7695,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 5,
+            "weight": 6.2895,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 1673,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1673,
+            "title": "Aziz Mossi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 372,
+            "title": "Nikki",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 50.7916
+          },
+          {
+            "o_id": 398,
+            "title": "Tanguiéta",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 50.7916
+          },
+          {
+            "o_id": 356,
+            "title": "Malanville",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 42.0223
+          },
+          {
+            "o_id": 305,
+            "title": "Djougou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 38.8584
+          },
+          {
+            "o_id": 333,
+            "title": "Kandi",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 38.8584
+          },
+          {
+            "o_id": 370,
+            "title": "Natitingou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 35.0326
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 31.8353
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 30.559
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 11,
+            "score": 22.8467
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 11,
+            "score": 20.2139
+          },
+          {
+            "o_id": 43,
+            "title": "Salafisme",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 15.419
+          },
+          {
+            "o_id": 15318,
+            "title": "Cohabitation religieuse",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 15.0372
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 9,
+            "score": 13.5733
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 10.1779
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.9523
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 7.6455
+          },
+          {
+            "o_id": 62,
+            "title": "Rivalités et tensions imams",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.3449
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.16
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.0129
+          },
+          {
+            "o_id": 13361,
+            "title": "Chômage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9895
+          },
+          {
+            "o_id": 728,
+            "title": "UNESCO",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7695
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.2895
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1673,
+            "target": 372,
+            "weight": 50.7916,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 398,
+            "weight": 50.7916,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 356,
+            "weight": 42.0223,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 305,
+            "weight": 38.8584,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 333,
+            "weight": 38.8584,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 370,
+            "weight": 35.0326,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 2008,
+            "weight": 31.8353,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 379,
+            "weight": 30.559,
+            "cooc": 7
+          },
+          {
+            "source": 1673,
+            "target": 63372,
+            "weight": 22.8467,
+            "cooc": 11
+          },
+          {
+            "source": 1673,
+            "target": 63530,
+            "weight": 20.2139,
+            "cooc": 11
+          },
+          {
+            "source": 1673,
+            "target": 43,
+            "weight": 15.419,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 15318,
+            "weight": 15.0372,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 33,
+            "weight": 13.5733,
+            "cooc": 9
+          },
+          {
+            "source": 1673,
+            "target": 56,
+            "weight": 10.1779,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 81,
+            "weight": 7.9523,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 55,
+            "weight": 7.6455,
+            "cooc": 5
+          },
+          {
+            "source": 1673,
+            "target": 62,
+            "weight": 7.3449,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 76274,
+            "weight": 7.16,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 15033,
+            "weight": 7.0129,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 13361,
+            "weight": 6.9895,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 728,
+            "weight": 6.7695,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 5,
+            "weight": 6.2895,
+            "cooc": 4
+          },
+          {
+            "source": 1673,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1673,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 1673,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1673,
+            "title": "Aziz Mossi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 372,
+          "name": "Nikki",
+          "lat": 9.94009,
+          "lng": 3.21075,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 398,
+          "name": "Tanguiéta",
+          "lat": 10.62118,
+          "lng": 1.26651,
+          "country": "Benin",
+          "count": 7
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 372,
+          "name": "Nikki",
+          "lat": 9.94009,
+          "lng": 3.21075,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 7
+        },
+        {
+          "o_id": 398,
+          "name": "Tanguiéta",
+          "lat": 10.62118,
+          "lng": 1.26651,
+          "country": "Benin",
+          "count": 7
+        }
+      ],
+      "creator": []
+    }
+  }
+}

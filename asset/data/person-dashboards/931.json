@@ -1,0 +1,376 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:55.559092+00:00",
+  "person": {
+    "o_id": 931,
+    "title": "Abdoul Rachid Anwar",
+    "prenom": "Abdoul Rachid",
+    "nom": "Anwar",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2001-02-16",
+    "last_occurrence": "2018-04-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2001,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2001,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2018
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2001,
+          2018
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 931,
+            "title": "Abdoul Rachid Anwar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 6,
+            "title": "Djihad",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 931,
+            "target": 609,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 6,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 931,
+            "title": "Abdoul Rachid Anwar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 6,
+            "title": "Djihad",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 931,
+            "target": 609,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 6,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 931,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 931,
+            "title": "Abdoul Rachid Anwar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

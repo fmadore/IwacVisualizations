@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:53.253862+00:00",
+  "person": {
+    "o_id": 1631,
+    "title": "Corine Guissou",
+    "prenom": "Corine",
+    "nom": "Guissou",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2020-08-11",
+    "last_occurrence": "2020-11-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2020,
+        "year_max": 2020,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2020,
+        "year_max": 2020,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2020
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina 24",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina 24",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1631,
+            "title": "Corine Guissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 572,
+            "title": "Fédération des Associations Islamiques du Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.7923
+          }
+        ],
+        "edges": [
+          {
+            "source": 1631,
+            "target": 572,
+            "weight": 4.7923,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1631,
+            "title": "Corine Guissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1631,
+            "title": "Corine Guissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 572,
+            "title": "Fédération des Associations Islamiques du Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.7923
+          }
+        ],
+        "edges": [
+          {
+            "source": 1631,
+            "target": 572,
+            "weight": 4.7923,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 13837,
+          "name": "Chine",
+          "lat": 35.844722,
+          "lng": 103.451944,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 13837,
+          "name": "Chine",
+          "lat": 35.844722,
+          "lng": 103.451944,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

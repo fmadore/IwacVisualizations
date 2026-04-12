@@ -1,0 +1,432 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.745651+00:00",
+  "person": {
+    "o_id": 2037,
+    "title": "Sourou Migan Apithy",
+    "prenom": "Sourou Migan",
+    "nom": "Apithy",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1970-10-09",
+    "last_occurrence": "2011-12-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1970,
+        "year_max": 2011,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 1970,
+        "year_max": 2011,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1971,
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1971,
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Daho-Express",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1970,
+          "year_max": 1971
+        },
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
+      "subject": [
+        {
+          "name": "Daho-Express",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1970,
+          "year_max": 1971
+        },
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2037,
+            "title": "Sourou Migan Apithy",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1451,
+            "title": "Justin Ahomadégbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 23.4786
+          },
+          {
+            "o_id": 2044,
+            "title": "Safiatou Bassabi Issi­fou Morou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 1616,
+            "title": "Gazaliou Tahirou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 1431,
+            "title": "Yacoubou Malèhossou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.4228
+          },
+          {
+            "o_id": 1478,
+            "title": "Thibaud C. Nagnonhou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 2037,
+            "target": 1451,
+            "weight": 23.4786,
+            "cooc": 4
+          },
+          {
+            "source": 2037,
+            "target": 2044,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1616,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1431,
+            "weight": 8.4228,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1478,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 2037,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2037,
+            "title": "Sourou Migan Apithy",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1451,
+            "title": "Justin Ahomadégbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 23.4786
+          },
+          {
+            "o_id": 2044,
+            "title": "Safiatou Bassabi Issi­fou Morou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 1616,
+            "title": "Gazaliou Tahirou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 1431,
+            "title": "Yacoubou Malèhossou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.4228
+          },
+          {
+            "o_id": 1478,
+            "title": "Thibaud C. Nagnonhou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 2037,
+            "target": 1451,
+            "weight": 23.4786,
+            "cooc": 4
+          },
+          {
+            "source": 2037,
+            "target": 2044,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1616,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1431,
+            "weight": 8.4228,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 1478,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 2037,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          },
+          {
+            "source": 2037,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2037,
+            "title": "Sourou Migan Apithy",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

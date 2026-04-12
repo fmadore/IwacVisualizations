@@ -1,0 +1,596 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.372634+00:00",
+  "person": {
+    "o_id": 65690,
+    "title": "Koenga Pouh",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2003-04-24",
+    "last_occurrence": "2011-11-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 12,
+        "year_min": 2003,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 10,
+        "year_min": 2003,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 12,
+        "year_min": 2003,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2003,
+          2004,
+          2007,
+          2008,
+          2011
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            2,
+            3,
+            3,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2003,
+          2004,
+          2007,
+          2008,
+          2011
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            2,
+            3,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2003,
+          2004,
+          2007,
+          2008,
+          2011
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            2,
+            3,
+            3,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 12,
+          "articles": 12,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2003,
+          "year_max": 2011
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 10,
+          "articles": 10,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2003,
+          "year_max": 2011
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 12,
+          "articles": 12,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2003,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 12
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 10
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 12
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65690,
+            "title": "Koenga Pouh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 19.3712
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0518
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.5642
+          },
+          {
+            "o_id": 146,
+            "title": "Colloque International des Musulmans de l'Espace Francophone",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 909,
+            "title": "Tariq Ramadan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.0129
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4258
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65690,
+            "target": 830,
+            "weight": 19.3712,
+            "cooc": 7
+          },
+          {
+            "source": 65690,
+            "target": 2177,
+            "weight": 12.0518,
+            "cooc": 3
+          },
+          {
+            "source": 65690,
+            "target": 2176,
+            "weight": 11.5642,
+            "cooc": 3
+          },
+          {
+            "source": 65690,
+            "target": 146,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 909,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 15033,
+            "weight": 7.0129,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 829,
+            "weight": 6.4258,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65690,
+            "title": "Koenga Pouh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0518
+          },
+          {
+            "o_id": 146,
+            "title": "Colloque International des Musulmans de l'Espace Francophone",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 909,
+            "title": "Tariq Ramadan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.0129
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          }
+        ],
+        "edges": [
+          {
+            "source": 65690,
+            "target": 830,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 65690,
+            "target": 2177,
+            "weight": 12.0518,
+            "cooc": 3
+          },
+          {
+            "source": 65690,
+            "target": 146,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2176,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 909,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 15033,
+            "weight": 7.0129,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65690,
+            "title": "Koenga Pouh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 19.3712
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0518
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.5642
+          },
+          {
+            "o_id": 146,
+            "title": "Colloque International des Musulmans de l'Espace Francophone",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 909,
+            "title": "Tariq Ramadan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.0129
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4258
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65690,
+            "target": 830,
+            "weight": 19.3712,
+            "cooc": 7
+          },
+          {
+            "source": 65690,
+            "target": 2177,
+            "weight": 12.0518,
+            "cooc": 3
+          },
+          {
+            "source": 65690,
+            "target": 2176,
+            "weight": 11.5642,
+            "cooc": 3
+          },
+          {
+            "source": 65690,
+            "target": 146,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 909,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 15033,
+            "weight": 7.0129,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 829,
+            "weight": 6.4258,
+            "cooc": 2
+          },
+          {
+            "source": 65690,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

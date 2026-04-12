@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.750978+00:00",
+  "person": {
+    "o_id": 1541,
+    "title": "Lazare Akpahou",
+    "prenom": "Lazare",
+    "nom": "Akpahou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2016-01-19",
+    "last_occurrence": "2017-10-03"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2016,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2016,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016,
+          2017
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2016,
+          2017
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2016,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2016,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1541,
+            "title": "Lazare Akpahou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1541,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1541,
+            "title": "Lazare Akpahou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1541,
+            "title": "Lazare Akpahou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1541,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1541,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

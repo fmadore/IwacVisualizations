@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.020964+00:00",
+  "person": {
+    "o_id": 1497,
+    "title": "Hubert O. Akponikpe",
+    "prenom": "Hubert",
+    "nom": "Akponikpe",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1980-02-29",
+    "last_occurrence": "2000-07-14"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 1980,
+        "year_max": 2000,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 12
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 9,
+        "year_min": 1980,
+        "year_max": 2000,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 12
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1980,
+          1993,
+          1994,
+          1997,
+          1998,
+          2000
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1980,
+          1993,
+          1994,
+          1997,
+          1998,
+          2000
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1993,
+          "year_max": 2000
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1980,
+          "year_max": 1980
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1993,
+          "year_max": 2000
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1980,
+          "year_max": 1980
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 9
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1497,
+            "title": "Hubert O. Akponikpe",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 790,
+            "title": "Radio La Voix de l'islam",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 775,
+            "title": "Haute Autorité de l'audiovisuel et de la communication",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.8154
+          },
+          {
+            "o_id": 13712,
+            "title": "Diplomatie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 7.1422
+          },
+          {
+            "o_id": 14916,
+            "title": "Organisation de l'Unité Africaine",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6094
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.7107
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0764
+          },
+          {
+            "o_id": 115,
+            "title": "Violence",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.8177
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 1497,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 790,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 775,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 1408,
+            "weight": 8.8154,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 13712,
+            "weight": 7.1422,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 14916,
+            "weight": 6.6094,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 895,
+            "weight": 5.7107,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 44,
+            "weight": 4.0764,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 115,
+            "weight": 3.8177,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1497,
+            "title": "Hubert O. Akponikpe",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1497,
+            "title": "Hubert O. Akponikpe",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 790,
+            "title": "Radio La Voix de l'islam",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 775,
+            "title": "Haute Autorité de l'audiovisuel et de la communication",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.8154
+          },
+          {
+            "o_id": 13712,
+            "title": "Diplomatie",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 7.1422
+          },
+          {
+            "o_id": 14916,
+            "title": "Organisation de l'Unité Africaine",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6094
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.7107
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0764
+          },
+          {
+            "o_id": 115,
+            "title": "Violence",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.8177
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 1497,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 790,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 775,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 1408,
+            "weight": 8.8154,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 13712,
+            "weight": 7.1422,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 14916,
+            "weight": 6.6094,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 895,
+            "weight": 5.7107,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 44,
+            "weight": 4.0764,
+            "cooc": 3
+          },
+          {
+            "source": 1497,
+            "target": 115,
+            "weight": 3.8177,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 1497,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.640146+00:00",
+  "person": {
+    "o_id": 15323,
+    "title": "Inoussa Izi Chérif",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2018-09-21",
+    "last_occurrence": "2022-10-03"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Matin Libre",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [
+        {
+          "name": "Matin Libre",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 14.8024
+          },
+          {
+            "o_id": 12853,
+            "title": "Mosquée centrale de Cococodji",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 14.5119
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.6437
+          },
+          {
+            "o_id": 14,
+            "title": "Contraception",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 15106,
+            "title": "Amos Agbindo-Bankolé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          },
+          {
+            "o_id": 14809,
+            "title": "Église Protestante Méthodiste du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          }
+        ],
+        "edges": [
+          {
+            "source": 15323,
+            "target": 31,
+            "weight": 14.8024,
+            "cooc": 4
+          },
+          {
+            "source": 15323,
+            "target": 12853,
+            "weight": 14.5119,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 2008,
+            "weight": 13.6437,
+            "cooc": 3
+          },
+          {
+            "source": 15323,
+            "target": 14,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 15323,
+            "target": 15106,
+            "weight": 12.0064,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 14809,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 14.8024
+          },
+          {
+            "o_id": 12853,
+            "title": "Mosquée centrale de Cococodji",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 14.5119
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.6437
+          },
+          {
+            "o_id": 14,
+            "title": "Contraception",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 15106,
+            "title": "Amos Agbindo-Bankolé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          },
+          {
+            "o_id": 14809,
+            "title": "Église Protestante Méthodiste du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          }
+        ],
+        "edges": [
+          {
+            "source": 15323,
+            "target": 31,
+            "weight": 14.8024,
+            "cooc": 4
+          },
+          {
+            "source": 15323,
+            "target": 12853,
+            "weight": 14.5119,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 2008,
+            "weight": 13.6437,
+            "cooc": 3
+          },
+          {
+            "source": 15323,
+            "target": 14,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 15323,
+            "target": 15106,
+            "weight": 12.0064,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 14809,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 15323,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

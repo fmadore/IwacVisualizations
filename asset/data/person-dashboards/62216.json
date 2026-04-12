@@ -1,0 +1,476 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.843866+00:00",
+  "person": {
+    "o_id": 62216,
+    "title": "Joseph Dago",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1982-06-09",
+    "last_occurrence": "1990-07-30"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1982,
+        "year_max": 1990,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1982,
+        "year_max": 1990,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1990
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1982,
+          1990
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1990
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1990
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62216,
+            "title": "Joseph Dago",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46216,
+            "title": "Bondoukou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.4592
+          },
+          {
+            "o_id": 76283,
+            "title": "Yaya Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62216,
+            "target": 46216,
+            "weight": 7.4592,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 76283,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62216,
+            "title": "Joseph Dago",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62216,
+            "title": "Joseph Dago",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46216,
+            "title": "Bondoukou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.4592
+          },
+          {
+            "o_id": 76283,
+            "title": "Yaya Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62216,
+            "target": 46216,
+            "weight": 7.4592,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 76283,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 62216,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 62216,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

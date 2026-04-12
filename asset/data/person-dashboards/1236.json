@@ -1,0 +1,286 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.292656+00:00",
+  "person": {
+    "o_id": 1236,
+    "title": "Abdourahmane Idrissa",
+    "prenom": "Abdourahmane",
+    "nom": "Idrissa",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso",
+      "Burkina Faso",
+      "Niger",
+      "Nigeria",
+      "Niger",
+      "Niger",
+      "Nigeria"
+    ],
+    "first_occurrence": "2003",
+    "last_occurrence": "2021"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2003,
+        "year_max": 2021,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 9,
+        "year_min": 2003,
+        "year_max": 2021,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2003,
+          2005,
+          2009,
+          2012,
+          2017,
+          2018,
+          2019,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "Niger": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2003,
+          2005,
+          2009,
+          2012,
+          2017,
+          2018,
+          2019,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "Niger": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Niger",
+          "count": 7
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Niger",
+          "count": 7
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1236,
+            "title": "Abdourahmane Idrissa",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60540,
+            "title": "Sahel",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 17.6089
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          }
+        ],
+        "edges": [
+          {
+            "source": 1236,
+            "target": 60540,
+            "weight": 17.6089,
+            "cooc": 3
+          },
+          {
+            "source": 1236,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1236,
+            "title": "Abdourahmane Idrissa",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1236,
+            "title": "Abdourahmane Idrissa",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60540,
+            "title": "Sahel",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 17.6089
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          }
+        ],
+        "edges": [
+          {
+            "source": 1236,
+            "target": 60540,
+            "weight": 17.6089,
+            "cooc": 3
+          },
+          {
+            "source": 1236,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "country": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "country": "Benin",
+          "count": 3
+        }
+      ]
+    }
+  }
+}

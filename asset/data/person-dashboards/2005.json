@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.735104+00:00",
+  "person": {
+    "o_id": 2005,
+    "title": "Alidou Yaya",
+    "prenom": "Alidou",
+    "nom": "Yaya",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1972-11-14",
+    "last_occurrence": "1976-08-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1972,
+        "year_max": 1976,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1972,
+        "year_max": 1976,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1972,
+          1973,
+          1976
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1972,
+          1973,
+          1976
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Daho-Express",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1973
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1976
+        }
+      ],
+      "subject": [
+        {
+          "name": "Daho-Express",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1973
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1976
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2005,
+            "title": "Alidou Yaya",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1980,
+            "title": "Mouftaou Sanni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 2005,
+            "target": 1980,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 2005,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 2005,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2005,
+            "title": "Alidou Yaya",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1980,
+            "title": "Mouftaou Sanni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 2005,
+            "target": 1980,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 2005,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 2005,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2005,
+            "title": "Alidou Yaya",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

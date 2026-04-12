@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.556722+00:00",
+  "person": {
+    "o_id": 16460,
+    "title": "Perry Collins",
+    "prenom": "Perry",
+    "nom": "Collins",
+    "genre": "Femme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2022-02-14",
+    "last_occurrence": "2022-09-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2022,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2022,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 16460,
+            "title": "Perry Collins",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          }
+        ],
+        "edges": [
+          {
+            "source": 16460,
+            "target": 858,
+            "weight": 12.0064,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 16460,
+            "title": "Perry Collins",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 16460,
+            "title": "Perry Collins",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          }
+        ],
+        "edges": [
+          {
+            "source": 16460,
+            "target": 858,
+            "weight": 12.0064,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

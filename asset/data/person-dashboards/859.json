@@ -1,0 +1,291 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.976604+00:00",
+  "person": {
+    "o_id": 859,
+    "title": "Louis Audet Gosselin",
+    "prenom": "Louis",
+    "nom": "Audet Gosselin",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso",
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2008",
+    "last_occurrence": "2022"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 12,
+        "year_min": 2008,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 12,
+        "year_min": 2008,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2011,
+          2012,
+          2013,
+          2016,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            2,
+            1,
+            3,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2008,
+          2011,
+          2012,
+          2013,
+          2016,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            2,
+            1,
+            3,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 12
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 12
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 1211,
+            "title": "Issouf Binaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          }
+        ],
+        "edges": [
+          {
+            "source": 859,
+            "target": 1208,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 1211,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 61,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 1211,
+            "title": "Issouf Binaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          }
+        ],
+        "edges": [
+          {
+            "source": 859,
+            "target": 1208,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 1211,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 61,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 859,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

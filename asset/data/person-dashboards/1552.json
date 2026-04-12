@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.615147+00:00",
+  "person": {
+    "o_id": 1552,
+    "title": "Alassane Yaro",
+    "prenom": "Alassane",
+    "nom": "Yaro",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1977-08-08",
+    "last_occurrence": "2011-09-07"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1977,
+        "year_max": 2011,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1977,
+        "year_max": 2011,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2011,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1977,
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1977,
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1977,
+          "year_max": 1977
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1977,
+          "year_max": 1977
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1552,
+            "title": "Alassane Yaro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          }
+        ],
+        "edges": [
+          {
+            "source": 1552,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1552,
+            "title": "Alassane Yaro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          }
+        ],
+        "edges": [
+          {
+            "source": 1552,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1552,
+            "title": "Alassane Yaro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

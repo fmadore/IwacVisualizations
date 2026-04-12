@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.698784+00:00",
+  "person": {
+    "o_id": 15238,
+    "title": "Oumar Ouédraogo",
+    "prenom": "Oumar",
+    "nom": "Ouédraogo",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1985-08-23",
+    "last_occurrence": "2013-05-27"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1985,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1985,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1985,
+          2013
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1985,
+          2013
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1985,
+          "year_max": 2013
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1985,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15238,
+            "title": "Oumar Ouédraogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 655,
+            "title": "Conseil National de la Révolution",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 911,
+            "title": "Thomas Sankara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1593
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 15238,
+            "target": 655,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 911,
+            "weight": 7.1593,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15238,
+            "title": "Oumar Ouédraogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15238,
+            "title": "Oumar Ouédraogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 655,
+            "title": "Conseil National de la Révolution",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 911,
+            "title": "Thomas Sankara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1593
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 15238,
+            "target": 655,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 911,
+            "weight": 7.1593,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 15238,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 279,
+          "name": "Banfora",
+          "lat": 10.63333,
+          "lng": -4.76667,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 279,
+          "name": "Banfora",
+          "lat": 10.63333,
+          "lng": -4.76667,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.209844+00:00",
+  "person": {
+    "o_id": 63526,
+    "title": "Bernard Kouakou Niamien",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1975-10-20",
+    "last_occurrence": "1975-12-12"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1975,
+        "year_max": 1975,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1975,
+        "year_max": 1975,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1975
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1975
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1975,
+          "year_max": 1975
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1975,
+          "year_max": 1975
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 63526,
+            "title": "Bernard Kouakou Niamien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46277,
+            "title": "Mattié Diakité",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          }
+        ],
+        "edges": [
+          {
+            "source": 63526,
+            "target": 46277,
+            "weight": 6.8546,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 63526,
+            "title": "Bernard Kouakou Niamien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 63526,
+            "title": "Bernard Kouakou Niamien",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46277,
+            "title": "Mattié Diakité",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          }
+        ],
+        "edges": [
+          {
+            "source": 63526,
+            "target": 46277,
+            "weight": 6.8546,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23692,
+          "name": "Grande mosquée de Treichville",
+          "lat": 5.3080303344696205,
+          "lng": -4.01092342679036,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 23692,
+          "name": "Grande mosquée de Treichville",
+          "lat": 5.3080303344696205,
+          "lng": -4.01092342679036,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

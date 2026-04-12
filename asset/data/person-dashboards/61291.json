@@ -1,0 +1,260 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.039237+00:00",
+  "person": {
+    "o_id": 61291,
+    "title": "Diégou Bailly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1992-04-01",
+    "last_occurrence": "1992-12-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1992,
+        "year_max": 1992,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1992,
+        "year_max": 1992,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1992,
+        "year_max": 1992,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1992
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1992
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Temps",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "creator": [
+        {
+          "name": "Notre Temps",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61291,
+            "title": "Diégou Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.4641
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 61291,
+            "target": 59,
+            "weight": 4.4641,
+            "cooc": 2
+          },
+          {
+            "source": 61291,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          },
+          {
+            "source": 61291,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61291,
+            "title": "Diégou Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61291,
+            "title": "Diégou Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,500 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.511739+00:00",
+  "person": {
+    "o_id": 14908,
+    "title": "Moudjaïdou Soumanou",
+    "prenom": "",
+    "nom": "",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2008-10-02",
+    "last_occurrence": "2016-07-07"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2008,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 12
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 2008,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 12
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2009,
+          2010,
+          2014,
+          2016
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2008,
+          2009,
+          2010,
+          2014,
+          2016
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2008,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2008,
+          "year_max": 2016
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 6
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 14908,
+            "title": "Moudjaïdou Soumanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 14.7456
+          },
+          {
+            "o_id": 1486,
+            "title": "Désiré C. Vigan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 1412,
+            "title": "Moussa Okanla",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 2017,
+            "title": "Ousmane Aboubakar",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.3758
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.4846
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.3023
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.3428
+          },
+          {
+            "o_id": 35,
+            "title": "Zakat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.0162
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 14908,
+            "target": 1960,
+            "weight": 14.7456,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 1486,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 1412,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 2017,
+            "weight": 8.3758,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 76041,
+            "weight": 6.4846,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 86,
+            "weight": 6.3023,
+            "cooc": 6
+          },
+          {
+            "source": 14908,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 14908,
+            "target": 32,
+            "weight": 5.3428,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 35,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 109,
+            "weight": 4.0162,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 14908,
+            "title": "Moudjaïdou Soumanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 14.7456
+          },
+          {
+            "o_id": 1486,
+            "title": "Désiré C. Vigan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 1412,
+            "title": "Moussa Okanla",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 2017,
+            "title": "Ousmane Aboubakar",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.3758
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.4846
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.3023
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.3428
+          },
+          {
+            "o_id": 35,
+            "title": "Zakat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.0162
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 14908,
+            "target": 1960,
+            "weight": 14.7456,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 1486,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 1412,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 2017,
+            "weight": 8.3758,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 76041,
+            "weight": 6.4846,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 86,
+            "weight": 6.3023,
+            "cooc": 6
+          },
+          {
+            "source": 14908,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 14908,
+            "target": 32,
+            "weight": 5.3428,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 35,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 109,
+            "weight": 4.0162,
+            "cooc": 4
+          },
+          {
+            "source": 14908,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 14908,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 14908,
+            "title": "Moudjaïdou Soumanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

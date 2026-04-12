@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.201627+00:00",
+  "person": {
+    "o_id": 65695,
+    "title": "Moumouni Idrissou",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1970-01-29",
+    "last_occurrence": "1980-09-01"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1970,
+        "year_max": 1980,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 1970,
+        "year_max": 1980,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1980
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1980
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1970
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1980,
+          "year_max": 1980
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1970
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1980,
+          "year_max": 1980
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65695,
+            "title": "Moumouni Idrissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 65686,
+            "title": "Congrès UMT (1970)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 73306,
+            "title": "Taofiqui Falana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 65695,
+            "target": 65686,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 65695,
+            "target": 73306,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 14057,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 2128,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65695,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65695,
+            "title": "Moumouni Idrissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 65686,
+            "title": "Congrès UMT (1970)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 73306,
+            "title": "Taofiqui Falana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 65695,
+            "target": 65686,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 65695,
+            "target": 73306,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 14057,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 65695,
+            "target": 2128,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65695,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65695,
+            "title": "Moumouni Idrissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

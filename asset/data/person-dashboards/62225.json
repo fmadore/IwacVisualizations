@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.164712+00:00",
+  "person": {
+    "o_id": 62225,
+    "title": "B. Coulibaly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1972-02-01",
+    "last_occurrence": "1973-11-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1972,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1972,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1972,
+          1973
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1972,
+          1973
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1972,
+          "year_max": 1973
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1972,
+          "year_max": 1973
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62225,
+            "title": "B. Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62225,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62225,
+            "title": "B. Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62225,
+            "title": "B. Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62225,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 62225,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.115312+00:00",
+  "person": {
+    "o_id": 1961,
+    "title": "Idrissou Abdel Nasser",
+    "prenom": "Idrissou Abdel",
+    "nom": "Nasser",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1995-07-21",
+    "last_occurrence": "1995-08-22"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1995,
+        "year_max": 1995,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1995,
+        "year_max": 1995,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 1995,
+        "year_max": 1995,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1995
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1995
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1961,
+            "title": "Idrissou Abdel Nasser",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1968,
+            "title": "Karim Dramane",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 758,
+            "title": "Communauté Islamique Universitaire du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1961,
+            "target": 1968,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 758,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1961,
+            "title": "Idrissou Abdel Nasser",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1968,
+            "title": "Karim Dramane",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 758,
+            "title": "Communauté Islamique Universitaire du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1961,
+            "target": 1968,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 758,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 1961,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1961,
+            "title": "Idrissou Abdel Nasser",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

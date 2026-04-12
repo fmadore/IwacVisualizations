@@ -1,0 +1,553 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:55.679007+00:00",
+  "person": {
+    "o_id": 1067,
+    "title": "Issa Kindo",
+    "prenom": "Issa",
+    "nom": "Kindo",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1994-05-20",
+    "last_occurrence": "2000-11-29"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1994,
+        "year_max": 2000,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 11
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1995,
+        "year_max": 1996,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1994,
+        "year_max": 2000,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994,
+          1995,
+          1996,
+          2000
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1995,
+          1996
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1994,
+          1995,
+          1996,
+          2000
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 1996
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ],
+      "subject": [
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1995,
+          "year_max": 1996
+        }
+      ],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 1996
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1067,
+            "title": "Issa Kindo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76341,
+            "title": "Moïse",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.7389
+          },
+          {
+            "o_id": 76330,
+            "title": "Jésus",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 9.0873
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 8.4924
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 8.3358
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.4846
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.3428
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9449
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.9791
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1067,
+            "target": 76341,
+            "weight": 10.7389,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 76330,
+            "weight": 9.0873,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 76273,
+            "weight": 8.4924,
+            "cooc": 4
+          },
+          {
+            "source": 1067,
+            "target": 85,
+            "weight": 8.3358,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 76041,
+            "weight": 6.4846,
+            "cooc": 4
+          },
+          {
+            "source": 1067,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 32,
+            "weight": 5.3428,
+            "cooc": 4
+          },
+          {
+            "source": 1067,
+            "target": 61328,
+            "weight": 4.9449,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 2013,
+            "weight": 3.9791,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1067,
+            "title": "Issa Kindo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.6886
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 1067,
+            "target": 124,
+            "weight": 3.6886,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1067,
+            "title": "Issa Kindo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76341,
+            "title": "Moïse",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1593
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3693
+          },
+          {
+            "o_id": 76330,
+            "title": "Jésus",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.0582
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1067,
+            "target": 76341,
+            "weight": 7.1593,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 76273,
+            "weight": 6.3693,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 76330,
+            "weight": 6.0582,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 85,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          },
+          {
+            "source": 1067,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 1067,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

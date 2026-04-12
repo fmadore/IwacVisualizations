@@ -1,0 +1,211 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.534254+00:00",
+  "person": {
+    "o_id": 15466,
+    "title": "Mahmoud Ahmadinejad",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [],
+    "first_occurrence": null,
+    "last_occurrence": null
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2010,
+        "year_max": 2011,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 0
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 2010,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2011,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2011
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            0
+          ],
+          "Côte D'Ivoire": [
+            0,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2010
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2011
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "creator": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15466,
+            "title": "Mahmoud Ahmadinejad",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15466,
+            "title": "Mahmoud Ahmadinejad",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15466,
+            "title": "Mahmoud Ahmadinejad",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

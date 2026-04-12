@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.124634+00:00",
+  "person": {
+    "o_id": 1249,
+    "title": "Robert Launay",
+    "prenom": "Robert",
+    "nom": "Launay",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Niger"
+    ],
+    "first_occurrence": "1982",
+    "last_occurrence": "2023"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 13,
+        "year_min": 1982,
+        "year_max": 2023,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 13,
+        "year_min": 1982,
+        "year_max": 2023,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1990,
+          1992,
+          1995,
+          1997,
+          2000,
+          2009,
+          2012,
+          2015,
+          2016,
+          2019,
+          2023
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1982,
+          1990,
+          1992,
+          1995,
+          1997,
+          2000,
+          2009,
+          2012,
+          2015,
+          2016,
+          2019,
+          2023
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 10
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 10
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1249,
+            "title": "Robert Launay",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1757,
+            "title": "Rudolph Ware",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          }
+        ],
+        "edges": [
+          {
+            "source": 1249,
+            "target": 1757,
+            "weight": 15.8982,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1249,
+            "title": "Robert Launay",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1249,
+            "title": "Robert Launay",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1757,
+            "title": "Rudolph Ware",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          }
+        ],
+        "edges": [
+          {
+            "source": 1249,
+            "target": 1757,
+            "weight": 15.8982,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

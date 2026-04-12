@@ -1,0 +1,1562 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.675281+00:00",
+  "person": {
+    "o_id": 2177,
+    "title": "Ahmed Têtou",
+    "prenom": "Ahmed",
+    "nom": "Têtou",
+    "genre": "Homme",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1999-01-11",
+    "last_occurrence": "2013-07-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 55,
+        "year_min": 1999,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 47
+      },
+      "subject": {
+        "total_mentions": 55,
+        "year_min": 1999,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 47
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2013
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            7,
+            2,
+            1,
+            2,
+            2,
+            13,
+            9,
+            14,
+            4,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2013
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            7,
+            2,
+            1,
+            2,
+            2,
+            13,
+            9,
+            14,
+            4,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 49,
+          "articles": 49,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2007
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 6,
+          "articles": 0,
+          "publications": 6,
+          "country": "Togo",
+          "year_min": 2004,
+          "year_max": 2013
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 49,
+          "articles": 49,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2007
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 6,
+          "articles": 0,
+          "publications": 6,
+          "country": "Togo",
+          "year_min": 2004,
+          "year_max": 2013
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 55
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 55
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 51,
+            "score": 141.1327
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 22,
+            "score": 60.8808
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 12,
+            "score": 46.257
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 36.1554
+          },
+          {
+            "o_id": 2129,
+            "title": "Abass Bonfoh",
+            "type": "Personnes",
+            "cooc": 8,
+            "score": 33.3192
+          },
+          {
+            "o_id": 13095,
+            "title": "Koffi Sama",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 29.9987
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 28.2595
+          },
+          {
+            "o_id": 586,
+            "title": "Association des Élèves et Étudiants Musulmans au Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 27.9849
+          },
+          {
+            "o_id": 15616,
+            "title": "Concours National de Récitation du Saint Coran",
+            "type": "Événements",
+            "cooc": 6,
+            "score": 27.7013
+          },
+          {
+            "o_id": 73310,
+            "title": "Katari Foli-Bazi",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 26.3625
+          },
+          {
+            "o_id": 31349,
+            "title": "Kpatcha Gnassingbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.5366
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 21.4276
+          },
+          {
+            "o_id": 15188,
+            "title": "Idrissou Sakibou Traoré",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 18.0604
+          },
+          {
+            "o_id": 27735,
+            "title": "Ibrahima Ouro-Gouni",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 17.6089
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 17.1365
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 17.029
+          },
+          {
+            "o_id": 65690,
+            "title": "Koenga Pouh",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 65692,
+            "title": "Prosper Pitassa",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 65743,
+            "title": "Evariste Yao Kadanga",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 2136,
+            "title": "Philippe Fanoko Kossi Kpodzro",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 27883,
+            "title": "Assemblées de Dieu",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 12.782
+          },
+          {
+            "o_id": 73315,
+            "title": "Nambiema Zakar",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 11.8253
+          },
+          {
+            "o_id": 909,
+            "title": "Tariq Ramadan",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.8948
+          },
+          {
+            "o_id": 65719,
+            "title": "Vincent K. Hoedanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.5193
+          },
+          {
+            "o_id": 65713,
+            "title": "Rigobert Bassadou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 65736,
+            "title": "Cyril Ekpawou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 73312,
+            "title": "Dahuku Péré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 65728,
+            "title": "Jules Lemou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 27752,
+            "title": "Agbéyomé Kodjo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 27999,
+            "title": "Kwassi Klutsé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.4604
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 65712,
+            "title": "Manati Tchangai",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.1636
+          },
+          {
+            "o_id": 73325,
+            "title": "Mohamed Atcha Titikpina",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 27911,
+            "title": "Edem Kodjo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 575,
+            "title": "Association Mondiale de l'Appel Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.7158
+          },
+          {
+            "o_id": 14916,
+            "title": "Organisation de l'Unité Africaine",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6094
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.2895
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 2177,
+            "target": 830,
+            "weight": 141.1327,
+            "cooc": 51
+          },
+          {
+            "source": 2177,
+            "target": 2128,
+            "weight": 60.8808,
+            "cooc": 22
+          },
+          {
+            "source": 2177,
+            "target": 2176,
+            "weight": 46.257,
+            "cooc": 12
+          },
+          {
+            "source": 2177,
+            "target": 2165,
+            "weight": 36.1554,
+            "cooc": 9
+          },
+          {
+            "source": 2177,
+            "target": 2129,
+            "weight": 33.3192,
+            "cooc": 8
+          },
+          {
+            "source": 2177,
+            "target": 13095,
+            "weight": 29.9987,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 845,
+            "weight": 28.2595,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 586,
+            "weight": 27.9849,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 15616,
+            "weight": 27.7013,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 73310,
+            "weight": 26.3625,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 31349,
+            "weight": 21.5366,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 457,
+            "weight": 21.4276,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 15188,
+            "weight": 18.0604,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 27735,
+            "weight": 17.6089,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 2138,
+            "weight": 17.1365,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 847,
+            "weight": 17.029,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 65690,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65692,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65743,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 2136,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 27883,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 15348,
+            "weight": 12.782,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 73315,
+            "weight": 12.0064,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 826,
+            "weight": 11.8253,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 909,
+            "weight": 10.8948,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65719,
+            "weight": 10.6201,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 15033,
+            "weight": 10.5193,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65713,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65736,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 73312,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65728,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27752,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27999,
+            "weight": 9.4604,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 283,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65712,
+            "weight": 9.1636,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 73325,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27911,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 575,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 29,
+            "weight": 6.7158,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 14916,
+            "weight": 6.6094,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 5,
+            "weight": 6.2895,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 51,
+            "score": 141.1327
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 22,
+            "score": 60.8808
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 12,
+            "score": 46.257
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 36.1554
+          },
+          {
+            "o_id": 2129,
+            "title": "Abass Bonfoh",
+            "type": "Personnes",
+            "cooc": 8,
+            "score": 33.3192
+          },
+          {
+            "o_id": 13095,
+            "title": "Koffi Sama",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 29.9987
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 28.2595
+          },
+          {
+            "o_id": 586,
+            "title": "Association des Élèves et Étudiants Musulmans au Togo",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 27.9849
+          },
+          {
+            "o_id": 15616,
+            "title": "Concours National de Récitation du Saint Coran",
+            "type": "Événements",
+            "cooc": 6,
+            "score": 27.7013
+          },
+          {
+            "o_id": 73310,
+            "title": "Katari Foli-Bazi",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 26.3625
+          },
+          {
+            "o_id": 31349,
+            "title": "Kpatcha Gnassingbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.5366
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 21.4276
+          },
+          {
+            "o_id": 15188,
+            "title": "Idrissou Sakibou Traoré",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 18.0604
+          },
+          {
+            "o_id": 27735,
+            "title": "Ibrahima Ouro-Gouni",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 17.6089
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 17.1365
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 17.029
+          },
+          {
+            "o_id": 65690,
+            "title": "Koenga Pouh",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 65692,
+            "title": "Prosper Pitassa",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 65743,
+            "title": "Evariste Yao Kadanga",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.9301
+          },
+          {
+            "o_id": 2136,
+            "title": "Philippe Fanoko Kossi Kpodzro",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 27883,
+            "title": "Assemblées de Dieu",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 12.782
+          },
+          {
+            "o_id": 73315,
+            "title": "Nambiema Zakar",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 11.8253
+          },
+          {
+            "o_id": 909,
+            "title": "Tariq Ramadan",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.8948
+          },
+          {
+            "o_id": 65719,
+            "title": "Vincent K. Hoedanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
+          },
+          {
+            "o_id": 15033,
+            "title": "Union européenne",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.5193
+          },
+          {
+            "o_id": 65713,
+            "title": "Rigobert Bassadou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 65736,
+            "title": "Cyril Ekpawou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 73312,
+            "title": "Dahuku Péré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 65728,
+            "title": "Jules Lemou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 27752,
+            "title": "Agbéyomé Kodjo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 27999,
+            "title": "Kwassi Klutsé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.4604
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 65712,
+            "title": "Manati Tchangai",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.1636
+          },
+          {
+            "o_id": 73325,
+            "title": "Mohamed Atcha Titikpina",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 27911,
+            "title": "Edem Kodjo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 575,
+            "title": "Association Mondiale de l'Appel Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.7158
+          },
+          {
+            "o_id": 14916,
+            "title": "Organisation de l'Unité Africaine",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6094
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.2895
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 2177,
+            "target": 830,
+            "weight": 141.1327,
+            "cooc": 51
+          },
+          {
+            "source": 2177,
+            "target": 2128,
+            "weight": 60.8808,
+            "cooc": 22
+          },
+          {
+            "source": 2177,
+            "target": 2176,
+            "weight": 46.257,
+            "cooc": 12
+          },
+          {
+            "source": 2177,
+            "target": 2165,
+            "weight": 36.1554,
+            "cooc": 9
+          },
+          {
+            "source": 2177,
+            "target": 2129,
+            "weight": 33.3192,
+            "cooc": 8
+          },
+          {
+            "source": 2177,
+            "target": 13095,
+            "weight": 29.9987,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 845,
+            "weight": 28.2595,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 586,
+            "weight": 27.9849,
+            "cooc": 7
+          },
+          {
+            "source": 2177,
+            "target": 15616,
+            "weight": 27.7013,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 73310,
+            "weight": 26.3625,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 31349,
+            "weight": 21.5366,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 457,
+            "weight": 21.4276,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 15188,
+            "weight": 18.0604,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 27735,
+            "weight": 17.6089,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 2138,
+            "weight": 17.1365,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 847,
+            "weight": 17.029,
+            "cooc": 5
+          },
+          {
+            "source": 2177,
+            "target": 65690,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65692,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65743,
+            "weight": 15.9301,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 2136,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 27883,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 15348,
+            "weight": 12.782,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 73315,
+            "weight": 12.0064,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 826,
+            "weight": 11.8253,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 909,
+            "weight": 10.8948,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65719,
+            "weight": 10.6201,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 15033,
+            "weight": 10.5193,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 65713,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65736,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 73312,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65728,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27752,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27999,
+            "weight": 9.4604,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 283,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 65712,
+            "weight": 9.1636,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 73325,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 27911,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 575,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 29,
+            "weight": 6.7158,
+            "cooc": 6
+          },
+          {
+            "source": 2177,
+            "target": 14916,
+            "weight": 6.6094,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 5,
+            "weight": 6.2895,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 2177,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 2177,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 2177,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 5
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 5
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

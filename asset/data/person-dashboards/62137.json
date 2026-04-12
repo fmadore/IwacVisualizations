@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.479534+00:00",
+  "person": {
+    "o_id": 62137,
+    "title": "Raphaël Lakpé",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1995-02-03",
+    "last_occurrence": "1995-02-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1982,
+        "year_max": 1995,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1995,
+        "year_max": 1995,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1982,
+        "year_max": 1995,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1984,
+          1995
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1995
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1982,
+          1984,
+          1995
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        },
+        {
+          "name": "Ivoire Dimanche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1984
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ],
+      "creator": [
+        {
+          "name": "Ivoire Dimanche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1984
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62137,
+            "title": "Raphaël Lakpé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43063,
+            "title": "Balla Keita",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0582
+          },
+          {
+            "o_id": 46178,
+            "title": "Front populaire ivoirien",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 62137,
+            "target": 43063,
+            "weight": 6.0582,
+            "cooc": 2
+          },
+          {
+            "source": 62137,
+            "target": 46178,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 62137,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 62137,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62137,
+            "title": "Raphaël Lakpé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62137,
+            "title": "Raphaël Lakpé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

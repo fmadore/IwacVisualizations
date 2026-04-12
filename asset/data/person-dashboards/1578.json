@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.525318+00:00",
+  "person": {
+    "o_id": 1578,
+    "title": "Jean Adande",
+    "prenom": "Jean",
+    "nom": "Adande",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2000-10-25",
+    "last_occurrence": "2004-06-14"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2000,
+        "year_max": 2004,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 2000,
+        "year_max": 2000,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2000,
+          2004
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2000
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2000,
+          "year_max": 2004
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2004,
+          "year_max": 2004
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1578,
+            "title": "Jean Adande",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1578,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1578,
+            "title": "Jean Adande",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1578,
+            "title": "Jean Adande",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

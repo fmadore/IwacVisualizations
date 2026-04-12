@@ -1,0 +1,349 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.336579+00:00",
+  "person": {
+    "o_id": 46162,
+    "title": "Augustin Kouyo",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2001-06-11",
+    "last_occurrence": "2017-06-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2001,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2015,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2001,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2010,
+          2015,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2001,
+          2010
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2001,
+          "year_max": 2017
+        }
+      ],
+      "subject": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2015,
+          "year_max": 2017
+        }
+      ],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2001,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46162,
+            "title": "Augustin Kouyo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 7.6123
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 46162,
+            "target": 46194,
+            "weight": 7.6123,
+            "cooc": 3
+          },
+          {
+            "source": 46162,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 46162,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46162,
+            "title": "Augustin Kouyo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          }
+        ],
+        "edges": [
+          {
+            "source": 46162,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46162,
+            "title": "Augustin Kouyo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.0749
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 46162,
+            "target": 46194,
+            "weight": 5.0749,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 46162,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

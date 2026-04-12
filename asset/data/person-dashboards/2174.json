@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.710085+00:00",
+  "person": {
+    "o_id": 2174,
+    "title": "Pierre Seshie",
+    "prenom": "Pierre",
+    "nom": "Seshie",
+    "genre": "Homme",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1988-10-10",
+    "last_occurrence": "1994-04-28"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1988,
+        "year_max": 1994,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1988,
+        "year_max": 1994,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1988,
+          1994
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1988,
+          1994
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1988,
+          "year_max": 1988
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1988,
+          "year_max": 1988
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2174,
+            "title": "Pierre Seshie",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 2174,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 2174,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2174,
+            "title": "Pierre Seshie",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 2174,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 2174,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2174,
+            "title": "Pierre Seshie",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

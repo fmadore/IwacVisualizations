@@ -1,0 +1,433 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.511038+00:00",
+  "person": {
+    "o_id": 73324,
+    "title": "Mahmoud Abbas",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Togo"
+    ],
+    "first_occurrence": "2010-09",
+    "last_occurrence": "2016-09-13"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2010,
+        "year_max": 2016,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 2010,
+        "year_max": 2016,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2011,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "Togo": [
+            0,
+            1,
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2010,
+          2011,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "Togo": [
+            0,
+            1,
+            2,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2016
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Benin",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2016
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Benin",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 5
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 5
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73324,
+            "title": "Mahmoud Abbas",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 69261,
+            "title": "Mahamat Idriss Déby Itno",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 26.9207
+          },
+          {
+            "o_id": 73322,
+            "title": "Hassan Rohani",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 23.0075
+          },
+          {
+            "o_id": 73330,
+            "title": "Abdelaziz Bouteflika",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 20.4635
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 19.894
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 73323,
+            "title": "Abdel Fattah Al-Sissi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.5295
+          },
+          {
+            "o_id": 73316,
+            "title": "Salmane ben Abdelaziz Al Saoud",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 11.1439
+          }
+        ],
+        "edges": [
+          {
+            "source": 73324,
+            "target": 69261,
+            "weight": 26.9207,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 73322,
+            "weight": 23.0075,
+            "cooc": 4
+          },
+          {
+            "source": 73324,
+            "target": 73330,
+            "weight": 20.4635,
+            "cooc": 4
+          },
+          {
+            "source": 73324,
+            "target": 894,
+            "weight": 19.894,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 73323,
+            "weight": 15.5295,
+            "cooc": 3
+          },
+          {
+            "source": 73324,
+            "target": 73316,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73324,
+            "target": 23606,
+            "weight": 11.1439,
+            "cooc": 5
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 73324,
+            "title": "Mahmoud Abbas",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 69261,
+            "title": "Mahamat Idriss Déby Itno",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 26.9207
+          },
+          {
+            "o_id": 73322,
+            "title": "Hassan Rohani",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 23.0075
+          },
+          {
+            "o_id": 73330,
+            "title": "Abdelaziz Bouteflika",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 20.4635
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 19.894
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 73323,
+            "title": "Abdel Fattah Al-Sissi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.5295
+          },
+          {
+            "o_id": 73316,
+            "title": "Salmane ben Abdelaziz Al Saoud",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.3476
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 11.1439
+          }
+        ],
+        "edges": [
+          {
+            "source": 73324,
+            "target": 69261,
+            "weight": 26.9207,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 73322,
+            "weight": 23.0075,
+            "cooc": 4
+          },
+          {
+            "source": 73324,
+            "target": 73330,
+            "weight": 20.4635,
+            "cooc": 4
+          },
+          {
+            "source": 73324,
+            "target": 894,
+            "weight": 19.894,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 73324,
+            "target": 73323,
+            "weight": 15.5295,
+            "cooc": 3
+          },
+          {
+            "source": 73324,
+            "target": 73316,
+            "weight": 15.3476,
+            "cooc": 3
+          },
+          {
+            "source": 73324,
+            "target": 23606,
+            "weight": 11.1439,
+            "cooc": 5
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 73324,
+            "title": "Mahmoud Abbas",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

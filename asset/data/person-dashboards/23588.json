@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:01.187029+00:00",
+  "person": {
+    "o_id": 23588,
+    "title": "Mohamed Diané",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2009-09-14",
+    "last_occurrence": "2015-09-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2009,
+        "year_max": 2015,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 2009,
+        "year_max": 2015,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2009,
+          2010,
+          2012,
+          2013,
+          2015
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2009,
+          2010,
+          2012,
+          2013,
+          2015
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2015
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "subject": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2015
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23588,
+            "title": "Mohamed Diané",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23638,
+            "title": "Communauté des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 23.5424
+          },
+          {
+            "o_id": 23493,
+            "title": "Aminata Dao Diaby",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.7683
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 23588,
+            "target": 23638,
+            "weight": 23.5424,
+            "cooc": 6
+          },
+          {
+            "source": 23588,
+            "target": 23493,
+            "weight": 10.7683,
+            "cooc": 2
+          },
+          {
+            "source": 23588,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 23588,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23588,
+            "title": "Mohamed Diané",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23638,
+            "title": "Communauté des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 23.5424
+          },
+          {
+            "o_id": 23493,
+            "title": "Aminata Dao Diaby",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.7683
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 23588,
+            "target": 23638,
+            "weight": 23.5424,
+            "cooc": 6
+          },
+          {
+            "source": 23588,
+            "target": 23493,
+            "weight": 10.7683,
+            "cooc": 2
+          },
+          {
+            "source": 23588,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 23588,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23588,
+            "title": "Mohamed Diané",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

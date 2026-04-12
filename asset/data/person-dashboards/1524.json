@@ -1,0 +1,302 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.387791+00:00",
+  "person": {
+    "o_id": 1524,
+    "title": "Aurélien Vidékon Gbegnon",
+    "prenom": "Aurélien Vidékon",
+    "nom": "Gbegnon",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2005-08-17",
+    "last_occurrence": "2005-08-19"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2005,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2005,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2005
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1524,
+            "title": "Aurélien Vidékon Gbegnon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 214,
+            "title": "Élection présidentielle de 2006 au Bénin",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1524,
+            "target": 214,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1524,
+            "title": "Aurélien Vidékon Gbegnon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1524,
+            "title": "Aurélien Vidékon Gbegnon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 214,
+            "title": "Élection présidentielle de 2006 au Bénin",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1524,
+            "target": 214,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 1524,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

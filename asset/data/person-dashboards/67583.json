@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.613015+00:00",
+  "person": {
+    "o_id": 67583,
+    "title": "Donald Wendpouiré Nikiema",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2013-08-11",
+    "last_occurrence": "2022-07-26"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2013,
+        "year_max": 2022,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2013,
+        "year_max": 2022,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2019,
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2013,
+          2019,
+          2022
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2013,
+          "year_max": 2022
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2013,
+          "year_max": 2022
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67583,
+            "title": "Donald Wendpouiré Nikiema",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76331,
+            "title": "Alphabétisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 76342,
+            "title": "Écoles coraniques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.9957
+          },
+          {
+            "o_id": 76329,
+            "title": "Enfant",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2576
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8235
+          },
+          {
+            "o_id": 572,
+            "title": "Fédération des Associations Islamiques du Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.7923
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0712
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 67583,
+            "target": 76331,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 76342,
+            "weight": 7.9957,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 76329,
+            "weight": 6.2576,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 571,
+            "weight": 4.8235,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 572,
+            "weight": 4.7923,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 56,
+            "weight": 4.0712,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67583,
+            "title": "Donald Wendpouiré Nikiema",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67583,
+            "title": "Donald Wendpouiré Nikiema",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76331,
+            "title": "Alphabétisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 76342,
+            "title": "Écoles coraniques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.9957
+          },
+          {
+            "o_id": 76329,
+            "title": "Enfant",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2576
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8235
+          },
+          {
+            "o_id": 572,
+            "title": "Fédération des Associations Islamiques du Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.7923
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0712
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 67583,
+            "target": 76331,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 76342,
+            "weight": 7.9957,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 76329,
+            "weight": 6.2576,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 571,
+            "weight": 4.8235,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 572,
+            "weight": 4.7923,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 56,
+            "weight": 4.0712,
+            "cooc": 2
+          },
+          {
+            "source": 67583,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

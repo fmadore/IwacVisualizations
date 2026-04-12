@@ -1,0 +1,342 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.578636+00:00",
+  "person": {
+    "o_id": 23567,
+    "title": "Soungalo Coulibaly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2017-01-03",
+    "last_occurrence": "2018-05-23"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2017,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2017,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2018
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ],
+      "subject": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2018
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23567,
+            "title": "Soungalo Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 12.3631
+          },
+          {
+            "o_id": 23475,
+            "title": "Immigration clandestine",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 23689,
+            "title": "Ligue Islamique des Prédicateurs de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.0292
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 23567,
+            "target": 588,
+            "weight": 12.3631,
+            "cooc": 5
+          },
+          {
+            "source": 23567,
+            "target": 23475,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 23636,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 23689,
+            "weight": 6.0292,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23567,
+            "title": "Soungalo Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 12.3631
+          },
+          {
+            "o_id": 23475,
+            "title": "Immigration clandestine",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 23689,
+            "title": "Ligue Islamique des Prédicateurs de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.0292
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 23567,
+            "target": 588,
+            "weight": 12.3631,
+            "cooc": 5
+          },
+          {
+            "source": 23567,
+            "target": 23475,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 23636,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 23689,
+            "weight": 6.0292,
+            "cooc": 2
+          },
+          {
+            "source": 23567,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23567,
+            "title": "Soungalo Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

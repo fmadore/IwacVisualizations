@@ -1,0 +1,534 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.789704+00:00",
+  "person": {
+    "o_id": 27735,
+    "title": "Ibrahima Ouro-Gouni",
+    "prenom": "Ibrahima",
+    "nom": "Ouro-Gouni",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2004-11-11",
+    "last_occurrence": "2021-08-27"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2004,
+        "year_max": 2021,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2004,
+        "year_max": 2021,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2006,
+          2007,
+          2021
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2004,
+          2006,
+          2007,
+          2021
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Rendez-Vous",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Togo",
+          "year_min": 2004,
+          "year_max": 2021
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2006,
+          "year_max": 2006
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Rendez-Vous",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Togo",
+          "year_min": 2004,
+          "year_max": 2021
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2006,
+          "year_max": 2006
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 27735,
+            "title": "Ibrahima Ouro-Gouni",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15616,
+            "title": "Concours National de Récitation du Saint Coran",
+            "type": "Événements",
+            "cooc": 4,
+            "score": 18.4675
+          },
+          {
+            "o_id": 586,
+            "title": "Association des Élèves et Étudiants Musulmans au Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 15.9914
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0518
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 529,
+            "title": "Centre Culturel Islamique de Lomé II",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 9.4604
+          },
+          {
+            "o_id": 804,
+            "title": "Al-Muntadah Al-Islami",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 27735,
+            "target": 15616,
+            "weight": 18.4675,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 586,
+            "weight": 15.9914,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 2177,
+            "weight": 12.0518,
+            "cooc": 3
+          },
+          {
+            "source": 27735,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 529,
+            "weight": 9.4604,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 804,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 27735,
+            "title": "Ibrahima Ouro-Gouni",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15616,
+            "title": "Concours National de Récitation du Saint Coran",
+            "type": "Événements",
+            "cooc": 4,
+            "score": 18.4675
+          },
+          {
+            "o_id": 586,
+            "title": "Association des Élèves et Étudiants Musulmans au Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 15.9914
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0518
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 529,
+            "title": "Centre Culturel Islamique de Lomé II",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 9.4604
+          },
+          {
+            "o_id": 804,
+            "title": "Al-Muntadah Al-Islami",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 27735,
+            "target": 15616,
+            "weight": 18.4675,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 586,
+            "weight": 15.9914,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 2177,
+            "weight": 12.0518,
+            "cooc": 3
+          },
+          {
+            "source": 27735,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 27735,
+            "target": 529,
+            "weight": 9.4604,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 804,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          },
+          {
+            "source": 27735,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 27735,
+            "title": "Ibrahima Ouro-Gouni",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 538,
+          "name": "Maison du Hadj",
+          "lat": 6.181735,
+          "lng": 1.255005,
+          "country": "Togo",
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 538,
+          "name": "Maison du Hadj",
+          "lat": 6.181735,
+          "lng": 1.255005,
+          "country": "Togo",
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

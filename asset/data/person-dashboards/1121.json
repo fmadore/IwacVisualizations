@@ -1,0 +1,390 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.921293+00:00",
+  "person": {
+    "o_id": 1121,
+    "title": "Mohamadi Tiemtoré",
+    "prenom": "Mohamadi",
+    "nom": "Tiemtoré",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2019-08-11",
+    "last_occurrence": "2019-08-13"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "FasoZine",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Burkina 24",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "subject": [
+        {
+          "name": "FasoZine",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Burkina 24",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1121,
+            "title": "Mohamadi Tiemtoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 873,
+            "title": "Christophe Dabiré",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.9345
+          },
+          {
+            "o_id": 1158,
+            "title": "Philippe Ouédraogo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.7732
+          },
+          {
+            "o_id": 49,
+            "title": "Khutba",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 9.5352
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.0032
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0764
+          }
+        ],
+        "edges": [
+          {
+            "source": 1121,
+            "target": 873,
+            "weight": 12.9345,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 1158,
+            "weight": 9.7732,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 49,
+            "weight": 9.5352,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 42,
+            "weight": 6.0032,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 44,
+            "weight": 4.0764,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1121,
+            "title": "Mohamadi Tiemtoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 873,
+            "title": "Christophe Dabiré",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.9345
+          },
+          {
+            "o_id": 1158,
+            "title": "Philippe Ouédraogo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.7732
+          },
+          {
+            "o_id": 49,
+            "title": "Khutba",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 9.5352
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.0032
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0764
+          }
+        ],
+        "edges": [
+          {
+            "source": 1121,
+            "target": 873,
+            "weight": 12.9345,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 1158,
+            "weight": 9.7732,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 49,
+            "weight": 9.5352,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 42,
+            "weight": 6.0032,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 1121,
+            "target": 44,
+            "weight": 4.0764,
+            "cooc": 3
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1121,
+            "title": "Mohamadi Tiemtoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

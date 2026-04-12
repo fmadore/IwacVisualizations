@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.508405+00:00",
+  "person": {
+    "o_id": 1915,
+    "title": "William Assanvo",
+    "prenom": "William",
+    "nom": "Assanvo",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Benin",
+      "Togo",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2015-06-22",
+    "last_occurrence": "2023-09-18"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2015,
+        "year_max": 2023,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2015,
+        "year_max": 2023,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            1,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2015,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            1,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 2
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1915,
+            "title": "William Assanvo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1678,
+            "title": "Jeannine Ella Abatan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.1256
+          }
+        ],
+        "edges": [
+          {
+            "source": 1915,
+            "target": 1678,
+            "weight": 13.1256,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1915,
+            "title": "William Assanvo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1915,
+            "title": "William Assanvo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1678,
+            "title": "Jeannine Ella Abatan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.1256
+          }
+        ],
+        "edges": [
+          {
+            "source": 1915,
+            "target": 1678,
+            "weight": 13.1256,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

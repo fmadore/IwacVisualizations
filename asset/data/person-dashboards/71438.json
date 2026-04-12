@@ -1,0 +1,549 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.800184+00:00",
+  "person": {
+    "o_id": 71438,
+    "title": "A. A.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2012-08-16",
+    "last_occurrence": "2023-11-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2012,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 12
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2012,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 12
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2012,
+          2013,
+          2023
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            4,
+            3,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2012,
+          2013,
+          2023
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            4,
+            3,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour Plus",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2013
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Jour Plus",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2013
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71438,
+            "title": "A. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.6823
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.7552
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 71438,
+            "target": 113,
+            "weight": 6.6823,
+            "cooc": 4
+          },
+          {
+            "source": 71438,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 662,
+            "weight": 5.7552,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 71438,
+            "title": "A. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 71438,
+            "title": "A. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.6823
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.7552
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 71438,
+            "target": 113,
+            "weight": 6.6823,
+            "cooc": 4
+          },
+          {
+            "source": 71438,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 662,
+            "weight": 5.7552,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 71438,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          },
+          {
+            "source": 71438,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

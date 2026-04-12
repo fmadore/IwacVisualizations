@@ -1,0 +1,373 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:49.809443+00:00",
+  "person": {
+    "o_id": 23494,
+    "title": "Mariam Koné",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Burkina Faso",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2007-08-29",
+    "last_occurrence": "2014-08-20"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2007,
+        "year_max": 2014,
+        "newspapers_count": 3,
+        "countries_count": 2,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2007,
+        "year_max": 2014,
+        "newspapers_count": 3,
+        "countries_count": 2,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2012,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "Côte D'Ivoire": [
+            2,
+            0,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2007,
+          2012,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "Côte D'Ivoire": [
+            2,
+            0,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2014
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "subject": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2014
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23494,
+            "title": "Mariam Koné",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23488,
+            "title": "Union Musulmane des Associations et des ONG féminines de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.8091
+          },
+          {
+            "o_id": 23679,
+            "title": "Maconi Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.7311
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 23494,
+            "target": 23488,
+            "weight": 9.8091,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 23679,
+            "weight": 8.7311,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 23494,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23494,
+            "title": "Mariam Koné",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23488,
+            "title": "Union Musulmane des Associations et des ONG féminines de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.8091
+          },
+          {
+            "o_id": 23679,
+            "title": "Maconi Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.7311
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 23494,
+            "target": 23488,
+            "weight": 9.8091,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 23679,
+            "weight": 8.7311,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 23494,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 23494,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23494,
+            "title": "Mariam Koné",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

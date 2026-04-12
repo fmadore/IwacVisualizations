@@ -1,0 +1,534 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.746659+00:00",
+  "person": {
+    "o_id": 65742,
+    "title": "Gisèle Sonhaye-Napo-Koura",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2007-10-08",
+    "last_occurrence": "2016-09-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2007,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 2007,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 7,
+        "year_min": 2008,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2008,
+          2009,
+          2012,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            2,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2007,
+          2009,
+          2012,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            2,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2008,
+          2009,
+          2012,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            2,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2007,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2007,
+          "year_max": 2016
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2008,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 6
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65742,
+            "title": "Gisèle Sonhaye-Napo-Koura",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.8365
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 13.7092
+          },
+          {
+            "o_id": 28021,
+            "title": "Ali Sossah",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 73311,
+            "title": "Gilbert Fossoun Houngbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 73313,
+            "title": "Komlan Mally",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65742,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 65742,
+            "target": 830,
+            "weight": 13.8365,
+            "cooc": 5
+          },
+          {
+            "source": 65742,
+            "target": 2138,
+            "weight": 13.7092,
+            "cooc": 4
+          },
+          {
+            "source": 65742,
+            "target": 28021,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 73311,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 73313,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 845,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2176,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65742,
+            "title": "Gisèle Sonhaye-Napo-Koura",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 28021,
+            "title": "Ali Sossah",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.2819
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.5865
+          },
+          {
+            "o_id": 73311,
+            "title": "Gilbert Fossoun Houngbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65742,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 65742,
+            "target": 28021,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2138,
+            "weight": 10.2819,
+            "cooc": 3
+          },
+          {
+            "source": 65742,
+            "target": 15348,
+            "weight": 9.5865,
+            "cooc": 3
+          },
+          {
+            "source": 65742,
+            "target": 73311,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 845,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65742,
+            "title": "Gisèle Sonhaye-Napo-Koura",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 15.9775
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.2819
+          },
+          {
+            "o_id": 73311,
+            "title": "Gilbert Fossoun Houngbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.3065
+          },
+          {
+            "o_id": 73313,
+            "title": "Komlan Mally",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65742,
+            "target": 15348,
+            "weight": 15.9775,
+            "cooc": 5
+          },
+          {
+            "source": 65742,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 65742,
+            "target": 2138,
+            "weight": 10.2819,
+            "cooc": 3
+          },
+          {
+            "source": 65742,
+            "target": 73311,
+            "weight": 9.3065,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 73313,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 845,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2176,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 65742,
+            "target": 2128,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

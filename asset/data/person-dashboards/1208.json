@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.969168+00:00",
+  "person": {
+    "o_id": 1208,
+    "title": "Muriel Gomez-Perez",
+    "prenom": "Muriel",
+    "nom": "Gomez-Perez",
+    "genre": "Femme",
+    "countries": [
+      "Benin",
+      "Burkina Faso",
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Côte d'Ivoire",
+      "Niger"
+    ],
+    "first_occurrence": "2005",
+    "last_occurrence": "2018"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 14,
+        "year_min": 2007,
+        "year_max": 2018,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 14,
+        "year_min": 2007,
+        "year_max": 2018,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2009,
+          2011,
+          2013,
+          2014,
+          2016,
+          2017,
+          2018
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            2,
+            2,
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2007,
+          2009,
+          2011,
+          2013,
+          2014,
+          2016,
+          2017,
+          2018
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            2,
+            2,
+            2,
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 14
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 14
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1294,
+            "title": "Marie Nathalie LeBlanc",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.0127
+          },
+          {
+            "o_id": 1295,
+            "title": "Mathias Boukary Savadogo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 20.5514
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          }
+        ],
+        "edges": [
+          {
+            "source": 1208,
+            "target": 1294,
+            "weight": 24.6293,
+            "cooc": 4
+          },
+          {
+            "source": 1208,
+            "target": 858,
+            "weight": 24.0127,
+            "cooc": 4
+          },
+          {
+            "source": 1208,
+            "target": 1295,
+            "weight": 20.5514,
+            "cooc": 3
+          },
+          {
+            "source": 1208,
+            "target": 859,
+            "weight": 12.0064,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1294,
+            "title": "Marie Nathalie LeBlanc",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.0127
+          },
+          {
+            "o_id": 1295,
+            "title": "Mathias Boukary Savadogo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 20.5514
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.0064
+          }
+        ],
+        "edges": [
+          {
+            "source": 1208,
+            "target": 1294,
+            "weight": 24.6293,
+            "cooc": 4
+          },
+          {
+            "source": 1208,
+            "target": 858,
+            "weight": 24.0127,
+            "cooc": 4
+          },
+          {
+            "source": 1208,
+            "target": 1295,
+            "weight": 20.5514,
+            "cooc": 3
+          },
+          {
+            "source": 1208,
+            "target": 859,
+            "weight": 12.0064,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

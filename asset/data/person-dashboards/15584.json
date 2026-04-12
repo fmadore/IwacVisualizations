@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.835361+00:00",
+  "person": {
+    "o_id": 15584,
+    "title": "Mikaïllou",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2004-04-02",
+    "last_occurrence": "2006-02-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2004,
+        "year_max": 2006,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2004,
+        "year_max": 2006,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2006
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2004,
+          2006
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Burkina Faso",
+          "year_min": 2004,
+          "year_max": 2006
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Burkina Faso",
+          "year_min": 2004,
+          "year_max": 2006
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15584,
+            "title": "Mikaïllou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.979
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 15584,
+            "target": 569,
+            "weight": 4.979,
+            "cooc": 2
+          },
+          {
+            "source": 15584,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 15584,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15584,
+            "title": "Mikaïllou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15584,
+            "title": "Mikaïllou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.979
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 15584,
+            "target": 569,
+            "weight": 4.979,
+            "cooc": 2
+          },
+          {
+            "source": 15584,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 15584,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

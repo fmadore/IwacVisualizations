@@ -1,0 +1,698 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:54.527409+00:00",
+  "person": {
+    "o_id": 1389,
+    "title": "Charles Toko",
+    "prenom": "Charles",
+    "nom": "Toko",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2015-09-25",
+    "last_occurrence": "2020-11-03"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 17
+      },
+      "subject": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 17
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Matinal",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2020
+        },
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Matinal",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2020
+        },
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 8
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1389,
+            "title": "Charles Toko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 21.8279
+          },
+          {
+            "o_id": 1481,
+            "title": "Maurille Gnassounou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.1315
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 8.1363
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 7,
+            "score": 7.3526
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 4,
+            "score": 6.3998
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2256
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.0162
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1389,
+            "target": 379,
+            "weight": 21.8279,
+            "cooc": 5
+          },
+          {
+            "source": 1389,
+            "target": 1481,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 1417,
+            "weight": 9.1315,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 75967,
+            "weight": 8.1363,
+            "cooc": 6
+          },
+          {
+            "source": 1389,
+            "target": 86,
+            "weight": 7.3526,
+            "cooc": 7
+          },
+          {
+            "source": 1389,
+            "target": 125,
+            "weight": 6.3998,
+            "cooc": 4
+          },
+          {
+            "source": 1389,
+            "target": 17,
+            "weight": 6.2256,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 109,
+            "weight": 4.0162,
+            "cooc": 4
+          },
+          {
+            "source": 1389,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1389,
+            "title": "Charles Toko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 21.8279
+          },
+          {
+            "o_id": 1481,
+            "title": "Maurille Gnassounou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.1315
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 8.1363
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 7,
+            "score": 7.3526
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 4,
+            "score": 6.3998
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2256
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.0162
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1389,
+            "target": 379,
+            "weight": 21.8279,
+            "cooc": 5
+          },
+          {
+            "source": 1389,
+            "target": 1481,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 1417,
+            "weight": 9.1315,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 75967,
+            "weight": 8.1363,
+            "cooc": 6
+          },
+          {
+            "source": 1389,
+            "target": 86,
+            "weight": 7.3526,
+            "cooc": 7
+          },
+          {
+            "source": 1389,
+            "target": 125,
+            "weight": 6.3998,
+            "cooc": 4
+          },
+          {
+            "source": 1389,
+            "target": 17,
+            "weight": 6.2256,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 1389,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 109,
+            "weight": 4.0162,
+            "cooc": 4
+          },
+          {
+            "source": 1389,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 1389,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1389,
+            "title": "Charles Toko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 5
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 5
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

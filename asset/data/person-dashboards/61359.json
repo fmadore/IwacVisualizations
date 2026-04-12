@@ -1,0 +1,334 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.253475+00:00",
+  "person": {
+    "o_id": 61359,
+    "title": "Jean-Claude Ablet",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1992-12-12",
+    "last_occurrence": "1994-06-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1992,
+        "year_max": 1994,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1992,
+        "year_max": 1994,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992,
+          1993,
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1992,
+          1993,
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1994
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Voie",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1992,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61359,
+            "title": "Jean-Claude Ablet",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 61359,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61359,
+            "title": "Jean-Claude Ablet",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61359,
+            "title": "Jean-Claude Ablet",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 61359,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 61359,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

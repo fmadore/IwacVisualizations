@@ -1,0 +1,450 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:55.626189+00:00",
+  "person": {
+    "o_id": 1066,
+    "title": "Issa Kafando",
+    "prenom": "Issa",
+    "nom": "Kafando",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1993-07-26",
+    "last_occurrence": "2021-04-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1993,
+        "year_max": 2021,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 1993,
+        "year_max": 2021,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          1994,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1993,
+          1994,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 2021
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
+      "subject": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 2021
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1066,
+            "title": "Issa Kafando",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 577,
+            "title": "Conseil Islamique Burkinabè",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 16.3958
+          },
+          {
+            "o_id": 1045,
+            "title": "Harouna Sana",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 16.1483
+          },
+          {
+            "o_id": 855,
+            "title": "Abdoul Salam Tiemtoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6439
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.6376
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          }
+        ],
+        "edges": [
+          {
+            "source": 1066,
+            "target": 577,
+            "weight": 16.3958,
+            "cooc": 4
+          },
+          {
+            "source": 1066,
+            "target": 1045,
+            "weight": 16.1483,
+            "cooc": 4
+          },
+          {
+            "source": 1066,
+            "target": 855,
+            "weight": 7.6439,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 76327,
+            "weight": 6.6376,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1066,
+            "title": "Issa Kafando",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 577,
+            "title": "Conseil Islamique Burkinabè",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 16.3958
+          },
+          {
+            "o_id": 1045,
+            "title": "Harouna Sana",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 16.1483
+          },
+          {
+            "o_id": 855,
+            "title": "Abdoul Salam Tiemtoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6439
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.6376
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          }
+        ],
+        "edges": [
+          {
+            "source": 1066,
+            "target": 577,
+            "weight": 16.3958,
+            "cooc": 4
+          },
+          {
+            "source": 1066,
+            "target": 1045,
+            "weight": 16.1483,
+            "cooc": 4
+          },
+          {
+            "source": 1066,
+            "target": 855,
+            "weight": 7.6439,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 76327,
+            "weight": 6.6376,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 1066,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 1066,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1066,
+            "title": "Issa Kafando",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

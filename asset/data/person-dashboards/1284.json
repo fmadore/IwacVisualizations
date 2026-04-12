@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.169681+00:00",
+  "person": {
+    "o_id": 1284,
+    "title": "Abdoulaye Sounaye",
+    "prenom": "Abdoulaye",
+    "nom": "Sounaye",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Côte d'Ivoire",
+      "Niger",
+      "Nigeria",
+      "Togo",
+      "Niger",
+      "Nigeria",
+      "Niger",
+      "Nigeria",
+      "Togo"
+    ],
+    "first_occurrence": "2005",
+    "last_occurrence": "2023"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 33,
+        "year_min": 2005,
+        "year_max": 2021,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 33,
+        "year_min": 2005,
+        "year_max": 2021,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2007,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "Niger": [
+            2,
+            1,
+            5,
+            1,
+            4,
+            2,
+            1,
+            1,
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2005,
+          2007,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "Niger": [
+            2,
+            1,
+            5,
+            1,
+            4,
+            2,
+            1,
+            1,
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Niger",
+          "count": 32
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Niger",
+          "count": 32
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1284,
+            "title": "Abdoulaye Sounaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 490,
+            "title": "Niamey",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 1284,
+            "target": 490,
+            "weight": 24.6293,
+            "cooc": 4
+          },
+          {
+            "source": 1284,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1284,
+            "title": "Abdoulaye Sounaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1284,
+            "title": "Abdoulaye Sounaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 490,
+            "title": "Niamey",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 1284,
+            "target": 490,
+            "weight": 24.6293,
+            "cooc": 4
+          },
+          {
+            "source": 1284,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "country": "Benin",
+          "count": 4
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "country": "Benin",
+          "count": 4
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

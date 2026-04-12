@@ -1,0 +1,324 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.254935+00:00",
+  "person": {
+    "o_id": 46288,
+    "title": "Namory Doumbia",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2016-07-07",
+    "last_occurrence": "2017-10-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2016,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2016,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2016,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2016,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46288,
+            "title": "Namory Doumbia",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46271,
+            "title": "Gagnoa",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 76510,
+            "title": "Immigration",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 7,
+            "title": "Excision",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4888
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 46288,
+            "target": 46271,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 76510,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 7,
+            "weight": 7.4888,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 9,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 46288,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46288,
+            "title": "Namory Doumbia",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46288,
+            "title": "Namory Doumbia",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46271,
+            "title": "Gagnoa",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 76510,
+            "title": "Immigration",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 7,
+            "title": "Excision",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4888
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 46288,
+            "target": 46271,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 76510,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 7,
+            "weight": 7.4888,
+            "cooc": 2
+          },
+          {
+            "source": 46288,
+            "target": 9,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 46288,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "country": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

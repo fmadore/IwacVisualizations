@@ -1,0 +1,416 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:55.010160+00:00",
+  "person": {
+    "o_id": 12838,
+    "title": "Anwar ul Haq",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2017-08-21",
+    "last_occurrence": "2021-05-14"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2017,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2017,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017,
+          2019,
+          2021
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2017,
+          2019,
+          2021
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2017,
+          "year_max": 2021
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "Le Matinal",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2017,
+          "year_max": 2021
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "Le Matinal",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 12838,
+            "title": "Anwar ul Haq",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 12838,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 12838,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 12838,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 12838,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 12838,
+            "title": "Anwar ul Haq",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 12838,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 12838,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 12838,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 12838,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 12838,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 12838,
+            "title": "Anwar ul Haq",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

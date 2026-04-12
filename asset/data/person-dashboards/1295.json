@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.000785+00:00",
+  "person": {
+    "o_id": 1295,
+    "title": "Mathias Boukary Savadogo",
+    "prenom": "Mathias Boukary",
+    "nom": "Savadogo",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso",
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Niger",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1990",
+    "last_occurrence": "2016"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 11,
+        "year_min": 1990,
+        "year_max": 2016,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 11,
+        "year_min": 1990,
+        "year_max": 2016,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990,
+          1993,
+          1996,
+          1998,
+          2005,
+          2009,
+          2011,
+          2014,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1990,
+          1993,
+          1996,
+          1998,
+          2005,
+          2009,
+          2011,
+          2014,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1295,
+            "title": "Mathias Boukary Savadogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 19.019
+          },
+          {
+            "o_id": 1294,
+            "title": "Marie Nathalie LeBlanc",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          }
+        ],
+        "edges": [
+          {
+            "source": 1295,
+            "target": 1208,
+            "weight": 19.019,
+            "cooc": 3
+          },
+          {
+            "source": 1295,
+            "target": 1294,
+            "weight": 12.3147,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1295,
+            "title": "Mathias Boukary Savadogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1295,
+            "title": "Mathias Boukary Savadogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 19.019
+          },
+          {
+            "o_id": 1294,
+            "title": "Marie Nathalie LeBlanc",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          }
+        ],
+        "edges": [
+          {
+            "source": 1295,
+            "target": 1208,
+            "weight": 19.019,
+            "cooc": 3
+          },
+          {
+            "source": 1295,
+            "target": 1294,
+            "weight": 12.3147,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

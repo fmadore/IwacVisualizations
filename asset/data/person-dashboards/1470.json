@@ -1,0 +1,410 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.708532+00:00",
+  "person": {
+    "o_id": 1470,
+    "title": "Inoussa Abiodoun Fagbémi",
+    "prenom": "Inoussa Abiodoun",
+    "nom": "Fagbémi",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1972-11-14",
+    "last_occurrence": "1986-03-25"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1972,
+        "year_max": 1986,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 1972,
+        "year_max": 1986,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1972,
+          1976,
+          1977,
+          1986
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1972,
+          1976,
+          1977,
+          1986
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1986
+        },
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1972
+        }
+      ],
+      "subject": [
+        {
+          "name": "Ehuzu",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1986
+        },
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1972
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1470,
+            "title": "Inoussa Abiodoun Fagbémi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2038,
+            "title": "Karamatou Adéchokan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 2028,
+            "title": "Martin Dohou Azonhiho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
+          },
+          {
+            "o_id": 805,
+            "title": "Gouvernement Militaire Révolutionnaire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.8091
+          },
+          {
+            "o_id": 2024,
+            "title": "Séfou Saka Aricoché",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.7161
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8769
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.4772
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.58
+          }
+        ],
+        "edges": [
+          {
+            "source": 1470,
+            "target": 2038,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 2028,
+            "weight": 10.6201,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 805,
+            "weight": 9.8091,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 2024,
+            "weight": 9.7161,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 1408,
+            "weight": 5.8769,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 29,
+            "weight": 4.4772,
+            "cooc": 4
+          },
+          {
+            "source": 1470,
+            "target": 76274,
+            "weight": 3.58,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1470,
+            "title": "Inoussa Abiodoun Fagbémi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2038,
+            "title": "Karamatou Adéchokan",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 2028,
+            "title": "Martin Dohou Azonhiho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
+          },
+          {
+            "o_id": 805,
+            "title": "Gouvernement Militaire Révolutionnaire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.8091
+          },
+          {
+            "o_id": 2024,
+            "title": "Séfou Saka Aricoché",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.7161
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8769
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.4772
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.58
+          }
+        ],
+        "edges": [
+          {
+            "source": 1470,
+            "target": 2038,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 2028,
+            "weight": 10.6201,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 805,
+            "weight": 9.8091,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 2024,
+            "weight": 9.7161,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 1408,
+            "weight": 5.8769,
+            "cooc": 2
+          },
+          {
+            "source": 1470,
+            "target": 29,
+            "weight": 4.4772,
+            "cooc": 4
+          },
+          {
+            "source": 1470,
+            "target": 76274,
+            "weight": 3.58,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1470,
+            "title": "Inoussa Abiodoun Fagbémi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

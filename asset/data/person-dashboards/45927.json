@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.617829+00:00",
+  "person": {
+    "o_id": 45927,
+    "title": "Lambert Koty",
+    "prenom": "Lambert",
+    "nom": "Koty",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2011-08-31",
+    "last_occurrence": "2011-12-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2011,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 2011,
+        "year_max": 2011,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2011
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 45927,
+            "title": "Lambert Koty",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2040,
+            "title": "Benoît Assouan Comlan Dègla",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 45927,
+            "target": 2040,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 45927,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 45927,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 45927,
+            "title": "Lambert Koty",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2040,
+            "title": "Benoît Assouan Comlan Dègla",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 45927,
+            "target": 2040,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 45927,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 45927,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 45927,
+            "title": "Lambert Koty",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

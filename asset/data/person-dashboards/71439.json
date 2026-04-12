@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:06.949334+00:00",
+  "person": {
+    "o_id": 71439,
+    "title": "Eustache Adiko",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2007-06-04",
+    "last_occurrence": "2007-06-04"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2007,
+        "year_max": 2007,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2007,
+        "year_max": 2007,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2007
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour Plus",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Jour Plus",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71439,
+            "title": "Eustache Adiko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1023,
+            "title": "Djiguiba Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.2135
+          },
+          {
+            "o_id": 46214,
+            "title": "Rassemblement des républicains de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.204
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 71439,
+            "target": 1023,
+            "weight": 5.2135,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 46214,
+            "weight": 5.204,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 71439,
+            "title": "Eustache Adiko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 71439,
+            "title": "Eustache Adiko",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1023,
+            "title": "Djiguiba Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.2135
+          },
+          {
+            "o_id": 46214,
+            "title": "Rassemblement des républicains de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.204
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 71439,
+            "target": 1023,
+            "weight": 5.2135,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 46214,
+            "weight": 5.204,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 71439,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

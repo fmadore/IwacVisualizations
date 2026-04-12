@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.755214+00:00",
+  "person": {
+    "o_id": 2048,
+    "title": "Éric Houndété",
+    "prenom": "Éric",
+    "nom": "Houndété",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2015-12-28",
+    "last_occurrence": "2020-12-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2015,
+        "year_max": 2020,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2017,
+          2018,
+          2020
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2017,
+          2018,
+          2020
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2018
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2018
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2048,
+            "title": "Éric Houndété",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3358
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.9202
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9449
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 2048,
+            "target": 76335,
+            "weight": 8.3358,
+            "cooc": 3
+          },
+          {
+            "source": 2048,
+            "target": 76346,
+            "weight": 7.9202,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 61328,
+            "weight": 4.9449,
+            "cooc": 3
+          },
+          {
+            "source": 2048,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2048,
+            "title": "Éric Houndété",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3358
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.9202
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7773
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9449
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 2048,
+            "target": 76335,
+            "weight": 8.3358,
+            "cooc": 3
+          },
+          {
+            "source": 2048,
+            "target": 76346,
+            "weight": 7.9202,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 2014,
+            "weight": 7.7773,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 61328,
+            "weight": 4.9449,
+            "cooc": 3
+          },
+          {
+            "source": 2048,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 2048,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2048,
+            "title": "Éric Houndété",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

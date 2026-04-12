@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.755431+00:00",
+  "person": {
+    "o_id": 2060,
+    "title": "Arthur Sélo",
+    "prenom": "Arthur",
+    "nom": "Selo",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2022-05-16",
+    "last_occurrence": "2023-11-02"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2022,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 2022,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2022,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2022,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Banouto",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2022,
+          "year_max": 2023
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Banouto",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2022,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2060,
+            "title": "Arthur Sélo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.17
+          },
+          {
+            "o_id": 1615,
+            "title": "Idrissou Aboubakar Lemanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 62,
+            "title": "Rivalités et tensions imams",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.3449
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          }
+        ],
+        "edges": [
+          {
+            "source": 2060,
+            "target": 765,
+            "weight": 8.17,
+            "cooc": 3
+          },
+          {
+            "source": 2060,
+            "target": 1615,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 2060,
+            "target": 62,
+            "weight": 7.3449,
+            "cooc": 2
+          },
+          {
+            "source": 2060,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 2060,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2060,
+            "title": "Arthur Sélo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2060,
+            "title": "Arthur Sélo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.17
+          },
+          {
+            "o_id": 1615,
+            "title": "Idrissou Aboubakar Lemanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 62,
+            "title": "Rivalités et tensions imams",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.3449
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          }
+        ],
+        "edges": [
+          {
+            "source": 2060,
+            "target": 765,
+            "weight": 8.17,
+            "cooc": 3
+          },
+          {
+            "source": 2060,
+            "target": 1615,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 2060,
+            "target": 62,
+            "weight": 7.3449,
+            "cooc": 2
+          },
+          {
+            "source": 2060,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 2060,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

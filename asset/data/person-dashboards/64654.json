@@ -1,0 +1,372 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.471518+00:00",
+  "person": {
+    "o_id": 64654,
+    "title": "Hadja Sidibé",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1998-06-09",
+    "last_occurrence": "1999-12-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1998,
+        "year_max": 1999,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1998,
+        "year_max": 1998,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1998,
+        "year_max": 1999,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1998,
+          1999
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1998
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1998,
+          1999
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1998,
+          "year_max": 1999
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1998,
+          "year_max": 1998
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1998,
+          "year_max": 1999
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 64654,
+            "title": "Hadja Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46210,
+            "title": "Confédération Islamique du Développement de la Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.4888
+          },
+          {
+            "o_id": 46163,
+            "title": "Babily Dembélé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3728
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 64654,
+            "target": 46210,
+            "weight": 7.4888,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 46163,
+            "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 64654,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 64654,
+            "title": "Hadja Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 64654,
+            "title": "Hadja Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46210,
+            "title": "Confédération Islamique du Développement de la Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.4888
+          },
+          {
+            "o_id": 46163,
+            "title": "Babily Dembélé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3728
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 64654,
+            "target": 46210,
+            "weight": 7.4888,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 46163,
+            "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 64654,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 64654,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

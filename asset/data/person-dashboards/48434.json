@@ -1,0 +1,485 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.781900+00:00",
+  "person": {
+    "o_id": 48434,
+    "title": "Jean-Antoine Doudou",
+    "prenom": "Jean-Antoine",
+    "nom": "Doudou",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2010-05-26",
+    "last_occurrence": "2018-04-04"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2010,
+        "year_max": 2018,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 12
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 2017,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2010,
+        "year_max": 2018,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2014,
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1,
+            5,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2010,
+          2014,
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1,
+            4,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2010,
+          "year_max": 2018
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ],
+      "creator": [
+        {
+          "name": "Le Patriote",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2010,
+          "year_max": 2018
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 9
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48434,
+            "title": "Jean-Antoine Doudou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23608,
+            "title": "Club des Hommes d'Affaires Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 16.2291
+          },
+          {
+            "o_id": 48435,
+            "title": "Charles Sanga",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.6763
+          },
+          {
+            "o_id": 23701,
+            "title": "Musique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.2849
+          },
+          {
+            "o_id": 12912,
+            "title": "Commerce",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.716
+          },
+          {
+            "o_id": 76329,
+            "title": "Enfant",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2576
+          },
+          {
+            "o_id": 25,
+            "title": "Mariage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4147
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          }
+        ],
+        "edges": [
+          {
+            "source": 48434,
+            "target": 23608,
+            "weight": 16.2291,
+            "cooc": 4
+          },
+          {
+            "source": 48434,
+            "target": 48435,
+            "weight": 8.6763,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 23701,
+            "weight": 8.2849,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 12912,
+            "weight": 6.716,
+            "cooc": 3
+          },
+          {
+            "source": 48434,
+            "target": 76329,
+            "weight": 6.2576,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 25,
+            "weight": 5.4147,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 48434,
+            "title": "Jean-Antoine Doudou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 48434,
+            "title": "Jean-Antoine Doudou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23608,
+            "title": "Club des Hommes d'Affaires Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 16.2291
+          },
+          {
+            "o_id": 23701,
+            "title": "Musique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.2849
+          },
+          {
+            "o_id": 12912,
+            "title": "Commerce",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.716
+          },
+          {
+            "o_id": 76329,
+            "title": "Enfant",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2576
+          },
+          {
+            "o_id": 25,
+            "title": "Mariage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4147
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3061
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          }
+        ],
+        "edges": [
+          {
+            "source": 48434,
+            "target": 23608,
+            "weight": 16.2291,
+            "cooc": 4
+          },
+          {
+            "source": 48434,
+            "target": 23701,
+            "weight": 8.2849,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 12912,
+            "weight": 6.716,
+            "cooc": 3
+          },
+          {
+            "source": 48434,
+            "target": 76329,
+            "weight": 6.2576,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 25,
+            "weight": 5.4147,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 10,
+            "weight": 4.3061,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 48434,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

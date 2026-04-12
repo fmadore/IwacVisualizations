@@ -1,0 +1,464 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:54.976965+00:00",
+  "person": {
+    "o_id": 13765,
+    "title": "Ilias Nondichao",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2020-04-29",
+    "last_occurrence": "2021-07-23"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2020,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2020,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020,
+          2021
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2020,
+          2021
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Bénin Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
+      "subject": [
+        {
+          "name": "Agence Bénin Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13765,
+            "title": "Ilias Nondichao",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15204,
+            "title": "Mosquée centrale d'Abomey",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 13.1256
+          },
+          {
+            "o_id": 809,
+            "title": "Fondation Malèhossou",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 8.4933
+          },
+          {
+            "o_id": 1431,
+            "title": "Yacoubou Malèhossou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.4228
+          },
+          {
+            "o_id": 789,
+            "title": "Agence Bénin Presse",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 4.7999
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 13765,
+            "target": 15204,
+            "weight": 13.1256,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 809,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 16,
+            "weight": 8.4933,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 1431,
+            "weight": 8.4228,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 789,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 125,
+            "weight": 4.7999,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 13765,
+            "title": "Ilias Nondichao",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15204,
+            "title": "Mosquée centrale d'Abomey",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 13.1256
+          },
+          {
+            "o_id": 809,
+            "title": "Fondation Malèhossou",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 8.4933
+          },
+          {
+            "o_id": 1431,
+            "title": "Yacoubou Malèhossou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.4228
+          },
+          {
+            "o_id": 789,
+            "title": "Agence Bénin Presse",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 4.7999
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 13765,
+            "target": 15204,
+            "weight": 13.1256,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 809,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 16,
+            "weight": 8.4933,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 1431,
+            "weight": 8.4228,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 789,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 125,
+            "weight": 4.7999,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 13765,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 13765,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 13765,
+            "title": "Ilias Nondichao",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

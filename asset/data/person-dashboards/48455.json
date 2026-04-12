@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.266786+00:00",
+  "person": {
+    "o_id": 48455,
+    "title": "Sindou Méité",
+    "prenom": "Sindou",
+    "nom": "Méité",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1999-07-05",
+    "last_occurrence": "2000-06-30"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1999,
+        "year_max": 2000,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1999,
+        "year_max": 2000,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1999,
+          2000
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1999,
+          "year_max": 2000
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Patriote",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1999,
+          "year_max": 2000
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48455,
+            "title": "Sindou Méité",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43059,
+            "title": "Ivoirité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.2106
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.9752
+          },
+          {
+            "o_id": 23548,
+            "title": "Hamed Bakayoko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.6878
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.6863
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 15,
+            "title": "Corruption",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0395
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 48455,
+            "target": 43059,
+            "weight": 7.2106,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 43055,
+            "weight": 6.9752,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 23548,
+            "weight": 6.6878,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 23606,
+            "weight": 6.6863,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 15,
+            "weight": 5.0395,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 48455,
+            "title": "Sindou Méité",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 48455,
+            "title": "Sindou Méité",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43059,
+            "title": "Ivoirité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.2106
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.9752
+          },
+          {
+            "o_id": 23548,
+            "title": "Hamed Bakayoko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.6878
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.6863
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 15,
+            "title": "Corruption",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0395
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 48455,
+            "target": 43059,
+            "weight": 7.2106,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 43055,
+            "weight": 6.9752,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 23548,
+            "weight": 6.6878,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 23606,
+            "weight": 6.6863,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 15,
+            "weight": 5.0395,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 48455,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 48455,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

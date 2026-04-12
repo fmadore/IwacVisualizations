@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.301384+00:00",
+  "person": {
+    "o_id": 46329,
+    "title": "Jean Khalil Sella",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2011-09-08",
+    "last_occurrence": "2014-09-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2011,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 2011,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2011,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2011,
+          "year_max": 2014
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2011,
+          "year_max": 2014
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46329,
+            "title": "Jean Khalil Sella",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 7.6123
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 46329,
+            "target": 46194,
+            "weight": 7.6123,
+            "cooc": 3
+          },
+          {
+            "source": 46329,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 46329,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46329,
+            "title": "Jean Khalil Sella",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46329,
+            "title": "Jean Khalil Sella",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 7.6123
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.9237
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          }
+        ],
+        "edges": [
+          {
+            "source": 46329,
+            "target": 46194,
+            "weight": 7.6123,
+            "cooc": 3
+          },
+          {
+            "source": 46329,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76268,
+            "weight": 3.9237,
+            "cooc": 3
+          },
+          {
+            "source": 46329,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 46329,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

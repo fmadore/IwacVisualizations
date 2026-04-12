@@ -1,0 +1,406 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.645675+00:00",
+  "person": {
+    "o_id": 61048,
+    "title": "Ibrahim Ganhounouto",
+    "prenom": "Ibrahim",
+    "nom": "Ganhounouto",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2015-11-02",
+    "last_occurrence": "2023-01-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2015,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 2015,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2023
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2015
+        }
+      ],
+      "subject": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2023
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2015,
+          "year_max": 2015
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61048,
+            "title": "Ibrahim Ganhounouto",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14401,
+            "title": "Fondation Zul-Kifl Salami pour la solidarité régionale",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 11.5037
+          },
+          {
+            "o_id": 1432,
+            "title": "Zul Kifl Salami",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.6763
+          },
+          {
+            "o_id": 60948,
+            "title": "Akpédjé Ayosso",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0876
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 61048,
+            "target": 14401,
+            "weight": 11.5037,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 1432,
+            "weight": 8.6763,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 60948,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 1417,
+            "weight": 6.0876,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 61048,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 61048,
+            "title": "Ibrahim Ganhounouto",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14401,
+            "title": "Fondation Zul-Kifl Salami pour la solidarité régionale",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 11.5037
+          },
+          {
+            "o_id": 1432,
+            "title": "Zul Kifl Salami",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.6763
+          },
+          {
+            "o_id": 60948,
+            "title": "Akpédjé Ayosso",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.4791
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0876
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.534
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 61048,
+            "target": 14401,
+            "weight": 11.5037,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 1432,
+            "weight": 8.6763,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 60948,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 58,
+            "weight": 6.4791,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 1417,
+            "weight": 6.0876,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 76269,
+            "weight": 3.534,
+            "cooc": 2
+          },
+          {
+            "source": 61048,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 61048,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 61048,
+            "title": "Ibrahim Ganhounouto",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

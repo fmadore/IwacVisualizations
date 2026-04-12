@@ -1,0 +1,463 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.674759+00:00",
+  "person": {
+    "o_id": 1518,
+    "title": "Moudachirou Souberou",
+    "prenom": "Moudachirou",
+    "nom": "Souberou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2013-09-16",
+    "last_occurrence": "2023-04-20"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2013,
+        "year_max": 2023,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 9
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2018,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2018,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2018,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ],
+      "subject": [
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1518,
+            "title": "Moudachirou Souberou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 781,
+            "title": "Conseil National de la Coordination du Hadj au Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.7806
+          },
+          {
+            "o_id": 2075,
+            "title": "Akimey Housséïni Seïdou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 802,
+            "title": "Réseau des Journalistes et Professionnels des Médias Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 2025,
+            "title": "Amidou Ourou-Djéri",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 76297,
+            "title": "Médias",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.58
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3579
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          }
+        ],
+        "edges": [
+          {
+            "source": 1518,
+            "target": 781,
+            "weight": 12.7806,
+            "cooc": 3
+          },
+          {
+            "source": 1518,
+            "target": 2075,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 802,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 2025,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 76297,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 76274,
+            "weight": 3.58,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 29,
+            "weight": 3.3579,
+            "cooc": 3
+          },
+          {
+            "source": 1518,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 1518,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1518,
+            "title": "Moudachirou Souberou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2075,
+            "title": "Akimey Housséïni Seïdou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 802,
+            "title": "Réseau des Journalistes et Professionnels des Médias Musulmans du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 76297,
+            "title": "Médias",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4575
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1518,
+            "target": 2075,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 802,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 76297,
+            "weight": 5.4575,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1518,
+            "title": "Moudachirou Souberou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 781,
+            "title": "Conseil National de la Coordination du Hadj au Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.7806
+          },
+          {
+            "o_id": 2025,
+            "title": "Amidou Ourou-Djéri",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.58
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3579
+          }
+        ],
+        "edges": [
+          {
+            "source": 1518,
+            "target": 781,
+            "weight": 12.7806,
+            "cooc": 3
+          },
+          {
+            "source": 1518,
+            "target": 2025,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 76274,
+            "weight": 3.58,
+            "cooc": 2
+          },
+          {
+            "source": 1518,
+            "target": 29,
+            "weight": 3.3579,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

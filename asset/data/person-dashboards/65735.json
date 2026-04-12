@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.055309+00:00",
+  "person": {
+    "o_id": 65735,
+    "title": "Komla Gokatse",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2015-06-22",
+    "last_occurrence": "2016-11-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 7,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            6
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            6
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            6
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65735,
+            "title": "Komla Gokatse",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 73317,
+            "title": "Damehame Yark",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.5865
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 65735,
+            "target": 73317,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 15348,
+            "weight": 9.5865,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65735,
+            "title": "Komla Gokatse",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 73317,
+            "title": "Damehame Yark",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.5865
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 65735,
+            "target": 73317,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 15348,
+            "weight": 9.5865,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65735,
+            "title": "Komla Gokatse",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 73317,
+            "title": "Damehame Yark",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.5865
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 65735,
+            "target": 73317,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 15348,
+            "weight": 9.5865,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 65735,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65735,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

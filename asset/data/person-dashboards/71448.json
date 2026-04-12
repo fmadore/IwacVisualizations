@@ -1,0 +1,639 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.669395+00:00",
+  "person": {
+    "o_id": 71448,
+    "title": "T. A.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2005-05-25",
+    "last_occurrence": "2020-05-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2005,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 15
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2005,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 15
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2006,
+          2011,
+          2012,
+          2020
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            3,
+            1,
+            2,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2005,
+          2006,
+          2011,
+          2012,
+          2020
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            3,
+            1,
+            2,
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour Plus",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2005,
+          "year_max": 2012
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Jour Plus",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2005,
+          "year_max": 2012
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71448,
+            "title": "T. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.2064
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 8.835
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 8.3529
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.6123
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.6863
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5395
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.0242
+          },
+          {
+            "o_id": 112,
+            "title": "Pardon",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.9286
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 15031,
+            "title": "Christianisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.5107
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          }
+        ],
+        "edges": [
+          {
+            "source": 71448,
+            "target": 46268,
+            "weight": 11.2064,
+            "cooc": 4
+          },
+          {
+            "source": 71448,
+            "target": 76269,
+            "weight": 8.835,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 113,
+            "weight": 8.3529,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 23601,
+            "weight": 7.6123,
+            "cooc": 3
+          },
+          {
+            "source": 71448,
+            "target": 23606,
+            "weight": 6.6863,
+            "cooc": 3
+          },
+          {
+            "source": 71448,
+            "target": 76268,
+            "weight": 6.5395,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 109,
+            "weight": 6.0242,
+            "cooc": 6
+          },
+          {
+            "source": 71448,
+            "target": 112,
+            "weight": 4.9286,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 15031,
+            "weight": 4.5107,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 71448,
+            "title": "T. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 71448,
+            "title": "T. A.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46268,
+            "title": "Diaby Moustapha",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.2064
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 8.835
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 8.3529
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.6123
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.6863
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5395
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 6.0242
+          },
+          {
+            "o_id": 112,
+            "title": "Pardon",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.9286
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.6501
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 15031,
+            "title": "Christianisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.5107
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          }
+        ],
+        "edges": [
+          {
+            "source": 71448,
+            "target": 46268,
+            "weight": 11.2064,
+            "cooc": 4
+          },
+          {
+            "source": 71448,
+            "target": 76269,
+            "weight": 8.835,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 113,
+            "weight": 8.3529,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 23601,
+            "weight": 7.6123,
+            "cooc": 3
+          },
+          {
+            "source": 71448,
+            "target": 23606,
+            "weight": 6.6863,
+            "cooc": 3
+          },
+          {
+            "source": 71448,
+            "target": 76268,
+            "weight": 6.5395,
+            "cooc": 5
+          },
+          {
+            "source": 71448,
+            "target": 109,
+            "weight": 6.0242,
+            "cooc": 6
+          },
+          {
+            "source": 71448,
+            "target": 112,
+            "weight": 4.9286,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 43055,
+            "weight": 4.6501,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 15031,
+            "weight": 4.5107,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 71448,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

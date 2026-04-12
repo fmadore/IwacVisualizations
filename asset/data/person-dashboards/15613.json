@@ -1,0 +1,224 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.838482+00:00",
+  "person": {
+    "o_id": 15613,
+    "title": "Mouhammad Patel",
+    "prenom": "Mouhammad",
+    "nom": "Patel",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2008-01-18",
+    "last_occurrence": "2008-02-22"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2008,
+        "year_max": 2008,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2008,
+        "year_max": 2008,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2008
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15613,
+            "title": "Mouhammad Patel",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 9.958
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 8.3358
+          }
+        ],
+        "edges": [
+          {
+            "source": 15613,
+            "target": 569,
+            "weight": 9.958,
+            "cooc": 4
+          },
+          {
+            "source": 15613,
+            "target": 85,
+            "weight": 8.3358,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15613,
+            "title": "Mouhammad Patel",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15613,
+            "title": "Mouhammad Patel",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 9.958
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 8.3358
+          }
+        ],
+        "edges": [
+          {
+            "source": 15613,
+            "target": 569,
+            "weight": 9.958,
+            "cooc": 4
+          },
+          {
+            "source": 15613,
+            "target": 85,
+            "weight": 8.3358,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.414391+00:00",
+  "person": {
+    "o_id": 64636,
+    "title": "Landry Kohon",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1999-12-30",
+    "last_occurrence": "1999-12-30"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1999,
+        "year_max": 1999,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1999,
+        "year_max": 1999,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1999
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 64636,
+            "title": "Landry Kohon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 48424,
+            "title": "Coup d'État de 1999 en Côte d'Ivoire",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 46262,
+            "title": "Robert Guéï",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1341
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 64636,
+            "target": 48424,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 46262,
+            "weight": 7.1341,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 64636,
+            "title": "Landry Kohon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 64636,
+            "title": "Landry Kohon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 48424,
+            "title": "Coup d'État de 1999 en Côte d'Ivoire",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 46262,
+            "title": "Robert Guéï",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1341
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 64636,
+            "target": 48424,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 46262,
+            "weight": 7.1341,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 64636,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

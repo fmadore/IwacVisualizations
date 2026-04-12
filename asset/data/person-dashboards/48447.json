@@ -1,0 +1,436 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.423799+00:00",
+  "person": {
+    "o_id": 48447,
+    "title": "Yélly Touré",
+    "prenom": "Yélly",
+    "nom": "Touré",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2004-02-01",
+    "last_occurrence": "2005-02-25"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2004,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2004,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2005
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            7,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2004,
+          2005
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            7,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2005
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Patriote",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 8
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48447,
+            "title": "Yélly Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1814,
+            "title": "Mamadou Dosso",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.5786
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 48447,
+            "target": 1814,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 105,
+            "weight": 6.5786,
+            "cooc": 4
+          },
+          {
+            "source": 48447,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 48447,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 48447,
+            "title": "Yélly Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 48447,
+            "title": "Yélly Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1814,
+            "title": "Mamadou Dosso",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.5786
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 48447,
+            "target": 1814,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 105,
+            "weight": 6.5786,
+            "cooc": 4
+          },
+          {
+            "source": 48447,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 48447,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 48447,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

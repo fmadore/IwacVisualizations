@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.948782+00:00",
+  "person": {
+    "o_id": 48240,
+    "title": "Abdul-Mohamed Ouattara",
+    "prenom": "Abdul-Mohamed",
+    "nom": "Ouattara",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2017-06-28",
+    "last_occurrence": "2017-09-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2017,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2017,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48240,
+            "title": "Abdul-Mohamed Ouattara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23697,
+            "title": "Microbes (Côte d'Ivoire)",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.7695
+          },
+          {
+            "o_id": 46248,
+            "title": "Yamoussoukro",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.8373
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 48240,
+            "target": 23697,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 269,
+            "weight": 6.7695,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 46248,
+            "weight": 5.8373,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 48240,
+            "title": "Abdul-Mohamed Ouattara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 48240,
+            "title": "Abdul-Mohamed Ouattara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23697,
+            "title": "Microbes (Côte d'Ivoire)",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.7695
+          },
+          {
+            "o_id": 46248,
+            "title": "Yamoussoukro",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.8373
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2286
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 48240,
+            "target": 23697,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 269,
+            "weight": 6.7695,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 46248,
+            "weight": 5.8373,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 43069,
+            "weight": 4.2286,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 48240,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

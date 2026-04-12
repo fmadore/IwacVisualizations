@@ -1,0 +1,310 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.866943+00:00",
+  "person": {
+    "o_id": 23598,
+    "title": "Aïssata Cissé Diaby",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2006-09-20",
+    "last_occurrence": "2014-10-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2006,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2006,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2010,
+          2014
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2006,
+          2010,
+          2014
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            3
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 5,
+          "articles": 0,
+          "publications": 5,
+          "country": "Côte D'Ivoire",
+          "year_min": 2006,
+          "year_max": 2014
+        }
+      ],
+      "subject": [
+        {
+          "name": "Islam Info",
+          "total": 5,
+          "articles": 0,
+          "publications": 5,
+          "country": "Côte D'Ivoire",
+          "year_min": 2006,
+          "year_max": 2014
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23598,
+            "title": "Aïssata Cissé Diaby",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23630,
+            "title": "Radio Al Bayane",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6387
+          },
+          {
+            "o_id": 23512,
+            "title": "Fadiga Moussa Al Farouk",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2901
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6287
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.1756
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          }
+        ],
+        "edges": [
+          {
+            "source": 23598,
+            "target": 23630,
+            "weight": 9.6387,
+            "cooc": 3
+          },
+          {
+            "source": 23598,
+            "target": 23512,
+            "weight": 7.2901,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 23681,
+            "weight": 6.6287,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 12891,
+            "weight": 5.1756,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23598,
+            "title": "Aïssata Cissé Diaby",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23630,
+            "title": "Radio Al Bayane",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6387
+          },
+          {
+            "o_id": 23512,
+            "title": "Fadiga Moussa Al Farouk",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2901
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.6287
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.1756
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          }
+        ],
+        "edges": [
+          {
+            "source": 23598,
+            "target": 23630,
+            "weight": 9.6387,
+            "cooc": 3
+          },
+          {
+            "source": 23598,
+            "target": 23512,
+            "weight": 7.2901,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 23681,
+            "weight": 6.6287,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 12891,
+            "weight": 5.1756,
+            "cooc": 2
+          },
+          {
+            "source": 23598,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23598,
+            "title": "Aïssata Cissé Diaby",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

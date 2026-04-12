@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.272025+00:00",
+  "person": {
+    "o_id": 26343,
+    "title": "Frédéric Ali Dermane",
+    "prenom": "Frédéric Ali",
+    "nom": "Dermane",
+    "genre": "Homme",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1970-02-18",
+    "last_occurrence": "1992-08-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1970,
+        "year_max": 1992,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 7,
+        "year_min": 1970,
+        "year_max": 1992,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1971,
+          1992
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            5,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1971,
+          1992
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            5,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1971
+        },
+        {
+          "name": "Courrier du Golfe",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1971
+        },
+        {
+          "name": "Courrier du Golfe",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 26343,
+            "title": "Frédéric Ali Dermane",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 22.1137
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 13622,
+            "title": "Ayi Houenou Joachim Hunlédé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.8365
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4258
+          }
+        ],
+        "edges": [
+          {
+            "source": 26343,
+            "target": 14057,
+            "weight": 22.1137,
+            "cooc": 5
+          },
+          {
+            "source": 26343,
+            "target": 2128,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 26343,
+            "target": 13622,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 26343,
+            "target": 830,
+            "weight": 13.8365,
+            "cooc": 5
+          },
+          {
+            "source": 26343,
+            "target": 829,
+            "weight": 6.4258,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 26343,
+            "title": "Frédéric Ali Dermane",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 22.1137
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 13622,
+            "title": "Ayi Houenou Joachim Hunlédé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.8365
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4258
+          }
+        ],
+        "edges": [
+          {
+            "source": 26343,
+            "target": 14057,
+            "weight": 22.1137,
+            "cooc": 5
+          },
+          {
+            "source": 26343,
+            "target": 2128,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 26343,
+            "target": 13622,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 26343,
+            "target": 830,
+            "weight": 13.8365,
+            "cooc": 5
+          },
+          {
+            "source": 26343,
+            "target": 829,
+            "weight": 6.4258,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 26343,
+            "title": "Frédéric Ali Dermane",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

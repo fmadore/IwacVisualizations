@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.937962+00:00",
+  "person": {
+    "o_id": 62138,
+    "title": "Boubacar Sakho",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1974-12-23",
+    "last_occurrence": "1987-08-20"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1974,
+        "year_max": 1987,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1974,
+        "year_max": 1987,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1974,
+          1987
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1974,
+          1987
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1974,
+          "year_max": 1987
+        },
+        {
+          "name": "Fraternité Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1987
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1974,
+          "year_max": 1987
+        },
+        {
+          "name": "Fraternité Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1987
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62138,
+            "title": "Boubacar Sakho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1458,
+            "title": "Paul VI",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 15086,
+            "title": "Dialogue interreligieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.8636
+          },
+          {
+            "o_id": 15031,
+            "title": "Christianisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.5107
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 62138,
+            "target": 1458,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 15086,
+            "weight": 5.8636,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 15031,
+            "weight": 4.5107,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62138,
+            "title": "Boubacar Sakho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1458,
+            "title": "Paul VI",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.8455
+          },
+          {
+            "o_id": 15086,
+            "title": "Dialogue interreligieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.8636
+          },
+          {
+            "o_id": 15031,
+            "title": "Christianisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.5107
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0929
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 62138,
+            "target": 1458,
+            "weight": 8.8455,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 15086,
+            "weight": 5.8636,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 15031,
+            "weight": 4.5107,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 23699,
+            "weight": 4.0929,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 62138,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62138,
+            "title": "Boubacar Sakho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

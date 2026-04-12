@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.801741+00:00",
+  "person": {
+    "o_id": 65746,
+    "title": "Wéndana B. Hourgnamba",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1997-10-14",
+    "last_occurrence": "2009-02-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 11,
+        "year_min": 1997,
+        "year_max": 2009,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 9,
+        "year_min": 1998,
+        "year_max": 2009,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "creator": {
+        "total_mentions": 11,
+        "year_min": 1997,
+        "year_max": 2009,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2005,
+          2007,
+          2009
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            4,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1998,
+          1999,
+          2000,
+          2001,
+          2005,
+          2009
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            4,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2005,
+          2007,
+          2009
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            4,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 11,
+          "articles": 11,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1997,
+          "year_max": 2009
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1998,
+          "year_max": 2009
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 11,
+          "articles": 11,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1997,
+          "year_max": 2009
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 11
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 9
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 11
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65746,
+            "title": "Wéndana B. Hourgnamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 8,
+            "score": 22.1385
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 15.419
+          },
+          {
+            "o_id": 2136,
+            "title": "Philippe Fanoko Kossi Kpodzro",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65746,
+            "target": 2128,
+            "weight": 22.1385,
+            "cooc": 8
+          },
+          {
+            "source": 65746,
+            "target": 2176,
+            "weight": 15.419,
+            "cooc": 4
+          },
+          {
+            "source": 65746,
+            "target": 2136,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 2165,
+            "weight": 8.0345,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 847,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65746,
+            "title": "Wéndana B. Hourgnamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.5642
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          }
+        ],
+        "edges": [
+          {
+            "source": 65746,
+            "target": 2128,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 65746,
+            "target": 2176,
+            "weight": 11.5642,
+            "cooc": 3
+          },
+          {
+            "source": 65746,
+            "target": 2165,
+            "weight": 8.0345,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65746,
+            "title": "Wéndana B. Hourgnamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 8,
+            "score": 22.1385
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 15.419
+          },
+          {
+            "o_id": 2136,
+            "title": "Philippe Fanoko Kossi Kpodzro",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.8116
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          }
+        ],
+        "edges": [
+          {
+            "source": 65746,
+            "target": 2128,
+            "weight": 22.1385,
+            "cooc": 8
+          },
+          {
+            "source": 65746,
+            "target": 2176,
+            "weight": 15.419,
+            "cooc": 4
+          },
+          {
+            "source": 65746,
+            "target": 2136,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 2165,
+            "weight": 8.0345,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 847,
+            "weight": 6.8116,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 65746,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

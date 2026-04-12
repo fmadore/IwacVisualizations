@@ -1,0 +1,380 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.703348+00:00",
+  "person": {
+    "o_id": 1509,
+    "title": "Jean-Baptiste Laleye",
+    "prenom": "Jean-Baptiste",
+    "nom": "Laleye",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2013-08-09",
+    "last_occurrence": "2013-10-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1509,
+            "title": "Jean-Baptiste Laleye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1615,
+            "title": "Idrissou Aboubakar Lemanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9339
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1509,
+            "target": 1615,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 105,
+            "weight": 4.9339,
+            "cooc": 3
+          },
+          {
+            "source": 1509,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 1509,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1509,
+            "title": "Jean-Baptiste Laleye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1509,
+            "title": "Jean-Baptiste Laleye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1615,
+            "title": "Idrissou Aboubakar Lemanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.7095
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9339
+          },
+          {
+            "o_id": 76336,
+            "title": "Sacrifice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.2403
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1509,
+            "target": 1615,
+            "weight": 7.7095,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 105,
+            "weight": 4.9339,
+            "cooc": 3
+          },
+          {
+            "source": 1509,
+            "target": 76336,
+            "weight": 4.2403,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 1509,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          },
+          {
+            "source": 1509,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:57.836786+00:00",
+  "person": {
+    "o_id": 1525,
+    "title": "Bachirou Assouma",
+    "prenom": "Bachirou",
+    "nom": "Assouma",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2002-09-16",
+    "last_occurrence": "2002-09-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2002,
+        "year_max": 2002,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 2002,
+        "year_max": 2002,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2002,
+        "year_max": 2002,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2002
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2002
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2002
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1525,
+            "title": "Bachirou Assouma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 1525,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1525,
+            "title": "Bachirou Assouma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1525,
+            "title": "Bachirou Assouma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 1525,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          },
+          {
+            "source": 1525,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

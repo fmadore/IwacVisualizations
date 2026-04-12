@@ -1,0 +1,354 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.826880+00:00",
+  "person": {
+    "o_id": 46180,
+    "title": "Jean Goudalé",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2012-12-03",
+    "last_occurrence": "2017-06-24"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2012,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 6,
+        "year_min": 2012,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2012,
+          2013,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2012,
+          2013,
+          2017
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2012,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46180,
+            "title": "Jean Goudalé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46311,
+            "title": "Abengourou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 15.7231
+          },
+          {
+            "o_id": 76515,
+            "title": "Communauté Islamique Mouhammadiyyat",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.9284
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 46180,
+            "target": 46311,
+            "weight": 15.7231,
+            "cooc": 3
+          },
+          {
+            "source": 46180,
+            "target": 76515,
+            "weight": 10.9284,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 46180,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46180,
+            "title": "Jean Goudalé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46180,
+            "title": "Jean Goudalé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46311,
+            "title": "Abengourou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 15.7231
+          },
+          {
+            "o_id": 76515,
+            "title": "Communauté Islamique Mouhammadiyyat",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 10.9284
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 46180,
+            "target": 46311,
+            "weight": 15.7231,
+            "cooc": 3
+          },
+          {
+            "source": 46180,
+            "target": 76515,
+            "weight": 10.9284,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 46180,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 46180,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46311,
+          "name": "Abengourou",
+          "lat": 6.729722,
+          "lng": -3.496389,
+          "country": "Côte d'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46311,
+          "name": "Abengourou",
+          "lat": 6.729722,
+          "lng": -3.496389,
+          "country": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  }
+}

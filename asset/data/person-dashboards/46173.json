@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.901273+00:00",
+  "person": {
+    "o_id": 46173,
+    "title": "Y. Faryk T.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2003-12-10",
+    "last_occurrence": "2008-01-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2003,
+        "year_max": 2008,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 8,
+        "year_min": 2003,
+        "year_max": 2008,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2003,
+          2004,
+          2005,
+          2006,
+          2008
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2,
+            1,
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2003,
+          2004,
+          2005,
+          2006,
+          2008
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2,
+            1,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2008
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2008
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 8
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46173,
+            "title": "Y. Faryk T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46293,
+            "title": "Ahmadiyya CI",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 33.6952
+          },
+          {
+            "o_id": 76518,
+            "title": "Abdul Rashid Anwar",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 28.7593
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 132,
+            "title": "Caricatures de Mahomet du journal Jyllands-Posten",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0681
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46173,
+            "target": 46293,
+            "weight": 33.6952,
+            "cooc": 7
+          },
+          {
+            "source": 46173,
+            "target": 76518,
+            "weight": 28.7593,
+            "cooc": 5
+          },
+          {
+            "source": 46173,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 46173,
+            "target": 132,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 75967,
+            "weight": 4.0681,
+            "cooc": 3
+          },
+          {
+            "source": 46173,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 46173,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46173,
+            "title": "Y. Faryk T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46173,
+            "title": "Y. Faryk T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46293,
+            "title": "Ahmadiyya CI",
+            "type": "Organisations",
+            "cooc": 7,
+            "score": 33.6952
+          },
+          {
+            "o_id": 76518,
+            "title": "Abdul Rashid Anwar",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 28.7593
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 132,
+            "title": "Caricatures de Mahomet du journal Jyllands-Posten",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 9.6272
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0681
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46173,
+            "target": 46293,
+            "weight": 33.6952,
+            "cooc": 7
+          },
+          {
+            "source": 46173,
+            "target": 76518,
+            "weight": 28.7593,
+            "cooc": 5
+          },
+          {
+            "source": 46173,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 46173,
+            "target": 132,
+            "weight": 9.6272,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 75967,
+            "weight": 4.0681,
+            "cooc": 3
+          },
+          {
+            "source": 46173,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 46173,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 46173,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

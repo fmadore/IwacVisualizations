@@ -1,0 +1,366 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.721391+00:00",
+  "person": {
+    "o_id": 67790,
+    "title": "Sangho",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1982-07-24",
+    "last_occurrence": "1983-07-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1982,
+        "year_max": 1983,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1982,
+        "year_max": 1983,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1983
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1982,
+          1983
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1983
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1982,
+          "year_max": 1983
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67790,
+            "title": "Sangho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 48427,
+            "title": "Odienné",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.1979
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 67790,
+            "target": 48427,
+            "weight": 8.1979,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67790,
+            "title": "Sangho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67790,
+            "title": "Sangho",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 48427,
+            "title": "Odienné",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.1979
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2423
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 67790,
+            "target": 48427,
+            "weight": 8.1979,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 76041,
+            "weight": 3.2423,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 67790,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

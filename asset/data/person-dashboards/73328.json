@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.475755+00:00",
+  "person": {
+    "o_id": 73328,
+    "title": "Ayelara Karim",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1999-08-16",
+    "last_occurrence": "2016-11-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 12,
+        "year_min": 1999,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 12,
+        "year_min": 1999,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000,
+          2002,
+          2004,
+          2006,
+          2008,
+          2009,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1999,
+          2000,
+          2002,
+          2004,
+          2006,
+          2008,
+          2009,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 12,
+          "articles": 12,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 12,
+          "articles": 12,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2016
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 12
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 12
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73328,
+            "title": "Ayelara Karim",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 12,
+            "score": 33.2077
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 11.8253
+          },
+          {
+            "o_id": 34,
+            "title": "VIH/Sida",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.5686
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1315
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 73328,
+            "target": 830,
+            "weight": 33.2077,
+            "cooc": 12
+          },
+          {
+            "source": 73328,
+            "target": 826,
+            "weight": 11.8253,
+            "cooc": 3
+          },
+          {
+            "source": 73328,
+            "target": 34,
+            "weight": 5.5686,
+            "cooc": 2
+          },
+          {
+            "source": 73328,
+            "target": 54,
+            "weight": 4.1315,
+            "cooc": 2
+          },
+          {
+            "source": 73328,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 73328,
+            "title": "Ayelara Karim",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 12,
+            "score": 33.2077
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 11.8253
+          },
+          {
+            "o_id": 34,
+            "title": "VIH/Sida",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.5686
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1315
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 73328,
+            "target": 830,
+            "weight": 33.2077,
+            "cooc": 12
+          },
+          {
+            "source": 73328,
+            "target": 826,
+            "weight": 11.8253,
+            "cooc": 3
+          },
+          {
+            "source": 73328,
+            "target": 34,
+            "weight": 5.5686,
+            "cooc": 2
+          },
+          {
+            "source": 73328,
+            "target": 54,
+            "weight": 4.1315,
+            "cooc": 2
+          },
+          {
+            "source": 73328,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 73328,
+            "title": "Ayelara Karim",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

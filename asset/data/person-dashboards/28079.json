@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.310648+00:00",
+  "person": {
+    "o_id": 28079,
+    "title": "Édouard Kodjo",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1970-04-25",
+    "last_occurrence": "1973-12-21"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 1970,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 8,
+        "year_min": 1970,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1971,
+          1973
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            3,
+            4
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1971,
+          1973
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            3,
+            4
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1973
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1973
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 28079,
+            "title": "Édouard Kodjo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2125,
+            "title": "Kukovi Benyi Gabriel Polycarpe Johnson",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 22.2048
+          },
+          {
+            "o_id": 27662,
+            "title": "Marie Madoé Sivomey",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.8567
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 19.3712
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 19.2774
+          },
+          {
+            "o_id": 73321,
+            "title": "Ampah Gabriel Johnson",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 19.019
+          },
+          {
+            "o_id": 13622,
+            "title": "Ayi Houenou Joachim Hunlédé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 2166,
+            "title": "Kpotivi Têvi-Djidjogbé Théodore Laclé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6764
+          }
+        ],
+        "edges": [
+          {
+            "source": 28079,
+            "target": 2125,
+            "weight": 22.2048,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 27662,
+            "weight": 21.8567,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 2128,
+            "weight": 19.3712,
+            "cooc": 7
+          },
+          {
+            "source": 28079,
+            "target": 829,
+            "weight": 19.2774,
+            "cooc": 6
+          },
+          {
+            "source": 28079,
+            "target": 73321,
+            "weight": 19.019,
+            "cooc": 3
+          },
+          {
+            "source": 28079,
+            "target": 13622,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 28079,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 2166,
+            "weight": 7.6764,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 28079,
+            "title": "Édouard Kodjo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2125,
+            "title": "Kukovi Benyi Gabriel Polycarpe Johnson",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 22.2048
+          },
+          {
+            "o_id": 27662,
+            "title": "Marie Madoé Sivomey",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 21.8567
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 19.3712
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 19.2774
+          },
+          {
+            "o_id": 73321,
+            "title": "Ampah Gabriel Johnson",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 19.019
+          },
+          {
+            "o_id": 13622,
+            "title": "Ayi Houenou Joachim Hunlédé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.3131
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 2166,
+            "title": "Kpotivi Têvi-Djidjogbé Théodore Laclé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6764
+          }
+        ],
+        "edges": [
+          {
+            "source": 28079,
+            "target": 2125,
+            "weight": 22.2048,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 27662,
+            "weight": 21.8567,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 2128,
+            "weight": 19.3712,
+            "cooc": 7
+          },
+          {
+            "source": 28079,
+            "target": 829,
+            "weight": 19.2774,
+            "cooc": 6
+          },
+          {
+            "source": 28079,
+            "target": 73321,
+            "weight": 19.019,
+            "cooc": 3
+          },
+          {
+            "source": 28079,
+            "target": 13622,
+            "weight": 14.3131,
+            "cooc": 3
+          },
+          {
+            "source": 28079,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 28079,
+            "target": 2166,
+            "weight": 7.6764,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 28079,
+            "title": "Édouard Kodjo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

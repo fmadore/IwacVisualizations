@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:55.715325+00:00",
+  "person": {
+    "o_id": 948,
+    "title": "Aboubacar Nakro",
+    "prenom": "Aboubacar",
+    "nom": "Nakro",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1992-04-02",
+    "last_occurrence": "2010-01"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1992,
+        "year_max": 2010,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1992,
+        "year_max": 2010,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992,
+          2010
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1992,
+          2010
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "subject": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 948,
+            "title": "Aboubacar Nakro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 27,
+            "title": "Mendicité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2416
+          },
+          {
+            "o_id": 87,
+            "title": "Sunnah",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 948,
+            "target": 27,
+            "weight": 6.2416,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 87,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 85,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 948,
+            "title": "Aboubacar Nakro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 27,
+            "title": "Mendicité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2416
+          },
+          {
+            "o_id": 87,
+            "title": "Sunnah",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 85,
+            "title": "Hadith",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 948,
+            "target": 27,
+            "weight": 6.2416,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 87,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 85,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 948,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 948,
+            "title": "Aboubacar Nakro",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

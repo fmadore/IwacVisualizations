@@ -1,0 +1,414 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.737197+00:00",
+  "person": {
+    "o_id": 2154,
+    "title": "Kokou Béné Touléassi",
+    "prenom": "Kokou",
+    "nom": "Touléassi",
+    "genre": "Homme",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1990-06-29",
+    "last_occurrence": "2012-02-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1990,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 1990,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990,
+          1994,
+          2003,
+          2004,
+          2012
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1990,
+          1994,
+          2003,
+          2004,
+          2012
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1994,
+          "year_max": 2012
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1994,
+          "year_max": 2012
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 6
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2154,
+            "title": "Kokou Béné Touléassi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 27806,
+            "title": "Bernardin Adjosse",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.1112
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.5642
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.2174
+          },
+          {
+            "o_id": 13095,
+            "title": "Koffi Sama",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          }
+        ],
+        "edges": [
+          {
+            "source": 2154,
+            "target": 2128,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 2154,
+            "target": 27806,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 845,
+            "weight": 12.1112,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 2176,
+            "weight": 11.5642,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 2154,
+            "target": 847,
+            "weight": 10.2174,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 13095,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 2154,
+            "target": 2165,
+            "weight": 8.0345,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2154,
+            "title": "Kokou Béné Touléassi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 6,
+            "score": 16.6038
+          },
+          {
+            "o_id": 27806,
+            "title": "Bernardin Adjosse",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 845,
+            "title": "Église Évangélique Presbytérienne du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 12.1112
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.5642
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 847,
+            "title": "Forces Armées Togolaises",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 10.2174
+          },
+          {
+            "o_id": 13095,
+            "title": "Koffi Sama",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          }
+        ],
+        "edges": [
+          {
+            "source": 2154,
+            "target": 2128,
+            "weight": 16.6038,
+            "cooc": 6
+          },
+          {
+            "source": 2154,
+            "target": 27806,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 845,
+            "weight": 12.1112,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 2176,
+            "weight": 11.5642,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 2154,
+            "target": 847,
+            "weight": 10.2174,
+            "cooc": 3
+          },
+          {
+            "source": 2154,
+            "target": 13095,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 2154,
+            "target": 2165,
+            "weight": 8.0345,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2154,
+            "title": "Kokou Béné Touléassi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

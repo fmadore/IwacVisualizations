@@ -1,0 +1,323 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.962784+00:00",
+  "person": {
+    "o_id": 62187,
+    "title": "Guefa Bamba",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1970-03-14",
+    "last_occurrence": "1986-05-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1970,
+        "year_max": 1986,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1986,
+        "year_max": 1986,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1970,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1973,
+          1986
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1986
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1970,
+          1973
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1970,
+          "year_max": 1986
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1986,
+          "year_max": 1986
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1970,
+          "year_max": 1973
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62187,
+            "title": "Guefa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 76035,
+            "title": "Famille",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3491
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62187,
+            "target": 46274,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 62187,
+            "target": 76035,
+            "weight": 4.3491,
+            "cooc": 2
+          },
+          {
+            "source": 62187,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 62187,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          },
+          {
+            "source": 62187,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62187,
+            "title": "Guefa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62187,
+            "title": "Guefa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 62187,
+            "target": 46274,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 62187,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 62187,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

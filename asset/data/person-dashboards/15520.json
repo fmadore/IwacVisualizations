@@ -1,0 +1,559 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.547789+00:00",
+  "person": {
+    "o_id": 15520,
+    "title": "Idrissou Touré",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Togo"
+    ],
+    "first_occurrence": "1970-06-04",
+    "last_occurrence": "2013-09-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 12,
+        "year_min": 1970,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 12,
+        "year_min": 1970,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1971,
+          1972,
+          1973,
+          1974,
+          2013
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            3,
+            4,
+            2,
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1970,
+          1971,
+          1972,
+          1973,
+          1974,
+          2013
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            3,
+            4,
+            2,
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 11,
+          "articles": 11,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1974
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 11,
+          "articles": 11,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1974
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 11
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 11
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15520,
+            "title": "Idrissou Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 30.9591
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 10,
+            "score": 27.6731
+          },
+          {
+            "o_id": 27753,
+            "title": "Ahmed Limiou",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 23.455
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 13.8365
+          },
+          {
+            "o_id": 2150,
+            "title": "Kassim Mensah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.2337
+          },
+          {
+            "o_id": 14143,
+            "title": "Issa Fousséni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6387
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 15520,
+            "target": 14057,
+            "weight": 30.9591,
+            "cooc": 7
+          },
+          {
+            "source": 15520,
+            "target": 830,
+            "weight": 27.6731,
+            "cooc": 10
+          },
+          {
+            "source": 15520,
+            "target": 27753,
+            "weight": 23.455,
+            "cooc": 5
+          },
+          {
+            "source": 15520,
+            "target": 2128,
+            "weight": 13.8365,
+            "cooc": 5
+          },
+          {
+            "source": 15520,
+            "target": 2150,
+            "weight": 12.2337,
+            "cooc": 3
+          },
+          {
+            "source": 15520,
+            "target": 14143,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 15520,
+            "target": 829,
+            "weight": 9.6387,
+            "cooc": 3
+          },
+          {
+            "source": 15520,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15520,
+            "title": "Idrissou Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14057,
+            "title": "Mama Fousséni",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 30.9591
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 10,
+            "score": 27.6731
+          },
+          {
+            "o_id": 27753,
+            "title": "Ahmed Limiou",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 23.455
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 13.8365
+          },
+          {
+            "o_id": 2150,
+            "title": "Kassim Mensah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.2337
+          },
+          {
+            "o_id": 14143,
+            "title": "Issa Fousséni",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6387
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 15520,
+            "target": 14057,
+            "weight": 30.9591,
+            "cooc": 7
+          },
+          {
+            "source": 15520,
+            "target": 830,
+            "weight": 27.6731,
+            "cooc": 10
+          },
+          {
+            "source": 15520,
+            "target": 27753,
+            "weight": 23.455,
+            "cooc": 5
+          },
+          {
+            "source": 15520,
+            "target": 2128,
+            "weight": 13.8365,
+            "cooc": 5
+          },
+          {
+            "source": 15520,
+            "target": 2150,
+            "weight": 12.2337,
+            "cooc": 3
+          },
+          {
+            "source": 15520,
+            "target": 14143,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 15520,
+            "target": 829,
+            "weight": 9.6387,
+            "cooc": 3
+          },
+          {
+            "source": 15520,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15520,
+            "title": "Idrissou Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.882847+00:00",
+  "person": {
+    "o_id": 23256,
+    "title": "Bark Biiga",
+    "prenom": "Bark",
+    "nom": "Biiga",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2010-10-12",
+    "last_occurrence": "2014-02-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2010,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2010,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2011,
+          2014
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2010,
+          2011,
+          2014
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "FasoZine",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2014
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "FasoZine",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2014
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23256,
+            "title": "Bark Biiga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1108,
+            "title": "Mama Sanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 9.2447
+          },
+          {
+            "o_id": 1172,
+            "title": "Samuel Yaméogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 671,
+            "title": "Fédération des Églises et Missions Évangéliques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7488
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          }
+        ],
+        "edges": [
+          {
+            "source": 23256,
+            "target": 1108,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 376,
+            "weight": 9.2447,
+            "cooc": 3
+          },
+          {
+            "source": 23256,
+            "target": 1172,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 284,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 671,
+            "weight": 6.7488,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23256,
+            "title": "Bark Biiga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23256,
+            "title": "Bark Biiga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1108,
+            "title": "Mama Sanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 9.2447
+          },
+          {
+            "o_id": 1172,
+            "title": "Samuel Yaméogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 671,
+            "title": "Fédération des Églises et Missions Évangéliques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7488
+          },
+          {
+            "o_id": 872,
+            "title": "Blaise Compaoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.4575
+          }
+        ],
+        "edges": [
+          {
+            "source": 23256,
+            "target": 1108,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 376,
+            "weight": 9.2447,
+            "cooc": 3
+          },
+          {
+            "source": 23256,
+            "target": 1172,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 284,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 671,
+            "weight": 6.7488,
+            "cooc": 2
+          },
+          {
+            "source": 23256,
+            "target": 872,
+            "weight": 5.4575,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 3
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "country": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "country": "Benin",
+          "count": 3
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "country": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

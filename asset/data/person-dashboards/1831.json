@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.260217+00:00",
+  "person": {
+    "o_id": 1831,
+    "title": "Jean-Claude Barbier",
+    "prenom": "Jean-Claude",
+    "nom": "Barbier",
+    "genre": "Homme",
+    "countries": [
+      "Benin",
+      "Togo"
+    ],
+    "first_occurrence": "1991",
+    "last_occurrence": "2002"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1991,
+        "year_max": 2002,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1991,
+        "year_max": 2002,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1991,
+          1995,
+          2001,
+          2002
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            1,
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1991,
+          1995,
+          2001,
+          2002
+        ],
+        "countries": [
+          "Benin",
+          "Togo"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "Togo": [
+            1,
+            1,
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 3
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1881,
+            "title": "Bernard Klein",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          }
+        ],
+        "edges": [
+          {
+            "source": 1831,
+            "target": 1881,
+            "weight": 15.8982,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1881,
+            "title": "Bernard Klein",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          }
+        ],
+        "edges": [
+          {
+            "source": 1831,
+            "target": 1881,
+            "weight": 15.8982,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

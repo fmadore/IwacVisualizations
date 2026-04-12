@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.789055+00:00",
+  "person": {
+    "o_id": 2065,
+    "title": "Omar ibn al-Khattâb",
+    "prenom": "",
+    "nom": "",
+    "genre": "Homme",
+    "countries": [
+      "Benin",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1986-07-21",
+    "last_occurrence": "2012-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1986,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1986,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 1
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1986,
+          2012
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1986,
+          2012
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1986,
+          "year_max": 1986
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Benin",
+          "year_min": 2012,
+          "year_max": 2012
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1986,
+          "year_max": 1986
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Benin",
+          "year_min": 2012,
+          "year_max": 2012
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2065,
+            "title": "Omar ibn al-Khattâb",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 2065,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2065,
+            "title": "Omar ibn al-Khattâb",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 2065,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2065,
+            "title": "Omar ibn al-Khattâb",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 453,
+          "name": "Institut de la Langue Arabe et de la Culture Islamique",
+          "lat": 6.42047,
+          "lng": 2.34345,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 453,
+          "name": "Institut de la Langue Arabe et de la Culture Islamique",
+          "lat": 6.42047,
+          "lng": 2.34345,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

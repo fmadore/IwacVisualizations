@@ -1,0 +1,356 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.780290+00:00",
+  "person": {
+    "o_id": 67756,
+    "title": "Niang Abdoulaye",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1987-06-01",
+    "last_occurrence": "1988-07-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1987,
+        "year_max": 1988,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1987,
+        "year_max": 1987,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1987,
+        "year_max": 1988,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1988
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1987
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1987,
+          1988
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1988
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1987
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1987,
+          "year_max": 1988
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67756,
+            "title": "Niang Abdoulaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 67745,
+            "title": "Lamine Diabaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 62179,
+            "title": "Laman Bakayoko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 1197,
+            "title": "Tidiane Bah",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0582
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.1599
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 67756,
+            "target": 67745,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 62179,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 1197,
+            "weight": 6.0582,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 76280,
+            "weight": 4.1599,
+            "cooc": 3
+          },
+          {
+            "source": 67756,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67756,
+            "title": "Niang Abdoulaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67756,
+            "title": "Niang Abdoulaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 67745,
+            "title": "Lamine Diabaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 62179,
+            "title": "Laman Bakayoko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5494
+          },
+          {
+            "o_id": 1197,
+            "title": "Tidiane Bah",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.0582
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.1599
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 67756,
+            "target": 67745,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 62179,
+            "weight": 7.5494,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 1197,
+            "weight": 6.0582,
+            "cooc": 2
+          },
+          {
+            "source": 67756,
+            "target": 76280,
+            "weight": 4.1599,
+            "cooc": 3
+          },
+          {
+            "source": 67756,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

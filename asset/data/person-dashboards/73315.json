@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.822612+00:00",
+  "person": {
+    "o_id": 73315,
+    "title": "Nambiema Zakar",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1999-05-30",
+    "last_occurrence": "2009-03-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 13,
+        "year_min": 1999,
+        "year_max": 2009,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 13,
+        "year_min": 1999,
+        "year_max": 2009,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2001,
+          2003,
+          2004,
+          2005,
+          2009
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3,
+            1,
+            1,
+            4,
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1999,
+          2001,
+          2003,
+          2004,
+          2005,
+          2009
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3,
+            1,
+            1,
+            4,
+            2,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 13,
+          "articles": 13,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2009
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 13,
+          "articles": 13,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2009
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 13
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 13
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73315,
+            "title": "Nambiema Zakar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 12,
+            "score": 47.3011
+          },
+          {
+            "o_id": 75961,
+            "title": "Abdou-Salami Ahamadou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.0127
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 73315,
+            "target": 826,
+            "weight": 47.3011,
+            "cooc": 12
+          },
+          {
+            "source": 73315,
+            "target": 75961,
+            "weight": 24.0127,
+            "cooc": 4
+          },
+          {
+            "source": 73315,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 73315,
+            "target": 2177,
+            "weight": 8.0345,
+            "cooc": 2
+          },
+          {
+            "source": 73315,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 73315,
+            "title": "Nambiema Zakar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "Organisations",
+            "cooc": 12,
+            "score": 47.3011
+          },
+          {
+            "o_id": 75961,
+            "title": "Abdou-Salami Ahamadou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.0127
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.0692
+          },
+          {
+            "o_id": 2177,
+            "title": "Ahmed Têtou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.0345
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0582
+          }
+        ],
+        "edges": [
+          {
+            "source": 73315,
+            "target": 826,
+            "weight": 47.3011,
+            "cooc": 12
+          },
+          {
+            "source": 73315,
+            "target": 75961,
+            "weight": 24.0127,
+            "cooc": 4
+          },
+          {
+            "source": 73315,
+            "target": 830,
+            "weight": 11.0692,
+            "cooc": 4
+          },
+          {
+            "source": 73315,
+            "target": 2177,
+            "weight": 8.0345,
+            "cooc": 2
+          },
+          {
+            "source": 73315,
+            "target": 55,
+            "weight": 3.0582,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 73315,
+            "title": "Nambiema Zakar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

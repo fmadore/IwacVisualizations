@@ -1,0 +1,462 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.780863+00:00",
+  "person": {
+    "o_id": 938,
+    "title": "Abdrahmane Sidibé",
+    "prenom": "Abdrahmane",
+    "nom": "Sidibé",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1991-08-23",
+    "last_occurrence": "2012-08-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1991,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 1991,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1991,
+          1998,
+          2000,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1991,
+          1998,
+          2000,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1991,
+          "year_max": 2012
+        },
+        {
+          "name": "L'Appel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ],
+      "subject": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1991,
+          "year_max": 2012
+        },
+        {
+          "name": "L'Appel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 938,
+            "title": "Abdrahmane Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 637,
+            "title": "Comité d'Appel à l'Islam",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 17.2556
+          },
+          {
+            "o_id": 574,
+            "title": "Agence des Musulmans d'Afrique/Direct-Aid",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7904
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 23467,
+            "title": "Association Ihsane pour le Développement et l'Éducation",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.0729
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9449
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 938,
+            "target": 637,
+            "weight": 17.2556,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 574,
+            "weight": 6.7904,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 23467,
+            "weight": 6.0729,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 61328,
+            "weight": 4.9449,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 938,
+            "title": "Abdrahmane Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 637,
+            "title": "Comité d'Appel à l'Islam",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 17.2556
+          },
+          {
+            "o_id": 574,
+            "title": "Agence des Musulmans d'Afrique/Direct-Aid",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.7904
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 23467,
+            "title": "Association Ihsane pour le Développement et l'Éducation",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.0729
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 5.5329
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9449
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 938,
+            "target": 637,
+            "weight": 17.2556,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 574,
+            "weight": 6.7904,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 23467,
+            "weight": 6.0729,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 124,
+            "weight": 5.5329,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 61328,
+            "weight": 4.9449,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 938,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 938,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 938,
+            "title": "Abdrahmane Sidibé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

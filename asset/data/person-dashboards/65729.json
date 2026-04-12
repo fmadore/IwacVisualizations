@@ -1,0 +1,432 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.080158+00:00",
+  "person": {
+    "o_id": 65729,
+    "title": "Yankolina M. Tingaena",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2016-04-24",
+    "last_occurrence": "2016-06-28"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2016,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 2016,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2016,
+          "year_max": 2016
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2016,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 65729,
+            "title": "Yankolina M. Tingaena",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 65726,
+            "title": "Mélissa Bataba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 73309,
+            "title": "Dama Dramani",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 73308,
+            "title": "Komi Selom Klassou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 576,
+            "title": "Boko Haram",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4434
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 116,
+            "title": "Secte",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.9173
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 65729,
+            "target": 65726,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 73309,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 73308,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 576,
+            "weight": 6.4434,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 116,
+            "weight": 5.9173,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 65729,
+            "title": "Yankolina M. Tingaena",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 65729,
+            "title": "Yankolina M. Tingaena",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 65726,
+            "title": "Mélissa Bataba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 73309,
+            "title": "Dama Dramani",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.0093
+          },
+          {
+            "o_id": 73308,
+            "title": "Komi Selom Klassou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.5421
+          },
+          {
+            "o_id": 2138,
+            "title": "Inoussa Bouraïma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 576,
+            "title": "Boko Haram",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.4434
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 116,
+            "title": "Secte",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.9173
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5346
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.6752
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0163
+          }
+        ],
+        "edges": [
+          {
+            "source": 65729,
+            "target": 65726,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 73309,
+            "weight": 10.0093,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 73308,
+            "weight": 9.5421,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 2138,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 576,
+            "weight": 6.4434,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 116,
+            "weight": 5.9173,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 830,
+            "weight": 5.5346,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 63530,
+            "weight": 3.6752,
+            "cooc": 2
+          },
+          {
+            "source": 65729,
+            "target": 33,
+            "weight": 3.0163,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

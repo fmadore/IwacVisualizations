@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.261737+00:00",
+  "person": {
+    "o_id": 63489,
+    "title": "Amadou Bouya Guèye",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1974-10-18",
+    "last_occurrence": "1977-10-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1974,
+        "year_max": 1977,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 1974,
+        "year_max": 1977,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1974,
+          1976,
+          1977
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1974,
+          1976,
+          1977
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1974,
+          "year_max": 1977
+        },
+        {
+          "name": "Ivoire Dimanche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1976,
+          "year_max": 1976
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1974,
+          "year_max": 1977
+        },
+        {
+          "name": "Ivoire Dimanche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1976,
+          "year_max": 1976
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 63489,
+            "title": "Amadou Bouya Guèye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76520,
+            "title": "Germain Coffi Gadeau",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 63489,
+            "target": 76520,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 63489,
+            "title": "Amadou Bouya Guèye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76520,
+            "title": "Germain Coffi Gadeau",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.5711
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 63489,
+            "target": 76520,
+            "weight": 8.5711,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 63489,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 63489,
+            "title": "Amadou Bouya Guèye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 76444,
+          "name": "Mosquée Sénégalaise",
+          "lat": 5.302210132319611,
+          "lng": -3.954733641173595,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 76444,
+          "name": "Mosquée Sénégalaise",
+          "lat": 5.302210132319611,
+          "lng": -3.954733641173595,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

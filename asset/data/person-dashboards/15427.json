@@ -1,0 +1,508 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.972664+00:00",
+  "person": {
+    "o_id": 15427,
+    "title": "Emmanuel Kouagou",
+    "prenom": "Emmanuel",
+    "nom": "Kouagou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1983-04-11",
+    "last_occurrence": "2023-03-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1983,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 2023,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1983,
+        "year_max": 1983,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1983,
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2023
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1983
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1983,
+          "year_max": 1983
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ],
+      "subject": [
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ],
+      "creator": [
+        {
+          "name": "Ehuzu",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1983,
+          "year_max": 1983
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15427,
+            "title": "Emmanuel Kouagou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1418,
+            "title": "Pierre Osho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.566
+          },
+          {
+            "o_id": 75965,
+            "title": "Liberté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.5155
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.7567
+          }
+        ],
+        "edges": [
+          {
+            "source": 15427,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 15427,
+            "target": 1418,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 895,
+            "weight": 8.566,
+            "cooc": 3
+          },
+          {
+            "source": 15427,
+            "target": 75965,
+            "weight": 6.5155,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 14425,
+            "weight": 3.7567,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15427,
+            "title": "Emmanuel Kouagou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15427,
+            "title": "Emmanuel Kouagou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1418,
+            "title": "Pierre Osho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.353
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.566
+          },
+          {
+            "o_id": 75965,
+            "title": "Liberté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.5155
+          },
+          {
+            "o_id": 83,
+            "title": "Démocratie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9153
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.7567
+          }
+        ],
+        "edges": [
+          {
+            "source": 15427,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 15427,
+            "target": 1418,
+            "weight": 10.353,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 895,
+            "weight": 8.566,
+            "cooc": 3
+          },
+          {
+            "source": 15427,
+            "target": 75965,
+            "weight": 6.5155,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 83,
+            "weight": 3.9153,
+            "cooc": 2
+          },
+          {
+            "source": 15427,
+            "target": 14425,
+            "weight": 3.7567,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 380,
+          "name": "Parc national de la Pendjari",
+          "lat": 11.2482,
+          "lng": 1.59839,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 381,
+          "name": "Parc national du W",
+          "lat": 12.07596,
+          "lng": 2.5235,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 380,
+          "name": "Parc national de la Pendjari",
+          "lat": 11.2482,
+          "lng": 1.59839,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 381,
+          "name": "Parc national du W",
+          "lat": 12.07596,
+          "lng": 2.5235,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

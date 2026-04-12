@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.857506+00:00",
+  "person": {
+    "o_id": 1532,
+    "title": "F. Houehou",
+    "prenom": "",
+    "nom": "Houehou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1979-10-17",
+    "last_occurrence": "1983-11-04"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1979,
+        "year_max": 1983,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1979,
+        "year_max": 1983,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1980,
+          1983
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1979,
+          1980,
+          1983
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1979,
+          "year_max": 1983
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Ehuzu",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1979,
+          "year_max": 1983
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1532,
+            "title": "F. Houehou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.7538
+          },
+          {
+            "o_id": 1426,
+            "title": "Simon Ifèdé Ogouma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.4214
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2256
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 13712,
+            "title": "Diplomatie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.7615
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          }
+        ],
+        "edges": [
+          {
+            "source": 1532,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1532,
+            "target": 1408,
+            "weight": 11.7538,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 1426,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 895,
+            "weight": 11.4214,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 17,
+            "weight": 6.2256,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 13712,
+            "weight": 4.7615,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1532,
+            "title": "F. Houehou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1532,
+            "title": "F. Houehou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 108,
+            "title": "Impérialisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 13.1812
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.7538
+          },
+          {
+            "o_id": 1426,
+            "title": "Simon Ifèdé Ogouma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.7393
+          },
+          {
+            "o_id": 895,
+            "title": "Mouammar Kadhafi",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 11.4214
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2256
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 13712,
+            "title": "Diplomatie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.7615
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7121
+          }
+        ],
+        "edges": [
+          {
+            "source": 1532,
+            "target": 108,
+            "weight": 13.1812,
+            "cooc": 3
+          },
+          {
+            "source": 1532,
+            "target": 1408,
+            "weight": 11.7538,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 1426,
+            "weight": 11.7393,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 895,
+            "weight": 11.4214,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 17,
+            "weight": 6.2256,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 1532,
+            "target": 13712,
+            "weight": 4.7615,
+            "cooc": 2
+          },
+          {
+            "source": 1532,
+            "target": 75967,
+            "weight": 2.7121,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

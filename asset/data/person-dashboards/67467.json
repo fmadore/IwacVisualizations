@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.729818+00:00",
+  "person": {
+    "o_id": 67467,
+    "title": "Yao Komlavi",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1990-06-22",
+    "last_occurrence": "1992-08-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1990,
+        "year_max": 1992,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 1990,
+        "year_max": 1992,
+        "newspapers_count": 3,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990,
+          1992
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1990,
+          1992
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Courrier du Golfe",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Courrier du Golfe",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1992,
+          "year_max": 1992
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67467,
+            "title": "Yao Komlavi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2107,
+            "title": "Anoumou Kate Aziaglo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 73291,
+            "title": "Bitokotipou Yagninim",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 2158,
+            "title": "Samon Kortho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 2157,
+            "title": "Gbégnon Amégboh",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.3758
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 851,
+            "title": "Église évangélique du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.6439
+          }
+        ],
+        "edges": [
+          {
+            "source": 67467,
+            "target": 2107,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 73291,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 2158,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 2157,
+            "weight": 8.3758,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 67467,
+            "target": 851,
+            "weight": 7.6439,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67467,
+            "title": "Yao Komlavi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2107,
+            "title": "Anoumou Kate Aziaglo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 73291,
+            "title": "Bitokotipou Yagninim",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 2158,
+            "title": "Samon Kortho",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 2157,
+            "title": "Gbégnon Amégboh",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.3758
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3019
+          },
+          {
+            "o_id": 851,
+            "title": "Église évangélique du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.6439
+          }
+        ],
+        "edges": [
+          {
+            "source": 67467,
+            "target": 2107,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 73291,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 2158,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 2157,
+            "weight": 8.3758,
+            "cooc": 2
+          },
+          {
+            "source": 67467,
+            "target": 830,
+            "weight": 8.3019,
+            "cooc": 3
+          },
+          {
+            "source": 67467,
+            "target": 851,
+            "weight": 7.6439,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67467,
+            "title": "Yao Komlavi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

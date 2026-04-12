@@ -1,0 +1,472 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:54.599047+00:00",
+  "person": {
+    "o_id": 15106,
+    "title": "Amos Agbindo-Bankolé",
+    "prenom": "",
+    "nom": "",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2018-03-14",
+    "last_occurrence": "2022-10-03"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2018,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            3,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15106,
+            "title": "Amos Agbindo-Bankolé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14809,
+            "title": "Église Protestante Méthodiste du Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 18.4675
+          },
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.1256
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 812,
+            "title": "Conférence Épiscopale du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 14,
+            "title": "Contraception",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4012
+          },
+          {
+            "o_id": 76326,
+            "title": "Médiation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2901
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 15106,
+            "target": 14809,
+            "weight": 18.4675,
+            "cooc": 4
+          },
+          {
+            "source": 15106,
+            "target": 15323,
+            "weight": 13.1256,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 2008,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 812,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 14,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 31,
+            "weight": 7.4012,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 76326,
+            "weight": 6.2901,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15106,
+            "title": "Amos Agbindo-Bankolé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14809,
+            "title": "Église Protestante Méthodiste du Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 18.4675
+          },
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.1256
+          },
+          {
+            "o_id": 2008,
+            "title": "Aziz Badarou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 812,
+            "title": "Conférence Épiscopale du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 14,
+            "title": "Contraception",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.7875
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4012
+          },
+          {
+            "o_id": 76326,
+            "title": "Médiation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2901
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7176
+          }
+        ],
+        "edges": [
+          {
+            "source": 15106,
+            "target": 14809,
+            "weight": 18.4675,
+            "cooc": 4
+          },
+          {
+            "source": 15106,
+            "target": 15323,
+            "weight": 13.1256,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 2008,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 812,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 14,
+            "weight": 8.7875,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 31,
+            "weight": 7.4012,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 76326,
+            "weight": 6.2901,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          },
+          {
+            "source": 15106,
+            "target": 44,
+            "weight": 2.7176,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15106,
+            "title": "Amos Agbindo-Bankolé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:53.213890+00:00",
+  "person": {
+    "o_id": 1652,
+    "title": "Basile Sama",
+    "prenom": "Basile",
+    "nom": "Sama",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2019-03-25",
+    "last_occurrence": "2021-04-01"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 2019,
+        "year_max": 2021,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 7,
+        "year_min": 2019,
+        "year_max": 2021,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2019,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina 24",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2021
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina 24",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1652,
+            "title": "Basile Sama",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 885,
+            "title": "Hélène Marie Laurence Ilboudo-Marchal",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 907,
+            "title": "Siméon Sawadogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6764
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6622
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          }
+        ],
+        "edges": [
+          {
+            "source": 1652,
+            "target": 885,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 907,
+            "weight": 7.6764,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 16,
+            "weight": 5.6622,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1652,
+            "title": "Basile Sama",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1652,
+            "title": "Basile Sama",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 885,
+            "title": "Hélène Marie Laurence Ilboudo-Marchal",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 907,
+            "title": "Siméon Sawadogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.6764
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6622
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5873
+          }
+        ],
+        "edges": [
+          {
+            "source": 1652,
+            "target": 885,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 907,
+            "weight": 7.6764,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 16,
+            "weight": 5.6622,
+            "cooc": 2
+          },
+          {
+            "source": 1652,
+            "target": 55,
+            "weight": 4.5873,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

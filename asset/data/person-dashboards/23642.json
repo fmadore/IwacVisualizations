@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.928705+00:00",
+  "person": {
+    "o_id": 23642,
+    "title": "Awa Bamba",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2015-03-04",
+    "last_occurrence": "2016-07-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 2015,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2015,
+          2016
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "subject": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte D'Ivoire",
+          "year_min": 2015,
+          "year_max": 2016
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23642,
+            "title": "Awa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23460,
+            "title": "Convention des Femmes Musulmanes Sunnites en Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 21.2401
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 10.3512
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.1326
+          },
+          {
+            "o_id": 63531,
+            "title": "Djihadisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4041
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          }
+        ],
+        "edges": [
+          {
+            "source": 23642,
+            "target": 23460,
+            "weight": 21.2401,
+            "cooc": 4
+          },
+          {
+            "source": 23642,
+            "target": 12891,
+            "weight": 10.3512,
+            "cooc": 4
+          },
+          {
+            "source": 23642,
+            "target": 615,
+            "weight": 6.1326,
+            "cooc": 2
+          },
+          {
+            "source": 23642,
+            "target": 63531,
+            "weight": 5.4041,
+            "cooc": 2
+          },
+          {
+            "source": 23642,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 23642,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 23642,
+            "title": "Awa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23460,
+            "title": "Convention des Femmes Musulmanes Sunnites en Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 21.2401
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 10.3512
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.1326
+          },
+          {
+            "o_id": 63531,
+            "title": "Djihadisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4041
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          }
+        ],
+        "edges": [
+          {
+            "source": 23642,
+            "target": 23460,
+            "weight": 21.2401,
+            "cooc": 4
+          },
+          {
+            "source": 23642,
+            "target": 12891,
+            "weight": 10.3512,
+            "cooc": 4
+          },
+          {
+            "source": 23642,
+            "target": 615,
+            "weight": 6.1326,
+            "cooc": 2
+          },
+          {
+            "source": 23642,
+            "target": 63531,
+            "weight": 5.4041,
+            "cooc": 2
+          },
+          {
+            "source": 23642,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 23642,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 23642,
+            "title": "Awa Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

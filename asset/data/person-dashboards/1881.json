@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.492506+00:00",
+  "person": {
+    "o_id": 1881,
+    "title": "Bernard Klein",
+    "prenom": "Bernard",
+    "nom": "Klein",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1995",
+    "last_occurrence": "2001"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1995,
+        "year_max": 2001,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1995,
+        "year_max": 2001,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          2001
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1995,
+          2001
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1881,
+            "title": "Bernard Klein",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 1881,
+            "target": 1831,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1881,
+            "title": "Bernard Klein",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1881,
+            "title": "Bernard Klein",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 1881,
+            "target": 1831,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

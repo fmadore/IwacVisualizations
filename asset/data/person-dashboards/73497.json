@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.332441+00:00",
+  "person": {
+    "o_id": 73497,
+    "title": "Félix D. Bony",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2002-12-31",
+    "last_occurrence": "2003-01-10"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2002,
+        "year_max": 2003,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2002,
+        "year_max": 2003,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 2002,
+        "year_max": 2003,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2002,
+          2003
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2002,
+          2003
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2002,
+          2003
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2002,
+          "year_max": 2003
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Jour",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2002,
+          "year_max": 2003
+        }
+      ],
+      "creator": [
+        {
+          "name": "Le Jour",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2002,
+          "year_max": 2003
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73497,
+            "title": "Félix D. Bony",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76034,
+            "title": "Guerre",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.1786
+          },
+          {
+            "o_id": 112,
+            "title": "Pardon",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.9286
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 73497,
+            "target": 76034,
+            "weight": 6.1786,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 112,
+            "weight": 4.9286,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 73497,
+            "title": "Félix D. Bony",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76034,
+            "title": "Guerre",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.1786
+          },
+          {
+            "o_id": 112,
+            "title": "Pardon",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.9286
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 73497,
+            "target": 76034,
+            "weight": 6.1786,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 112,
+            "weight": 4.9286,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 73497,
+            "title": "Félix D. Bony",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76034,
+            "title": "Guerre",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.1786
+          },
+          {
+            "o_id": 112,
+            "title": "Pardon",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.9286
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.6144
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 73497,
+            "target": 76034,
+            "weight": 6.1786,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 112,
+            "weight": 4.9286,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 76271,
+            "weight": 4.6144,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          },
+          {
+            "source": 73497,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:50.365885+00:00",
+  "person": {
+    "o_id": 1149,
+    "title": "Oumou Koulsoum",
+    "prenom": "Oumou",
+    "nom": "Koulsoum",
+    "genre": "Femme",
+    "countries": [
+      "Burkina Faso",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1993-10-12",
+    "last_occurrence": "2008-07-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1993,
+        "year_max": 2008,
+        "newspapers_count": 3,
+        "countries_count": 2,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1993,
+        "year_max": 2008,
+        "newspapers_count": 3,
+        "countries_count": 2,
+        "neighbors_count": 3
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          2004,
+          2008
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            0
+          ],
+          "Côte D'Ivoire": [
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1993,
+          2004,
+          2008
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            0
+          ],
+          "Côte D'Ivoire": [
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "subject": [
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        },
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1149,
+            "title": "Oumou Koulsoum",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9837
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.425
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          }
+        ],
+        "edges": [
+          {
+            "source": 1149,
+            "target": 36,
+            "weight": 4.9837,
+            "cooc": 3
+          },
+          {
+            "source": 1149,
+            "target": 76327,
+            "weight": 4.425,
+            "cooc": 2
+          },
+          {
+            "source": 1149,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1149,
+            "title": "Oumou Koulsoum",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.9837
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.425
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          }
+        ],
+        "edges": [
+          {
+            "source": 1149,
+            "target": 36,
+            "weight": 4.9837,
+            "cooc": 3
+          },
+          {
+            "source": 1149,
+            "target": 76327,
+            "weight": 4.425,
+            "cooc": 2
+          },
+          {
+            "source": 1149,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1149,
+            "title": "Oumou Koulsoum",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

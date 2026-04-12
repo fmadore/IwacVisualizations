@@ -1,0 +1,286 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:58.740453+00:00",
+  "person": {
+    "o_id": 67757,
+    "title": "Abou",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin",
+      "Burkina Faso",
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1979-09-01",
+    "last_occurrence": "2020-05-12"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1979,
+        "year_max": 2020,
+        "newspapers_count": 4,
+        "countries_count": 3,
+        "neighbors_count": 0
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2009,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 2009,
+        "newspapers_count": 2,
+        "countries_count": 2,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          2009,
+          2020
+        ],
+        "countries": [
+          "Benin",
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            1
+          ],
+          "Burkina Faso": [
+            0,
+            1,
+            0
+          ],
+          "Côte D'Ivoire": [
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2009,
+          2020
+        ],
+        "countries": [
+          "Benin",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1979,
+          2009
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            1
+          ],
+          "Côte D'Ivoire": [
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1979,
+          "year_max": 1979
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1979,
+          "year_max": 1979
+        },
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67757,
+            "title": "Abou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67757,
+            "title": "Abou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67757,
+            "title": "Abou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

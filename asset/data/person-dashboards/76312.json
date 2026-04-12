@@ -1,0 +1,648 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.217177+00:00",
+  "person": {
+    "o_id": 76312,
+    "title": "Jean-Baptiste Ello",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1973-10-15",
+    "last_occurrence": "1981-05-29"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1973,
+        "year_max": 1981,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 11
+      },
+      "subject": {
+        "total_mentions": 7,
+        "year_min": 1973,
+        "year_max": 1981,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 11
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1973,
+          1975,
+          1977,
+          1981
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1973,
+          1975,
+          1977,
+          1981
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            4,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1973,
+          "year_max": 1981
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1973,
+          "year_max": 1981
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 7
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76312,
+            "title": "Jean-Baptiste Ello",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46245,
+            "title": "Adzopé",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 14.9183
+          },
+          {
+            "o_id": 23465,
+            "title": "Korhogo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.5204
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.1973
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.0193
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.2316
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 76312,
+            "target": 46245,
+            "weight": 14.9183,
+            "cooc": 4
+          },
+          {
+            "source": 76312,
+            "target": 23465,
+            "weight": 8.5204,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 54,
+            "weight": 6.1973,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 15831,
+            "weight": 6.0193,
+            "cooc": 5
+          },
+          {
+            "source": 76312,
+            "target": 76268,
+            "weight": 5.2316,
+            "cooc": 4
+          },
+          {
+            "source": 76312,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 76312,
+            "title": "Jean-Baptiste Ello",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46245,
+            "title": "Adzopé",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 14.9183
+          },
+          {
+            "o_id": 23465,
+            "title": "Korhogo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.5204
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.1973
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.0193
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.2316
+          },
+          {
+            "o_id": 46274,
+            "title": "Parti Démocratique de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 76312,
+            "target": 46245,
+            "weight": 14.9183,
+            "cooc": 4
+          },
+          {
+            "source": 76312,
+            "target": 23465,
+            "weight": 8.5204,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 54,
+            "weight": 6.1973,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 15831,
+            "weight": 6.0193,
+            "cooc": 5
+          },
+          {
+            "source": 76312,
+            "target": 76268,
+            "weight": 5.2316,
+            "cooc": 4
+          },
+          {
+            "source": 76312,
+            "target": 46274,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          },
+          {
+            "source": 76312,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 76312,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 76312,
+            "title": "Jean-Baptiste Ello",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 4
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46279,
+          "name": "Bouaflé",
+          "lat": 6.990278,
+          "lng": -5.744167,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "country": "Côte d'Ivoire",
+          "count": 4
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "country": "Benin",
+          "count": 1
+        },
+        {
+          "o_id": 46279,
+          "name": "Bouaflé",
+          "lat": 6.990278,
+          "lng": -5.744167,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "country": "Côte d'Ivoire",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

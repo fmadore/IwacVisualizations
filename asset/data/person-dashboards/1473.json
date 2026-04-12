@@ -1,0 +1,306 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.679401+00:00",
+  "person": {
+    "o_id": 1473,
+    "title": "Pierre Koffi",
+    "prenom": "Pierre",
+    "nom": "Koffi",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1972-11-09",
+    "last_occurrence": "1973-01-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1972,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1972,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1972,
+          1973
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1972,
+          1973
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Daho-Express",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1973
+        }
+      ],
+      "subject": [
+        {
+          "name": "Daho-Express",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1972,
+          "year_max": 1973
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1473,
+            "title": "Pierre Koffi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1475,
+            "title": "Mama Djougou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 1459,
+            "title": "Barthélémy Ohouens",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1473,
+            "target": 1475,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 1459,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1473,
+            "title": "Pierre Koffi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1475,
+            "title": "Mama Djougou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 1459,
+            "title": "Barthélémy Ohouens",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 1473,
+            "target": 1475,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 1459,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          },
+          {
+            "source": 1473,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1473,
+            "title": "Pierre Koffi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

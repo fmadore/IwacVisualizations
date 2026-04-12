@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.686171+00:00",
+  "person": {
+    "o_id": 76850,
+    "title": "D. Bailly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [],
+    "first_occurrence": null,
+    "last_occurrence": null
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1976,
+        "year_max": 1985,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1976,
+        "year_max": 1985,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1976,
+          1983,
+          1984,
+          1985
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1976,
+          1983,
+          1984,
+          1985
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ivoire Dimanche",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1976,
+          "year_max": 1985
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Ivoire Dimanche",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1976,
+          "year_max": 1985
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76850,
+            "title": "D. Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 50,
+            "title": "Marabout",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 76850,
+            "target": 50,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 76850,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 76850,
+            "title": "D. Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 76850,
+            "title": "D. Bailly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 50,
+            "title": "Marabout",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.1145
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 76850,
+            "target": 50,
+            "weight": 8.1145,
+            "cooc": 2
+          },
+          {
+            "source": 76850,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

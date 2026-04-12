@@ -1,0 +1,551 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.159257+00:00",
+  "person": {
+    "o_id": 62233,
+    "title": "Bamba",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1970-09-29",
+    "last_occurrence": "2013-09-05"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1970,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 13
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 1989,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 1970,
+        "year_max": 1974,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 9
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1972,
+          1973,
+          1974,
+          1989,
+          2013
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1989,
+          2013
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1970,
+          1972,
+          1973,
+          1974
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1970,
+          "year_max": 1989
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1989,
+          "year_max": 1989
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1970,
+          "year_max": 1974
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62233,
+            "title": "Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46218,
+            "title": "Agboville",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 16.1483
+          },
+          {
+            "o_id": 76309,
+            "title": "Daouda Coulibaly",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.7161
+          },
+          {
+            "o_id": 23701,
+            "title": "Musique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.2849
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.7802
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 12906,
+            "title": "Culture",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0307
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 125,
+            "title": "Aïd al-Adha (Tabaski)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.1999
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 62233,
+            "target": 46218,
+            "weight": 16.1483,
+            "cooc": 4
+          },
+          {
+            "source": 62233,
+            "target": 76309,
+            "weight": 9.7161,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 23701,
+            "weight": 8.2849,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 75967,
+            "weight": 6.7802,
+            "cooc": 5
+          },
+          {
+            "source": 62233,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 62233,
+            "target": 12906,
+            "weight": 5.0307,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 62233,
+            "target": 125,
+            "weight": 3.1999,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 62233,
+            "title": "Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 62233,
+            "title": "Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46218,
+            "title": "Agboville",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 16.1483
+          },
+          {
+            "o_id": 76309,
+            "title": "Daouda Coulibaly",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.7161
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.4242
+          },
+          {
+            "o_id": 12906,
+            "title": "Culture",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0307
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          }
+        ],
+        "edges": [
+          {
+            "source": 62233,
+            "target": 46218,
+            "weight": 16.1483,
+            "cooc": 4
+          },
+          {
+            "source": 62233,
+            "target": 76309,
+            "weight": 9.7161,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 62233,
+            "target": 75967,
+            "weight": 5.4242,
+            "cooc": 4
+          },
+          {
+            "source": 62233,
+            "target": 12906,
+            "weight": 5.0307,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 62233,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 62233,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 4
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "country": "Côte d'Ivoire",
+          "count": 4
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:01.170016+00:00",
+  "person": {
+    "o_id": 46189,
+    "title": "Alipha Mohamed Diomandé",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2008-05-09",
+    "last_occurrence": "2010-02-26"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2008,
+        "year_max": 2010,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2008,
+        "year_max": 2010,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2010
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2008,
+          2010
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour Plus",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2010
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Jour Plus",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2010
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46189,
+            "title": "Alipha Mohamed Diomandé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23544,
+            "title": "Al-Mouwahhidoun",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 24.5228
+          },
+          {
+            "o_id": 71457,
+            "title": "Hervé Makré",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 46261,
+            "title": "Mah Traoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4012
+          },
+          {
+            "o_id": 26,
+            "title": "Mawlid",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46189,
+            "target": 23544,
+            "weight": 24.5228,
+            "cooc": 5
+          },
+          {
+            "source": 46189,
+            "target": 71457,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 46189,
+            "target": 46261,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 31,
+            "weight": 7.4012,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 26,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46189,
+            "title": "Alipha Mohamed Diomandé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23544,
+            "title": "Al-Mouwahhidoun",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 24.5228
+          },
+          {
+            "o_id": 71457,
+            "title": "Hervé Makré",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 13.7454
+          },
+          {
+            "o_id": 46261,
+            "title": "Mah Traoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.4012
+          },
+          {
+            "o_id": 26,
+            "title": "Mawlid",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.8957
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6527
+          }
+        ],
+        "edges": [
+          {
+            "source": 46189,
+            "target": 23544,
+            "weight": 24.5228,
+            "cooc": 5
+          },
+          {
+            "source": 46189,
+            "target": 71457,
+            "weight": 13.7454,
+            "cooc": 3
+          },
+          {
+            "source": 46189,
+            "target": 46261,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 31,
+            "weight": 7.4012,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 26,
+            "weight": 4.8957,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 46189,
+            "target": 2013,
+            "weight": 2.6527,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46189,
+            "title": "Alipha Mohamed Diomandé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:05.714371+00:00",
+  "person": {
+    "o_id": 67765,
+    "title": "J. B. Kouamé",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1983-08-02",
+    "last_occurrence": "1985-02-21"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1983,
+        "year_max": 1985,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 3,
+        "year_min": 1983,
+        "year_max": 1985,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 5
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1983,
+          1985
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1983,
+          1985
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1983,
+          "year_max": 1985
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1983,
+          "year_max": 1985
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67765,
+            "title": "J. B. Kouamé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 27,
+            "title": "Mendicité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2416
+          },
+          {
+            "o_id": 23691,
+            "title": "Abobo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 12912,
+            "title": "Commerce",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.4773
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9762
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.7567
+          }
+        ],
+        "edges": [
+          {
+            "source": 67765,
+            "target": 27,
+            "weight": 6.2416,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 23691,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 12912,
+            "weight": 4.4773,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 81,
+            "weight": 3.9762,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 14425,
+            "weight": 3.7567,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 67765,
+            "title": "J. B. Kouamé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 67765,
+            "title": "J. B. Kouamé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 27,
+            "title": "Mendicité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.2416
+          },
+          {
+            "o_id": 23691,
+            "title": "Abobo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.7985
+          },
+          {
+            "o_id": 12912,
+            "title": "Commerce",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.4773
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.9762
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.7567
+          }
+        ],
+        "edges": [
+          {
+            "source": 67765,
+            "target": 27,
+            "weight": 6.2416,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 23691,
+            "weight": 5.7985,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 12912,
+            "weight": 4.4773,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 81,
+            "weight": 3.9762,
+            "cooc": 2
+          },
+          {
+            "source": 67765,
+            "target": 14425,
+            "weight": 3.7567,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

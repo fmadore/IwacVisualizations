@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.720134+00:00",
+  "person": {
+    "o_id": 2108,
+    "title": "Ayodélé Aguiar",
+    "prenom": "Ayodélé",
+    "nom": "Aguiar",
+    "genre": "",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "1990-03-24",
+    "last_occurrence": "1996-02-16"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1990,
+        "year_max": 1996,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 1,
+        "year_min": 1996,
+        "year_max": 1996,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1990,
+        "year_max": 1996,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990,
+          1996
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1996
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1990,
+          1996
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1996,
+          "year_max": 1996
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1996,
+          "year_max": 1996
+        }
+      ],
+      "creator": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1990,
+          "year_max": 1990
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1996,
+          "year_max": 1996
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 2108,
+            "title": "Ayodélé Aguiar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 2108,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 2108,
+            "title": "Ayodélé Aguiar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 2108,
+            "title": "Ayodélé Aguiar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3225
+          }
+        ],
+        "edges": [
+          {
+            "source": 2108,
+            "target": 36,
+            "weight": 3.3225,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

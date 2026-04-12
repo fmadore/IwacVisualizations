@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:07.983837+00:00",
+  "person": {
+    "o_id": 1250,
+    "title": "Pierre-Joseph Laurent",
+    "prenom": "Pierre-Joseph",
+    "nom": "Laurent",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2006",
+    "last_occurrence": "2012"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2006,
+        "year_max": 2012,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2006,
+        "year_max": 2012,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2006,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1250,
+            "title": "Pierre-Joseph Laurent",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1217,
+            "title": "Felice Dassetto",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 1250,
+            "target": 1217,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1250,
+            "title": "Pierre-Joseph Laurent",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1250,
+            "title": "Pierre-Joseph Laurent",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1217,
+            "title": "Felice Dassetto",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 1250,
+            "target": 1217,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

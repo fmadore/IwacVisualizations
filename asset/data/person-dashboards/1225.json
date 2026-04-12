@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:47.224894+00:00",
+  "person": {
+    "o_id": 1225,
+    "title": "Hamidou Diallo",
+    "prenom": "Hamidou",
+    "nom": "Diallo",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1985",
+    "last_occurrence": "2019"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 14,
+        "year_min": 1985,
+        "year_max": 2019,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "subject": {
+        "total_mentions": 4,
+        "year_min": 1992,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 1
+      },
+      "creator": {
+        "total_mentions": 10,
+        "year_min": 1985,
+        "year_max": 2019,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1985,
+          1989,
+          1990,
+          1992,
+          2002,
+          2003,
+          2005,
+          2009,
+          2011,
+          2012,
+          2013,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1992,
+          2002,
+          2011,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1985,
+          1989,
+          1990,
+          2003,
+          2005,
+          2009,
+          2012,
+          2013,
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Pays",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1992,
+          "year_max": 2002
+        },
+        {
+          "name": "Sidwaya",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2011,
+          "year_max": 2012
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Pays",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1992,
+          "year_max": 2002
+        },
+        {
+          "name": "Sidwaya",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2011,
+          "year_max": 2012
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 14
+        }
+      ],
+      "subject": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1225,
+            "title": "Hamidou Diallo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1225,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1225,
+            "title": "Hamidou Diallo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2647
+          }
+        ],
+        "edges": [
+          {
+            "source": 1225,
+            "target": 13908,
+            "weight": 2.2647,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1225,
+            "title": "Hamidou Diallo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

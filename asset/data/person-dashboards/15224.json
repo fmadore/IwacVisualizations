@@ -1,0 +1,476 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:59.848910+00:00",
+  "person": {
+    "o_id": 15224,
+    "title": "Rufin Patinvoh",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2018-02-23",
+    "last_occurrence": "2022-10-01"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 10,
+        "year_min": 2018,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 10
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            7
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2018,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            7
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2022
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 10
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15224,
+            "title": "Rufin Patinvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 760,
+            "title": "Cadre de Concertation des Confessions Religieuses",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.8507
+          },
+          {
+            "o_id": 13356,
+            "title": "Mahmoud Dicko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 10.8934
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.1315
+          },
+          {
+            "o_id": 1411,
+            "title": "Michel Alokpo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 1467,
+            "title": "Houzéifa Amzat",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.8835
+          },
+          {
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3728
+          },
+          {
+            "o_id": 63531,
+            "title": "Djihadisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4041
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          }
+        ],
+        "edges": [
+          {
+            "source": 15224,
+            "target": 760,
+            "weight": 13.8507,
+            "cooc": 3
+          },
+          {
+            "source": 15224,
+            "target": 13356,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 765,
+            "weight": 10.8934,
+            "cooc": 4
+          },
+          {
+            "source": 15224,
+            "target": 1417,
+            "weight": 9.1315,
+            "cooc": 3
+          },
+          {
+            "source": 15224,
+            "target": 1411,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 1467,
+            "weight": 7.8835,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 1960,
+            "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 63531,
+            "weight": 5.4041,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 15224,
+            "title": "Rufin Patinvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 15224,
+            "title": "Rufin Patinvoh",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 760,
+            "title": "Cadre de Concertation des Confessions Religieuses",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 13.8507
+          },
+          {
+            "o_id": 13356,
+            "title": "Mahmoud Dicko",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 10.8934
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.1315
+          },
+          {
+            "o_id": 1411,
+            "title": "Michel Alokpo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0302
+          },
+          {
+            "o_id": 1467,
+            "title": "Houzéifa Amzat",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.8835
+          },
+          {
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3728
+          },
+          {
+            "o_id": 63531,
+            "title": "Djihadisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.4041
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          }
+        ],
+        "edges": [
+          {
+            "source": 15224,
+            "target": 760,
+            "weight": 13.8507,
+            "cooc": 3
+          },
+          {
+            "source": 15224,
+            "target": 13356,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 765,
+            "weight": 10.8934,
+            "cooc": 4
+          },
+          {
+            "source": 15224,
+            "target": 1417,
+            "weight": 9.1315,
+            "cooc": 3
+          },
+          {
+            "source": 15224,
+            "target": 1411,
+            "weight": 9.0302,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 1467,
+            "weight": 7.8835,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 1960,
+            "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 63531,
+            "weight": 5.4041,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          },
+          {
+            "source": 15224,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

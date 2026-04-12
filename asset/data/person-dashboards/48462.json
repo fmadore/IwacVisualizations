@@ -1,0 +1,317 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.308519+00:00",
+  "person": {
+    "o_id": 48462,
+    "title": "Salifou Traoré",
+    "prenom": "Salifou",
+    "nom": "Traoré",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2004-01-06",
+    "last_occurrence": "2004-08-31"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 2,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "creator": {
+        "total_mentions": 1,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        }
+      ],
+      "subject": [
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        }
+      ],
+      "creator": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48462,
+            "title": "Salifou Traoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 45832,
+            "title": "Salif Traoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.9667
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.4179
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.4372
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6158
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 48462,
+            "target": 45832,
+            "weight": 8.9667,
+            "cooc": 2
+          },
+          {
+            "source": 48462,
+            "target": 588,
+            "weight": 7.4179,
+            "cooc": 3
+          },
+          {
+            "source": 48462,
+            "target": 76042,
+            "weight": 3.4372,
+            "cooc": 2
+          },
+          {
+            "source": 48462,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 48462,
+            "target": 76268,
+            "weight": 2.6158,
+            "cooc": 2
+          },
+          {
+            "source": 48462,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 48462,
+            "title": "Salifou Traoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.9453
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          }
+        ],
+        "edges": [
+          {
+            "source": 48462,
+            "target": 588,
+            "weight": 4.9453,
+            "cooc": 2
+          },
+          {
+            "source": 48462,
+            "target": 9,
+            "weight": 3.1379,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 48462,
+            "title": "Salifou Traoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

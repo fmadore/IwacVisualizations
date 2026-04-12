@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:49.942499+00:00",
+  "person": {
+    "o_id": 965,
+    "title": "Adama Sinare",
+    "prenom": "Adama",
+    "nom": "Sinare",
+    "genre": "Homme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2008-03-25",
+    "last_occurrence": "2010-02-22"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2008,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2008,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 7
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2009,
+          2010
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2008,
+          2009,
+          2010
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Pays",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2010
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Pays",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 965,
+            "title": "Adama Sinare",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 947,
+            "title": "Aboubacar Maïga II",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.857
+          },
+          {
+            "o_id": 26,
+            "title": "Mawlid",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.9791
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3579
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          }
+        ],
+        "edges": [
+          {
+            "source": 965,
+            "target": 947,
+            "weight": 9.857,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 26,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 2013,
+            "weight": 3.9791,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 29,
+            "weight": 3.3579,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 965,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 965,
+            "title": "Adama Sinare",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 965,
+            "title": "Adama Sinare",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 947,
+            "title": "Aboubacar Maïga II",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.857
+          },
+          {
+            "o_id": 26,
+            "title": "Mawlid",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 7.3435
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.9791
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3579
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2893
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          }
+        ],
+        "edges": [
+          {
+            "source": 965,
+            "target": 947,
+            "weight": 9.857,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 26,
+            "weight": 7.3435,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 2013,
+            "weight": 3.9791,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 29,
+            "weight": 3.3579,
+            "cooc": 3
+          },
+          {
+            "source": 965,
+            "target": 105,
+            "weight": 3.2893,
+            "cooc": 2
+          },
+          {
+            "source": 965,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

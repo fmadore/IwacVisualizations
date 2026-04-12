@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.838547+00:00",
+  "person": {
+    "o_id": 46302,
+    "title": "Laurent Brindou",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2003-07-28",
+    "last_occurrence": "2005-12-06"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2003,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 2003,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2003,
+          2005
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2003,
+          2005
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2005
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2003,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46302,
+            "title": "Laurent Brindou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23633,
+            "title": "Ediémou Blin Jacob",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.3367
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          }
+        ],
+        "edges": [
+          {
+            "source": 46302,
+            "target": 23633,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 46302,
+            "target": 1057,
+            "weight": 4.3367,
+            "cooc": 2
+          },
+          {
+            "source": 46302,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46302,
+            "title": "Laurent Brindou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46302,
+            "title": "Laurent Brindou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23633,
+            "title": "Ediémou Blin Jacob",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.2632
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.3367
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          }
+        ],
+        "edges": [
+          {
+            "source": 46302,
+            "target": 23633,
+            "weight": 7.2632,
+            "cooc": 2
+          },
+          {
+            "source": 46302,
+            "target": 1057,
+            "weight": 4.3367,
+            "cooc": 2
+          },
+          {
+            "source": 46302,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

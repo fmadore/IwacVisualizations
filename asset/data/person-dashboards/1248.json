@@ -1,0 +1,296 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:08.014172+00:00",
+  "person": {
+    "o_id": 1248,
+    "title": "Katrin Langewiesche",
+    "prenom": "Katrin",
+    "nom": "Langewiesche",
+    "genre": "Femme",
+    "countries": [
+      "Benin",
+      "Burkina Faso",
+      "Burkina Faso"
+    ],
+    "first_occurrence": "1998",
+    "last_occurrence": "2022"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 11,
+        "year_min": 1998,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 3
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 11,
+        "year_min": 1998,
+        "year_max": 2022,
+        "newspapers_count": 0,
+        "countries_count": 2,
+        "neighbors_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1998,
+          2003,
+          2005,
+          2011,
+          2015,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Benin",
+          "Burkina Faso"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          1998,
+          2003,
+          2005,
+          2011,
+          2015,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Benin",
+          "Burkina Faso"
+        ],
+        "series": {
+          "Benin": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
+        },
+        {
+          "name": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1248,
+            "title": "Katrin Langewiesche",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          }
+        ],
+        "edges": [
+          {
+            "source": 1248,
+            "target": 61,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 1248,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1248,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1248,
+            "title": "Katrin Langewiesche",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1248,
+            "title": "Katrin Langewiesche",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.6032
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5572
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0021
+          }
+        ],
+        "edges": [
+          {
+            "source": 1248,
+            "target": 61,
+            "weight": 5.6032,
+            "cooc": 2
+          },
+          {
+            "source": 1248,
+            "target": 76335,
+            "weight": 5.5572,
+            "cooc": 2
+          },
+          {
+            "source": 1248,
+            "target": 42,
+            "weight": 4.0021,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

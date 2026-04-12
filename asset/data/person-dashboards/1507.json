@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:54.868210+00:00",
+  "person": {
+    "o_id": 1507,
+    "title": "Alexis Meton",
+    "prenom": "Alexis",
+    "nom": "Meton",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2018-06-13",
+    "last_occurrence": "2024-04-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2018,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 6,
+        "year_min": 2018,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 6
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2021,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2018,
+          2019,
+          2021,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            2,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2024
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "La Nation",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2018,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 6
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1507,
+            "title": "Alexis Meton",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.1599
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1507,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 76280,
+            "weight": 4.1599,
+            "cooc": 3
+          },
+          {
+            "source": 1507,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1507,
+            "title": "Alexis Meton",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1507,
+            "title": "Alexis Meton",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.4467
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.1599
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0943
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1008
+          }
+        ],
+        "edges": [
+          {
+            "source": 1507,
+            "target": 765,
+            "weight": 5.4467,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 76280,
+            "weight": 4.1599,
+            "cooc": 3
+          },
+          {
+            "source": 1507,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 14391,
+            "weight": 3.0943,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 1507,
+            "target": 86,
+            "weight": 2.1008,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

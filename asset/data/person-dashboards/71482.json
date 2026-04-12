@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:06.929304+00:00",
+  "person": {
+    "o_id": 71482,
+    "title": "G. T.",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2007-08-11",
+    "last_occurrence": "2007-10-02"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2007,
+        "year_max": 2007,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 12
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2007,
+        "year_max": 2007,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 12
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            5
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2007
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            5
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour Plus",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Le Jour Plus",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71482,
+            "title": "G. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23510,
+            "title": "Rivalité Fofana-Koudouss",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.471
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 7.6736
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.505
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.1326
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.8061
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.1558
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 71482,
+            "target": 23510,
+            "weight": 8.471,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 662,
+            "weight": 7.6736,
+            "cooc": 4
+          },
+          {
+            "source": 71482,
+            "target": 1057,
+            "weight": 6.505,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 615,
+            "weight": 6.1326,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 653,
+            "weight": 5.8061,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 76042,
+            "weight": 5.1558,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 71482,
+            "title": "G. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 71482,
+            "title": "G. T.",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23510,
+            "title": "Rivalité Fofana-Koudouss",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 8.471
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 7.6736
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.505
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.1326
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.0745
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.8061
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.1558
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.7733
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 71482,
+            "target": 23510,
+            "weight": 8.471,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 662,
+            "weight": 7.6736,
+            "cooc": 4
+          },
+          {
+            "source": 71482,
+            "target": 1057,
+            "weight": 6.505,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 615,
+            "weight": 6.1326,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 945,
+            "weight": 6.0745,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 653,
+            "weight": 5.8061,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 76042,
+            "weight": 5.1558,
+            "cooc": 3
+          },
+          {
+            "source": 71482,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 76280,
+            "weight": 2.7733,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 71482,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

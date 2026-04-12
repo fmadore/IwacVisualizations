@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:54.613667+00:00",
+  "person": {
+    "o_id": 13493,
+    "title": "Ahmad Qamar",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2017-11-28",
+    "last_occurrence": "2024-04-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2017,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "subject": {
+        "total_mentions": 5,
+        "year_min": 2017,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 5
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017,
+          2020,
+          2021,
+          2022,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2017,
+          2020,
+          2021,
+          2022,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2017,
+          "year_max": 2024
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "subject": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2017,
+          "year_max": 2024
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13493,
+            "title": "Ahmad Qamar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 15.8404
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.5932
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          }
+        ],
+        "edges": [
+          {
+            "source": 13493,
+            "target": 76346,
+            "weight": 15.8404,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 61328,
+            "weight": 6.5932,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 13493,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 13493,
+            "title": "Ahmad Qamar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 15.8404
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 11.1144
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.5932
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.4591
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6266
+          }
+        ],
+        "edges": [
+          {
+            "source": 13493,
+            "target": 76346,
+            "weight": 15.8404,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 76335,
+            "weight": 11.1144,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 61328,
+            "weight": 6.5932,
+            "cooc": 4
+          },
+          {
+            "source": 13493,
+            "target": 10,
+            "weight": 6.4591,
+            "cooc": 3
+          },
+          {
+            "source": 13493,
+            "target": 76039,
+            "weight": 4.6266,
+            "cooc": 3
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 13493,
+            "title": "Ahmad Qamar",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

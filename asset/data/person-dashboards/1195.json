@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.181891+00:00",
+  "person": {
+    "o_id": 1195,
+    "title": "Tasséré Koanda",
+    "prenom": "Tasséré",
+    "nom": "Koanda",
+    "genre": "",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2000-02-17",
+    "last_occurrence": "2001-08-08"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2000,
+        "year_max": 2001,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 4,
+        "year_min": 2000,
+        "year_max": 2001,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2000,
+          2001
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            3
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2000,
+          2001
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2001
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2001
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1195,
+            "title": "Tasséré Koanda",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1315
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1195,
+            "target": 609,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 1195,
+            "target": 54,
+            "weight": 4.1315,
+            "cooc": 2
+          },
+          {
+            "source": 1195,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 1195,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1195,
+            "title": "Tasséré Koanda",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1195,
+            "title": "Tasséré Koanda",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 609,
+            "title": "Communauté islamique Ahmadiyya Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1315
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.1511
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4077
+          }
+        ],
+        "edges": [
+          {
+            "source": 1195,
+            "target": 609,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 1195,
+            "target": 54,
+            "weight": 4.1315,
+            "cooc": 2
+          },
+          {
+            "source": 1195,
+            "target": 86,
+            "weight": 3.1511,
+            "cooc": 3
+          },
+          {
+            "source": 1195,
+            "target": 15831,
+            "weight": 2.4077,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

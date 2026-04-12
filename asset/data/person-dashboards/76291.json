@@ -1,0 +1,860 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:04.342439+00:00",
+  "person": {
+    "o_id": 76291,
+    "title": "Moustapha Sanogo",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "1984-06-28",
+    "last_occurrence": "1994-03-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1984,
+        "year_max": 1994,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 24
+      },
+      "subject": {
+        "total_mentions": 6,
+        "year_min": 1984,
+        "year_max": 1994,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 24
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1984,
+          1992,
+          1993,
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1984,
+          1992,
+          1993,
+          1994
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1984,
+          "year_max": 1994
+        },
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1993,
+          "year_max": 1994
+        }
+      ],
+      "subject": [
+        {
+          "name": "Fraternité Matin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1984,
+          "year_max": 1994
+        },
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 1993,
+          "year_max": 1994
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 6
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76291,
+            "title": "Moustapha Sanogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62148,
+            "title": "Lazéni Coulibaly",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 16.6206
+          },
+          {
+            "o_id": 61330,
+            "title": "Vassiriki Diaby",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.0924
+          },
+          {
+            "o_id": 1197,
+            "title": "Tidiane Bah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.0873
+          },
+          {
+            "o_id": 76293,
+            "title": "Salia Traoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 23674,
+            "title": "Aboubacar Coulibaly",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 1122,
+            "title": "Mohamed Lamine Kaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 46277,
+            "title": "Mattié Diakité",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 23499,
+            "title": "Anzoumana Konaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.7079
+          },
+          {
+            "o_id": 76281,
+            "title": "Mohamed Lamine Fadika",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.6482
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 62161,
+            "title": "Diaby Salif",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.1941
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.8635
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.2015
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0071
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8368
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.6886
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          }
+        ],
+        "edges": [
+          {
+            "source": 76291,
+            "target": 62148,
+            "weight": 16.6206,
+            "cooc": 5
+          },
+          {
+            "source": 76291,
+            "target": 61330,
+            "weight": 10.0924,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 1197,
+            "weight": 9.0873,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76293,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 23674,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 1122,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 46277,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 23499,
+            "weight": 6.7079,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 76281,
+            "weight": 6.6482,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 62161,
+            "weight": 6.1941,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 76041,
+            "weight": 4.8635,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 86,
+            "weight": 4.2015,
+            "cooc": 4
+          },
+          {
+            "source": 76291,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 32,
+            "weight": 4.0071,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 662,
+            "weight": 3.8368,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 124,
+            "weight": 3.6886,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 76291,
+            "title": "Moustapha Sanogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62148,
+            "title": "Lazéni Coulibaly",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 16.6206
+          },
+          {
+            "o_id": 61330,
+            "title": "Vassiriki Diaby",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.0924
+          },
+          {
+            "o_id": 1197,
+            "title": "Tidiane Bah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.0873
+          },
+          {
+            "o_id": 76293,
+            "title": "Salia Traoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.623
+          },
+          {
+            "o_id": 23674,
+            "title": "Aboubacar Coulibaly",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5189
+          },
+          {
+            "o_id": 1122,
+            "title": "Mohamed Lamine Kaba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 46277,
+            "title": "Mattié Diakité",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.8546
+          },
+          {
+            "o_id": 23499,
+            "title": "Anzoumana Konaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.7079
+          },
+          {
+            "o_id": 76281,
+            "title": "Mohamed Lamine Fadika",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.6482
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3428
+          },
+          {
+            "o_id": 62161,
+            "title": "Diaby Salif",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.1941
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.8635
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.7069
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.6415
+          },
+          {
+            "o_id": 76273,
+            "title": "Abraham",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2462
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.2015
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.0497
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.0071
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8708
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.8368
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 3.6886
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0844
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0121
+          }
+        ],
+        "edges": [
+          {
+            "source": 76291,
+            "target": 62148,
+            "weight": 16.6206,
+            "cooc": 5
+          },
+          {
+            "source": 76291,
+            "target": 61330,
+            "weight": 10.0924,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 1197,
+            "weight": 9.0873,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76293,
+            "weight": 8.623,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 23674,
+            "weight": 7.5189,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 1122,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 46277,
+            "weight": 6.8546,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 23499,
+            "weight": 6.7079,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 76281,
+            "weight": 6.6482,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 43069,
+            "weight": 6.3428,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 62161,
+            "weight": 6.1941,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 76041,
+            "weight": 4.8635,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 63,
+            "weight": 4.7069,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 14391,
+            "weight": 4.6415,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76273,
+            "weight": 4.2462,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 86,
+            "weight": 4.2015,
+            "cooc": 4
+          },
+          {
+            "source": 76291,
+            "target": 945,
+            "weight": 4.0497,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 32,
+            "weight": 4.0071,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 653,
+            "weight": 3.8708,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 662,
+            "weight": 3.8368,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 124,
+            "weight": 3.6886,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 76291,
+            "target": 76039,
+            "weight": 3.0844,
+            "cooc": 2
+          },
+          {
+            "source": 76291,
+            "target": 109,
+            "weight": 3.0121,
+            "cooc": 3
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 76291,
+            "title": "Moustapha Sanogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "country": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

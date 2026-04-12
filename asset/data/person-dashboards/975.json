@@ -1,0 +1,478 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:52.146102+00:00",
+  "person": {
+    "o_id": 975,
+    "title": "Aimée Florentine Kaboré",
+    "prenom": "Aimée Florentine",
+    "nom": "Kaboré",
+    "genre": "Femme",
+    "countries": [
+      "Burkina Faso"
+    ],
+    "first_occurrence": "2000-09-06",
+    "last_occurrence": "2017-11-15"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2000,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 11
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 9,
+        "year_min": 2000,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 11
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2000,
+          2001,
+          2009,
+          2013,
+          2014,
+          2017
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            2,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2000,
+          2001,
+          2009,
+          2013,
+          2014,
+          2017
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            3,
+            2,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2017
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Sidwaya",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 9
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Burkina Faso",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 975,
+            "title": "Aimée Florentine Kaboré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 581,
+            "title": "Organisation du Monde Islamique pour l'Éducation, les Sciences et la Culture",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 575,
+            "title": "Association Mondiale de l'Appel Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 13361,
+            "title": "Chômage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9895
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.6376
+          },
+          {
+            "o_id": 76328,
+            "title": "Sensibilisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.3568
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.1068
+          },
+          {
+            "o_id": 12906,
+            "title": "Culture",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0307
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 975,
+            "target": 581,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 575,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 13361,
+            "weight": 6.9895,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 76327,
+            "weight": 6.6376,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 76328,
+            "weight": 6.3568,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 975,
+            "target": 56,
+            "weight": 6.1068,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 12906,
+            "weight": 5.0307,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 975,
+            "title": "Aimée Florentine Kaboré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 975,
+            "title": "Aimée Florentine Kaboré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 581,
+            "title": "Organisation du Monde Islamique pour l'Éducation, les Sciences et la Culture",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 8.0741
+          },
+          {
+            "o_id": 575,
+            "title": "Association Mondiale de l'Appel Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.1093
+          },
+          {
+            "o_id": 13361,
+            "title": "Chômage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.9895
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.6376
+          },
+          {
+            "o_id": 76328,
+            "title": "Sensibilisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.3568
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 6.1164
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 6.1068
+          },
+          {
+            "o_id": 12906,
+            "title": "Culture",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.0307
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.3971
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2966
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0081
+          }
+        ],
+        "edges": [
+          {
+            "source": 975,
+            "target": 581,
+            "weight": 8.0741,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 575,
+            "weight": 7.1093,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 13361,
+            "weight": 6.9895,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 76327,
+            "weight": 6.6376,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 76328,
+            "weight": 6.3568,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 55,
+            "weight": 6.1164,
+            "cooc": 4
+          },
+          {
+            "source": 975,
+            "target": 56,
+            "weight": 6.1068,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 12906,
+            "weight": 5.0307,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 13908,
+            "weight": 3.3971,
+            "cooc": 3
+          },
+          {
+            "source": 975,
+            "target": 61328,
+            "weight": 3.2966,
+            "cooc": 2
+          },
+          {
+            "source": 975,
+            "target": 109,
+            "weight": 2.0081,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

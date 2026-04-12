@@ -1,0 +1,396 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:03.951690+00:00",
+  "person": {
+    "o_id": 60950,
+    "title": "Ignace B. Fanou",
+    "prenom": "Ignace",
+    "nom": "Fanou",
+    "genre": "",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "2020-04-23",
+    "last_occurrence": "2024-04-04"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2020,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 9,
+        "year_min": 2020,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 8
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            4,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            2,
+            4,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2024
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 2020,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 9
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60950,
+            "title": "Ignace B. Fanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1590,
+            "title": "Marc Mensah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.1762
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.6167
+          },
+          {
+            "o_id": 60948,
+            "title": "Akpédjé Ayosso",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.9345
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 12.1753
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 60950,
+            "target": 1590,
+            "weight": 15.1762,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 765,
+            "weight": 13.6167,
+            "cooc": 5
+          },
+          {
+            "source": 60950,
+            "target": 60948,
+            "weight": 12.9345,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 1417,
+            "weight": 12.1753,
+            "cooc": 4
+          },
+          {
+            "source": 60950,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 60950,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 60950,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 60950,
+            "title": "Ignace B. Fanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 60950,
+            "title": "Ignace B. Fanou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1590,
+            "title": "Marc Mensah",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.1762
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 13.6167
+          },
+          {
+            "o_id": 60948,
+            "title": "Akpédjé Ayosso",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.9345
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 12.1753
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.6116
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.6714
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2386
+          }
+        ],
+        "edges": [
+          {
+            "source": 60950,
+            "target": 1590,
+            "weight": 15.1762,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 765,
+            "weight": 13.6167,
+            "cooc": 5
+          },
+          {
+            "source": 60950,
+            "target": 60948,
+            "weight": 12.9345,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 1417,
+            "weight": 12.1753,
+            "cooc": 4
+          },
+          {
+            "source": 60950,
+            "target": 15831,
+            "weight": 3.6116,
+            "cooc": 3
+          },
+          {
+            "source": 60950,
+            "target": 113,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 60950,
+            "target": 32,
+            "weight": 2.6714,
+            "cooc": 2
+          },
+          {
+            "source": 60950,
+            "target": 29,
+            "weight": 2.2386,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

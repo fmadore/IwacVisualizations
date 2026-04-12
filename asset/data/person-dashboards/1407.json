@@ -1,0 +1,373 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:21:56.831648+00:00",
+  "person": {
+    "o_id": 1407,
+    "title": "Machioudi Dissou",
+    "prenom": "Machioudi",
+    "nom": "Dissou",
+    "genre": "Homme",
+    "countries": [
+      "Benin"
+    ],
+    "first_occurrence": "1973-08-14",
+    "last_occurrence": "2005"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1973,
+        "year_max": 2005,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 1973,
+        "year_max": 1984,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 6
+      },
+      "creator": {
+        "total_mentions": 2,
+        "year_min": 1999,
+        "year_max": 2005,
+        "newspapers_count": 0,
+        "countries_count": 1,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1973,
+          1976,
+          1984,
+          1999,
+          2005
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          1973,
+          1976,
+          1984
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [
+          1999,
+          2005
+        ],
+        "countries": [
+          "Benin"
+        ],
+        "series": {
+          "Benin": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1984
+        },
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1973,
+          "year_max": 1973
+        }
+      ],
+      "subject": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1976,
+          "year_max": 1984
+        },
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Benin",
+          "year_min": 1973,
+          "year_max": 1973
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Benin",
+          "count": 5
+        }
+      ],
+      "subject": [
+        {
+          "name": "Benin",
+          "count": 3
+        }
+      ],
+      "creator": [
+        {
+          "name": "Benin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 1407,
+            "title": "Machioudi Dissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2006,
+            "title": "Fagbémi Wassi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 2039,
+            "title": "Moucharaf Gbadamassi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 2003,
+            "title": "Ahounou Mounirou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8769
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 1407,
+            "target": 2006,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 2039,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 2003,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 1408,
+            "weight": 5.8769,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 1407,
+            "title": "Machioudi Dissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2006,
+            "title": "Fagbémi Wassi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.4821
+          },
+          {
+            "o_id": 2039,
+            "title": "Moucharaf Gbadamassi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.2318
+          },
+          {
+            "o_id": 2003,
+            "title": "Ahounou Mounirou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 1950,
+            "title": "Badirou Gafary",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0958
+          },
+          {
+            "o_id": 1408,
+            "title": "Mathieu Kérékou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8769
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1447
+          }
+        ],
+        "edges": [
+          {
+            "source": 1407,
+            "target": 2006,
+            "weight": 10.4821,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 2039,
+            "weight": 10.2318,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 2003,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 1950,
+            "weight": 9.0958,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 1408,
+            "weight": 5.8769,
+            "cooc": 2
+          },
+          {
+            "source": 1407,
+            "target": 5,
+            "weight": 3.1447,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 1407,
+            "title": "Machioudi Dissou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [],
+      "subject": [],
+      "creator": []
+    }
+  }
+}

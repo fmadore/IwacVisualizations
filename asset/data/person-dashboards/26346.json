@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:00.457606+00:00",
+  "person": {
+    "o_id": 26346,
+    "title": "Gilbert Bawara",
+    "prenom": "Gilbert",
+    "nom": "Bawara",
+    "genre": "Homme",
+    "countries": [
+      "Togo"
+    ],
+    "first_occurrence": "2008-01-28",
+    "last_occurrence": "2013-07-11"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2008,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "subject": {
+        "total_mentions": 3,
+        "year_min": 2008,
+        "year_max": 2013,
+        "newspapers_count": 2,
+        "countries_count": 1,
+        "neighbors_count": 2
+      },
+      "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2013
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1
+          ]
+        }
+      },
+      "subject": {
+        "years": [
+          2008,
+          2013
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1
+          ]
+        }
+      },
+      "creator": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2008,
+          "year_max": 2008
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2008,
+          "year_max": 2008
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ],
+      "creator": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ],
+      "subject": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ],
+      "creator": []
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 26346,
+            "title": "Gilbert Bawara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 636,
+            "title": "Banque Islamique de Développement",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.1662
+          }
+        ],
+        "edges": [
+          {
+            "source": 26346,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 26346,
+            "target": 636,
+            "weight": 5.1662,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 26346,
+            "title": "Gilbert Bawara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.391
+          },
+          {
+            "o_id": 636,
+            "title": "Banque Islamique de Développement",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.1662
+          }
+        ],
+        "edges": [
+          {
+            "source": 26346,
+            "target": 15348,
+            "weight": 6.391,
+            "cooc": 2
+          },
+          {
+            "source": 26346,
+            "target": 636,
+            "weight": 5.1662,
+            "cooc": 2
+          }
+        ]
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 26346,
+            "title": "Gilbert Bawara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  }
+}

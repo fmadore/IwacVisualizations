@@ -1,0 +1,554 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-12T10:22:02.056141+00:00",
+  "person": {
+    "o_id": 46319,
+    "title": "Khader Coulibaly",
+    "prenom": "",
+    "nom": "",
+    "genre": "",
+    "countries": [
+      "Côte d'Ivoire"
+    ],
+    "first_occurrence": "2019-11-10",
+    "last_occurrence": "2019-12-09"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 14
+      },
+      "subject": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0,
+        "neighbors_count": 0
+      },
+      "creator": {
+        "total_mentions": 5,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1,
+        "neighbors_count": 14
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            5
+          ]
+        }
+      },
+      "subject": {
+        "years": [],
+        "countries": [],
+        "series": {}
+      },
+      "creator": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Côte D'Ivoire"
+        ],
+        "series": {
+          "Côte D'Ivoire": [
+            5
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Notre Voie",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte D'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "name": "Côte D'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46319,
+            "title": "Khader Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23560,
+            "title": "Élection présidentielle ivoirienne de 2020",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 12.8566
+          },
+          {
+            "o_id": 23492,
+            "title": "Wadzifa Internationale",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 46169,
+            "title": "Abdul Quyyom Pasha",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3358
+          },
+          {
+            "o_id": 23497,
+            "title": "Moustapha Sonta",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.1979
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.9576
+          },
+          {
+            "o_id": 52,
+            "title": "Soufisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.43
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.068
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          }
+        ],
+        "edges": [
+          {
+            "source": 46319,
+            "target": 23560,
+            "weight": 12.8566,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23492,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 46169,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 76335,
+            "weight": 8.3358,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23497,
+            "weight": 8.1979,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 894,
+            "weight": 7.9576,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 52,
+            "weight": 7.43,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 76269,
+            "weight": 7.068,
+            "cooc": 4
+          },
+          {
+            "source": 46319,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 46319,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          }
+        ]
+      },
+      "subject": {
+        "nodes": [
+          {
+            "o_id": 46319,
+            "title": "Khader Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "creator": {
+        "nodes": [
+          {
+            "o_id": 46319,
+            "title": "Khader Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23560,
+            "title": "Élection présidentielle ivoirienne de 2020",
+            "type": "Événements",
+            "cooc": 3,
+            "score": 12.8566
+          },
+          {
+            "o_id": 23492,
+            "title": "Wadzifa Internationale",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 12.6793
+          },
+          {
+            "o_id": 46169,
+            "title": "Abdul Quyyom Pasha",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 11.1024
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.3358
+          },
+          {
+            "o_id": 23497,
+            "title": "Moustapha Sonta",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.1979
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.9576
+          },
+          {
+            "o_id": 52,
+            "title": "Soufisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.43
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.068
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.5129
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 5.0202
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.5244
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4576
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1539
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.1379
+          }
+        ],
+        "edges": [
+          {
+            "source": 46319,
+            "target": 23560,
+            "weight": 12.8566,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23492,
+            "weight": 12.6793,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 46169,
+            "weight": 11.1024,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 76335,
+            "weight": 8.3358,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23497,
+            "weight": 8.1979,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 894,
+            "weight": 7.9576,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 52,
+            "weight": 7.43,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 76269,
+            "weight": 7.068,
+            "cooc": 4
+          },
+          {
+            "source": 46319,
+            "target": 63530,
+            "weight": 5.5129,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 109,
+            "weight": 5.0202,
+            "cooc": 5
+          },
+          {
+            "source": 46319,
+            "target": 33,
+            "weight": 4.5244,
+            "cooc": 3
+          },
+          {
+            "source": 46319,
+            "target": 23606,
+            "weight": 4.4576,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 63372,
+            "weight": 4.1539,
+            "cooc": 2
+          },
+          {
+            "source": 46319,
+            "target": 63,
+            "weight": 3.1379,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "country": "Benin",
+          "count": 1
+        }
+      ]
+    }
+  }
+}
