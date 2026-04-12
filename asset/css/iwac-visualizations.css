@@ -807,3 +807,109 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     background: color-mix(in srgb, var(--surface, #191d24) 90%, transparent);
     color: var(--ink-light, #aab4bf);
 }
+
+/* =========================================================================
+ * Person Dashboard — header card + layout
+ * ========================================================================= */
+
+.iwac-vis-person {
+    display: block;
+}
+
+.iwac-vis-person__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+.iwac-vis-person-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4, 1rem);
+    padding: var(--space-4, 1rem);
+    background: var(--surface-raised, #fff);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: var(--radius-md, 8px);
+    margin-bottom: var(--space-4, 1rem);
+}
+
+.iwac-vis-person-header__avatar {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--border, #e5e7eb);
+}
+
+.iwac-vis-person-header__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-person-header__name {
+    margin: 0;
+    font-size: var(--text-xl, 1.25rem);
+    color: var(--ink, #111827);
+}
+
+.iwac-vis-person-header__gender {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 0 var(--space-2, 0.5rem);
+    border-radius: 999px;
+    background: var(--surface, #f3f4f6);
+    color: var(--muted, #6b7280);
+    font-size: var(--text-sm, 0.875rem);
+}
+
+.iwac-vis-person-header__bio {
+    margin: 0;
+    color: var(--ink-light, #374151);
+    font-size: var(--text-sm, 0.875rem);
+    line-height: 1.5;
+}
+
+.iwac-vis-person-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+    margin-top: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-person-header__chip {
+    display: inline-block;
+    padding: 2px var(--space-2, 0.5rem);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 999px;
+    background: var(--surface, #f9fafb);
+    color: var(--primary, #d97706);
+    font-size: var(--text-xs, 0.75rem);
+    text-decoration: none;
+    transition: background 120ms ease;
+}
+
+.iwac-vis-person-header__chip:hover {
+    background: var(--surface-raised, #fff);
+}
+
+.iwac-vis-person__stats {
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-person__facet {
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+@media (max-width: 640px) {
+    .iwac-vis-person-header {
+        flex-direction: column;
+    }
+    .iwac-vis-person-header__avatar {
+        width: 72px;
+        height: 72px;
+    }
+}

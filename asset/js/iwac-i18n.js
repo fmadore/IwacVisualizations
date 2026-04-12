@@ -181,6 +181,29 @@
             'item_type_document':    'Document',
             'item_type_audiovisual': 'Audio-visual recording',
             'item_type_reference':   'Reference',
+
+            // Person dashboard — labels + panels
+            'Mentions': 'Mentions',
+            'Total mentions': 'Total mentions',
+            'Neighbors': 'Neighbors',
+            'All roles': 'All roles',
+            'As subject': 'As subject',
+            'As creator': 'As creator',
+            'Associated entities': 'Associated entities',
+            'Locations mentioned': 'Locations mentioned',
+            'Top newspapers': 'Top newspapers',
+            'Countries covered': 'Countries covered',
+            'Period covered_short': 'Years',
+            'Distinctiveness score': 'Distinctiveness score',
+            'Affiliations': 'Affiliations',
+            'Wikidata': 'Wikidata',
+
+            // Entity type labels (used by C.network legend + tooltips)
+            'entity_type_Personnes': 'Persons',
+            'entity_type_Organisations': 'Organizations',
+            'entity_type_Lieux': 'Places',
+            'entity_type_Sujets': 'Subjects',
+            'entity_type_\u00c9v\u00e9nements': 'Events',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -313,6 +336,29 @@
             'item_type_document':    'Document',
             'item_type_audiovisual': 'Enregistrement audio-visuel',
             'item_type_reference':   'R\u00e9f\u00e9rence',
+
+            // Person dashboard — labels + panels
+            'Mentions': 'Mentions',
+            'Total mentions': 'Mentions totales',
+            'Neighbors': 'Voisins',
+            'All roles': 'Tous les r\u00f4les',
+            'As subject': 'Comme sujet',
+            'As creator': 'Comme cr\u00e9ateur',
+            'Associated entities': 'Entit\u00e9s associ\u00e9es',
+            'Locations mentioned': 'Lieux mentionn\u00e9s',
+            'Top newspapers': 'Journaux les plus fr\u00e9quents',
+            'Countries covered': 'Pays couverts',
+            'Period covered_short': 'Ann\u00e9es',
+            'Distinctiveness score': 'Indice de sp\u00e9cificit\u00e9',
+            'Affiliations': 'Affiliations',
+            'Wikidata': 'Wikidata',
+
+            // Entity type labels (used by C.network legend + tooltips)
+            'entity_type_Personnes': 'Personnes',
+            'entity_type_Organisations': 'Organisations',
+            'entity_type_Lieux': 'Lieux',
+            'entity_type_Sujets': 'Sujets',
+            'entity_type_\u00c9v\u00e9nements': '\u00c9v\u00e9nements',
         }
     };
 
