@@ -14,6 +14,7 @@ return [
             'knowledgeGraph' => Site\ResourcePageBlockLayout\KnowledgeGraph::class,
             'itemSetDashboard' => Site\ResourcePageBlockLayout\ItemSetDashboard::class,
             'linkedItemsDashboard' => Site\ResourcePageBlockLayout\LinkedItemsDashboard::class,
+            'personDashboard' => Site\ResourcePageBlockLayout\PersonDashboard::class,
         ],
     ],
     'view_manager' => [

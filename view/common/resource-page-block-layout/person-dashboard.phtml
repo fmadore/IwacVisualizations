@@ -1,0 +1,133 @@
+<?php
+/**
+ * Person Dashboard resource page block.
+ *
+ * Renders the static header card server-side from the Omeka item
+ * representation, then an async container that the JS orchestrator
+ * (person-dashboard.js) fills with 7 dynamic panels by fetching
+ * asset/data/person-dashboards/{o_id}.json.
+ *
+ * Assets: the item controller already enqueues i18n / theme / core
+ * via Module::addAssets(). This template enqueues the shared primitives
+ * and block-specific orchestrator + panel modules.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ */
+
+// Shared primitives that aren't on the default item-controller bundle.
+// Module::addAssets() currently attaches i18n/theme/core; panel-specific
+// shared primitives are enqueued here in load order.
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 'IwacVisualizations'));
+
+// Person panel modules (self-registering IIFEs)
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/facet.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.js', 'IwacVisualizations'));
+
+// Orchestrator — must load LAST
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard.js', 'IwacVisualizations'));
+
+$siteSlug = $this->currentSite()->slug();
+$escape = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+
+// -------- Header card data, read straight from the Omeka representation --------
+
+$title = (string) $resource->displayTitle();
+
+// Primary thumbnail, square — falls back to medium if square unavailable
+$thumbUrl = $resource->thumbnailDisplayUrl('square') ?: $resource->thumbnailDisplayUrl('medium');
+
+// Short description (dcterms:description) — first language-matching value wins,
+// else the first value in any language.
+$description = '';
+foreach ($resource->value('dcterms:description', ['all' => true, 'default' => []]) as $value) {
+    $description = (string) $value;
+    if ($description !== '') break;
+}
+
+// Gender (foaf:gender) — item link label or literal string.
+$gender = '';
+$genderValue = $resource->value('foaf:gender');
+if ($genderValue) {
+    $gender = (string) $genderValue->displayTitle() ?: (string) $genderValue;
+}
+
+// Wikidata URI — dcterms:identifier value that starts with the wikidata host.
+$wikidata = '';
+foreach ($resource->value('dcterms:identifier', ['all' => true, 'default' => []]) as $value) {
+    $s = (string) $value;
+    if (strpos($s, 'wikidata.org') !== false) {
+        $wikidata = $s;
+        break;
+    }
+}
+
+// Affiliations — linked items via dcterms:isPartOf.
+$affiliations = [];
+foreach ($resource->value('dcterms:isPartOf', ['all' => true, 'default' => []]) as $value) {
+    $linked = $value->valueResource();
+    if ($linked) {
+        $affiliations[] = [
+            'title' => (string) $linked->displayTitle(),
+            'url'   => $linked->url(),
+        ];
+    }
+}
+?>
+
+<div class="iwac-vis-block iwac-vis-person"
+     data-item-id="<?= $escapeAttr($resource->id()) ?>"
+     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
+     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+
+    <div class="iwac-vis-person-header">
+        <?php if ($thumbUrl): ?>
+            <img class="iwac-vis-person-header__avatar"
+                 src="<?= $escapeAttr($thumbUrl) ?>"
+                 alt="<?= $escapeAttr($title) ?>">
+        <?php endif; ?>
+
+        <div class="iwac-vis-person-header__body">
+            <h2 class="iwac-vis-person-header__name"><?= $escape($title) ?></h2>
+
+            <?php if ($gender !== ''): ?>
+                <span class="iwac-vis-person-header__gender"><?= $escape($gender) ?></span>
+            <?php endif; ?>
+
+            <?php if ($description !== ''): ?>
+                <p class="iwac-vis-person-header__bio"><?= $escape($description) ?></p>
+            <?php endif; ?>
+
+            <?php if ($wikidata !== '' || $affiliations): ?>
+                <div class="iwac-vis-person-header__meta">
+                    <?php if ($wikidata !== ''): ?>
+                        <a class="iwac-vis-person-header__chip"
+                           href="<?= $escapeAttr($wikidata) ?>"
+                           rel="noopener"
+                           target="_blank"><?= $this->translate('Wikidata') ?></a>
+                    <?php endif; ?>
+                    <?php foreach ($affiliations as $aff): ?>
+                        <a class="iwac-vis-person-header__chip"
+                           href="<?= $escapeAttr($aff['url']) ?>"><?= $escape($aff['title']) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="iwac-vis-loading iwac-vis-person__loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
+    </div>
+</div>
