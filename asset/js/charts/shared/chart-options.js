@@ -1496,12 +1496,31 @@
         var max = 1;
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
-        // Theme-aware color ramp: start from the --surface background
-        // and fade up toward --primary so the heatmap respects whatever
-        // accent color the IWAC theme is currently set to.
+        // Theme-aware color ramp: read the dedicated semantic palette
+        // defined in iwac-visualizations.css (--iwac-vis-heatmap-0..4).
+        // These stops use the same --primary → --surface ramp as the
+        // subjectivité bar so every sequential chart in the module
+        // lands on the same visual language. Reading them via
+        // getComputedStyle means a theme/palette override flows
+        // through without touching JS.
+        function readVar(name) {
+            if (typeof getComputedStyle === 'undefined' || !document.body) return '';
+            return getComputedStyle(document.body).getPropertyValue(name).trim();
+        }
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var rampBase = tokens.surface || '#fdfdfc';
-        var rampAccent = tokens.primary || '#e67a14';
+        var heatStops = [
+            readVar('--iwac-vis-heatmap-0'),
+            readVar('--iwac-vis-heatmap-1'),
+            readVar('--iwac-vis-heatmap-2'),
+            readVar('--iwac-vis-heatmap-3'),
+            readVar('--iwac-vis-heatmap-4')
+        ].filter(Boolean);
+        // Fallback ramp if CSS vars aren't resolvable (theme not loaded):
+        // still routed through the base tokens so no hex literals ever
+        // appear in this file.
+        if (heatStops.length < 2) {
+            heatStops = [tokens.surface || '', tokens.primary || ''].filter(Boolean);
+        }
 
         return {
             tooltip: {
@@ -1540,7 +1559,7 @@
                 itemWidth: 12,
                 textStyle: { fontSize: 10 },
                 inRange: {
-                    color: [rampBase, rampAccent]
+                    color: heatStops
                 }
             },
             series: [{

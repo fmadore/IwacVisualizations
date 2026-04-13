@@ -59,6 +59,15 @@
     --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--surface, #fdfdfc));
     --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
     --iwac-vis-subj-5: var(--primary, #e67a14);
+
+    /* Heatmap — sequential 0..4, same --primary → --surface ramp as
+       subjectivité so every sequential chart in the module lands on
+       the same palette. Read by C.heatmap via getComputedStyle. */
+    --iwac-vis-heatmap-0: color-mix(in srgb, var(--primary, #e67a14)  8%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-1: color-mix(in srgb, var(--primary, #e67a14) 28%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-2: color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-3: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-4: var(--primary, #e67a14);
 }
 
 /* ------------------------------------------------------------------- */
