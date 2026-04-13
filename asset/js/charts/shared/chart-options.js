@@ -955,7 +955,9 @@
         var graphNodes = nodes.map(function (n, idx) {
             var isCenter = n.type === 'center';
             var normScore = isCenter ? 1 : Math.max(0, Math.min(1, (n.score || 0) / maxScore));
-            var symbolSize = isCenter ? 46 : 14 + Math.sqrt(normScore) * 26;
+            // Make the centre visually unmistakable since we no longer
+            // fix its position — size + type color do all the lifting.
+            var symbolSize = isCenter ? 56 : 14 + Math.sqrt(normScore) * 28;
             return {
                 id: String(n.o_id),
                 name: C._truncate(n.title || '', maxLen),
@@ -966,9 +968,13 @@
                 score: n.score,
                 symbolSize: symbolSize,
                 itemStyle: { color: TYPE_COLORS[n.type] || palette[idx % palette.length] },
-                fixed: isCenter,
-                x: isCenter ? 0 : undefined,
-                y: isCenter ? 0 : undefined,
+                // Intentionally NO `fixed` and NO x/y seed: pinning the
+                // centre at (0,0) made the auto-fit asymmetric — nodes
+                // clustered around the pin and ECharts couldn't centre
+                // the resulting bbox in the viewport. Force layout with
+                // an `initLayout: 'circular'` seed (set below) produces
+                // a symmetric starting point so the final layout lands
+                // in the middle of the panel.
                 label: { show: true, position: 'right', formatter: '{b}' }
             };
         });
@@ -1028,6 +1034,7 @@
                 var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
                 return [{
                     data: legendData,
+                    show: opts.showLegend !== false,
                     top: 6,
                     left: 'center',
                     orient: 'horizontal',
@@ -1045,15 +1052,22 @@
             series: [{
                 type: 'graph',
                 layout: 'force',
-                // Reserve room for the top legend so the force layout
-                // doesn't overlap it when the panel is wide.
-                top: 56,
-                bottom: 24,
-                left: 24,
-                right: 24,
+                // Reserve room for the top legend; the rest of the panel
+                // is handed to the force simulation + auto-fit.
+                top: 44,
+                bottom: 16,
+                left: 16,
+                right: 16,
                 roam: true,
                 draggable: true,
+                // Per ECharts docs: clamp zoom so roam button overlays
+                // can't scale the graph into oblivion, and shrink node
+                // symbols gently as the user zooms in so labels stay
+                // readable.
+                scaleLimit: { min: 0.25, max: 5 },
+                nodeScaleRatio: 0.6,
                 focusNodeAdjacency: true,
+                labelLayout: { hideOverlap: true },
                 emphasis: {
                     focus: 'adjacency',
                     lineStyle: { width: 4 },
@@ -1061,9 +1075,15 @@
                     scaleSize: 3
                 },
                 force: {
-                    repulsion: 180,
-                    edgeLength: [40, 120],
-                    gravity: 0.05,
+                    // Circular seed gives force a symmetric starting
+                    // point; without it, the jittered random initial
+                    // positions + a pinned centre produced asymmetric
+                    // layouts that auto-fit couldn't recover from.
+                    initLayout: 'circular',
+                    repulsion: 220,
+                    edgeLength: [60, 140],
+                    gravity: 0.08,
+                    friction: 0.6,
                     layoutAnimation: true
                 },
                 data: graphNodes,

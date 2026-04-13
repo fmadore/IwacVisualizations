@@ -257,6 +257,8 @@
             'Zoom in': 'Zoom in',
             'Zoom out': 'Zoom out',
             'Reset view': 'Reset view',
+            'Toggle legend': 'Toggle legend',
+            'Toggle fullscreen': 'Toggle fullscreen',
 
             // Entity type labels (used by C.network legend + tooltips)
             'entity_type_Personnes': 'Persons',
@@ -470,6 +472,8 @@
             'Zoom in': 'Zoom avant',
             'Zoom out': 'Zoom arri\u00e8re',
             'Reset view': 'R\u00e9initialiser la vue',
+            'Toggle legend': 'Afficher/masquer la l\u00e9gende',
+            'Toggle fullscreen': 'Basculer en plein \u00e9cran',
 
             // Entity type labels (used by C.network legend + tooltips)
             'entity_type_Personnes': 'Personnes',

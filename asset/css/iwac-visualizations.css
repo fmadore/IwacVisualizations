@@ -927,11 +927,20 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
  *
  * Buttons inherit color, border, focus-visible, and transition from
  * `.iwac-vis-btn` (the network panel composes both classes), so this
- * file only overrides the icon-button geometry.
+ * file only overrides the icon-button geometry. The graph host gets
+ * a taller min-height than the default chart to accommodate the
+ * force-layout bbox (typically 460px square for a 50-node graph).
  * ------------------------------------------------------------------------- */
 
 .iwac-vis-graph-host {
     position: relative;
+    min-height: 520px;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-graph-host {
+        min-height: 440px;
+    }
 }
 
 .iwac-vis-graph-toolbar {
@@ -951,4 +960,39 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     font-size: var(--text-lg, 1.125rem);
     line-height: 1;
     box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
+}
+
+.iwac-vis-graph-toolbar__btn--pressed {
+    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+    color: var(--primary, #e67a14);
+}
+
+/* -------------------------------------------------------------------------
+ * Panel fullscreen overlay
+ *
+ * Applied when the user toggles fullscreen via the network panel's
+ * toolbar. The panel wrapper escapes its parent grid and covers the
+ * viewport; the graph host fills the remaining space after padding
+ * and toolbar. Also applied by the browser automatically via the
+ * :fullscreen pseudo-class so native Esc / F11 transitions stay in
+ * sync without JS having to intervene.
+ * ------------------------------------------------------------------------- */
+
+.iwac-vis-panel--fullscreen,
+.iwac-vis-panel:fullscreen {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    z-index: 1000;
+    padding: var(--space-5, 1.25rem);
+    background: var(--surface, #fdfdfc);
+    overflow: auto;
+    border-radius: 0;
+}
+
+.iwac-vis-panel--fullscreen > .iwac-vis-graph-host,
+.iwac-vis-panel:fullscreen > .iwac-vis-graph-host {
+    min-height: calc(100vh - 120px);
+    height: calc(100vh - 120px);
 }
