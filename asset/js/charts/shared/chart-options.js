@@ -678,7 +678,6 @@
      * @param {Array<Object>} entries
      *   Each: { name, country, type, year_min, year_max, total }
      * @param {Object} [opts]
-     * @param {Object<string, string>} [opts.countryColors]
      */
     C.gantt = function (entries, opts) {
         opts = opts || {};
@@ -700,23 +699,8 @@
         if (!isFinite(yearMin)) yearMin = 1900;
         if (!isFinite(yearMax)) yearMax = new Date().getFullYear();
 
-        var palette = [
-            '#d97706', '#059669', '#2563eb', '#9333ea', '#dc2626', '#0891b2',
-            '#65a30d', '#ea580c', '#7c3aed', '#0d9488'
-        ];
-        var countryColorMap = {};
-        var colorIdx = 0;
-        function colorForCountry(country) {
-            if (!country) return palette[0];
-            if (opts.countryColors && opts.countryColors[country]) {
-                return opts.countryColors[country];
-            }
-            if (countryColorMap[country] == null) {
-                countryColorMap[country] = palette[colorIdx % palette.length];
-                colorIdx++;
-            }
-            return countryColorMap[country];
-        }
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var strokeColor = tokens.border ? tokens.border + '36' : 'rgba(0,0,0,0.13)';
 
         function renderItem(params, api) {
             var yIndex = api.value(0);
@@ -725,22 +709,22 @@
             var height = api.size([0, 1])[1] * 0.6;
             var width = Math.max(2, end[0] - start[0]);
             var entry = data[params.dataIndex] && data[params.dataIndex].entry;
-            var color = colorForCountry(entry && entry.country);
-            var rectShape = {
-                x: start[0],
-                y: start[1] - height / 2,
-                width: width,
-                height: height
-            };
+            var color = C._countryColor(entry && entry.country);
             return {
                 type: 'rect',
-                shape: rectShape,
-                style: { fill: color, stroke: '#00000022' }
+                shape: {
+                    x: start[0],
+                    y: start[1] - height / 2,
+                    width: width,
+                    height: height,
+                    r: 2
+                },
+                style: { fill: color, stroke: strokeColor }
             };
         }
 
-        return {
-            grid: { left: 8, right: 48, top: 48, bottom: 48, containLabel: true },
+        var base = {
+            grid: C._grid({ left: 8, right: 48, bottom: 48 }),
             tooltip: {
                 formatter: function (p) {
                     var entry = (data[p.dataIndex] || {}).entry || {};
@@ -771,10 +755,7 @@
                 data: names,
                 inverse: true,
                 axisTick: { show: false },
-                axisLabel: {
-                    width: 160,
-                    overflow: 'truncate'
-                }
+                axisLabel: { width: 160, overflow: 'truncate' }
             },
             dataZoom: list.length > 20 ? [
                 { type: 'slider', yAxisIndex: 0, start: 0, end: 100 / Math.max(1, list.length / 20), right: 8 },
@@ -785,8 +766,14 @@
                 renderItem: renderItem,
                 encode: { x: [1, 2], y: 0 },
                 data: data
-            }]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
