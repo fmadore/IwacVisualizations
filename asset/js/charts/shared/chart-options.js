@@ -139,31 +139,29 @@
         if (filter) categories = categories.filter(function (c) { return !P.isUnknown(c); });
         var years = timeline.years || [];
 
+        var barDef = C._barDefaults('vertical');
+        var useCountryColors = opts.useCountryColors !== false;
         var series = categories.map(function (cat) {
+            var itemStyle = useCountryColors
+                ? { borderRadius: barDef.itemStyle.borderRadius, color: C._countryColor(cat) }
+                : { borderRadius: barDef.itemStyle.borderRadius };
             return {
                 name: cat,
                 type: 'bar',
                 stack: 'total',
-                barMaxWidth: 28,
-                emphasis: { focus: 'series' },
-                blur: { itemStyle: { opacity: 0.35 } },
+                barMaxWidth: barDef.barMaxWidth,
+                emphasis: barDef.emphasis,
+                blur: barDef.blur,
+                itemStyle: itemStyle,
                 data: (timeline.series && timeline.series[cat]) || []
             };
         });
 
         var useZoom = years.length > 20;
-        return {
-            grid: { left: 48, right: 16, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
-            legend: {
-                type: 'scroll',
-                top: 4,
-                itemWidth: 12,
-                itemHeight: 10
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
+        var base = {
+            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
+            legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
                 type: 'category',
                 data: years,
@@ -171,18 +169,16 @@
                 nameLocation: 'middle',
                 nameGap: useZoom ? 36 : 24
             },
-            yAxis: {
-                type: 'value',
-                name: opts.valueName || t('Count')
-            },
-            dataZoom: useZoom
-                ? [
-                      { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                      { type: 'inside' }
-                  ]
-                : [],
-            series: series
+            yAxis: { type: 'value', name: opts.valueName || t('Count') },
+            dataZoom: C._dataZoom(years.length),
+            series: series,
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -586,22 +582,24 @@
         var categories = d.categories || [];
         var stackKeys = d.stackKeys || [];
         var seriesMap = d.series || {};
-        var useZoom = categories.length > 20;
 
+        var barDef = C._barDefaults('vertical');
         var series = stackKeys.map(function (k) {
             return {
                 name: opts.labelFor ? opts.labelFor(k) : k,
                 type: 'bar',
                 stack: 'total',
-                barMaxWidth: 28,
-                emphasis: { focus: 'series' },
-                blur: { itemStyle: { opacity: 0.35 } },
+                barMaxWidth: barDef.barMaxWidth,
+                emphasis: barDef.emphasis,
+                blur: barDef.blur,
+                itemStyle: { borderRadius: barDef.itemStyle.borderRadius },
                 data: seriesMap[k] || []
             };
         });
 
-        return {
-            grid: { left: 48, right: 16, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
+        var useZoom = categories.length > 20;
+        var base = {
+            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
@@ -612,12 +610,15 @@
                 nameGap: useZoom ? 36 : 24
             },
             yAxis: { type: 'value', name: opts.valueName || t('Count') },
-            dataZoom: useZoom ? [
-                { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                { type: 'inside' }
-            ] : [],
-            series: series
+            dataZoom: C._dataZoom(categories.length),
+            series: series,
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
