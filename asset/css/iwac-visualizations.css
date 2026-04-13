@@ -803,7 +803,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 }
 
 /* =========================================================================
- * Person Dashboard — header card + layout
+ * Person Dashboard — layout
  * ========================================================================= */
 
 .iwac-vis-person {
@@ -816,80 +816,6 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     gap: var(--space-4, 1rem);
 }
 
-.iwac-vis-person-header {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-4, 1rem);
-    padding: var(--space-4, 1rem);
-    background: var(--surface-raised, #fff);
-    border: 1px solid var(--border, #e5e7eb);
-    border-radius: var(--radius-md, 8px);
-    margin-bottom: var(--space-4, 1rem);
-}
-
-.iwac-vis-person-header__avatar {
-    flex: 0 0 auto;
-    width: 96px;
-    height: 96px;
-    object-fit: cover;
-    border-radius: var(--radius-md, 8px);
-    border: 1px solid var(--border, #e5e7eb);
-}
-
-.iwac-vis-person-header__body {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
-}
-
-.iwac-vis-person-header__name {
-    margin: 0;
-    font-size: var(--text-xl, 1.25rem);
-    color: var(--ink, #111827);
-}
-
-.iwac-vis-person-header__gender {
-    display: inline-block;
-    align-self: flex-start;
-    padding: 0 var(--space-2, 0.5rem);
-    border-radius: 999px;
-    background: var(--surface, #f3f4f6);
-    color: var(--muted, #6b7280);
-    font-size: var(--text-sm, 0.875rem);
-}
-
-.iwac-vis-person-header__bio {
-    margin: 0;
-    color: var(--ink-light, #374151);
-    font-size: var(--text-sm, 0.875rem);
-    line-height: 1.5;
-}
-
-.iwac-vis-person-header__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2, 0.5rem);
-    margin-top: var(--space-2, 0.5rem);
-}
-
-.iwac-vis-person-header__chip {
-    display: inline-block;
-    padding: 2px var(--space-2, 0.5rem);
-    border: 1px solid var(--border, #e5e7eb);
-    border-radius: 999px;
-    background: var(--surface, #f9fafb);
-    color: var(--primary, #d97706);
-    font-size: var(--text-xs, 0.75rem);
-    text-decoration: none;
-    transition: background 120ms ease;
-}
-
-.iwac-vis-person-header__chip:hover {
-    background: var(--surface-raised, #fff);
-}
-
 .iwac-vis-person__stats {
     margin-bottom: var(--space-3, 0.75rem);
 }
@@ -898,12 +824,48 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     margin-bottom: var(--space-3, 0.75rem);
 }
 
-@media (max-width: 640px) {
-    .iwac-vis-person-header {
-        flex-direction: column;
-    }
-    .iwac-vis-person-header__avatar {
-        width: 72px;
-        height: 72px;
-    }
+/* -------------------------------------------------------------------------
+ * Panel description (subheader under each panel h4)
+ * ------------------------------------------------------------------------- */
+
+.iwac-vis-panel-desc {
+    margin: 0 0 var(--space-3, 0.75rem);
+    color: var(--muted, #6b7280);
+    font-size: var(--text-sm, 0.875rem);
+    line-height: 1.5;
+    max-width: 72ch;
+}
+
+/* -------------------------------------------------------------------------
+ * Network panel — zoom toolbar overlay
+ * ------------------------------------------------------------------------- */
+
+.iwac-vis-graph-host {
+    position: relative;
+}
+
+.iwac-vis-graph-toolbar {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-graph-toolbar__btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    background: var(--surface, #fdfdfc);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 6px);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.06));
+}
+
+.iwac-vis-graph-toolbar__btn:hover {
+    background: var(--surface-raised, #f9f7f3);
 }

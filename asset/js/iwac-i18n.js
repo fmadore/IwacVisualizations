@@ -185,18 +185,29 @@
             // Person dashboard — labels + panels
             'Mentions': 'Mentions',
             'Total mentions': 'Total mentions',
-            'Neighbors': 'Neighbors',
             'All roles': 'All roles',
             'As subject': 'As subject',
             'As creator': 'As creator',
             'Associated entities': 'Associated entities',
-            'Locations mentioned': 'Locations mentioned',
+            'Associated locations': 'Associated locations',
             'Top newspapers': 'Top newspapers',
             'Countries covered': 'Countries covered',
             'Period covered_short': 'Years',
             'Distinctiveness score': 'Distinctiveness score',
             'Affiliations': 'Affiliations',
             'Wikidata': 'Wikidata',
+
+            // Person dashboard — panel descriptions (subheaders)
+            'desc_mentions_timeline':      'Articles, publications and references mentioning this person each year, stacked by country of publication.',
+            'desc_top_newspapers':         'News and periodical sources where this person appears most often (top 15).',
+            'desc_countries_covered':      'Distribution of mentions by country of publication of the source.',
+            'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named.',
+            'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
+
+            // Network panel toolbar
+            'Zoom in': 'Zoom in',
+            'Zoom out': 'Zoom out',
+            'Reset view': 'Reset view',
 
             // Entity type labels (used by C.network legend + tooltips)
             'entity_type_Personnes': 'Persons',
@@ -340,18 +351,29 @@
             // Person dashboard — labels + panels
             'Mentions': 'Mentions',
             'Total mentions': 'Mentions totales',
-            'Neighbors': 'Voisins',
             'All roles': 'Tous les r\u00f4les',
             'As subject': 'Comme sujet',
             'As creator': 'Comme cr\u00e9ateur',
             'Associated entities': 'Entit\u00e9s associ\u00e9es',
-            'Locations mentioned': 'Lieux mentionn\u00e9s',
+            'Associated locations': 'Lieux associ\u00e9s',
             'Top newspapers': 'Journaux les plus fr\u00e9quents',
             'Countries covered': 'Pays couverts',
             'Period covered_short': 'Ann\u00e9es',
             'Distinctiveness score': 'Indice de sp\u00e9cificit\u00e9',
             'Affiliations': 'Affiliations',
             'Wikidata': 'Wikidata',
+
+            // Person dashboard — panel descriptions (subheaders)
+            'desc_mentions_timeline':      'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette personne par ann\u00e9e, empil\u00e9 par pays de publication.',
+            'desc_top_newspapers':         'Journaux et p\u00e9riodiques o\u00f9 cette personne appara\u00eet le plus souvent (top 15).',
+            'desc_countries_covered':      'R\u00e9partition des mentions par pays de publication de la source.',
+            'desc_associated_entities':    'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette personne est nomm\u00e9e.',
+            'desc_associated_locations':   'Lieux g\u00e9ographiques mentionn\u00e9s dans les notices o\u00f9 cette personne appara\u00eet comme cr\u00e9ateur ou sujet, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
+
+            // Network panel toolbar
+            'Zoom in': 'Zoom avant',
+            'Zoom out': 'Zoom arri\u00e8re',
+            'Reset view': 'R\u00e9initialiser la vue',
 
             // Entity type labels (used by C.network legend + tooltips)
             'entity_type_Personnes': 'Personnes',

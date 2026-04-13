@@ -1023,13 +1023,28 @@
             },
             legend: legendData.length ? [{
                 data: legendData,
-                top: 4,
-                itemWidth: 12,
-                itemHeight: 10
+                top: 6,
+                left: 'center',
+                orient: 'horizontal',
+                itemWidth: 14,
+                itemHeight: 10,
+                itemGap: 16,
+                padding: [6, 12],
+                backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                borderColor: 'rgba(0, 0, 0, 0.08)',
+                borderWidth: 1,
+                borderRadius: 6,
+                textStyle: { fontSize: 12 }
             }] : [],
             series: [{
                 type: 'graph',
                 layout: 'force',
+                // Reserve room for the top legend so the force layout
+                // doesn't overlap it when the panel is wide.
+                top: 56,
+                bottom: 24,
+                left: 24,
+                right: 24,
                 roam: true,
                 draggable: true,
                 focusNodeAdjacency: true,
@@ -1042,7 +1057,8 @@
                 force: {
                     repulsion: 180,
                     edgeLength: [40, 120],
-                    gravity: 0.05
+                    gravity: 0.05,
+                    layoutAnimation: true
                 },
                 data: graphNodes,
                 links: graphEdges,

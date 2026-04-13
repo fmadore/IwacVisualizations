@@ -74,6 +74,40 @@ def configure_logging(level: int = logging.INFO) -> logging.Logger:
 # Country/Location Normalization
 # =============================================================================
 
+# Canonical spellings for country names that ``str.title()`` would mangle —
+# notably anything with apostrophes ("Cote D'Ivoire") or accents we want to
+# preserve. Keys are lowercased; values are the desired display form.
+COUNTRY_DISPLAY_OVERRIDES: Dict[str, str] = {
+    "cote d'ivoire":  "Côte d'Ivoire",
+    "côte d'ivoire":  "Côte d'Ivoire",
+    "cote divoire":   "Côte d'Ivoire",
+    "ivory coast":    "Côte d'Ivoire",
+    "burkina faso":   "Burkina Faso",
+    "benin":          "Bénin",
+    "bénin":          "Bénin",
+    "niger":          "Niger",
+    "nigeria":        "Nigeria",
+    "togo":           "Togo",
+}
+
+
+def _canonical_country(name: str) -> str:
+    """Apply IWAC display overrides on top of ``str.title()``.
+
+    ``str.title()`` re-capitalizes after every non-letter, so
+    ``"côte d'ivoire".title() == "Côte D'Ivoire"`` — ugly. This helper
+    returns the canonical IWAC spelling for known names and falls back
+    to the title-cased input for anything else.
+    """
+    s = str(name).strip()
+    if not s:
+        return s
+    key = unicodedata.normalize('NFC', s.lower())
+    if key in COUNTRY_DISPLAY_OVERRIDES:
+        return COUNTRY_DISPLAY_OVERRIDES[key]
+    return s.title()
+
+
 def normalize_country(
     value: Any,
     return_list: bool = True,
@@ -97,19 +131,19 @@ def normalize_country(
 
     Examples:
         >>> normalize_country("Benin")
-        ["Benin"]
+        ["Bénin"]
         >>> normalize_country("benin|togo")
-        ["Benin", "Togo"]
+        ["Bénin", "Togo"]
+        >>> normalize_country("cote d'ivoire")
+        ["Côte d'Ivoire"]
         >>> normalize_country(None)
         ["Unknown"]
-        >>> normalize_country("Benin", return_list=False)
-        "Benin"
     """
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return [unknown_value] if return_list else unknown_value
 
     if isinstance(value, (list, tuple)):
-        countries = [str(c).strip().title() for c in value if str(c).strip()]
+        countries = [_canonical_country(c) for c in value if str(c).strip()]
         result = countries if countries else [unknown_value]
         return result if return_list else (result[0] if len(result) == 1 else ", ".join(result))
 
@@ -120,11 +154,11 @@ def normalize_country(
     # Handle multiple countries separated by common delimiters
     for sep in ["|", ";", ",", "/"]:
         if sep in country_str:
-            countries = [c.strip().title() for c in country_str.split(sep) if c.strip()]
+            countries = [_canonical_country(c) for c in country_str.split(sep) if c.strip()]
             result = countries if countries else [unknown_value]
             return result if return_list else (result[0] if len(result) == 1 else ", ".join(result))
 
-    result = country_str.title()
+    result = _canonical_country(country_str)
     return [result] if return_list else result
 
 

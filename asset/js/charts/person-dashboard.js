@@ -46,11 +46,11 @@
         grid.classList.add('iwac-vis-person__grid');
         body.appendChild(grid);
 
-        var timelinePanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Mentions'));
-        var newspapersPanel = P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'));
-        var countriesPanel  = P.buildPanel('iwac-vis-panel',                      P.t('Countries covered'));
-        var networkPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated entities'));
-        var mapPanel        = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Locations mentioned'));
+        var timelinePanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Mentions'),            P.t('desc_mentions_timeline'));
+        var newspapersPanel = P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'),      P.t('desc_top_newspapers'));
+        var countriesPanel  = P.buildPanel('iwac-vis-panel',                      P.t('Countries covered'),   P.t('desc_countries_covered'));
+        var networkPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated entities'), P.t('desc_associated_entities'));
+        var mapPanel        = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated locations'), P.t('desc_associated_locations'));
 
         [timelinePanel, newspapersPanel, countriesPanel, networkPanel, mapPanel]
             .forEach(function (p) { grid.appendChild(p.panel); });

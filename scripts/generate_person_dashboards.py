@@ -64,6 +64,17 @@ CREATOR_FIELDS = {
     "references":   "author",
 }
 
+# Spatial coverage field — multivalue, pipe-separated, contains place
+# names that may or may not match an index Lieux entry. The previous
+# implementation only looked at SUBJECT and CREATOR entities and filtered
+# those that happened to be Lieux, which silently dropped every place
+# named only in `dcterms:spatial`.
+SPATIAL_FIELDS = {
+    "articles":     "spatial",
+    "publications": "spatial",
+    "references":   "spatial",
+}
+
 # Minimum co-occurrence before a neighbor qualifies for the network.
 # Singletons produce noisy TF-IDF scores.
 MIN_COOCCURRENCE = 2
@@ -94,6 +105,10 @@ class PersonDashboardGenerator:
         self.lieux_rows: Dict[int, Tuple[float, float, str]] = {}  # o_id -> (lat, lng, country)
         self.persons: Dict[int, Dict[str, Any]] = {}
         self.item_entities: Dict[str, Dict[str, List[int]]] = {}  # item_key -> {'subject': [o_id, ...], 'creator': [...]}
+        # item_key -> set of Lieux o_ids parsed from the dcterms:spatial field.
+        # Kept separate from item_entities because spatial coverage isn't a
+        # "role" of the entity, it's a property of the item.
+        self.item_spatial: Dict[str, Set[int]] = {}
         self.items_meta: Dict[str, Dict[str, Any]] = {}           # item_key -> {o_id, pub_date, newspaper, country, subset}
         self.persons_items: Dict[int, Dict[str, Set[str]]] = defaultdict(
             lambda: {"subject": set(), "creator": set()}
@@ -212,9 +227,13 @@ class PersonDashboardGenerator:
 
         Populates:
           - self.item_entities[item_key] = {"subject": [o_id...], "creator": [o_id...]}
+          - self.item_spatial[item_key]  = {lieu_o_id, ...}  (parsed from dcterms:spatial)
           - self.items_meta[item_key]    = {o_id, pub_date, newspaper, country, subset}
           - self.persons_items[person_o_id] = {"subject": {item_key,...}, "creator": {...}}
         """
+        spatial_hits = 0
+        spatial_misses = 0
+
         for subset, df in self.content_dfs.items():
             id_col = find_column(df, ["o:id", "id"])
             if not id_col:
@@ -227,6 +246,12 @@ class PersonDashboardGenerator:
             creator_col = CREATOR_FIELDS.get(subset)
             if creator_col and creator_col not in df.columns:
                 creator_col = None
+            spatial_col = find_column(df, [
+                SPATIAL_FIELDS.get(subset, "spatial"),
+                "spatial",
+                "dcterms:spatial",
+                "Couverture spatiale",
+            ])
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
             country_col = find_column(df, ["country", "countries"])
@@ -264,6 +289,21 @@ class PersonDashboardGenerator:
 
                 self.item_entities[item_key] = roles
 
+                # Parse spatial coverage independently — these are place
+                # names, not entity references, but we look them up in the
+                # same name → entity index so we can geocode them.
+                if spatial_col:
+                    seen_spatial: Set[int] = set()
+                    for name in parse_pipe_separated(row.get(spatial_col)):
+                        entity = self.entity_lookup.get(normalize_location_name(name))
+                        if entity and entity["o_id"] in self.lieux_rows:
+                            seen_spatial.add(entity["o_id"])
+                            spatial_hits += 1
+                        elif name.strip():
+                            spatial_misses += 1
+                    if seen_spatial:
+                        self.item_spatial[item_key] = seen_spatial
+
                 for role_name, o_ids in roles.items():
                     for o_id in o_ids:
                         if o_id in self.persons:
@@ -273,6 +313,10 @@ class PersonDashboardGenerator:
             f"Resolved {len(self.item_entities)} items; "
             f"{sum(1 for p in self.persons_items if self.persons_items[p]['subject'] or self.persons_items[p]['creator'])} "
             f"persons have at least one mention"
+        )
+        logger.info(
+            f"Spatial coverage: {spatial_hits} matched to Lieux entries, "
+            f"{spatial_misses} unmatched (free-form place names not in IWAC index)"
         )
 
     @staticmethod
@@ -293,7 +337,6 @@ class PersonDashboardGenerator:
         "year_max": None,
         "newspapers_count": 0,
         "countries_count": 0,
-        "neighbors_count": 0,
     }
 
     def _items_for_role(
@@ -332,7 +375,6 @@ class PersonDashboardGenerator:
                 "year_max": max(years) if years else None,
                 "newspapers_count": len(newspapers),
                 "countries_count": len(countries),
-                "neighbors_count": 0,  # filled in after network is built
             }
         return {"by_role": by_role}
 
@@ -415,11 +457,17 @@ class PersonDashboardGenerator:
         return {"by_role": by_role}
 
     def compute_locations(self, person_o_id: int) -> Dict[str, Any]:
-        """Join mentioned Lieux entities to their Coordonnées.
+        """Aggregate places associated with this person, per role.
 
-        ``self.lieux_rows`` is precomputed in ``build_entity_lookup``
-        (o_id → (lat, lng, country)). ``self.id_to_entity`` gives the
-        O(1) title lookup.
+        Pulls Lieux from three sources for every item the person touches:
+          1. The item's ``dcterms:spatial`` field (primary source — these
+             are explicitly tagged places, parsed in ``resolve_items``)
+          2. Any ``subject`` entity that happens to be a Lieux record
+          3. Any ``creator`` entity that happens to be a Lieux record
+
+        Each place is counted once per item, regardless of how many of
+        the three sources surfaced it. ``self.lieux_rows`` is precomputed
+        in ``build_entity_lookup`` (o_id → (lat, lng, country)).
         """
         by_role: Dict[str, Any] = {}
         for role in ("all", "subject", "creator"):
@@ -427,13 +475,11 @@ class PersonDashboardGenerator:
             loc_counter: Counter = Counter()
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
-                seen_here: Set[int] = set()
+                seen_here: Set[int] = set(self.item_spatial.get(key, set()))
                 for entity_o_id in roles.get("subject", []) + roles.get("creator", []):
-                    if entity_o_id not in self.lieux_rows:
-                        continue
-                    if entity_o_id in seen_here:
-                        continue
-                    seen_here.add(entity_o_id)
+                    if entity_o_id in self.lieux_rows:
+                        seen_here.add(entity_o_id)
+                for entity_o_id in seen_here:
                     loc_counter[entity_o_id] += 1
             entries = []
             for entity_o_id, count in loc_counter.most_common():
@@ -578,11 +624,6 @@ class PersonDashboardGenerator:
         countries = self.compute_countries(person_o_id)
         network = self.compute_network(person_o_id)
         locations = self.compute_locations(person_o_id)
-
-        # Backfill neighbors_count into summary now that network exists
-        for role in ("all", "subject", "creator"):
-            nodes = network["by_role"][role]["nodes"]
-            summary["by_role"][role]["neighbors_count"] = max(0, len(nodes) - 1)
 
         return {
             "version": 1,

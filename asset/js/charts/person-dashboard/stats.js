@@ -1,7 +1,7 @@
 /**
  * IWAC Visualizations — Person Dashboard: summary stats row
  *
- * 5 cards: total mentions, year range, newspapers, countries, neighbors.
+ * 4 cards: total mentions, year range, newspapers, countries.
  * Subscribes to the role facet and rebuilds when the role changes.
  */
 (function () {
@@ -32,7 +32,6 @@
         card(range, 'Period covered_short');
         card(slice.newspapers_count, 'Newspapers');
         card(slice.countries_count, 'Countries');
-        card(slice.neighbors_count, 'Neighbors');
         return cards;
     }
 

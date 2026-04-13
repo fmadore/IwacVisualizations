@@ -69,17 +69,21 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Build a `.iwac-vis-panel` wrapper with an `<h4>` title and a
-     * `.iwac-vis-chart` child that the controller can pass to
-     * `IWACVis.registerChart`.
+     * Build a `.iwac-vis-panel` wrapper with an `<h4>` title, an
+     * optional description paragraph, and a `.iwac-vis-chart` child
+     * that the controller can pass to `IWACVis.registerChart`.
      *
      * @param {string} className e.g. "iwac-vis-panel" or "iwac-vis-panel iwac-vis-panel--wide"
      * @param {string} titleText already-translated title
+     * @param {string} [descriptionText] already-translated description shown below the title
      * @returns {{panel: HTMLElement, chart: HTMLElement}}
      */
-    P.buildPanel = function (className, titleText) {
+    P.buildPanel = function (className, titleText, descriptionText) {
         var panel = P.el('div', className);
         panel.appendChild(P.el('h4', null, titleText));
+        if (descriptionText) {
+            panel.appendChild(P.el('p', 'iwac-vis-panel-desc', descriptionText));
+        }
         var chart = P.el('div', 'iwac-vis-chart');
         panel.appendChild(chart);
         return { panel: panel, chart: chart };
