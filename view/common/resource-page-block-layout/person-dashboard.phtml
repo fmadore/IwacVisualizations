@@ -19,6 +19,7 @@
 // Module::addAssets() currently attaches i18n/theme/core; panel-specific
 // shared primitives are enqueued here in load order.
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'));
