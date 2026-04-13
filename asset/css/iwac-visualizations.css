@@ -13,6 +13,12 @@
 /*  added as each visualization is built.                                */
 /* =================================================================== */
 
+/* Breakpoints (cannot use var() in @media — values documented here):
+   sm: 640px   (large phones)
+   md: 768px   (tablets)
+   lg: 1024px  (small laptops)
+*/
+
 /* ------------------------------------------------------------------- */
 /*  Block wrapper                                                       */
 /* ------------------------------------------------------------------- */
@@ -95,6 +101,12 @@
     width: 100%;
     min-width: 0;
     min-height: 320px;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-panel > .iwac-vis-chart {
+        min-height: 280px;
+    }
 }
 
 /* ------------------------------------------------------------------- */
@@ -225,11 +237,11 @@
     gap: var(--space-3, 0.75rem);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 640px) { /* sm */
     .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) { /* lg */
     .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
 }
 
@@ -283,7 +295,7 @@
     gap: var(--space-4, 1rem);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 768px) { /* md */
     .iwac-vis-overview-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -310,7 +322,13 @@
 }
 
 .iwac-vis-overview-grid .iwac-vis-panel--wide .iwac-vis-chart {
-    min-height: 360px;
+    min-height: clamp(280px, 40vh, 360px);
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-overview-grid .iwac-vis-chart {
+        min-height: 240px;
+    }
 }
 
 /* Entity tabs */
@@ -561,7 +579,7 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { background: #064e3b; colo
 /* =================================================================== */
 
 .iwac-vis-panel--wordcloud .iwac-vis-chart {
-    min-height: 520px;
+    min-height: clamp(320px, 50vh, 520px);
 }
 
 .iwac-vis-wordcloud-meta {
@@ -689,7 +707,7 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { background: #064e3b; colo
 
 .iwac-vis-map {
     width: 100%;
-    height: 520px;
+    height: clamp(320px, 60vh, 520px);
     border-radius: var(--radius-sm, 4px);
     overflow: hidden;
     position: relative;
