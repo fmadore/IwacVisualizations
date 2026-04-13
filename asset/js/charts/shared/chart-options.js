@@ -26,6 +26,91 @@
     var t = P.t;
     var fmt = P.formatNumber;
     var esc = P.escapeHtml;
+    var R = ns.responsive;
+
+    /* ----------------------------------------------------------------- */
+    /*  Shared private helpers                                            */
+    /* ----------------------------------------------------------------- */
+
+    C._grid = function (overrides) {
+        var defaults = { left: 48, right: 24, top: 48, bottom: 32, containLabel: true };
+        if (!overrides) return defaults;
+        var result = {};
+        for (var k in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, k)) {
+                result[k] = overrides[k] !== undefined ? overrides[k] : defaults[k];
+            }
+        }
+        for (var k2 in overrides) {
+            if (Object.prototype.hasOwnProperty.call(overrides, k2) && !(k2 in defaults)) {
+                result[k2] = overrides[k2];
+            }
+        }
+        return result;
+    };
+
+    C._dataZoom = function (count, opts) {
+        opts = opts || {};
+        var threshold = opts.threshold || 20;
+        if (count <= threshold) return [];
+        var start = opts.start != null ? opts.start : 60;
+        return [
+            { type: 'slider', start: start, end: 100, bottom: 8, height: 18 },
+            { type: 'inside' }
+        ];
+    };
+
+    C._truncate = function (str, maxLen) {
+        if (!str || str.length <= maxLen) return str || '';
+        var head = Math.floor((maxLen - 1) / 2);
+        var tail = maxLen - 1 - head;
+        return str.slice(0, head) + '\u2026' + str.slice(-tail);
+    };
+
+    C._barDefaults = function (direction) {
+        var radius = direction === 'horizontal'
+            ? [0, 2, 2, 0]
+            : [2, 2, 0, 0];
+        return {
+            barMaxWidth: 24,
+            emphasis: { focus: 'series' },
+            blur: { itemStyle: { opacity: 0.35 } },
+            itemStyle: { borderRadius: radius }
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Country color map                                                 */
+    /* ----------------------------------------------------------------- */
+
+    var COUNTRY_MAP = {
+        'Benin':            0,
+        'B\u00e9nin':       0,
+        'Burkina Faso':     1,
+        "C\u00f4te d'Ivoire": 2,
+        'Niger':            3,
+        'Nigeria':          4,
+        'Togo':             5,
+        'S\u00e9n\u00e9gal': 6,
+        'Senegal':          6
+    };
+    var _dynamicIdx = 7;
+    var _dynamicMap = {};
+
+    C._countryColor = function (country) {
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        if (palette.length === 0) palette = ['#e67a14', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
+        var idx;
+        if (COUNTRY_MAP[country] != null) {
+            idx = COUNTRY_MAP[country];
+        } else if (_dynamicMap[country] != null) {
+            idx = _dynamicMap[country];
+        } else {
+            idx = _dynamicIdx++;
+            _dynamicMap[country] = idx;
+        }
+        return palette[idx % palette.length];
+    };
 
     /* ----------------------------------------------------------------- */
     /*  Stacked timeline (bar) — year × category                          */
