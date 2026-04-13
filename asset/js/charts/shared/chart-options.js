@@ -53,7 +53,9 @@
         opts = opts || {};
         var threshold = opts.threshold || 20;
         if (count <= threshold) return [];
-        var start = opts.start != null ? opts.start : 60;
+        // Default start: 0 so the full range is visible on load. Users can
+        // drag the slider to zoom in. Previous default of 60 hid early years.
+        var start = opts.start != null ? opts.start : 0;
         return [
             { type: 'slider', start: start, end: 100, bottom: 8, height: 18 },
             { type: 'inside' }
@@ -67,13 +69,17 @@
         return str.slice(0, head) + '\u2026' + str.slice(-tail);
     };
 
+    /**
+     * Returns primitive values (numbers, not objects) so callers can compose
+     * them into fresh option literals each call. Sharing object references
+     * across series caused hover-state bugs where ECharts mutated the shared
+     * itemStyle/emphasis/blur and other series rendered with broken state.
+     */
     C._barDefaults = function (direction) {
         var horizontal = direction === 'horizontal';
         return {
             barMaxWidth: horizontal ? 24 : 28,
-            emphasis: { focus: 'series' },
-            blur: { itemStyle: { opacity: 0.35 } },
-            itemStyle: { borderRadius: horizontal ? [0, 2, 2, 0] : [2, 2, 0, 0] }
+            borderRadius: horizontal ? [0, 2, 2, 0] : [2, 2, 0, 0]
         };
     };
 
@@ -141,16 +147,15 @@
         var barDef = C._barDefaults('vertical');
         var useCountryColors = opts.useCountryColors !== false;
         var series = categories.map(function (cat) {
-            var itemStyle = useCountryColors
-                ? { borderRadius: barDef.itemStyle.borderRadius, color: C._countryColor(cat) }
-                : { borderRadius: barDef.itemStyle.borderRadius };
+            var itemStyle = { borderRadius: barDef.borderRadius.slice() };
+            if (useCountryColors) itemStyle.color = C._countryColor(cat);
             return {
                 name: cat,
                 type: 'bar',
                 stack: 'total',
                 barMaxWidth: barDef.barMaxWidth,
-                emphasis: barDef.emphasis,
-                blur: barDef.blur,
+                emphasis: { focus: 'series' },
+                blur: { itemStyle: { opacity: 0.5 } },
                 itemStyle: itemStyle,
                 data: (timeline.series && timeline.series[cat]) || []
             };
@@ -220,7 +225,7 @@
                 type: 'bar',
                 data: values,
                 barMaxWidth: barDef.barMaxWidth - 2,
-                itemStyle: barDef.itemStyle,
+                itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: {
                     show: true,
                     position: 'right',
@@ -284,9 +289,7 @@
                     }
                 },
                 emphasis: {
-                    label: { show: true, fontWeight: 'bold' },
-                    scale: true,
-                    scaleSize: 6
+                    label: { show: true, fontWeight: 'bold' }
                 },
                 labelLine: { show: true },
                 data: data
@@ -365,7 +368,7 @@
                 type: 'bar',
                 data: values,
                 barMaxWidth: barDef.barMaxWidth - 6,
-                itemStyle: barDef.itemStyle,
+                itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: {
                     show: true,
                     position: 'right',
@@ -441,7 +444,7 @@
                 type: 'bar',
                 data: values,
                 barMaxWidth: barDef.barMaxWidth - 4,
-                itemStyle: barDef.itemStyle,
+                itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: {
                     show: true,
                     position: 'right',
@@ -577,8 +580,7 @@
                     yAxisIndex: 0,
                     data: monthly,
                     barMaxWidth: barDef.barMaxWidth - 8,
-                    emphasis: barDef.emphasis,
-                    itemStyle: barDef.itemStyle
+                    itemStyle: { borderRadius: barDef.borderRadius.slice() }
                 },
                 {
                     name: t('Cumulative total'),
@@ -630,9 +632,9 @@
                 type: 'bar',
                 stack: 'total',
                 barMaxWidth: barDef.barMaxWidth,
-                emphasis: barDef.emphasis,
-                blur: barDef.blur,
-                itemStyle: { borderRadius: barDef.itemStyle.borderRadius },
+                emphasis: { focus: 'series' },
+                blur: { itemStyle: { opacity: 0.5 } },
+                itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 data: seriesMap[k] || []
             };
         });
