@@ -81,6 +81,12 @@
 
     /* ----------------------------------------------------------------- */
     /*  Country color map                                                 */
+    /*                                                                    */
+    /*  All known IWAC countries are pre-mapped in COUNTRY_MAP. The       */
+    /*  _dynamicMap fallback handles any unexpected country name (e.g.    */
+    /*  data drift) by assigning the next free palette slot. Since the    */
+    /*  page reloads on dashboard navigation, persistence across reinits  */
+    /*  is not a concern in practice.                                     */
     /* ----------------------------------------------------------------- */
 
     var COUNTRY_MAP = {
