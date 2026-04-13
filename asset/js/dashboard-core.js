@@ -17,6 +17,14 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
 
+    function debounce(fn, ms) {
+        var timer;
+        return function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(fn, ms);
+        };
+    }
+
     // Ensure themes are registered even if iwac-theme.js loaded before ECharts.
     if (typeof ns.registerEChartsThemes === 'function') {
         ns.registerEChartsThemes();
@@ -61,6 +69,19 @@
         var instance = ns.initChart(el);
         if (!instance) return null;
         var entry = { el: el, render: render, instance: instance, kind: 'echarts' };
+
+        if (typeof ResizeObserver !== 'undefined') {
+            var ro = new ResizeObserver(debounce(function () {
+                if (entry.instance && !entry.instance.isDisposed()) {
+                    entry.instance.resize({
+                        animation: { duration: 200, easing: 'cubicOut' }
+                    });
+                }
+            }, 150));
+            ro.observe(el.parentElement || el);
+            entry._resizeObserver = ro;
+        }
+
         ns._charts.push(entry);
         try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
         return instance;
@@ -80,9 +101,14 @@
     /** Remove disposed/detached charts from the tracking array. */
     ns.pruneCharts = function () {
         ns._charts = ns._charts.filter(function (c) {
-            if (c.kind === 'echarts') return c.instance && !c.instance.isDisposed();
-            if (c.kind === 'maplibre') return c.instance && !c.instance._removed;
-            return false;
+            var alive = false;
+            if (c.kind === 'echarts') alive = c.instance && !c.instance.isDisposed();
+            else if (c.kind === 'maplibre') alive = c.instance && !c.instance._removed;
+            if (!alive && c._resizeObserver) {
+                c._resizeObserver.disconnect();
+                c._resizeObserver = null;
+            }
+            return alive;
         });
     };
 
@@ -160,21 +186,22 @@
     // overflows its grid cell on window resize. Debounced so we don't
     // thrash during the drag.
 
-    var _resizeTimer = null;
-    function handleWindowResize() {
-        if (_resizeTimer) clearTimeout(_resizeTimer);
-        _resizeTimer = setTimeout(function () {
-            ns.pruneCharts();
-            ns._charts.forEach(function (entry) {
-                try {
-                    if (entry.kind === 'echarts' && entry.instance) entry.instance.resize();
-                    else if (entry.kind === 'maplibre' && entry.instance) entry.instance.resize();
-                } catch (e) {
-                    // Swallow — a disposed chart shouldn't take the whole page down
+    var handleWindowResize = debounce(function () {
+        ns.pruneCharts();
+        ns._charts.forEach(function (entry) {
+            try {
+                // ECharts entries with a per-chart ResizeObserver are already
+                // handled by that observer — skip them here to avoid double resize.
+                if (entry.kind === 'echarts' && entry.instance && !entry._resizeObserver) {
+                    entry.instance.resize();
+                } else if (entry.kind === 'maplibre' && entry.instance) {
+                    entry.instance.resize();
                 }
-            });
-        }, 120);
-    }
+            } catch (e) {
+                // Swallow — a disposed chart shouldn't take the whole page down
+            }
+        });
+    }, 120);
 
     function observeResize() {
         window.addEventListener('resize', handleWindowResize, { passive: true });

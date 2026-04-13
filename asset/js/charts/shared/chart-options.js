@@ -26,6 +26,95 @@
     var t = P.t;
     var fmt = P.formatNumber;
     var esc = P.escapeHtml;
+    var R = ns.responsive;
+
+    /* ----------------------------------------------------------------- */
+    /*  Shared private helpers                                            */
+    /* ----------------------------------------------------------------- */
+
+    C._grid = function (overrides) {
+        var defaults = { left: 48, right: 24, top: 48, bottom: 32, containLabel: true };
+        if (!overrides) return defaults;
+        var result = {};
+        for (var k in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, k)) {
+                result[k] = overrides[k] !== undefined ? overrides[k] : defaults[k];
+            }
+        }
+        for (var k2 in overrides) {
+            if (Object.prototype.hasOwnProperty.call(overrides, k2) && !(k2 in defaults)) {
+                result[k2] = overrides[k2];
+            }
+        }
+        return result;
+    };
+
+    C._dataZoom = function (count, opts) {
+        opts = opts || {};
+        var threshold = opts.threshold || 20;
+        if (count <= threshold) return [];
+        var start = opts.start != null ? opts.start : 60;
+        return [
+            { type: 'slider', start: start, end: 100, bottom: 8, height: 18 },
+            { type: 'inside' }
+        ];
+    };
+
+    C._truncate = function (str, maxLen) {
+        if (!str || str.length <= maxLen) return str || '';
+        var head = Math.floor((maxLen - 1) / 2);
+        var tail = maxLen - 1 - head;
+        return str.slice(0, head) + '\u2026' + str.slice(-tail);
+    };
+
+    C._barDefaults = function (direction) {
+        var horizontal = direction === 'horizontal';
+        return {
+            barMaxWidth: horizontal ? 24 : 28,
+            emphasis: { focus: 'series' },
+            blur: { itemStyle: { opacity: 0.35 } },
+            itemStyle: { borderRadius: horizontal ? [0, 2, 2, 0] : [2, 2, 0, 0] }
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Country color map                                                 */
+    /*                                                                    */
+    /*  All known IWAC countries are pre-mapped in COUNTRY_MAP. The       */
+    /*  _dynamicMap fallback handles any unexpected country name (e.g.    */
+    /*  data drift) by assigning the next free palette slot. Since the    */
+    /*  page reloads on dashboard navigation, persistence across reinits  */
+    /*  is not a concern in practice.                                     */
+    /* ----------------------------------------------------------------- */
+
+    var COUNTRY_MAP = {
+        'Benin':            0,
+        'B\u00e9nin':       0,
+        'Burkina Faso':     1,
+        "C\u00f4te d'Ivoire": 2,
+        'Niger':            3,
+        'Nigeria':          4,
+        'Togo':             5,
+        'S\u00e9n\u00e9gal': 6,
+        'Senegal':          6
+    };
+    var _dynamicIdx = 7;
+    var _dynamicMap = {};
+
+    C._countryColor = function (country) {
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        if (palette.length === 0) palette = ['#e67a14', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
+        var idx;
+        if (COUNTRY_MAP[country] != null) {
+            idx = COUNTRY_MAP[country];
+        } else if (_dynamicMap[country] != null) {
+            idx = _dynamicMap[country];
+        } else {
+            idx = _dynamicIdx++;
+            _dynamicMap[country] = idx;
+        }
+        return palette[idx % palette.length];
+    };
 
     /* ----------------------------------------------------------------- */
     /*  Stacked timeline (bar) — year × category                          */
@@ -40,6 +129,7 @@
      * @param {string} [opts.categoryName] default: t('Year')
      * @param {string} [opts.valueName] default: t('Count')
      * @param {boolean} [opts.filterUnknown=true]
+     * @param {boolean} [opts.useCountryColors=true] When true, applies stable per-country colors via C._countryColor
      */
     C.timeline = function (timeline, opts) {
         opts = opts || {};
@@ -48,31 +138,30 @@
         if (filter) categories = categories.filter(function (c) { return !P.isUnknown(c); });
         var years = timeline.years || [];
 
+        var barDef = C._barDefaults('vertical');
+        var useCountryColors = opts.useCountryColors !== false;
         var series = categories.map(function (cat) {
+            var itemStyle = useCountryColors
+                ? { borderRadius: barDef.itemStyle.borderRadius, color: C._countryColor(cat) }
+                : { borderRadius: barDef.itemStyle.borderRadius };
             return {
                 name: cat,
                 type: 'bar',
                 stack: 'total',
-                barMaxWidth: 28,
-                emphasis: { focus: 'series' },
-                blur: { itemStyle: { opacity: 0.35 } },
+                barMaxWidth: barDef.barMaxWidth,
+                emphasis: barDef.emphasis,
+                blur: barDef.blur,
+                itemStyle: itemStyle,
                 data: (timeline.series && timeline.series[cat]) || []
             };
         });
 
-        var useZoom = years.length > 20;
-        return {
-            grid: { left: 48, right: 16, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
-            legend: {
-                type: 'scroll',
-                top: 4,
-                itemWidth: 12,
-                itemHeight: 10
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
+        var dataZoom = C._dataZoom(years.length);
+        var useZoom = dataZoom.length > 0;
+        var base = {
+            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
+            legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
                 type: 'category',
                 data: years,
@@ -80,18 +169,16 @@
                 nameLocation: 'middle',
                 nameGap: useZoom ? 36 : 24
             },
-            yAxis: {
-                type: 'value',
-                name: opts.valueName || t('Count')
-            },
-            dataZoom: useZoom
-                ? [
-                      { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                      { type: 'inside' }
-                  ]
-                : [],
-            series: series
+            yAxis: { type: 'value', name: opts.valueName || t('Count') },
+            dataZoom: dataZoom,
+            series: series,
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -117,12 +204,11 @@
         }
         var names = list.map(function (e) { return e[nameKey]; });
         var values = list.map(function (e) { return e[valueKey]; });
-        return {
-            grid: { left: 8, right: 28, top: 8, bottom: 8, containLabel: true },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
+        var barDef = C._barDefaults('horizontal');
+
+        var base = {
+            grid: C._grid({ left: 8, top: 8, bottom: 8 }),
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: { type: 'value' },
             yAxis: {
                 type: 'category',
@@ -130,19 +216,24 @@
                 inverse: true,
                 axisTick: { show: false }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 22,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    }
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 2,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
                 }
-            ]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -165,7 +256,8 @@
         var data = (entries || []).map(function (e) {
             return { name: e[nameKey], value: e[valueKey] };
         });
-        return {
+
+        var base = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -180,26 +272,51 @@
                 itemWidth: 12,
                 itemHeight: 10
             },
-            series: [
-                {
-                    type: 'pie',
-                    radius: ['40%', '68%'],
-                    center: ['38%', '50%'],
-                    avoidLabelOverlap: true,
-                    label: {
-                        show: true,
-                        formatter: function (p) {
-                            return p.percent >= 5 ? p.name + '\n' + p.percent + '%' : '';
-                        }
-                    },
-                    emphasis: {
-                        label: { show: true, fontWeight: 'bold' }
-                    },
-                    labelLine: { show: true },
-                    data: data
-                }
-            ]
+            series: [{
+                type: 'pie',
+                radius: ['40%', '68%'],
+                center: ['38%', '50%'],
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    formatter: function (p) {
+                        return p.percent >= 5 ? p.name + '\n' + p.percent + '%' : '';
+                    }
+                },
+                emphasis: {
+                    label: { show: true, fontWeight: 'bold' },
+                    scale: true,
+                    scaleSize: 6
+                },
+                labelLine: { show: true },
+                data: data
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        var pieMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    legend: {
+                        orient: 'horizontal',
+                        left: 'center',
+                        bottom: 0,
+                        top: null,
+                        right: null
+                    },
+                    series: [{
+                        center: ['50%', '45%'],
+                        radius: ['30%', '58%']
+                    }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, pieMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -217,8 +334,10 @@
         var list = entries || [];
         var names = list.map(function (e) { return e.name; });
         var values = list.map(function (e) { return e.total; });
-        return {
-            grid: { left: 8, right: 48, top: 8, bottom: 8, containLabel: true },
+        var barDef = C._barDefaults('horizontal');
+
+        var base = {
+            grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -242,19 +361,24 @@
                 inverse: true,
                 axisTick: { show: false }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 18,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    }
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 6,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
                 }
-            ]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 120, smFontSize: 11 }), R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -278,16 +402,10 @@
         var values = list.map(function (e) {
             return { value: e.frequency, o_id: e.o_id };
         });
+        var barDef = C._barDefaults('horizontal');
 
-        function truncate(name) {
-            if (!name || name.length <= maxLen) return name || '';
-            var head = Math.floor((maxLen - 1) / 2);
-            var tail = maxLen - 1 - head;
-            return name.slice(0, head) + '\u2026' + name.slice(-tail);
-        }
-
-        return {
-            grid: { left: 8, right: 48, top: 8, bottom: 8, containLabel: true },
+        var base = {
+            grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -316,23 +434,28 @@
                 axisLabel: {
                     width: 220,
                     overflow: 'truncate',
-                    formatter: truncate
+                    formatter: function (v) { return C._truncate(v, maxLen); }
                 }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 20,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    },
-                    cursor: 'pointer'
-                }
-            ]
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 4,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
+                },
+                cursor: 'pointer'
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 120, smFontSize: 11 }), R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -355,11 +478,9 @@
      */
     C.treemap = function (tree, opts) {
         opts = opts || {};
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var surfaceColor = tokens.surface || '#fdfdfc';
 
-        // Sanitize: only leaves carry value, parents only carry children.
-        // This sidesteps an ECharts 6 bug in the treemap layout where
-        // `upperLabel` on non-leaf levels + value-carrying parents crashes
-        // with `Cannot set properties of undefined (setting '2')` in di().
         function sanitize(node, depth, depthRef) {
             if (!node || typeof node !== 'object') return null;
             depthRef.max = Math.max(depthRef.max, depth);
@@ -373,7 +494,6 @@
                 if (cleanKids.length > 0) {
                     return { name: node.name || '', children: cleanKids };
                 }
-                // kids array was effectively empty → treat as leaf if it has value
             }
             if (node.value != null && Number(node.value) > 0) {
                 return { name: node.name || '', value: Number(node.value) };
@@ -393,24 +513,24 @@
                     return crumbs + '<br><strong>' + fmt(info.value) + '</strong>';
                 }
             },
-            series: [
-                {
-                    type: 'treemap',
-                    name: opts.rootName || (tree && tree.name) || 'Root',
-                    roam: false,
-                    nodeClick: 'zoomToNode',
-                    leafDepth: 2,
-                    breadcrumb: { show: true, bottom: 4 },
-                    label: { show: true, formatter: '{b}' },
-                    itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: '#fff' },
-                    levels: [
-                        { itemStyle: { borderWidth: 0, gapWidth: 3 } },
-                        { itemStyle: { gapWidth: 2 } },
-                        { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1 } }
-                    ],
-                    data: children
-                }
-            ]
+            series: [{
+                type: 'treemap',
+                name: opts.rootName || (tree && tree.name) || 'Root',
+                roam: false,
+                nodeClick: 'zoomToNode',
+                leafDepth: 2,
+                breadcrumb: { show: true, bottom: 4 },
+                label: { show: true, formatter: '{b}' },
+                itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: surfaceColor },
+                levels: [
+                    { itemStyle: { borderWidth: 0, gapWidth: 3, borderColor: surfaceColor } },
+                    { itemStyle: { gapWidth: 2, borderColor: surfaceColor } },
+                    { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1, borderColor: surfaceColor } }
+                ],
+                data: children
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
     };
 
@@ -425,9 +545,12 @@
         var months = growth.months || [];
         var monthly = growth.monthly_additions || [];
         var cumulative = growth.cumulative_total || [];
-        var useZoom = months.length > 24;
-        return {
-            grid: { left: 48, right: 56, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
+        var barDef = C._barDefaults('vertical');
+        var dataZoom = C._dataZoom(months.length, { threshold: 24 });
+        var useZoom = dataZoom.length > 0;
+
+        var base = {
+            grid: C._grid({ right: 56, bottom: useZoom ? 56 : 32 }),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             legend: {
                 top: 4,
@@ -446,18 +569,16 @@
                 { type: 'value', name: t('Monthly') },
                 { type: 'value', name: t('Cumulative'), splitLine: { show: false } }
             ],
-            dataZoom: useZoom ? [
-                { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                { type: 'inside' }
-            ] : [],
+            dataZoom: dataZoom,
             series: [
                 {
                     name: t('Monthly additions'),
                     type: 'bar',
                     yAxisIndex: 0,
                     data: monthly,
-                    barMaxWidth: 20,
-                    emphasis: { focus: 'series' }
+                    barMaxWidth: barDef.barMaxWidth - 8,
+                    emphasis: barDef.emphasis,
+                    itemStyle: barDef.itemStyle
                 },
                 {
                     name: t('Cumulative total'),
@@ -468,8 +589,14 @@
                     symbol: 'none',
                     lineStyle: { width: 2 }
                 }
-            ]
+            ],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -495,22 +622,25 @@
         var categories = d.categories || [];
         var stackKeys = d.stackKeys || [];
         var seriesMap = d.series || {};
-        var useZoom = categories.length > 20;
 
+        var barDef = C._barDefaults('vertical');
         var series = stackKeys.map(function (k) {
             return {
                 name: opts.labelFor ? opts.labelFor(k) : k,
                 type: 'bar',
                 stack: 'total',
-                barMaxWidth: 28,
-                emphasis: { focus: 'series' },
-                blur: { itemStyle: { opacity: 0.35 } },
+                barMaxWidth: barDef.barMaxWidth,
+                emphasis: barDef.emphasis,
+                blur: barDef.blur,
+                itemStyle: { borderRadius: barDef.itemStyle.borderRadius },
                 data: seriesMap[k] || []
             };
         });
 
-        return {
-            grid: { left: 48, right: 16, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
+        var dataZoom = C._dataZoom(categories.length);
+        var useZoom = dataZoom.length > 0;
+        var base = {
+            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
@@ -521,12 +651,15 @@
                 nameGap: useZoom ? 36 : 24
             },
             yAxis: { type: 'value', name: opts.valueName || t('Count') },
-            dataZoom: useZoom ? [
-                { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                { type: 'inside' }
-            ] : [],
-            series: series
+            dataZoom: dataZoom,
+            series: series,
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -542,7 +675,6 @@
      * @param {Array<Object>} entries
      *   Each: { name, country, type, year_min, year_max, total }
      * @param {Object} [opts]
-     * @param {Object<string, string>} [opts.countryColors]
      */
     C.gantt = function (entries, opts) {
         opts = opts || {};
@@ -564,23 +696,8 @@
         if (!isFinite(yearMin)) yearMin = 1900;
         if (!isFinite(yearMax)) yearMax = new Date().getFullYear();
 
-        var palette = [
-            '#d97706', '#059669', '#2563eb', '#9333ea', '#dc2626', '#0891b2',
-            '#65a30d', '#ea580c', '#7c3aed', '#0d9488'
-        ];
-        var countryColorMap = {};
-        var colorIdx = 0;
-        function colorForCountry(country) {
-            if (!country) return palette[0];
-            if (opts.countryColors && opts.countryColors[country]) {
-                return opts.countryColors[country];
-            }
-            if (countryColorMap[country] == null) {
-                countryColorMap[country] = palette[colorIdx % palette.length];
-                colorIdx++;
-            }
-            return countryColorMap[country];
-        }
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var strokeColor = tokens.border ? tokens.border + '36' : 'rgba(0,0,0,0.13)';
 
         function renderItem(params, api) {
             var yIndex = api.value(0);
@@ -589,22 +706,22 @@
             var height = api.size([0, 1])[1] * 0.6;
             var width = Math.max(2, end[0] - start[0]);
             var entry = data[params.dataIndex] && data[params.dataIndex].entry;
-            var color = colorForCountry(entry && entry.country);
-            var rectShape = {
-                x: start[0],
-                y: start[1] - height / 2,
-                width: width,
-                height: height
-            };
+            var color = C._countryColor(entry && entry.country);
             return {
                 type: 'rect',
-                shape: rectShape,
-                style: { fill: color, stroke: '#00000022' }
+                shape: {
+                    x: start[0],
+                    y: start[1] - height / 2,
+                    width: width,
+                    height: height,
+                    r: 2
+                },
+                style: { fill: color, stroke: strokeColor }
             };
         }
 
-        return {
-            grid: { left: 8, right: 48, top: 48, bottom: 48, containLabel: true },
+        var base = {
+            grid: C._grid({ left: 8, right: 48, bottom: 48 }),
             tooltip: {
                 formatter: function (p) {
                     var entry = (data[p.dataIndex] || {}).entry || {};
@@ -635,10 +752,7 @@
                 data: names,
                 inverse: true,
                 axisTick: { show: false },
-                axisLabel: {
-                    width: 160,
-                    overflow: 'truncate'
-                }
+                axisLabel: { width: 160, overflow: 'truncate' }
             },
             dataZoom: list.length > 20 ? [
                 { type: 'slider', yAxisIndex: 0, start: 0, end: 100 / Math.max(1, list.length / 20), right: 8 },
@@ -649,8 +763,14 @@
                 renderItem: renderItem,
                 encode: { x: [1, 2], y: 0 },
                 data: data
-            }]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -712,14 +832,12 @@
         var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
         var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
         var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
+        var smMaxFont = Math.round(maxFont * 0.8);
 
-        // Palette pulled from the live IWAC theme when available, with a
-        // warm-to-cool default set as fallback. Randomized per-word so the
-        // cloud has visual variety instead of one flat colour.
-        var palette = (window.IWACVis && window.IWACVis.getPalette && window.IWACVis.getPalette())
+        var palette = (ns.getPalette && ns.getPalette())
             || ['#e67a14', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
 
-        return {
+        var base = {
             tooltip: {
                 confine: true,
                 formatter: function (p) {
@@ -729,8 +847,6 @@
             aria: { enabled: true },
             series: [{
                 type: 'wordCloud',
-                // Inverse-square shape function: behaves as a rectangle but
-                // lets the wordcloud layout actually fill the box.
                 shape: function (theta) {
                     var cos = Math.abs(Math.cos(theta));
                     var sin = Math.abs(Math.sin(theta));
@@ -759,13 +875,26 @@
                 emphasis: {
                     textStyle: {
                         fontWeight: 'bold',
-                        shadowBlur: 10,
-                        shadowColor: 'rgba(0,0,0,0.3)'
+                        shadowBlur: 14,
+                        shadowColor: 'rgba(0,0,0,0.4)'
                     }
                 },
                 data: data
             }]
         };
+
+        var wcMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    series: [{ sizeRange: [minFont, smMaxFont] }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, wcMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -816,13 +945,6 @@
             }
         }
 
-        function truncate(name) {
-            if (!name || name.length <= maxLen) return name || '';
-            var head = Math.floor((maxLen - 1) / 2);
-            var tail = maxLen - 1 - head;
-            return name.slice(0, head) + '\u2026' + name.slice(-tail);
-        }
-
         var scores = nodes.map(function (n) { return n.score || 0; });
         var maxScore = Math.max.apply(null, scores.concat([1]));
         var weights = edges.map(function (e) { return e.weight || 0; });
@@ -834,7 +956,7 @@
             var symbolSize = isCenter ? 46 : 14 + Math.sqrt(normScore) * 26;
             return {
                 id: String(n.o_id),
-                name: truncate(n.title || ''),
+                name: C._truncate(n.title || '', maxLen),
                 fullTitle: n.title || '',
                 entityType: n.type,
                 o_id: n.o_id,
@@ -872,27 +994,27 @@
             };
         });
 
-        return {
+        var base = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
                     if (p.dataType === 'node') {
-                        var data = p.data || {};
-                        var lines = ['<strong>' + esc(data.fullTitle || '') + '</strong>'];
-                        if (data.entityType && data.entityType !== 'center') {
-                            lines.push(t('entity_type_' + data.entityType));
+                        var nodeData = p.data || {};
+                        var lines = ['<strong>' + esc(nodeData.fullTitle || '') + '</strong>'];
+                        if (nodeData.entityType && nodeData.entityType !== 'center') {
+                            lines.push(t('entity_type_' + nodeData.entityType));
                         }
-                        if (data.cooc != null) {
-                            lines.push(t('mentions_count', { count: fmt(data.cooc) }));
+                        if (nodeData.cooc != null) {
+                            lines.push(t('mentions_count', { count: fmt(nodeData.cooc) }));
                         }
-                        if (data.score != null) {
-                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(data.score * 10) / 10));
+                        if (nodeData.score != null) {
+                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(nodeData.score * 10) / 10));
                         }
                         return lines.join('<br>');
                     }
                     if (p.dataType === 'edge') {
-                        var e = p.data || {};
-                        return t('mentions_count', { count: fmt(e.cooc || 0) });
+                        var edgeData = p.data || {};
+                        return t('mentions_count', { count: fmt(edgeData.cooc || 0) });
                     }
                     return '';
                 }
@@ -911,7 +1033,9 @@
                 focusNodeAdjacency: true,
                 emphasis: {
                     focus: 'adjacency',
-                    lineStyle: { width: 3 }
+                    lineStyle: { width: 4 },
+                    scale: true,
+                    scaleSize: 3
                 },
                 force: {
                     repulsion: 180,
@@ -921,7 +1045,27 @@
                 data: graphNodes,
                 links: graphEdges,
                 cursor: 'pointer'
-            }]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        var networkMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    series: [{
+                        force: {
+                            repulsion: 120,
+                            edgeLength: [30, 80]
+                        }
+                    }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, networkMedia)
+            : base;
     };
 })();
