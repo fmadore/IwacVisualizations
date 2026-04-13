@@ -1021,21 +1021,27 @@
                     return '';
                 }
             },
-            legend: legendData.length ? [{
-                data: legendData,
-                top: 6,
-                left: 'center',
-                orient: 'horizontal',
-                itemWidth: 14,
-                itemHeight: 10,
-                itemGap: 16,
-                padding: [6, 12],
-                backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                borderColor: 'rgba(0, 0, 0, 0.08)',
-                borderWidth: 1,
-                borderRadius: 6,
-                textStyle: { fontSize: 12 }
-            }] : [],
+            legend: legendData.length ? (function () {
+                // Theme-aware legend chrome — read tokens at build time so
+                // the panel matches IWAC light/dark and the user's CSS
+                // overrides without any hardcoded rgba.
+                var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+                return [{
+                    data: legendData,
+                    top: 6,
+                    left: 'center',
+                    orient: 'horizontal',
+                    itemWidth: 14,
+                    itemHeight: 10,
+                    itemGap: 16,
+                    padding: [6, 12],
+                    backgroundColor: tokens.surface || 'transparent',
+                    borderColor: tokens.borderLight || tokens.border || 'transparent',
+                    borderWidth: 1,
+                    borderRadius: 6,
+                    textStyle: { fontSize: 12, color: tokens.inkLight || tokens.ink }
+                }];
+            })() : [],
             series: [{
                 type: 'graph',
                 layout: 'force',

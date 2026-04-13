@@ -830,14 +830,18 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 
 .iwac-vis-panel-desc {
     margin: 0 0 var(--space-3, 0.75rem);
-    color: var(--muted, #6b7280);
-    font-size: var(--text-sm, 0.875rem);
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
     line-height: 1.5;
     max-width: 72ch;
 }
 
 /* -------------------------------------------------------------------------
  * Network panel — zoom toolbar overlay
+ *
+ * Buttons inherit color, border, focus-visible, and transition from
+ * `.iwac-vis-btn` (the network panel composes both classes), so this
+ * file only overrides the icon-button geometry.
  * ------------------------------------------------------------------------- */
 
 .iwac-vis-graph-host {
@@ -858,14 +862,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     width: 32px;
     height: 32px;
     padding: 0;
-    font-size: 18px;
+    font-size: var(--text-lg, 1.125rem);
     line-height: 1;
-    background: var(--surface, #fdfdfc);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 6px);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.06));
-}
-
-.iwac-vis-graph-toolbar__btn:hover {
-    background: var(--surface-raised, #f9f7f3);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
 }
