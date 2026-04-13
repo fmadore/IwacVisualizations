@@ -190,8 +190,13 @@
         ns.pruneCharts();
         ns._charts.forEach(function (entry) {
             try {
-                if (entry.kind === 'echarts' && entry.instance) entry.instance.resize();
-                else if (entry.kind === 'maplibre' && entry.instance) entry.instance.resize();
+                // ECharts entries with a per-chart ResizeObserver are already
+                // handled by that observer — skip them here to avoid double resize.
+                if (entry.kind === 'echarts' && entry.instance && !entry._resizeObserver) {
+                    entry.instance.resize();
+                } else if (entry.kind === 'maplibre' && entry.instance) {
+                    entry.instance.resize();
+                }
             } catch (e) {
                 // Swallow — a disposed chart shouldn't take the whole page down
             }
