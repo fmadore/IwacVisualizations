@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.935338+00:00",
+  "generated_at": "2026-04-13T12:40:59.133648+00:00",
   "entity": {
     "o_id": 75836,
     "title": "Alfa Taaka au service de la communauté",
@@ -159,17 +159,17 @@
           "count": 2
         },
         {
-          "o_id": 62025,
-          "name": "Donga",
-          "lat": 9.7,
-          "lng": 1.666667,
-          "count": 1
-        },
-        {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 62025,
+          "name": "Donga",
+          "lat": 9.7,
+          "lng": 1.666667,
           "count": 1
         }
       ]
@@ -211,6 +211,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.5,
             "rated_articles": 2
           },
@@ -235,6 +257,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           },
@@ -257,6 +301,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -306,13 +372,13 @@
           "Djougou",
           "Coopération",
           "Koweït",
+          "Ramadan",
+          "Bénin",
           "Zakat",
           "Solidarité",
           "Jeûne",
           "Donga",
-          "Aïd el-Fitr",
-          "Ramadan",
-          "Bénin"
+          "Aïd el-Fitr"
         ],
         "matrix": [
           [
@@ -393,9 +459,9 @@
             1,
             0,
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0
           ],
@@ -407,50 +473,8 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
             0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0
@@ -464,8 +488,50 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             1
           ],
@@ -477,9 +543,9 @@
             1,
             0,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             0
           ]

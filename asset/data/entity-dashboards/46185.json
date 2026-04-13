@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.420265+00:00",
+  "generated_at": "2026-04-13T12:40:58.680592+00:00",
   "entity": {
     "o_id": 46185,
     "title": "Conférence Islamique pour l'Organisation des Pèlerinages",
@@ -330,17 +330,17 @@
           "count": 8
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 6
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
           "lng": -4.00167,
+          "count": 6
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 6
         },
         {
@@ -372,20 +372,6 @@
           "count": 1
         },
         {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
-          "count": 1
-        },
-        {
-          "o_id": 414,
-          "name": "Soudan",
-          "lat": 16.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
           "o_id": 359,
           "name": "Maroc",
           "lat": 28.5,
@@ -400,10 +386,24 @@
           "count": 1
         },
         {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
           "o_id": 63386,
           "name": "Abidjan-Plateau",
           "lat": 5.32549,
           "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
           "count": 1
         }
       ]
@@ -457,6 +457,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 3
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 9
           },
@@ -487,6 +509,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.44,
@@ -525,6 +569,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.44,
             "rated_articles": 9
           }
@@ -557,19 +623,29 @@
         ],
         "cells": [
           [
+            1,
+            10,
+            1
+          ],
+          [
             2,
             3,
             1
           ],
           [
             1,
-            10,
-            1
+            1,
+            2
           ],
           [
             1,
-            1,
-            2
+            8,
+            1
+          ],
+          [
+            2,
+            11,
+            1
           ],
           [
             0,
@@ -579,16 +655,6 @@
           [
             2,
             7,
-            1
-          ],
-          [
-            2,
-            11,
-            1
-          ],
-          [
-            1,
-            8,
             1
           ]
         ]
@@ -601,19 +667,19 @@
         "names": [
           "Hadj",
           "La Mecque",
-          "Côte d'Ivoire",
           "Conseil National Islamique",
           "Abidjan",
+          "Côte d'Ivoire",
           "Arabie saoudite",
           "Gouvernement",
           "Association musulmane pour l'organisation du pèlerinage à la Mecque",
           "Comité National pour l'Organisation du Pèlerinage à la Mecque (CI)",
           "Djeddah",
           "Comité National pour l'Organisation du Pèlerinage à la Mecque",
-          "Médine",
           "Santé",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
-          "Économie"
+          "Économie",
+          "Médine"
         ],
         "matrix": [
           [
@@ -636,8 +702,8 @@
           [
             8,
             0,
-            6,
             5,
+            6,
             6,
             5,
             4,
@@ -645,33 +711,16 @@
             3,
             3,
             2,
-            2,
             1,
             2,
-            1
-          ],
-          [
-            6,
-            6,
-            0,
-            4,
-            5,
-            4,
-            4,
-            2,
-            3,
-            2,
-            2,
-            2,
             1,
-            1,
-            1
+            2
           ],
           [
             6,
             5,
-            4,
             0,
+            4,
             4,
             4,
             3,
@@ -687,8 +736,25 @@
           [
             6,
             6,
+            4,
+            0,
             5,
             4,
+            4,
+            2,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            6,
+            6,
+            4,
+            5,
             0,
             4,
             4,
@@ -696,84 +762,84 @@
             3,
             2,
             2,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            5,
+            5,
+            4,
+            4,
+            4,
+            0,
+            4,
+            1,
             2,
             1,
             1,
+            0,
+            1,
+            0,
+            2
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4,
+            0,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            0,
+            2,
+            2,
+            1,
+            2,
             1
           ],
           [
-            5,
-            5,
-            4,
-            4,
-            4,
-            0,
-            4,
-            1,
-            2,
-            1,
-            1,
-            2,
-            0,
-            1,
-            0
-          ],
-          [
-            4,
-            4,
-            4,
             3,
-            4,
-            4,
-            0,
-            1,
-            2,
-            1,
-            1,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
+            3,
+            3,
+            3,
             3,
             2,
             2,
-            3,
             2,
-            1,
-            1,
             0,
-            2,
             0,
             2,
             1,
-            2,
+            1,
             1,
             2
           ],
           [
             3,
             3,
-            3,
-            3,
-            3,
-            2,
-            2,
-            2,
-            0,
-            0,
-            2,
-            2,
             1,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
             2,
-            1,
             2,
             1,
             1,
@@ -805,70 +871,70 @@
           ],
           [
             2,
+            1,
             2,
+            1,
+            1,
+            0,
+            0,
             2,
+            1,
+            0,
+            1,
+            0,
+            1,
             2,
+            0
+          ],
+          [
             2,
             2,
             2,
             1,
-            2,
-            0,
+            1,
             1,
             0,
+            1,
+            1,
             0,
+            1,
+            1,
             0,
+            1,
             0
           ],
           [
             2,
             1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0,
             1,
             2,
             1,
             0,
-            0,
-            2,
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            2
+            0
           ],
           [
             2,
             2,
-            1,
+            2,
+            2,
+            2,
+            2,
             2,
             1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1
-          ],
-          [
             2,
-            1,
-            1,
-            2,
-            1,
-            0,
-            0,
-            2,
-            1,
             0,
             1,
             0,
-            2,
-            1,
+            0,
+            0,
             0
           ]
         ]

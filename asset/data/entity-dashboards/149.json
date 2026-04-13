@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.534452+00:00",
+  "generated_at": "2026-04-13T12:41:00.551197+00:00",
   "entity": {
     "o_id": 149,
     "title": "2e congrès de l'ABCI",
@@ -38,7 +38,7 @@
     "by_role": {
       "all": [
         {
-          "name": "L'Observateur Paalga",
+          "name": "Le Pays",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -47,7 +47,7 @@
           "year_max": 1995
         },
         {
-          "name": "Le Pays",
+          "name": "L'Observateur Paalga",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -115,6 +115,13 @@
     "by_role": {
       "all": [
         {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -133,13 +140,6 @@
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
           "count": 1
         }
       ]
@@ -181,6 +181,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           },
@@ -199,6 +221,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.5,
@@ -223,6 +267,28 @@
               {
                 "name": "Central",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -269,16 +335,16 @@
         "names": [
           "Culture",
           "Association Burkinabè pour la Culture Islamique",
+          "Solidarité",
+          "Mosquée",
+          "Ouagadougou",
           "Burkina Faso",
           "Centre culturel arabe libyen",
           "La Mecque",
           "Front de la Oumat Islamique",
           "Hadith",
           "Écoles coraniques",
-          "Niger",
-          "Solidarité",
-          "Mosquée",
-          "Ouagadougou"
+          "Niger"
         ],
         "matrix": [
           [
@@ -315,10 +381,10 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -329,10 +395,10 @@
             1,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -343,65 +409,9 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -414,9 +424,65 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
             0,
             0,
             0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
             0,
             1,
             1
@@ -427,10 +493,10 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             1
@@ -441,10 +507,10 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             0

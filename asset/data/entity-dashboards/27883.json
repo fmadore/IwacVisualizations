@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.289188+00:00",
+  "generated_at": "2026-04-13T12:40:58.553866+00:00",
   "entity": {
     "o_id": 27883,
     "title": "Assemblées de Dieu",
@@ -66,15 +66,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 1999,
-          "year_max": 2005
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 3,
           "articles": 3,
@@ -82,6 +73,15 @@
           "country": "Burkina Faso",
           "year_min": 1999,
           "year_max": 2010
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 2005
         },
         {
           "name": "Bénin Intelligent",
@@ -117,11 +117,11 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo",
+          "name": "Burkina Faso",
           "count": 4
         },
         {
-          "name": "Burkina Faso",
+          "name": "Togo",
           "count": 4
         },
         {
@@ -446,6 +446,13 @@
           "count": 3
         },
         {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 2
+        },
+        {
           "o_id": 349,
           "name": "Koudougou",
           "lat": 12.25263,
@@ -465,27 +472,6 @@
           "lat": 12.06157,
           "lng": 0.35843,
           "count": 2
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 2
-        },
-        {
-          "o_id": 60467,
-          "name": "Apégamé",
-          "lat": 6.85,
-          "lng": 0.73333,
-          "count": 1
-        },
-        {
-          "o_id": 508,
-          "name": "Kara",
-          "lat": 9.5488888888889,
-          "lng": 1.1905555555556,
-          "count": 1
         },
         {
           "o_id": 299,
@@ -513,27 +499,6 @@
           "name": "Godomey",
           "lat": 6.38948,
           "lng": 2.34581,
-          "count": 1
-        },
-        {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
-          "count": 1
-        },
-        {
-          "o_id": 76314,
-          "name": "Kadiogo",
-          "lat": 12.333333,
-          "lng": -1.5,
-          "count": 1
-        },
-        {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
           "count": 1
         },
         {
@@ -612,6 +577,41 @@
           "lat": 28.0,
           "lng": 17.0,
           "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 76314,
+          "name": "Kadiogo",
+          "lat": 12.333333,
+          "lng": -1.5,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 60467,
+          "name": "Apégamé",
+          "lat": 6.85,
+          "lng": 0.73333,
+          "count": 1
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 1
         }
       ]
     }
@@ -624,11 +624,11 @@
           "count": 4
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 2
         },
         {
-          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 2
         },
         {
@@ -696,6 +696,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.5,
             "rated_articles": 9
           },
@@ -746,6 +768,28 @@
               {
                 "name": "Non abordé",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.12,
@@ -800,6 +844,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 9
           }
@@ -813,10 +879,32 @@
       "all": {
         "years": [
           1995,
+          1996,
+          1997,
+          1998,
           1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
           2005,
+          2006,
+          2007,
+          2008,
           2009,
           2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
           2022
         ],
         "months": [
@@ -835,33 +923,33 @@
         ],
         "cells": [
           [
-            2,
+            27,
             3,
-            2
-          ],
-          [
-            1,
-            6,
             1
           ],
           [
-            5,
-            3,
+            14,
+            2,
             1
           ],
           [
             4,
-            0,
-            2
-          ],
-          [
-            1,
             5,
             1
           ],
           [
+            15,
+            0,
+            2
+          ],
+          [
+            10,
             3,
-            2,
+            2
+          ],
+          [
+            4,
+            6,
             1
           ],
           [
@@ -879,44 +967,41 @@
         "names": [
           "Togo",
           "Ouagadougou",
+          "Éducation",
           "Ahmed Têtou",
           "Lomé",
           "Union Musulmane du Togo",
-          "Éducation",
-          "Abass Bonfoh",
-          "Katari Foli-Bazi",
-          "Église Évangélique Presbytérienne du Togo",
           "Pluralisme religieux",
           "Paix",
           "Église du christianisme céleste",
+          "Burkina Faso",
+          "Adama Aorèma Ouédraogo",
           "Koudougou",
-          "Bobo-Dioulasso",
-          "Fada N'Gourma"
+          "Blaise Compaoré",
+          "Politique",
+          "Congrès pour la Démocratie et le Progrès"
         ],
         "matrix": [
           [
             0,
             1,
-            3,
-            3,
-            3,
             1,
-            2,
-            2,
-            2,
+            3,
+            3,
+            3,
             0,
             0,
             0,
             1,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
             0,
-            0,
-            0,
-            0,
             3,
             0,
             0,
@@ -924,6 +1009,26 @@
             1,
             1,
             0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            1,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            2,
+            1,
             2,
             2,
             2
@@ -932,12 +1037,12 @@
             3,
             0,
             0,
+            0,
             3,
             3,
             0,
-            2,
-            2,
-            2,
+            0,
+            0,
             0,
             0,
             0,
@@ -948,13 +1053,13 @@
           [
             3,
             0,
-            3,
             0,
             3,
             0,
-            2,
-            2,
-            2,
+            3,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -965,80 +1070,12 @@
           [
             3,
             0,
+            0,
             3,
             3,
             0,
             0,
-            2,
-            2,
-            2,
             0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            3,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            2,
-            2
-          ],
-          [
-            2,
-            0,
-            2,
-            2,
-            2,
-            0,
-            0,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            0,
-            2,
-            2,
-            2,
-            0,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            0,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
             0,
             0,
             0,
@@ -1055,21 +1092,18 @@
             0,
             0,
             0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
-            1,
-            1,
+            0,
             0,
             0
           ],
           [
             0,
             1,
-            0,
-            0,
-            0,
             1,
             0,
             0,
@@ -1077,8 +1111,11 @@
             1,
             0,
             1,
+            1,
+            1,
             0,
             1,
+            0,
             1
           ],
           [
@@ -1088,11 +1125,11 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
             1,
             1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -1101,26 +1138,6 @@
           [
             1,
             2,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            2,
-            0,
-            0,
-            0,
             2,
             0,
             0,
@@ -1129,15 +1146,15 @@
             1,
             0,
             0,
-            0,
+            2,
+            1,
+            2,
+            1,
             2
           ],
           [
-            0,
+            1,
             2,
-            0,
-            0,
-            0,
             2,
             0,
             0,
@@ -1145,8 +1162,79 @@
             0,
             1,
             0,
+            2,
+            0,
+            1,
+            2,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             2,
+            2,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            2,
+            1,
+            2,
+            1,
             0
           ]
         ]

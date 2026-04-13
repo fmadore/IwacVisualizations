@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:50.823870+00:00",
+  "generated_at": "2026-04-13T12:41:05.346736+00:00",
   "entity": {
     "o_id": 30,
     "title": "Peul",
@@ -71,13 +71,13 @@
           "year_max": 2018
         },
         {
-          "name": "Sidwaya",
+          "name": "Matin Libre",
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2020,
-          "year_max": 2020
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
         },
         {
           "name": "Fraternité",
@@ -98,6 +98,15 @@
           "year_max": 2020
         },
         {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
           "name": "La Nation",
           "total": 1,
           "articles": 1,
@@ -105,15 +114,6 @@
           "country": "Bénin",
           "year_min": 2018,
           "year_max": 2018
-        },
-        {
-          "name": "Matin Libre",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2023,
-          "year_max": 2023
         }
       ]
     }
@@ -239,17 +239,17 @@
             "score": 2.2877
           },
           {
-            "o_id": 283,
-            "title": "Bénin",
-            "type": "Lieux",
-            "cooc": 3,
-            "score": 2.2219
-          },
-          {
             "o_id": 284,
             "title": "Bobo-Dioulasso",
             "type": "Lieux",
             "cooc": 2,
+            "score": 2.2219
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
             "score": 2.2219
           },
           {
@@ -369,15 +369,15 @@
           },
           {
             "source": 30,
-            "target": 283,
-            "weight": 2.2219,
-            "cooc": 3
-          },
-          {
-            "source": 30,
             "target": 284,
             "weight": 2.2219,
             "cooc": 2
+          },
+          {
+            "source": 30,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
           },
           {
             "source": 30,
@@ -424,13 +424,6 @@
           "count": 4
         },
         {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
-          "count": 3
-        },
-        {
           "o_id": 357,
           "name": "Mali",
           "lat": 18.0,
@@ -438,24 +431,17 @@
           "count": 3
         },
         {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
-          "count": 2
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
         },
         {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
-          "count": 2
-        },
-        {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
           "count": 2
         },
         {
@@ -466,10 +452,10 @@
           "count": 2
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
           "count": 2
         },
         {
@@ -487,67 +473,18 @@
           "count": 2
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 2
         },
         {
-          "o_id": 369,
-          "name": "Nassoumbou",
-          "lat": 14.4089,
-          "lng": -1.5507,
-          "count": 1
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 1
-        },
-        {
-          "o_id": 286,
-          "name": "Bohicon",
-          "lat": 7.17826,
-          "lng": 2.0667,
-          "count": 1
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 62020,
-          "name": "Bamako",
-          "lat": 12.645833,
-          "lng": -7.992222,
-          "count": 1
-        },
-        {
-          "o_id": 76344,
-          "name": "Atacora",
-          "lat": 10.3,
-          "lng": 1.366667,
-          "count": 1
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 2
         },
         {
           "o_id": 33161,
@@ -625,6 +562,69 @@
           "lat": 13.58278,
           "lng": -2.42158,
           "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 62020,
+          "name": "Bamako",
+          "lat": 12.645833,
+          "lng": -7.992222,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 369,
+          "name": "Nassoumbou",
+          "lat": 14.4089,
+          "lng": -1.5507,
+          "count": 1
+        },
+        {
+          "o_id": 76344,
+          "name": "Atacora",
+          "lat": 10.3,
+          "lng": 1.366667,
+          "count": 1
         }
       ]
     }
@@ -637,15 +637,15 @@
           "count": 4
         },
         {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        },
+        {
           "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
           "label": "don - offrir - geste - ong - vivre - solidarité",
-          "count": 1
-        },
-        {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         }
       ]
@@ -689,6 +689,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.43,
             "rated_articles": 7
           },
@@ -719,6 +741,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 4
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.14,
@@ -757,6 +801,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.57,
             "rated_articles": 7
           }
@@ -770,7 +836,9 @@
       "all": {
         "years": [
           2018,
+          2019,
           2020,
+          2021,
           2022,
           2023
         ],
@@ -790,33 +858,33 @@
         ],
         "cells": [
           [
-            1,
-            6,
-            1
-          ],
-          [
-            2,
-            8,
-            1
-          ],
-          [
-            1,
-            5,
-            1
-          ],
-          [
-            0,
-            9,
-            1
-          ],
-          [
             0,
             3,
             2
           ],
           [
-            3,
+            5,
             1,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            0,
+            9,
             1
           ]
         ]
@@ -831,17 +899,17 @@
           "Radicalisation",
           "Burkina Faso",
           "Extrémisme",
-          "Bénin",
           "Mali",
-          "Cohésion sociale",
+          "Bénin",
+          "Niger",
+          "Nigéria",
           "Soum",
-          "Gouvernance",
+          "Tenkodogo",
+          "Bobo-Dioulasso",
+          "Cohésion sociale",
           "Djibo",
-          "Sécurité",
           "Dori",
-          "Ibrahim Malam Dicko",
-          "Cohabitation religieuse",
-          "Nigéria"
+          "Éducation"
         ],
         "matrix": [
           [
@@ -849,10 +917,10 @@
             6,
             4,
             3,
-            2,
             3,
             2,
-            2,
+            1,
+            1,
             2,
             2,
             2,
@@ -866,10 +934,10 @@
             0,
             4,
             3,
-            2,
             3,
             2,
-            2,
+            1,
+            1,
             2,
             2,
             2,
@@ -883,6 +951,9 @@
             4,
             0,
             3,
+            2,
+            1,
+            1,
             1,
             2,
             2,
@@ -890,9 +961,6 @@
             2,
             2,
             2,
-            2,
-            2,
-            1,
             1
           ],
           [
@@ -900,33 +968,16 @@
             3,
             3,
             0,
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1
-          ],
-          [
-            2,
             2,
             1,
             1,
-            0,
             1,
-            0,
-            0,
+            2,
             1,
-            0,
-            0,
-            0,
-            0,
             1,
+            2,
+            2,
+            2,
             1
           ],
           [
@@ -934,62 +985,11 @@
             3,
             2,
             2,
-            1,
             0,
             1,
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            0,
-            2,
-            1,
-            2,
-            2,
-            2,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            2,
-            0,
-            1,
-            2,
-            2,
-            2,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            0,
             1,
             1,
             1,
@@ -1000,77 +1000,27 @@
           [
             2,
             2,
-            2,
-            2,
-            0,
             1,
-            2,
-            2,
+            1,
             1,
             0,
-            2,
-            2,
-            2,
+            0,
             1,
-            0
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
           ],
           [
-            2,
-            2,
-            2,
-            2,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
-            1,
-            2,
-            2,
-            1,
-            2,
-            0,
-            2,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            0,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            2,
-            0,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            1,
-            1,
             0,
             1,
             1,
@@ -1079,8 +1029,7 @@
             1,
             1,
             1,
-            0,
-            0
+            1
           ],
           [
             1,
@@ -1089,14 +1038,133 @@
             1,
             1,
             1,
-            0,
-            0,
             1,
             0,
             0,
             0,
             0,
             0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            2,
+            0,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ]
         ]

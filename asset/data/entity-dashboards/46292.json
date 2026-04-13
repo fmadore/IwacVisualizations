@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:47.330306+00:00",
+  "generated_at": "2026-04-13T12:41:01.259094+00:00",
   "entity": {
     "o_id": 46292,
     "title": "Charnier de Yopougon",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2004,
-          "year_max": 2004
-        },
-        {
           "name": "Le Jour",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
         },
         {
           "name": "Notre Voie",
@@ -270,6 +270,13 @@
           "count": 3
         },
         {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
           "o_id": 63374,
           "name": "Benghazi",
           "lat": 32.116667,
@@ -319,13 +326,6 @@
           "count": 1
         },
         {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
           "o_id": 23691,
           "name": "Abobo",
           "lat": 5.418889,
@@ -339,11 +339,11 @@
     "by_role": {
       "all": [
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
@@ -391,6 +391,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.67,
             "rated_articles": 3
           },
@@ -413,6 +435,28 @@
               {
                 "name": "Très central",
                 "count": 3
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.33,
@@ -447,6 +491,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.33,
             "rated_articles": 3
           }
@@ -460,6 +526,8 @@
       "all": {
         "years": [
           2001,
+          2002,
+          2003,
           2004
         ],
         "months": [
@@ -478,14 +546,14 @@
         ],
         "cells": [
           [
-            1,
-            4,
-            1
-          ],
-          [
             0,
             5,
             2
+          ],
+          [
+            3,
+            4,
+            1
           ]
         ]
       }
@@ -500,16 +568,16 @@
           "Yopougon",
           "Politique",
           "Laurent Gbagbo",
-          "Hadj",
-          "Aboubacar Fofana",
-          "Crise",
-          "Réconciliation",
           "Conflit",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Hadj",
+          "Crise",
+          "Réconciliation",
           "Djiguiba Cissé",
-          "Guerre",
-          "Benghazi",
-          "Tripoli"
+          "Aboubacar Fofana",
+          "Rassemblement des républicains de Côte d'Ivoire",
+          "Conseil National Islamique",
+          "Abidjan-Plateau"
         ],
         "matrix": [
           [
@@ -604,28 +672,11 @@
             2,
             2,
             0,
-            1,
-            2,
             2,
             1,
             1,
             1,
-            1,
-            1,
-            1
-          ],
-          [
             2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
             1,
             1,
             1,
@@ -638,11 +689,11 @@
             2,
             2,
             2,
-            1,
             0,
+            1,
+            1,
+            1,
             2,
-            1,
-            1,
             1,
             1,
             1,
@@ -654,11 +705,11 @@
             2,
             2,
             2,
-            2,
             1,
-            2,
+            1,
             0,
-            1,
+            2,
+            2,
             1,
             1,
             1,
@@ -673,50 +724,67 @@
             2,
             1,
             1,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
             1,
             1,
             0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
             2,
             2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
             0,
             0,
             0
           ],
           [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            2,
-            0,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
             1,
             1,
@@ -726,8 +794,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -743,8 +811,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             0,
@@ -760,8 +828,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             1,

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:10.250201+00:00",
+  "generated_at": "2026-04-13T12:41:24.236593+00:00",
   "entity": {
     "o_id": 76343,
     "title": "Médersas",
@@ -52,15 +52,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Sidwaya",
-          "total": 5,
-          "articles": 5,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1994,
-          "year_max": 2004
-        },
-        {
           "name": "Le Pays",
           "total": 5,
           "articles": 5,
@@ -68,6 +59,15 @@
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2013
+        },
+        {
+          "name": "Sidwaya",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 2004
         },
         {
           "name": "L'Observateur Paalga",
@@ -406,17 +406,17 @@
           "count": 4
         },
         {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
-          "count": 2
-        },
-        {
           "o_id": 63422,
           "name": "Passoré",
           "lat": 12.95,
           "lng": -2.2666666666667,
+          "count": 2
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
           "count": 2
         },
         {
@@ -425,6 +425,13 @@
           "lat": 11.17715,
           "lng": -4.2979,
           "count": 2
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
         },
         {
           "o_id": 312,
@@ -445,6 +452,20 @@
           "name": "Gounghin",
           "lat": 12.35641975819987,
           "lng": -1.5480543813205,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
+        },
+        {
+          "o_id": 368,
+          "name": "Namissiguima",
+          "lat": 13.59468,
+          "lng": -2.21892,
           "count": 1
         },
         {
@@ -474,27 +495,6 @@
           "lat": 13.583333,
           "lng": -2.416667,
           "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 368,
-          "name": "Namissiguima",
-          "lat": 13.59468,
-          "lng": -2.21892,
-          "count": 1
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
-          "count": 1
         }
       ]
     }
@@ -515,11 +515,11 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
       ]
@@ -559,6 +559,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 9
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.08,
             "rated_articles": 13
           },
@@ -585,6 +607,28 @@
               {
                 "name": "Central",
                 "count": 4
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 4
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.15,
@@ -615,6 +659,28 @@
                 "count": 12
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 12
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.08,
             "rated_articles": 13
           }
@@ -629,11 +695,24 @@
         "years": [
           1993,
           1994,
+          1995,
           1996,
+          1997,
+          1998,
           1999,
           2000,
           2001,
+          2002,
+          2003,
           2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
           2013
         ],
         "months": [
@@ -652,24 +731,49 @@
         ],
         "cells": [
           [
-            3,
-            4,
-            1
-          ],
-          [
             1,
             9,
             1
           ],
           [
+            7,
+            6,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            2
+          ],
+          [
             0,
             0,
             2
           ],
           [
-            2,
-            3,
-            2
+            11,
+            9,
+            1
+          ],
+          [
+            20,
+            5,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            6,
+            6,
+            1
           ],
           [
             1,
@@ -678,32 +782,7 @@
           ],
           [
             6,
-            9,
-            1
-          ],
-          [
-            7,
-            5,
-            1
-          ],
-          [
-            5,
-            2,
-            1
-          ],
-          [
             4,
-            6,
-            1
-          ],
-          [
-            0,
-            1,
-            1
-          ],
-          [
-            3,
-            6,
             1
           ]
         ]
@@ -718,17 +797,17 @@
           "Éducation",
           "Enseignement confessionnel islamique",
           "Ouagadougou",
-          "Coopération",
           "Alphabétisation",
-          "Communauté Musulmane du Burkina Faso",
           "Formation",
+          "Coopération",
           "Yako",
+          "Communauté Musulmane du Burkina Faso",
           "Association Mondiale de l'Appel Islamique",
-          "Toumani Triandé",
           "Oumarou Kanazoé",
+          "Toumani Triandé",
           "Centre culturel arabe libyen",
           "UNICEF",
-          "Ouahigouya"
+          "Passoré"
         ],
         "matrix": [
           [
@@ -755,8 +834,8 @@
             4,
             3,
             3,
-            4,
             3,
+            4,
             4,
             2,
             3,
@@ -772,12 +851,12 @@
             5,
             4,
             4,
-            3,
             4,
             3,
             3,
-            2,
             3,
+            3,
+            2,
             2,
             2,
             2
@@ -787,30 +866,13 @@
             4,
             5,
             0,
-            3,
-            1,
             1,
             2,
-            0,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            4,
-            3,
-            4,
             3,
             0,
             1,
-            0,
             2,
-            0,
-            3,
-            0,
+            1,
             0,
             0,
             0,
@@ -821,33 +883,16 @@
             3,
             4,
             1,
-            1,
-            0,
-            0,
-            2,
-            2,
-            1,
             0,
             2,
             1,
-            1,
-            0
-          ],
-          [
-            4,
-            4,
-            3,
-            1,
-            0,
-            0,
-            0,
-            0,
             2,
             0,
-            3,
             1,
+            2,
             0,
-            0,
+            1,
+            1,
             2
           ],
           [
@@ -856,43 +901,77 @@
             4,
             2,
             2,
-            2,
             0,
-            0,
-            1,
-            2,
-            0,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            4,
-            4,
-            3,
-            0,
-            0,
-            2,
             2,
             1,
             0,
-            0,
             2,
-            2,
+            1,
             0,
-            0,
+            1,
+            1,
             1
           ],
           [
+            4,
             3,
-            2,
+            4,
             3,
+            1,
             2,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            0,
+            2,
+            1,
+            0,
+            0,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            4,
             3,
             1,
             0,
+            0,
+            0,
             2,
+            0,
+            0,
+            1,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            3,
+            2,
+            1,
+            2,
+            3,
+            0,
             0,
             0,
             0,
@@ -904,13 +983,13 @@
           [
             3,
             3,
-            2,
-            0,
-            0,
-            0,
             3,
+            1,
+            2,
+            1,
             0,
             2,
+            1,
             0,
             0,
             0,
@@ -921,13 +1000,13 @@
           [
             3,
             3,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2,
             3,
-            1,
-            0,
-            2,
-            1,
-            1,
-            2,
             0,
             0,
             0,
@@ -940,10 +1019,10 @@
             2,
             2,
             0,
-            0,
+            1,
             1,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -957,10 +1036,10 @@
             2,
             2,
             0,
-            0,
+            1,
             1,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -974,11 +1053,11 @@
             2,
             2,
             0,
-            0,
+            2,
+            1,
             0,
             2,
             0,
-            1,
             0,
             2,
             0,

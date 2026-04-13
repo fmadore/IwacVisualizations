@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.306306+00:00",
+  "generated_at": "2026-04-13T12:40:58.565353+00:00",
   "entity": {
     "o_id": 31357,
     "title": "Collectif Sauvons le Togo",
@@ -157,6 +157,13 @@
   "locations": {
     "by_role": {
       "all": [
+        {
+          "o_id": 309,
+          "name": "Émirats arabes unis",
+          "lat": 23.75,
+          "lng": 54.5,
+          "count": 1
+        },
         {
           "o_id": 512,
           "name": "Kpalimé",
@@ -324,13 +331,6 @@
           "lat": 41.893055555556,
           "lng": 12.482777777778,
           "count": 1
-        },
-        {
-          "o_id": 309,
-          "name": "Émirats arabes unis",
-          "lat": 23.75,
-          "lng": 54.5,
-          "count": 1
         }
       ]
     }
@@ -352,18 +352,84 @@
           "gemini": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "chatgpt": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "mistral": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           }
@@ -418,14 +484,14 @@
           "Centre Culturel Islamique de Lomé II",
           "Union pour la République",
           "Al Wifaq",
-          "Kpalimé",
-          "Mango",
-          "Sokodé",
-          "Tchaoudjo",
-          "Abidjan",
-          "Allemagne",
-          "Kozah",
-          "Togo"
+          "Rassemblement du Peuple Togolais",
+          "Zakaria Agoro",
+          "Grande mosquée de Lomé",
+          "Émirats arabes unis",
+          "Coopération",
+          "Sani Karim",
+          "Akrawati Shamsidine Adjita",
+          "Kpalimé"
         ],
         "matrix": [
           [
@@ -470,13 +536,13 @@
             2,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ],
           [
@@ -487,13 +553,13 @@
             2,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ],
           [
@@ -504,13 +570,13 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ],
           [
@@ -550,11 +616,112 @@
           [
             1,
             1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             1,
             1,
@@ -562,7 +729,8 @@
             1,
             1,
             1,
-            1
+            0,
+            0
           ],
           [
             1,
@@ -572,115 +740,13 @@
             0,
             1,
             0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
             0,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
             0,
             0,
             0,
-            1,
             0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0
           ]
         ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:47.191311+00:00",
+  "generated_at": "2026-04-13T12:41:01.104902+00:00",
   "entity": {
     "o_id": 31359,
     "title": "Incendies marchés Lomé et Kara (2013)",
@@ -191,20 +191,6 @@
           "count": 2
         },
         {
-          "o_id": 559,
-          "name": "Université de Lomé",
-          "lat": 6.173669,
-          "lng": 1.215866,
-          "count": 1
-        },
-        {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 1
-        },
-        {
           "o_id": 512,
           "name": "Kpalimé",
           "lat": 6.91,
@@ -364,6 +350,20 @@
           "lat": 41.893055555556,
           "lng": 12.482777777778,
           "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "count": 1
         }
       ]
     }
@@ -385,18 +385,84 @@
           "gemini": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "chatgpt": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "mistral": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           }
@@ -428,22 +494,22 @@
         "cells": [
           [
             0,
+            0,
+            1
+          ],
+          [
+            0,
             5,
             3
           ],
           [
             0,
-            4,
-            1
-          ],
-          [
-            0,
-            0,
-            1
-          ],
-          [
-            0,
             2,
+            1
+          ],
+          [
+            0,
+            4,
             1
           ]
         ]
@@ -457,18 +523,18 @@
           "Faure Gnassingbé",
           "Union Musulmane du Togo",
           "Union pour la République",
-          "Kara",
-          "Terrorisme",
-          "Zakaria Agoro",
-          "Élections législatives togolaises de 2013",
           "Agbéyomé Kodjo",
-          "Fondation Islamique Aboudou Assouma pour la Charité",
-          "Aboudou Assouma",
-          "UMT reports du congrès",
-          "Association des Cadres Musulmans au Togo",
-          "Université de Lomé",
-          "Yaya Assadou Kolani",
-          "Mamadou Alioune Diouf"
+          "Kara",
+          "Élections législatives togolaises de 2013",
+          "Zakaria Agoro",
+          "Terrorisme",
+          "Kpalimé",
+          "Mango",
+          "Sokodé",
+          "Tchaoudjo",
+          "Abidjan",
+          "Allemagne",
+          "Kozah"
         ],
         "matrix": [
           [
@@ -476,10 +542,10 @@
             4,
             2,
             2,
-            1,
-            1,
-            1,
             2,
+            1,
+            1,
+            1,
             1,
             1,
             1,
@@ -509,11 +575,28 @@
             2,
             2,
             0,
+            1,
             2,
+            1,
             0,
             0,
             1,
             1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
             1,
             1,
             1,
@@ -526,8 +609,25 @@
             2,
             2,
             2,
+            1,
+            0,
+            1,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1,
+            1,
+            1,
             0,
             1,
             1,
@@ -538,6 +638,23 @@
             1,
             1,
             1
+          ],
+          [
+            1,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -558,62 +675,11 @@
           ],
           [
             1,
-            2,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            2,
             1,
             1,
             1,
             1,
-            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
             0,
             0,
             0,
@@ -629,8 +695,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -646,8 +712,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -663,8 +729,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -680,8 +746,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -697,8 +763,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -714,8 +780,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,

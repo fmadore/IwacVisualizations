@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.152599+00:00",
+  "generated_at": "2026-04-13T12:40:55.389411+00:00",
   "entity": {
     "o_id": 709,
     "title": "Observatoire National des Faits Religieux",
@@ -77,7 +77,7 @@
           "year_max": 2020
         },
         {
-          "name": "Le Pays",
+          "name": "L'Observateur Paalga",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -95,7 +95,7 @@
           "year_max": 2015
         },
         {
-          "name": "L'Observateur Paalga",
+          "name": "Le Pays",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -600,10 +600,10 @@
           "count": 3
         },
         {
-          "o_id": 554,
-          "name": "Italie",
-          "lat": 42.5,
-          "lng": 12.5,
+          "o_id": 374,
+          "name": "Orodara",
+          "lat": 10.98568,
+          "lng": -4.92612,
           "count": 2
         },
         {
@@ -614,25 +614,18 @@
           "count": 2
         },
         {
+          "o_id": 554,
+          "name": "Italie",
+          "lat": 42.5,
+          "lng": 12.5,
+          "count": 2
+        },
+        {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
           "count": 2
-        },
-        {
-          "o_id": 374,
-          "name": "Orodara",
-          "lat": 10.98568,
-          "lng": -4.92612,
-          "count": 2
-        },
-        {
-          "o_id": 344,
-          "name": "Kombissiri",
-          "lat": 12.06884,
-          "lng": -1.33644,
-          "count": 1
         },
         {
           "o_id": 294,
@@ -738,6 +731,13 @@
           "lat": 21.4225,
           "lng": 39.826111,
           "count": 1
+        },
+        {
+          "o_id": 344,
+          "name": "Kombissiri",
+          "lat": 12.06884,
+          "lng": -1.33644,
+          "count": 1
         }
       ]
     }
@@ -754,11 +754,11 @@
           "count": 2
         },
         {
-          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
           "count": 1
         }
       ]
@@ -808,6 +808,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 8
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 5
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.95,
@@ -862,6 +884,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 7
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 5
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.2,
             "rated_articles": 21
           },
@@ -898,6 +942,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 17
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.05,
             "rated_articles": 21
           }
@@ -916,6 +982,9 @@
           2018,
           2019,
           2020,
+          2021,
+          2022,
+          2023,
           2024
         ],
         "months": [
@@ -934,18 +1003,43 @@
         ],
         "cells": [
           [
+            5,
+            7,
+            4
+          ],
+          [
             1,
             7,
             2
           ],
           [
-            4,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            2,
             10,
             1
           ],
           [
+            3,
+            10,
+            1
+          ],
+          [
+            0,
             1,
-            6,
+            2
+          ],
+          [
+            0,
+            5,
             1
           ],
           [
@@ -954,63 +1048,38 @@
             1
           ],
           [
-            5,
-            7,
-            4
-          ],
-          [
-            0,
-            1,
-            2
-          ],
-          [
-            1,
-            3,
-            1
-          ],
-          [
-            0,
-            0,
-            2
-          ],
-          [
             0,
             4,
             1
           ],
           [
             0,
+            0,
+            2
+          ],
+          [
+            0,
             3,
             1
           ],
           [
-            2,
-            10,
-            1
-          ],
-          [
+            9,
             6,
-            6,
-            1
-          ],
-          [
-            2,
-            0,
             1
           ],
           [
             1,
-            0,
-            1
-          ],
-          [
             3,
-            10,
             1
           ],
           [
-            0,
-            5,
+            1,
+            6,
+            1
+          ],
+          [
+            4,
+            10,
             1
           ]
         ]
@@ -1030,11 +1099,11 @@
           "Conseil Supérieur de la Communication",
           "Radicalisation",
           "Fédération des Églises et Missions Évangéliques",
-          "Cohésion sociale",
-          "Ismaël Tiendrébéogo",
-          "Extrémisme",
           "Catholiques",
           "Protestants",
+          "Cohésion sociale",
+          "Extrémisme",
+          "Ismaël Tiendrébéogo",
           "Simon Compaoré"
         ],
         "matrix": [
@@ -1048,11 +1117,11 @@
             3,
             2,
             4,
-            1,
-            1,
-            1,
             3,
             3,
+            1,
+            1,
+            1,
             0
           ],
           [
@@ -1066,10 +1135,10 @@
             4,
             3,
             3,
+            3,
+            3,
+            3,
             2,
-            3,
-            3,
-            3,
             1
           ],
           [
@@ -1082,11 +1151,11 @@
             2,
             2,
             4,
+            1,
+            1,
             3,
             2,
             2,
-            1,
-            1,
             2
           ],
           [
@@ -1099,11 +1168,11 @@
             3,
             1,
             4,
+            2,
+            2,
             4,
-            1,
             3,
-            2,
-            2,
+            1,
             1
           ],
           [
@@ -1117,10 +1186,10 @@
             5,
             0,
             1,
-            2,
+            1,
+            1,
             3,
-            1,
-            1,
+            2,
             1
           ],
           [
@@ -1133,10 +1202,10 @@
             3,
             3,
             1,
+            2,
+            2,
             3,
-            2,
             4,
-            2,
             2,
             0
           ],
@@ -1150,11 +1219,11 @@
             0,
             2,
             1,
-            2,
-            2,
-            2,
             0,
             0,
+            2,
+            2,
+            2,
             0
           ],
           [
@@ -1167,11 +1236,11 @@
             2,
             0,
             0,
-            1,
+            0,
+            0,
             1,
             2,
-            0,
-            0,
+            1,
             1
           ],
           [
@@ -1184,11 +1253,45 @@
             1,
             0,
             0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            2,
+            1,
             2,
             0,
             0,
             1,
+            0,
+            4,
             1,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0,
+            1,
+            4,
+            0,
+            1,
+            1,
+            0,
             0
           ],
           [
@@ -1201,28 +1304,11 @@
             2,
             1,
             2,
-            0,
             1,
-            2,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            2,
-            1,
-            0,
             1,
             0,
             2,
-            0,
-            0,
+            1,
             0
           ],
           [
@@ -1235,44 +1321,27 @@
             2,
             2,
             0,
-            2,
+            1,
+            1,
             2,
             0,
-            1,
-            1,
+            2,
             0
           ],
           [
-            3,
-            3,
             1,
+            2,
             2,
             1,
             2,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            4,
-            0
-          ],
-          [
-            3,
-            3,
-            1,
+            2,
             2,
             1,
+            0,
+            0,
+            0,
+            1,
             2,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            4,
             0,
             0
           ],

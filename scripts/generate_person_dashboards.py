@@ -103,6 +103,11 @@ CENTRALITE_ORDER = [
     "Non abordé",
 ]
 
+# Subjectivité scores are integers 1..5 in the IWAC dataset. The
+# segmentedBar panel treats these as named categories so the same
+# {name, count} shape as polarité/centralité works unchanged.
+SUBJECTIVITE_BUCKETS = ["1", "2", "3", "4", "5"]
+
 # How many top entities to keep in the cooccurrence chord matrix. The
 # chord layout becomes unreadable above ~15 nodes.
 TOP_N_COOCCURRENCE = 15
@@ -637,6 +642,7 @@ class PersonDashboardGenerator:
             for model in SENTIMENT_MODELS:
                 pol_counter: Counter = Counter()
                 cen_counter: Counter = Counter()
+                sub_counter: Counter = Counter()
                 sub_values: List[float] = []
                 rated = 0
                 for key in item_keys:
@@ -652,11 +658,15 @@ class PersonDashboardGenerator:
                         cen_counter[cen] += 1
                     if sub is not None:
                         sub_values.append(float(sub))
+                        # Bucket into integer 1..5 (IWAC domain).
+                        bucket = max(1, min(5, int(round(float(sub)))))
+                        sub_counter[str(bucket)] += 1
                     if pol or cen or sub is not None:
                         rated += 1
                 # Force the canonical ordering even when categories are absent
                 pol_ordered = [{"name": n, "count": pol_counter.get(n, 0)} for n in POLARITE_ORDER]
                 cen_ordered = [{"name": n, "count": cen_counter.get(n, 0)} for n in CENTRALITE_ORDER]
+                sub_ordered = [{"name": n, "count": sub_counter.get(n, 0)} for n in SUBJECTIVITE_BUCKETS]
                 # Drop trailing all-zero categories (visual noise) but keep
                 # the canonical order in between.
                 while pol_ordered and pol_ordered[-1]["count"] == 0:
@@ -666,6 +676,7 @@ class PersonDashboardGenerator:
                 by_model[model] = {
                     "polarite": pol_ordered,
                     "centralite": cen_ordered,
+                    "subjectivite": sub_ordered,
                     "subjectivite_avg": (
                         round(sum(sub_values) / len(sub_values), 2)
                         if sub_values else None
@@ -686,31 +697,34 @@ class PersonDashboardGenerator:
     def compute_heatmap(self, person_o_id: int) -> Dict[str, Any]:
         """Year × month mention counts as ECharts heatmap cells.
 
-        Cells are emitted as ``[year_index, month_index, count]`` so the
-        ECharts heatmap series can consume them directly. Years that
-        have no items at all are dropped from the y axis.
+        The y-axis spans the FULL year range (min..max inclusive) of
+        items mentioning this person — same range the "Years" summary
+        card shows — so the two panels stay consistent even when most
+        dates are YYYY-only. Cells only populate for items with a
+        parseable YYYY-MM date; gap years render as an empty row.
         """
         by_role: Dict[str, Any] = {}
         for role in ("all", "subject", "creator"):
             buckets: Dict[Tuple[int, int], int] = Counter()
-            years_seen: Set[int] = set()
+            all_years: Set[int] = set()  # any year we can extract (YYYY or finer)
             for key in self._items_for_role(person_o_id, role):
                 date = self.items_meta.get(key, {}).get("pub_date") or ""
                 year = extract_year(date)
                 if year is None:
                     continue
-                # Try to extract a 1-12 month number from the date string.
+                all_years.add(year)
                 month = _extract_month_num(date)
                 if month is None:
-                    continue
+                    continue  # still count the year on the axis, just no cell
                 buckets[(year, month)] += 1
-                years_seen.add(year)
-            if not years_seen:
+            if not all_years:
                 by_role[role] = {"years": [], "months": list(range(1, 13)), "cells": []}
                 continue
-            years = sorted(years_seen)
+            # Full contiguous range so empty years render as blank rows.
+            years = list(range(min(all_years), max(all_years) + 1))
+            year_index = {y: i for i, y in enumerate(years)}
             cells = [
-                [years.index(y), m - 1, count]
+                [year_index[y], m - 1, count]
                 for (y, m), count in buckets.items()
             ]
             by_role[role] = {

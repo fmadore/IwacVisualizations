@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.338444+00:00",
+  "generated_at": "2026-04-13T12:40:55.571091+00:00",
   "entity": {
     "o_id": 732,
     "title": "Voix du pèlerin",
@@ -121,17 +121,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 2
         },
         {
@@ -247,6 +247,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.5,
             "rated_articles": 2
           },
@@ -265,6 +287,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.5,
@@ -295,6 +339,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -308,6 +374,10 @@
       "all": {
         "years": [
           2013,
+          2014,
+          2015,
+          2016,
+          2017,
           2018
         ],
         "months": [
@@ -326,13 +396,13 @@
         ],
         "cells": [
           [
-            1,
-            7,
+            0,
+            5,
             1
           ],
           [
-            0,
             5,
+            7,
             1
           ]
         ]
@@ -343,9 +413,11 @@
     "by_role": {
       "all": {
         "names": [
+          "Burkina Faso",
           "Arabie saoudite",
           "Hadj",
-          "Burkina Faso",
+          "Femmes",
+          "Fédération des Associations Islamiques du Burkina",
           "Paul Kaba Thieba",
           "Ramatoulaye",
           "Roch Marc Christian Kaboré",
@@ -355,9 +427,7 @@
           "Riyad",
           "Comité National de Suivi du Pèlerinage à la Mecque",
           "Bobo-Dioulasso",
-          "Côte d'Ivoire",
-          "Aboubacar Maïga II",
-          "Djeddah"
+          "Côte d'Ivoire"
         ],
         "matrix": [
           [
@@ -417,22 +487,40 @@
             1,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
             1,
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
             0,
             1,
             1,
@@ -442,32 +530,14 @@
             1,
             1,
             1,
-            1,
             1
           ],
           [
-            1,
-            1,
             1,
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
             1,
             0,
             1,
@@ -483,8 +553,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             0,
@@ -500,8 +570,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -517,8 +587,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -534,8 +604,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -551,8 +621,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -568,8 +638,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -585,8 +655,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -602,8 +672,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.081686+00:00",
+  "generated_at": "2026-04-13T12:40:55.307065+00:00",
   "entity": {
     "o_id": 696,
     "title": "Ligue des Femmes de la Communauté Musulmane du Burkina Faso",
@@ -55,15 +55,6 @@
           "year_max": 2013
         },
         {
-          "name": "Le Pays",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2001,
-          "year_max": 2007
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 2,
           "articles": 2,
@@ -71,6 +62,15 @@
           "country": "Burkina Faso",
           "year_min": 2002,
           "year_max": 2013
+        },
+        {
+          "name": "Le Pays",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2001,
+          "year_max": 2007
         }
       ]
     }
@@ -322,6 +322,13 @@
           "count": 2
         },
         {
+          "o_id": 76319,
+          "name": "Maison du Peuple",
+          "lat": 12.3722,
+          "lng": -1.5236,
+          "count": 1
+        },
+        {
           "o_id": 331,
           "name": "Iran",
           "lat": 32.0,
@@ -390,13 +397,6 @@
           "lat": 12.31538,
           "lng": -1.50888,
           "count": 1
-        },
-        {
-          "o_id": 76319,
-          "name": "Maison du Peuple",
-          "lat": 12.3722,
-          "lng": -1.5236,
-          "count": 1
         }
       ]
     }
@@ -405,11 +405,11 @@
     "by_role": {
       "all": [
         {
-          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 3
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 3
         },
         {
@@ -477,6 +477,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.67,
             "rated_articles": 7
           },
@@ -527,6 +549,28 @@
               {
                 "name": "Non abordé",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.17,
@@ -581,6 +625,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.33,
             "rated_articles": 7
           }
@@ -595,8 +661,16 @@
         "years": [
           2001,
           2002,
+          2003,
           2004,
+          2005,
+          2006,
           2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
           2013
         ],
         "months": [
@@ -615,14 +689,19 @@
         ],
         "cells": [
           [
-            0,
-            8,
+            1,
+            4,
             1
           ],
           [
-            4,
+            12,
             5,
             2
+          ],
+          [
+            0,
+            8,
+            1
           ],
           [
             3,
@@ -630,18 +709,13 @@
             1
           ],
           [
+            6,
+            5,
+            1
+          ],
+          [
             0,
             10,
-            1
-          ],
-          [
-            1,
-            4,
-            1
-          ],
-          [
-            2,
-            5,
             1
           ]
         ]
@@ -658,15 +732,15 @@
           "Aïchata Traoré",
           "Ouagadougou",
           "Éducation",
-          "Mahomet",
           "Mariage",
-          "Aboubacar Maïga II",
-          "Mosquée",
+          "Mahomet",
+          "Association Mondiale de l'Appel Islamique",
           "Alphabétisation",
           "Communauté Musulmane du Burkina Faso",
-          "Libye",
-          "Association Mondiale de l'Appel Islamique",
-          "Enseignement confessionnel islamique"
+          "Enseignement confessionnel islamique",
+          "Aboubacar Maïga II",
+          "Mosquée",
+          "Libye"
         ],
         "matrix": [
           [
@@ -727,14 +801,14 @@
             0,
             5,
             3,
-            2,
             3,
+            2,
+            2,
+            2,
+            2,
+            2,
             1,
             1,
-            2,
-            2,
-            2,
-            2,
             2
           ],
           [
@@ -747,10 +821,10 @@
             2,
             2,
             1,
+            2,
+            2,
+            2,
             1,
-            2,
-            2,
-            2,
             1,
             2
           ],
@@ -761,31 +835,14 @@
             3,
             2,
             0,
-            1,
             2,
             1,
             1,
             2,
             1,
-            0,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
-            3,
-            2,
-            2,
-            1,
-            0,
             1,
             1,
-            2,
-            0,
             1,
-            1,
-            0,
             0
           ],
           [
@@ -795,46 +852,63 @@
             3,
             2,
             2,
-            1,
-            0,
             0,
             1,
             1,
             1,
+            1,
+            1,
             0,
             1,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
             1
           ],
           [
             2,
             2,
             2,
-            1,
+            2,
             1,
             1,
             1,
             0,
             0,
-            1,
             0,
             0,
             1,
             1,
+            0,
             1
           ],
           [
             2,
             2,
             2,
-            1,
-            1,
-            1,
+            2,
+            2,
             2,
             1,
+            0,
+            0,
+            0,
             1,
-            0,
-            0,
-            0,
+            1,
             0,
             0,
             0
@@ -845,11 +919,11 @@
             2,
             2,
             2,
-            2,
-            0,
+            1,
+            1,
             1,
             0,
-            0,
+            1,
             0,
             1,
             0,
@@ -864,44 +938,10 @@
             2,
             1,
             1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
             0,
             1,
             1,
-            0,
-            0,
+            1,
             0,
             1,
             0,
@@ -911,9 +951,43 @@
             2,
             2,
             2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
             2,
             2,
             1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
             0,
             1,
             1,
@@ -921,7 +995,7 @@
             1,
             1,
             1,
-            1,
+            0,
             0
           ]
         ]

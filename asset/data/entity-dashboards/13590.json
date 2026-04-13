@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.934390+00:00",
+  "generated_at": "2026-04-13T12:41:00.872381+00:00",
   "entity": {
     "o_id": 13590,
     "title": "Congrès UIB (2019)",
@@ -49,6 +49,15 @@
           "year_max": 2019
         },
         {
+          "name": "Banouto",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2022
+        },
+        {
           "name": "Matin Libre",
           "total": 3,
           "articles": 3,
@@ -67,15 +76,6 @@
           "year_max": 2019
         },
         {
-          "name": "Banouto",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2022
-        },
-        {
           "name": "24 Heures au Bénin",
           "total": 2,
           "articles": 2,
@@ -85,7 +85,7 @@
           "year_max": 2019
         },
         {
-          "name": "La Nouvelle Tribune",
+          "name": "L'Evénement Précis",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -94,7 +94,7 @@
           "year_max": 2019
         },
         {
-          "name": "L'Evénement Précis",
+          "name": "La Nouvelle Tribune",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -663,11 +663,11 @@
           "count": 2
         },
         {
-          "label": "jamais - aucun - raison - homme - propos - état",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 2
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "jamais - aucun - raison - homme - propos - état",
           "count": 2
         },
         {
@@ -711,6 +711,28 @@
                 "count": 18
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 6
+              },
+              {
+                "name": "2",
+                "count": 8
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 4
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.11,
             "rated_articles": 18
           },
@@ -737,6 +759,28 @@
               {
                 "name": "Très central",
                 "count": 18
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 5
+              },
+              {
+                "name": "2",
+                "count": 8
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 1
               }
             ],
             "subjectivite_avg": 2.17,
@@ -771,6 +815,28 @@
                 "count": 17
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 14
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.28,
             "rated_articles": 18
           }
@@ -784,6 +850,8 @@
       "all": {
         "years": [
           2019,
+          2020,
+          2021,
           2022
         ],
         "months": [
@@ -808,18 +876,18 @@
           ],
           [
             0,
-            0,
-            2
-          ],
-          [
-            0,
             2,
             2
           ],
           [
-            1,
+            3,
             4,
             1
+          ],
+          [
+            0,
+            0,
+            2
           ]
         ]
       }
@@ -829,8 +897,8 @@
     "by_role": {
       "all": {
         "names": [
-          "Union Islamique du Bénin",
           "Bénin",
+          "Union Islamique du Bénin",
           "Unité et divisions",
           "Cotonou",
           "Porto-Novo",
@@ -841,8 +909,8 @@
           "Patrice Talon",
           "Réconciliation",
           "Élections",
-          "Bohicon",
           "Idrissou Aboubakar Lemanou",
+          "Bohicon",
           "Paix"
         ],
         "matrix": [

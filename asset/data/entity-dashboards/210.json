@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.826535+00:00",
+  "generated_at": "2026-04-13T12:41:00.778634+00:00",
   "entity": {
     "o_id": 210,
     "title": "Élection présidentielle de 2021 au Bénin",
@@ -49,21 +49,21 @@
           "year_max": 2021
         },
         {
-          "name": "Agence Bénin Presse",
-          "total": 4,
-          "articles": 4,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2020,
-          "year_max": 2021
-        },
-        {
           "name": "La Nation",
           "total": 4,
           "articles": 4,
           "publications": 0,
           "country": "Bénin",
           "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
           "year_max": 2021
         }
       ]
@@ -439,13 +439,6 @@
           "count": 3
         },
         {
-          "o_id": 62025,
-          "name": "Donga",
-          "lat": 9.7,
-          "lng": 1.666667,
-          "count": 2
-        },
-        {
           "o_id": 299,
           "name": "Cotonou",
           "lat": 6.36536,
@@ -453,24 +446,17 @@
           "count": 2
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 1
+          "o_id": 62025,
+          "name": "Donga",
+          "lat": 9.7,
+          "lng": 1.666667,
+          "count": 2
         },
         {
           "o_id": 388,
           "name": "Sakété",
           "lat": 6.73618,
           "lng": 2.65866,
-          "count": 1
-        },
-        {
-          "o_id": 372,
-          "name": "Nikki",
-          "lat": 9.94009,
-          "lng": 3.21075,
           "count": 1
         },
         {
@@ -493,6 +479,20 @@
           "lat": 6.38948,
           "lng": 2.34581,
           "count": 1
+        },
+        {
+          "o_id": 372,
+          "name": "Nikki",
+          "lat": 9.94009,
+          "lng": 3.21075,
+          "count": 1
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
         }
       ]
     }
@@ -505,7 +505,7 @@
           "count": 9
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
@@ -513,11 +513,11 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         },
         {
-          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -565,6 +565,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 5
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 13
           },
@@ -595,6 +617,28 @@
               {
                 "name": "Secondaire",
                 "count": 5
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.31,
@@ -629,6 +673,28 @@
                 "count": 4
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 12
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.92,
             "rated_articles": 13
           }
@@ -661,11 +727,6 @@
         "cells": [
           [
             1,
-            3,
-            5
-          ],
-          [
-            1,
             1,
             3
           ],
@@ -683,6 +744,11 @@
             0,
             7,
             1
+          ],
+          [
+            1,
+            3,
+            5
           ]
         ]
       }
@@ -694,273 +760,273 @@
         "names": [
           "Paix",
           "Bénin",
+          "Prière",
           "Patrice Talon",
           "Élections",
-          "Prière",
           "Politique",
           "Mariam Chabi Talata",
+          "Développement",
           "Fondation Zul-Kifl Salami pour la solidarité régionale",
           "Zul Kifl Salami",
           "Formation des imams et des prêcheurs",
-          "Développement",
+          "Pluralisme religieux",
           "Abdoulaye Bio Tchané",
           "Djougou",
-          "Imamat",
-          "Pluralisme religieux"
+          "Imamat"
         ],
         "matrix": [
           [
             0,
             9,
+            9,
             6,
             7,
-            9,
             2,
             2,
             4,
             4,
             4,
             4,
+            3,
             2,
             2,
-            1,
-            3
+            1
           ],
           [
             9,
             0,
+            8,
             6,
             7,
+            2,
+            1,
+            4,
+            4,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1
+          ],
+          [
+            9,
             8,
-            2,
-            1,
-            4,
-            4,
-            4,
-            4,
+            0,
+            6,
+            7,
             2,
             2,
-            1,
-            3
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            0
           ],
           [
             6,
             6,
+            6,
             0,
             8,
-            6,
             5,
             4,
-            2,
-            2,
-            2,
-            3,
-            3,
             3,
             2,
-            0
+            2,
+            2,
+            0,
+            3,
+            3,
+            2
           ],
           [
+            7,
             7,
             7,
             8,
             0,
-            7,
-            4,
-            3,
-            2,
-            2,
-            2,
-            3,
-            3,
-            3,
-            1,
-            0
-          ],
-          [
-            9,
-            8,
-            6,
-            7,
-            0,
-            2,
-            2,
-            3,
-            3,
-            3,
-            4,
-            2,
-            2,
-            0,
-            2
-          ],
-          [
-            2,
-            2,
-            5,
-            4,
-            2,
-            0,
-            3,
-            0,
-            0,
-            0,
-            1,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            1,
-            4,
-            3,
-            2,
-            3,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            2,
-            0
-          ],
-          [
-            4,
-            4,
-            2,
-            2,
-            3,
-            0,
-            0,
-            0,
-            4,
-            4,
-            2,
-            0,
-            0,
-            1,
-            2
-          ],
-          [
-            4,
-            4,
-            2,
-            2,
-            3,
-            0,
-            0,
-            4,
-            0,
-            4,
-            2,
-            0,
-            0,
-            1,
-            2
-          ],
-          [
-            4,
-            4,
-            2,
-            2,
-            3,
-            0,
-            0,
-            4,
-            4,
-            0,
-            2,
-            0,
-            0,
-            1,
-            2
-          ],
-          [
-            4,
             4,
             3,
             3,
-            4,
-            1,
-            0,
             2,
             2,
             2,
             0,
-            2,
-            2,
-            0,
+            3,
+            3,
             1
           ],
           [
             2,
             2,
-            3,
-            3,
             2,
-            2,
-            1,
-            0,
-            0,
-            0,
-            2,
+            5,
+            4,
             0,
             3,
             1,
-            0
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2
           ],
           [
             2,
+            1,
             2,
+            4,
             3,
             3,
-            2,
-            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            3,
+            3,
             1,
             0,
             0,
-            0,
             2,
-            3,
-            0,
+            2,
+            2,
             1,
+            2,
+            2,
             0
           ],
           [
-            1,
-            1,
+            4,
+            4,
+            3,
             2,
-            1,
+            2,
+            0,
             0,
             2,
-            2,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
+            4,
+            4,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            2,
+            2,
+            0,
+            0,
+            2,
+            4,
+            0,
+            4,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            2,
+            2,
+            0,
+            0,
+            2,
+            4,
+            4,
+            0,
+            2,
+            0,
             0,
             1
           ],
           [
             3,
             3,
-            0,
-            0,
             2,
             0,
             0,
+            0,
+            0,
+            1,
             2,
             2,
+            2,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            3,
+            3,
             2,
             1,
+            2,
             0,
             0,
+            0,
+            0,
+            0,
+            3,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0
           ]

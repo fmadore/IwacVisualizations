@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:37.253869+00:00",
+  "generated_at": "2026-04-13T12:40:51.313849+00:00",
   "entity": {
     "o_id": 76460,
     "title": "Chu de Treichville",
@@ -46,15 +46,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Fraternité Matin",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1984,
-          "year_max": 1994
-        },
-        {
           "name": "Le Patriote",
           "total": 2,
           "articles": 2,
@@ -62,6 +53,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2013,
           "year_max": 2015
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1984,
+          "year_max": 1994
         },
         {
           "name": "Le Jour Plus",
@@ -237,13 +237,6 @@
           "count": 4
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 3
-        },
-        {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
@@ -251,11 +244,11 @@
           "count": 3
         },
         {
-          "o_id": 48427,
-          "name": "Odienné",
-          "lat": 9.5,
-          "lng": -7.566667,
-          "count": 2
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
         },
         {
           "o_id": 23648,
@@ -265,25 +258,11 @@
           "count": 2
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
-        },
-        {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 63379,
-          "name": "Port-Bouët",
-          "lat": 5.266667,
-          "lng": -3.9,
-          "count": 1
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 2
         },
         {
           "o_id": 489,
@@ -305,6 +284,27 @@
           "lat": 5.261417,
           "lng": -3.925778,
           "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63379,
+          "name": "Port-Bouët",
+          "lat": 5.266667,
+          "lng": -3.9,
+          "count": 1
         }
       ]
     }
@@ -313,15 +313,7 @@
     "by_role": {
       "all": [
         {
-          "label": "homme - mort - attendre - maison - enfant - sou",
-          "count": 1
-        },
-        {
           "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
-          "count": 1
-        },
-        {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         },
         {
@@ -329,7 +321,15 @@
           "count": 1
         },
         {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         }
       ]
@@ -377,6 +377,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 5
           },
@@ -411,6 +433,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.6,
@@ -449,6 +493,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 5
           }
@@ -462,9 +528,36 @@
       "all": {
         "years": [
           1984,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1991,
+          1992,
+          1993,
           1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
           2012,
           2013,
+          2014,
           2015
         ],
         "months": [
@@ -483,27 +576,27 @@
         ],
         "cells": [
           [
-            0,
-            0,
-            1
-          ],
-          [
-            4,
+            31,
             9,
             1
           ],
           [
-            2,
-            7,
-            1
-          ],
-          [
-            1,
+            10,
             8,
             1
           ],
           [
-            3,
+            0,
+            0,
+            1
+          ],
+          [
+            29,
+            7,
+            1
+          ],
+          [
+            28,
             7,
             1
           ]
@@ -516,48 +609,31 @@
       "all": {
         "names": [
           "Treichville",
-          "Abidjan",
           "Côte d'Ivoire",
-          "Odienné",
+          "Abidjan",
           "Mosquée de la Riviéra Golf",
           "Santé",
           "Riviera Golf",
           "Alassane Ouattara",
+          "Odienné",
           "Ramadan",
-          "Alpha Cissé",
-          "Paris",
-          "Cocody",
-          "Port-Bouët",
-          "Éducation",
-          "Inhumation"
+          "Egypt Air",
+          "La Mecque",
+          "Abdoulaye Touré",
+          "Mamadou Traoré",
+          "Direction Générale des Cultes",
+          "Sécurité"
         ],
         "matrix": [
           [
             0,
-            2,
             3,
             2,
             2,
             1,
             2,
             2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             2,
-            0,
-            2,
-            1,
-            1,
-            2,
-            1,
-            1,
             1,
             1,
             1,
@@ -568,13 +644,98 @@
           ],
           [
             3,
+            0,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
             2,
             0,
             1,
             2,
             1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
             2,
             2,
+            1,
+            0,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0,
             1,
             1,
             1,
@@ -593,23 +754,6 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            0,
-            1,
-            2,
-            2,
-            1,
             0,
             0,
             0,
@@ -619,64 +763,13 @@
           ],
           [
             1,
-            2,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            2,
-            1,
-            0,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            2,
-            1,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
             1,
             1,
             1,
             1,
+            1,
+            1,
+            0,
             0,
             0,
             0,
@@ -690,9 +783,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -707,9 +800,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             1,
@@ -724,9 +817,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             1,
@@ -741,9 +834,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             1,
@@ -758,9 +851,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             1,
@@ -775,9 +868,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             1,

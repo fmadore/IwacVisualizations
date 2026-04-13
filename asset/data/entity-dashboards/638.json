@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:39.748246+00:00",
+  "generated_at": "2026-04-13T12:40:53.901300+00:00",
   "entity": {
     "o_id": 638,
     "title": "Centre Culturel Islamique du Burkina",
@@ -135,17 +135,17 @@
           "count": 2
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
-          "count": 1
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 1
         }
       ]
@@ -155,15 +155,15 @@
     "by_role": {
       "all": [
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
-          "count": 1
-        },
-        {
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
           "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -203,6 +203,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.67,
             "rated_articles": 3
           },
@@ -229,6 +251,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -263,6 +307,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.67,
             "rated_articles": 3
           }
@@ -294,17 +360,17 @@
         "cells": [
           [
             0,
-            5,
-            1
-          ],
-          [
-            0,
             3,
             1
           ],
           [
             0,
             11,
+            1
+          ],
+          [
+            0,
+            5,
             1
           ]
         ]
@@ -315,29 +381,19 @@
     "by_role": {
       "all": {
         "names": [
+          "Pluralisme religieux",
           "Alidou Ilboudo",
           "Ouagadougou",
-          "Pluralisme religieux",
-          "États-Unis",
           "Terrorisme",
           "Laïcité",
           "Radicalisation",
-          "Burkina Faso"
+          "Burkina Faso",
+          "États-Unis"
         ],
         "matrix": [
           [
             0,
-            2,
             1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            2,
-            0,
             1,
             1,
             1,
@@ -347,47 +403,27 @@
           ],
           [
             1,
+            0,
+            2,
+            1,
+            1,
             1,
             0,
+            1
+          ],
+          [
+            1,
+            2,
             0,
             1,
             1,
             1,
+            0,
             1
           ],
           [
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
             1,
             0,
             1,
@@ -396,8 +432,38 @@
             0
           ],
           [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
             1,
             0,
             0,

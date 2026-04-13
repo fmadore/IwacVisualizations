@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:42.968206+00:00",
+  "generated_at": "2026-04-13T12:40:57.192336+00:00",
   "entity": {
     "o_id": 23483,
     "title": "Fondation Djigui",
@@ -96,15 +96,6 @@
           "year_max": 2015
         },
         {
-          "name": "Le Débat Ivoirien",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2019,
-          "year_max": 2019
-        },
-        {
           "name": "Le Jour Plus",
           "total": 1,
           "articles": 1,
@@ -121,6 +112,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
         }
       ]
     }
@@ -245,16 +245,16 @@
             "score": 6.1292
           },
           {
-            "o_id": 23515,
-            "title": "Al Muwassat",
-            "type": "Organisations",
+            "o_id": 76474,
+            "title": "Kabadougou",
+            "type": "Lieux",
             "cooc": 2,
             "score": 5.7399
           },
           {
-            "o_id": 76474,
-            "title": "Kabadougou",
-            "type": "Lieux",
+            "o_id": 23515,
+            "title": "Al Muwassat",
+            "type": "Organisations",
             "cooc": 2,
             "score": 5.7399
           },
@@ -570,13 +570,13 @@
           },
           {
             "source": 23483,
-            "target": 23515,
+            "target": 76474,
             "weight": 5.7399,
             "cooc": 2
           },
           {
             "source": 23483,
-            "target": 76474,
+            "target": 23515,
             "weight": 5.7399,
             "cooc": 2
           },
@@ -801,10 +801,31 @@
           "count": 3
         },
         {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 2
+        },
+        {
           "o_id": 63417,
           "name": "Marcory",
           "lat": 5.3,
           "lng": -3.9833333333333,
+          "count": 2
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 2
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
           "count": 2
         },
         {
@@ -822,59 +843,73 @@
           "count": 2
         },
         {
-          "o_id": 46256,
-          "name": "Treichville",
-          "lat": 5.3,
-          "lng": -4.0,
-          "count": 2
-        },
-        {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
-          "count": 2
-        },
-        {
-          "o_id": 308,
-          "name": "Égypte",
-          "lat": 27.0,
-          "lng": 30.0,
-          "count": 2
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 1
         },
         {
-          "o_id": 76463,
-          "name": "Fès",
-          "lat": 34.043333,
-          "lng": -5.003333,
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
           "count": 1
         },
         {
-          "o_id": 46294,
-          "name": "Yopougon",
-          "lat": 5.316667,
-          "lng": -4.066667,
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
           "count": 1
         },
         {
-          "o_id": 46245,
-          "name": "Adzopé",
-          "lat": 6.103517,
-          "lng": -3.864814,
+          "o_id": 76484,
+          "name": "Danané",
+          "lat": 7.26666667,
+          "lng": -8.16666667,
           "count": 1
         },
         {
-          "o_id": 23632,
-          "name": "Bingerville",
-          "lat": 5.35,
-          "lng": -3.9,
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
+          "count": 1
+        },
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        },
+        {
+          "o_id": 63382,
+          "name": "Touba",
+          "lat": 8.283333,
+          "lng": -7.683333,
+          "count": 1
+        },
+        {
+          "o_id": 76501,
+          "name": "Biankouma",
+          "lat": 7.7333333333333,
+          "lng": -7.6166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76505,
+          "name": "Guiglo",
+          "lat": 6.5436111111111,
+          "lng": -7.4933333333333,
           "count": 1
         },
         {
@@ -997,73 +1032,38 @@
           "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
           "count": 1
         },
         {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
           "count": 1
         },
         {
-          "o_id": 76484,
-          "name": "Danané",
-          "lat": 7.26666667,
-          "lng": -8.16666667,
+          "o_id": 76463,
+          "name": "Fès",
+          "lat": 34.043333,
+          "lng": -5.003333,
           "count": 1
         },
         {
-          "o_id": 13448,
-          "name": "Le Caire",
-          "lat": 30.044444,
-          "lng": 31.235833,
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
           "count": 1
         },
         {
-          "o_id": 48427,
-          "name": "Odienné",
-          "lat": 9.5,
-          "lng": -7.566667,
-          "count": 1
-        },
-        {
-          "o_id": 46196,
-          "name": "Man",
-          "lat": 7.4125,
-          "lng": -7.553611,
-          "count": 1
-        },
-        {
-          "o_id": 63382,
-          "name": "Touba",
-          "lat": 8.283333,
-          "lng": -7.683333,
-          "count": 1
-        },
-        {
-          "o_id": 76501,
-          "name": "Biankouma",
-          "lat": 7.7333333333333,
-          "lng": -7.6166666666667,
-          "count": 1
-        },
-        {
-          "o_id": 76505,
-          "name": "Guiglo",
-          "lat": 6.5436111111111,
-          "lng": -7.4933333333333,
-          "count": 1
-        },
-        {
-          "o_id": 46175,
-          "name": "Attécoubé",
-          "lat": 5.333333,
-          "lng": -4.033333,
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
           "count": 1
         }
       ]
@@ -1081,11 +1081,7 @@
           "count": 3
         },
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
-          "count": 1
-        },
-        {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         },
         {
@@ -1093,7 +1089,11 @@
           "count": 1
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         }
       ]
@@ -1139,6 +1139,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 15
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.88,
@@ -1193,6 +1215,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 12
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.2,
             "rated_articles": 17
           },
@@ -1245,6 +1289,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 16
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 17
           }
@@ -1261,11 +1327,16 @@
           2006,
           2007,
           2008,
+          2009,
+          2010,
           2011,
           2012,
           2013,
           2014,
           2015,
+          2016,
+          2017,
+          2018,
           2019,
           2020,
           2021
@@ -1286,18 +1357,38 @@
         ],
         "cells": [
           [
-            8,
-            0,
+            1,
+            1,
             1
           ],
           [
-            7,
+            0,
+            11,
+            1
+          ],
+          [
+            14,
+            4,
+            2
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            15,
+            3,
+            1
+          ],
+          [
+            10,
             1,
             2
           ],
           [
-            9,
-            11,
+            16,
+            0,
             1
           ],
           [
@@ -1306,118 +1397,33 @@
             2
           ],
           [
-            10,
-            10,
-            1
-          ],
-          [
-            1,
-            4,
-            1
-          ],
-          [
-            6,
-            11,
-            1
-          ],
-          [
-            3,
-            11,
-            1
-          ],
-          [
-            9,
-            10,
-            1
-          ],
-          [
-            9,
-            4,
-            2
-          ],
-          [
-            1,
-            8,
-            1
-          ],
-          [
-            3,
-            8,
-            1
-          ],
-          [
-            0,
-            11,
-            1
-          ],
-          [
-            9,
+            14,
             9,
             2
           ],
           [
-            5,
-            1,
+            8,
+            11,
             1
           ],
           [
             8,
+            8,
+            1
+          ],
+          [
+            9,
             1,
             2
-          ],
-          [
-            6,
-            10,
-            1
-          ],
-          [
-            1,
-            3,
-            1
-          ],
-          [
-            10,
-            3,
-            1
           ],
           [
             7,
+            1,
+            1
+          ],
+          [
+            14,
             11,
-            1
-          ],
-          [
-            6,
-            8,
-            1
-          ],
-          [
-            9,
-            1,
-            1
-          ],
-          [
-            4,
-            9,
-            1
-          ],
-          [
-            1,
-            1,
-            1
-          ],
-          [
-            11,
-            0,
-            1
-          ],
-          [
-            0,
-            10,
-            1
-          ],
-          [
-            2,
-            9,
             1
           ],
           [
@@ -1426,8 +1432,73 @@
             1
           ],
           [
+            0,
+            10,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            14,
+            10,
+            1
+          ],
+          [
+            8,
+            10,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
             1,
             0,
+            1
+          ],
+          [
+            10,
+            0,
+            1
+          ],
+          [
+            15,
+            10,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            14,
+            1,
+            1
+          ],
+          [
+            9,
+            11,
+            1
+          ],
+          [
+            1,
+            4,
             1
           ]
         ]
@@ -1442,17 +1513,17 @@
           "Excision",
           "Abidjan",
           "Côte d'Ivoire",
-          "Nuit du Destin",
           "Femmes",
-          "Laïcité",
           "Charité",
-          "Terrorisme",
+          "Laïcité",
+          "Nuit du Destin",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Terrorisme",
           "Conseil National Islamique",
-          "Islamisme",
           "Sensibilisation",
-          "Aboubacar Fofana",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire"
+          "Coopération",
+          "Islamisme",
+          "Association des Musulmans Sunnites de Côte d'Ivoire"
         ],
         "matrix": [
           [
@@ -1460,32 +1531,32 @@
             11,
             8,
             9,
-            2,
             5,
-            2,
             3,
+            2,
+            2,
+            1,
             0,
             1,
-            1,
-            1,
             4,
+            2,
             1,
-            1
+            0
           ],
           [
             11,
             0,
             6,
             8,
-            0,
             5,
+            1,
             2,
-            1,
             0,
             1,
             0,
-            1,
+            0,
             4,
+            2,
             1,
             0
           ],
@@ -1494,16 +1565,16 @@
             6,
             0,
             6,
-            0,
+            2,
             2,
             0,
-            2,
             0,
             2,
             0,
             0,
             2,
             1,
+            0,
             0
           ],
           [
@@ -1511,7 +1582,6 @@
             8,
             6,
             0,
-            0,
             5,
             0,
             0,
@@ -1520,27 +1590,11 @@
             0,
             0,
             4,
+            1,
             0,
             1
           ],
           [
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            2,
-            0,
-            2,
-            1,
-            0,
-            1,
-            2
-          ],
-          [
             5,
             5,
             2,
@@ -1549,29 +1603,12 @@
             0,
             0,
             0,
-            1,
-            0,
             0,
             1,
+            0,
             4,
             1,
-            0
-          ],
-          [
-            2,
-            2,
-            0,
-            0,
             1,
-            0,
-            0,
-            2,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
             1
           ],
           [
@@ -1579,33 +1616,50 @@
             1,
             2,
             0,
+            0,
+            0,
+            2,
             1,
+            2,
             0,
             2,
             0,
             0,
-            2,
-            2,
             0,
-            0,
-            2,
-            2
+            0
           ],
           [
-            0,
+            2,
+            2,
             0,
             0,
             0,
             2,
+            0,
             1,
             0,
             0,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             0,
             0,
             2,
             2,
             0,
-            2,
+            0,
+            1,
             0
           ],
           [
@@ -1614,30 +1668,81 @@
             2,
             2,
             0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             0,
             2,
             0,
             0,
-            1,
-            1,
+            2,
             0,
             1,
-            2
+            2,
+            3
           ],
           [
             1,
             0,
             0,
             0,
-            2,
             0,
-            1,
-            2,
             2,
             1,
+            2,
+            1,
+            2,
             0,
             0,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            2,
+            4,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             1,
             1
@@ -1648,66 +1753,32 @@
             0,
             0,
             1,
-            1,
-            1,
             0,
+            1,
+            1,
+            1,
             2,
+            0,
+            0,
             1,
             0,
-            0,
-            0,
-            1,
-            0
+            1
           ],
           [
-            4,
-            4,
-            2,
-            4,
-            0,
-            4,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
             0,
             1,
             1,
             0,
-            2,
-            2,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
             0,
             0,
             1,
-            2,
-            0,
-            1,
-            2,
-            0,
-            2,
+            3,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
             0
           ]
         ]

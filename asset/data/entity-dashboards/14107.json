@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:42.642349+00:00",
+  "generated_at": "2026-04-13T12:40:56.846620+00:00",
   "entity": {
     "o_id": 14107,
     "title": "Cour de Répression des Infractions Économiques et Terroristes",
@@ -227,6 +227,13 @@
           "count": 2
         },
         {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
           "o_id": 347,
           "name": "Kouandé",
           "lat": 10.42486,
@@ -241,6 +248,13 @@
           "count": 1
         },
         {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
           "o_id": 385,
           "name": "Porto-Novo",
           "lat": 6.49646,
@@ -248,10 +262,10 @@
           "count": 1
         },
         {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
+          "o_id": 12866,
+          "name": "Brésil",
+          "lat": -14.0,
+          "lng": -53.0,
           "count": 1
         },
         {
@@ -386,20 +400,6 @@
           "lat": 35.0,
           "lng": 38.0,
           "count": 1
-        },
-        {
-          "o_id": 12866,
-          "name": "Brésil",
-          "lat": -14.0,
-          "lng": -53.0,
-          "count": 1
-        },
-        {
-          "o_id": 378,
-          "name": "Ouidah",
-          "lat": 6.36307,
-          "lng": 2.08506,
-          "count": 1
         }
       ]
     }
@@ -408,11 +408,11 @@
     "by_role": {
       "all": [
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 2
         },
         {
-          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 2
         },
         {
@@ -476,6 +476,28 @@
                 "count": 4
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.43,
             "rated_articles": 7
           },
@@ -514,6 +536,28 @@
               {
                 "name": "Marginal",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.57,
@@ -556,6 +600,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 7
           }
@@ -590,13 +656,13 @@
         ],
         "cells": [
           [
-            3,
+            4,
             10,
             1
           ],
           [
-            2,
             3,
+            10,
             1
           ],
           [
@@ -605,13 +671,8 @@
             1
           ],
           [
-            4,
             2,
-            1
-          ],
-          [
-            4,
-            1,
+            3,
             1
           ],
           [
@@ -621,7 +682,12 @@
           ],
           [
             4,
-            10,
+            2,
+            1
+          ],
+          [
+            4,
+            1,
             1
           ]
         ]
@@ -639,14 +705,14 @@
           "Parakou",
           "Burkina Faso",
           "Politique",
+          "Marabout",
+          "Ouidah",
           "Groupe de Soutien à l'Islam et aux Musulmans",
           "Formation",
           "Kouandé",
           "Al-Qaïda au Maghreb Islamique",
           "Fada N'Gourma",
-          "Porto-Novo",
-          "Bertin Koovi",
-          "Élections"
+          "Djougou"
         ],
         "matrix": [
           [
@@ -664,7 +730,7 @@
             1,
             1,
             1,
-            1
+            0
           ],
           [
             3,
@@ -674,8 +740,8 @@
             2,
             1,
             2,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
@@ -691,14 +757,14 @@
             3,
             2,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             3,
@@ -708,13 +774,13 @@
             2,
             2,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ],
           [
@@ -732,55 +798,72 @@
             0,
             0,
             0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
             1
           ],
           [
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
             1,
+            1,
+            0
+          ],
+          [
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -793,13 +876,13 @@
             0,
             1,
             0,
-            1,
+            0,
+            0,
             0,
             1,
             1,
             1,
-            0,
-            0,
+            1,
             0
           ],
           [
@@ -810,13 +893,13 @@
             0,
             1,
             0,
-            1,
+            0,
+            0,
             1,
             0,
             1,
             1,
-            0,
-            0,
+            1,
             0
           ],
           [
@@ -827,13 +910,13 @@
             0,
             1,
             0,
-            1,
+            0,
+            0,
             1,
             1,
             0,
             1,
-            0,
-            0,
+            1,
             0
           ],
           [
@@ -844,38 +927,36 @@
             0,
             1,
             0,
-            1,
+            0,
+            0,
             1,
             1,
             1,
             0,
-            0,
-            0,
+            1,
             0
           ],
           [
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
             1,
-            1
+            1,
+            1,
+            1,
+            0,
+            0
           ],
           [
+            0,
             1,
             1,
-            0,
-            0,
-            0,
             0,
             1,
             0,
@@ -883,25 +964,10 @@
             0,
             0,
             0,
-            1,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
             0,
             0,
             0,
             0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
             0
           ]
         ]

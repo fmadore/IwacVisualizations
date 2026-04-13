@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:15.955238+00:00",
+  "generated_at": "2026-04-13T12:40:29.332662+00:00",
   "entity": {
     "o_id": 296,
     "title": "Cocotomey",
@@ -55,6 +55,15 @@
           "year_max": 2020
         },
         {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
           "name": "Boulevard des Infos",
           "total": 1,
           "articles": 1,
@@ -80,15 +89,6 @@
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2013
-        },
-        {
-          "name": "L'Evénement Précis",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2021,
-          "year_max": 2021
         }
       ]
     }
@@ -360,20 +360,6 @@
           "count": 3
         },
         {
-          "o_id": 14293,
-          "name": "Ouémé",
-          "lat": 6.5,
-          "lng": 2.6,
-          "count": 2
-        },
-        {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 2
-        },
-        {
           "o_id": 299,
           "name": "Cotonou",
           "lat": 6.36536,
@@ -385,6 +371,20 @@
           "name": "Allemagne",
           "lat": 51.5,
           "lng": 10.5,
+          "count": 2
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 2
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
           "count": 2
         },
         {
@@ -423,11 +423,11 @@
           "count": 2
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         },
         {
-          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -463,6 +463,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.86,
             "rated_articles": 7
           },
@@ -489,6 +511,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.14,
@@ -523,6 +567,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.86,
             "rated_articles": 7
           }
@@ -536,7 +602,11 @@
       "all": {
         "years": [
           2013,
+          2014,
           2015,
+          2016,
+          2017,
+          2018,
           2019,
           2020,
           2021
@@ -557,12 +627,22 @@
         ],
         "cells": [
           [
-            2,
-            0,
+            8,
+            6,
             1
           ],
           [
             2,
+            10,
+            1
+          ],
+          [
+            6,
+            0,
+            1
+          ],
+          [
+            6,
             11,
             2
           ],
@@ -572,18 +652,8 @@
             1
           ],
           [
-            3,
+            7,
             8,
-            1
-          ],
-          [
-            4,
-            6,
-            1
-          ],
-          [
-            1,
-            10,
             1
           ]
         ]
@@ -601,14 +671,14 @@
           "Santé",
           "Abomey-Calavi",
           "Porto-Novo",
+          "Cotonou",
+          "Allemagne",
+          "Jama'at Islamique Ahmadiyya Bénin",
+          "Parakou",
           "Développement",
           "Mosquée",
           "Enfant",
-          "Ouémé",
-          "Rana Farooq Ahmad",
-          "Parakou",
-          "Cotonou",
-          "Allemagne"
+          "Ouémé"
         ],
         "matrix": [
           [
@@ -619,12 +689,12 @@
             4,
             2,
             3,
+            2,
+            2,
+            2,
+            2,
             0,
             0,
-            2,
-            2,
-            2,
-            2,
             2,
             2
           ],
@@ -636,13 +706,13 @@
             4,
             1,
             3,
-            0,
-            0,
-            2,
-            2,
-            2,
-            2,
             1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
             2
           ],
           [
@@ -653,13 +723,13 @@
             4,
             1,
             3,
-            0,
-            0,
-            2,
-            2,
-            2,
-            2,
             1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
             2
           ],
           [
@@ -670,13 +740,13 @@
             4,
             1,
             3,
-            0,
-            0,
-            2,
-            2,
-            2,
-            2,
             1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
             2
           ],
           [
@@ -687,13 +757,13 @@
             0,
             1,
             3,
-            0,
-            0,
-            2,
-            2,
-            2,
-            2,
             1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
             2
           ],
           [
@@ -707,9 +777,9 @@
             1,
             1,
             1,
-            1,
-            1,
             0,
+            1,
+            1,
             1,
             1
           ],
@@ -722,25 +792,76 @@
             1,
             0,
             0,
+            1,
+            1,
+            1,
             0,
+            0,
+            2,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
             2,
             2,
             2,
             1,
+            1,
+            1,
             0,
+            2,
+            1,
+            0,
+            0,
+            1,
             1
           ],
           [
-            0,
-            0,
-            0,
-            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
             0,
             1,
             0,
             0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
             2,
             0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -755,11 +876,28 @@
             0,
             1,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
             2,
             0,
+            0
+          ],
+          [
             0,
             0,
             0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
             0,
             0,
             0
@@ -773,13 +911,13 @@
             1,
             2,
             0,
+            1,
+            1,
             0,
             0,
-            2,
-            2,
             0,
             0,
-            1
+            2
           ],
           [
             2,
@@ -790,80 +928,12 @@
             1,
             2,
             0,
-            0,
-            2,
-            0,
-            2,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            0,
-            0,
-            2,
-            2,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
             1,
             1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1
-          ],
-          [
             2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
             0
           ]
         ]

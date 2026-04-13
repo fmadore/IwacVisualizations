@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.239752+00:00",
+  "generated_at": "2026-04-13T12:40:58.510449+00:00",
   "entity": {
     "o_id": 26324,
     "title": "Fédération des Associations des Femmes Musulmanes du Togo",
@@ -42,15 +42,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Rendez-Vous",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Togo",
-          "year_min": 2010,
-          "year_max": 2010
-        },
-        {
           "name": "Togo-Presse",
           "total": 1,
           "articles": 1,
@@ -67,6 +58,15 @@
           "country": "Togo",
           "year_min": 2023,
           "year_max": 2023
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Togo",
+          "year_min": 2010,
+          "year_max": 2010
         }
       ]
     }
@@ -181,6 +181,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.5,
             "rated_articles": 2
           },
@@ -199,6 +221,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -225,6 +269,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -238,7 +304,18 @@
       "all": {
         "years": [
           2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
           2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
           2023
         ],
         "months": [
@@ -257,18 +334,18 @@
         ],
         "cells": [
           [
+            6,
+            2,
+            1
+          ],
+          [
+            13,
+            2,
+            1
+          ],
+          [
             0,
             6,
-            1
-          ],
-          [
-            1,
-            2,
-            1
-          ],
-          [
-            2,
-            2,
             1
           ]
         ]
@@ -279,41 +356,27 @@
     "by_role": {
       "all": {
         "names": [
-          "Femmes",
-          "UMT reports du congrès",
-          "Union Musulmane du Togo",
-          "Centre Culturel Islamique de Lomé II",
-          "Sani Karim",
-          "Katari Foli-Bazi",
           "Togo",
           "Kozah",
           "Kara",
           "Blitta",
           "Danemark",
-          "Arabie saoudite"
+          "Arabie saoudite",
+          "Femmes",
+          "UMT reports du congrès",
+          "Union Musulmane du Togo",
+          "Centre Culturel Islamique de Lomé II",
+          "Sani Karim",
+          "Katari Foli-Bazi"
         ],
         "matrix": [
           [
             0,
             1,
             1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -323,11 +386,11 @@
           ],
           [
             1,
-            1,
             0,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -338,37 +401,9 @@
           [
             1,
             1,
-            1,
-            0,
-            1,
-            1,
             0,
             0,
             0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -382,11 +417,39 @@
             0,
             0,
             0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             0,
             0,
             0,
             1,
             1,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -398,12 +461,26 @@
             0,
             0,
             0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             1,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             0,
@@ -415,9 +492,9 @@
             1,
             1,
             0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             0,
@@ -426,9 +503,9 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             1,
             1
@@ -440,9 +517,9 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             0,
             1
@@ -454,9 +531,9 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             0

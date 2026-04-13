@@ -50,6 +50,15 @@
     --iwac-vis-cent-3: color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
     --iwac-vis-cent-4: color-mix(in srgb, var(--primary, #e67a14) 30%, var(--surface, #fdfdfc));
     --iwac-vis-cent-na: var(--border-light, var(--border, #dcd7ce));
+
+    /* Subjectivité — sequential 1..5 (objective → subjective), built
+       from --primary the same way centralité is. 1 = factual/objective
+       is the lightest tint, 5 = highly subjective is the accent itself. */
+    --iwac-vis-subj-1: color-mix(in srgb, var(--primary, #e67a14) 15%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-2: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-5: var(--primary, #e67a14);
 }
 
 /* ------------------------------------------------------------------- */
@@ -908,7 +917,8 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     min-height: 110px;
 }
 
-.iwac-vis-sentiment__chart--cen {
+.iwac-vis-sentiment__chart--cen,
+.iwac-vis-sentiment__chart--sub {
     margin-top: var(--space-2, 0.5rem);
 }
 

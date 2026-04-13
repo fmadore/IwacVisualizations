@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.279211+00:00",
+  "generated_at": "2026-04-13T12:40:58.542054+00:00",
   "entity": {
     "o_id": 27661,
     "title": "Confédération Nationale des Travailleurs du Togo",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 1979,
-          "year_max": 1979
-        },
-        {
           "name": "La Lettre de Tchaoudjo",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Togo",
           "year_min": 1993,
           "year_max": 1993
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1979,
+          "year_max": 1979
         }
       ]
     }
@@ -104,6 +104,13 @@
     "by_role": {
       "all": [
         {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
           "o_id": 514,
           "name": "Mango",
           "lat": 10.355555555556,
@@ -130,13 +137,6 @@
           "lat": 10.3257,
           "lng": 0.749044,
           "count": 1
-        },
-        {
-          "o_id": 519,
-          "name": "Sokodé",
-          "lat": 8.9833333333333,
-          "lng": 1.1333333333333,
-          "count": 1
         }
       ]
     }
@@ -145,11 +145,11 @@
     "by_role": {
       "all": [
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         },
         {
-          "label": "homme - mort - attendre - maison - enfant - sou",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
       ]
@@ -185,6 +185,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 4.5,
             "rated_articles": 2
           },
@@ -211,6 +233,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.0,
@@ -253,6 +297,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           }
@@ -266,6 +332,19 @@
       "all": {
         "years": [
           1979,
+          1980,
+          1981,
+          1982,
+          1983,
+          1984,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1991,
+          1992,
           1993
         ],
         "months": [
@@ -284,13 +363,13 @@
         ],
         "cells": [
           [
-            0,
-            7,
+            14,
+            3,
             1
           ],
           [
-            1,
-            3,
+            0,
+            7,
             1
           ]
         ]
@@ -302,6 +381,9 @@
       "all": {
         "names": [
           "Rassemblement du Peuple Togolais",
+          "Sokodé",
+          "Catholiques",
+          "Haut Conseil de la République",
           "Ramadan",
           "Barry Moussa Barqué",
           "Mango",
@@ -309,10 +391,7 @@
           "Gnassingbé Eyadéma",
           "Oti",
           "Fambaré Ouattara Natchaba",
-          "Gando",
-          "Sokodé",
-          "Catholiques",
-          "Haut Conseil de la République"
+          "Gando"
         ],
         "matrix": [
           [
@@ -334,25 +413,11 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
-            0
-          ],
-          [
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             0,
             0,
             0
@@ -360,13 +425,13 @@
           [
             1,
             1,
-            1,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -375,67 +440,11 @@
             1,
             1,
             1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
             0,
             0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -447,10 +456,80 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
             0,
             0,
             0,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             1,
             1
@@ -460,11 +539,11 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             1
@@ -474,11 +553,11 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             0

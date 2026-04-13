@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:42.786212+00:00",
+  "generated_at": "2026-04-13T12:40:56.983681+00:00",
   "entity": {
     "o_id": 23121,
     "title": "Centre Africain de Diffusion Islamique et Scientifique",
@@ -53,13 +53,13 @@
           "year_max": 2013
         },
         {
-          "name": "Le Pays",
+          "name": "Le CERFIste",
           "total": 1,
-          "articles": 1,
-          "publications": 0,
+          "articles": 0,
+          "publications": 1,
           "country": "Burkina Faso",
-          "year_min": 2002,
-          "year_max": 2002
+          "year_min": 2006,
+          "year_max": 2006
         },
         {
           "name": "Al Mawadda",
@@ -71,15 +71,6 @@
           "year_max": 2002
         },
         {
-          "name": "Le CERFIste",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2006,
-          "year_max": 2006
-        },
-        {
           "name": "L'Evénement",
           "total": 1,
           "articles": 1,
@@ -87,6 +78,15 @@
           "country": "Burkina Faso",
           "year_min": 2012,
           "year_max": 2012
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2002,
+          "year_max": 2002
         }
       ]
     }
@@ -259,34 +259,6 @@
           "count": 4
         },
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 1
-        },
-        {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
-          "count": 1
-        },
-        {
           "o_id": 397,
           "name": "Soum",
           "lat": 14.1,
@@ -343,6 +315,20 @@
           "count": 1
         },
         {
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
           "o_id": 357,
           "name": "Mali",
           "lat": 18.0,
@@ -354,6 +340,20 @@
           "name": "France",
           "lat": 46.0,
           "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 1
         }
       ]
@@ -403,6 +403,28 @@
                 "count": 4
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.5,
             "rated_articles": 4
           },
@@ -425,6 +447,28 @@
               {
                 "name": "Très central",
                 "count": 4
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.25,
@@ -455,6 +499,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.25,
             "rated_articles": 4
           }
@@ -468,7 +534,15 @@
       "all": {
         "years": [
           2002,
+          2003,
+          2004,
+          2005,
           2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
           2012,
           2013
         ],
@@ -488,27 +562,27 @@
         ],
         "cells": [
           [
+            4,
+            9,
+            1
+          ],
+          [
+            11,
+            6,
+            2
+          ],
+          [
             0,
+            2,
+            1
+          ],
+          [
+            10,
             8,
             1
           ],
           [
             0,
-            2,
-            1
-          ],
-          [
-            3,
-            6,
-            2
-          ],
-          [
-            1,
-            9,
-            1
-          ],
-          [
-            2,
             8,
             1
           ]
@@ -520,56 +594,56 @@
     "by_role": {
       "all": {
         "names": [
-          "Ouagadougou",
           "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Ouagadougou",
           "Association des Élèves et Étudiants Musulmans au Burkina",
-          "Aïd el-Fitr",
           "Ahmed Simozrag",
+          "Aïd el-Fitr",
+          "Terrorisme",
           "Ramadan",
           "Prière",
           "Mosquée",
           "Mahomet",
-          "Terrorisme",
-          "Burkina Faso",
-          "Commission Nationale d'Organisation du Pèlerinage à La Mecque",
-          "Laïcité",
-          "Hamidou Diallo",
-          "La Mecque"
+          "Benoît XVI",
+          "Charité",
+          "Soum",
+          "Colloque International des Musulmans de l'Espace Francophone",
+          "Banfora"
         ],
         "matrix": [
           [
             0,
             3,
             3,
-            3,
-            3,
-            1,
-            1,
-            1,
-            1,
             2,
-            0,
-            0,
-            0,
-            0,
-            0
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             3,
             0,
             3,
+            3,
+            3,
             2,
-            2,
             1,
             1,
             1,
             1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             3,
@@ -577,67 +651,67 @@
             0,
             2,
             2,
-            0,
-            0,
-            0,
-            0,
             2,
             0,
             0,
             0,
             0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
+            2,
+            3,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
             3,
             2,
             2,
             0,
-            2,
             1,
             1,
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
-            3,
             2,
             2,
             2,
-            0,
-            1,
-            1,
-            1,
-            1,
             2,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
-            0,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -645,11 +719,11 @@
             0,
             1,
             1,
-            2,
+            0,
             0,
             2,
             2,
-            0,
+            2,
             0,
             0,
             0,
@@ -662,11 +736,11 @@
             0,
             1,
             1,
-            2,
-            2,
             0,
             2,
             0,
+            2,
+            2,
             0,
             0,
             0,
@@ -679,11 +753,11 @@
             0,
             1,
             1,
-            2,
+            0,
             2,
             2,
             0,
-            0,
+            2,
             0,
             0,
             0,
@@ -691,15 +765,15 @@
             0
           ],
           [
-            2,
-            2,
-            2,
             1,
+            1,
+            0,
+            1,
+            1,
+            0,
             2,
-            0,
-            0,
-            0,
-            0,
+            2,
+            2,
             0,
             0,
             0,
@@ -708,12 +782,12 @@
             0
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -725,12 +799,12 @@
             1
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -742,12 +816,12 @@
             1
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -759,12 +833,12 @@
             1
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -776,12 +850,12 @@
             1
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,

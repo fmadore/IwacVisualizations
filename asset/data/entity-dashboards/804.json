@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.856786+00:00",
+  "generated_at": "2026-04-13T12:40:56.068172+00:00",
   "entity": {
     "o_id": 804,
     "title": "Al-Muntadah Al-Islami",
@@ -78,15 +78,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
-          "total": 9,
-          "articles": 9,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 1998,
-          "year_max": 2011
-        },
-        {
           "name": "Le Rendez-Vous",
           "total": 9,
           "articles": 0,
@@ -94,6 +85,15 @@
           "country": "Togo",
           "year_min": 2004,
           "year_max": 2021
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 9,
+          "articles": 9,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1998,
+          "year_max": 2011
         },
         {
           "name": "ASSALAM",
@@ -259,16 +259,16 @@
             "score": 4.108
           },
           {
-            "o_id": 63389,
-            "title": "Angleterre",
-            "type": "Lieux",
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
             "cooc": 2,
             "score": 4.088
           },
           {
-            "o_id": 829,
-            "title": "Rassemblement du Peuple Togolais",
-            "type": "Organisations",
+            "o_id": 63389,
+            "title": "Angleterre",
+            "type": "Lieux",
             "cooc": 2,
             "score": 4.088
           },
@@ -461,13 +461,13 @@
           },
           {
             "source": 804,
-            "target": 63389,
+            "target": 829,
             "weight": 4.088,
             "cooc": 2
           },
           {
             "source": 804,
-            "target": 829,
+            "target": 63389,
             "weight": 4.088,
             "cooc": 2
           },
@@ -573,10 +573,31 @@
           "count": 3
         },
         {
+          "o_id": 538,
+          "name": "Maison du Hadj",
+          "lat": 6.181735,
+          "lng": 1.255005,
+          "count": 2
+        },
+        {
+          "o_id": 499,
+          "name": "Bafilo",
+          "lat": 9.35,
+          "lng": 1.26666667,
+          "count": 2
+        },
+        {
           "o_id": 60523,
           "name": "Londres",
           "lat": 51.507222222222,
           "lng": -0.1275,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 2
         },
         {
@@ -594,38 +615,45 @@
           "count": 2
         },
         {
-          "o_id": 538,
-          "name": "Maison du Hadj",
-          "lat": 6.181735,
-          "lng": 1.255005,
-          "count": 2
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
-        },
-        {
-          "o_id": 499,
-          "name": "Bafilo",
-          "lat": 9.35,
-          "lng": 1.26666667,
-          "count": 2
-        },
-        {
-          "o_id": 512,
-          "name": "Kpalimé",
-          "lat": 6.91,
-          "lng": 0.62805555555556,
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
           "count": 1
         },
         {
-          "o_id": 532,
-          "name": "Kloto",
-          "lat": 7.083333,
-          "lng": 0.75,
+          "o_id": 309,
+          "name": "Émirats arabes unis",
+          "lat": 23.75,
+          "lng": 54.5,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 12866,
+          "name": "Brésil",
+          "lat": -14.0,
+          "lng": -53.0,
           "count": 1
         },
         {
@@ -643,31 +671,17 @@
           "count": 1
         },
         {
-          "o_id": 427,
-          "name": "Royaume-Uni",
-          "lat": 54.75844,
-          "lng": -2.69531,
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
           "count": 1
         },
         {
-          "o_id": 309,
-          "name": "Émirats arabes unis",
-          "lat": 23.75,
-          "lng": 54.5,
-          "count": 1
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 12866,
-          "name": "Brésil",
-          "lat": -14.0,
-          "lng": -53.0,
+          "o_id": 532,
+          "name": "Kloto",
+          "lat": 7.083333,
+          "lng": 0.75,
           "count": 1
         },
         {
@@ -776,24 +790,10 @@
           "count": 1
         },
         {
-          "o_id": 545,
-          "name": "Turquie",
-          "lat": 39.0,
-          "lng": 35.0,
-          "count": 1
-        },
-        {
-          "o_id": 519,
-          "name": "Sokodé",
-          "lat": 8.9833333333333,
-          "lng": 1.1333333333333,
-          "count": 1
-        },
-        {
-          "o_id": 523,
-          "name": "Tchaoudjo",
-          "lat": 8.98333333,
-          "lng": 1.13333333,
+          "o_id": 427,
+          "name": "Royaume-Uni",
+          "lat": 54.75844,
+          "lng": -2.69531,
           "count": 1
         }
       ]
@@ -815,11 +815,11 @@
           "count": 2
         },
         {
-          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
           "count": 1
         },
         {
-          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "label": "cheikh - concours - édition - candidat - santé - imams",
           "count": 1
         }
       ]
@@ -865,6 +865,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.67,
@@ -919,6 +941,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 9
           },
@@ -971,6 +1015,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.75,
             "rated_articles": 9
           }
@@ -986,15 +1052,26 @@
           1998,
           1999,
           2000,
+          2001,
           2002,
           2003,
           2004,
           2005,
           2006,
           2007,
+          2008,
           2009,
           2010,
           2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
           2021
         ],
         "months": [
@@ -1013,63 +1090,18 @@
         ],
         "cells": [
           [
-            2,
-            2,
+            23,
+            7,
             1
           ],
           [
+            8,
             3,
-            9,
-            1
-          ],
-          [
-            8,
-            8,
-            1
-          ],
-          [
-            10,
-            6,
-            1
-          ],
-          [
-            1,
-            11,
-            1
-          ],
-          [
-            6,
-            8,
-            1
-          ],
-          [
-            9,
-            11,
-            1
-          ],
-          [
-            8,
-            2,
-            1
-          ],
-          [
-            2,
-            5,
-            1
-          ],
-          [
-            9,
-            8,
             1
           ],
           [
             4,
-            3,
-            1
-          ],
-          [
-            7,
-            3,
+            6,
             1
           ],
           [
@@ -1078,33 +1110,78 @@
             1
           ],
           [
-            11,
+            9,
+            8,
+            1
+          ],
+          [
+            13,
             1,
             1
           ],
           [
-            5,
-            10,
+            1,
+            11,
             1
           ],
           [
-            6,
-            10,
+            7,
+            8,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            9,
+            2,
             1
           ],
           [
             11,
+            8,
+            1
+          ],
+          [
+            13,
             11,
             1
           ],
           [
             12,
-            7,
+            6,
             1
           ],
           [
-            3,
+            7,
+            10,
+            1
+          ],
+          [
+            11,
+            11,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
             6,
+            10,
             1
           ]
         ]
@@ -1116,28 +1193,28 @@
       "all": {
         "names": [
           "Union Musulmane du Togo",
-          "Togo",
           "Coopération",
-          "Hadj",
+          "Togo",
           "Centre Culturel Islamique de Lomé II",
-          "Construction mosquée",
+          "Hadj",
           "Association des Élèves et Étudiants Musulmans au Togo",
+          "Construction mosquée",
           "Lomé",
           "Terrorisme",
           "Inoussa Bouraïma",
           "Bénin",
-          "Imamat",
           "Concours National de Récitation du Saint Coran",
           "Libye",
-          "Londres"
+          "Imamat",
+          "Maison du Hadj"
         ],
         "matrix": [
           [
             0,
+            6,
             3,
-            6,
-            6,
             5,
+            6,
             4,
             4,
             1,
@@ -1145,69 +1222,52 @@
             4,
             0,
             3,
-            3,
             2,
-            1
-          ],
-          [
             3,
-            0,
-            6,
-            0,
-            2,
-            5,
-            2,
-            6,
-            1,
-            0,
-            3,
-            0,
-            0,
-            0,
             2
           ],
           [
             6,
-            6,
             0,
+            6,
+            3,
             2,
             3,
             6,
             3,
-            3,
             0,
-            2,
             2,
             2,
             1,
+            2,
             2,
             1
           ],
           [
+            3,
             6,
             0,
             2,
             0,
             2,
-            0,
-            2,
-            0,
-            2,
-            3,
+            5,
+            6,
             1,
-            2,
-            2,
-            2,
+            0,
+            3,
+            0,
+            0,
+            0,
             0
           ],
           [
             5,
-            2,
             3,
             2,
             0,
             2,
             3,
+            2,
             2,
             1,
             2,
@@ -1218,53 +1278,172 @@
             1
           ],
           [
+            6,
+            2,
+            0,
+            2,
+            0,
+            2,
+            0,
+            0,
+            2,
+            3,
+            1,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
             4,
+            3,
+            2,
+            3,
+            2,
+            0,
+            2,
+            1,
+            2,
+            2,
+            2,
+            3,
+            2,
+            1,
+            1
+          ],
+          [
+            4,
+            6,
             5,
+            2,
+            0,
+            2,
+            0,
+            2,
+            0,
+            0,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            3,
             6,
-            0,
             2,
-            0,
-            2,
-            2,
-            0,
-            0,
-            2,
-            1,
             0,
             1,
+            2,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            0,
             1
           ],
           [
             4,
             2,
-            3,
+            0,
             2,
             3,
             2,
             0,
+            0,
+            2,
+            0,
+            0,
+            2,
             1,
-            2,
-            2,
-            2,
             1,
+            2
+          ],
+          [
+            0,
+            2,
             3,
+            1,
+            1,
             2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
             0
           ],
           [
+            3,
             1,
-            6,
+            0,
+            2,
+            2,
             3,
             0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            2,
             2,
             2,
             1,
             0,
             1,
+            1,
+            1,
+            1,
             0,
+            1,
+            0
+          ],
+          [
+            3,
             2,
             0,
+            2,
+            2,
+            1,
+            1,
             0,
+            0,
+            1,
+            0,
+            0,
+            1,
             0,
             1
           ],
@@ -1272,119 +1451,17 @@
             2,
             1,
             0,
-            2,
             1,
-            0,
-            2,
-            1,
-            0,
-            2,
-            2,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            4,
-            0,
-            2,
-            3,
-            2,
-            0,
-            2,
-            0,
-            2,
-            0,
-            0,
-            1,
-            2,
-            1,
-            0
-          ],
-          [
-            0,
-            3,
-            2,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            3,
-            0,
-            2,
-            2,
-            2,
             1,
             1,
             0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            3,
-            0,
-            1,
-            2,
-            2,
-            0,
-            3,
             0,
             1,
             2,
             0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            2,
-            0,
-            2,
-            2,
-            2,
-            1,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            2,
             1,
             0,
             1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         ]

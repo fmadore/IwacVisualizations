@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.788810+00:00",
+  "generated_at": "2026-04-13T12:40:55.995450+00:00",
   "entity": {
     "o_id": 787,
     "title": "Réseau des Associations et ONG Islamiques du Bénin",
@@ -46,6 +46,15 @@
     "by_role": {
       "all": [
         {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
           "name": "ASSALAM",
           "total": 1,
           "articles": 0,
@@ -55,13 +64,13 @@
           "year_max": 2017
         },
         {
-          "name": "Boulevard des Infos",
+          "name": "La Nation",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Bénin",
-          "year_min": 2023,
-          "year_max": 2023
+          "year_min": 2009,
+          "year_max": 2009
         },
         {
           "name": "Matin Libre",
@@ -73,22 +82,13 @@
           "year_max": 2015
         },
         {
-          "name": "Fraternité",
+          "name": "Boulevard des Infos",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Bénin",
-          "year_min": 2013,
-          "year_max": 2013
-        },
-        {
-          "name": "La Nation",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2009,
-          "year_max": 2009
+          "year_min": 2023,
+          "year_max": 2023
         }
       ]
     }
@@ -316,6 +316,13 @@
           "count": 2
         },
         {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
+        },
+        {
           "o_id": 393,
           "name": "Savé",
           "lat": 8.03424,
@@ -341,27 +348,6 @@
           "name": "Ouagadougou",
           "lat": 12.36566,
           "lng": -1.53388,
-          "count": 1
-        },
-        {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
           "count": 1
         },
         {
@@ -482,6 +468,20 @@
           "lat": 8.5,
           "lng": -12.1,
           "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
         }
       ]
     }
@@ -494,11 +494,11 @@
           "count": 2
         },
         {
-          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         },
         {
-          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
       ]
@@ -538,6 +538,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.5,
             "rated_articles": 4
           },
@@ -570,6 +592,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 4
           },
@@ -598,6 +642,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 4
           }
@@ -611,9 +677,19 @@
       "all": {
         "years": [
           2009,
+          2010,
+          2011,
+          2012,
           2013,
+          2014,
           2015,
+          2016,
           2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
           2023
         ],
         "months": [
@@ -632,27 +708,27 @@
         ],
         "cells": [
           [
-            3,
-            8,
-            1
-          ],
-          [
             4,
-            4,
-            1
-          ],
-          [
-            2,
-            9,
-            1
-          ],
-          [
-            1,
             10,
             1
           ],
           [
+            8,
+            8,
+            1
+          ],
+          [
             0,
+            4,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            14,
             4,
             1
           ]
@@ -666,19 +742,19 @@
         "names": [
           "Bénin",
           "Union Islamique du Bénin",
+          "Éducation",
+          "Mosquée",
           "Niger",
           "Togo",
           "Burkina Faso",
           "Femmes",
           "Médine",
-          "Éducation",
-          "Mosquée",
           "La Mecque",
           "Cotonou",
-          "Savé",
-          "Abomey-Calavi",
-          "Manfouss Bello",
-          "Aziz Atanda Yaya"
+          "Porto-Novo",
+          "Enfant",
+          "Imamat",
+          "Mosquée centrale de Ouando"
         ],
         "matrix": [
           [
@@ -701,25 +777,6 @@
           [
             3,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            2,
-            2,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            0,
-            2,
             2,
             2,
             1,
@@ -727,89 +784,6 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            2,
             1,
             0,
             1,
@@ -820,13 +794,30 @@
           [
             2,
             2,
+            0,
+            2,
             1,
             1,
             1,
             1,
             1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
             2,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             1,
@@ -839,28 +830,113 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            2,
+            2,
             2,
             1,
             1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
             0,
             1,
             1,
             1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
             1,
-            1
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
           ],
           [
             2,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             0,
@@ -873,12 +949,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -890,12 +966,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             0,
@@ -907,12 +983,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
@@ -924,12 +1000,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,

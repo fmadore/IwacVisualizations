@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.371847+00:00",
+  "generated_at": "2026-04-13T12:41:00.415036+00:00",
   "entity": {
     "o_id": 131,
     "title": "Attentat de Grand-Bassam de 2016",
@@ -54,29 +54,20 @@
           "year_max": 2017
         },
         {
-          "name": "APA News",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2016,
-          "year_max": 2016
-        },
-        {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2016,
-          "year_max": 2016
-        },
-        {
           "name": "Burkina 24",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
           "year_min": 2016,
           "year_max": 2016
         },
@@ -88,6 +79,15 @@
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
         }
       ]
     }
@@ -96,11 +96,11 @@
     "by_role": {
       "all": [
         {
-          "name": "Côte d'Ivoire",
+          "name": "Burkina Faso",
           "count": 3
         },
         {
-          "name": "Burkina Faso",
+          "name": "Côte d'Ivoire",
           "count": 3
         }
       ]
@@ -272,6 +272,13 @@
           "count": 2
         },
         {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "count": 1
+        },
+        {
           "o_id": 62240,
           "name": "Palais des Sports de Treichville",
           "lat": 5.298056,
@@ -283,41 +290,6 @@
           "name": "Treichville",
           "lat": 5.3,
           "lng": -4.0,
-          "count": 1
-        },
-        {
-          "o_id": 23691,
-          "name": "Abobo",
-          "lat": 5.418889,
-          "lng": -4.020556,
-          "count": 1
-        },
-        {
-          "o_id": 46316,
-          "name": "Adjamé",
-          "lat": 5.3648,
-          "lng": -4.02366,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
-          "count": 1
-        },
-        {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 1
-        },
-        {
-          "o_id": 294,
-          "name": "Centre culturel islamique AEEMB",
-          "lat": 12.37545088285411,
-          "lng": -1.4871601188636745,
           "count": 1
         },
         {
@@ -431,6 +403,34 @@
           "lat": 18.0,
           "lng": -2.0,
           "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
         }
       ]
     }
@@ -443,11 +443,11 @@
           "count": 2
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         },
         {
@@ -455,7 +455,7 @@
           "count": 1
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
       ]
@@ -503,6 +503,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.83,
             "rated_articles": 6
           },
@@ -537,6 +559,28 @@
               {
                 "name": "Secondaire",
                 "count": 4
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.83,
@@ -575,6 +619,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.17,
             "rated_articles": 6
           }
@@ -611,7 +677,7 @@
             2
           ],
           [
-            0,
+            1,
             0,
             1
           ],
@@ -621,7 +687,7 @@
             2
           ],
           [
-            1,
+            0,
             0,
             1
           ]
@@ -639,15 +705,15 @@
           "Abidjan",
           "Grand-Bassam",
           "Attentat de Ouagadougou de 2016",
+          "Al-Qaïda au Maghreb Islamique",
           "Burkina Faso",
           "Sécurité",
-          "Al-Qaïda au Maghreb Islamique",
-          "Palais des Sports de Treichville",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Treichville",
-          "Pluralisme religieux",
-          "Paix",
-          "François Kaboré"
+          "Laïcité",
+          "Centre culturel islamique AEEMB",
+          "Jeunesse",
+          "30e anniversaire de l'AEEMB",
+          "Ali Sawadogo",
+          "Alidou Ilboudo"
         ],
         "matrix": [
           [
@@ -660,9 +726,9 @@
             2,
             2,
             2,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             1
@@ -677,9 +743,9 @@
             2,
             2,
             2,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             1
@@ -691,15 +757,15 @@
             4,
             4,
             1,
+            1,
             2,
             2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             3,
@@ -708,15 +774,15 @@
             0,
             4,
             1,
+            1,
             2,
             2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             3,
@@ -725,15 +791,15 @@
             4,
             0,
             1,
+            1,
             2,
             2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             3,
@@ -743,14 +809,31 @@
             1,
             0,
             1,
-            0,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             2,
@@ -759,23 +842,6 @@
             2,
             2,
             1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            0,
             1,
             0,
             1,
@@ -789,10 +855,10 @@
           [
             2,
             2,
-            1,
-            1,
-            1,
-            1,
+            2,
+            2,
+            2,
+            0,
             1,
             1,
             0,
@@ -804,44 +870,11 @@
             0
           ],
           [
-            0,
-            0,
-            1,
             1,
             1,
             0,
             0,
             0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
             1,
             0,
             0,
@@ -849,24 +882,57 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             1,
             1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
             1,
             1,
             1,
+            1
+          ],
+          [
             1,
             1,
             0,
             0,
             0,
+            1,
             0,
             0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             1,
             1
@@ -874,16 +940,16 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             0,
             0,
             0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             0,
             1
@@ -891,16 +957,16 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             0,
             0,
             0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             0

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.428136+00:00",
+  "generated_at": "2026-04-13T12:40:58.688532+00:00",
   "entity": {
     "o_id": 46191,
     "title": "Collectif des Associations de Jeunesse Musulmane",
@@ -40,7 +40,7 @@
     "by_role": {
       "all": [
         {
-          "name": "Fraternité Matin",
+          "name": "Le Patriote",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -49,7 +49,7 @@
           "year_max": 2002
         },
         {
-          "name": "Le Patriote",
+          "name": "Fraternité Matin",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -205,13 +205,6 @@
           "count": 2
         },
         {
-          "o_id": 67746,
-          "name": "Mosquée An Nour Riviera 2",
-          "lat": 5.351224783601886,
-          "lng": -3.980895863811308,
-          "count": 1
-        },
-        {
           "o_id": 23691,
           "name": "Abobo",
           "lat": 5.418889,
@@ -223,6 +216,13 @@
           "name": "Daloa",
           "lat": 6.866667,
           "lng": -6.45,
+          "count": 1
+        },
+        {
+          "o_id": 67746,
+          "name": "Mosquée An Nour Riviera 2",
+          "lat": 5.351224783601886,
+          "lng": -3.980895863811308,
           "count": 1
         },
         {
@@ -283,6 +283,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.67,
             "rated_articles": 3
           },
@@ -301,6 +323,28 @@
               {
                 "name": "Très central",
                 "count": 3
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.67,
@@ -335,6 +379,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 3
           }
@@ -348,6 +414,8 @@
       "all": {
         "years": [
           1999,
+          2000,
+          2001,
           2002
         ],
         "months": [
@@ -366,13 +434,13 @@
         ],
         "cells": [
           [
-            1,
-            9,
+            3,
+            6,
             1
           ],
           [
-            1,
-            6,
+            3,
+            9,
             1
           ],
           [
@@ -388,21 +456,21 @@
     "by_role": {
       "all": {
         "names": [
-          "Côte d'Ivoire",
           "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Côte d'Ivoire",
           "Association des Jeunes Musulmans de Côte d'Ivoire",
-          "Abidjan",
-          "Amicale des Anciens de l'AEEMCI",
           "Conflit",
           "Médias",
-          "Mosquée An Nour Riviera 2",
-          "Coran",
-          "Jeunesse",
-          "Mohamed Cissé",
-          "Crise",
-          "Tentative de coup d'État de 2002 en Côte d'Ivoire",
-          "Prière",
-          "Fédération Estudiantine et Scolaire de Côte d'Ivoire"
+          "Amicale des Anciens de l'AEEMCI",
+          "Abidjan",
+          "Fédération Estudiantine et Scolaire de Côte d'Ivoire",
+          "Rassemblement des républicains de Côte d'Ivoire",
+          "Émile Boga Doudou",
+          "Politique",
+          "Abobo",
+          "Aboubacar Fofana",
+          "Violence",
+          "Éducation"
         ],
         "matrix": [
           [
@@ -444,6 +512,23 @@
             2,
             0,
             1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
             2,
             1,
             1,
@@ -460,6 +545,7 @@
             2,
             2,
             1,
+            2,
             0,
             1,
             1,
@@ -470,16 +556,15 @@
             1,
             1,
             1,
-            1,
-            0
+            1
           ],
           [
             2,
             2,
             2,
             1,
-            0,
             1,
+            0,
             1,
             1,
             1,
@@ -496,42 +581,143 @@
             1,
             1,
             1,
-            0,
-            2,
-            0,
+            1,
             0,
             0,
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             1
           ],
           [
-            2,
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
             1,
             1,
             1,
             1,
             1,
-            0,
-            0,
+            1,
             0,
             1,
             1,
@@ -539,125 +725,7 @@
             1,
             1,
             1,
-            0
-          ],
-          [
             1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         ]

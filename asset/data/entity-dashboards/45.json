@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:53.741575+00:00",
+  "generated_at": "2026-04-13T12:41:08.280816+00:00",
   "entity": {
     "o_id": 45,
     "title": "Ummah",
@@ -98,15 +98,6 @@
           "year_max": 2013
         },
         {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2007,
-          "year_max": 2007
-        },
-        {
           "name": "Sidwaya",
           "total": 1,
           "articles": 1,
@@ -114,6 +105,15 @@
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
         }
       ]
     }
@@ -130,11 +130,11 @@
           "count": 2
         },
         {
-          "name": "Côte d'Ivoire",
+          "name": "Niger",
           "count": 1
         },
         {
-          "name": "Niger",
+          "name": "Côte d'Ivoire",
           "count": 1
         }
       ]
@@ -343,17 +343,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 3
-        },
-        {
           "o_id": 407,
           "name": "Palestine",
           "lat": 31.92157,
           "lng": 35.20329,
+          "count": 3
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 3
         },
         {
@@ -385,6 +385,13 @@
           "count": 2
         },
         {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
           "o_id": 60484,
           "name": "Dakar",
           "lat": 14.731944444444,
@@ -403,6 +410,55 @@
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 1
+        },
+        {
+          "o_id": 543,
+          "name": "Syrie",
+          "lat": 35.0,
+          "lng": 38.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 454,
+          "name": "Jordanie",
+          "lat": 31.0,
+          "lng": 36.0,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        },
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 353,
+          "name": "Liban",
+          "lat": 33.83333,
+          "lng": 35.83333,
           "count": 1
         },
         {
@@ -474,62 +530,6 @@
           "lat": 12.36566,
           "lng": -1.53388,
           "count": 1
-        },
-        {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
-          "count": 1
-        },
-        {
-          "o_id": 13522,
-          "name": "Jérusalem",
-          "lat": 31.778889,
-          "lng": 35.225556,
-          "count": 1
-        },
-        {
-          "o_id": 543,
-          "name": "Syrie",
-          "lat": 35.0,
-          "lng": 38.0,
-          "count": 1
-        },
-        {
-          "o_id": 308,
-          "name": "Égypte",
-          "lat": 27.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 454,
-          "name": "Jordanie",
-          "lat": 31.0,
-          "lng": 36.0,
-          "count": 1
-        },
-        {
-          "o_id": 73289,
-          "name": "Préfecture du Golfe",
-          "lat": 6.133333,
-          "lng": 1.2,
-          "count": 1
-        },
-        {
-          "o_id": 331,
-          "name": "Iran",
-          "lat": 32.0,
-          "lng": 53.0,
-          "count": 1
-        },
-        {
-          "o_id": 353,
-          "name": "Liban",
-          "lat": 33.83333,
-          "lng": 35.83333,
-          "count": 1
         }
       ]
     }
@@ -542,11 +542,11 @@
           "count": 2
         },
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "label": "afrique - africain - islamique - coopération - arabe - conférence",
           "count": 1
         },
         {
-          "label": "afrique - africain - islamique - coopération - arabe - conférence",
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 1
         },
         {
@@ -554,7 +554,7 @@
           "count": 1
         },
         {
-          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
       ]
@@ -594,6 +594,28 @@
                 "count": 6
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.33,
             "rated_articles": 6
           },
@@ -616,6 +638,28 @@
               {
                 "name": "Très central",
                 "count": 6
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 1
               }
             ],
             "subjectivite_avg": 3.67,
@@ -646,6 +690,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.83,
             "rated_articles": 6
           }
@@ -659,9 +725,24 @@
       "all": {
         "years": [
           1993,
+          1994,
+          1995,
+          1996,
           1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
           2007,
           2008,
+          2009,
+          2010,
+          2011,
           2012,
           2013
         ],
@@ -681,13 +762,23 @@
         ],
         "cells": [
           [
+            15,
             2,
-            7,
             1
           ],
           [
-            3,
-            2,
+            20,
+            6,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            19,
+            7,
             1
           ],
           [
@@ -696,18 +787,8 @@
             1
           ],
           [
-            4,
+            14,
             7,
-            1
-          ],
-          [
-            5,
-            6,
-            1
-          ],
-          [
-            1,
-            11,
             1
           ]
         ]
@@ -719,20 +800,20 @@
       "all": {
         "names": [
           "Mahomet",
-          "La Mecque",
           "Organisation de la Coopération Islamique",
           "Palestine",
-          "Hadj",
+          "La Mecque",
           "Sénégal",
           "Paix",
           "Pauvreté",
           "Violence",
           "Israël",
           "Burkina Faso",
+          "Coran",
+          "Hadj",
           "États-Unis",
           "Unité",
-          "Coran",
-          "Idriss Koudouss Koné"
+          "Niger"
         ],
         "matrix": [
           [
@@ -745,85 +826,67 @@
             1,
             1,
             1,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             0
           ],
           [
             2,
-            0,
-            1,
-            1,
-            2,
-            0,
-            0,
-            0,
-            1,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
             0,
             3,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
             0,
             2,
             2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
             0
           ],
           [
             2,
-            1,
             3,
             0,
-            0,
+            1,
             2,
             2,
             2,
             2,
             2,
             1,
+            1,
+            0,
             2,
             2,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            2,
+            1,
             1,
             0
           ],
           [
             1,
             2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            2,
             2,
             0,
             0,
@@ -833,13 +896,13 @@
             2,
             0,
             1,
+            0,
             1,
             1,
             0
           ],
           [
             1,
-            0,
             2,
             2,
             0,
@@ -850,13 +913,13 @@
             2,
             0,
             1,
+            0,
             1,
             1,
             0
           ],
           [
             1,
-            0,
             2,
             2,
             0,
@@ -867,57 +930,41 @@
             2,
             0,
             1,
+            0,
             1,
             1,
             0
           ],
           [
             1,
-            1,
             2,
             2,
-            0,
-            1,
-            1,
-            1,
-            0,
             1,
             1,
             1,
             1,
             0,
-            0
-          ],
-          [
             1,
-            0,
-            2,
-            2,
-            0,
-            2,
-            2,
-            2,
             1,
             0,
             0,
-            1,
             1,
             1,
             0
           ],
           [
+            1,
             2,
             2,
-            1,
-            1,
-            1,
             0,
-            0,
-            0,
+            2,
+            2,
+            2,
             1,
             0,
             0,
             1,
+            0,
             1,
             1,
             0
@@ -925,34 +972,17 @@
           [
             2,
             1,
+            1,
             2,
-            2,
+            0,
+            0,
+            0,
+            1,
+            0,
             0,
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            0,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            2,
-            0,
             1,
             0
           ],
@@ -964,21 +994,72 @@
             1,
             1,
             1,
+            0,
+            1,
             1,
             0,
             1,
             1,
             1,
+            0
+          ],
+          [
             1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
             0,
             0
           ],
           [
             0,
-            1,
             0,
             0,
-            1,
+            0,
+            0,
             0,
             0,
             0,

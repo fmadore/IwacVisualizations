@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.843629+00:00",
+  "generated_at": "2026-04-13T12:40:56.055231+00:00",
   "entity": {
     "o_id": 802,
     "title": "Réseau des Journalistes et Professionnels des Médias Musulmans du Bénin",
@@ -55,13 +55,22 @@
           "year_max": 2019
         },
         {
-          "name": "Matin Libre",
+          "name": "La Nouvelle Tribune",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Bénin",
-          "year_min": 2023,
-          "year_max": 2023
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2017,
+          "year_max": 2017
         },
         {
           "name": "La Perche du Nord",
@@ -82,22 +91,13 @@
           "year_max": 2019
         },
         {
-          "name": "Fraternité",
+          "name": "Matin Libre",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Bénin",
-          "year_min": 2017,
-          "year_max": 2017
-        },
-        {
-          "name": "La Nouvelle Tribune",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2017,
-          "year_max": 2017
+          "year_min": 2023,
+          "year_max": 2023
         }
       ]
     }
@@ -372,15 +372,15 @@
           "count": 4
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
-          "count": 1
-        },
-        {
           "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 1
         }
       ]
@@ -412,6 +412,28 @@
                 "count": 7
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.57,
             "rated_articles": 7
           },
@@ -434,6 +456,28 @@
               {
                 "name": "Central",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.57,
@@ -460,6 +504,28 @@
                 "count": 7
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 7
           }
@@ -476,6 +542,8 @@
           2018,
           2019,
           2020,
+          2021,
+          2022,
           2023
         ],
         "months": [
@@ -494,14 +562,14 @@
         ],
         "cells": [
           [
-            2,
-            7,
+            0,
+            10,
             2
           ],
           [
-            4,
-            3,
-            1
+            2,
+            7,
+            2
           ],
           [
             3,
@@ -514,9 +582,9 @@
             1
           ],
           [
-            0,
-            10,
-            2
+            6,
+            3,
+            1
           ]
         ]
       }
@@ -531,16 +599,16 @@
           "Cotonou",
           "Euloge Abd-Gafar Zohoungbogbo",
           "Akimey Housséïni Seïdou",
+          "Djibril Boussou",
           "Paix",
           "Cohabitation religieuse",
           "Environnement",
           "Aïd al-Adha (Tabaski)",
           "Unité",
-          "Ramadan",
-          "Moudachirou Souberou",
-          "Prière",
           "Solidarité",
-          "Front de la Oumat Islamique"
+          "Front de la Oumat Islamique",
+          "Ramadan",
+          "Moudachirou Souberou"
         ],
         "matrix": [
           [
@@ -567,15 +635,15 @@
             3,
             3,
             2,
+            2,
             1,
             1,
             1,
             1,
             2,
+            1,
             2,
-            2,
-            2,
-            1
+            2
           ],
           [
             5,
@@ -588,7 +656,7 @@
             2,
             2,
             2,
-            1,
+            2,
             1,
             1,
             1,
@@ -600,173 +668,140 @@
             3,
             0,
             0,
+            1,
             2,
             2,
             2,
             2,
             2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
             0,
             0,
             0,
             1,
+            0,
+            2,
             2
           ],
           [
-            3,
-            3,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             2,
             2,
             2,
             1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
+            1,
             0,
-            0,
-            1,
-            1,
-            1,
             1,
             0,
             0,
             0,
             0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            0,
             1,
             0,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
             1,
-            2,
-            2,
-            0,
-            1,
-            2,
-            0,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            0,
-            1,
-            2,
-            2,
-            0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            1,
-            2,
-            2,
-            0,
-            1,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
             1
           ],
           [
             2,
             2,
+            2,
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
             1,
             0,
             2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             2,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
             2,
             1,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            0,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            2,
+            0,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
             0
           ],
           [
             2,
             2,
             1,
-            0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2,
-            0,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2,
-            2,
-            0,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
             1,
             1,
             1,
@@ -775,10 +810,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
             0,
+            1,
+            1,
             1
           ],
           [
@@ -788,14 +822,48 @@
             2,
             0,
             0,
+            0,
+            1,
             1,
             1,
             1,
             1,
             0,
             0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
+            0,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
             0
           ]
         ]

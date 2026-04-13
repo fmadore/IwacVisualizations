@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:41.229499+00:00",
+  "generated_at": "2026-04-13T12:40:55.463169+00:00",
   "entity": {
     "o_id": 726,
     "title": "STMB Tours",
@@ -84,15 +84,6 @@
           "year_max": 2011
         },
         {
-          "name": "Le CERFIste",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2010,
-          "year_max": 2010
-        },
-        {
           "name": "Mutations",
           "total": 1,
           "articles": 1,
@@ -106,6 +97,15 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
           "country": "Burkina Faso",
           "year_min": 2010,
           "year_max": 2010
@@ -785,13 +785,6 @@
           "count": 6
         },
         {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
-          "count": 4
-        },
-        {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
@@ -799,17 +792,24 @@
           "count": 4
         },
         {
-          "o_id": 311,
-          "name": "Fada N'Gourma",
-          "lat": 12.06157,
-          "lng": 0.35843,
-          "count": 3
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
+          "count": 4
         },
         {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
+          "count": 3
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
           "count": 3
         },
         {
@@ -820,13 +820,6 @@
           "count": 3
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 2
-        },
-        {
           "o_id": 25602,
           "name": "Gambie",
           "lat": 13.5,
@@ -834,10 +827,10 @@
           "count": 2
         },
         {
-          "o_id": 414,
-          "name": "Soudan",
-          "lat": 16.0,
-          "lng": 30.0,
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 2
         },
         {
@@ -848,66 +841,17 @@
           "count": 2
         },
         {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 2
+        },
+        {
           "o_id": 312,
           "name": "France",
           "lat": 46.0,
           "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 405,
-          "name": "Ziniaré",
-          "lat": 12.58186,
-          "lng": -1.2971,
-          "count": 1
-        },
-        {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
-          "count": 1
-        },
-        {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 1
-        },
-        {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
-          "count": 1
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 33164,
-          "name": "Garango",
-          "lat": 11.804722222222,
-          "lng": -0.54888888888889,
-          "count": 1
-        },
-        {
-          "o_id": 348,
-          "name": "Koubri",
-          "lat": 12.1675,
-          "lng": -1.35556,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
           "count": 1
         },
         {
@@ -944,6 +888,62 @@
           "lat": 13.583333,
           "lng": -2.416667,
           "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 33164,
+          "name": "Garango",
+          "lat": 11.804722222222,
+          "lng": -0.54888888888889,
+          "count": 1
+        },
+        {
+          "o_id": 348,
+          "name": "Koubri",
+          "lat": 12.1675,
+          "lng": -1.35556,
+          "count": 1
         }
       ]
     }
@@ -956,15 +956,15 @@
           "count": 38
         },
         {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         },
         {
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
-          "count": 1
-        },
-        {
-          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
       ]
@@ -1008,6 +1008,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 12
+              },
+              {
+                "name": "2",
+                "count": 18
+              },
+              {
+                "name": "3",
+                "count": 4
+              },
+              {
+                "name": "4",
+                "count": 6
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.17,
             "rated_articles": 41
           },
@@ -1044,6 +1066,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 10
+              },
+              {
+                "name": "2",
+                "count": 17
+              },
+              {
+                "name": "3",
+                "count": 7
+              },
+              {
+                "name": "4",
+                "count": 7
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.27,
             "rated_articles": 41
           },
@@ -1074,6 +1118,28 @@
               {
                 "name": "Central",
                 "count": 36
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 27
+              },
+              {
+                "name": "3",
+                "count": 7
+              },
+              {
+                "name": "4",
+                "count": 6
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.44,
@@ -1112,18 +1178,8 @@
         "cells": [
           [
             4,
-            10,
-            1
-          ],
-          [
-            4,
             9,
             4
-          ],
-          [
-            1,
-            9,
-            1
           ],
           [
             3,
@@ -1131,14 +1187,14 @@
             1
           ],
           [
-            3,
-            11,
+            1,
+            0,
             2
           ],
           [
-            3,
-            8,
-            4
+            1,
+            10,
+            3
           ],
           [
             2,
@@ -1146,39 +1202,9 @@
             5
           ],
           [
-            5,
-            9,
-            1
-          ],
-          [
-            2,
-            9,
-            1
-          ],
-          [
-            4,
-            8,
-            3
-          ],
-          [
-            1,
-            1,
-            1
-          ],
-          [
             3,
             0,
             1
-          ],
-          [
-            1,
-            10,
-            3
-          ],
-          [
-            1,
-            11,
-            4
           ],
           [
             1,
@@ -1192,13 +1218,48 @@
           ],
           [
             2,
-            5,
+            9,
             1
           ],
           [
             1,
+            11,
+            4
+          ],
+          [
+            5,
             0,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            3,
+            10,
             2
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            3,
+            11,
+            2
+          ],
+          [
+            3,
+            8,
+            4
           ],
           [
             0,
@@ -1211,13 +1272,18 @@
             1
           ],
           [
-            3,
-            10,
-            2
+            4,
+            8,
+            3
           ],
           [
+            1,
+            1,
+            1
+          ],
+          [
+            2,
             5,
-            0,
             1
           ]
         ]
@@ -1240,8 +1306,8 @@
           "Djeddah",
           "Mali",
           "Fédération des Associations Islamiques du Burkina",
-          "Abdou Rasmané Sana",
           "Santé",
+          "Abdou Rasmané Sana",
           "Cercle d'Études, de Recherches et de Formation Islamiques"
         ],
         "matrix": [
@@ -1275,8 +1341,8 @@
             6,
             5,
             5,
-            4,
             5,
+            4,
             4
           ],
           [
@@ -1292,8 +1358,8 @@
             6,
             4,
             3,
-            6,
             5,
+            6,
             2
           ],
           [
@@ -1326,8 +1392,8 @@
             6,
             5,
             4,
-            4,
             3,
+            4,
             1
           ],
           [
@@ -1343,8 +1409,8 @@
             3,
             1,
             1,
-            2,
             3,
+            2,
             2
           ],
           [
@@ -1360,8 +1426,8 @@
             3,
             3,
             2,
-            3,
             1,
+            3,
             1
           ],
           [
@@ -1377,8 +1443,8 @@
             4,
             1,
             3,
-            1,
             3,
+            1,
             0
           ],
           [
@@ -1394,8 +1460,8 @@
             1,
             2,
             1,
-            0,
             1,
+            0,
             0
           ],
           [
@@ -1445,25 +1511,8 @@
             3,
             1,
             0,
-            1,
-            0,
-            1
-          ],
-          [
-            6,
-            4,
-            6,
-            4,
-            4,
-            2,
-            3,
-            1,
             0,
             1,
-            0,
-            1,
-            0,
-            2,
             1
           ],
           [
@@ -1479,11 +1528,28 @@
             1,
             0,
             0,
-            2,
             0,
+            2,
             0
           ],
           [
+            6,
+            4,
+            6,
+            4,
+            4,
+            2,
+            3,
+            1,
+            0,
+            1,
+            0,
+            1,
+            2,
+            0,
+            1
+          ],
+          [
             4,
             4,
             2,
@@ -1496,8 +1562,8 @@
             0,
             0,
             1,
-            1,
             0,
+            1,
             0
           ]
         ]

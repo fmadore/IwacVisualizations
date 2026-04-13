@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:22.981184+00:00",
+  "generated_at": "2026-04-13T12:40:36.534662+00:00",
   "entity": {
     "o_id": 396,
     "title": "Solenzo",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Pays",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2002,
-          "year_max": 2002
-        },
-        {
           "name": "Sidwaya",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2002,
+          "year_max": 2002
         }
       ]
     }
@@ -180,11 +180,11 @@
     "by_role": {
       "all": [
         {
-          "label": "jamais - aucun - raison - homme - propos - état",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         }
       ]
@@ -232,6 +232,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           },
@@ -261,6 +283,28 @@
               },
               {
                 "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
                 "count": 1
               }
             ],
@@ -300,6 +344,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           }
@@ -313,6 +379,22 @@
       "all": {
         "years": [
           2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
           2019
         ],
         "months": [
@@ -331,13 +413,13 @@
         ],
         "cells": [
           [
-            0,
-            8,
+            17,
+            5,
             1
           ],
           [
-            1,
-            5,
+            0,
+            8,
             1
           ]
         ]
@@ -349,6 +431,9 @@
       "all": {
         "names": [
           "Bobo-Dioulasso",
+          "Ramadan",
+          "Sya",
+          "Mouvement du Peuple pour le Progrès",
           "Laïcité",
           "Salif Diallo",
           "Tougan",
@@ -359,10 +444,7 @@
           "Inde",
           "Souleymane Ouédraogo",
           "Pakistan",
-          "Issaka Kaboré",
-          "Aboubacar Ouédraogo",
-          "Congrès MSBF (1987)",
-          "Imamat"
+          "Issaka Kaboré"
         ],
         "matrix": [
           [
@@ -387,21 +469,57 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
             1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
             0,
             1,
             1,
@@ -412,49 +530,13 @@
             1,
             1,
             1,
-            1,
-            1,
             1
           ],
           [
-            1,
-            1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
+            0,
             1,
             0,
             1,
@@ -469,9 +551,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             0,
@@ -486,9 +568,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -503,9 +585,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -520,9 +602,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -537,9 +619,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -554,9 +636,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -571,9 +653,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -588,9 +670,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -605,9 +687,9 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,

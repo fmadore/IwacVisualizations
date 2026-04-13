@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:47.344097+00:00",
+  "generated_at": "2026-04-13T12:41:01.278697+00:00",
   "entity": {
     "o_id": 46771,
     "title": "Congrès SEMI (1999)",
@@ -38,7 +38,7 @@
     "by_role": {
       "all": [
         {
-          "name": "Fraternité Matin",
+          "name": "Notre Voie",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -47,7 +47,7 @@
           "year_max": 1999
         },
         {
-          "name": "Notre Voie",
+          "name": "Fraternité Matin",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -161,17 +161,17 @@
           "count": 2
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
-        },
-        {
           "o_id": 46294,
           "name": "Yopougon",
           "lat": 5.316667,
           "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
           "count": 1
         }
       ]
@@ -217,6 +217,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.5,
             "rated_articles": 2
           },
@@ -239,6 +261,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.0,
@@ -267,6 +311,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -300,12 +366,12 @@
         "cells": [
           [
             0,
-            0,
+            1,
             1
           ],
           [
             0,
-            1,
+            0,
             1
           ]
         ]
@@ -321,7 +387,6 @@
           "Secours médical islamique",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Hôtel Ivoire",
-          "Abidjan",
           "Idriss Koudouss Koné",
           "Kader Kéita",
           "Formation",
@@ -329,7 +394,8 @@
           "Élections",
           "Gouvernance",
           "Aboubacar Fofana",
-          "Yopougon"
+          "Yopougon",
+          "Abidjan"
         ],
         "matrix": [
           [
@@ -419,12 +485,124 @@
             1,
             1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0
           ],
@@ -436,124 +614,12 @@
             1,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0
           ]
         ]

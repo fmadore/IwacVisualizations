@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:34.344062+00:00",
+  "generated_at": "2026-04-13T12:40:49.582836+00:00",
   "entity": {
     "o_id": 60528,
     "title": "Nangbani",
@@ -127,17 +127,17 @@
           "count": 2
         },
         {
-          "o_id": 60486,
-          "name": "Dankpen",
-          "lat": 9.6833333333333,
-          "lng": 0.6,
-          "count": 1
-        },
-        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 60486,
+          "name": "Dankpen",
+          "lat": 9.6833333333333,
+          "lng": 0.6,
           "count": 1
         }
       ]
@@ -199,6 +199,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.33,
             "rated_articles": 3
           },
@@ -233,6 +255,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.67,
@@ -271,6 +315,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.67,
             "rated_articles": 3
           }
@@ -302,17 +368,17 @@
         "cells": [
           [
             0,
+            11,
+            1
+          ],
+          [
+            0,
             8,
             1
           ],
           [
             0,
             0,
-            1
-          ],
-          [
-            0,
-            11,
             1
           ]
         ]
@@ -325,8 +391,8 @@
         "names": [
           "Bassar",
           "Lomé",
-          "Dankpen",
-          "Arabie saoudite"
+          "Arabie saoudite",
+          "Dankpen"
         ],
         "matrix": [
           [
@@ -338,18 +404,18 @@
           [
             2,
             0,
-            0,
-            1
-          ],
-          [
             1,
-            0,
-            0,
             0
           ],
           [
             1,
             1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
             0,
             0
           ]

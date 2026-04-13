@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:31.624380+00:00",
+  "generated_at": "2026-04-13T12:40:46.068160+00:00",
   "entity": {
     "o_id": 13416,
     "title": "Cococodji",
@@ -51,16 +51,7 @@
           "year_max": 2014
         },
         {
-          "name": "24 Heures au Bénin",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2020,
-          "year_max": 2020
-        },
-        {
-          "name": "L'Evénement Précis",
+          "name": "Agence Bénin Presse",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -78,7 +69,16 @@
           "year_max": 2018
         },
         {
-          "name": "Agence Bénin Presse",
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "24 Heures au Bénin",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -286,27 +286,6 @@
           "count": 1
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 1
-        },
-        {
-          "o_id": 76348,
-          "name": "Dantokpa",
-          "lat": 6.374473399413714,
-          "lng": 2.4310254886739333,
-          "count": 1
-        },
-        {
-          "o_id": 270,
-          "name": "Abomey",
-          "lat": 7.18286,
-          "lng": 1.99119,
-          "count": 1
-        },
-        {
           "o_id": 376,
           "name": "Ouagadougou",
           "lat": 12.36566,
@@ -333,6 +312,27 @@
           "lat": 20.25,
           "lng": -10.5,
           "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
+        },
+        {
+          "o_id": 76348,
+          "name": "Dantokpa",
+          "lat": 6.374473399413714,
+          "lng": 2.4310254886739333,
+          "count": 1
         }
       ]
     }
@@ -349,11 +349,11 @@
           "count": 1
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 1
         },
         {
-          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         }
       ]
@@ -417,6 +417,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.25,
             "rated_articles": 5
           },
@@ -467,6 +489,28 @@
               {
                 "name": "Non abordé",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.75,
@@ -521,6 +565,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.25,
             "rated_articles": 5
           }
@@ -534,7 +600,11 @@
       "all": {
         "years": [
           2014,
+          2015,
+          2016,
+          2017,
           2018,
+          2019,
           2020
         ],
         "months": [
@@ -558,18 +628,18 @@
             1
           ],
           [
-            2,
+            6,
             4,
             2
           ],
           [
-            2,
-            0,
+            4,
+            8,
             1
           ],
           [
-            1,
-            8,
+            6,
+            0,
             1
           ]
         ]
@@ -583,12 +653,12 @@
           "Bénin",
           "Inoussa Izi Chérif",
           "Ramadan",
-          "Cotonou",
-          "Abomey-Calavi",
           "Covid-19",
           "Mosquée",
           "Mosquée centrale de Cococodji",
+          "Cotonou",
           "Planification familiale",
+          "Abomey-Calavi",
           "Paris",
           "Doha",
           "Agriculture",
@@ -603,10 +673,10 @@
             1,
             1,
             1,
-            1,
+            2,
             1,
             2,
-            2,
+            1,
             1,
             1,
             1,
@@ -620,10 +690,10 @@
             1,
             1,
             1,
-            1,
+            2,
             1,
             2,
-            2,
+            1,
             0,
             0,
             0,
@@ -635,25 +705,8 @@
             1,
             1,
             0,
-            1,
-            1,
             2,
             2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
             1,
             1,
             0,
@@ -668,12 +721,12 @@
           [
             1,
             1,
+            2,
+            0,
+            2,
             1,
             1,
             0,
-            1,
-            1,
-            1,
             1,
             0,
             0,
@@ -686,42 +739,8 @@
             1,
             1,
             2,
-            1,
-            1,
-            0,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            2,
-            1,
-            1,
             2,
             0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
-            1,
             1,
             1,
             0,
@@ -736,11 +755,62 @@
           [
             2,
             2,
+            1,
+            1,
+            1,
+            0,
             0,
             1,
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             0,

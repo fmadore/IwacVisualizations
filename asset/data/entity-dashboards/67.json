@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:55.797583+00:00",
+  "generated_at": "2026-04-13T12:41:10.299156+00:00",
   "entity": {
     "o_id": 67,
     "title": "Islamistes algériens",
@@ -469,13 +469,6 @@
           "count": 2
         },
         {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
-          "count": 2
-        },
-        {
           "o_id": 429,
           "name": "Suisse",
           "lat": 47.00016,
@@ -483,24 +476,17 @@
           "count": 2
         },
         {
-          "o_id": 63400,
-          "name": "Casablanca",
-          "lat": 33.599166666667,
-          "lng": -7.62,
-          "count": 1
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 2
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
-          "count": 1
-        },
-        {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 1
         },
         {
@@ -546,10 +532,24 @@
           "count": 1
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 63400,
+          "name": "Casablanca",
+          "lat": 33.599166666667,
+          "lng": -7.62,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
           "count": 1
         }
       ]
@@ -567,15 +567,15 @@
           "count": 2
         },
         {
-          "label": "homme - mort - attendre - maison - enfant - sou",
-          "count": 2
-        },
-        {
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 2
         },
         {
-          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
@@ -583,7 +583,7 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
           "count": 1
         }
       ]
@@ -639,6 +639,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 3
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 4
+              },
+              {
+                "name": "4",
+                "count": 4
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 12
           },
@@ -673,6 +695,28 @@
               {
                 "name": "Central",
                 "count": 4
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 5
+              },
+              {
+                "name": "5",
+                "count": 1
               }
             ],
             "subjectivite_avg": 3.25,
@@ -715,6 +759,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 7
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 3.42,
             "rated_articles": 12
           }
@@ -729,6 +795,8 @@
         "years": [
           1994,
           1995,
+          1996,
+          1997,
           1998
         ],
         "months": [
@@ -753,8 +821,8 @@
           ],
           [
             0,
-            10,
-            1
+            8,
+            5
           ],
           [
             1,
@@ -762,18 +830,18 @@
             1
           ],
           [
-            0,
-            8,
-            5
-          ],
-          [
-            2,
+            4,
             10,
             2
           ],
           [
             0,
             7,
+            1
+          ],
+          [
+            0,
+            10,
             1
           ]
         ]

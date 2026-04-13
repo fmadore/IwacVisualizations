@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:02.555746+00:00",
+  "generated_at": "2026-04-13T12:41:17.891263+00:00",
   "entity": {
     "o_id": 15339,
     "title": "Unité et divisions",
@@ -102,13 +102,13 @@
           "year_max": 2022
         },
         {
-          "name": "La Nouvelle Tribune",
+          "name": "Togo-Presse",
           "total": 2,
           "articles": 2,
           "publications": 0,
-          "country": "Bénin",
-          "year_min": 2013,
-          "year_max": 2019
+          "country": "Togo",
+          "year_min": 1972,
+          "year_max": 1996
         },
         {
           "name": "24 Heures au Bénin",
@@ -120,13 +120,13 @@
           "year_max": 2022
         },
         {
-          "name": "Togo-Presse",
+          "name": "La Nouvelle Tribune",
           "total": 2,
           "articles": 2,
           "publications": 0,
-          "country": "Togo",
-          "year_min": 1972,
-          "year_max": 1996
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2019
         },
         {
           "name": "L'Evénement Précis",
@@ -138,15 +138,6 @@
           "year_max": 2019
         },
         {
-          "name": "Fraternité",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2020,
-          "year_max": 2020
-        },
-        {
           "name": "Le Démocrate",
           "total": 1,
           "articles": 1,
@@ -154,6 +145,15 @@
           "country": "Togo",
           "year_min": 1997,
           "year_max": 1997
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
         }
       ]
     }
@@ -366,15 +366,15 @@
             "score": 4.8322
           },
           {
-            "o_id": 1940,
-            "title": "Abdoul Jalili Yéssoufou",
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
             "type": "Personnes",
             "cooc": 2,
             "score": 4.755
           },
           {
-            "o_id": 1960,
-            "title": "Ibrahim Ousmane",
+            "o_id": 1940,
+            "title": "Abdoul Jalili Yéssoufou",
             "type": "Personnes",
             "cooc": 2,
             "score": 4.755
@@ -644,13 +644,13 @@
           },
           {
             "source": 15339,
-            "target": 1940,
+            "target": 1960,
             "weight": 4.755,
             "cooc": 2
           },
           {
             "source": 15339,
-            "target": 1960,
+            "target": 1940,
             "weight": 4.755,
             "cooc": 2
           },
@@ -759,17 +759,17 @@
           "count": 20
         },
         {
-          "o_id": 299,
-          "name": "Cotonou",
-          "lat": 6.36536,
-          "lng": 2.41833,
-          "count": 11
-        },
-        {
           "o_id": 385,
           "name": "Porto-Novo",
           "lat": 6.49646,
           "lng": 2.60359,
+          "count": 11
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
           "count": 11
         },
         {
@@ -794,6 +794,13 @@
           "count": 2
         },
         {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
           "o_id": 60482,
           "name": "Borgou",
           "lat": 10.74821385974019,
@@ -801,11 +808,18 @@
           "count": 2
         },
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 2
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
         },
         {
           "o_id": 319,
@@ -819,6 +833,41 @@
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 296,
+          "name": "Cocotomey",
+          "lat": 6.38957,
+          "lng": 2.31227,
+          "count": 1
+        },
+        {
+          "o_id": 491,
+          "name": "Mosquée centrale Médine II d'Agori Plateau",
+          "lat": 6.4327785,
+          "lng": 2.3442182,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
           "count": 1
         },
         {
@@ -892,59 +941,10 @@
           "count": 1
         },
         {
-          "o_id": 333,
-          "name": "Kandi",
-          "lat": 11.13417,
-          "lng": 2.93861,
-          "count": 1
-        },
-        {
           "o_id": 489,
           "name": "La Mecque",
           "lat": 21.4225,
           "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 296,
-          "name": "Cocotomey",
-          "lat": 6.38957,
-          "lng": 2.31227,
-          "count": 1
-        },
-        {
-          "o_id": 491,
-          "name": "Mosquée centrale Médine II d'Agori Plateau",
-          "lat": 6.4327785,
-          "lng": 2.3442182,
-          "count": 1
-        },
-        {
-          "o_id": 271,
-          "name": "Abomey-Calavi",
-          "lat": 6.44852,
-          "lng": 2.35566,
-          "count": 1
-        },
-        {
-          "o_id": 274,
-          "name": "Allada",
-          "lat": 6.66547,
-          "lng": 2.15138,
-          "count": 1
-        },
-        {
-          "o_id": 378,
-          "name": "Ouidah",
-          "lat": 6.36307,
-          "lng": 2.08506,
-          "count": 1
-        },
-        {
-          "o_id": 519,
-          "name": "Sokodé",
-          "lat": 8.9833333333333,
-          "lng": 1.1333333333333,
           "count": 1
         }
       ]
@@ -966,19 +966,19 @@
           "count": 5
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
-          "count": 2
-        },
-        {
           "label": "jamais - aucun - raison - homme - propos - état",
           "count": 2
         },
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
-          "count": 1
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
         },
         {
           "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 1
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
       ]
@@ -1030,6 +1030,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 6
+              },
+              {
+                "name": "2",
+                "count": 8
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 7
+              },
+              {
+                "name": "5",
+                "count": 2
+              }
+            ],
             "subjectivite_avg": 2.65,
             "rated_articles": 26
           },
@@ -1068,6 +1090,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 9
+              },
+              {
+                "name": "3",
+                "count": 5
+              },
+              {
+                "name": "4",
+                "count": 6
+              },
+              {
+                "name": "5",
+                "count": 2
               }
             ],
             "subjectivite_avg": 2.73,
@@ -1110,6 +1154,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 17
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 5
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.54,
             "rated_articles": 26
           }
@@ -1123,13 +1189,55 @@
       "all": {
         "years": [
           1972,
+          1973,
+          1974,
+          1975,
+          1976,
+          1977,
+          1978,
+          1979,
+          1980,
+          1981,
+          1982,
+          1983,
+          1984,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1991,
+          1992,
+          1993,
+          1994,
+          1995,
           1996,
           1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
           2013,
+          2014,
+          2015,
           2016,
           2017,
+          2018,
           2019,
           2020,
+          2021,
           2022
         ],
         "months": [
@@ -1148,68 +1256,68 @@
         ],
         "cells": [
           [
-            6,
+            47,
             3,
             13
           ],
           [
-            3,
-            7,
-            1
-          ],
-          [
-            4,
-            11,
-            1
-          ],
-          [
-            8,
-            2,
-            1
-          ],
-          [
-            6,
+            47,
             9,
             2
           ],
           [
-            8,
-            4,
+            0,
+            6,
             1
           ],
           [
-            4,
-            8,
-            1
-          ],
-          [
-            7,
+            44,
             11,
             1
           ],
           [
+            50,
             2,
+            1
+          ],
+          [
+            25,
             9,
             1
           ],
           [
-            1,
+            47,
+            0,
+            1
+          ],
+          [
+            48,
+            11,
+            1
+          ],
+          [
+            50,
+            4,
+            1
+          ],
+          [
+            44,
+            8,
+            1
+          ],
+          [
+            45,
+            4,
+            1
+          ],
+          [
+            24,
             10,
             1
           ],
           [
-            6,
-            0,
-            1
-          ],
-          [
-            0,
-            6,
-            1
-          ],
-          [
-            5,
-            4,
+            41,
+            7,
             1
           ]
         ]
@@ -1223,8 +1331,8 @@
           "Union Islamique du Bénin",
           "Bénin",
           "Congrès UIB (2019)",
-          "Cotonou",
           "Porto-Novo",
+          "Cotonou",
           "Paix",
           "Crise",
           "Imamat",
@@ -1234,15 +1342,15 @@
           "Houzéifa Amzat",
           "Unité",
           "Division",
-          "Mosquée"
+          "Parakou"
         ],
         "matrix": [
           [
             0,
             20,
             14,
-            10,
             11,
+            10,
             9,
             9,
             8,
@@ -1252,14 +1360,14 @@
             7,
             5,
             5,
-            4
+            5
           ],
           [
             20,
             0,
             14,
-            10,
             11,
+            10,
             8,
             9,
             7,
@@ -1269,14 +1377,14 @@
             7,
             5,
             4,
-            3
+            4
           ],
           [
             14,
             14,
             0,
-            9,
             10,
+            9,
             5,
             8,
             6,
@@ -1289,28 +1397,11 @@
             2
           ],
           [
-            10,
-            10,
-            9,
-            0,
-            8,
-            4,
-            5,
-            3,
-            7,
-            5,
-            5,
-            3,
-            2,
-            4,
-            0
-          ],
-          [
             11,
             11,
             10,
-            8,
             0,
+            8,
             3,
             5,
             5,
@@ -1323,24 +1414,41 @@
             1
           ],
           [
+            10,
+            10,
             9,
             8,
-            5,
-            4,
-            3,
             0,
-            3,
-            1,
-            5,
-            5,
-            5,
-            1,
             4,
+            5,
+            3,
+            7,
+            5,
+            5,
+            3,
             2,
+            4,
             1
           ],
           [
             9,
+            8,
+            5,
+            3,
+            4,
+            0,
+            3,
+            1,
+            5,
+            5,
+            5,
+            1,
+            4,
+            2,
+            2
+          ],
+          [
+            9,
             9,
             8,
             5,
@@ -1354,48 +1462,48 @@
             3,
             2,
             2,
+            2
+          ],
+          [
+            8,
+            7,
+            6,
+            5,
+            3,
+            1,
+            4,
+            0,
+            1,
+            0,
+            0,
+            5,
+            1,
+            1,
+            4
+          ],
+          [
+            7,
+            7,
+            7,
+            5,
+            7,
+            5,
+            4,
+            1,
+            0,
+            6,
+            4,
+            0,
+            2,
+            3,
             1
           ],
           [
             8,
-            7,
-            6,
-            3,
-            5,
-            1,
-            4,
-            0,
-            1,
-            0,
-            0,
-            5,
-            1,
-            1,
-            5
-          ],
-          [
-            7,
-            7,
-            7,
-            7,
-            5,
-            5,
-            4,
-            1,
-            0,
-            6,
-            4,
-            0,
-            2,
-            3,
-            0
-          ],
-          [
-            8,
             8,
             7,
-            5,
             4,
+            5,
             5,
             4,
             0,
@@ -1411,8 +1519,8 @@
             7,
             7,
             6,
-            5,
             4,
+            5,
             5,
             3,
             0,
@@ -1422,14 +1530,14 @@
             2,
             2,
             3,
-            0
+            1
           ],
           [
             7,
             7,
             6,
-            3,
             5,
+            3,
             1,
             3,
             5,
@@ -1445,8 +1553,8 @@
             5,
             5,
             3,
-            2,
             1,
+            2,
             4,
             2,
             1,
@@ -1456,7 +1564,7 @@
             0,
             0,
             1,
-            1
+            0
           ],
           [
             5,
@@ -1476,19 +1584,19 @@
             1
           ],
           [
-            4,
-            3,
-            2,
-            0,
-            1,
-            1,
-            1,
             5,
-            0,
-            0,
-            0,
+            4,
             2,
             1,
+            1,
+            2,
+            2,
+            4,
+            1,
+            0,
+            1,
+            2,
+            0,
             1,
             0
           ]

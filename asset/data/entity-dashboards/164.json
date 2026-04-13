@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.586579+00:00",
+  "generated_at": "2026-04-13T12:41:00.582311+00:00",
   "entity": {
     "o_id": 164,
     "title": "Congrès CERFI (2015)",
@@ -49,19 +49,19 @@
           "year_max": 2016
         },
         {
-          "name": "Sidwaya",
+          "name": "L'Autre Regard",
           "total": 1,
-          "articles": 1,
-          "publications": 0,
+          "articles": 0,
+          "publications": 1,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2016
         },
         {
-          "name": "L'Autre Regard",
+          "name": "Sidwaya",
           "total": 1,
-          "articles": 0,
-          "publications": 1,
+          "articles": 1,
+          "publications": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2016
@@ -172,13 +172,6 @@
           "count": 5
         },
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
           "o_id": 408,
           "name": "Israël",
           "lat": 31.5,
@@ -205,6 +198,13 @@
           "lat": 13.09167,
           "lng": -1.08444,
           "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
         }
       ]
     }
@@ -217,11 +217,11 @@
           "count": 3
         },
         {
-          "label": "ouédraogo - population - village - commune - man - maire",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "ouédraogo - population - village - commune - man - maire",
           "count": 1
         }
       ]
@@ -257,6 +257,28 @@
                 "count": 5
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.6,
             "rated_articles": 5
           },
@@ -283,6 +305,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.6,
@@ -315,6 +359,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.8,
@@ -353,6 +419,11 @@
             3
           ],
           [
+            1,
+            1,
+            1
+          ],
+          [
             0,
             11,
             1
@@ -360,11 +431,6 @@
           [
             0,
             0,
-            1
-          ],
-          [
-            1,
-            1,
             1
           ]
         ]
@@ -380,16 +446,16 @@
           "Ouagadougou",
           "Souleymane Koné",
           "Fédération des Associations Islamiques du Burkina",
-          "Burkina Faso",
-          "Formation",
-          "Pluralisme religieux",
-          "Alidou Ilboudo",
-          "Mosquée",
-          "Développement",
-          "Roch Marc Christian Kaboré",
-          "Congrès FAIB (2015)",
-          "Sidi Mohamed Koné",
-          "Salifou Belem"
+          "Sénat et article 37",
+          "Attentat de Ouagadougou de 2016",
+          "Extrémisme",
+          "Amnesty International",
+          "Islamisme",
+          "Israël",
+          "Palestine",
+          "Terrorisme",
+          "Souleymane Ouédraogo",
+          "Pakistan"
         ],
         "matrix": [
           [
@@ -438,9 +504,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             1
           ],
           [
@@ -450,11 +516,11 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -466,11 +532,113 @@
             2,
             1,
             0,
+            1,
             0,
             0,
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
             0,
             1,
             1,
@@ -481,37 +649,10 @@
             1,
             1,
             1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
-            0
-          ],
-          [
             1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
             1,
             1,
@@ -519,132 +660,57 @@
             0,
             1,
             1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
+            1
           ],
           [
             1,
             1,
             1,
             0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
             1,
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ]
         ]

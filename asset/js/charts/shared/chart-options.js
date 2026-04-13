@@ -1100,29 +1100,37 @@
     /**
      * Render an ordered list of {name, count} segments as a single
      * horizontal stacked bar with inside-bar percentage labels and
-     * a bottom legend. Reused by the sentiment panel for both the
-     * polarité and centralité distributions; equally applicable to
-     * any other categorical distribution where the user wants to see
-     * percentages at a glance instead of absolute counts.
+     * a bottom legend. Reused by the sentiment panel for polarité,
+     * centralité, and subjectivité distributions; equally applicable
+     * to any other categorical distribution where the user wants to
+     * see percentages at a glance instead of absolute counts.
      *
      * Colors are resolved by the caller from CSS variables / theme
      * tokens (NEVER hardcoded hex) and passed in via opts.colors.
+     * Display labels are translated via opts.labelFor while the
+     * underlying palette still keys on the original segment name —
+     * that separation is deliberate so the French data keys keep
+     * working when the locale is English.
      *
      * @param {Array<{name:string, count:number}>} segments
      * @param {Object} opts
      * @param {Object<string,string>} opts.colors      segment name → CSS color
      * @param {string}                opts.axisLabel   y-axis row label
+     * @param {function(string):string} [opts.labelFor] map raw segment name → display label
      * @param {string}                [opts.fallbackColor] used when a segment is not in opts.colors
      */
     C.segmentedBar = function (segments, opts) {
         opts = opts || {};
         var colors = opts.colors || {};
         var fallback = opts.fallbackColor || '';
+        var labelFor = typeof opts.labelFor === 'function'
+            ? opts.labelFor
+            : function (name) { return name; };
         var total = segments.reduce(function (s, e) { return s + (e.count || 0); }, 0);
 
         var series = segments.map(function (seg) {
             return {
-                name: seg.name,
+                name: labelFor(seg.name),
                 type: 'bar',
                 stack: 'total',
                 barMaxWidth: 28,
@@ -1204,15 +1212,26 @@
         var palette = (ns.getPalette && ns.getPalette())
             || ['#d97706', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
 
+        // Pre-compute each row's total so symbol size can normalize
+        // against the largest node. Without normalization the
+        // variation is swamped when all values are small.
+        var rowSums = names.map(function (_, i) {
+            return (matrix[i] || []).reduce(function (a, b) { return a + b; }, 0);
+        });
+        var maxRowSum = rowSums.reduce(function (m, v) { return Math.max(m, v); }, 1);
+
         var nodes = names.map(function (name, i) {
-            // Node radius reflects the row sum (total cooccurrences)
-            var rowSum = (matrix[i] || []).reduce(function (a, b) { return a + b; }, 0);
+            // Node radius reflects the row sum (total cooccurrences),
+            // normalized so the biggest hub is always ~56px and the
+            // smallest participant ~14px regardless of absolute counts.
+            var rowSum = rowSums[i];
+            var norm = maxRowSum > 0 ? rowSum / maxRowSum : 0;
             return {
                 id: String(i),
                 name: C._truncate(name, 28),
                 fullName: name,
                 value: rowSum,
-                symbolSize: 14 + Math.sqrt(rowSum) * 2,
+                symbolSize: 14 + Math.sqrt(norm) * 42,
                 itemStyle: { color: palette[i % palette.length] }
             };
         });
@@ -1432,9 +1451,15 @@
     /* ------------------------------------------------------------------ */
 
     /**
-     * Discrete year × month heatmap. Cells come in as
-     * ``[year_index, month_index, count]`` triples — same shape ECharts
-     * heatmap expects, no transformation required.
+     * Discrete year × month heatmap, calendar-style: years run along
+     * the x-axis (time flows left → right) and months stack along the
+     * y-axis (12 fixed rows regardless of year range). Cells come in
+     * as ``[year_index, month_index, count]`` triples which maps
+     * directly to ECharts' ``[xIdx, yIdx, value]`` convention with
+     * those axes.
+     *
+     * Colors are read from IWAC theme tokens via getChartTokens so the
+     * ramp follows --primary and flips for dark mode.
      *
      * @param {{years:number[], months:number[], cells:Array}} data
      */
@@ -1451,6 +1476,13 @@
         var max = 1;
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
+        // Theme-aware color ramp: start from the --surface background
+        // and fade up toward --primary so the heatmap respects whatever
+        // accent color the IWAC theme is currently set to.
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var rampBase = tokens.surface || '#fdfdfc';
+        var rampAccent = tokens.primary || '#e67a14';
+
         return {
             tooltip: {
                 position: 'top',
@@ -1461,16 +1493,19 @@
                         t('mentions_count', { count: fmt(p.data[2]) });
                 }
             },
-            grid: C._grid({ top: 24, bottom: 32, left: 56, right: 56 }),
+            grid: C._grid({ top: 24, bottom: 40, left: 64, right: 72 }),
             xAxis: {
                 type: 'category',
-                data: monthLabels,
+                data: years.map(String),
+                // Auto-skip labels when many years crowd the x axis
+                axisLabel: { interval: 'auto', fontSize: 10 },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
             yAxis: {
                 type: 'category',
-                data: years.map(String),
+                data: monthLabels,
+                axisLabel: { fontSize: 10 },
                 splitArea: { show: true },
                 axisTick: { show: false }
             },
@@ -1479,18 +1514,13 @@
                 max: max,
                 calculable: true,
                 orient: 'vertical',
-                right: 0,
+                right: 4,
                 top: 'middle',
-                itemHeight: 100,
+                itemHeight: 120,
                 itemWidth: 12,
                 textStyle: { fontSize: 10 },
                 inRange: {
-                    color: [
-                        'rgba(217, 119, 6, 0.06)',
-                        'rgba(217, 119, 6, 0.35)',
-                        'rgba(217, 119, 6, 0.65)',
-                        'rgba(217, 119, 6, 0.95)'
-                    ]
+                    color: [rampBase, rampAccent]
                 }
             },
             series: [{
@@ -1499,8 +1529,8 @@
                 label: { show: false },
                 emphasis: {
                     itemStyle: {
-                        shadowBlur: 8,
-                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                        borderColor: tokens.ink || '#18202a',
+                        borderWidth: 2
                     }
                 }
             }]

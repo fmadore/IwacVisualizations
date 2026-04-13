@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:31.482833+00:00",
+  "generated_at": "2026-04-13T12:40:45.935707+00:00",
   "entity": {
     "o_id": 560,
     "title": "Université Alassane Ouattara",
@@ -42,7 +42,7 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Patriote",
+          "name": "Fraternité Matin",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -51,13 +51,13 @@
           "year_max": 2011
         },
         {
-          "name": "APA News",
+          "name": "Le Patriote",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Côte d'Ivoire",
-          "year_min": 2019,
-          "year_max": 2019
+          "year_min": 2011,
+          "year_max": 2011
         },
         {
           "name": "Le Débat Ivoirien",
@@ -69,13 +69,13 @@
           "year_max": 2016
         },
         {
-          "name": "Fraternité Matin",
+          "name": "APA News",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Côte d'Ivoire",
-          "year_min": 2011,
-          "year_max": 2011
+          "year_min": 2019,
+          "year_max": 2019
         }
       ]
     }
@@ -191,6 +191,13 @@
           "count": 2
         },
         {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
           "o_id": 23465,
           "name": "Korhogo",
           "lat": 9.457778,
@@ -217,13 +224,6 @@
           "lat": 5.318399197445977,
           "lng": -4.112374498969468,
           "count": 1
-        },
-        {
-          "o_id": 46175,
-          "name": "Attécoubé",
-          "lat": 5.333333,
-          "lng": -4.033333,
-          "count": 1
         }
       ]
     }
@@ -236,11 +236,11 @@
           "count": 2
         },
         {
-          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
       ]
@@ -274,6 +274,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.75,
@@ -312,6 +334,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.5,
             "rated_articles": 4
           },
@@ -348,6 +392,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.75,
             "rated_articles": 4
           }
@@ -361,7 +427,13 @@
       "all": {
         "years": [
           2011,
+          2012,
+          2013,
+          2014,
+          2015,
           2016,
+          2017,
+          2018,
           2019
         ],
         "months": [
@@ -381,22 +453,22 @@
         "cells": [
           [
             0,
-            4,
-            1
-          ],
-          [
-            2,
-            5,
-            1
-          ],
-          [
-            1,
-            9,
+            7,
             1
           ],
           [
             0,
-            7,
+            4,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            8,
+            5,
             1
           ]
         ]
@@ -408,20 +480,20 @@
       "all": {
         "names": [
           "Bouaké",
+          "Association des Musulmans Sunnites de Côte d'Ivoire",
           "Côte d'Ivoire",
           "Abidjan",
-          "Association des Musulmans Sunnites de Côte d'Ivoire",
-          "Korhogo",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Enseignement confessionnel islamique",
-          "Cocody",
-          "Université Félix Houphouët-Boigny",
-          "Université Islamique Al-Fourqane",
-          "Yopougon-Niangon",
-          "Alassane Ouattara",
-          "Fadiga Moussa Al Farouk",
-          "Félix Houphouët-Boigny",
-          "Jeunesse Musulmane en Côte d'Ivoire"
+          "Jeunesse Musulmane en Côte d'Ivoire",
+          "Justice",
+          "Jeunesse",
+          "Conflit",
+          "Paix",
+          "Abdul Karim Dosso",
+          "Pardon",
+          "Réconciliation",
+          "Droits de l'homme",
+          "Élections",
+          "Charles Konan Banny"
         ],
         "matrix": [
           [
@@ -444,51 +516,221 @@
           [
             2,
             0,
-            2,
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            0,
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1
           ],
           [
             2,
             1,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
             1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             1
           ],
@@ -496,187 +738,17 @@
             1,
             1,
             1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
             1,
             1,
             1,
             1,
             1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
             1,
             1,
             1,
             1,
             1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         ]

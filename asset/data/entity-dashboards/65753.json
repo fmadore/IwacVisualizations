@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:04.804669+00:00",
+  "generated_at": "2026-04-13T12:41:18.724474+00:00",
   "entity": {
     "o_id": 65753,
     "title": "Tarabia",
@@ -141,17 +141,17 @@
           "count": 2
         },
         {
-          "o_id": 519,
-          "name": "Sokodé",
-          "lat": 8.9833333333333,
-          "lng": 1.1333333333333,
-          "count": 1
-        },
-        {
           "o_id": 407,
           "name": "Palestine",
           "lat": 31.92157,
           "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
           "count": 1
         }
       ]
@@ -161,11 +161,11 @@
     "by_role": {
       "all": [
         {
-          "label": "dieu - homme - islam - foi - religion - coran",
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         },
         {
-          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         }
       ]
@@ -201,6 +201,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           },
@@ -219,6 +241,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.5,
@@ -241,6 +285,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.5,
             "rated_articles": 2
           }
@@ -254,6 +320,7 @@
       "all": {
         "years": [
           1970,
+          1971,
           1972
         ],
         "months": [
@@ -272,13 +339,13 @@
         ],
         "cells": [
           [
-            1,
-            6,
+            0,
+            4,
             1
           ],
           [
-            0,
-            4,
+            2,
+            6,
             1
           ]
         ]
@@ -293,17 +360,17 @@
           "Mama Fousséni",
           "Gnassingbé Eyadéma",
           "Union Musulmane du Togo",
+          "Palestine",
+          "Jeunesse",
+          "Congrès UMT (1970)",
+          "Coopération",
+          "Mohamed Belly El Fouti",
+          "Hadj",
+          "Moumouni Idrissou",
           "Idrissou Touré",
           "Kassim Mensah",
           "Sokodé",
-          "Ahmed Limiou",
-          "Unité et divisions",
-          "Secte",
-          "Rassemblement du Peuple Togolais",
-          "Issa Fousséni",
-          "Palestine",
-          "Jeunesse",
-          "Congrès UMT (1970)"
+          "Ahmed Limiou"
         ],
         "matrix": [
           [
@@ -386,24 +453,7 @@
             1,
             1,
             1,
-            1,
             0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0
@@ -414,13 +464,13 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
             1,
             1,
+            0,
             0,
             0,
             0
@@ -432,12 +482,12 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
             1,
+            0,
             0,
             0,
             0
@@ -450,11 +500,11 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
+            0,
             0,
             0,
             0
@@ -468,10 +518,10 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
+            0,
             0,
             0,
             0
@@ -486,9 +536,9 @@
             1,
             1,
             1,
-            1,
             0,
             1,
+            0,
             0,
             0,
             0
@@ -504,7 +554,7 @@
             1,
             1,
             1,
-            1,
+            0,
             0,
             0,
             0,
@@ -523,6 +573,23 @@
             0,
             0,
             0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             1,
             1
@@ -539,7 +606,7 @@
             0,
             0,
             0,
-            0,
+            1,
             1,
             0,
             1
@@ -556,7 +623,7 @@
             0,
             0,
             0,
-            0,
+            1,
             1,
             1,
             0

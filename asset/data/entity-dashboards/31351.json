@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.303495+00:00",
+  "generated_at": "2026-04-13T12:40:58.563586+00:00",
   "entity": {
     "o_id": 31351,
     "title": "Conférence des Évêques du Togo",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 2018,
-          "year_max": 2018
-        },
-        {
           "name": "Le Rendez-Vous",
           "total": 1,
           "articles": 0,
@@ -56,6 +47,15 @@
           "country": "Togo",
           "year_min": 2013,
           "year_max": 2013
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2018,
+          "year_max": 2018
         }
       ]
     }
@@ -188,13 +188,6 @@
           "lat": 7.5269444444444,
           "lng": 1.1266666666667,
           "count": 2
-        },
-        {
-          "o_id": 73298,
-          "name": "Baguida",
-          "lat": 6.166667,
-          "lng": 1.316667,
-          "count": 1
         },
         {
           "o_id": 512,
@@ -342,6 +335,13 @@
           "lat": 41.893055555556,
           "lng": 12.482777777778,
           "count": 1
+        },
+        {
+          "o_id": 73298,
+          "name": "Baguida",
+          "lat": 6.166667,
+          "lng": 1.316667,
+          "count": 1
         }
       ]
     }
@@ -382,6 +382,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 1
           },
@@ -400,6 +422,28 @@
               {
                 "name": "Très central",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -426,6 +470,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 1
           }
@@ -439,6 +505,10 @@
       "all": {
         "years": [
           2013,
+          2014,
+          2015,
+          2016,
+          2017,
           2018
         ],
         "months": [
@@ -457,13 +527,13 @@
         ],
         "cells": [
           [
-            1,
-            7,
+            0,
+            5,
             1
           ],
           [
-            0,
             5,
+            7,
             1
           ]
         ]
@@ -475,20 +545,20 @@
       "all": {
         "names": [
           "Togo",
-          "Lomé",
           "Catholiques",
-          "Atakpamé",
-          "Inoussa Bouraïma",
           "Union Musulmane du Togo",
-          "Zakaria Agoro",
-          "Pluralisme religieux",
-          "Église Évangélique Presbytérienne du Togo",
-          "Grande mosquée de Lomé",
-          "Baguida",
-          "Église Méthodiste du Togo",
-          "Ali Sossah",
-          "Martial Kokou Kataka",
-          "Protestants"
+          "Lomé",
+          "Inoussa Bouraïma",
+          "Atakpamé",
+          "Kpalimé",
+          "Mango",
+          "Sokodé",
+          "Tchaoudjo",
+          "Abidjan",
+          "Allemagne",
+          "Kozah",
+          "Italie",
+          "Union pour la République"
         ],
         "matrix": [
           [

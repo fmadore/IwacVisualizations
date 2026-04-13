@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:25.375212+00:00",
+  "generated_at": "2026-04-13T12:40:39.610475+00:00",
   "entity": {
     "o_id": 484,
     "title": "Zaria",
@@ -45,15 +45,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Sahel",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Niger",
-          "year_min": 2024,
-          "year_max": 2024
-        },
-        {
           "name": "Togo-Presse",
           "total": 1,
           "articles": 1,
@@ -61,6 +52,15 @@
           "country": "Togo",
           "year_min": 1996,
           "year_max": 1996
+        },
+        {
+          "name": "Le Sahel",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Niger",
+          "year_min": 2024,
+          "year_max": 2024
         }
       ]
     }
@@ -69,11 +69,11 @@
     "by_role": {
       "all": [
         {
-          "name": "Niger",
+          "name": "Togo",
           "count": 1
         },
         {
-          "name": "Togo",
+          "name": "Niger",
           "count": 1
         }
       ]
@@ -106,6 +106,13 @@
           "count": 2
         },
         {
+          "o_id": 13837,
+          "name": "Chine",
+          "lat": 35.844722,
+          "lng": 103.451944,
+          "count": 1
+        },
+        {
           "o_id": 490,
           "name": "Niamey",
           "lat": 13.515,
@@ -132,13 +139,6 @@
           "lat": 9.5488888888889,
           "lng": 1.1905555555556,
           "count": 1
-        },
-        {
-          "o_id": 13837,
-          "name": "Chine",
-          "lat": 35.844722,
-          "lng": 103.451944,
-          "count": 1
         }
       ]
     }
@@ -147,11 +147,11 @@
     "by_role": {
       "all": [
         {
-          "label": "ouédraogo - population - village - commune - man - maire",
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         },
         {
-          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "label": "ouédraogo - population - village - commune - man - maire",
           "count": 1
         }
       ]
@@ -215,6 +215,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           },
@@ -265,6 +287,28 @@
               {
                 "name": "Non abordé",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 4.0,
@@ -319,6 +363,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           }
@@ -332,6 +398,33 @@
       "all": {
         "years": [
           1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
           2024
         ],
         "months": [
@@ -350,13 +443,13 @@
         ],
         "cells": [
           [
+            0,
             1,
-            7,
             1
           ],
           [
-            0,
-            1,
+            28,
+            7,
             1
           ]
         ]
@@ -367,15 +460,15 @@
     "by_role": {
       "all": {
         "names": [
-          "Niamey",
-          "Zinder",
-          "Djibo",
-          "Kara",
           "Femmes",
           "Hijab",
           "Chine",
           "Enseignement confessionnel islamique",
-          "Ayodélé Aguiar"
+          "Ayodélé Aguiar",
+          "Niamey",
+          "Zinder",
+          "Djibo",
+          "Kara"
         ],
         "matrix": [
           [
@@ -383,7 +476,7 @@
             1,
             1,
             1,
-            0,
+            1,
             0,
             0,
             0,
@@ -394,7 +487,7 @@
             0,
             1,
             1,
-            0,
+            1,
             0,
             0,
             0,
@@ -405,7 +498,7 @@
             1,
             0,
             1,
-            0,
+            1,
             0,
             0,
             0,
@@ -416,6 +509,17 @@
             1,
             1,
             0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -428,17 +532,6 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            1,
             0,
             1,
             1,
@@ -449,7 +542,7 @@
             0,
             0,
             0,
-            1,
+            0,
             1,
             0,
             1,
@@ -460,7 +553,7 @@
             0,
             0,
             0,
-            1,
+            0,
             1,
             1,
             0,
@@ -471,7 +564,7 @@
             0,
             0,
             0,
-            1,
+            0,
             1,
             1,
             1,

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:03.515403+00:00",
+  "generated_at": "2026-04-13T12:41:17.413745+00:00",
   "entity": {
     "o_id": 43074,
     "title": "Allahou Akbar (TV)",
@@ -53,15 +53,6 @@
           "year_max": 1984
         },
         {
-          "name": "Plume Libre",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 1992,
-          "year_max": 1992
-        },
-        {
           "name": "Alif",
           "total": 1,
           "articles": 0,
@@ -69,6 +60,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
         }
       ]
     }
@@ -156,17 +156,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 76443,
-          "name": "Williamsville",
-          "lat": 5.372656157414483,
-          "lng": -4.0202704387950305,
-          "count": 1
-        },
-        {
           "o_id": 308,
           "name": "Égypte",
           "lat": 27.0,
           "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
           "count": 1
         }
       ]
@@ -176,11 +176,11 @@
     "by_role": {
       "all": [
         {
-          "label": "dieu - homme - islam - foi - religion - coran",
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 1
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         }
       ]
@@ -212,6 +212,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 3.0,
             "rated_articles": 2
           },
@@ -230,6 +252,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 3.0,
@@ -256,6 +300,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -269,7 +335,20 @@
       "all": {
         "years": [
           1977,
+          1978,
+          1979,
+          1980,
+          1981,
+          1982,
+          1983,
           1984,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1991,
           1992,
           1993
         ],
@@ -289,8 +368,13 @@
         ],
         "cells": [
           [
-            2,
             7,
+            5,
+            1
+          ],
+          [
+            16,
+            9,
             1
           ],
           [
@@ -299,13 +383,8 @@
             1
           ],
           [
-            3,
-            9,
-            1
-          ],
-          [
-            1,
-            5,
+            15,
+            7,
             1
           ]
         ]
@@ -316,21 +395,21 @@
     "by_role": {
       "all": {
         "names": [
-          "Conseil National Islamique",
-          "Intégrisme",
           "Ramadan",
           "Mahomet",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Moustapha Diaby",
-          "Conseil Supérieur Islamique",
-          "Islamisme",
-          "Mohamed Lamine Kaba",
-          "Femmes",
-          "Science",
-          "Tidiane Bah",
-          "Aboubacar Fofana",
-          "Front de la Oumat Islamique",
-          "Souleymane Doumbia"
+          "Conseil National Islamique",
+          "Intégrisme",
+          "Jeûne",
+          "Coran",
+          "Communauté Musulmane de la Riviera",
+          "Hadj",
+          "Éducation",
+          "Égypte",
+          "Riviera Golf",
+          "Nuit du Destin",
+          "Laïcité",
+          "Moustapha Sonta",
+          "Extrémisme"
         ],
         "matrix": [
           [
@@ -342,10 +421,10 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -359,10 +438,10 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -376,10 +455,10 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1
@@ -393,10 +472,10 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1
@@ -410,10 +489,10 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -427,10 +506,10 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -444,10 +523,10 @@
             1,
             0,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -461,9 +540,77 @@
             1,
             1,
             0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
+            0
+          ],
+          [
+            1,
+            1,
             0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -479,77 +626,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
             0,
             0,
             0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
             0,
             1,
             1
@@ -563,10 +642,10 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             1
@@ -580,10 +659,10 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             0

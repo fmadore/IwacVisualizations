@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:37.301270+00:00",
+  "generated_at": "2026-04-13T12:40:51.356601+00:00",
   "entity": {
     "o_id": 76466,
     "title": "Zanzan",
@@ -72,15 +72,6 @@
           "year_max": 1999
         },
         {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2004,
-          "year_max": 2004
-        },
-        {
           "name": "Le Temps",
           "total": 1,
           "articles": 1,
@@ -90,13 +81,13 @@
           "year_max": 2010
         },
         {
-          "name": "Le Jour Plus",
+          "name": "Le Patriote",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Côte d'Ivoire",
-          "year_min": 2012,
-          "year_max": 2012
+          "year_min": 2004,
+          "year_max": 2004
         },
         {
           "name": "Le Débat Ivoirien",
@@ -106,6 +97,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2012,
+          "year_max": 2012
         }
       ]
     }
@@ -357,6 +357,13 @@
           "count": 4
         },
         {
+          "o_id": 76469,
+          "name": "Bouna",
+          "lat": 9.26666667,
+          "lng": -3.0,
+          "count": 2
+        },
+        {
           "o_id": 328,
           "name": "Guinée",
           "lat": 10.83333,
@@ -364,11 +371,32 @@
           "count": 2
         },
         {
-          "o_id": 76469,
-          "name": "Bouna",
-          "lat": 9.26666667,
-          "lng": -3.0,
-          "count": 2
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "count": 1
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 1
         },
         {
           "o_id": 546,
@@ -420,38 +448,10 @@
           "count": 1
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
           "o_id": 319,
           "name": "Ghana",
           "lat": 8.1,
           "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 23465,
-          "name": "Korhogo",
-          "lat": 9.457778,
-          "lng": -5.629444,
-          "count": 1
-        },
-        {
-          "o_id": 63391,
-          "name": "Anyama",
-          "lat": 5.4944444444444,
-          "lng": -4.0516666666667,
           "count": 1
         }
       ]
@@ -469,7 +469,7 @@
           "count": 3
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "école - enfant - éducation - formation - islamique - élève",
           "count": 1
         },
         {
@@ -477,7 +477,7 @@
           "count": 1
         },
         {
-          "label": "école - enfant - éducation - formation - islamique - élève",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         }
       ]
@@ -521,6 +521,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 4
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.89,
             "rated_articles": 9
           },
@@ -547,6 +569,28 @@
               {
                 "name": "Central",
                 "count": 6
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.44,
@@ -581,6 +625,28 @@
                 "count": 4
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 8
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.11,
             "rated_articles": 9
           }
@@ -595,12 +661,23 @@
         "years": [
           1998,
           1999,
+          2000,
+          2001,
+          2002,
+          2003,
           2004,
+          2005,
           2006,
+          2007,
           2008,
+          2009,
           2010,
+          2011,
           2012,
+          2013,
+          2014,
           2015,
+          2016,
           2017
         ],
         "months": [
@@ -619,48 +696,48 @@
         ],
         "cells": [
           [
+            0,
+            5,
+            1
+          ],
+          [
+            12,
+            8,
+            1
+          ],
+          [
+            10,
+            9,
+            1
+          ],
+          [
+            8,
+            4,
+            1
+          ],
+          [
+            6,
+            1,
+            1
+          ],
+          [
+            19,
+            9,
+            1
+          ],
+          [
             1,
             10,
             1
           ],
           [
-            2,
-            1,
-            1
-          ],
-          [
-            4,
-            9,
-            1
-          ],
-          [
-            5,
-            8,
-            1
-          ],
-          [
-            3,
-            4,
-            1
-          ],
-          [
-            0,
-            5,
-            1
-          ],
-          [
-            6,
+            14,
             11,
             1
           ],
           [
-            7,
+            17,
             0,
-            1
-          ],
-          [
-            8,
-            9,
             1
           ]
         ]
@@ -676,16 +753,16 @@
           "Côte d'Ivoire",
           "Éducation",
           "Développement",
+          "Bouna",
+          "Laurent Gbagbo",
+          "Santé",
+          "Gouvernement",
+          "Conflit",
           "Parti Démocratique de Côte d'Ivoire",
           "Rassemblement des républicains de Côte d'Ivoire",
           "Guinée",
-          "Conflit",
           "Démocratie",
-          "Alassane Ouattara",
-          "Gouvernement",
-          "Laurent Gbagbo",
-          "Bouna",
-          "Santé"
+          "Alassane Ouattara"
         ],
         "matrix": [
           [
@@ -694,16 +771,16 @@
             3,
             3,
             3,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             2,
             2,
             2,
-            2
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             4,
@@ -711,15 +788,15 @@
             3,
             1,
             2,
-            2,
-            2,
-            2,
             1,
             2,
             2,
             1,
-            2,
             1,
+            2,
+            2,
+            2,
+            2,
             2
           ],
           [
@@ -728,16 +805,16 @@
             0,
             2,
             2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
+            0,
+            0,
             1,
-            0,
-            0,
-            1
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
           ],
           [
             3,
@@ -746,13 +823,13 @@
             0,
             2,
             0,
+            0,
             1,
             1,
             1,
             0,
             1,
             1,
-            0,
             0,
             1
           ],
@@ -762,167 +839,48 @@
             2,
             2,
             0,
-            1,
-            1,
-            1,
             0,
-            1,
+            0,
             1,
             0,
             0,
-            0,
+            1,
+            1,
+            1,
+            1,
             1
           ],
           [
+            2,
             1,
-            2,
-            2,
+            0,
+            0,
+            0,
             0,
             1,
             0,
-            1,
-            1,
-            1,
-            2,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
             0
           ],
           [
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            0,
-            2,
-            1,
-            1,
-            2,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            1,
-            1,
-            2,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
-            2,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            2,
-            2,
-            0,
-            1,
-            2,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            2,
-            2,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1
-          ],
-          [
             2,
             2,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
             0,
             1,
-            1
-          ],
-          [
-            2,
             1,
             0,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
             0,
             0
           ],
@@ -934,13 +892,132 @@
             1,
             0,
             1,
+            0,
             1,
             0,
             0,
             1,
             1,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
             1,
             0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            2,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            1,
             0
           ]
         ]

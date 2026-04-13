@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:43.806607+00:00",
+  "generated_at": "2026-04-13T12:40:58.073506+00:00",
   "entity": {
     "o_id": 23672,
     "title": "Communauté des Musulmans de Cocody à Angré",
@@ -352,18 +352,84 @@
           "gemini": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "chatgpt": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "mistral": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           }
@@ -377,8 +443,14 @@
       "all": {
         "years": [
           2001,
+          2002,
+          2003,
+          2004,
+          2005,
           2006,
           2007,
+          2008,
+          2009,
           2010,
           2011,
           2012,
@@ -386,6 +458,8 @@
           2014,
           2015,
           2016,
+          2017,
+          2018,
           2019,
           2020
         ],
@@ -405,83 +479,83 @@
         ],
         "cells": [
           [
-            0,
-            3,
-            1
-          ],
-          [
-            1,
+            5,
             2,
             1
           ],
           [
             11,
-            2,
+            1,
             1
           ],
           [
-            3,
+            14,
+            4,
+            1
+          ],
+          [
+            13,
+            11,
+            1
+          ],
+          [
+            14,
+            0,
+            1
+          ],
+          [
+            15,
+            4,
+            1
+          ],
+          [
+            18,
             5,
             1
           ],
           [
-            4,
+            19,
+            2,
+            1
+          ],
+          [
+            9,
+            5,
+            1
+          ],
+          [
+            11,
             11,
             1
           ],
           [
-            9,
+            15,
             8,
             1
           ],
           [
-            9,
-            4,
+            12,
+            11,
+            1
+          ],
+          [
+            14,
+            11,
             1
           ],
           [
             10,
-            5,
+            11,
             1
           ],
           [
             6,
-            11,
+            2,
             1
           ],
           [
-            8,
-            4,
-            1
-          ],
-          [
-            8,
-            11,
-            1
-          ],
-          [
-            5,
-            11,
-            1
-          ],
-          [
-            8,
             0,
-            1
-          ],
-          [
-            2,
-            2,
-            1
-          ],
-          [
-            5,
-            1,
-            1
-          ],
-          [
-            7,
-            11,
+            3,
             1
           ]
         ]
@@ -492,55 +566,55 @@
     "by_role": {
       "all": {
         "names": [
-          "Nuit du Destin",
           "Terrorisme",
+          "Nuit du Destin",
           "Laïcité",
           "Amicale des Anciens de l'AEEMCI",
-          "Journée de l'Enfant Musulman",
           "Réconciliation",
           "Obscurantisme",
           "Association des Jeunes Musulmans de Côte d'Ivoire",
-          "Association des Femmes Musulmanes de Côte d'Ivoire",
-          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Journée de l'Enfant Musulman",
           "Al-Mouwahhidoun",
-          "Construction mosquée",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Islamisme",
+          "Djihadisme",
+          "Association des Femmes Musulmanes de Côte d'Ivoire",
           "Extrémisme",
-          "Djihadisme"
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Construction mosquée"
         ],
         "matrix": [
           [
             0,
             1,
             2,
+            1,
             2,
             1,
             0,
             1,
             1,
-            1,
-            1,
-            0,
+            2,
             2,
             1,
-            1,
+            2,
+            0,
             0
           ],
           [
             1,
             0,
             2,
-            1,
-            1,
             2,
-            1,
             0,
             1,
-            0,
+            1,
             1,
             0,
             0,
-            2,
+            0,
+            1,
+            1,
+            1,
             2
           ],
           [
@@ -548,67 +622,50 @@
             2,
             0,
             3,
+            1,
+            1,
+            0,
             2,
-            1,
-            1,
             0,
             1,
-            0,
-            0,
             0,
             1,
             2,
+            0,
             0
           ],
           [
-            2,
-            1,
-            3,
-            0,
-            3,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
             1,
             2,
             3,
             0,
             1,
+            1,
+            1,
+            3,
             0,
             1,
             0,
             0,
-            0,
             1,
             0,
-            1,
-            0
+            1
           ],
           [
-            0,
             2,
-            1,
-            1,
-            1,
             0,
             1,
-            0,
-            0,
+            1,
             0,
             1,
             0,
+            1,
+            1,
+            2,
+            0,
             0,
             1,
+            0,
             0
           ],
           [
@@ -616,12 +673,46 @@
             1,
             1,
             1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
             0,
             1,
             0,
             0,
             0,
             0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            2,
+            3,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
             0,
             0,
             1,
@@ -632,71 +723,24 @@
             1,
             0,
             0,
-            1,
-            1,
             0,
-            0,
+            1,
             0,
             0,
             0,
             0,
             1,
             0,
-            0,
-            0
-          ],
-          [
             1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
             0,
             1,
             0
           ],
           [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
+            2,
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             2,
             0,
             0,
@@ -704,7 +748,20 @@
             1,
             0,
             0,
+            0,
             1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -715,34 +772,51 @@
           ],
           [
             1,
+            1,
+            1,
             0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
             1,
             1,
             0,
             0,
             1,
             0,
+            1,
             0,
-            0,
-            0,
-            0,
+            1,
             0,
             0,
             0
           ],
           [
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            0,
             0,
             1,
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
             0,
             0,
             0
@@ -751,11 +825,11 @@
             0,
             2,
             0,
-            0,
+            1,
             0,
             0,
             1,
-            0,
+            1,
             0,
             0,
             0,

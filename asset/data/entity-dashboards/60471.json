@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:33.875331+00:00",
+  "generated_at": "2026-04-13T12:40:49.109008+00:00",
   "entity": {
     "o_id": 60471,
     "title": "Atalotè",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 2011,
-          "year_max": 2011
-        },
-        {
           "name": "Agence Togolaise de Presse",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Togo",
           "year_min": 2024,
           "year_max": 2024
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2011
         }
       ]
     }
@@ -111,13 +111,6 @@
           "count": 2
         },
         {
-          "o_id": 507,
-          "name": "Kandé",
-          "lat": 9.9563888888889,
-          "lng": 1.0463888888889,
-          "count": 1
-        },
-        {
           "o_id": 428,
           "name": "Danemark",
           "lat": 56.0,
@@ -137,6 +130,13 @@
           "lat": 25.0,
           "lng": 45.0,
           "count": 1
+        },
+        {
+          "o_id": 507,
+          "name": "Kandé",
+          "lat": 9.9563888888889,
+          "lng": 1.0463888888889,
+          "count": 1
         }
       ]
     }
@@ -145,11 +145,11 @@
     "by_role": {
       "all": [
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
       ]
@@ -197,6 +197,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.0,
             "rated_articles": 2
           },
@@ -231,6 +253,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.5,
@@ -281,6 +325,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -294,6 +360,18 @@
       "all": {
         "years": [
           2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
           2024
         ],
         "months": [
@@ -312,13 +390,13 @@
         ],
         "cells": [
           [
-            0,
-            4,
+            13,
+            2,
             1
           ],
           [
-            1,
-            2,
+            0,
+            4,
             1
           ]
         ]
@@ -330,11 +408,11 @@
       "all": {
         "names": [
           "Kéran",
-          "Kandé",
-          "Union Musulmane du Togo",
           "Danemark",
           "Nadoba",
-          "Arabie saoudite"
+          "Arabie saoudite",
+          "Kandé",
+          "Union Musulmane du Togo"
         ],
         "matrix": [
           [
@@ -349,7 +427,7 @@
             1,
             0,
             1,
-            0,
+            1,
             0,
             0
           ],
@@ -357,6 +435,14 @@
             1,
             1,
             0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -366,14 +452,6 @@
             0,
             0,
             0,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
             0,
             1
           ],
@@ -381,7 +459,7 @@
             1,
             0,
             0,
-            1,
+            0,
             1,
             0
           ]

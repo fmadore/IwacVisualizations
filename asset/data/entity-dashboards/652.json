@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:39.866522+00:00",
+  "generated_at": "2026-04-13T12:40:54.015172+00:00",
   "entity": {
     "o_id": 652,
     "title": "Comité Militaire de Redressement pour le Progrès National",
@@ -189,27 +189,6 @@
           "count": 2
         },
         {
-          "o_id": 404,
-          "name": "Yako",
-          "lat": 12.9591,
-          "lng": -2.26075,
-          "count": 1
-        },
-        {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 1
-        },
-        {
-          "o_id": 352,
-          "name": "Léo",
-          "lat": 11.10033,
-          "lng": -2.10654,
-          "count": 1
-        },
-        {
           "o_id": 488,
           "name": "Lagos",
           "lat": 6.45,
@@ -250,6 +229,27 @@
           "lat": 52.516666666667,
           "lng": 13.383333333333,
           "count": 1
+        },
+        {
+          "o_id": 404,
+          "name": "Yako",
+          "lat": 12.9591,
+          "lng": -2.26075,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 352,
+          "name": "Léo",
+          "lat": 11.10033,
+          "lng": -2.10654,
+          "count": 1
         }
       ]
     }
@@ -258,19 +258,19 @@
     "by_role": {
       "all": [
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
-          "count": 1
-        },
-        {
-          "label": "paix - peuple - nation - vie - dieu - ensemble",
-          "count": 1
-        },
-        {
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         },
         {
           "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         }
       ]
@@ -318,6 +318,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 2.25,
             "rated_articles": 4
           },
@@ -351,6 +373,28 @@
               },
               {
                 "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
                 "count": 1
               }
             ],
@@ -390,6 +434,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.5,
             "rated_articles": 4
           }
@@ -423,22 +489,22 @@
         "cells": [
           [
             1,
-            4,
-            1
-          ],
-          [
-            0,
-            11,
-            1
-          ],
-          [
-            1,
             7,
             1
           ],
           [
             2,
             4,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            0,
+            11,
             1
           ]
         ]
@@ -450,20 +516,20 @@
       "all": {
         "names": [
           "Saye Zerbo",
-          "Gouvernement",
           "Burkina Faso",
+          "Gouvernement",
           "Oumarou Kanazoé",
           "Ouagadougou",
           "Abdoul Salam Tiemtoré",
           "Prière",
-          "Mosquée",
-          "Hamdalaye",
-          "Sécurité",
-          "Yako",
-          "Construction mosquée",
-          "Bobo-Dioulasso",
-          "Léo",
-          "Justice"
+          "Ramadan",
+          "Jeûne",
+          "Jeunesse Étudiante Catholique (Burkina Faso)",
+          "Aïd el-Fitr",
+          "Communauté Musulmane de Haute-Volta",
+          "Lagos",
+          "Politique",
+          "Chine"
         ],
         "matrix": [
           [
@@ -487,9 +553,9 @@
             3,
             0,
             2,
-            2,
-            2,
-            2,
+            1,
+            1,
+            1,
             2,
             1,
             1,
@@ -504,10 +570,180 @@
             3,
             2,
             0,
+            2,
+            2,
+            2,
+            2,
             1,
             1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
             1,
             2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -518,61 +754,6 @@
             1
           ],
           [
-            2,
-            2,
-            1,
-            0,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            2,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            1,
             1,
             1,
             0,
@@ -582,119 +763,17 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
             1,
+            0,
             1
           ],
           [
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
             0,
             0,
             0,
@@ -702,22 +781,9 @@
             0,
             0,
             0,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
             0,
             0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
             0
           ]

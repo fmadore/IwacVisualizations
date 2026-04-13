@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:09.264465+00:00",
+  "generated_at": "2026-04-13T12:41:23.211117+00:00",
   "entity": {
     "o_id": 76298,
     "title": "Télévision",
@@ -101,15 +101,6 @@
           "year_max": 2017
         },
         {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1993,
-          "year_max": 1993
-        },
-        {
           "name": "Le Pays",
           "total": 1,
           "articles": 1,
@@ -117,6 +108,15 @@
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
         }
       ]
     }
@@ -474,20 +474,6 @@
           "count": 3
         },
         {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
-          "count": 2
-        },
-        {
-          "o_id": 274,
-          "name": "Allada",
-          "lat": 6.66547,
-          "lng": 2.15138,
-          "count": 2
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -502,53 +488,18 @@
           "count": 2
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 1
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 2
         },
         {
-          "o_id": 322,
-          "name": "Grand Popo",
-          "lat": 6.28333,
-          "lng": 1.83333,
-          "count": 1
-        },
-        {
-          "o_id": 388,
-          "name": "Sakété",
-          "lat": 6.73618,
-          "lng": 2.65866,
-          "count": 1
-        },
-        {
-          "o_id": 404,
-          "name": "Yako",
-          "lat": 12.9591,
-          "lng": -2.26075,
-          "count": 1
-        },
-        {
-          "o_id": 63422,
-          "name": "Passoré",
-          "lat": 12.95,
-          "lng": -2.2666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "count": 2
         },
         {
           "o_id": 33155,
@@ -628,6 +579,55 @@
           "count": 1
         },
         {
+          "o_id": 404,
+          "name": "Yako",
+          "lat": 12.9591,
+          "lng": -2.26075,
+          "count": 1
+        },
+        {
+          "o_id": 63422,
+          "name": "Passoré",
+          "lat": 12.95,
+          "lng": -2.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
+        },
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "count": 1
+        },
+        {
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
           "o_id": 23532,
           "name": "Mosquée Salam du Plateau",
           "lat": 5.319408854484132,
@@ -641,11 +641,11 @@
     "by_role": {
       "all": [
         {
-          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 3
         },
         {
-          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 3
         },
         {
@@ -725,6 +725,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 4
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.6,
             "rated_articles": 11
           },
@@ -775,6 +797,28 @@
               {
                 "name": "Non abordé",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 3
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.8,
@@ -829,6 +873,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 9
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 11
           }
@@ -842,11 +908,31 @@
       "all": {
         "years": [
           1993,
+          1994,
           1995,
+          1996,
           1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
           2007,
+          2008,
           2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
           2017,
+          2018,
           2019,
           2020
         ],
@@ -866,48 +952,48 @@
         ],
         "cells": [
           [
-            2,
-            9,
-            1
-          ],
-          [
-            6,
-            9,
-            1
-          ],
-          [
-            2,
-            10,
-            1
-          ],
-          [
-            5,
-            3,
-            3
-          ],
-          [
-            0,
-            0,
-            1
-          ],
-          [
-            3,
-            1,
-            1
-          ],
-          [
-            7,
-            4,
-            1
-          ],
-          [
-            4,
+            16,
             11,
             1
           ],
           [
-            1,
+            26,
+            9,
+            1
+          ],
+          [
+            2,
             7,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            24,
+            3,
+            3
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            14,
+            1,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            27,
+            4,
             1
           ]
         ]
@@ -921,27 +1007,27 @@
           "Côte d'Ivoire",
           "Radio Al Bayane",
           "Djiguiba Cissé",
-          "Haute Autorité de l'audiovisuel et de la communication",
           "Médias",
           "Développement",
-          "Radio La Voix de l'islam",
+          "Haute Autorité de l'audiovisuel et de la communication",
           "Cotonou",
           "Bénin",
+          "Radio La Voix de l'islam",
           "Mosquée de la Riviéra Golf",
           "Aboubacar Fofana",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
-          "Djougou",
-          "Allada",
-          "Isidore de Souza"
+          "Burkina Faso",
+          "Ouagadougou",
+          "Djougou"
         ],
         "matrix": [
           [
             0,
             5,
             5,
-            0,
             2,
             3,
+            0,
             0,
             0,
             0,
@@ -956,9 +1042,9 @@
             5,
             0,
             5,
-            0,
             2,
             3,
+            0,
             0,
             0,
             0,
@@ -973,9 +1059,9 @@
             5,
             5,
             0,
-            0,
             2,
             3,
+            0,
             0,
             0,
             0,
@@ -987,189 +1073,53 @@
             0
           ],
           [
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            3,
-            3,
-            3,
-            0,
-            0,
-            0,
             2,
             2,
-            2
-          ],
-          [
             2,
-            2,
+            0,
             2,
             1,
-            0,
-            2,
+            1,
+            1,
             0,
             1,
             1,
             1,
             1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            3,
-            0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1,
-            3,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            3,
-            0,
-            0,
-            0,
-            2,
-            2,
-            0,
-            0,
-            0,
-            1,
-            2,
-            2
-          ],
-          [
-            0,
-            0,
-            0,
-            3,
-            1,
-            0,
-            2,
-            0,
-            3,
-            0,
-            0,
-            0,
-            2,
-            2,
-            2
-          ],
-          [
-            0,
-            0,
-            0,
-            3,
-            1,
-            0,
-            2,
-            3,
-            0,
-            0,
-            0,
-            0,
-            2,
-            2,
-            2
-          ],
-          [
-            3,
-            3,
-            3,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            3,
-            0,
-            1,
-            3,
-            0,
-            0,
-            0,
-            1,
-            0,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            3,
-            0,
-            1,
-            2,
-            0,
-            0,
-            0,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            2,
-            1,
-            0,
-            1,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
             1,
             1
           ],
           [
-            0,
-            0,
-            0,
+            3,
+            3,
+            3,
             2,
             0,
             0,
-            2,
-            2,
-            2,
             0,
             0,
             0,
             1,
+            3,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
             0,
             2
           ],
@@ -1177,17 +1127,153 @@
             0,
             0,
             0,
+            1,
+            0,
+            3,
+            0,
+            3,
             2,
             0,
             0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            3,
+            3,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
             2,
             2,
-            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            0,
+            0,
             0,
             0,
             0,
             1,
             2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            3,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]

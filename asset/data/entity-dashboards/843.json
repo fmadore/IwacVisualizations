@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:42.510655+00:00",
+  "generated_at": "2026-04-13T12:40:56.701880+00:00",
   "entity": {
     "o_id": 843,
     "title": "Haut Conseil de la République",
@@ -75,15 +75,6 @@
           "year_max": 2005
         },
         {
-          "name": "La Nouvelle Marche",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 1991,
-          "year_max": 1991
-        },
-        {
           "name": "Le Pays",
           "total": 1,
           "articles": 1,
@@ -91,6 +82,15 @@
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1991,
+          "year_max": 1991
         },
         {
           "name": "La Lettre de Tchaoudjo",
@@ -290,20 +290,6 @@
           "count": 2
         },
         {
-          "o_id": 523,
-          "name": "Tchaoudjo",
-          "lat": 8.98333333,
-          "lng": 1.13333333,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -346,10 +332,10 @@
           "count": 1
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 1
         },
         {
@@ -386,6 +372,20 @@
           "lat": 14.731944444444,
           "lng": -17.457222222222,
           "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 1
         }
       ]
     }
@@ -402,7 +402,7 @@
           "count": 2
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
@@ -414,11 +414,11 @@
           "count": 1
         },
         {
-          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
           "count": 1
         },
         {
-          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         }
       ]
@@ -466,6 +466,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 6
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 1
+              }
+            ],
             "subjectivite_avg": 1.8,
             "rated_articles": 10
           },
@@ -500,6 +522,28 @@
               {
                 "name": "Marginal",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.3,
@@ -554,6 +598,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 8
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.22,
             "rated_articles": 10
           }
@@ -569,8 +635,32 @@
           1991,
           1992,
           1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
           2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
           2017,
+          2018,
+          2019,
           2020
         ],
         "months": [
@@ -589,38 +679,28 @@
         ],
         "cells": [
           [
-            1,
-            3,
-            2
-          ],
-          [
-            1,
-            7,
-            1
-          ],
-          [
-            0,
-            7,
-            1
-          ],
-          [
-            3,
-            3,
-            1
-          ],
-          [
-            4,
+            26,
             11,
             1
           ],
           [
             1,
+            3,
+            2
+          ],
+          [
             0,
+            7,
             1
           ],
           [
             1,
-            2,
+            0,
+            1
+          ],
+          [
+            14,
+            3,
             1
           ],
           [
@@ -629,8 +709,18 @@
             1
           ],
           [
-            5,
+            29,
             1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            7,
             1
           ]
         ]
@@ -646,16 +736,16 @@
           "Philippe Fanoko Kossi Kpodzro",
           "Grande mosquée de Lomé",
           "Union Musulmane du Togo",
-          "Sokodé",
           "Youssif Guimba",
           "Joseph Kokou Koffigoh",
           "Église Méthodiste du Togo",
-          "Tchaoudjo",
-          "Boukari Djobo",
-          "Conseil Suprême Islamique",
-          "La Mecque",
-          "Comité d'Action pour le Renouveau",
-          "Alliance de Démocrates pour le Renouveau"
+          "Sokodé",
+          "Boko Haram",
+          "Terrorisme",
+          "Burkina Faso",
+          "Cameroun",
+          "Mali",
+          "Djihad"
         ],
         "matrix": [
           [
@@ -664,16 +754,16 @@
             5,
             3,
             3,
-            1,
             2,
             2,
             2,
             1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             6,
@@ -681,14 +771,14 @@
             4,
             3,
             3,
-            1,
             2,
             1,
             2,
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             0
           ],
@@ -698,91 +788,189 @@
             0,
             1,
             3,
-            0,
             1,
             2,
             2,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            0,
+            0,
+            2,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             1,
             0,
             1,
             1
           ],
           [
-            3,
-            3,
-            1,
             0,
-            0,
-            1,
-            2,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            3,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            1,
             0,
             0,
             0,
@@ -792,124 +980,26 @@
             0,
             0,
             1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
             1,
             1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             1
           ],
           [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
-            0,
             1,
-            0,
-            0,
-            0,
-            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
             1,
             0
           ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:32.170032+00:00",
+  "generated_at": "2026-04-13T12:40:47.363523+00:00",
   "entity": {
     "o_id": 33161,
     "title": "Sebba",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2000,
-          "year_max": 2000
-        },
-        {
           "name": "Le Pays",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Burkina Faso",
           "year_min": 2018,
           "year_max": 2018
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
         }
       ]
     }
@@ -130,17 +130,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 2
-        },
-        {
           "o_id": 33161,
           "name": "Sebba",
           "lat": 13.43916667,
           "lng": 0.52888889,
+          "count": 2
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
           "count": 2
         },
         {
@@ -149,27 +149,6 @@
           "lat": 14.0341,
           "lng": -0.03261,
           "count": 2
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 1
-        },
-        {
-          "o_id": 311,
-          "name": "Fada N'Gourma",
-          "lat": 12.06157,
-          "lng": 0.35843,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
-          "count": 1
         },
         {
           "o_id": 397,
@@ -247,6 +226,27 @@
           "lat": 18.0,
           "lng": -2.0,
           "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
         }
       ]
     }
@@ -255,11 +255,11 @@
     "by_role": {
       "all": [
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -295,6 +295,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           },
@@ -321,6 +343,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.5,
@@ -351,6 +395,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -364,6 +430,23 @@
       "all": {
         "years": [
           2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
           2018
         ],
         "months": [
@@ -382,13 +465,13 @@
         ],
         "cells": [
           [
-            0,
-            2,
+            18,
+            3,
             1
           ],
           [
-            1,
-            3,
+            0,
+            2,
             1
           ]
         ]
@@ -402,18 +485,18 @@
           "Burkina Faso",
           "Pluralisme religieux",
           "Dori",
-          "Paul Ouédraogo",
-          "Formation",
-          "Union Fraternelle des Croyants de Dori",
-          "Sénégal",
-          "Fada N'Gourma",
-          "Ouagadougou",
           "Extrémisme",
           "Soum",
           "Tenkodogo",
           "Algérie",
           "Tchad",
-          "Bobo-Dioulasso"
+          "Bobo-Dioulasso",
+          "Niger",
+          "Peul",
+          "Terrorisme",
+          "Cohésion sociale",
+          "Radicalisation",
+          "Djibo"
         ],
         "matrix": [
           [
@@ -477,12 +560,12 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -494,12 +577,12 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -511,12 +594,12 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -528,12 +611,12 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -545,12 +628,12 @@
             1,
             0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
@@ -562,23 +645,23 @@
             1,
             1,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             1,
             1,
@@ -590,32 +673,15 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
             1,
             1,
             1,
-            1
-          ],
-          [
+            1,
             1,
             1,
             1,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
-            1,
-            0,
             1,
             1,
             1
@@ -624,12 +690,29 @@
             1,
             1,
             1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             1,
@@ -641,12 +724,12 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             1,
@@ -658,12 +741,12 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             1,

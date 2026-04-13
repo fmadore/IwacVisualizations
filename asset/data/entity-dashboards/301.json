@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:17.919443+00:00",
+  "generated_at": "2026-04-13T12:40:31.417723+00:00",
   "entity": {
     "o_id": 301,
     "title": "Dablo",
@@ -60,15 +60,6 @@
           "year_max": 2019
         },
         {
-          "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2019,
-          "year_max": 2019
-        },
-        {
           "name": "LeFaso.net",
           "total": 1,
           "articles": 1,
@@ -76,6 +67,15 @@
           "country": "Burkina Faso",
           "year_min": 2020,
           "year_max": 2020
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
         }
       ]
     }
@@ -366,13 +366,6 @@
           "count": 4
         },
         {
-          "o_id": 390,
-          "name": "Sanmatenga",
-          "lat": 13.25,
-          "lng": -1.08333,
-          "count": 2
-        },
-        {
           "o_id": 426,
           "name": "Barsalogho",
           "lat": 13.41389,
@@ -385,6 +378,34 @@
           "lat": 12.36566,
           "lng": -1.53388,
           "count": 2
+        },
+        {
+          "o_id": 390,
+          "name": "Sanmatenga",
+          "lat": 13.25,
+          "lng": -1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 318,
+          "name": "Gaoua",
+          "lat": 10.38247,
+          "lng": -3.16475,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
+        },
+        {
+          "o_id": 543,
+          "name": "Syrie",
+          "lat": 35.0,
+          "lng": 38.0,
+          "count": 1
         },
         {
           "o_id": 386,
@@ -401,31 +422,10 @@
           "count": 1
         },
         {
-          "o_id": 318,
-          "name": "Gaoua",
-          "lat": 10.38247,
-          "lng": -3.16475,
-          "count": 1
-        },
-        {
           "o_id": 389,
           "name": "Salmossi",
           "lat": 14.56148,
           "lng": -0.07253,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 543,
-          "name": "Syrie",
-          "lat": 35.0,
-          "lng": 38.0,
           "count": 1
         }
       ]
@@ -443,7 +443,7 @@
           "count": 2
         },
         {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
@@ -455,7 +455,7 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
       ]
@@ -499,6 +499,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 7
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.44,
             "rated_articles": 9
           },
@@ -529,6 +551,28 @@
               {
                 "name": "Secondaire",
                 "count": 3
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 2
+              },
+              {
+                "name": "4",
+                "count": 2
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.56,
@@ -563,6 +607,28 @@
                 "count": 8
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 6
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.67,
             "rated_articles": 9
           }
@@ -576,6 +642,14 @@
       "all": {
         "years": [
           2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
           2019,
           2020
         ],
@@ -595,32 +669,22 @@
         ],
         "cells": [
           [
-            0,
             10,
+            4,
             1
           ],
           [
-            1,
-            8,
-            1
-          ],
-          [
-            2,
-            1,
-            1
-          ],
-          [
-            2,
+            10,
             5,
             1
           ],
           [
-            1,
             9,
+            8,
             1
           ],
           [
-            1,
+            9,
             4,
             2
           ],
@@ -630,8 +694,18 @@
             1
           ],
           [
-            2,
-            4,
+            10,
+            1,
+            1
+          ],
+          [
+            9,
+            9,
+            1
+          ],
+          [
+            0,
+            10,
             1
           ]
         ]
@@ -642,155 +716,121 @@
     "by_role": {
       "all": {
         "names": [
-          "Burkina Faso",
           "Terrorisme",
           "Radicalisation",
-          "Prière",
+          "Burkina Faso",
           "Kaya",
           "Sécurité",
           "Forces de Défense et de Sécurité",
+          "Prière",
           "Mosquée",
-          "Cohésion sociale",
           "Pluralisme religieux",
-          "Sanmatenga",
-          "Hadj",
-          "Solidarité",
+          "Cohésion sociale",
           "Barsalogho",
-          "Ouagadougou"
+          "Cohabitation religieuse",
+          "Ouagadougou",
+          "Sanmatenga",
+          "Solidarité"
         ],
         "matrix": [
           [
             0,
-            5,
-            5,
-            3,
-            2,
-            3,
-            3,
-            3,
-            2,
-            3,
-            2,
-            1,
-            2,
-            1,
-            1
-          ],
-          [
-            5,
-            0,
             6,
-            2,
+            5,
             3,
             4,
             4,
-            3,
             2,
             3,
+            3,
+            2,
+            2,
+            2,
+            2,
             1,
-            0,
-            2,
-            2,
             2
           ],
           [
-            5,
             6,
             0,
-            2,
+            5,
             3,
             4,
             4,
-            3,
             2,
             3,
+            3,
+            2,
+            2,
+            2,
+            2,
             1,
+            2
+          ],
+          [
+            5,
+            5,
             0,
             2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
             2,
             2
           ],
           [
             3,
-            2,
+            3,
             2,
             0,
             2,
             2,
             2,
-            1,
-            1,
+            2,
             1,
             2,
             2,
             1,
+            2,
             1,
             1
           ],
           [
-            2,
-            3,
+            4,
+            4,
             3,
             2,
             0,
-            2,
-            2,
-            2,
+            4,
             2,
             1,
-            1,
-            1,
+            2,
             1,
             2,
-            2
+            1,
+            2,
+            1,
+            1
           ],
           [
+            4,
+            4,
             3,
-            4,
-            4,
-            2,
-            2,
-            0,
-            4,
-            1,
-            1,
-            2,
-            1,
-            0,
-            1,
-            2,
-            2
-          ],
-          [
-            3,
-            4,
-            4,
-            2,
             2,
             4,
             0,
-            1,
+            2,
             1,
             2,
             1,
-            0,
-            1,
-            2,
-            2
-          ],
-          [
-            3,
-            3,
-            3,
-            1,
             2,
             1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
             2,
             1,
             1
@@ -798,66 +838,49 @@
           [
             2,
             2,
-            2,
-            1,
-            2,
-            1,
-            1,
-            1,
-            0,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
             3,
-            3,
-            3,
-            1,
-            1,
             2,
             2,
-            1,
             2,
             0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
             1,
+            1,
+            1,
+            1,
+            0,
             1,
             2,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
             1
           ],
           [
-            1,
-            0,
-            0,
+            3,
+            3,
+            3,
             2,
             1,
-            0,
-            0,
-            0,
+            1,
             1,
             0,
             1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            0,
             0,
             0,
             0,
@@ -867,6 +890,7 @@
             2,
             2,
             2,
+            2,
             1,
             1,
             1,
@@ -874,44 +898,94 @@
             2,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
             1,
             0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
             0,
             1,
             1
           ],
           [
             1,
-            2,
-            2,
             1,
             2,
-            2,
+            1,
+            1,
+            1,
             2,
             1,
             0,
-            0,
-            1,
             0,
             1,
             0,
-            2
+            1,
+            0,
+            1
           ],
           [
-            1,
-            2,
-            2,
-            1,
             2,
             2,
             2,
             1,
+            1,
+            1,
+            1,
+            2,
             0,
             0,
             1,
-            0,
             1,
-            2,
+            1,
+            1,
             0
           ]
         ]

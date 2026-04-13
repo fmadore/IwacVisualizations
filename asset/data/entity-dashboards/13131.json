@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:54:00.263587+00:00",
+  "generated_at": "2026-04-13T12:41:15.574808+00:00",
   "entity": {
     "o_id": 13131,
     "title": "Opération Djidjoho",
@@ -38,7 +38,7 @@
     "by_role": {
       "all": [
         {
-          "name": "La Nation",
+          "name": "24 Heures au Bénin",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -56,7 +56,7 @@
           "year_max": 2019
         },
         {
-          "name": "24 Heures au Bénin",
+          "name": "La Nation",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -301,20 +301,6 @@
           "count": 3
         },
         {
-          "o_id": 62018,
-          "name": "Alibori",
-          "lat": 11.128611,
-          "lng": 2.936944,
-          "count": 2
-        },
-        {
-          "o_id": 76344,
-          "name": "Atacora",
-          "lat": 10.3,
-          "lng": 1.366667,
-          "count": 2
-        },
-        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
@@ -333,6 +319,20 @@
           "name": "Ghana",
           "lat": 8.1,
           "lng": -1.2,
+          "count": 2
+        },
+        {
+          "o_id": 62018,
+          "name": "Alibori",
+          "lat": 11.128611,
+          "lng": 2.936944,
+          "count": 2
+        },
+        {
+          "o_id": 76344,
+          "name": "Atacora",
+          "lat": 10.3,
+          "lng": 1.366667,
           "count": 2
         },
         {
@@ -397,6 +397,28 @@
                 "count": 3
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.67,
             "rated_articles": 3
           },
@@ -449,6 +471,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.0,
             "rated_articles": 3
           },
@@ -483,6 +527,28 @@
               {
                 "name": "Secondaire",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -535,13 +601,13 @@
           "Sécurité",
           "Bénin",
           "Parc national du W",
-          "Alibori",
-          "Atacora",
           "Togo",
           "Patrice Talon",
           "Niger",
           "Ghana",
-          "Djihad"
+          "Alibori",
+          "Atacora",
+          "Gouvernement"
         ],
         "matrix": [
           [
@@ -691,8 +757,8 @@
             2,
             0,
             2,
-            1,
-            1,
+            2,
+            2,
             1,
             1,
             1
@@ -708,8 +774,42 @@
             2,
             2,
             0,
+            2,
+            2,
             1,
             1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
             1,
             1,
             1
@@ -725,42 +825,8 @@
             2,
             1,
             1,
-            0,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
             1,
             1,
-            2,
-            0,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            2,
-            2,
             0,
             2,
             0
@@ -776,8 +842,8 @@
             2,
             1,
             1,
-            2,
-            2,
+            1,
+            1,
             2,
             0,
             0
@@ -793,8 +859,8 @@
             1,
             1,
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             0

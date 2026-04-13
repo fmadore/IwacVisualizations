@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:44.816058+00:00",
+  "generated_at": "2026-04-13T12:40:59.046231+00:00",
   "entity": {
     "o_id": 46769,
     "title": "Union Nationale des Musulmans de Côte d'Ivoire",
@@ -40,15 +40,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2000,
-          "year_max": 2000
-        },
-        {
           "name": "Notre Voie",
           "total": 1,
           "articles": 1,
@@ -56,6 +47,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 1999
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
         }
       ]
     }
@@ -124,6 +124,13 @@
           "count": 2
         },
         {
+          "o_id": 62236,
+          "name": "Hôtel Ivoire",
+          "lat": 5.3269,
+          "lng": -4.00547,
+          "count": 1
+        },
+        {
           "o_id": 23648,
           "name": "Mosquée de la Riviéra Golf",
           "lat": 5.33757653748572,
@@ -136,13 +143,6 @@
           "lat": 5.3648,
           "lng": -4.02366,
           "count": 1
-        },
-        {
-          "o_id": 62236,
-          "name": "Hôtel Ivoire",
-          "lat": 5.3269,
-          "lng": -4.00547,
-          "count": 1
         }
       ]
     }
@@ -151,11 +151,11 @@
     "by_role": {
       "all": [
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
       ]
@@ -191,6 +191,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.5,
             "rated_articles": 2
           },
@@ -213,6 +235,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.5,
@@ -247,6 +291,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           }
@@ -278,13 +344,13 @@
         ],
         "cells": [
           [
-            1,
-            10,
+            0,
+            5,
             1
           ],
           [
-            0,
-            5,
+            1,
+            10,
             1
           ]
         ]
@@ -297,19 +363,19 @@
         "names": [
           "Côte d'Ivoire",
           "Unité",
+          "Front populaire ivoirien",
+          "Léon Konan Koffi",
+          "Jeunesse",
+          "Paix",
+          "Éducation",
+          "Hôtel Ivoire",
+          "Laurent Dona-Fologo",
           "Mosquée de la Riviéra Golf",
           "Conflit",
           "Politique",
           "Conseil National Islamique",
           "Tidiane Bah",
-          "Élections",
-          "Adjamé",
-          "Réconciliation",
-          "Mamadou Dosso",
-          "Front populaire ivoirien",
-          "Léon Konan Koffi",
-          "Jeunesse",
-          "Paix"
+          "Élections"
         ],
         "matrix": [
           [
@@ -356,25 +422,8 @@
             1,
             1,
             1,
-            1,
-            1,
             0,
             0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -384,14 +433,14 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
             1,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -402,13 +451,13 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -420,12 +469,12 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -438,11 +487,11 @@
             1,
             1,
             1,
-            1,
             0,
             1,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -456,10 +505,10 @@
             1,
             1,
             1,
-            1,
             0,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0,
@@ -474,25 +523,8 @@
             1,
             1,
             1,
-            1,
-            0,
-            1,
             0,
             0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -510,7 +542,41 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             0,
             1,
             1,
@@ -526,8 +592,8 @@
             0,
             0,
             0,
-            0,
-            0,
+            1,
+            1,
             1,
             0,
             1,
@@ -543,8 +609,8 @@
             0,
             0,
             0,
-            0,
-            0,
+            1,
+            1,
             1,
             1,
             0,
@@ -560,8 +626,8 @@
             0,
             0,
             0,
-            0,
-            0,
+            1,
+            1,
             1,
             1,
             1,

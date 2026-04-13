@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:46.872026+00:00",
+  "generated_at": "2026-04-13T12:41:00.815964+00:00",
   "entity": {
     "o_id": 220,
     "title": "Élections législatives de 2011 au Bénin",
@@ -180,24 +180,24 @@
           "count": 3
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 1
-        },
-        {
-          "o_id": 459,
-          "name": "Mosquée centrale de Porto-Novo",
-          "lat": 6.470333,
-          "lng": 2.626611,
-          "count": 1
-        },
-        {
           "o_id": 399,
           "name": "Tchaourou",
           "lat": 9.0349,
           "lng": 2.5169,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
           "count": 1
         },
         {
@@ -215,17 +215,17 @@
           "count": 1
         },
         {
-          "o_id": 299,
-          "name": "Cotonou",
-          "lat": 6.36536,
-          "lng": 2.41833,
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
           "count": 1
         },
         {
-          "o_id": 370,
-          "name": "Natitingou",
-          "lat": 10.30416,
-          "lng": 1.37962,
+          "o_id": 459,
+          "name": "Mosquée centrale de Porto-Novo",
+          "lat": 6.470333,
+          "lng": 2.626611,
           "count": 1
         }
       ]
@@ -235,11 +235,11 @@
     "by_role": {
       "all": [
         {
-          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
@@ -247,7 +247,7 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
           "count": 1
         }
       ]
@@ -295,6 +295,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 3
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 1.25,
             "rated_articles": 4
           },
@@ -329,6 +351,28 @@
               {
                 "name": "Marginal",
                 "count": 1
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 3
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 1.75,
@@ -367,6 +411,28 @@
                 "count": 1
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 4
           }
@@ -403,13 +469,13 @@
             2
           ],
           [
-            1,
-            1,
+            0,
+            2,
             1
           ],
           [
-            0,
-            2,
+            1,
+            1,
             1
           ]
         ]
@@ -423,18 +489,18 @@
           "Élection présidentielle de 2011 au Bénin",
           "Élections",
           "Bénin",
-          "Démocratie",
-          "Protestants",
           "Prière",
           "Paix",
-          "Porto-Novo",
-          "Moudjadid Lawal Damala",
-          "Justice",
-          "Mosquée centrale de Porto-Novo",
-          "Karim Urbain da Silva",
-          "Éducation",
-          "Ousmane Batoko",
-          "Banque Islamique de Développement"
+          "Démocratie",
+          "Protestants",
+          "Banque Islamique de Développement",
+          "Tchaourou",
+          "Développement économique",
+          "Violence",
+          "Finance islamique",
+          "Thomas Boni Yayi",
+          "Coopération",
+          "Zul Kifl Salami"
         ],
         "matrix": [
           [
@@ -458,85 +524,51 @@
             3,
             0,
             3,
-            1,
-            1,
             2,
             2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1
           ],
           [
             3,
             3,
             0,
-            1,
-            1,
             2,
             2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1
           ],
           [
             2,
-            1,
-            1,
-            0,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            2,
-            1,
-            1,
-            2,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            2,
             2,
             2,
             0,
-            0,
-            0,
             1,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1
           ],
           [
@@ -544,8 +576,42 @@
             2,
             2,
             1,
+            0,
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            1,
+            2,
             0,
             0,
             0,
@@ -558,112 +624,11 @@
           ],
           [
             1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
             1,
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
             0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
             0,
             0,
             1,
@@ -672,24 +637,125 @@
             1,
             1,
             1,
-            0,
-            0
+            1
           ],
           [
             1,
             1,
             1,
-            0,
-            0,
             1,
             0,
             0,
             0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
             0,
             0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0
           ]
         ]

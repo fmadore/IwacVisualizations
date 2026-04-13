@@ -102,6 +102,8 @@ CENTRALITE_ORDER = [
     "Non abordé",
 ]
 
+SUBJECTIVITE_BUCKETS = ["1", "2", "3", "4", "5"]
+
 TOP_N_COOCCURRENCE = 15
 TOP_N_TOPICS = 12
 
@@ -545,6 +547,7 @@ class EntityDashboardGenerator:
         for model in SENTIMENT_MODELS:
             pol_counter: Counter = Counter()
             cen_counter: Counter = Counter()
+            sub_counter: Counter = Counter()
             sub_values: List[float] = []
             rated = 0
             for key in item_keys:
@@ -560,10 +563,13 @@ class EntityDashboardGenerator:
                     cen_counter[cen] += 1
                 if sub is not None:
                     sub_values.append(float(sub))
+                    bucket = max(1, min(5, int(round(float(sub)))))
+                    sub_counter[str(bucket)] += 1
                 if pol or cen or sub is not None:
                     rated += 1
             pol_ordered = [{"name": n, "count": pol_counter.get(n, 0)} for n in POLARITE_ORDER]
             cen_ordered = [{"name": n, "count": cen_counter.get(n, 0)} for n in CENTRALITE_ORDER]
+            sub_ordered = [{"name": n, "count": sub_counter.get(n, 0)} for n in SUBJECTIVITE_BUCKETS]
             while pol_ordered and pol_ordered[-1]["count"] == 0:
                 pol_ordered.pop()
             while cen_ordered and cen_ordered[-1]["count"] == 0:
@@ -571,6 +577,7 @@ class EntityDashboardGenerator:
             by_model[model] = {
                 "polarite": pol_ordered,
                 "centralite": cen_ordered,
+                "subjectivite": sub_ordered,
                 "subjectivite_avg": (
                     round(sum(sub_values) / len(sub_values), 2)
                     if sub_values else None
@@ -588,24 +595,31 @@ class EntityDashboardGenerator:
     # ------------------------------------------------------------------
 
     def compute_heatmap(self, entity_o_id: int) -> Dict[str, Any]:
+        """Year × month mention counts.
+
+        The y-axis spans the full year range (min..max inclusive) so
+        the heatmap stays consistent with the Years summary card even
+        when most items are YYYY-only. Gap years render as empty rows.
+        """
         item_keys = self.entity_items.get(entity_o_id, set())
         buckets: Dict[Tuple[int, int], int] = Counter()
-        years_seen: Set[int] = set()
+        all_years: Set[int] = set()
         for key in item_keys:
             date = self.items_meta.get(key, {}).get("pub_date") or ""
             year = extract_year(date)
             if year is None:
                 continue
+            all_years.add(year)
             month = _extract_month_num(date)
             if month is None:
                 continue
             buckets[(year, month)] += 1
-            years_seen.add(year)
-        if not years_seen:
+        if not all_years:
             return self._wrap({"years": [], "months": list(range(1, 13)), "cells": []})
-        years = sorted(years_seen)
+        years = list(range(min(all_years), max(all_years) + 1))
+        year_index = {y: i for i, y in enumerate(years)}
         cells = [
-            [years.index(y), m - 1, count]
+            [year_index[y], m - 1, count]
             for (y, m), count in buckets.items()
         ]
         return self._wrap({

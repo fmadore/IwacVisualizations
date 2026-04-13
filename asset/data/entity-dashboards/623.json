@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:39.534767+00:00",
+  "generated_at": "2026-04-13T12:40:53.710983+00:00",
   "entity": {
     "o_id": 623,
     "title": "Association des Jeunes Musulmans de Tanghin",
@@ -45,15 +45,6 @@
     "by_role": {
       "all": [
         {
-          "name": "L'Autre Regard",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2015,
-          "year_max": 2015
-        },
-        {
           "name": "Islam Info",
           "total": 1,
           "articles": 0,
@@ -61,6 +52,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "L'Autre Regard",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2015
         }
       ]
     }
@@ -69,11 +69,11 @@
     "by_role": {
       "all": [
         {
-          "name": "Burkina Faso",
+          "name": "Côte d'Ivoire",
           "count": 1
         },
         {
-          "name": "Côte d'Ivoire",
+          "name": "Burkina Faso",
           "count": 1
         }
       ]
@@ -243,18 +243,84 @@
           "gemini": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "chatgpt": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           },
           "mistral": {
             "polarite": [],
             "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": null,
             "rated_articles": 0
           }
@@ -268,6 +334,7 @@
       "all": {
         "years": [
           2015,
+          2016,
           2017
         ],
         "months": [
@@ -286,13 +353,13 @@
         ],
         "cells": [
           [
-            0,
-            3,
+            2,
+            6,
             1
           ],
           [
-            1,
-            6,
+            0,
+            3,
             1
           ]
         ]
@@ -305,19 +372,19 @@
         "names": [
           "Charité",
           "Enseignement confessionnel islamique",
+          "Terrorisme",
+          "Ligue des Écoles Confessionnelles Islamiques de Côte d'Ivoire",
+          "Association des Jeunes Musulmans de Treichville",
+          "Extrémisme",
+          "Corruption",
+          "Organisation des Établissements d'Enseignement Confessionnel Islamique en Côte d'Ivoire",
+          "Club des Hommes d'Affaires Musulmans de Côte d'Ivoire",
           "Charia",
           "Révolution de 2014 au Burkina Faso",
           "Abidjan",
           "Tenkodogo",
           "Hassane Soré",
-          "Palestine",
-          "Islamisme",
-          "Israël",
-          "Abdoul Aziz Compaoré",
-          "Bobo-Dioulasso",
-          "Ismaël Derra",
-          "Abdourahmane Guélbéogo",
-          "Djibo"
+          "Palestine"
         ],
         "matrix": [
           [
@@ -364,12 +431,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -381,12 +448,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -398,12 +465,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -415,12 +482,12 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -432,12 +499,12 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -449,12 +516,12 @@
             1,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -466,23 +533,23 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
@@ -493,13 +560,13 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             1,
@@ -510,13 +577,13 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             0,
@@ -527,13 +594,13 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -544,13 +611,13 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -561,13 +628,13 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,

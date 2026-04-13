@@ -222,6 +222,30 @@
             'Centrality':   'Centrality',
             'Subjectivity': 'Subjectivity',
 
+            // AI sentiment — polarité category labels (data uses raw
+            // French as the key; English locale maps them here while
+            // CSS palette lookups continue to use the French keys).
+            'Très positif':   'Very positive',
+            'Positif':        'Positive',
+            'Neutre':         'Neutral',
+            'Négatif':        'Negative',
+            'Très négatif':   'Very negative',
+            'Non applicable': 'Not applicable',
+
+            // AI sentiment — centralité category labels
+            'Très central': 'Very central',
+            'Central':      'Central',
+            'Secondaire':   'Secondary',
+            'Marginal':     'Marginal',
+            'Non abordé':   'Not addressed',
+
+            // AI sentiment — subjectivité bucket labels (1 = objective → 5 = very subjective)
+            '1': 'Very objective',
+            '2': 'Rather objective',
+            '3': 'Mixed',
+            '4': 'Rather subjective',
+            '5': 'Very subjective',
+
             // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
             'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
             'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
@@ -419,6 +443,28 @@
             'Polarity':     'Polarit\u00e9',
             'Centrality':   'Centralit\u00e9',
             'Subjectivity': 'Subjectivit\u00e9',
+
+            // AI sentiment — polarité category labels (pass-through in fr)
+            'Très positif':   'Tr\u00e8s positif',
+            'Positif':        'Positif',
+            'Neutre':         'Neutre',
+            'Négatif':        'N\u00e9gatif',
+            'Très négatif':   'Tr\u00e8s n\u00e9gatif',
+            'Non applicable': 'Non applicable',
+
+            // AI sentiment — centralité category labels (pass-through in fr)
+            'Très central': 'Tr\u00e8s central',
+            'Central':      'Central',
+            'Secondaire':   'Secondaire',
+            'Marginal':     'Marginal',
+            'Non abordé':   'Non abord\u00e9',
+
+            // AI sentiment — subjectivité bucket labels (1..5)
+            '1': 'Tr\u00e8s objectif',
+            '2': 'Plut\u00f4t objectif',
+            '3': 'Mixte',
+            '4': 'Plut\u00f4t subjectif',
+            '5': 'Tr\u00e8s subjectif',
 
             // Network panel toolbar
             'Zoom in': 'Zoom avant',

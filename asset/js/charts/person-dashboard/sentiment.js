@@ -52,6 +52,14 @@
                 'Secondaire':   readVar('--iwac-vis-cent-3'),
                 'Marginal':     readVar('--iwac-vis-cent-4'),
                 'Non abordé':   readVar('--iwac-vis-cent-na')
+            },
+            // Subjectivité 1..5 — sequential, 1 = objective, 5 = very subjective.
+            subjectivite: {
+                '1': readVar('--iwac-vis-subj-1'),
+                '2': readVar('--iwac-vis-subj-2'),
+                '3': readVar('--iwac-vis-subj-3'),
+                '4': readVar('--iwac-vis-subj-4'),
+                '5': readVar('--iwac-vis-subj-5')
             }
         };
     }
@@ -92,6 +100,9 @@
         var cenEl = P.el('div', 'iwac-vis-sentiment__chart iwac-vis-sentiment__chart--cen');
         host.appendChild(cenEl);
 
+        var subEl = P.el('div', 'iwac-vis-sentiment__chart iwac-vis-sentiment__chart--sub');
+        host.appendChild(subEl);
+
         var emptyEl = P.el('div', 'iwac-vis-empty', P.t('No data available'));
         emptyEl.style.display = 'none';
         host.appendChild(emptyEl);
@@ -102,6 +113,10 @@
                     C.segmentedBar(segments, {
                         colors: palette,
                         axisLabel: axisLabel,
+                        // Translate category names for display but keep
+                        // the palette keyed on the raw French names so
+                        // --iwac-vis-sent-* lookups still work.
+                        labelFor: function (name) { return P.t(name); },
                         fallbackColor: readVar('--iwac-vis-sent-neutral')
                     }),
                     true
@@ -121,6 +136,11 @@
             if (!m) { instance.clear(); return; }
             paint(instance, m.centralite, readPalettes().centralite, P.t('Centrality'));
         });
+        var subChart = ns.registerChart(subEl, function (el, instance) {
+            var m = currentModel();
+            if (!m) { instance.clear(); return; }
+            paint(instance, m.subjectivite, readPalettes().subjectivite, P.t('Subjectivity'));
+        });
 
         function refresh() {
             var m = currentModel();
@@ -128,12 +148,14 @@
                 emptyEl.style.display = '';
                 polEl.style.display = 'none';
                 cenEl.style.display = 'none';
+                subEl.style.display = 'none';
                 caption.textContent = '';
                 return;
             }
             emptyEl.style.display = 'none';
             polEl.style.display = '';
             cenEl.style.display = '';
+            subEl.style.display = '';
 
             var palettes = readPalettes();
             if (polChart && !polChart.isDisposed()) {
@@ -142,8 +164,13 @@
             if (cenChart && !cenChart.isDisposed()) {
                 paint(cenChart, m.centralite, palettes.centralite, P.t('Centrality'));
             }
+            if (subChart && !subChart.isDisposed()) {
+                paint(subChart, m.subjectivite, palettes.subjectivite, P.t('Subjectivity'));
+            }
 
-            // Caption: rated articles + average subjectivity score
+            // Caption: rated articles + average subjectivity score as a
+            // single glanceable number. The distribution is visible in
+            // the bar below, this line just summarizes it.
             var rated = m.rated_articles || 0;
             var bits = [P.t('articles_count', { count: rated })];
             if (m.subjectivite_avg != null) {

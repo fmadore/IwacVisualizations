@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:47.236906+00:00",
+  "generated_at": "2026-04-13T12:41:01.153572+00:00",
   "entity": {
     "o_id": 43066,
     "title": "Méga Kadr",
@@ -86,6 +86,24 @@
           "year_max": 1996
         },
         {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1996,
+          "year_max": 1996
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        },
+        {
           "name": "Alif",
           "total": 1,
           "articles": 0,
@@ -102,24 +120,6 @@
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
-        },
-        {
-          "name": "Notre Voie",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1999,
-          "year_max": 1999
-        },
-        {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1996,
-          "year_max": 1996
         }
       ]
     }
@@ -882,31 +882,10 @@
           "count": 1
         },
         {
-          "o_id": 63383,
-          "name": "Aghien",
-          "lat": 5.388123,
-          "lng": -3.999984,
-          "count": 1
-        },
-        {
-          "o_id": 23600,
-          "name": "Grande mosquée des II-Plateaux Aghien",
-          "lat": 5.382535557731071,
-          "lng": -3.993870062858185,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
-          "o_id": 63441,
-          "name": "Mosquée de la Riviéra 3",
-          "lat": 5.348374315507951,
-          "lng": -3.954733469340994,
+          "o_id": 67746,
+          "name": "Mosquée An Nour Riviera 2",
+          "lat": 5.351224783601886,
+          "lng": -3.980895863811308,
           "count": 1
         },
         {
@@ -1029,10 +1008,31 @@
           "count": 1
         },
         {
-          "o_id": 67746,
-          "name": "Mosquée An Nour Riviera 2",
-          "lat": 5.351224783601886,
-          "lng": -3.980895863811308,
+          "o_id": 63383,
+          "name": "Aghien",
+          "lat": 5.388123,
+          "lng": -3.999984,
+          "count": 1
+        },
+        {
+          "o_id": 23600,
+          "name": "Grande mosquée des II-Plateaux Aghien",
+          "lat": 5.382535557731071,
+          "lng": -3.993870062858185,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 63441,
+          "name": "Mosquée de la Riviéra 3",
+          "lat": 5.348374315507951,
+          "lng": -3.954733469340994,
           "count": 1
         }
       ]
@@ -1094,6 +1094,28 @@
                 "count": 13
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 2
+              },
+              {
+                "name": "2",
+                "count": 5
+              },
+              {
+                "name": "3",
+                "count": 3
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.54,
             "rated_articles": 13
           },
@@ -1112,6 +1134,28 @@
               {
                 "name": "Très central",
                 "count": 13
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 1
+              },
+              {
+                "name": "2",
+                "count": 4
+              },
+              {
+                "name": "3",
+                "count": 5
+              },
+              {
+                "name": "4",
+                "count": 3
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.77,
@@ -1146,6 +1190,28 @@
                 "count": 5
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 11
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 1
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.23,
             "rated_articles": 13
           }
@@ -1163,6 +1229,8 @@
           1994,
           1995,
           1996,
+          1997,
+          1998,
           1999,
           2000
         ],
@@ -1187,43 +1255,43 @@
             5
           ],
           [
+            8,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2
+          ],
+          [
             1,
             2,
+            2
+          ],
+          [
+            1,
+            3,
             2
           ],
           [
             0,
             2,
             2
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            1
           ],
           [
             1,
             4,
-            1
-          ],
-          [
-            1,
-            3,
-            2
-          ],
-          [
-            3,
-            3,
-            1
-          ],
-          [
-            2,
-            2,
-            2
-          ],
-          [
-            5,
-            0,
-            1
-          ],
-          [
-            6,
-            0,
             1
           ]
         ]
@@ -1240,14 +1308,14 @@
           "Treichville",
           "Palais des Sports de Treichville",
           "Prière",
-          "Nuit du Destin",
           "Coran",
+          "Nuit du Destin",
           "Djiguiba Cissé",
           "Unité",
-          "Abidjan",
+          "Idriss Koudouss Koné",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Mahomet",
-          "Idriss Koudouss Koné",
+          "Abidjan",
           "Mosquée"
         ],
         "matrix": [
@@ -1262,10 +1330,10 @@
             7,
             8,
             6,
-            4,
+            6,
             6,
             5,
-            6,
+            4,
             4
           ],
           [
@@ -1275,14 +1343,14 @@
             8,
             8,
             8,
-            7,
             8,
+            7,
             6,
             5,
-            5,
+            4,
             4,
             5,
-            4,
+            5,
             5
           ],
           [
@@ -1296,10 +1364,10 @@
             8,
             4,
             5,
-            5,
-            6,
-            6,
             4,
+            6,
+            6,
+            5,
             5
           ],
           [
@@ -1313,10 +1381,10 @@
             6,
             7,
             5,
+            4,
+            4,
+            4,
             5,
-            4,
-            4,
-            4,
             4
           ],
           [
@@ -1347,10 +1415,27 @@
             8,
             5,
             5,
-            6,
+            4,
             5,
             6,
+            6,
+            4
+          ],
+          [
+            7,
+            8,
+            8,
+            6,
+            7,
+            8,
+            0,
+            8,
+            3,
+            5,
             4,
+            5,
+            5,
+            6,
             4
           ],
           [
@@ -1360,34 +1445,17 @@
             6,
             7,
             8,
-            0,
             8,
+            0,
             3,
             6,
-            6,
+            5,
             6,
             5,
-            5,
+            6,
             3
           ],
           [
-            7,
-            8,
-            8,
-            6,
-            7,
-            8,
-            8,
-            0,
-            3,
-            5,
-            6,
-            5,
-            5,
-            4,
-            4
-          ],
-          [
             8,
             6,
             4,
@@ -1398,10 +1466,10 @@
             3,
             0,
             3,
-            2,
+            3,
             2,
             3,
-            3,
+            2,
             3
           ],
           [
@@ -1411,99 +1479,99 @@
             5,
             7,
             5,
-            6,
             5,
+            6,
             3,
             0,
-            4,
+            5,
             4,
             3,
-            5,
+            4,
             0
           ],
           [
+            6,
+            4,
+            4,
             4,
             5,
-            5,
-            5,
-            5,
-            6,
-            6,
-            6,
-            2,
             4,
-            0,
+            4,
+            5,
             3,
-            3,
-            2,
-            2
-          ],
-          [
-            6,
-            4,
-            6,
-            4,
             5,
-            5,
-            6,
-            5,
-            2,
-            4,
-            3,
             0,
             4,
-            4,
-            2
-          ],
-          [
-            5,
-            5,
-            6,
-            4,
-            5,
-            6,
-            5,
-            5,
-            3,
-            3,
-            3,
-            4,
-            0,
             2,
-            3
-          ],
-          [
-            6,
-            4,
-            4,
-            4,
-            5,
-            4,
-            5,
-            4,
-            3,
-            5,
             2,
-            4,
-            2,
-            0,
             1
           ],
           [
+            6,
+            4,
+            6,
             4,
             5,
             5,
-            4,
+            5,
+            6,
             2,
             4,
-            3,
             4,
+            0,
+            4,
+            3,
+            2
+          ],
+          [
+            5,
+            5,
+            6,
+            4,
+            5,
+            6,
+            5,
+            5,
+            3,
+            3,
+            2,
+            4,
+            0,
+            3,
+            3
+          ],
+          [
+            4,
+            5,
+            5,
+            5,
+            5,
+            6,
+            6,
+            6,
+            2,
+            4,
+            2,
+            3,
             3,
             0,
+            2
+          ],
+          [
+            4,
+            5,
+            5,
+            4,
             2,
+            4,
+            4,
+            3,
+            3,
+            0,
+            1,
             2,
             3,
-            1,
+            2,
             0
           ]
         ]

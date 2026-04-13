@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T09:53:35.158463+00:00",
+  "generated_at": "2026-04-13T12:40:48.994151+00:00",
   "entity": {
     "o_id": 62029,
     "title": "Kassakou",
@@ -38,7 +38,7 @@
     "by_role": {
       "all": [
         {
-          "name": "Banouto",
+          "name": "La Nouvelle Tribune",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -47,7 +47,7 @@
           "year_max": 2020
         },
         {
-          "name": "La Nouvelle Tribune",
+          "name": "Banouto",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -214,6 +214,28 @@
                 "count": 2
               }
             ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
             "subjectivite_avg": 2.0,
             "rated_articles": 2
           },
@@ -240,6 +262,28 @@
               {
                 "name": "Très central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 2
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.0,
@@ -272,6 +316,28 @@
               {
                 "name": "Central",
                 "count": 2
+              }
+            ],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 1
+              },
+              {
+                "name": "3",
+                "count": 1
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
               }
             ],
             "subjectivite_avg": 2.5,
@@ -321,10 +387,10 @@
           "Covid-19",
           "Violence",
           "Prière",
-          "Radio Kandi FM",
           "Police",
           "Sensibilisation",
-          "Gouvernement"
+          "Gouvernement",
+          "Radio Kandi FM"
         ],
         "matrix": [
           [
@@ -389,7 +455,29 @@
             1,
             1,
             0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0
           ],
@@ -401,29 +489,7 @@
             1,
             0,
             0,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
             0
           ]
         ]
