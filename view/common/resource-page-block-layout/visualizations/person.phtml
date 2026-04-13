@@ -8,15 +8,33 @@
  * removed since the same metadata is already shown by Omeka above the
  * resource page block.
  *
- * Assets: the item controller already enqueues i18n / theme / core
- * via Module::addAssets(). This partial enqueues the shared primitives
- * and person-specific orchestrator + panel modules.
+ * Asset loading is self-contained: this partial enqueues every CSS/JS
+ * dependency it needs. Module.php deliberately does NOT inject ECharts
+ * et al. on every Item view — this partial pulls them in only when an
+ * actual person dashboard is being rendered.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-// Shared primitives that aren't on the default item-controller bundle.
+// Stylesheet
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+);
+
+// CDN libraries — ECharts for charts/network, MapLibre for the locations map.
+// echarts-wordcloud is intentionally NOT loaded; the person dashboard has
+// no word cloud panel.
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js');
+$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
+
+// IWAC infrastructure — order matters: i18n → theme → core
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+
+// Shared primitives
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));

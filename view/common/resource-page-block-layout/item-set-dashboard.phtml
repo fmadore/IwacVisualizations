@@ -3,12 +3,30 @@
  * Item Set Dashboard resource page block.
  *
  * Async container. Aggregated visualizations for an item set are expected
- * to load from a precomputed JSON file. ECharts + IWAC theme/i18n assets
- * are injected by Module.php on item-set controllers.
+ * to load from a precomputed JSON file (pipeline TBD).
+ *
+ * Asset loading is self-contained — Module.php no longer blanket-injects
+ * ECharts/MapLibre on every Item/ItemSet view.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemSetRepresentation $resource
  */
+
+// Stylesheet
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+);
+
+// CDN libraries
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js');
+$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
+
+// IWAC infrastructure
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
 
 $siteSlug = $this->currentSite()->slug();
 ?>

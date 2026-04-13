@@ -102,7 +102,7 @@ class PersonDashboardGenerator:
         # Built in later tasks
         self.entity_lookup: Dict[str, Dict[str, Any]] = {}
         self.id_to_entity: Dict[int, Dict[str, Any]] = {}  # o_id -> entity info (reverse index)
-        self.lieux_rows: Dict[int, Tuple[float, float, str]] = {}  # o_id -> (lat, lng, country)
+        self.lieux_rows: Dict[int, Tuple[float, float]] = {}  # o_id -> (lat, lng)
         self.persons: Dict[int, Dict[str, Any]] = {}
         self.item_entities: Dict[str, Dict[str, List[int]]] = {}  # item_key -> {'subject': [o_id, ...], 'creator': [...]}
         # item_key -> set of Lieux o_ids parsed from the dcterms:spatial field.
@@ -163,7 +163,6 @@ class PersonDashboardGenerator:
             )
         alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
         coord_col = find_column(df, ["Coordonnées", "coordinates"])
-        countries_col = find_column(df, ["countries", "country"])
 
         self.prenom_col = find_column(df, ["Prénom", "foaf:firstName"])
         self.nom_col = find_column(df, ["Nom", "foaf:lastName"])
@@ -208,9 +207,12 @@ class PersonDashboardGenerator:
             if entity_type == "Lieux" and coord_col:
                 coords = parse_coordinates(row.get(coord_col))
                 if coords is not None:
-                    country_list = parse_pipe_separated(row.get(countries_col)) if countries_col else []
-                    country = country_list[0] if country_list else ""
-                    self.lieux_rows[o_id] = (coords[0], coords[1], country)
+                    # Note: index.countries is "countries this entity has
+                    # been MENTIONED in", not "country this place is
+                    # located in", so we deliberately do not record a
+                    # country for the place. The frontend popup just
+                    # shows the place name + count.
+                    self.lieux_rows[o_id] = (coords[0], coords[1])
 
         self.n_persons = len(self.persons)
         logger.info(
@@ -483,14 +485,13 @@ class PersonDashboardGenerator:
                     loc_counter[entity_o_id] += 1
             entries = []
             for entity_o_id, count in loc_counter.most_common():
-                lat, lng, country = self.lieux_rows[entity_o_id]
+                lat, lng = self.lieux_rows[entity_o_id]
                 info = self.id_to_entity.get(entity_o_id, {})
                 entries.append({
                     "o_id": entity_o_id,
                     "name": info.get("title", f"#{entity_o_id}"),
                     "lat": lat,
                     "lng": lng,
-                    "country": country,
                     "count": count,
                 })
             by_role[role] = entries

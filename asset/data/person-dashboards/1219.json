@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-04-12T10:22:08.022843+00:00",
+  "generated_at": "2026-04-13T07:32:39.044846+00:00",
   "person": {
     "o_id": 1219,
     "title": "Alice Degorce",
@@ -22,24 +22,21 @@
         "year_min": 2011,
         "year_max": 2021,
         "newspapers_count": 0,
-        "countries_count": 1,
-        "neighbors_count": 0
+        "countries_count": 1
       },
       "subject": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
         "newspapers_count": 0,
-        "countries_count": 0,
-        "neighbors_count": 0
+        "countries_count": 0
       },
       "creator": {
         "total_mentions": 6,
         "year_min": 2011,
         "year_max": 2021,
         "newspapers_count": 0,
-        "countries_count": 1,
-        "neighbors_count": 0
+        "countries_count": 1
       }
     }
   },
@@ -160,9 +157,39 @@
   },
   "locations": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 6
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 6
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
+      ]
     }
   }
 }

@@ -25,7 +25,6 @@
                         geometry: { type: 'Point', coordinates: [l.lng, l.lat] },
                         properties: {
                             name: l.name,
-                            country: l.country || '',
                             count: l.count
                         }
                     };
@@ -89,7 +88,6 @@
                         .setLngLat(f.geometry.coordinates)
                         .setHTML(
                             '<strong>' + P.escapeHtml(f.properties.name) + '</strong><br>' +
-                            (f.properties.country ? P.escapeHtml(f.properties.country) + '<br>' : '') +
                             P.formatNumber(Number(f.properties.count)) + ' ' + P.t('Mentions').toLowerCase()
                         )
                         .addTo(m);

@@ -44,6 +44,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    _canonical_country,
     configure_logging,
     create_metadata_block,
     extract_year,
@@ -56,6 +57,31 @@ from iwac_utils import (
 # separately (authority records, no ``pub_date``); ``references`` are
 # bibliographic metadata and are excluded from the timeline.
 CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual"]
+
+
+def _canonicalize_country_field(value: Any) -> Any:
+    """Map a single dataframe ``country`` cell to its canonical form.
+
+    Handles three shapes the column can take in practice:
+      * NaN / None / empty → returned untouched so downstream guards
+        keep working
+      * Plain string ("Bénin", "côte d'ivoire") → canonical string
+      * Pipe-separated string ("Bénin|Burkina Faso") → canonical pipe
+        string with each piece normalized
+
+    Routes every piece through ``_canonical_country`` so apostrophes
+    don't get title-cased and known countries collapse to one spelling.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return value
+    s = str(value)
+    if not s.strip():
+        return value
+    if "|" in s:
+        return "|".join(
+            _canonical_country(p) for p in s.split("|") if p.strip()
+        )
+    return _canonical_country(s)
 
 # Entity types in the ``index`` subset — keyed by the French label used in
 # the dataset. Order controls the tab order in the block.
@@ -281,8 +307,9 @@ def compute_country_distribution(
         df = dataframes.get(subset)
         if df is None or df.empty or "country" not in df.columns:
             continue
-        # ``country`` is usually single-value but can contain pipe-separated
-        # values. Handle both uniformly.
+        # ``country`` was normalized to canonical IWAC spellings at load
+        # time (see _canonicalize_country_field), so downstream code can
+        # just read raw values here.
         for value in df["country"]:
             countries = parse_pipe_separated(value)
             for country in countries:
@@ -1027,6 +1054,15 @@ def build_overview(
     for subset in CONTENT_SUBSETS + ["references", "index"]:
         df = load_dataset_safe(subset, repo_id=repo_id, token=token)
         if df is not None:
+            # Normalize the country column once at load time so every
+            # downstream aggregator gets canonical IWAC spellings
+            # (Côte d'Ivoire instead of Côte D'Ivoire / Côte d'ivoire,
+            # Bénin instead of Benin, etc.) without each call site
+            # having to remember to call _canonical_country.
+            if "country" in df.columns:
+                df["country"] = df["country"].apply(_canonicalize_country_field)
+            if "countries" in df.columns:
+                df["countries"] = df["countries"].apply(_canonicalize_country_field)
             dataframes[subset] = df
 
     subset_summaries = {

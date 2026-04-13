@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-04-12T10:22:08.480524+00:00",
+  "generated_at": "2026-04-13T07:32:39.431779+00:00",
   "person": {
     "o_id": 1765,
     "title": "Paul Marty",
@@ -21,24 +21,21 @@
         "year_min": 1922,
         "year_max": 1926,
         "newspapers_count": 0,
-        "countries_count": 2,
-        "neighbors_count": 0
+        "countries_count": 2
       },
       "subject": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
         "newspapers_count": 0,
-        "countries_count": 0,
-        "neighbors_count": 0
+        "countries_count": 0
       },
       "creator": {
         "total_mentions": 2,
         "year_min": 1922,
         "year_max": 1926,
         "newspapers_count": 0,
-        "countries_count": 2,
-        "neighbors_count": 0
+        "countries_count": 2
       }
     }
   },
@@ -50,15 +47,15 @@
           1926
         ],
         "countries": [
-          "Benin",
-          "Côte D'Ivoire"
+          "Bénin",
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Benin": [
+          "Bénin": [
             0,
             1
           ],
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             1,
             0
           ]
@@ -75,15 +72,15 @@
           1926
         ],
         "countries": [
-          "Benin",
-          "Côte D'Ivoire"
+          "Bénin",
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Benin": [
+          "Bénin": [
             0,
             1
           ],
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             1,
             0
           ]
@@ -102,22 +99,22 @@
     "by_role": {
       "all": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 1
         },
         {
-          "name": "Benin",
+          "name": "Bénin",
           "count": 1
         }
       ],
       "subject": [],
       "creator": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 1
         },
         {
-          "name": "Benin",
+          "name": "Bénin",
           "count": 1
         }
       ]
@@ -165,9 +162,39 @@
   },
   "locations": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
+      ]
     }
   }
 }

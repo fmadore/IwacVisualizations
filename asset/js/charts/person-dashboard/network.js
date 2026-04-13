@@ -20,6 +20,22 @@
 
     var ZOOM_FACTOR = 1.4;
 
+    /**
+     * ECharts' `graphRoam` action silently no-ops unless the dispatch
+     * carries `originX`/`originY` in pixel coordinates — there is no
+     * default anchor, so without them the roam helper has nothing to
+     * scale around. Anchor every dispatched zoom on the chart's
+     * geometric center.
+     */
+    function dispatchZoom(chart, factor) {
+        chart.dispatchAction({
+            type: 'graphRoam',
+            zoom: factor,
+            originX: chart.getWidth() / 2,
+            originY: chart.getHeight() / 2
+        });
+    }
+
     function buildToolbar(getChart) {
         var bar = P.el('div', 'iwac-vis-graph-toolbar');
 
@@ -36,10 +52,10 @@
         }
 
         bar.appendChild(btn('+', P.t('Zoom in'), function (c) {
-            c.dispatchAction({ type: 'graphRoam', zoom: ZOOM_FACTOR });
+            dispatchZoom(c, ZOOM_FACTOR);
         }));
         bar.appendChild(btn('\u2212', P.t('Zoom out'), function (c) {
-            c.dispatchAction({ type: 'graphRoam', zoom: 1 / ZOOM_FACTOR });
+            dispatchZoom(c, 1 / ZOOM_FACTOR);
         }));
         bar.appendChild(btn('\u21BA', P.t('Reset view'), function (c) {
             c.dispatchAction({ type: 'restore' });

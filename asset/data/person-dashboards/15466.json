@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-04-12T10:21:58.534254+00:00",
+  "generated_at": "2026-04-13T07:32:27.848148+00:00",
   "person": {
     "o_id": 15466,
     "title": "Mahmoud Ahmadinejad",
@@ -18,24 +18,21 @@
         "year_min": 2010,
         "year_max": 2011,
         "newspapers_count": 2,
-        "countries_count": 2,
-        "neighbors_count": 0
+        "countries_count": 2
       },
       "subject": {
         "total_mentions": 1,
         "year_min": 2010,
         "year_max": 2010,
         "newspapers_count": 1,
-        "countries_count": 1,
-        "neighbors_count": 0
+        "countries_count": 1
       },
       "creator": {
         "total_mentions": 1,
         "year_min": 2011,
         "year_max": 2011,
         "newspapers_count": 1,
-        "countries_count": 1,
-        "neighbors_count": 0
+        "countries_count": 1
       }
     }
   },
@@ -47,15 +44,15 @@
           2011
         ],
         "countries": [
-          "Benin",
-          "Côte D'Ivoire"
+          "Bénin",
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Benin": [
+          "Bénin": [
             1,
             0
           ],
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             0,
             1
           ]
@@ -66,10 +63,10 @@
           2010
         ],
         "countries": [
-          "Benin"
+          "Bénin"
         ],
         "series": {
-          "Benin": [
+          "Bénin": [
             1
           ]
         }
@@ -79,10 +76,10 @@
           2011
         ],
         "countries": [
-          "Côte D'Ivoire"
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             1
           ]
         }
@@ -97,7 +94,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Côte D'Ivoire",
+          "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
         },
@@ -106,7 +103,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Benin",
+          "country": "Bénin",
           "year_min": 2010,
           "year_max": 2010
         }
@@ -117,7 +114,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Benin",
+          "country": "Bénin",
           "year_min": 2010,
           "year_max": 2010
         }
@@ -128,7 +125,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Côte D'Ivoire",
+          "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
         }
@@ -139,23 +136,23 @@
     "by_role": {
       "all": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 1
         },
         {
-          "name": "Benin",
+          "name": "Bénin",
           "count": 1
         }
       ],
       "subject": [
         {
-          "name": "Benin",
+          "name": "Bénin",
           "count": 1
         }
       ],
       "creator": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 1
         }
       ]
@@ -203,9 +200,75 @@
   },
   "locations": {
     "by_role": {
-      "all": [],
-      "subject": [],
-      "creator": []
+      "all": [
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 13747,
+          "name": "Téhéran",
+          "lat": 35.7,
+          "lng": 51.416667,
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 13747,
+          "name": "Téhéran",
+          "lat": 35.7,
+          "lng": 51.416667,
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        }
+      ]
     }
   }
 }

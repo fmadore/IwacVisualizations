@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-04-12T10:22:04.883041+00:00",
+  "generated_at": "2026-04-13T07:32:35.822953+00:00",
   "person": {
     "o_id": 62166,
     "title": "Lambert Kouassi",
@@ -20,24 +20,21 @@
         "year_min": 1988,
         "year_max": 1995,
         "newspapers_count": 1,
-        "countries_count": 1,
-        "neighbors_count": 6
+        "countries_count": 1
       },
       "subject": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
         "newspapers_count": 0,
-        "countries_count": 0,
-        "neighbors_count": 0
+        "countries_count": 0
       },
       "creator": {
         "total_mentions": 3,
         "year_min": 1988,
         "year_max": 1995,
         "newspapers_count": 1,
-        "countries_count": 1,
-        "neighbors_count": 6
+        "countries_count": 1
       }
     }
   },
@@ -50,10 +47,10 @@
           1995
         ],
         "countries": [
-          "Côte D'Ivoire"
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             1,
             1,
             1
@@ -72,10 +69,10 @@
           1995
         ],
         "countries": [
-          "Côte D'Ivoire"
+          "Côte d'Ivoire"
         ],
         "series": {
-          "Côte D'Ivoire": [
+          "Côte d'Ivoire": [
             1,
             1,
             1
@@ -92,7 +89,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
-          "country": "Côte D'Ivoire",
+          "country": "Côte d'Ivoire",
           "year_min": 1988,
           "year_max": 1995
         }
@@ -104,7 +101,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
-          "country": "Côte D'Ivoire",
+          "country": "Côte d'Ivoire",
           "year_min": 1988,
           "year_max": 1995
         }
@@ -115,14 +112,14 @@
     "by_role": {
       "all": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 3
         }
       ],
       "subject": [],
       "creator": [
         {
-          "name": "Côte D'Ivoire",
+          "name": "Côte d'Ivoire",
           "count": 3
         }
       ]
@@ -330,11 +327,24 @@
     "by_role": {
       "all": [
         {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
           "o_id": 46238,
           "name": "Bouaké",
           "lat": 7.68333,
           "lng": -5.03306,
-          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
           "count": 2
         },
         {
@@ -342,7 +352,83 @@
           "name": "Adzopé",
           "lat": 6.103517,
           "lng": -3.864814,
-          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 76487,
+          "name": "Tiassalé",
+          "lat": 5.89839,
+          "lng": -4.82293,
+          "count": 1
+        },
+        {
+          "o_id": 61323,
+          "name": "Dabou",
+          "lat": 5.325556,
+          "lng": -4.376667,
+          "count": 1
+        },
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
+          "o_id": 61325,
+          "name": "Mosquée Bilal",
+          "lat": 5.249081568964093,
+          "lng": -3.9182779270167036,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 76497,
+          "name": "Vavoua",
+          "lat": 7.38333333,
+          "lng": -6.48333333,
+          "count": 1
+        },
+        {
+          "o_id": 63426,
+          "name": "Samatiguila",
+          "lat": 9.8333333333333,
+          "lng": -7.5666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76470,
+          "name": "Issia",
+          "lat": 6.4922222222222,
+          "lng": -6.5855555555556,
           "count": 1
         },
         {
@@ -350,18 +436,37 @@
           "name": "Daloa",
           "lat": 6.866667,
           "lng": -6.45,
-          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 76475,
+          "name": "Soubré",
+          "lat": 5.7836111111111,
+          "lng": -6.5938888888889,
           "count": 1
         }
       ],
       "subject": [],
       "creator": [
         {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
           "o_id": 46238,
           "name": "Bouaké",
           "lat": 7.68333,
           "lng": -5.03306,
-          "country": "Benin",
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
           "count": 2
         },
         {
@@ -369,7 +474,83 @@
           "name": "Adzopé",
           "lat": 6.103517,
           "lng": -3.864814,
-          "country": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "o_id": 76487,
+          "name": "Tiassalé",
+          "lat": 5.89839,
+          "lng": -4.82293,
+          "count": 1
+        },
+        {
+          "o_id": 61323,
+          "name": "Dabou",
+          "lat": 5.325556,
+          "lng": -4.376667,
+          "count": 1
+        },
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
+          "o_id": 61325,
+          "name": "Mosquée Bilal",
+          "lat": 5.249081568964093,
+          "lng": -3.9182779270167036,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 76497,
+          "name": "Vavoua",
+          "lat": 7.38333333,
+          "lng": -6.48333333,
+          "count": 1
+        },
+        {
+          "o_id": 63426,
+          "name": "Samatiguila",
+          "lat": 9.8333333333333,
+          "lng": -7.5666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76470,
+          "name": "Issia",
+          "lat": 6.4922222222222,
+          "lng": -6.5855555555556,
           "count": 1
         },
         {
@@ -377,7 +558,13 @@
           "name": "Daloa",
           "lat": 6.866667,
           "lng": -6.45,
-          "country": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "o_id": 76475,
+          "name": "Soubré",
+          "lat": 5.7836111111111,
+          "lng": -6.5938888888889,
           "count": 1
         }
       ]
