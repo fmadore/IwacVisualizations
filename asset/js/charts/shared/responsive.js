@@ -107,7 +107,6 @@
             }
         }
         if (allRules.length === 0) return baseOption;
-        allRules.push({ option: baseOption });
         return { baseOption: baseOption, media: allRules };
     };
 })();
