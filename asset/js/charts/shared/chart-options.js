@@ -68,14 +68,12 @@
     };
 
     C._barDefaults = function (direction) {
-        var radius = direction === 'horizontal'
-            ? [0, 2, 2, 0]
-            : [2, 2, 0, 0];
+        var horizontal = direction === 'horizontal';
         return {
-            barMaxWidth: 24,
+            barMaxWidth: horizontal ? 24 : 28,
             emphasis: { focus: 'series' },
             blur: { itemStyle: { opacity: 0.35 } },
-            itemStyle: { borderRadius: radius }
+            itemStyle: { borderRadius: horizontal ? [0, 2, 2, 0] : [2, 2, 0, 0] }
         };
     };
 
@@ -131,6 +129,7 @@
      * @param {string} [opts.categoryName] default: t('Year')
      * @param {string} [opts.valueName] default: t('Count')
      * @param {boolean} [opts.filterUnknown=true]
+     * @param {boolean} [opts.useCountryColors=true] When true, applies stable per-country colors via C._countryColor
      */
     C.timeline = function (timeline, opts) {
         opts = opts || {};
@@ -157,7 +156,8 @@
             };
         });
 
-        var useZoom = years.length > 20;
+        var dataZoom = C._dataZoom(years.length);
+        var useZoom = dataZoom.length > 0;
         var base = {
             grid: C._grid({ bottom: useZoom ? 56 : 32 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
@@ -170,7 +170,7 @@
                 nameGap: useZoom ? 36 : 24
             },
             yAxis: { type: 'value', name: opts.valueName || t('Count') },
-            dataZoom: C._dataZoom(years.length),
+            dataZoom: dataZoom,
             series: series,
             animationDuration: 600,
             animationEasing: 'cubicOut'
@@ -597,7 +597,8 @@
             };
         });
 
-        var useZoom = categories.length > 20;
+        var dataZoom = C._dataZoom(categories.length);
+        var useZoom = dataZoom.length > 0;
         var base = {
             grid: C._grid({ bottom: useZoom ? 56 : 32 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
@@ -610,7 +611,7 @@
                 nameGap: useZoom ? 36 : 24
             },
             yAxis: { type: 'value', name: opts.valueName || t('Count') },
-            dataZoom: C._dataZoom(categories.length),
+            dataZoom: dataZoom,
             series: series,
             animationDuration: 600,
             animationEasing: 'cubicOut'
