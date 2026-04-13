@@ -1,0 +1,407 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:16.656571+00:00",
+  "entity": {
+    "o_id": 73282,
+    "title": "Bè",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 2001,
+        "year_max": 2014,
+        "newspapers_count": 3,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2002,
+          2006,
+          2007,
+          2009,
+          2012,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Côte d'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2
+          ],
+          "Togo": [
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2001,
+          "year_max": 2009
+        },
+        {
+          "name": "Nord-Sud",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2012,
+          "year_max": 2014
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 6
+        },
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73282,
+            "title": "Bè",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 73306,
+            "title": "Taofiqui Falana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.6354
+          },
+          {
+            "o_id": 2176,
+            "title": "Youssif Guimba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.4765
+          },
+          {
+            "o_id": 527,
+            "title": "Lycée de Tokoin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.007
+          },
+          {
+            "o_id": 73288,
+            "title": "Tokoin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.2936
+          },
+          {
+            "o_id": 528,
+            "title": "Grande mosquée de Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.6207
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 3.8542
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 3.5143
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2215
+          },
+          {
+            "o_id": 46316,
+            "title": "Adjamé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8354
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3251
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          }
+        ],
+        "edges": [
+          {
+            "source": 73282,
+            "target": 73306,
+            "weight": 12.6354,
+            "cooc": 3
+          },
+          {
+            "source": 73282,
+            "target": 2176,
+            "weight": 8.4765,
+            "cooc": 3
+          },
+          {
+            "source": 73282,
+            "target": 527,
+            "weight": 6.007,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 73288,
+            "weight": 5.2936,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 528,
+            "weight": 4.6207,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 544,
+            "weight": 3.8542,
+            "cooc": 5
+          },
+          {
+            "source": 73282,
+            "target": 457,
+            "weight": 3.5143,
+            "cooc": 3
+          },
+          {
+            "source": 73282,
+            "target": 830,
+            "weight": 3.2215,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 46316,
+            "weight": 2.8354,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 46294,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 73282,
+            "target": 269,
+            "weight": 2.3251,
+            "cooc": 3
+          },
+          {
+            "source": 73282,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 73282,
+          "name": "Bè",
+          "lat": 6.13333,
+          "lng": 1.25,
+          "count": 10
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 5
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 3
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 73288,
+          "name": "Tokoin",
+          "lat": 6.15,
+          "lng": 1.216667,
+          "count": 2
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 76482,
+          "name": "Tiébissou",
+          "lat": 7.15,
+          "lng": -5.2333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "count": 1
+        },
+        {
+          "o_id": 48425,
+          "name": "Divo",
+          "lat": 5.837222,
+          "lng": -5.357222,
+          "count": 1
+        },
+        {
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
+          "o_id": 63379,
+          "name": "Port-Bouët",
+          "lat": 5.266667,
+          "lng": -3.9,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

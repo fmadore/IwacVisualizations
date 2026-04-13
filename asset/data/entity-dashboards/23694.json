@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.642042+00:00",
+  "entity": {
+    "o_id": 23694,
+    "title": "Radio Al-Fourqane",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2010,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2013,
+          2014
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2010,
+          "year_max": 2014
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23694,
+            "title": "Radio Al-Fourqane",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23512,
+            "title": "Fadiga Moussa Al Farouk",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.5134
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.944
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.8461
+          }
+        ],
+        "edges": [
+          {
+            "source": 23694,
+            "target": 23512,
+            "weight": 6.5134,
+            "cooc": 3
+          },
+          {
+            "source": 23694,
+            "target": 23681,
+            "weight": 5.944,
+            "cooc": 3
+          },
+          {
+            "source": 23694,
+            "target": 12891,
+            "weight": 2.8461,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:20.904764+00:00",
+  "entity": {
+    "o_id": 791,
+    "title": "Amnesty International",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1999,
+        "year_max": 2017,
+        "newspapers_count": 5,
+        "countries_count": 3
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2006,
+          2010,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte d'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "Côte d'Ivoire": [
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          "Togo": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2006
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 1999
+        },
+        {
+          "name": "L'Autre Regard",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        },
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 791,
+            "title": "Amnesty International",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76328,
+            "title": "Sensibilisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3756
+          },
+          {
+            "o_id": 114,
+            "title": "Droits de l'homme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.9504
+          },
+          {
+            "o_id": 310,
+            "title": "États-Unis",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2063
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.525
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1439
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 791,
+            "target": 76328,
+            "weight": 3.3756,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 114,
+            "weight": 2.9504,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 310,
+            "weight": 2.2063,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 376,
+            "weight": 1.525,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 546,
+            "weight": 1.1439,
+            "cooc": 2
+          },
+          {
+            "source": 791,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 2
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 2
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

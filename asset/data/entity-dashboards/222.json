@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.583785+00:00",
+  "entity": {
+    "o_id": 222,
+    "title": "Élections législatives de 2019 au Bénin",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 222,
+            "title": "Élections législatives de 2019 au Bénin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1960,
+            "title": "Ibrahim Ousmane",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.755
+          },
+          {
+            "o_id": 460,
+            "title": "Mosquée centrale de Cotonou Jonquet",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.5568
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 3.552
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0635
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          }
+        ],
+        "edges": [
+          {
+            "source": 222,
+            "target": 1960,
+            "weight": 4.755,
+            "cooc": 2
+          },
+          {
+            "source": 222,
+            "target": 460,
+            "weight": 4.5568,
+            "cooc": 2
+          },
+          {
+            "source": 222,
+            "target": 299,
+            "weight": 3.552,
+            "cooc": 3
+          },
+          {
+            "source": 222,
+            "target": 76269,
+            "weight": 3.0635,
+            "cooc": 3
+          },
+          {
+            "source": 222,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          },
+          {
+            "source": 222,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 222,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 3
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:20.863498+00:00",
+  "entity": {
+    "o_id": 785,
+    "title": "Majority Moubarak Islam",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1986,
+        "year_max": 1986,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1986
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1986,
+          "year_max": 1986
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 785,
+            "title": "Majority Moubarak Islam",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          }
+        ],
+        "edges": [
+          {
+            "source": 785,
+            "target": 385,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 785,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          },
+          {
+            "source": 785,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 459,
+          "name": "Mosquée centrale de Porto-Novo",
+          "lat": 6.470333,
+          "lng": 2.626611,
+          "count": 1
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

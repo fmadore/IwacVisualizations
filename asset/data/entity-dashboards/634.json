@@ -1,0 +1,437 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:19.229132+00:00",
+  "entity": {
+    "o_id": 634,
+    "title": "Mutuelle d'épargne et de crédit Baïtoul Maal",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1998,
+        "year_max": 2009,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1998,
+          1999,
+          2005,
+          2009
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "L'Appel",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Burkina Faso",
+          "year_min": 1998,
+          "year_max": 1999
+        },
+        {
+          "name": "An-Nasr Trimestriel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2005,
+          "year_max": 2005
+        },
+        {
+          "name": "La Preuve",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 634,
+            "title": "Mutuelle d'épargne et de crédit Baïtoul Maal",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1090,
+            "title": "Lassané Sawadogo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.9127
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 7.7713
+          },
+          {
+            "o_id": 579,
+            "title": "Commission Nationale d'Organisation du Pèlerinage à La Mecque",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 6.8732
+          },
+          {
+            "o_id": 678,
+            "title": "Fondation Omar Ben Khattab",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.1413
+          },
+          {
+            "o_id": 63445,
+            "title": "Obscurantisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.095
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 4.575
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.9571
+          },
+          {
+            "o_id": 377,
+            "title": "Ouahigouya",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.9504
+          },
+          {
+            "o_id": 24,
+            "title": "Islamisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.454
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3806
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2219
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 2.093
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.856
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.8062
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          }
+        ],
+        "edges": [
+          {
+            "source": 634,
+            "target": 1090,
+            "weight": 9.9127,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 571,
+            "weight": 7.7713,
+            "cooc": 6
+          },
+          {
+            "source": 634,
+            "target": 579,
+            "weight": 6.8732,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 678,
+            "weight": 6.1413,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 63445,
+            "weight": 5.095,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 376,
+            "weight": 4.575,
+            "cooc": 6
+          },
+          {
+            "source": 634,
+            "target": 569,
+            "weight": 3.9571,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 377,
+            "weight": 2.9504,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 24,
+            "weight": 2.454,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 10,
+            "weight": 2.3806,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 284,
+            "weight": 2.2219,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 124,
+            "weight": 2.093,
+            "cooc": 2
+          },
+          {
+            "source": 634,
+            "target": 33,
+            "weight": 1.856,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 29,
+            "weight": 1.8062,
+            "cooc": 3
+          },
+          {
+            "source": 634,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 6
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
+          "count": 2
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
+        },
+        {
+          "o_id": 391,
+          "name": "Sapouy",
+          "lat": 11.55444,
+          "lng": -1.77361,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
+          "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 404,
+          "name": "Yako",
+          "lat": 12.9591,
+          "lng": -2.26075,
+          "count": 1
+        },
+        {
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
+          "count": 1
+        },
+        {
+          "o_id": 321,
+          "name": "Gourcy",
+          "lat": 13.20776,
+          "lng": -2.35893,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 346,
+          "name": "Kongoussi",
+          "lat": 13.32583,
+          "lng": -1.53472,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 344,
+          "name": "Kombissiri",
+          "lat": 12.06884,
+          "lng": -1.33644,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

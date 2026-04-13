@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.741471+00:00",
+  "entity": {
+    "o_id": 23474,
+    "title": "Association Nationale des Artistes Musulmans de Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2009,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2009,
+          2010,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 6,
+          "articles": 0,
+          "publications": 6,
+          "country": "Côte d'Ivoire",
+          "year_min": 2009,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23474,
+            "title": "Association Nationale des Artistes Musulmans de Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.2691
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8677
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8514
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2041
+          }
+        ],
+        "edges": [
+          {
+            "source": 23474,
+            "target": 12891,
+            "weight": 4.2691,
+            "cooc": 3
+          },
+          {
+            "source": 23474,
+            "target": 63372,
+            "weight": 1.8677,
+            "cooc": 2
+          },
+          {
+            "source": 23474,
+            "target": 63530,
+            "weight": 1.8514,
+            "cooc": 2
+          },
+          {
+            "source": 23474,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          },
+          {
+            "source": 23474,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          },
+          {
+            "source": 23474,
+            "target": 29,
+            "weight": 1.2041,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

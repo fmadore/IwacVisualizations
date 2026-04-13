@@ -1,0 +1,505 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.051742+00:00",
+  "entity": {
+    "o_id": 552,
+    "title": "Université Abdou Moumouni",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 18,
+        "year_min": 2018,
+        "year_max": 2024,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1,
+            5,
+            3,
+            3,
+            2,
+            2,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Sahel",
+          "total": 18,
+          "articles": 18,
+          "publications": 0,
+          "country": "Niger",
+          "year_min": 2018,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Niger",
+          "count": 18
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 552,
+            "title": "Université Abdou Moumouni",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 490,
+            "title": "Niamey",
+            "type": "Lieux",
+            "cooc": 14,
+            "score": 22.2376
+          },
+          {
+            "o_id": 63439,
+            "title": "Zinder",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 16.8882
+          },
+          {
+            "o_id": 540,
+            "title": "Niger",
+            "type": "Lieux",
+            "cooc": 16,
+            "score": 13.5602
+          },
+          {
+            "o_id": 60540,
+            "title": "Sahel",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.4299
+          },
+          {
+            "o_id": 539,
+            "title": "Mauritanie",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.4681
+          },
+          {
+            "o_id": 414,
+            "title": "Soudan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.4171
+          },
+          {
+            "o_id": 357,
+            "title": "Mali",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 4.0313
+          },
+          {
+            "o_id": 304,
+            "title": "Djibo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.2215
+          },
+          {
+            "o_id": 328,
+            "title": "Guinée",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.4365
+          },
+          {
+            "o_id": 541,
+            "title": "Nigéria",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.972
+          },
+          {
+            "o_id": 395,
+            "title": "Sénégal",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.9041
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3811
+          }
+        ],
+        "edges": [
+          {
+            "source": 552,
+            "target": 490,
+            "weight": 22.2376,
+            "cooc": 14
+          },
+          {
+            "source": 552,
+            "target": 63439,
+            "weight": 16.8882,
+            "cooc": 6
+          },
+          {
+            "source": 552,
+            "target": 540,
+            "weight": 13.5602,
+            "cooc": 16
+          },
+          {
+            "source": 552,
+            "target": 60540,
+            "weight": 5.4299,
+            "cooc": 3
+          },
+          {
+            "source": 552,
+            "target": 539,
+            "weight": 4.4681,
+            "cooc": 3
+          },
+          {
+            "source": 552,
+            "target": 414,
+            "weight": 4.4171,
+            "cooc": 3
+          },
+          {
+            "source": 552,
+            "target": 357,
+            "weight": 4.0313,
+            "cooc": 5
+          },
+          {
+            "source": 552,
+            "target": 304,
+            "weight": 3.2215,
+            "cooc": 2
+          },
+          {
+            "source": 552,
+            "target": 328,
+            "weight": 2.4365,
+            "cooc": 2
+          },
+          {
+            "source": 552,
+            "target": 541,
+            "weight": 1.972,
+            "cooc": 2
+          },
+          {
+            "source": 552,
+            "target": 395,
+            "weight": 1.9041,
+            "cooc": 2
+          },
+          {
+            "source": 552,
+            "target": 489,
+            "weight": 1.3811,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 552,
+          "name": "Université Abdou Moumouni",
+          "lat": 13.501361,
+          "lng": 2.098528,
+          "count": 18
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 16
+        },
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "count": 14
+        },
+        {
+          "o_id": 63439,
+          "name": "Zinder",
+          "lat": 13.8,
+          "lng": 8.9833333333333,
+          "count": 6
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 5
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "count": 3
+        },
+        {
+          "o_id": 539,
+          "name": "Mauritanie",
+          "lat": 20.25,
+          "lng": -10.5,
+          "count": 3
+        },
+        {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 3
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 2
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 2
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 330,
+          "name": "Irak",
+          "lat": 33.0,
+          "lng": 44.0,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 60543,
+          "name": "Sierra Leone",
+          "lat": 8.5,
+          "lng": -12.1,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 62020,
+          "name": "Bamako",
+          "lat": 12.645833,
+          "lng": -7.992222,
+          "count": 1
+        },
+        {
+          "o_id": 430,
+          "name": "Canada",
+          "lat": 60.10867,
+          "lng": -113.64258,
+          "count": 1
+        },
+        {
+          "o_id": 60493,
+          "name": "Espagne",
+          "lat": 40.2,
+          "lng": -3.5,
+          "count": 1
+        },
+        {
+          "o_id": 14355,
+          "name": "Sokoto",
+          "lat": 13.062222,
+          "lng": 5.233889,
+          "count": 1
+        },
+        {
+          "o_id": 15482,
+          "name": "Kano",
+          "lat": 12.0,
+          "lng": 8.516667,
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
+          "count": 1
+        },
+        {
+          "o_id": 63376,
+          "name": "Istanbul",
+          "lat": 41.01,
+          "lng": 28.960278,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:16.653513+00:00",
+  "entity": {
+    "o_id": 71410,
+    "title": "Tadjikistan",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1970,
+        "year_max": 1972,
+        "newspapers_count": 2,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1972
+        ],
+        "countries": [
+          "Bénin",
+          "Togo"
+        ],
+        "series": {
+          "Bénin": [
+            0,
+            1
+          ],
+          "Togo": [
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1972,
+          "year_max": 1972
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1970,
+          "year_max": 1970
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 1
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 71410,
+            "title": "Tadjikistan",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60524,
+            "title": "Moscou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.7173
+          },
+          {
+            "o_id": 551,
+            "title": "Union des républiques socialistes soviétiques",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.5568
+          }
+        ],
+        "edges": [
+          {
+            "source": 71410,
+            "target": 60524,
+            "weight": 5.7173,
+            "cooc": 2
+          },
+          {
+            "source": 71410,
+            "target": 551,
+            "weight": 4.5568,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 551,
+          "name": "Union des républiques socialistes soviétiques",
+          "lat": 65.0,
+          "lng": 90.0,
+          "count": 2
+        },
+        {
+          "o_id": 60524,
+          "name": "Moscou",
+          "lat": 55.755833333333,
+          "lng": 37.617777777778,
+          "count": 2
+        },
+        {
+          "o_id": 71410,
+          "name": "Tadjikistan",
+          "lat": 38.583333,
+          "lng": 71.366667,
+          "count": 2
+        },
+        {
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 71411,
+          "name": "Azerbaïdjan",
+          "lat": 40.3,
+          "lng": 47.7,
+          "count": 1
+        },
+        {
+          "o_id": 60505,
+          "name": "Kazakhstan",
+          "lat": 48.0,
+          "lng": 68.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.474125+00:00",
+  "entity": {
+    "o_id": 23671,
+    "title": "Jeunesse Estudiantine Musulmane",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1975,
+        "year_max": 2007,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1975,
+          1976,
+          1977,
+          1978,
+          2007
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1975,
+          "year_max": 1978
+        },
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "Ivoire Dimanche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1976,
+          "year_max": 1976
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23671,
+            "title": "Jeunesse Estudiantine Musulmane",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62125,
+            "title": "Union Culturelle Musulmane de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.911
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 4.9955
+          },
+          {
+            "o_id": 23632,
+            "title": "Bingerville",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.4467
+          },
+          {
+            "o_id": 441,
+            "title": "Grand-Bassam",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.3411
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.3106
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 23671,
+            "target": 62125,
+            "weight": 6.911,
+            "cooc": 2
+          },
+          {
+            "source": 23671,
+            "target": 9,
+            "weight": 4.9955,
+            "cooc": 6
+          },
+          {
+            "source": 23671,
+            "target": 23632,
+            "weight": 4.4467,
+            "cooc": 2
+          },
+          {
+            "source": 23671,
+            "target": 441,
+            "weight": 3.3411,
+            "cooc": 2
+          },
+          {
+            "source": 23671,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          },
+          {
+            "source": 23671,
+            "target": 13908,
+            "weight": 2.3106,
+            "cooc": 4
+          },
+          {
+            "source": 23671,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          },
+          {
+            "source": 23671,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 2
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "count": 1
+        },
+        {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

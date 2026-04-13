@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.256636+00:00",
+  "entity": {
+    "o_id": 60551,
+    "title": "Tohoun",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2006,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2011,
+          2023
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2006,
+          "year_max": 2011
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60551,
+            "title": "Tohoun",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60525,
+            "title": "Moyen-Mono",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 12.2676
+          }
+        ],
+        "edges": [
+          {
+            "source": 60551,
+            "target": 60525,
+            "weight": 12.2676,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60525,
+          "name": "Moyen-Mono",
+          "lat": 7.0230555555556,
+          "lng": 1.615,
+          "count": 3
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 60492,
+          "name": "Elavagnon",
+          "lat": 7.9612,
+          "lng": 1.2866,
+          "count": 1
+        },
+        {
+          "o_id": 60462,
+          "name": "Akébou",
+          "lat": 7.6559489,
+          "lng": 0.7922752,
+          "count": 1
+        },
+        {
+          "o_id": 495,
+          "name": "Anié",
+          "lat": 7.76111111,
+          "lng": 1.19166667,
+          "count": 1
+        },
+        {
+          "o_id": 60464,
+          "name": "Amou",
+          "lat": 7.5,
+          "lng": 1.05,
+          "count": 1
+        },
+        {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60562,
+          "name": "Wawa",
+          "lat": 7.583333,
+          "lng": 0.6,
+          "count": 1
+        },
+        {
+          "o_id": 498,
+          "name": "Badou",
+          "lat": 7.584327,
+          "lng": 0.606651,
+          "count": 1
+        },
+        {
+          "o_id": 60531,
+          "name": "Notsé",
+          "lat": 6.948333333333333,
+          "lng": 1.1680555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 60501,
+          "name": "Haho",
+          "lat": 6.95,
+          "lng": 1.16666667,
+          "count": 1
+        },
+        {
+          "o_id": 60565,
+          "name": "Est-Mono",
+          "lat": 7.4475,
+          "lng": 0.847222,
+          "count": 1
+        },
+        {
+          "o_id": 60534,
+          "name": "Nyékonakpoé",
+          "lat": 6.1305555555555555,
+          "lng": 1.2055555555555555,
+          "count": 1
+        },
+        {
+          "o_id": 537,
+          "name": "Ogou",
+          "lat": 7.516667,
+          "lng": 1.116667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,327 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.671063+00:00",
+  "entity": {
+    "o_id": 23492,
+    "title": "Wadzifa Internationale",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23492,
+            "title": "Wadzifa Internationale",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23497,
+            "title": "Moustapha Sonta",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 9.5378
+          },
+          {
+            "o_id": 23560,
+            "title": "Élection présidentielle ivoirienne de 2020",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 5.1532
+          },
+          {
+            "o_id": 894,
+            "title": "Mohammed VI",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.9442
+          },
+          {
+            "o_id": 52,
+            "title": "Soufisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.1282
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.7217
+          },
+          {
+            "o_id": 359,
+            "title": "Maroc",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.4761
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0423
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6711
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.55
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 23492,
+            "target": 23497,
+            "weight": 9.5378,
+            "cooc": 4
+          },
+          {
+            "source": 23492,
+            "target": 23560,
+            "weight": 5.1532,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 894,
+            "weight": 4.9442,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 52,
+            "weight": 4.1282,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 23606,
+            "weight": 2.7217,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 359,
+            "weight": 2.4761,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 76269,
+            "weight": 2.0423,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 63,
+            "weight": 1.6711,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 269,
+            "weight": 1.55,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          },
+          {
+            "source": 23492,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 2
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 2
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.736954+00:00",
+  "entity": {
+    "o_id": 23470,
+    "title": "Maktab Ta'Awoune",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2007,
+        "year_max": 2016,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2008,
+          2013,
+          2014,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            4,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2014
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2015,
+          "year_max": 2016
+        },
+        {
+          "name": "Le Temps",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23470,
+            "title": "Maktab Ta'Awoune",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23512,
+            "title": "Fadiga Moussa Al Farouk",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 15.198
+          },
+          {
+            "o_id": 23484,
+            "title": "Ali Diarrassouba",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.8922
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.944
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 3.1001
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4761
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.028
+          },
+          {
+            "o_id": 277,
+            "title": "Arabie saoudite",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.0258
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8514
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.8062
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.4332
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 23470,
+            "target": 23512,
+            "weight": 15.198,
+            "cooc": 7
+          },
+          {
+            "source": 23470,
+            "target": 23484,
+            "weight": 7.8922,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 23681,
+            "weight": 5.944,
+            "cooc": 3
+          },
+          {
+            "source": 23470,
+            "target": 269,
+            "weight": 3.1001,
+            "cooc": 4
+          },
+          {
+            "source": 23470,
+            "target": 46294,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 76327,
+            "weight": 2.4761,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 56,
+            "weight": 2.028,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 277,
+            "weight": 2.0258,
+            "cooc": 3
+          },
+          {
+            "source": 23470,
+            "target": 61328,
+            "weight": 1.8514,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 29,
+            "weight": 1.8062,
+            "cooc": 3
+          },
+          {
+            "source": 23470,
+            "target": 75967,
+            "weight": 1.4332,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          },
+          {
+            "source": 23470,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 4
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 3
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

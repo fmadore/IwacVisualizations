@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.271139+00:00",
+  "entity": {
+    "o_id": 69287,
+    "title": "Agence Nigérienne de Presse",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 1,
+        "year_min": 1973,
+        "year_max": 1973,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1973
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Daho-Express",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1973,
+          "year_max": 1973
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 69287,
+            "title": "Agence Nigérienne de Presse",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

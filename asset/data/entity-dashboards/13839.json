@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.501314+00:00",
+  "entity": {
+    "o_id": 13839,
+    "title": "Radio Kandi FM",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2020,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Banouto",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13839,
+            "title": "Radio Kandi FM",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 333,
+            "title": "Kandi",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.2539
+          }
+        ],
+        "edges": [
+          {
+            "source": 13839,
+            "target": 333,
+            "weight": 4.2539,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 2
+        },
+        {
+          "o_id": 62018,
+          "name": "Alibori",
+          "lat": 11.128611,
+          "lng": 2.936944,
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "count": 1
+        },
+        {
+          "o_id": 62029,
+          "name": "Kassakou",
+          "lat": 11.083333,
+          "lng": 2.9,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

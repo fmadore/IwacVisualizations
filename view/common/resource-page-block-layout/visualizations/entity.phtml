@@ -1,0 +1,73 @@
+<?php
+/**
+ * Visualizations: shared partial for non-person entities.
+ *
+ * Drives the dashboard for Lieux (template 6), Organisations (7),
+ * Sujets (3), and Événements (2). Each of those item types resolves
+ * to this partial via Visualizations::TEMPLATE_PARTIALS, fetches
+ * asset/data/entity-dashboards/{o_id}.json, and renders the same
+ * panel set as the person dashboard MINUS the role facet bar (subject
+ * vs creator only makes sense for persons).
+ *
+ * Asset loading is self-contained — Module.php deliberately does NOT
+ * blanket-inject ECharts/MapLibre on every Item view.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ */
+
+// Stylesheet
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+);
+
+// CDN libraries — ECharts for charts/network, MapLibre for the locations map.
+// echarts-wordcloud is intentionally NOT loaded; entity dashboards have no
+// word cloud panel.
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js');
+$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
+
+// IWAC infrastructure — order matters: i18n → theme → core
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+
+// Shared primitives
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 'IwacVisualizations'));
+
+// Reuse the person panel modules: the entity precompute wraps every
+// section in `by_role.all` precisely so these modules work unchanged
+// with a no-op facet provided by entity-dashboard.js.
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.js', 'IwacVisualizations'));
+
+// Orchestrator — must load LAST
+$this->headScript()->appendFile($this->assetUrl('js/charts/entity-dashboard.js', 'IwacVisualizations'));
+
+$siteSlug = $this->currentSite()->slug();
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+?>
+
+<div class="iwac-vis-block iwac-vis-entity"
+     data-item-id="<?= $escapeAttr($resource->id()) ?>"
+     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
+     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+
+    <h3><?= $this->translate('Visualizations') ?></h3>
+
+    <div class="iwac-vis-loading iwac-vis-entity__loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
+    </div>
+</div>

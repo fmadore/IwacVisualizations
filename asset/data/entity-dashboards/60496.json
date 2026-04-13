@@ -1,0 +1,260 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.830780+00:00",
+  "entity": {
+    "o_id": 60496,
+    "title": "Agou-Gadzépé",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 2011,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2023,
+          2024
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            5,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2024
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 8
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60496,
+            "title": "Agou-Gadzépé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60561,
+            "title": "Agou",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 16.1821
+          },
+          {
+            "o_id": 60516,
+            "title": "Kpélé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 11.3759
+          },
+          {
+            "o_id": 60455,
+            "title": "Adéta",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 10.556
+          },
+          {
+            "o_id": 532,
+            "title": "Kloto",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.1956
+          },
+          {
+            "o_id": 60487,
+            "title": "Danyi",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.7921
+          },
+          {
+            "o_id": 512,
+            "title": "Kpalimé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.0583
+          }
+        ],
+        "edges": [
+          {
+            "source": 60496,
+            "target": 60561,
+            "weight": 16.1821,
+            "cooc": 5
+          },
+          {
+            "source": 60496,
+            "target": 60516,
+            "weight": 11.3759,
+            "cooc": 3
+          },
+          {
+            "source": 60496,
+            "target": 60455,
+            "weight": 10.556,
+            "cooc": 3
+          },
+          {
+            "source": 60496,
+            "target": 532,
+            "weight": 7.1956,
+            "cooc": 3
+          },
+          {
+            "source": 60496,
+            "target": 60487,
+            "weight": 6.7921,
+            "cooc": 2
+          },
+          {
+            "source": 60496,
+            "target": 512,
+            "weight": 6.0583,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60496,
+          "name": "Agou-Gadzépé",
+          "lat": 7.4669444444444,
+          "lng": 1.9169444444444,
+          "count": 8
+        },
+        {
+          "o_id": 60561,
+          "name": "Agou",
+          "lat": 7.466667,
+          "lng": 1.916667,
+          "count": 5
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "count": 3
+        },
+        {
+          "o_id": 60516,
+          "name": "Kpélé",
+          "lat": 6.857,
+          "lng": 1.183,
+          "count": 3
+        },
+        {
+          "o_id": 60455,
+          "name": "Adéta",
+          "lat": 7.12815,
+          "lng": 0.730591,
+          "count": 3
+        },
+        {
+          "o_id": 532,
+          "name": "Kloto",
+          "lat": 7.083333,
+          "lng": 0.75,
+          "count": 3
+        },
+        {
+          "o_id": 60487,
+          "name": "Danyi",
+          "lat": 7.25,
+          "lng": 0.95,
+          "count": 2
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 60468,
+          "name": "Danyi-Apéyémé",
+          "lat": 7.25,
+          "lng": 0.95,
+          "count": 1
+        },
+        {
+          "o_id": 524,
+          "name": "Tsévié",
+          "lat": 6.4333333333333,
+          "lng": 1.2166666666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

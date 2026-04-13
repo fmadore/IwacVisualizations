@@ -21,9 +21,19 @@ class Visualizations implements ResourcePageBlockLayoutInterface
     /**
      * Map of resource template ids on islam.zmo.de to the partial name
      * (relative to common/resource-page-block-layout/visualizations/).
+     *
+     * Persons get a dedicated partial because the role facet (subject
+     * vs creator) is meaningful only for them. The four non-person
+     * entity types share `entity.phtml`, which renders the same panel
+     * set without a facet bar and reads from the precomputed JSON
+     * shape that generate_entity_dashboards.py emits.
      */
     const TEMPLATE_PARTIALS = [
         5 => 'person', // Personnes
+        6 => 'entity', // Lieux
+        7 => 'entity', // Organisations
+        3 => 'entity', // Sujets
+        2 => 'entity', // Événements
     ];
 
     public function getLabel(): string

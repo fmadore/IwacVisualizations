@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.859800+00:00",
+  "entity": {
+    "o_id": 23511,
+    "title": "Conseil National Bilal des Muezzins en Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2018,
+        "year_max": 2020,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte d'Ivoire",
+          "year_min": 2018,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23511,
+            "title": "Conseil National Bilal des Muezzins en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23512,
+            "title": "Fadiga Moussa Al Farouk",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.3423
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.9626
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          }
+        ],
+        "edges": [
+          {
+            "source": 23511,
+            "target": 23512,
+            "weight": 4.3423,
+            "cooc": 2
+          },
+          {
+            "source": 23511,
+            "target": 23681,
+            "weight": 3.9626,
+            "cooc": 2
+          },
+          {
+            "source": 23511,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          },
+          {
+            "source": 23511,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

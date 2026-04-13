@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.734127+00:00",
+  "entity": {
+    "o_id": 23584,
+    "title": "Caravane de Prédication et d'Action Sociale",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2007,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2010,
+          2013
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23584,
+            "title": "Caravane de Prédication et d'Action Sociale",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.3027
+          }
+        ],
+        "edges": [
+          {
+            "source": 23584,
+            "target": 615,
+            "weight": 5.3027,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

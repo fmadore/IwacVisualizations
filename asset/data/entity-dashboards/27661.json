@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.840354+00:00",
+  "entity": {
+    "o_id": 27661,
+    "title": "Confédération Nationale des Travailleurs du Togo",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 1993,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1993
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Lettre de Tchaoudjo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1979,
+          "year_max": 1979
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 27661,
+            "title": "Confédération Nationale des Travailleurs du Togo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.088
+          }
+        ],
+        "edges": [
+          {
+            "source": 27661,
+            "target": 829,
+            "weight": 4.088,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 514,
+          "name": "Mango",
+          "lat": 10.355555555556,
+          "lng": 0.47555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 27795,
+          "name": "Oti",
+          "lat": 10.357222,
+          "lng": 0.471111,
+          "count": 1
+        },
+        {
+          "o_id": 506,
+          "name": "Gando",
+          "lat": 10.3257,
+          "lng": 0.749044,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

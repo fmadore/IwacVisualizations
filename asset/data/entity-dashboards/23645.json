@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.459735+00:00",
+  "entity": {
+    "o_id": 23645,
+    "title": "Club des Amis de l'AJMCI",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2012,
+        "year_max": 2014,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2012,
+          2014
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2012,
+          "year_max": 2014
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23645,
+            "title": "Club des Amis de l'AJMCI",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.5351
+          }
+        ],
+        "edges": [
+          {
+            "source": 23645,
+            "target": 615,
+            "weight": 3.5351,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

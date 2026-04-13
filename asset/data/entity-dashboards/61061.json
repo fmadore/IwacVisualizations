@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.897272+00:00",
+  "entity": {
+    "o_id": 61061,
+    "title": "Élections municipales béninoises de 2020",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2020,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 61061,
+            "title": "Élections municipales béninoises de 2020",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 763,
+            "title": "Bloc républicain",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.9812
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0423
+          }
+        ],
+        "edges": [
+          {
+            "source": 61061,
+            "target": 763,
+            "weight": 5.9812,
+            "cooc": 2
+          },
+          {
+            "source": 61061,
+            "target": 76269,
+            "weight": 2.0423,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,371 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.791742+00:00",
+  "entity": {
+    "o_id": 31359,
+    "title": "Incendies marchés Lomé et Kara (2013)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            6
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Rendez-Vous",
+          "total": 6,
+          "articles": 0,
+          "publications": 6,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 31359,
+            "title": "Incendies marchés Lomé et Kara (2013)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 9.0498
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 8.0536
+          },
+          {
+            "o_id": 27761,
+            "title": "Élections législatives togolaises de 2013",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.0373
+          },
+          {
+            "o_id": 25004,
+            "title": "Union pour la République",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.9522
+          },
+          {
+            "o_id": 27752,
+            "title": "Agbéyomé Kodjo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.5059
+          },
+          {
+            "o_id": 27628,
+            "title": "Zakaria Agoro",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.1413
+          },
+          {
+            "o_id": 508,
+            "title": "Kara",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.6677
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 31359,
+            "target": 15348,
+            "weight": 9.0498,
+            "cooc": 5
+          },
+          {
+            "source": 31359,
+            "target": 830,
+            "weight": 8.0536,
+            "cooc": 5
+          },
+          {
+            "source": 31359,
+            "target": 27761,
+            "weight": 7.0373,
+            "cooc": 2
+          },
+          {
+            "source": 31359,
+            "target": 25004,
+            "weight": 6.9522,
+            "cooc": 2
+          },
+          {
+            "source": 31359,
+            "target": 27752,
+            "weight": 6.5059,
+            "cooc": 2
+          },
+          {
+            "source": 31359,
+            "target": 27628,
+            "weight": 6.1413,
+            "cooc": 2
+          },
+          {
+            "source": 31359,
+            "target": 508,
+            "weight": 3.6677,
+            "cooc": 2
+          },
+          {
+            "source": 31359,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 2
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "count": 1
+        },
+        {
+          "o_id": 514,
+          "name": "Mango",
+          "lat": 10.355555555556,
+          "lng": 0.47555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
+          "count": 1
+        },
+        {
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 554,
+          "name": "Italie",
+          "lat": 42.5,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 60478,
+          "name": "Berlin",
+          "lat": 52.516666666667,
+          "lng": 13.383333333333,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "count": 1
+        },
+        {
+          "o_id": 494,
+          "name": "Aného",
+          "lat": 6.2288888888889,
+          "lng": 1.5930555555556,
+          "count": 1
+        },
+        {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60531,
+          "name": "Notsé",
+          "lat": 6.948333333333333,
+          "lng": 1.1680555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 1
+        },
+        {
+          "o_id": 60539,
+          "name": "Rome",
+          "lat": 41.893055555556,
+          "lng": 12.482777777778,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

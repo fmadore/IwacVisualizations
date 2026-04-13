@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:07.549654+00:00",
+  "entity": {
+    "o_id": 467,
+    "title": "Mosquée centrale de Godomey",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2020,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2023
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 467,
+            "title": "Mosquée centrale de Godomey",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 412,
+            "title": "Godomey",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 11.0493
+          },
+          {
+            "o_id": 1941,
+            "title": "Abou Yêkini",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5839
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2409
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.0964
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1985
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.0679
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.936
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          }
+        ],
+        "edges": [
+          {
+            "source": 467,
+            "target": 412,
+            "weight": 11.0493,
+            "cooc": 4
+          },
+          {
+            "source": 467,
+            "target": 1941,
+            "weight": 7.5839,
+            "cooc": 2
+          },
+          {
+            "source": 467,
+            "target": 16,
+            "weight": 3.2409,
+            "cooc": 2
+          },
+          {
+            "source": 467,
+            "target": 765,
+            "weight": 3.0964,
+            "cooc": 2
+          },
+          {
+            "source": 467,
+            "target": 76041,
+            "weight": 2.1985,
+            "cooc": 2
+          },
+          {
+            "source": 467,
+            "target": 15831,
+            "weight": 2.0679,
+            "cooc": 3
+          },
+          {
+            "source": 467,
+            "target": 86,
+            "weight": 1.936,
+            "cooc": 3
+          },
+          {
+            "source": 467,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 412,
+          "name": "Godomey",
+          "lat": 6.38948,
+          "lng": 2.34581,
+          "count": 4
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 62019,
+          "name": "Cadjèhoun",
+          "lat": 6.359,
+          "lng": 2.3971,
+          "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

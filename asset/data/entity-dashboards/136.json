@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.269397+00:00",
+  "entity": {
+    "o_id": 136,
+    "title": "Crise des otages américains en Iran",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 1979,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "L'Observateur",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1979,
+          "year_max": 1979
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 136,
+            "title": "Crise des otages américains en Iran",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13747,
+            "title": "Téhéran",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.8989
+          },
+          {
+            "o_id": 862,
+            "title": "Aboubacar Sangoulé Lamizana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.8713
+          },
+          {
+            "o_id": 331,
+            "title": "Iran",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.9224
+          },
+          {
+            "o_id": 76274,
+            "title": "Sécurité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0245
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1439
+          }
+        ],
+        "edges": [
+          {
+            "source": 136,
+            "target": 13747,
+            "weight": 4.8989,
+            "cooc": 2
+          },
+          {
+            "source": 136,
+            "target": 862,
+            "weight": 3.8713,
+            "cooc": 2
+          },
+          {
+            "source": 136,
+            "target": 331,
+            "weight": 2.9224,
+            "cooc": 2
+          },
+          {
+            "source": 136,
+            "target": 76274,
+            "weight": 2.0245,
+            "cooc": 2
+          },
+          {
+            "source": 136,
+            "target": 546,
+            "weight": 1.1439,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 2
+        },
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 2
+        },
+        {
+          "o_id": 13747,
+          "name": "Téhéran",
+          "lat": 35.7,
+          "lng": 51.416667,
+          "count": 2
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 63424,
+          "name": "Qom",
+          "lat": 34.64,
+          "lng": 50.87638888888889,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

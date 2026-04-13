@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:08.795049+00:00",
+  "entity": {
+    "o_id": 506,
+    "title": "Gando",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 1977,
+        "year_max": 2024,
+        "newspapers_count": 3,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1977,
+          1979,
+          2001,
+          2003,
+          2004,
+          2011,
+          2020,
+          2024
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "Togo": [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1977,
+          "year_max": 2020
+        },
+        {
+          "name": "L'Evénement",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2024,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 7
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 506,
+            "title": "Gando",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 514,
+            "title": "Mango",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 14.5203
+          },
+          {
+            "o_id": 27795,
+            "title": "Oti",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 14.2375
+          },
+          {
+            "o_id": 2165,
+            "title": "Fambaré Ouattara Natchaba",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.7139
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 4.625
+          },
+          {
+            "o_id": 15348,
+            "title": "Faure Gnassingbé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.6199
+          },
+          {
+            "o_id": 574,
+            "title": "Agence des Musulmans d'Afrique/Direct-Aid",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.5201
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.2937
+          },
+          {
+            "o_id": 312,
+            "title": "France",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.7499
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6183
+          }
+        ],
+        "edges": [
+          {
+            "source": 506,
+            "target": 514,
+            "weight": 14.5203,
+            "cooc": 6
+          },
+          {
+            "source": 506,
+            "target": 27795,
+            "weight": 14.2375,
+            "cooc": 5
+          },
+          {
+            "source": 506,
+            "target": 2165,
+            "weight": 8.7139,
+            "cooc": 3
+          },
+          {
+            "source": 506,
+            "target": 544,
+            "weight": 4.625,
+            "cooc": 6
+          },
+          {
+            "source": 506,
+            "target": 15348,
+            "weight": 3.6199,
+            "cooc": 2
+          },
+          {
+            "source": 506,
+            "target": 574,
+            "weight": 3.5201,
+            "cooc": 2
+          },
+          {
+            "source": 506,
+            "target": 2128,
+            "weight": 3.2937,
+            "cooc": 2
+          },
+          {
+            "source": 506,
+            "target": 312,
+            "weight": 1.7499,
+            "cooc": 2
+          },
+          {
+            "source": 506,
+            "target": 55,
+            "weight": 1.6183,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 506,
+          "name": "Gando",
+          "lat": 10.3257,
+          "lng": 0.749044,
+          "count": 8
+        },
+        {
+          "o_id": 514,
+          "name": "Mango",
+          "lat": 10.355555555556,
+          "lng": 0.47555555555556,
+          "count": 6
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 6
+        },
+        {
+          "o_id": 27795,
+          "name": "Oti",
+          "lat": 10.357222,
+          "lng": 0.471111,
+          "count": 5
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 2
+        },
+        {
+          "o_id": 403,
+          "name": "Tripoli",
+          "lat": 32.88743,
+          "lng": 13.18733,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
+          "o_id": 60514,
+          "name": "Kpendjal",
+          "lat": 10.8475,
+          "lng": 0.81666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
+          "count": 1
+        },
+        {
+          "o_id": 503,
+          "name": "Cinkassé",
+          "lat": 11.096876,
+          "lng": 0.016393,
+          "count": 1
+        },
+        {
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 1
+        },
+        {
+          "o_id": 60542,
+          "name": "Région des Savanes",
+          "lat": 10.5,
+          "lng": 0.5,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 73288,
+          "name": "Tokoin",
+          "lat": 6.15,
+          "lng": 1.216667,
+          "count": 1
+        },
+        {
+          "o_id": 553,
+          "name": "Pays-Bas",
+          "lat": 52.366666666667,
+          "lng": 4.8833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 63437,
+          "name": "Tunis",
+          "lat": 36.800833333333,
+          "lng": 10.18,
+          "count": 1
+        },
+        {
+          "o_id": 559,
+          "name": "Université de Lomé",
+          "lat": 6.173669,
+          "lng": 1.215866,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 413,
+          "name": "Tunisie",
+          "lat": 34.0,
+          "lng": 9.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

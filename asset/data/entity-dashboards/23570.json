@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.068387+00:00",
+  "entity": {
+    "o_id": 23570,
+    "title": "Conseil Fédéral des Tidjanis en Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2017,
+        "year_max": 2020,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017,
+          2019,
+          2020
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte d'Ivoire",
+          "year_min": 2017,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23570,
+            "title": "Conseil Fédéral des Tidjanis en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 23570,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 23570,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.188706+00:00",
+  "entity": {
+    "o_id": 60541,
+    "title": "Sanguéra",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2008,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2011,
+          2024
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2008,
+          "year_max": 2011
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2024,
+          "year_max": 2024
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60541,
+            "title": "Sanguéra",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60558,
+            "title": "Agoé-Nyivé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.3458
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2215
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.5417
+          }
+        ],
+        "edges": [
+          {
+            "source": 60541,
+            "target": 60558,
+            "weight": 6.3458,
+            "cooc": 2
+          },
+          {
+            "source": 60541,
+            "target": 830,
+            "weight": 3.2215,
+            "cooc": 2
+          },
+          {
+            "source": 60541,
+            "target": 544,
+            "weight": 1.5417,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 60558,
+          "name": "Agoé-Nyivé",
+          "lat": 6.2575,
+          "lng": 1.1929,
+          "count": 2
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 60550,
+          "name": "Togblékopé",
+          "lat": 6.2738571,
+          "lng": 1.209831,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        },
+        {
+          "o_id": 73298,
+          "name": "Baguida",
+          "lat": 6.166667,
+          "lng": 1.316667,
+          "count": 1
+        },
+        {
+          "o_id": 60511,
+          "name": "Kovié",
+          "lat": 6.3417,
+          "lng": 1.1088,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

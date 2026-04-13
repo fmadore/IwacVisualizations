@@ -1,0 +1,908 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:01.356919+00:00",
+  "entity": {
+    "o_id": 293,
+    "title": "Centre culturel arabe libyen",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 21,
+        "year_min": 1978,
+        "year_max": 2010,
+        "newspapers_count": 6,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1978,
+          1985,
+          1990,
+          1993,
+          1994,
+          1995,
+          1997,
+          1998,
+          1999,
+          2001,
+          2003,
+          2010
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            4,
+            2,
+            1,
+            1,
+            1,
+            2,
+            5,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1985,
+          "year_max": 1999
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1994,
+          "year_max": 2003
+        },
+        {
+          "name": "Le Pays",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Carrefour africain",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1978,
+          "year_max": 1978
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
+          "name": "L'Appel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 1999,
+          "year_max": 1999
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 21
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 293,
+            "title": "Centre culturel arabe libyen",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76314,
+            "title": "Kadiogo",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 13.0609
+          },
+          {
+            "o_id": 575,
+            "title": "Association Mondiale de l'Appel Islamique",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 12.324
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 8,
+            "score": 10.3617
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 8,
+            "score": 9.9044
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 11,
+            "score": 8.3876
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 14,
+            "score": 8.0071
+          },
+          {
+            "o_id": 1175,
+            "title": "Sayouba Belem K.",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5276
+          },
+          {
+            "o_id": 58,
+            "title": "Formation des imams et des prêcheurs",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.45
+          },
+          {
+            "o_id": 76319,
+            "title": "Maison du Peuple",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.2385
+          },
+          {
+            "o_id": 76343,
+            "title": "Médersas",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.1722
+          },
+          {
+            "o_id": 354,
+            "title": "Libye",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 7.1546
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 7,
+            "score": 6.7821
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 6.5951
+          },
+          {
+            "o_id": 12906,
+            "title": "Culture",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.4996
+          },
+          {
+            "o_id": 1171,
+            "title": "Salifou Belem",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.9057
+          },
+          {
+            "o_id": 76321,
+            "title": "Oubritenga",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.4644
+          },
+          {
+            "o_id": 76324,
+            "title": "Houet",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.103
+          },
+          {
+            "o_id": 582,
+            "title": "Mouvement Sunnite du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.6537
+          },
+          {
+            "o_id": 729,
+            "title": "UNICEF",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.4827
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 4.4437
+          },
+          {
+            "o_id": 377,
+            "title": "Ouahigouya",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.4255
+          },
+          {
+            "o_id": 1198,
+            "title": "Tiégo Tiemtoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4113
+          },
+          {
+            "o_id": 855,
+            "title": "Abdoul Salam Tiemtoré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.2647
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 4.1778
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 4.0458
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 3.9243
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.7354
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.6482
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.5371
+          },
+          {
+            "o_id": 336,
+            "title": "Kaya",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.4179
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.0833
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0421
+          },
+          {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.8784
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.5814
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.3106
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1985
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7437
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.4332
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3811
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          }
+        ],
+        "edges": [
+          {
+            "source": 293,
+            "target": 76314,
+            "weight": 13.0609,
+            "cooc": 6
+          },
+          {
+            "source": 293,
+            "target": 575,
+            "weight": 12.324,
+            "cooc": 6
+          },
+          {
+            "source": 293,
+            "target": 571,
+            "weight": 10.3617,
+            "cooc": 8
+          },
+          {
+            "source": 293,
+            "target": 76327,
+            "weight": 9.9044,
+            "cooc": 8
+          },
+          {
+            "source": 293,
+            "target": 376,
+            "weight": 8.3876,
+            "cooc": 11
+          },
+          {
+            "source": 293,
+            "target": 546,
+            "weight": 8.0071,
+            "cooc": 14
+          },
+          {
+            "source": 293,
+            "target": 1175,
+            "weight": 7.5276,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 58,
+            "weight": 7.45,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 76319,
+            "weight": 7.2385,
+            "cooc": 3
+          },
+          {
+            "source": 293,
+            "target": 76343,
+            "weight": 7.1722,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 354,
+            "weight": 7.1546,
+            "cooc": 6
+          },
+          {
+            "source": 293,
+            "target": 105,
+            "weight": 6.7821,
+            "cooc": 7
+          },
+          {
+            "source": 293,
+            "target": 569,
+            "weight": 6.5951,
+            "cooc": 5
+          },
+          {
+            "source": 293,
+            "target": 12906,
+            "weight": 6.4996,
+            "cooc": 5
+          },
+          {
+            "source": 293,
+            "target": 1171,
+            "weight": 5.9057,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 76321,
+            "weight": 5.4644,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 76324,
+            "weight": 5.103,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 582,
+            "weight": 4.6537,
+            "cooc": 3
+          },
+          {
+            "source": 293,
+            "target": 729,
+            "weight": 4.4827,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 284,
+            "weight": 4.4437,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 377,
+            "weight": 4.4255,
+            "cooc": 3
+          },
+          {
+            "source": 293,
+            "target": 1198,
+            "weight": 4.4113,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 855,
+            "weight": 4.2647,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 63,
+            "weight": 4.1778,
+            "cooc": 5
+          },
+          {
+            "source": 293,
+            "target": 55,
+            "weight": 4.0458,
+            "cooc": 5
+          },
+          {
+            "source": 293,
+            "target": 36,
+            "weight": 3.9243,
+            "cooc": 5
+          },
+          {
+            "source": 293,
+            "target": 63372,
+            "weight": 3.7354,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 23699,
+            "weight": 3.6482,
+            "cooc": 3
+          },
+          {
+            "source": 293,
+            "target": 14391,
+            "weight": 3.5371,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 336,
+            "weight": 3.4179,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 44,
+            "weight": 3.0833,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 56,
+            "weight": 3.0421,
+            "cooc": 3
+          },
+          {
+            "source": 293,
+            "target": 578,
+            "weight": 2.8784,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 86,
+            "weight": 2.5814,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 13908,
+            "weight": 2.3106,
+            "cooc": 4
+          },
+          {
+            "source": 293,
+            "target": 76041,
+            "weight": 2.1985,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 76039,
+            "weight": 1.7437,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 75967,
+            "weight": 1.4332,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 489,
+            "weight": 1.3811,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 293,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 14
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 11
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 6
+        },
+        {
+          "o_id": 76314,
+          "name": "Kadiogo",
+          "lat": 12.333333,
+          "lng": -1.5,
+          "count": 6
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 4
+        },
+        {
+          "o_id": 76319,
+          "name": "Maison du Peuple",
+          "lat": 12.3722,
+          "lng": -1.5236,
+          "count": 3
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
+          "count": 3
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 76321,
+          "name": "Oubritenga",
+          "lat": 12.583333,
+          "lng": -1.416667,
+          "count": 2
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 2
+        },
+        {
+          "o_id": 76324,
+          "name": "Houet",
+          "lat": 11.333333,
+          "lng": -4.25,
+          "count": 2
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
+          "count": 1
+        },
+        {
+          "o_id": 63422,
+          "name": "Passoré",
+          "lat": 12.95,
+          "lng": -2.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 401,
+          "name": "Tougan",
+          "lat": 13.05913,
+          "lng": -3.07527,
+          "count": 1
+        },
+        {
+          "o_id": 346,
+          "name": "Kongoussi",
+          "lat": 13.32583,
+          "lng": -1.53472,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 391,
+          "name": "Sapouy",
+          "lat": 11.55444,
+          "lng": -1.77361,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 318,
+          "name": "Gaoua",
+          "lat": 10.38247,
+          "lng": -3.16475,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
+          "count": 1
+        },
+        {
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
+        },
+        {
+          "o_id": 554,
+          "name": "Italie",
+          "lat": 42.5,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 63431,
+          "name": "Sourou",
+          "lat": 13.066666666667,
+          "lng": -3.0666666666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

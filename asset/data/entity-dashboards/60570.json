@@ -1,0 +1,377 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.402596+00:00",
+  "entity": {
+    "o_id": 60570,
+    "title": "Agbonou",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1987,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1990,
+          2022
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1987,
+          "year_max": 1990
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2022,
+          "year_max": 2022
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60570,
+            "title": "Agbonou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 537,
+            "title": "Ogou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 8.5425
+          },
+          {
+            "o_id": 497,
+            "title": "Atakpamé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.8541
+          },
+          {
+            "o_id": 60491,
+            "title": "Doufelgou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.4403
+          },
+          {
+            "o_id": 60562,
+            "title": "Wawa",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.2264
+          },
+          {
+            "o_id": 515,
+            "title": "Niamtougou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.9057
+          },
+          {
+            "o_id": 498,
+            "title": "Badou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.5044
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.2937
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.5417
+          }
+        ],
+        "edges": [
+          {
+            "source": 60570,
+            "target": 537,
+            "weight": 8.5425,
+            "cooc": 3
+          },
+          {
+            "source": 60570,
+            "target": 497,
+            "weight": 6.8541,
+            "cooc": 3
+          },
+          {
+            "source": 60570,
+            "target": 60491,
+            "weight": 6.4403,
+            "cooc": 2
+          },
+          {
+            "source": 60570,
+            "target": 60562,
+            "weight": 6.2264,
+            "cooc": 2
+          },
+          {
+            "source": 60570,
+            "target": 515,
+            "weight": 5.9057,
+            "cooc": 2
+          },
+          {
+            "source": 60570,
+            "target": 498,
+            "weight": 5.5044,
+            "cooc": 2
+          },
+          {
+            "source": 60570,
+            "target": 2128,
+            "weight": 3.2937,
+            "cooc": 2
+          },
+          {
+            "source": 60570,
+            "target": 544,
+            "weight": 1.5417,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
+          "count": 3
+        },
+        {
+          "o_id": 537,
+          "name": "Ogou",
+          "lat": 7.516667,
+          "lng": 1.116667,
+          "count": 3
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 515,
+          "name": "Niamtougou",
+          "lat": 9.7666666666667,
+          "lng": 1.1,
+          "count": 2
+        },
+        {
+          "o_id": 60491,
+          "name": "Doufelgou",
+          "lat": 9.76666667,
+          "lng": 1.1,
+          "count": 2
+        },
+        {
+          "o_id": 498,
+          "name": "Badou",
+          "lat": 7.584327,
+          "lng": 0.606651,
+          "count": 2
+        },
+        {
+          "o_id": 60562,
+          "name": "Wawa",
+          "lat": 7.583333,
+          "lng": 0.6,
+          "count": 2
+        },
+        {
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
+          "count": 1
+        },
+        {
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
+          "count": 1
+        },
+        {
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 1
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 1
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        },
+        {
+          "o_id": 60559,
+          "name": "Région des plateaux",
+          "lat": 7.5,
+          "lng": 1.1,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 518,
+          "name": "Sarakawa",
+          "lat": 9.6218425,
+          "lng": 0.9866713,
+          "count": 1
+        },
+        {
+          "o_id": 522,
+          "name": "Tchamba",
+          "lat": 9.0333333333333,
+          "lng": 1.4166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 60464,
+          "name": "Amou",
+          "lat": 7.5,
+          "lng": 1.05,
+          "count": 1
+        },
+        {
+          "o_id": 13242,
+          "name": "Nangbéto",
+          "lat": 7.423643,
+          "lng": 1.434753,
+          "count": 1
+        },
+        {
+          "o_id": 60488,
+          "name": "Datcha",
+          "lat": 7.4309,
+          "lng": 1.1607,
+          "count": 1
+        },
+        {
+          "o_id": 493,
+          "name": "Amlamé",
+          "lat": 7.4605555555556,
+          "lng": 0.90305555555556,
+          "count": 1
+        },
+        {
+          "o_id": 494,
+          "name": "Aného",
+          "lat": 6.2288888888889,
+          "lng": 1.5930555555556,
+          "count": 1
+        },
+        {
+          "o_id": 495,
+          "name": "Anié",
+          "lat": 7.76111111,
+          "lng": 1.19166667,
+          "count": 1
+        },
+        {
+          "o_id": 496,
+          "name": "Assoli",
+          "lat": 9.35,
+          "lng": 1.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 499,
+          "name": "Bafilo",
+          "lat": 9.35,
+          "lng": 1.26666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

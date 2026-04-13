@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.247206+00:00",
+  "entity": {
+    "o_id": 60549,
+    "title": "Tchalo",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1973,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1973,
+          2016,
+          2020,
+          2023
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1973,
+          "year_max": 2016
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2020,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60549,
+            "title": "Tchalo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60560,
+            "title": "Kadambara",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.5125
+          },
+          {
+            "o_id": 519,
+            "title": "Sokodé",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 7.4833
+          },
+          {
+            "o_id": 523,
+            "title": "Tchaoudjo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.4965
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.5417
+          },
+          {
+            "o_id": 277,
+            "title": "Arabie saoudite",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3505
+          }
+        ],
+        "edges": [
+          {
+            "source": 60549,
+            "target": 60560,
+            "weight": 8.5125,
+            "cooc": 2
+          },
+          {
+            "source": 60549,
+            "target": 519,
+            "weight": 7.4833,
+            "cooc": 4
+          },
+          {
+            "source": 60549,
+            "target": 523,
+            "weight": 6.4965,
+            "cooc": 3
+          },
+          {
+            "source": 60549,
+            "target": 544,
+            "weight": 1.5417,
+            "cooc": 2
+          },
+          {
+            "source": 60549,
+            "target": 277,
+            "weight": 1.3505,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 4
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 3
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 2
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
+          "count": 1
+        },
+        {
+          "o_id": 60490,
+          "name": "Doha",
+          "lat": 25.286205555555554,
+          "lng": 51.52943611111111,
+          "count": 1
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

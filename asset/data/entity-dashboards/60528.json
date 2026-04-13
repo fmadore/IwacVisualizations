@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.003588+00:00",
+  "entity": {
+    "o_id": 60528,
+    "title": "Nangbani",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2023,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2023
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60528,
+            "title": "Nangbani",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 500,
+            "title": "Bassar",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.1744
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.3429
+          }
+        ],
+        "edges": [
+          {
+            "source": 60528,
+            "target": 500,
+            "weight": 7.1744,
+            "cooc": 3
+          },
+          {
+            "source": 60528,
+            "target": 457,
+            "weight": 2.3429,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60528,
+          "name": "Nangbani",
+          "lat": 9.2666666666667,
+          "lng": 0.8,
+          "count": 3
+        },
+        {
+          "o_id": 500,
+          "name": "Bassar",
+          "lat": 9.25,
+          "lng": 0.78333333333333,
+          "count": 3
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 60486,
+          "name": "Dankpen",
+          "lat": 9.6833333333333,
+          "lng": 0.6,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.252187+00:00",
+  "entity": {
+    "o_id": 62127,
+    "title": "Association des Enseignants Coraniques",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1979,
+        "year_max": 1990,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1990
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1979,
+          "year_max": 1990
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62127,
+            "title": "Association des Enseignants Coraniques",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.1147
+          },
+          {
+            "o_id": 46256,
+            "title": "Treichville",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.7881
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 62127,
+            "target": 23601,
+            "weight": 3.1147,
+            "cooc": 2
+          },
+          {
+            "source": 62127,
+            "target": 46256,
+            "weight": 2.7881,
+            "cooc": 2
+          },
+          {
+            "source": 62127,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 62127,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 2
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

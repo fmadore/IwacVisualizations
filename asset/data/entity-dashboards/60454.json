@@ -1,0 +1,374 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.454585+00:00",
+  "entity": {
+    "o_id": 60454,
+    "title": "Abou Dhabi",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1992,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992,
+          2000,
+          2010,
+          2023
+        ],
+        "countries": [
+          "Bénin",
+          "Togo"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            1,
+            0
+          ],
+          "Togo": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1992,
+          "year_max": 2010
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60454,
+            "title": "Abou Dhabi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 309,
+            "title": "Émirats arabes unis",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.159
+          },
+          {
+            "o_id": 274,
+            "title": "Allada",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.022
+          },
+          {
+            "o_id": 378,
+            "title": "Ouidah",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.66
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.425
+          },
+          {
+            "o_id": 13712,
+            "title": "Diplomatie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.8676
+          },
+          {
+            "o_id": 12912,
+            "title": "Commerce",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.5951
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4275
+          },
+          {
+            "o_id": 351,
+            "title": "Koweït",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2774
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1678
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          }
+        ],
+        "edges": [
+          {
+            "source": 60454,
+            "target": 309,
+            "weight": 5.159,
+            "cooc": 3
+          },
+          {
+            "source": 60454,
+            "target": 274,
+            "weight": 5.022,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 378,
+            "weight": 4.66,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 17,
+            "weight": 3.425,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 13712,
+            "weight": 2.8676,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 12912,
+            "weight": 2.5951,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 55,
+            "weight": 2.4275,
+            "cooc": 3
+          },
+          {
+            "source": 60454,
+            "target": 351,
+            "weight": 2.2774,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 14425,
+            "weight": 2.1678,
+            "cooc": 2
+          },
+          {
+            "source": 60454,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60454,
+          "name": "Abou Dhabi",
+          "lat": 24.45111111111111,
+          "lng": 54.39694444444444,
+          "count": 4
+        },
+        {
+          "o_id": 309,
+          "name": "Émirats arabes unis",
+          "lat": 23.75,
+          "lng": 54.5,
+          "count": 3
+        },
+        {
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 2
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 2
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 297,
+          "name": "Comè",
+          "lat": 6.40764,
+          "lng": 1.88198,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
+          "o_id": 371,
+          "name": "N'Dali",
+          "lat": 9.73027,
+          "lng": 2.45032,
+          "count": 1
+        },
+        {
+          "o_id": 372,
+          "name": "Nikki",
+          "lat": 9.94009,
+          "lng": 3.21075,
+          "count": 1
+        },
+        {
+          "o_id": 73337,
+          "name": "Dubaï",
+          "lat": 25.269722,
+          "lng": 55.309444,
+          "count": 1
+        },
+        {
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 412,
+          "name": "Godomey",
+          "lat": 6.38948,
+          "lng": 2.34581,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

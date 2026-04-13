@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.950235+00:00",
+  "entity": {
+    "o_id": 23605,
+    "title": "Mosquée Ibn Baz",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2005,
+        "year_max": 2007,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2007
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        },
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23605,
+            "title": "Mosquée Ibn Baz",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23514,
+            "title": "Communauté Estudiantine Musulmane de l'Université de Cocody et de l'École Normale Supérieure",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 7.2193
+          },
+          {
+            "o_id": 558,
+            "title": "Université Félix Houphouët-Boigny",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.6294
+          },
+          {
+            "o_id": 63402,
+            "title": "Cocody",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.0191
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          }
+        ],
+        "edges": [
+          {
+            "source": 23605,
+            "target": 23514,
+            "weight": 7.2193,
+            "cooc": 2
+          },
+          {
+            "source": 23605,
+            "target": 558,
+            "weight": 5.6294,
+            "cooc": 2
+          },
+          {
+            "source": 23605,
+            "target": 63402,
+            "weight": 3.0191,
+            "cooc": 2
+          },
+          {
+            "source": 23605,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 2
+        },
+        {
+          "o_id": 558,
+          "name": "Université Félix Houphouët-Boigny",
+          "lat": 5.345556,
+          "lng": -3.986111,
+          "count": 2
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

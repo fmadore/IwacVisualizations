@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:16.642436+00:00",
+  "entity": {
+    "o_id": 63453,
+    "title": "Mosquée Dioula Treichville",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1974,
+        "year_max": 1994,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1974,
+          1979,
+          1994
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1974,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 63453,
+            "title": "Mosquée Dioula Treichville",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46277,
+            "title": "Mattié Diakité",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.975
+          },
+          {
+            "o_id": 62180,
+            "title": "Mamadou Coulibaly",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.4467
+          },
+          {
+            "o_id": 46256,
+            "title": "Treichville",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.1822
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7685
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          }
+        ],
+        "edges": [
+          {
+            "source": 63453,
+            "target": 46277,
+            "weight": 4.975,
+            "cooc": 2
+          },
+          {
+            "source": 63453,
+            "target": 62180,
+            "weight": 4.4467,
+            "cooc": 2
+          },
+          {
+            "source": 63453,
+            "target": 46256,
+            "weight": 4.1822,
+            "cooc": 3
+          },
+          {
+            "source": 63453,
+            "target": 14391,
+            "weight": 1.7685,
+            "cooc": 2
+          },
+          {
+            "source": 63453,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 63453,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 3
+        },
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 76460,
+          "name": "Chu de Treichville",
+          "lat": 5.293477682375166,
+          "lng": -4.003772668120945,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 76444,
+          "name": "Mosquée Sénégalaise",
+          "lat": 5.302210132319611,
+          "lng": -3.954733641173595,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

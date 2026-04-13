@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.091921+00:00",
+  "entity": {
+    "o_id": 825,
+    "title": "Commission de Réflexion pour l'Unité de la Communauté Musulmane du Bénin",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 825,
+            "title": "Commission de Réflexion pour l'Unité de la Communauté Musulmane du Bénin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14736,
+            "title": "Révision constitutionnelle (2013)",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 11.3759
+          },
+          {
+            "o_id": 812,
+            "title": "Conférence Épiscopale du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 6.0865
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.6446
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3512
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.2219
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6241
+          }
+        ],
+        "edges": [
+          {
+            "source": 825,
+            "target": 14736,
+            "weight": 11.3759,
+            "cooc": 3
+          },
+          {
+            "source": 825,
+            "target": 812,
+            "weight": 6.0865,
+            "cooc": 2
+          },
+          {
+            "source": 825,
+            "target": 765,
+            "weight": 4.6446,
+            "cooc": 3
+          },
+          {
+            "source": 825,
+            "target": 42,
+            "weight": 2.3512,
+            "cooc": 2
+          },
+          {
+            "source": 825,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
+          },
+          {
+            "source": 825,
+            "target": 76268,
+            "weight": 1.6241,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        },
+        {
+          "o_id": 430,
+          "name": "Canada",
+          "lat": 60.10867,
+          "lng": -113.64258,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

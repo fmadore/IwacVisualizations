@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.913726+00:00",
+  "entity": {
+    "o_id": 62129,
+    "title": "Congrès AEEMCI (1992)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1992,
+        "year_max": 1993,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992,
+          1993
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62129,
+            "title": "Congrès AEEMCI (1992)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 61324,
+            "title": "Grande Mosquée d'Adjamé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.1181
+          },
+          {
+            "o_id": 46316,
+            "title": "Adjamé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8354
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.2063
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6652
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6241
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 62129,
+            "target": 61324,
+            "weight": 4.1181,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 46316,
+            "weight": 2.8354,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 653,
+            "weight": 2.2063,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 9,
+            "weight": 1.6652,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 76268,
+            "weight": 1.6241,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          },
+          {
+            "source": 62129,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 61324,
+          "name": "Grande Mosquée d'Adjamé",
+          "lat": 5.353286615241792,
+          "lng": -4.026326534959187,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

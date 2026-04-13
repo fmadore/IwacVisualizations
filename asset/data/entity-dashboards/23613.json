@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.754969+00:00",
+  "entity": {
+    "o_id": 23613,
+    "title": "Congrès AMSCI (2014)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2014,
+        "year_max": 2014,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2014
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            4
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2014
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23613,
+            "title": "Congrès AMSCI (2014)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23574,
+            "title": "Académie Nationale des Oulémas en Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 13.0118
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 7.9253
+          },
+          {
+            "o_id": 23556,
+            "title": "Conseil des Imams Sunnites",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 6.6345
+          }
+        ],
+        "edges": [
+          {
+            "source": 23613,
+            "target": 23574,
+            "weight": 13.0118,
+            "cooc": 4
+          },
+          {
+            "source": 23613,
+            "target": 23681,
+            "weight": 7.9253,
+            "cooc": 4
+          },
+          {
+            "source": 23613,
+            "target": 23556,
+            "weight": 6.6345,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

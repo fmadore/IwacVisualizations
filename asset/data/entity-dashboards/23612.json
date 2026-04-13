@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.750802+00:00",
+  "entity": {
+    "o_id": 23612,
+    "title": "Crise ivoirienne de 2010-2011",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 2011,
+        "year_max": 2019,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            9,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 7,
+          "articles": 0,
+          "publications": 7,
+          "country": "Côte d'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Al Minbar",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23612,
+            "title": "Crise ivoirienne de 2010-2011",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23491,
+            "title": "Élection présidentielle ivoirienne de 2010",
+            "type": "Événements",
+            "cooc": 9,
+            "score": 23.1136
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 5.6922
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.5347
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3251
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.2628
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 63372,
+            "title": "Extrémisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8677
+          }
+        ],
+        "edges": [
+          {
+            "source": 23612,
+            "target": 23491,
+            "weight": 23.1136,
+            "cooc": 9
+          },
+          {
+            "source": 23612,
+            "target": 12891,
+            "weight": 5.6922,
+            "cooc": 4
+          },
+          {
+            "source": 23612,
+            "target": 46294,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 23612,
+            "target": 1057,
+            "weight": 2.5347,
+            "cooc": 2
+          },
+          {
+            "source": 23612,
+            "target": 269,
+            "weight": 2.3251,
+            "cooc": 3
+          },
+          {
+            "source": 23612,
+            "target": 5,
+            "weight": 2.2628,
+            "cooc": 3
+          },
+          {
+            "source": 23612,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 23612,
+            "target": 63372,
+            "weight": 1.8677,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

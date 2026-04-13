@@ -1,0 +1,248 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.500169+00:00",
+  "entity": {
+    "o_id": 76361,
+    "title": "Cour pénale internationale",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2013,
+        "year_max": 2019,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2014,
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76361,
+            "title": "Cour pénale internationale",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.9959
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.984
+          },
+          {
+            "o_id": 14536,
+            "title": "Justice",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.2024
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6241
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.55
+          }
+        ],
+        "edges": [
+          {
+            "source": 76361,
+            "target": 46194,
+            "weight": 2.9959,
+            "cooc": 2
+          },
+          {
+            "source": 76361,
+            "target": 113,
+            "weight": 2.984,
+            "cooc": 3
+          },
+          {
+            "source": 76361,
+            "target": 14536,
+            "weight": 2.2024,
+            "cooc": 2
+          },
+          {
+            "source": 76361,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          },
+          {
+            "source": 76361,
+            "target": 76268,
+            "weight": 1.6241,
+            "cooc": 2
+          },
+          {
+            "source": 76361,
+            "target": 269,
+            "weight": 1.55,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 2
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:20.950691+00:00",
+  "entity": {
+    "o_id": 806,
+    "title": "Fan Club de l'Imam Chakirou Amoussou",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2020,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020,
+          2021
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 806,
+            "title": "Fan Club de l'Imam Chakirou Amoussou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2021,
+            "title": "Chakirou Amoussou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 10.4915
+          },
+          {
+            "o_id": 210,
+            "title": "Élection présidentielle de 2021 au Bénin",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.1262
+          },
+          {
+            "o_id": 1417,
+            "title": "Patrice Talon",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 5.3254
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6652
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          }
+        ],
+        "edges": [
+          {
+            "source": 806,
+            "target": 2021,
+            "weight": 10.4915,
+            "cooc": 3
+          },
+          {
+            "source": 806,
+            "target": 210,
+            "weight": 7.1262,
+            "cooc": 2
+          },
+          {
+            "source": 806,
+            "target": 1417,
+            "weight": 5.3254,
+            "cooc": 3
+          },
+          {
+            "source": 806,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 806,
+            "target": 9,
+            "weight": 1.6652,
+            "cooc": 2
+          },
+          {
+            "source": 806,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 412,
+          "name": "Godomey",
+          "lat": 6.38948,
+          "lng": 2.34581,
+          "count": 1
+        },
+        {
+          "o_id": 393,
+          "name": "Savé",
+          "lat": 8.03424,
+          "lng": 2.4866,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        },
+        {
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:07.508388+00:00",
+  "entity": {
+    "o_id": 462,
+    "title": "Lycée Béhanzin",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2015,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2015,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 462,
+            "title": "Lycée Béhanzin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.5331
+          },
+          {
+            "o_id": 2019,
+            "title": "Mohamed Louckman Bissirou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.4729
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 6.4172
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 5.6285
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.8546
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.3303
+          },
+          {
+            "o_id": 541,
+            "title": "Nigéria",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.958
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 1.9397
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 63530,
+            "title": "Radicalisation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8514
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.7956
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 462,
+            "target": 76346,
+            "weight": 7.5331,
+            "cooc": 3
+          },
+          {
+            "source": 462,
+            "target": 2019,
+            "weight": 6.4729,
+            "cooc": 2
+          },
+          {
+            "source": 462,
+            "target": 76335,
+            "weight": 6.4172,
+            "cooc": 4
+          },
+          {
+            "source": 462,
+            "target": 385,
+            "weight": 5.6285,
+            "cooc": 4
+          },
+          {
+            "source": 462,
+            "target": 2014,
+            "weight": 4.8546,
+            "cooc": 2
+          },
+          {
+            "source": 462,
+            "target": 9,
+            "weight": 3.3303,
+            "cooc": 4
+          },
+          {
+            "source": 462,
+            "target": 541,
+            "weight": 2.958,
+            "cooc": 3
+          },
+          {
+            "source": 462,
+            "target": 2013,
+            "weight": 1.9397,
+            "cooc": 3
+          },
+          {
+            "source": 462,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 462,
+            "target": 63530,
+            "weight": 1.8514,
+            "cooc": 2
+          },
+          {
+            "source": 462,
+            "target": 109,
+            "weight": 1.7956,
+            "cooc": 3
+          },
+          {
+            "source": 462,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          },
+          {
+            "source": 462,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 4
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 3
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 384,
+          "name": "Pobé",
+          "lat": 6.98008,
+          "lng": 2.6649,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 272,
+          "name": "Adjarra",
+          "lat": 6.53445,
+          "lng": 2.66833,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

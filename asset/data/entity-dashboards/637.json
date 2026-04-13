@@ -1,0 +1,496 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:19.311389+00:00",
+  "entity": {
+    "o_id": 637,
+    "title": "Comité d'Appel à l'Islam",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1979,
+        "year_max": 2003,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1993,
+          1998,
+          2000,
+          2003
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Sidwaya",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 2000
+        },
+        {
+          "name": "L'Appel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2000,
+          "year_max": 2000
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Carrefour africain",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1979,
+          "year_max": 1979
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 637,
+            "title": "Comité d'Appel à l'Islam",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 938,
+            "title": "Abdrahmane Sidibé",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 11.4628
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 4.4437
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 4.0458
+          },
+          {
+            "o_id": 303,
+            "title": "Dédougou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.8983
+          },
+          {
+            "o_id": 862,
+            "title": "Aboubacar Sangoulé Lamizana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.8713
+          },
+          {
+            "o_id": 351,
+            "title": "Koweït",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 3.4161
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 3.05
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.777
+          },
+          {
+            "o_id": 571,
+            "title": "Cercle d'Études, de Recherches et de Formation Islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.5904
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3806
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.2877
+          },
+          {
+            "o_id": 124,
+            "title": "Aïd el-Fitr",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 2.093
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.0679
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.4332
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          }
+        ],
+        "edges": [
+          {
+            "source": 637,
+            "target": 938,
+            "weight": 11.4628,
+            "cooc": 3
+          },
+          {
+            "source": 637,
+            "target": 284,
+            "weight": 4.4437,
+            "cooc": 4
+          },
+          {
+            "source": 637,
+            "target": 55,
+            "weight": 4.0458,
+            "cooc": 5
+          },
+          {
+            "source": 637,
+            "target": 303,
+            "weight": 3.8983,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 862,
+            "weight": 3.8713,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 351,
+            "weight": 3.4161,
+            "cooc": 3
+          },
+          {
+            "source": 637,
+            "target": 376,
+            "weight": 3.05,
+            "cooc": 4
+          },
+          {
+            "source": 637,
+            "target": 61328,
+            "weight": 2.777,
+            "cooc": 3
+          },
+          {
+            "source": 637,
+            "target": 571,
+            "weight": 2.5904,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 10,
+            "weight": 2.3806,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 546,
+            "weight": 2.2877,
+            "cooc": 4
+          },
+          {
+            "source": 637,
+            "target": 124,
+            "weight": 2.093,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 15831,
+            "weight": 2.0679,
+            "cooc": 3
+          },
+          {
+            "source": 637,
+            "target": 75967,
+            "weight": 1.4332,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          },
+          {
+            "source": 637,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 4
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 4
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 4
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 3
+        },
+        {
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
+          "count": 2
+        },
+        {
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
+          "count": 1
+        },
+        {
+          "o_id": 288,
+          "name": "Boulsa",
+          "lat": 12.65,
+          "lng": -0.567,
+          "count": 1
+        },
+        {
+          "o_id": 386,
+          "name": "Pouytenga",
+          "lat": 12.25162,
+          "lng": -0.42565,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 1
+        },
+        {
+          "o_id": 287,
+          "name": "Boromo",
+          "lat": 11.75,
+          "lng": -2.93333,
+          "count": 1
+        },
+        {
+          "o_id": 373,
+          "name": "Nouna",
+          "lat": 12.74367,
+          "lng": -3.86322,
+          "count": 1
+        },
+        {
+          "o_id": 76322,
+          "name": "Dioulassoba",
+          "lat": 11.178,
+          "lng": -4.2961,
+          "count": 1
+        },
+        {
+          "o_id": 63374,
+          "name": "Benghazi",
+          "lat": 32.116667,
+          "lng": 20.066667,
+          "count": 1
+        },
+        {
+          "o_id": 403,
+          "name": "Tripoli",
+          "lat": 32.88743,
+          "lng": 13.18733,
+          "count": 1
+        },
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
+          "count": 1
+        },
+        {
+          "o_id": 60535,
+          "name": "Ouganda",
+          "lat": 1.28,
+          "lng": 32.39,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

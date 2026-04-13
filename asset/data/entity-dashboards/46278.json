@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.173207+00:00",
+  "entity": {
+    "o_id": 46278,
+    "title": "Commission nationale pour la réconciliation et l'indemnisation des victimes des crises",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2015,
+        "year_max": 2017,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2017
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2015,
+          "year_max": 2017
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2015,
+          "year_max": 2015
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46278,
+            "title": "Commission nationale pour la réconciliation et l'indemnisation des victimes des crises",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23640,
+            "title": "Commission Dialogue Vérité et Réconciliation",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.1325
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.984
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.7217
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.3181
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7968
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          }
+        ],
+        "edges": [
+          {
+            "source": 46278,
+            "target": 23640,
+            "weight": 7.1325,
+            "cooc": 3
+          },
+          {
+            "source": 46278,
+            "target": 113,
+            "weight": 2.984,
+            "cooc": 3
+          },
+          {
+            "source": 46278,
+            "target": 23606,
+            "weight": 2.7217,
+            "cooc": 2
+          },
+          {
+            "source": 46278,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 46278,
+            "target": 945,
+            "weight": 2.3181,
+            "cooc": 2
+          },
+          {
+            "source": 46278,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 46278,
+            "target": 76280,
+            "weight": 1.7968,
+            "cooc": 2
+          },
+          {
+            "source": 46278,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 76456,
+          "name": "Riviera Palmeraie",
+          "lat": 5.36992,
+          "lng": -3.95658,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

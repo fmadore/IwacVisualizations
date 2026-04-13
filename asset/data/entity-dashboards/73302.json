@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:16.793535+00:00",
+  "entity": {
+    "o_id": 73302,
+    "title": "Bè-Kpota",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1987,
+        "year_max": 2007,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1995,
+          2007
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1995,
+          "year_max": 2007
+        },
+        {
+          "name": "La Nouvelle Marche",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1987,
+          "year_max": 1987
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73302,
+            "title": "Bè-Kpota",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2215
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.3429
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3125
+          }
+        ],
+        "edges": [
+          {
+            "source": 73302,
+            "target": 830,
+            "weight": 3.2215,
+            "cooc": 2
+          },
+          {
+            "source": 73302,
+            "target": 457,
+            "weight": 2.3429,
+            "cooc": 2
+          },
+          {
+            "source": 73302,
+            "target": 544,
+            "weight": 2.3125,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 3
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 60458,
+          "name": "Agbalépédogan",
+          "lat": 6.19943,
+          "lng": 1.19883,
+          "count": 1
+        },
+        {
+          "o_id": 60558,
+          "name": "Agoé-Nyivé",
+          "lat": 6.2575,
+          "lng": 1.1929,
+          "count": 1
+        },
+        {
+          "o_id": 73333,
+          "name": "Adidogomé",
+          "lat": 6.171275049714692,
+          "lng": 1.1416055290325384,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

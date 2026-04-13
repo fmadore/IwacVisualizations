@@ -1,0 +1,412 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.950303+00:00",
+  "entity": {
+    "o_id": 46185,
+    "title": "Conférence Islamique pour l'Organisation des Pèlerinages",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 2004,
+        "year_max": 2006,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2005,
+          2006
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            4,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2006
+        },
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2006
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46185,
+            "title": "Conférence Islamique pour l'Organisation des Pèlerinages",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46321,
+            "title": "Association musulmane pour l'organisation du pèlerinage à la Mecque",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.2385
+          },
+          {
+            "o_id": 23540,
+            "title": "Comité National pour l'Organisation du Pèlerinage à la Mecque (CI)",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 6.67
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 6.6188
+          },
+          {
+            "o_id": 46223,
+            "title": "Bema Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.1976
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 8,
+            "score": 5.5246
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 9,
+            "score": 5.4186
+          },
+          {
+            "o_id": 654,
+            "title": "Comité National pour l'Organisation du Pèlerinage à la Mecque",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.2576
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 4.6501
+          },
+          {
+            "o_id": 442,
+            "title": "Djeddah",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.0155
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.5936
+          },
+          {
+            "o_id": 277,
+            "title": "Arabie saoudite",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 3.3763
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 3.3432
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1678
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9617
+          },
+          {
+            "o_id": 443,
+            "title": "Médine",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.9175
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8514
+          }
+        ],
+        "edges": [
+          {
+            "source": 46185,
+            "target": 46321,
+            "weight": 7.2385,
+            "cooc": 3
+          },
+          {
+            "source": 46185,
+            "target": 23540,
+            "weight": 6.67,
+            "cooc": 3
+          },
+          {
+            "source": 46185,
+            "target": 653,
+            "weight": 6.6188,
+            "cooc": 6
+          },
+          {
+            "source": 46185,
+            "target": 46223,
+            "weight": 6.1976,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 489,
+            "weight": 5.5246,
+            "cooc": 8
+          },
+          {
+            "source": 46185,
+            "target": 29,
+            "weight": 5.4186,
+            "cooc": 9
+          },
+          {
+            "source": 46185,
+            "target": 654,
+            "weight": 5.2576,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 269,
+            "weight": 4.6501,
+            "cooc": 6
+          },
+          {
+            "source": 46185,
+            "target": 442,
+            "weight": 4.0155,
+            "cooc": 3
+          },
+          {
+            "source": 46185,
+            "target": 76280,
+            "weight": 3.5936,
+            "cooc": 4
+          },
+          {
+            "source": 46185,
+            "target": 277,
+            "weight": 3.3763,
+            "cooc": 5
+          },
+          {
+            "source": 46185,
+            "target": 298,
+            "weight": 3.3432,
+            "cooc": 6
+          },
+          {
+            "source": 46185,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 14425,
+            "weight": 2.1678,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 76042,
+            "weight": 1.9617,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 443,
+            "weight": 1.9175,
+            "cooc": 2
+          },
+          {
+            "source": 46185,
+            "target": 61328,
+            "weight": 1.8514,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 8
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 6
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 6
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 5
+        },
+        {
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 3
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 2
+        },
+        {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

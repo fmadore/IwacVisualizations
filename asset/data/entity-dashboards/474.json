@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:07.573912+00:00",
+  "entity": {
+    "o_id": 474,
+    "title": "Mosquée centrale de Toviklin",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2010,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 474,
+            "title": "Mosquée centrale de Toviklin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 478,
+            "title": "Toviklin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 12.6354
+          },
+          {
+            "o_id": 62024,
+            "title": "Couffo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.9133
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.6446
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.5156
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3806
+          }
+        ],
+        "edges": [
+          {
+            "source": 474,
+            "target": 478,
+            "weight": 12.6354,
+            "cooc": 3
+          },
+          {
+            "source": 474,
+            "target": 62024,
+            "weight": 7.9133,
+            "cooc": 3
+          },
+          {
+            "source": 474,
+            "target": 765,
+            "weight": 4.6446,
+            "cooc": 3
+          },
+          {
+            "source": 474,
+            "target": 32,
+            "weight": 2.5156,
+            "cooc": 3
+          },
+          {
+            "source": 474,
+            "target": 10,
+            "weight": 2.3806,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 62024,
+          "name": "Couffo",
+          "lat": 6.961944,
+          "lng": 1.801667,
+          "count": 3
+        },
+        {
+          "o_id": 478,
+          "name": "Toviklin",
+          "lat": 6.88796,
+          "lng": 1.80739,
+          "count": 3
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

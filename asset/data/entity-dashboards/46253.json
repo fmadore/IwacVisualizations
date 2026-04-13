@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.083446+00:00",
+  "entity": {
+    "o_id": 46253,
+    "title": "Ansar Dine CI",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2004,
+        "year_max": 2004,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46253,
+            "title": "Ansar Dine CI",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76443,
+            "title": "Williamsville",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.2976
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 46253,
+            "target": 76443,
+            "weight": 4.2976,
+            "cooc": 2
+          },
+          {
+            "source": 46253,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 46253,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          },
+          {
+            "source": 46253,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          },
+          {
+            "source": 46253,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
+          "count": 2
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

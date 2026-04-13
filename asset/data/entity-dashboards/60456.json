@@ -1,0 +1,295 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.463408+00:00",
+  "entity": {
+    "o_id": 60456,
+    "title": "Afagnan",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2005,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2023,
+          2024
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2024
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60456,
+            "title": "Afagnan",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60476,
+            "title": "Bas-Mono",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 8.6056
+          },
+          {
+            "o_id": 494,
+            "title": "Aného",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.7045
+          },
+          {
+            "o_id": 60555,
+            "title": "Yoto",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.8706
+          },
+          {
+            "o_id": 525,
+            "title": "Vogan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.0596
+          },
+          {
+            "o_id": 521,
+            "title": "Tabligbo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.8093
+          },
+          {
+            "o_id": 524,
+            "title": "Tsévié",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.4447
+          }
+        ],
+        "edges": [
+          {
+            "source": 60456,
+            "target": 60476,
+            "weight": 8.6056,
+            "cooc": 2
+          },
+          {
+            "source": 60456,
+            "target": 494,
+            "weight": 7.7045,
+            "cooc": 3
+          },
+          {
+            "source": 60456,
+            "target": 60555,
+            "weight": 6.8706,
+            "cooc": 2
+          },
+          {
+            "source": 60456,
+            "target": 525,
+            "weight": 6.0596,
+            "cooc": 2
+          },
+          {
+            "source": 60456,
+            "target": 521,
+            "weight": 5.8093,
+            "cooc": 2
+          },
+          {
+            "source": 60456,
+            "target": 524,
+            "weight": 5.4447,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60456,
+          "name": "Afagnan",
+          "lat": 6.4939168,
+          "lng": 1.6339159,
+          "count": 4
+        },
+        {
+          "o_id": 494,
+          "name": "Aného",
+          "lat": 6.2288888888889,
+          "lng": 1.5930555555556,
+          "count": 3
+        },
+        {
+          "o_id": 60476,
+          "name": "Bas-Mono",
+          "lat": 6.48333333,
+          "lng": 1.65,
+          "count": 2
+        },
+        {
+          "o_id": 521,
+          "name": "Tabligbo",
+          "lat": 6.5833333333333,
+          "lng": 1.5,
+          "count": 2
+        },
+        {
+          "o_id": 60555,
+          "name": "Yoto",
+          "lat": 6.58333333,
+          "lng": 1.5,
+          "count": 2
+        },
+        {
+          "o_id": 524,
+          "name": "Tsévié",
+          "lat": 6.4333333333333,
+          "lng": 1.2166666666667,
+          "count": 2
+        },
+        {
+          "o_id": 525,
+          "name": "Vogan",
+          "lat": 6.3333333333333,
+          "lng": 1.5333333333333,
+          "count": 2
+        },
+        {
+          "o_id": 309,
+          "name": "Émirats arabes unis",
+          "lat": 23.75,
+          "lng": 54.5,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 522,
+          "name": "Tchamba",
+          "lat": 9.0333333333333,
+          "lng": 1.4166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60464,
+          "name": "Amou",
+          "lat": 7.5,
+          "lng": 1.05,
+          "count": 1
+        },
+        {
+          "o_id": 60553,
+          "name": "Vo",
+          "lat": 6.3333333333333,
+          "lng": 1.5333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 60470,
+          "name": "Assahoun",
+          "lat": 6.4546,
+          "lng": 0.9096,
+          "count": 1
+        },
+        {
+          "o_id": 536,
+          "name": "Zio",
+          "lat": 6.433333,
+          "lng": 1.216667,
+          "count": 1
+        },
+        {
+          "o_id": 60567,
+          "name": "Kévé",
+          "lat": 6.427811,
+          "lng": 0.924481,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

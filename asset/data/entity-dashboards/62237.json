@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:15.684498+00:00",
+  "entity": {
+    "o_id": 62237,
+    "title": "Institut Islamique d'Abobo",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1990,
+        "year_max": 1990,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1990,
+          "year_max": 1990
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 62237,
+            "title": "Institut Islamique d'Abobo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63412,
+            "title": "Kong",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.2324
+          },
+          {
+            "o_id": 63391,
+            "title": "Anyama",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.1486
+          },
+          {
+            "o_id": 23691,
+            "title": "Abobo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1025
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3058
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.028
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          }
+        ],
+        "edges": [
+          {
+            "source": 62237,
+            "target": 63412,
+            "weight": 4.2324,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 63391,
+            "weight": 4.1486,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 23691,
+            "weight": 3.1025,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 54,
+            "weight": 2.3058,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 56,
+            "weight": 2.028,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 62237,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 2
+        },
+        {
+          "o_id": 63412,
+          "name": "Kong",
+          "lat": 9.150632,
+          "lng": -4.610263,
+          "count": 2
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 413,
+          "name": "Tunisie",
+          "lat": 34.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

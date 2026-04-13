@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.858649+00:00",
+  "entity": {
+    "o_id": 23509,
+    "title": "Réseau des Écoles Madrasas en Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2008,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2010,
+          2023
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2008,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23509,
+            "title": "Réseau des Écoles Madrasas en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.028
+          }
+        ],
+        "edges": [
+          {
+            "source": 23509,
+            "target": 56,
+            "weight": 2.028,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

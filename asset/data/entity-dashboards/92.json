@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:32.146890+00:00",
+  "entity": {
+    "o_id": 92,
+    "title": "Mossi",
+    "type": "Sujets"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1966,
+        "year_max": 1998,
+        "newspapers_count": 0,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1966,
+          1996,
+          1998
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": []
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 92,
+            "title": "Mossi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.7158
+          }
+        ],
+        "edges": [
+          {
+            "source": 92,
+            "target": 546,
+            "weight": 1.7158,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 3
+        }
+      ]
+    }
+  }
+}

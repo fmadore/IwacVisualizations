@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.825788+00:00",
+  "entity": {
+    "o_id": 26344,
+    "title": "Dossier de l'Islam",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1997,
+        "year_max": 2002,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1997,
+          2002
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1997,
+          "year_max": 2002
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 26344,
+            "title": "Dossier de l'Islam",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 529,
+            "title": "Centre Culturel Islamique de Lomé II",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.5694
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.3429
+          }
+        ],
+        "edges": [
+          {
+            "source": 26344,
+            "target": 529,
+            "weight": 4.5694,
+            "cooc": 2
+          },
+          {
+            "source": 26344,
+            "target": 457,
+            "weight": 2.3429,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 2
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 524,
+          "name": "Tsévié",
+          "lat": 6.4333333333333,
+          "lng": 1.2166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 536,
+          "name": "Zio",
+          "lat": 6.433333,
+          "lng": 1.216667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

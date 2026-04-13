@@ -1,0 +1,191 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:06.411751+00:00",
+  "entity": {
+    "o_id": 435,
+    "title": "Mosquée AEEMB (Université de Ouagadougou)",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2008,
+        "year_max": 2012,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2012
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "An-Nasr Vendredi",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2008
+        },
+        {
+          "name": "An-Nasr Trimestriel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2012
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 435,
+            "title": "Mosquée AEEMB (Université de Ouagadougou)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 569,
+            "title": "Association des Élèves et Étudiants Musulmans au Burkina",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.638
+          },
+          {
+            "o_id": 443,
+            "title": "Médine",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.9175
+          },
+          {
+            "o_id": 376,
+            "title": "Ouagadougou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.525
+          }
+        ],
+        "edges": [
+          {
+            "source": 435,
+            "target": 569,
+            "weight": 2.638,
+            "cooc": 2
+          },
+          {
+            "source": 435,
+            "target": 443,
+            "weight": 1.9175,
+            "cooc": 2
+          },
+          {
+            "source": 435,
+            "target": 376,
+            "weight": 1.525,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 2
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 2
+        },
+        {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 332,
+          "name": "Japon",
+          "lat": 35.68536,
+          "lng": 139.75309,
+          "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

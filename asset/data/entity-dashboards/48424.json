@@ -1,0 +1,381 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.888728+00:00",
+  "entity": {
+    "o_id": 48424,
+    "title": "Coup d'État de 1999 en Côte d'Ivoire",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 9,
+        "year_min": 1999,
+        "year_max": 2019,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000,
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            6,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Jour",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 9
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48424,
+            "title": "Coup d'État de 1999 en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46262,
+            "title": "Robert Guéï",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 11.3606
+          },
+          {
+            "o_id": 48416,
+            "title": "Comité National de Salut Public",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.3396
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.8021
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.4771
+          },
+          {
+            "o_id": 46214,
+            "title": "Rassemblement des républicains de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.3826
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.3094
+          },
+          {
+            "o_id": 1023,
+            "title": "Djiguiba Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.9617
+          },
+          {
+            "o_id": 46238,
+            "title": "Bouaké",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.7572
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3512
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6711
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.55
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5417
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          }
+        ],
+        "edges": [
+          {
+            "source": 48424,
+            "target": 46262,
+            "weight": 11.3606,
+            "cooc": 5
+          },
+          {
+            "source": 48424,
+            "target": 48416,
+            "weight": 9.3396,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 1057,
+            "weight": 3.8021,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 945,
+            "weight": 3.4771,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 46214,
+            "weight": 3.3826,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 653,
+            "weight": 3.3094,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 1023,
+            "weight": 2.9617,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 46238,
+            "weight": 2.7572,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 42,
+            "weight": 2.3512,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          },
+          {
+            "source": 48424,
+            "target": 63,
+            "weight": 1.6711,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 269,
+            "weight": 1.55,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 44,
+            "weight": 1.5417,
+            "cooc": 2
+          },
+          {
+            "source": 48424,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 2
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 2
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        },
+        {
+          "o_id": 23600,
+          "name": "Grande mosquée des II-Plateaux Aghien",
+          "lat": 5.382535557731071,
+          "lng": -3.993870062858185,
+          "count": 1
+        },
+        {
+          "o_id": 62240,
+          "name": "Palais des Sports de Treichville",
+          "lat": 5.298056,
+          "lng": -4.005278,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

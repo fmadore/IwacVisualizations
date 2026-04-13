@@ -1,0 +1,503 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:04.156033+00:00",
+  "entity": {
+    "o_id": 347,
+    "title": "Kouandé",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1976,
+        "year_max": 2022,
+        "newspapers_count": 5,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1976,
+          1998,
+          2018,
+          2021,
+          2022
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1998,
+          "year_max": 2021
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1976,
+          "year_max": 1976
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Bénin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 347,
+            "title": "Kouandé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.2214
+          },
+          {
+            "o_id": 370,
+            "title": "Natitingou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.8803
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1269
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.9626
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.368
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1985
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.936
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 347,
+            "target": 385,
+            "weight": 4.2214,
+            "cooc": 3
+          },
+          {
+            "source": 347,
+            "target": 370,
+            "weight": 3.8803,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 379,
+            "weight": 3.1269,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 283,
+            "weight": 2.9626,
+            "cooc": 4
+          },
+          {
+            "source": 347,
+            "target": 299,
+            "weight": 2.368,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 76041,
+            "weight": 2.1985,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 86,
+            "weight": 1.936,
+            "cooc": 3
+          },
+          {
+            "source": 347,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          },
+          {
+            "source": 347,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 347,
+          "name": "Kouandé",
+          "lat": 10.42486,
+          "lng": 1.71466,
+          "count": 6
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 4
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 3
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 2
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "count": 2
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 2
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
+          "o_id": 76344,
+          "name": "Atacora",
+          "lat": 10.3,
+          "lng": 1.366667,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 399,
+          "name": "Tchaourou",
+          "lat": 9.0349,
+          "lng": 2.5169,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 281,
+          "name": "Bassila",
+          "lat": 9.00814,
+          "lng": 1.6654,
+          "count": 1
+        },
+        {
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
+          "count": 1
+        },
+        {
+          "o_id": 62018,
+          "name": "Alibori",
+          "lat": 11.128611,
+          "lng": 2.936944,
+          "count": 1
+        },
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "count": 1
+        },
+        {
+          "o_id": 25155,
+          "name": "Russie",
+          "lat": 66.416667,
+          "lng": 94.25,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 337,
+          "name": "Kérou",
+          "lat": 10.91433,
+          "lng": 1.99153,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "count": 1
+        },
+        {
+          "o_id": 371,
+          "name": "N'Dali",
+          "lat": 9.73027,
+          "lng": 2.45032,
+          "count": 1
+        },
+        {
+          "o_id": 27900,
+          "name": "Angola",
+          "lat": -12.35,
+          "lng": 17.35,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

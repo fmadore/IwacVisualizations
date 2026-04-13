@@ -1,0 +1,347 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.819564+00:00",
+  "entity": {
+    "o_id": 60494,
+    "title": "Eswatini",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2020,
+        "year_max": 2022,
+        "newspapers_count": 2,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020,
+          2022
+        ],
+        "countries": [
+          "Niger",
+          "Togo"
+        ],
+        "series": {
+          "Niger": [
+            1,
+            1
+          ],
+          "Togo": [
+            0,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Sahel",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Niger",
+          "year_min": 2020,
+          "year_max": 2022
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2022,
+          "year_max": 2022
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Niger",
+          "count": 2
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60494,
+            "title": "Eswatini",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 562,
+            "title": "Namibie",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.7971
+          },
+          {
+            "o_id": 555,
+            "title": "Afrique du Sud",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.348
+          },
+          {
+            "o_id": 541,
+            "title": "Nigéria",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.972
+          }
+        ],
+        "edges": [
+          {
+            "source": 60494,
+            "target": 562,
+            "weight": 4.7971,
+            "cooc": 2
+          },
+          {
+            "source": 60494,
+            "target": 555,
+            "weight": 3.348,
+            "cooc": 2
+          },
+          {
+            "source": 60494,
+            "target": 541,
+            "weight": 1.972,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60494,
+          "name": "Eswatini",
+          "lat": -26.483333,
+          "lng": 31.433333,
+          "count": 3
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 2
+        },
+        {
+          "o_id": 562,
+          "name": "Namibie",
+          "lat": -23.0,
+          "lng": 17.0,
+          "count": 2
+        },
+        {
+          "o_id": 13955,
+          "name": "République centrafricaine",
+          "lat": 6.7,
+          "lng": 20.9,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 63377,
+          "name": "République du Congo",
+          "lat": -0.75,
+          "lng": 15.383331,
+          "count": 1
+        },
+        {
+          "o_id": 409,
+          "name": "Somalie",
+          "lat": 6.0,
+          "lng": 48.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 413,
+          "name": "Tunisie",
+          "lat": 34.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 548,
+          "name": "Gabon",
+          "lat": -1.0,
+          "lng": 11.75,
+          "count": 1
+        },
+        {
+          "o_id": 14637,
+          "name": "Rwanda",
+          "lat": -2.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 13118,
+          "name": "Accra",
+          "lat": 5.533333,
+          "lng": -0.216667,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 13251,
+          "name": "Île Maurice",
+          "lat": -20.2,
+          "lng": 57.5,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 60467,
+          "name": "Apégamé",
+          "lat": 6.85,
+          "lng": 0.73333,
+          "count": 1
+        },
+        {
+          "o_id": 60543,
+          "name": "Sierra Leone",
+          "lat": 8.5,
+          "lng": -12.1,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 60457,
+          "name": "Afghanistan",
+          "lat": 33.0,
+          "lng": 66.0,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

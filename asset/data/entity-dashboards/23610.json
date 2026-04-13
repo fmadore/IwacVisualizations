@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.259928+00:00",
+  "entity": {
+    "o_id": 23610,
+    "title": "Association Musulmane du Personnel de l'Enseignement en Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2005,
+        "year_max": 2006,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2006
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2006
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23610,
+            "title": "Association Musulmane du Personnel de l'Enseignement en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 63528,
+            "title": "Ladji Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.5276
+          },
+          {
+            "o_id": 71429,
+            "title": "Fama Touré",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.3119
+          },
+          {
+            "o_id": 23691,
+            "title": "Abobo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1025
+          },
+          {
+            "o_id": 76327,
+            "title": "Formation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.4761
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 23610,
+            "target": 63528,
+            "weight": 7.5276,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 71429,
+            "weight": 5.3119,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 23691,
+            "weight": 3.1025,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 76327,
+            "weight": 2.4761,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          },
+          {
+            "source": 23610,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 2
+        }
+      ]
+    }
+  }
+}

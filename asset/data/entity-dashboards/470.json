@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:07.570763+00:00",
+  "entity": {
+    "o_id": 470,
+    "title": "Mosquée centrale de Ouando",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2013,
+        "year_max": 2022,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2020,
+          2022
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Visages du Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 470,
+            "title": "Mosquée centrale de Ouando",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7685
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          }
+        ],
+        "edges": [
+          {
+            "source": 470,
+            "target": 385,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 470,
+            "target": 14391,
+            "weight": 1.7685,
+            "cooc": 2
+          },
+          {
+            "source": 470,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.185621+00:00",
+  "entity": {
+    "o_id": 12853,
+    "title": "Mosquée centrale de Cococodji",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2020,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 12853,
+            "title": "Mosquée centrale de Cococodji",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15323,
+            "title": "Inoussa Izi Chérif",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.0453
+          },
+          {
+            "o_id": 13416,
+            "title": "Cococodji",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.5839
+          },
+          {
+            "o_id": 31,
+            "title": "Planification familiale",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.5949
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.2219
+          }
+        ],
+        "edges": [
+          {
+            "source": 12853,
+            "target": 15323,
+            "weight": 12.0453,
+            "cooc": 3
+          },
+          {
+            "source": 12853,
+            "target": 13416,
+            "weight": 7.5839,
+            "cooc": 2
+          },
+          {
+            "source": 12853,
+            "target": 31,
+            "weight": 4.5949,
+            "cooc": 2
+          },
+          {
+            "source": 12853,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
+        },
+        {
+          "o_id": 13416,
+          "name": "Cococodji",
+          "lat": 6.387477,
+          "lng": 2.272057,
+          "count": 2
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

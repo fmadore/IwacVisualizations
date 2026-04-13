@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.221628+00:00",
+  "entity": {
+    "o_id": 48417,
+    "title": "Conseil National Supérieur Islamique des Muezzins de Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2017,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 48417,
+            "title": "Conseil National Supérieur Islamique des Muezzins de Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1144
+          }
+        ],
+        "edges": [
+          {
+            "source": 48417,
+            "target": 46294,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 48417,
+            "target": 298,
+            "weight": 1.1144,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 76484,
+          "name": "Danané",
+          "lat": 7.26666667,
+          "lng": -8.16666667,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

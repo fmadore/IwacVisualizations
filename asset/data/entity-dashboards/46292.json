@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.875154+00:00",
+  "entity": {
+    "o_id": 46292,
+    "title": "Charnier de Yopougon",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2001,
+        "year_max": 2004,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2004
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2001,
+          "year_max": 2001
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46292,
+            "title": "Charnier de Yopougon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 4.4939
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.2214
+          },
+          {
+            "o_id": 1023,
+            "title": "Djiguiba Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.9617
+          },
+          {
+            "o_id": 76271,
+            "title": "Crise",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.809
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.3181
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.2628
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 113,
+            "title": "Réconciliation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9893
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9617
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2041
+          }
+        ],
+        "edges": [
+          {
+            "source": 46292,
+            "target": 46194,
+            "weight": 4.4939,
+            "cooc": 3
+          },
+          {
+            "source": 46292,
+            "target": 46294,
+            "weight": 4.2214,
+            "cooc": 3
+          },
+          {
+            "source": 46292,
+            "target": 1023,
+            "weight": 2.9617,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 76271,
+            "weight": 2.809,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 46292,
+            "target": 945,
+            "weight": 2.3181,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 5,
+            "weight": 2.2628,
+            "cooc": 3
+          },
+          {
+            "source": 46292,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 113,
+            "weight": 1.9893,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 76042,
+            "weight": 1.9617,
+            "cooc": 2
+          },
+          {
+            "source": 46292,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          },
+          {
+            "source": 46292,
+            "target": 29,
+            "weight": 1.2041,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 3
+        },
+        {
+          "o_id": 63374,
+          "name": "Benghazi",
+          "lat": 32.116667,
+          "lng": 20.066667,
+          "count": 1
+        },
+        {
+          "o_id": 403,
+          "name": "Tripoli",
+          "lat": 32.88743,
+          "lng": 13.18733,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 76445,
+          "name": "Grande Mosquée de Koumassi",
+          "lat": 5.291817878819392,
+          "lng": -3.96656169628797,
+          "count": 1
+        },
+        {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

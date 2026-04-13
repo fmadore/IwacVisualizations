@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.691359+00:00",
+  "entity": {
+    "o_id": 23519,
+    "title": "Congrès AEEMCI (2005-2006)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2006,
+        "year_max": 2006,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Al-Azan",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2006
+        },
+        {
+          "name": "Islam Info",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2006
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23519,
+            "title": "Congrès AEEMCI (2005-2006)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          }
+        ],
+        "edges": [
+          {
+            "source": 23519,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

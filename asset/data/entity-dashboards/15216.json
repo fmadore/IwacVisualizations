@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.722792+00:00",
+  "entity": {
+    "o_id": 15216,
+    "title": "Mosquée centrale de Guèma",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2020,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 15216,
+            "title": "Mosquée centrale de Guèma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 13631,
+            "title": "Aboubacar Sariki",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 12.1544
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.6904
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.2219
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.936
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.4332
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          }
+        ],
+        "edges": [
+          {
+            "source": 15216,
+            "target": 13631,
+            "weight": 12.1544,
+            "cooc": 3
+          },
+          {
+            "source": 15216,
+            "target": 379,
+            "weight": 4.6904,
+            "cooc": 3
+          },
+          {
+            "source": 15216,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
+          },
+          {
+            "source": 15216,
+            "target": 86,
+            "weight": 1.936,
+            "cooc": 3
+          },
+          {
+            "source": 15216,
+            "target": 75967,
+            "weight": 1.4332,
+            "cooc": 2
+          },
+          {
+            "source": 15216,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          },
+          {
+            "source": 15216,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 3
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
+        }
+      ]
+    }
+  }
+}

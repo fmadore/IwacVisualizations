@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.585284+00:00",
+  "entity": {
+    "o_id": 223,
+    "title": "Élections législatives de 2023 au Bénin",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2022,
+        "year_max": 2023,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2022,
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "24 Heures au Bénin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 223,
+            "title": "Élections législatives de 2023 au Bénin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0423
+          },
+          {
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5417
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          }
+        ],
+        "edges": [
+          {
+            "source": 223,
+            "target": 76269,
+            "weight": 2.0423,
+            "cooc": 2
+          },
+          {
+            "source": 223,
+            "target": 44,
+            "weight": 1.5417,
+            "cooc": 2
+          },
+          {
+            "source": 223,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          },
+          {
+            "source": 223,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        }
+      ]
+    }
+  }
+}

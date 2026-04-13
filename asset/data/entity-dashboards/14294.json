@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:34.803587+00:00",
+  "entity": {
+    "o_id": 14294,
+    "title": "Sorcellerie",
+    "type": "Sujets"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 1979,
+        "year_max": 2011,
+        "newspapers_count": 5,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1984,
+          1985,
+          1995,
+          2002,
+          2010,
+          2011
+        ],
+        "countries": [
+          "Bénin",
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Bénin": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          "Côte d'Ivoire": [
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1979,
+          "year_max": 1984
+        },
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2002,
+          "year_max": 2011
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
+          "name": "Fraternité Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1985,
+          "year_max": 1985
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 6
+        },
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 14294,
+            "title": "Sorcellerie",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 50,
+            "title": "Marabout",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 12.3225
+          },
+          {
+            "o_id": 76527,
+            "title": "Spiritualité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3896
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 2.5863
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          }
+        ],
+        "edges": [
+          {
+            "source": 14294,
+            "target": 50,
+            "weight": 12.3225,
+            "cooc": 5
+          },
+          {
+            "source": 14294,
+            "target": 76527,
+            "weight": 3.3896,
+            "cooc": 2
+          },
+          {
+            "source": 14294,
+            "target": 385,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 14294,
+            "target": 2013,
+            "weight": 2.5863,
+            "cooc": 4
+          },
+          {
+            "source": 14294,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 14294,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          },
+          {
+            "source": 14294,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          },
+          {
+            "source": 14294,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 393,
+          "name": "Savé",
+          "lat": 8.03424,
+          "lng": 2.4866,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "count": 1
+        },
+        {
+          "o_id": 63432,
+          "name": "Séguéla",
+          "lat": 7.9611111111111,
+          "lng": -6.6730555555556,
+          "count": 1
+        },
+        {
+          "o_id": 61323,
+          "name": "Dabou",
+          "lat": 5.325556,
+          "lng": -4.376667,
+          "count": 1
+        },
+        {
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
+          "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 67746,
+          "name": "Mosquée An Nour Riviera 2",
+          "lat": 5.351224783601886,
+          "lng": -3.980895863811308,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

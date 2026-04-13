@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.267175+00:00",
+  "entity": {
+    "o_id": 67408,
+    "title": "Église adventiste du septième jour",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 1995,
+        "year_max": 2004,
+        "newspapers_count": 2,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          2004
+        ],
+        "countries": [
+          "Côte d'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            0,
+            1
+          ],
+          "Togo": [
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2004,
+          "year_max": 2004
+        },
+        {
+          "name": "Forum Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1995,
+          "year_max": 1995
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 67408,
+            "title": "Église adventiste du septième jour",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 14811,
+            "title": "Église du christianisme céleste",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.7689
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          }
+        ],
+        "edges": [
+          {
+            "source": 67408,
+            "target": 14811,
+            "weight": 4.7689,
+            "cooc": 2
+          },
+          {
+            "source": 67408,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

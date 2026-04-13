@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.695193+00:00",
+  "entity": {
+    "o_id": 23536,
+    "title": "Journée de la Militante Aeemciste",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2010,
+        "year_max": 2016,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2015,
+          2016
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2010,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23536,
+            "title": "Journée de la Militante Aeemciste",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23561,
+            "title": "Aminata Kane Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.5737
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0486
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.0377
+          },
+          {
+            "o_id": 63445,
+            "title": "Obscurantisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.3967
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          }
+        ],
+        "edges": [
+          {
+            "source": 23536,
+            "target": 23561,
+            "weight": 6.5737,
+            "cooc": 2
+          },
+          {
+            "source": 23536,
+            "target": 23636,
+            "weight": 4.0486,
+            "cooc": 2
+          },
+          {
+            "source": 23536,
+            "target": 588,
+            "weight": 4.0377,
+            "cooc": 3
+          },
+          {
+            "source": 23536,
+            "target": 63445,
+            "weight": 3.3967,
+            "cooc": 2
+          },
+          {
+            "source": 23536,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

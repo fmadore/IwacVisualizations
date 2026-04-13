@@ -1,0 +1,382 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:34.282765+00:00",
+  "entity": {
+    "o_id": 13796,
+    "title": "Mariage précoce",
+    "type": "Sujets"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2018,
+        "year_max": 2021,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Bénin Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2018,
+          "year_max": 2021
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2020
+        },
+        {
+          "name": "La Nouvelle Tribune",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13796,
+            "title": "Mariage précoce",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 62025,
+            "title": "Donga",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.9116
+          },
+          {
+            "o_id": 76329,
+            "title": "Enfant",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.4655
+          },
+          {
+            "o_id": 305,
+            "title": "Djougou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.3141
+          },
+          {
+            "o_id": 729,
+            "title": "UNICEF",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.4827
+          },
+          {
+            "o_id": 25,
+            "title": "Mariage",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.0544
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.9626
+          },
+          {
+            "o_id": 541,
+            "title": "Nigéria",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.972
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.733
+          },
+          {
+            "o_id": 540,
+            "title": "Niger",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.695
+          }
+        ],
+        "edges": [
+          {
+            "source": 13796,
+            "target": 62025,
+            "weight": 6.9116,
+            "cooc": 3
+          },
+          {
+            "source": 13796,
+            "target": 76329,
+            "weight": 5.4655,
+            "cooc": 3
+          },
+          {
+            "source": 13796,
+            "target": 305,
+            "weight": 5.3141,
+            "cooc": 3
+          },
+          {
+            "source": 13796,
+            "target": 729,
+            "weight": 4.4827,
+            "cooc": 2
+          },
+          {
+            "source": 13796,
+            "target": 25,
+            "weight": 3.0544,
+            "cooc": 2
+          },
+          {
+            "source": 13796,
+            "target": 283,
+            "weight": 2.9626,
+            "cooc": 4
+          },
+          {
+            "source": 13796,
+            "target": 541,
+            "weight": 1.972,
+            "cooc": 2
+          },
+          {
+            "source": 13796,
+            "target": 13908,
+            "weight": 1.733,
+            "cooc": 3
+          },
+          {
+            "source": 13796,
+            "target": 540,
+            "weight": 1.695,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 4
+        },
+        {
+          "o_id": 62025,
+          "name": "Donga",
+          "lat": 9.7,
+          "lng": 1.666667,
+          "count": 3
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 3
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "count": 1
+        },
+        {
+          "o_id": 62018,
+          "name": "Alibori",
+          "lat": 11.128611,
+          "lng": 2.936944,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 371,
+          "name": "N'Dali",
+          "lat": 9.73027,
+          "lng": 2.45032,
+          "count": 1
+        },
+        {
+          "o_id": 76344,
+          "name": "Atacora",
+          "lat": 10.3,
+          "lng": 1.366667,
+          "count": 1
+        },
+        {
+          "o_id": 281,
+          "name": "Bassila",
+          "lat": 9.00814,
+          "lng": 1.6654,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 384,
+          "name": "Pobé",
+          "lat": 6.98008,
+          "lng": 2.6649,
+          "count": 1
+        },
+        {
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 1
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        },
+        {
+          "o_id": 343,
+          "name": "Kétou",
+          "lat": 7.45,
+          "lng": 2.626,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

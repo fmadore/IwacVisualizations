@@ -1,0 +1,469 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:20.864887+00:00",
+  "entity": {
+    "o_id": 786,
+    "title": "Organisation Humanitaire pour l'Entraide Islamique au Bénin",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2014,
+        "year_max": 2022,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2014,
+          2016,
+          2017,
+          2019,
+          2022
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2014,
+          "year_max": 2016
+        },
+        {
+          "name": "Le Matinal",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 786,
+            "title": "Organisation Humanitaire pour l'Entraide Islamique au Bénin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.2214
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 3.7032
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.0964
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.368
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 277,
+            "title": "Arabie saoudite",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3505
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          }
+        ],
+        "edges": [
+          {
+            "source": 786,
+            "target": 385,
+            "weight": 4.2214,
+            "cooc": 3
+          },
+          {
+            "source": 786,
+            "target": 283,
+            "weight": 3.7032,
+            "cooc": 5
+          },
+          {
+            "source": 786,
+            "target": 765,
+            "weight": 3.0964,
+            "cooc": 2
+          },
+          {
+            "source": 786,
+            "target": 299,
+            "weight": 2.368,
+            "cooc": 2
+          },
+          {
+            "source": 786,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 786,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 786,
+            "target": 277,
+            "weight": 1.3505,
+            "cooc": 2
+          },
+          {
+            "source": 786,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 5
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 3
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 2
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 343,
+          "name": "Kétou",
+          "lat": 7.45,
+          "lng": 2.626,
+          "count": 1
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
+          "o_id": 25602,
+          "name": "Gambie",
+          "lat": 13.5,
+          "lng": -15.5,
+          "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 548,
+          "name": "Gabon",
+          "lat": -1.0,
+          "lng": 11.75,
+          "count": 1
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 1
+        },
+        {
+          "o_id": 557,
+          "name": "Suède",
+          "lat": 61.0,
+          "lng": 15.0,
+          "count": 1
+        },
+        {
+          "o_id": 430,
+          "name": "Canada",
+          "lat": 60.10867,
+          "lng": -113.64258,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "count": 1
+        },
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "count": 1
+        },
+        {
+          "o_id": 455,
+          "name": "Mosquée Oumar Ibn Khattab",
+          "lat": 6.414748141664798,
+          "lng": 2.3372766573629,
+          "count": 1
+        },
+        {
+          "o_id": 332,
+          "name": "Japon",
+          "lat": 35.68536,
+          "lng": 139.75309,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 27900,
+          "name": "Angola",
+          "lat": -12.35,
+          "lng": 17.35,
+          "count": 1
+        },
+        {
+          "o_id": 334,
+          "name": "Karimama",
+          "lat": 11.93816,
+          "lng": 2.75703,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

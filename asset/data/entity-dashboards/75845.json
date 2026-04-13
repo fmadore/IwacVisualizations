@@ -1,0 +1,199 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:16.851479+00:00",
+  "entity": {
+    "o_id": 75845,
+    "title": "Mosquée centrale d'Allada",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2019,
+        "year_max": 2020,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Bénin Presse",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 75845,
+            "title": "Mosquée centrale d'Allada",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 274,
+            "title": "Allada",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 10.0441
+          },
+          {
+            "o_id": 75867,
+            "title": "Abdou Karimou Malèhossou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.2785
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2409
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.5814
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.7956
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          }
+        ],
+        "edges": [
+          {
+            "source": 75845,
+            "target": 274,
+            "weight": 10.0441,
+            "cooc": 4
+          },
+          {
+            "source": 75845,
+            "target": 75867,
+            "weight": 9.2785,
+            "cooc": 2
+          },
+          {
+            "source": 75845,
+            "target": 16,
+            "weight": 3.2409,
+            "cooc": 2
+          },
+          {
+            "source": 75845,
+            "target": 86,
+            "weight": 2.5814,
+            "cooc": 4
+          },
+          {
+            "source": 75845,
+            "target": 109,
+            "weight": 1.7956,
+            "cooc": 3
+          },
+          {
+            "source": 75845,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          },
+          {
+            "source": 75845,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 274,
+          "name": "Allada",
+          "lat": 6.66547,
+          "lng": 2.15138,
+          "count": 4
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 75841,
+          "name": "Attogon",
+          "lat": 6.716667,
+          "lng": 2.15,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

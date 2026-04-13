@@ -1,0 +1,398 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.093988+00:00",
+  "entity": {
+    "o_id": 826,
+    "title": "Agence Togolaise de Presse",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1976,
+        "year_max": 2005,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1976,
+          1996,
+          1997,
+          2002,
+          2005
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 7,
+          "articles": 7,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1976,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 826,
+            "title": "Agence Togolaise de Presse",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 509,
+            "title": "Kéran",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 9.0105
+          },
+          {
+            "o_id": 507,
+            "title": "Kandé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.2556
+          },
+          {
+            "o_id": 60566,
+            "title": "Tône",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.2755
+          },
+          {
+            "o_id": 496,
+            "title": "Assoli",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.975
+          },
+          {
+            "o_id": 504,
+            "title": "Dapaong",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.7137
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 4.625
+          },
+          {
+            "o_id": 512,
+            "title": "Kpalimé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.0388
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.3429
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3811
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          }
+        ],
+        "edges": [
+          {
+            "source": 826,
+            "target": 509,
+            "weight": 9.0105,
+            "cooc": 3
+          },
+          {
+            "source": 826,
+            "target": 507,
+            "weight": 6.2556,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 60566,
+            "weight": 5.2755,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 496,
+            "weight": 4.975,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 504,
+            "weight": 4.7137,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 544,
+            "weight": 4.625,
+            "cooc": 6
+          },
+          {
+            "source": 826,
+            "target": 512,
+            "weight": 4.0388,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 457,
+            "weight": 2.3429,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 489,
+            "weight": 1.3811,
+            "cooc": 2
+          },
+          {
+            "source": 826,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 6
+        },
+        {
+          "o_id": 509,
+          "name": "Kéran",
+          "lat": 10.083333333333,
+          "lng": 1.0,
+          "count": 3
+        },
+        {
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
+          "count": 2
+        },
+        {
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 2
+        },
+        {
+          "o_id": 507,
+          "name": "Kandé",
+          "lat": 9.9563888888889,
+          "lng": 1.0463888888889,
+          "count": 2
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "count": 2
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 496,
+          "name": "Assoli",
+          "lat": 9.35,
+          "lng": 1.2666666666667,
+          "count": 2
+        },
+        {
+          "o_id": 73282,
+          "name": "Bè",
+          "lat": 6.13333,
+          "lng": 1.25,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 532,
+          "name": "Kloto",
+          "lat": 7.083333,
+          "lng": 0.75,
+          "count": 1
+        },
+        {
+          "o_id": 520,
+          "name": "Sotouboua",
+          "lat": 8.56667,
+          "lng": 0.983333,
+          "count": 1
+        },
+        {
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
+          "count": 1
+        },
+        {
+          "o_id": 536,
+          "name": "Zio",
+          "lat": 6.433333,
+          "lng": 1.216667,
+          "count": 1
+        },
+        {
+          "o_id": 60501,
+          "name": "Haho",
+          "lat": 6.95,
+          "lng": 1.16666667,
+          "count": 1
+        },
+        {
+          "o_id": 499,
+          "name": "Bafilo",
+          "lat": 9.35,
+          "lng": 1.26666667,
+          "count": 1
+        },
+        {
+          "o_id": 60531,
+          "name": "Notsé",
+          "lat": 6.948333333333333,
+          "lng": 1.1680555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 60534,
+          "name": "Nyékonakpoé",
+          "lat": 6.1305555555555555,
+          "lng": 1.2055555555555555,
+          "count": 1
+        },
+        {
+          "o_id": 73339,
+          "name": "Mandouri",
+          "lat": 10.847468,
+          "lng": 0.816593,
+          "count": 1
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 1
+        },
+        {
+          "o_id": 503,
+          "name": "Cinkassé",
+          "lat": 11.096876,
+          "lng": 0.016393,
+          "count": 1
+        },
+        {
+          "o_id": 510,
+          "name": "Kétao",
+          "lat": 9.6611111111111,
+          "lng": 1.3113888888889,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

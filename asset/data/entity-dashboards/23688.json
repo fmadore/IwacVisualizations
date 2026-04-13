@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.581598+00:00",
+  "entity": {
+    "o_id": 23688,
+    "title": "Réseau des Femmes Musulmanes d'Afrique section Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2010,
+        "year_max": 2010,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2010,
+          "year_max": 2010
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23688,
+            "title": "Réseau des Femmes Musulmanes d'Afrique section Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 12891,
+            "title": "Nuit du Destin",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 4.2691
+          },
+          {
+            "o_id": 23681,
+            "title": "Association des Musulmans Sunnites de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.9626
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.028
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5697
+          }
+        ],
+        "edges": [
+          {
+            "source": 23688,
+            "target": 12891,
+            "weight": 4.2691,
+            "cooc": 3
+          },
+          {
+            "source": 23688,
+            "target": 23681,
+            "weight": 3.9626,
+            "cooc": 2
+          },
+          {
+            "source": 23688,
+            "target": 56,
+            "weight": 2.028,
+            "cooc": 2
+          },
+          {
+            "source": 23688,
+            "target": 36,
+            "weight": 1.5697,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

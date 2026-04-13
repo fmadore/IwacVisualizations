@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:23.516395+00:00",
+  "entity": {
+    "o_id": 76727,
+    "title": "Sant'Egidio",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2001,
+        "year_max": 2019,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2001,
+          "year_max": 2001
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76727,
+            "title": "Sant'Egidio",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          }
+        ],
+        "edges": [
+          {
+            "source": 76727,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 60493,
+          "name": "Espagne",
+          "lat": 40.2,
+          "lng": -3.5,
+          "count": 1
+        },
+        {
+          "o_id": 403,
+          "name": "Tripoli",
+          "lat": 32.88743,
+          "lng": 13.18733,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

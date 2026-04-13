@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.239524+00:00",
+  "entity": {
+    "o_id": 13045,
+    "title": "Mosquée Dar Es Salam",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2020,
+        "year_max": 2020,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13045,
+            "title": "Mosquée Dar Es Salam",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.6904
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2409
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.2219
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1985
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          }
+        ],
+        "edges": [
+          {
+            "source": 13045,
+            "target": 379,
+            "weight": 4.6904,
+            "cooc": 3
+          },
+          {
+            "source": 13045,
+            "target": 16,
+            "weight": 3.2409,
+            "cooc": 2
+          },
+          {
+            "source": 13045,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
+          },
+          {
+            "source": 13045,
+            "target": 76041,
+            "weight": 2.1985,
+            "cooc": 2
+          },
+          {
+            "source": 13045,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 3
+        },
+        {
+          "o_id": 399,
+          "name": "Tchaourou",
+          "lat": 9.0349,
+          "lng": 2.5169,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

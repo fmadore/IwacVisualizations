@@ -1,0 +1,385 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.416401+00:00",
+  "entity": {
+    "o_id": 13719,
+    "title": "Mosquée centrale d'Aïdjèdo",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2019,
+        "year_max": 2023,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2022
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2023
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13719,
+            "title": "Mosquée centrale d'Aïdjèdo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1940,
+            "title": "Abdoul Jalili Yéssoufou",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 11.8874
+          },
+          {
+            "o_id": 14710,
+            "title": "Congrès UIB (2022)",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.7631
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 6.1928
+          },
+          {
+            "o_id": 463,
+            "title": "Mosquée centrale de Bohicon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.0331
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 5.9199
+          },
+          {
+            "o_id": 1615,
+            "title": "Idrissou Aboubakar Lemanou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.3303
+          },
+          {
+            "o_id": 2015,
+            "title": "Moutawakil Boukari Malik",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.038
+          },
+          {
+            "o_id": 286,
+            "title": "Bohicon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.9073
+          },
+          {
+            "o_id": 270,
+            "title": "Abomey",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.6921
+          },
+          {
+            "o_id": 271,
+            "title": "Abomey-Calavi",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1208
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.9626
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.7572
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0423
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.936
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7685
+          }
+        ],
+        "edges": [
+          {
+            "source": 13719,
+            "target": 1940,
+            "weight": 11.8874,
+            "cooc": 5
+          },
+          {
+            "source": 13719,
+            "target": 14710,
+            "weight": 7.7631,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 765,
+            "weight": 6.1928,
+            "cooc": 4
+          },
+          {
+            "source": 13719,
+            "target": 463,
+            "weight": 6.0331,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 299,
+            "weight": 5.9199,
+            "cooc": 5
+          },
+          {
+            "source": 13719,
+            "target": 1615,
+            "weight": 5.3303,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 2015,
+            "weight": 5.038,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 286,
+            "weight": 3.9073,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 270,
+            "weight": 3.6921,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 271,
+            "weight": 3.1208,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 283,
+            "weight": 2.9626,
+            "cooc": 4
+          },
+          {
+            "source": 13719,
+            "target": 15831,
+            "weight": 2.7572,
+            "cooc": 4
+          },
+          {
+            "source": 13719,
+            "target": 76269,
+            "weight": 2.0423,
+            "cooc": 2
+          },
+          {
+            "source": 13719,
+            "target": 86,
+            "weight": 1.936,
+            "cooc": 3
+          },
+          {
+            "source": 13719,
+            "target": 14391,
+            "weight": 1.7685,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 5
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 4
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 2
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 2
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 2
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 491,
+          "name": "Mosquée centrale Médine II d'Agori Plateau",
+          "lat": 6.4327785,
+          "lng": 2.3442182,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

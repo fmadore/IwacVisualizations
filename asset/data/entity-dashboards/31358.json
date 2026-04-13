@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.857865+00:00",
+  "entity": {
+    "o_id": 31358,
+    "title": "Al Wifaq",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2013,
+        "year_max": 2016,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2016
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Rendez-Vous",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2016,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 31358,
+            "title": "Al Wifaq",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 27761,
+            "title": "Élections législatives togolaises de 2013",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.0373
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.8322
+          }
+        ],
+        "edges": [
+          {
+            "source": 31358,
+            "target": 27761,
+            "weight": 7.0373,
+            "cooc": 2
+          },
+          {
+            "source": 31358,
+            "target": 830,
+            "weight": 4.8322,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

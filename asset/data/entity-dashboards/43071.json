@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.844885+00:00",
+  "entity": {
+    "o_id": 43071,
+    "title": "Congrès AJMCI (1994)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1994,
+        "year_max": 1994,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Alif",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 43071,
+            "title": "Congrès AJMCI (1994)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23547,
+            "title": "Moustapha Soumahoro",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8812
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 5.3027
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.3094
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.292
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.1147
+          },
+          {
+            "o_id": 24,
+            "title": "Islamisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.454
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.2628
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 43071,
+            "target": 23547,
+            "weight": 5.8812,
+            "cooc": 2
+          },
+          {
+            "source": 43071,
+            "target": 615,
+            "weight": 5.3027,
+            "cooc": 3
+          },
+          {
+            "source": 43071,
+            "target": 653,
+            "weight": 3.3094,
+            "cooc": 3
+          },
+          {
+            "source": 43071,
+            "target": 59,
+            "weight": 3.292,
+            "cooc": 3
+          },
+          {
+            "source": 43071,
+            "target": 23601,
+            "weight": 3.1147,
+            "cooc": 2
+          },
+          {
+            "source": 43071,
+            "target": 24,
+            "weight": 2.454,
+            "cooc": 2
+          },
+          {
+            "source": 43071,
+            "target": 5,
+            "weight": 2.2628,
+            "cooc": 3
+          },
+          {
+            "source": 43071,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.841730+00:00",
+  "entity": {
+    "o_id": 43070,
+    "title": "Congrès AEEMCI (1994)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 1994,
+        "year_max": 1995,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994,
+          1995
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            5,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1995,
+          "year_max": 1995
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 43070,
+            "title": "Congrès AEEMCI (1994)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 43058,
+            "title": "Bafao Dagnogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.0282
+          },
+          {
+            "o_id": 43056,
+            "title": "Sinan Ali Ouattara",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.2568
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 8.0753
+          },
+          {
+            "o_id": 23691,
+            "title": "Abobo",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 7.7562
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 5.0695
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 4.4125
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.3303
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 2.8883
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 2.786
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.1498
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          }
+        ],
+        "edges": [
+          {
+            "source": 43070,
+            "target": 43058,
+            "weight": 9.0282,
+            "cooc": 2
+          },
+          {
+            "source": 43070,
+            "target": 43056,
+            "weight": 8.2568,
+            "cooc": 2
+          },
+          {
+            "source": 43070,
+            "target": 588,
+            "weight": 8.0753,
+            "cooc": 6
+          },
+          {
+            "source": 43070,
+            "target": 23691,
+            "weight": 7.7562,
+            "cooc": 5
+          },
+          {
+            "source": 43070,
+            "target": 1057,
+            "weight": 5.0695,
+            "cooc": 4
+          },
+          {
+            "source": 43070,
+            "target": 653,
+            "weight": 4.4125,
+            "cooc": 4
+          },
+          {
+            "source": 43070,
+            "target": 9,
+            "weight": 3.3303,
+            "cooc": 4
+          },
+          {
+            "source": 43070,
+            "target": 13908,
+            "weight": 2.8883,
+            "cooc": 5
+          },
+          {
+            "source": 43070,
+            "target": 298,
+            "weight": 2.786,
+            "cooc": 5
+          },
+          {
+            "source": 43070,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 43070,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 43070,
+            "target": 75967,
+            "weight": 2.1498,
+            "cooc": 3
+          },
+          {
+            "source": 43070,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 5
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 5
+        }
+      ]
+    }
+  }
+}

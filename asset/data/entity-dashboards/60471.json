@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.647762+00:00",
+  "entity": {
+    "o_id": 60471,
+    "title": "Atalotè",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2011,
+        "year_max": 2024,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2024
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2024,
+          "year_max": 2024
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60471,
+            "title": "Atalotè",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 509,
+            "title": "Kéran",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.007
+          }
+        ],
+        "edges": [
+          {
+            "source": 60471,
+            "target": 509,
+            "weight": 6.007,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 509,
+          "name": "Kéran",
+          "lat": 10.083333333333,
+          "lng": 1.0,
+          "count": 2
+        },
+        {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 1
+        },
+        {
+          "o_id": 60526,
+          "name": "Nadoba",
+          "lat": 9.85,
+          "lng": 0.63333333,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 507,
+          "name": "Kandé",
+          "lat": 9.9563888888889,
+          "lng": 1.0463888888889,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

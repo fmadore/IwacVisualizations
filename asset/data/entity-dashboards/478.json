@@ -1,0 +1,285 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:07.600383+00:00",
+  "entity": {
+    "o_id": 478,
+    "title": "Toviklin",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 2010,
+        "year_max": 2023,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2021,
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            5,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 478,
+            "title": "Toviklin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 474,
+            "title": "Mosquée centrale de Toviklin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 14.1247
+          },
+          {
+            "o_id": 62024,
+            "title": "Couffo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 7.9133
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.7613
+          },
+          {
+            "o_id": 765,
+            "title": "Union Islamique du Bénin",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.6446
+          },
+          {
+            "o_id": 62,
+            "title": "Rivalités et tensions imams",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.3198
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.3541
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2086
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.6952
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7685
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          }
+        ],
+        "edges": [
+          {
+            "source": 478,
+            "target": 474,
+            "weight": 14.1247,
+            "cooc": 3
+          },
+          {
+            "source": 478,
+            "target": 62024,
+            "weight": 7.9133,
+            "cooc": 3
+          },
+          {
+            "source": 478,
+            "target": 10,
+            "weight": 4.7613,
+            "cooc": 4
+          },
+          {
+            "source": 478,
+            "target": 765,
+            "weight": 4.6446,
+            "cooc": 3
+          },
+          {
+            "source": 478,
+            "target": 62,
+            "weight": 4.3198,
+            "cooc": 2
+          },
+          {
+            "source": 478,
+            "target": 32,
+            "weight": 3.3541,
+            "cooc": 4
+          },
+          {
+            "source": 478,
+            "target": 76335,
+            "weight": 3.2086,
+            "cooc": 2
+          },
+          {
+            "source": 478,
+            "target": 76280,
+            "weight": 2.6952,
+            "cooc": 3
+          },
+          {
+            "source": 478,
+            "target": 14391,
+            "weight": 1.7685,
+            "cooc": 2
+          },
+          {
+            "source": 478,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          },
+          {
+            "source": 478,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 478,
+          "name": "Toviklin",
+          "lat": 6.88796,
+          "lng": 1.80739,
+          "count": 7
+        },
+        {
+          "o_id": 62024,
+          "name": "Couffo",
+          "lat": 6.961944,
+          "lng": 1.801667,
+          "count": 3
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

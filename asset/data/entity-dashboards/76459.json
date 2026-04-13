@@ -1,0 +1,341 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:17.371134+00:00",
+  "entity": {
+    "o_id": 76459,
+    "title": "Mosquée de la Paix",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 10,
+        "year_min": 2005,
+        "year_max": 2020,
+        "newspapers_count": 5,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2005,
+          2006,
+          2007,
+          2013,
+          2017,
+          2020
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            5,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2017
+        },
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "L'Expression",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Nord-Sud",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76459,
+            "title": "Mosquée de la Paix",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76521,
+            "title": "Seydou Sylla",
+            "type": "Personnes",
+            "cooc": 5,
+            "score": 19.7305
+          },
+          {
+            "o_id": 46248,
+            "title": "Yamoussoukro",
+            "type": "Lieux",
+            "cooc": 10,
+            "score": 14.0976
+          },
+          {
+            "o_id": 23697,
+            "title": "Microbes (Côte d'Ivoire)",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 5.9812
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 5.4434
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 5.2473
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 8,
+            "score": 4.4576
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 7,
+            "score": 4.1898
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 4.0603
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.747
+          },
+          {
+            "o_id": 76280,
+            "title": "Gouvernement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.6952
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.5814
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4978
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3251
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.3106
+          }
+        ],
+        "edges": [
+          {
+            "source": 76459,
+            "target": 76521,
+            "weight": 19.7305,
+            "cooc": 5
+          },
+          {
+            "source": 76459,
+            "target": 46248,
+            "weight": 14.0976,
+            "cooc": 10
+          },
+          {
+            "source": 76459,
+            "target": 23697,
+            "weight": 5.9812,
+            "cooc": 2
+          },
+          {
+            "source": 76459,
+            "target": 23606,
+            "weight": 5.4434,
+            "cooc": 4
+          },
+          {
+            "source": 76459,
+            "target": 43069,
+            "weight": 5.2473,
+            "cooc": 4
+          },
+          {
+            "source": 76459,
+            "target": 298,
+            "weight": 4.4576,
+            "cooc": 8
+          },
+          {
+            "source": 76459,
+            "target": 109,
+            "weight": 4.1898,
+            "cooc": 7
+          },
+          {
+            "source": 76459,
+            "target": 76268,
+            "weight": 4.0603,
+            "cooc": 5
+          },
+          {
+            "source": 76459,
+            "target": 43055,
+            "weight": 2.747,
+            "cooc": 2
+          },
+          {
+            "source": 76459,
+            "target": 76280,
+            "weight": 2.6952,
+            "cooc": 3
+          },
+          {
+            "source": 76459,
+            "target": 86,
+            "weight": 2.5814,
+            "cooc": 4
+          },
+          {
+            "source": 76459,
+            "target": 9,
+            "weight": 2.4978,
+            "cooc": 3
+          },
+          {
+            "source": 76459,
+            "target": 269,
+            "weight": 2.3251,
+            "cooc": 3
+          },
+          {
+            "source": 76459,
+            "target": 13908,
+            "weight": 2.3106,
+            "cooc": 4
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 10
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 8
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 48425,
+          "name": "Divo",
+          "lat": 5.837222,
+          "lng": -5.357222,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

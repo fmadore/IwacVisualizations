@@ -204,6 +204,13 @@
             'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named.',
             'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
+            // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
+            'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
+            'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
+            'desc_entity_countries_covered':    'Distribution of mentions by country of publication of the source.',
+            'desc_entity_associated_entities':  'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this entity is named.',
+            'desc_entity_associated_locations': 'Geographic places mentioned in the same items as this entity, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
+
             // Network panel toolbar
             'Zoom in': 'Zoom in',
             'Zoom out': 'Zoom out',
@@ -369,6 +376,13 @@
             'desc_countries_covered':      'R\u00e9partition des mentions par pays de publication de la source.',
             'desc_associated_entities':    'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette personne est nomm\u00e9e.',
             'desc_associated_locations':   'Lieux g\u00e9ographiques mentionn\u00e9s dans les notices o\u00f9 cette personne appara\u00eet comme cr\u00e9ateur ou sujet, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
+
+            // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
+            'desc_entity_mentions_timeline':    'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette entit\u00e9 par ann\u00e9e, empil\u00e9 par pays de publication.',
+            'desc_entity_top_newspapers':       'Journaux et p\u00e9riodiques o\u00f9 cette entit\u00e9 est nomm\u00e9e le plus souvent (top 15).',
+            'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
+            'desc_entity_associated_entities':  'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette entit\u00e9 est nomm\u00e9e.',
+            'desc_entity_associated_locations': 'Lieux g\u00e9ographiques mentionn\u00e9s dans les m\u00eames notices que cette entit\u00e9, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
 
             // Network panel toolbar
             'Zoom in': 'Zoom avant',

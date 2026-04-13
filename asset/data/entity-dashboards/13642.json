@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.398867+00:00",
+  "entity": {
+    "o_id": 13642,
+    "title": "Mosquée centrale de Dassa-Zoumè",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2019,
+        "year_max": 2020,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 13642,
+            "title": "Mosquée centrale de Dassa-Zoumè",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 302,
+            "title": "Dassa-Zoumè",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 8.5093
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.2978
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.5156
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3806
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.2219
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7437
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          }
+        ],
+        "edges": [
+          {
+            "source": 13642,
+            "target": 302,
+            "weight": 8.5093,
+            "cooc": 3
+          },
+          {
+            "source": 13642,
+            "target": 76041,
+            "weight": 3.2978,
+            "cooc": 3
+          },
+          {
+            "source": 13642,
+            "target": 32,
+            "weight": 2.5156,
+            "cooc": 3
+          },
+          {
+            "source": 13642,
+            "target": 10,
+            "weight": 2.3806,
+            "cooc": 2
+          },
+          {
+            "source": 13642,
+            "target": 283,
+            "weight": 2.2219,
+            "cooc": 3
+          },
+          {
+            "source": 13642,
+            "target": 76039,
+            "weight": 1.7437,
+            "cooc": 2
+          },
+          {
+            "source": 13642,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 302,
+          "name": "Dassa-Zoumè",
+          "lat": 7.696,
+          "lng": 2.278,
+          "count": 3
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 3
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

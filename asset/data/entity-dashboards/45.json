@@ -1,0 +1,537 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:29.269048+00:00",
+  "entity": {
+    "o_id": 45,
+    "title": "Ummah",
+    "type": "Sujets"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1993,
+        "year_max": 2013,
+        "newspapers_count": 4,
+        "countries_count": 4
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          1997,
+          2007,
+          2008,
+          2009,
+          2012,
+          2013
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Bénin",
+          "Côte d'Ivoire",
+          "Niger"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "Bénin": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "Côte d'Ivoire": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "Niger": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1997,
+          "year_max": 2008
+        },
+        {
+          "name": "Le Pays",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2013
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Burkina Faso",
+          "count": 3
+        },
+        {
+          "name": "Bénin",
+          "count": 2
+        },
+        {
+          "name": "Côte d'Ivoire",
+          "count": 1
+        },
+        {
+          "name": "Niger",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 45,
+            "title": "Ummah",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 583,
+            "title": "Organisation de la Coopération Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.4255
+          },
+          {
+            "o_id": 407,
+            "title": "Palestine",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 4.2056
+          },
+          {
+            "o_id": 408,
+            "title": "Israël",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.7623
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 2.5863
+          },
+          {
+            "o_id": 310,
+            "title": "États-Unis",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2063
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.0717
+          },
+          {
+            "o_id": 81,
+            "title": "Pauvreté",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9651
+          },
+          {
+            "o_id": 115,
+            "title": "Violence",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.948
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 395,
+            "title": "Sénégal",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.9041
+          },
+          {
+            "o_id": 63,
+            "title": "Unité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6711
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2041
+          },
+          {
+            "o_id": 109,
+            "title": "Paix",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1971
+          },
+          {
+            "o_id": 546,
+            "title": "Burkina Faso",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.1439
+          }
+        ],
+        "edges": [
+          {
+            "source": 45,
+            "target": 583,
+            "weight": 4.4255,
+            "cooc": 3
+          },
+          {
+            "source": 45,
+            "target": 407,
+            "weight": 4.2056,
+            "cooc": 3
+          },
+          {
+            "source": 45,
+            "target": 408,
+            "weight": 2.7623,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 2013,
+            "weight": 2.5863,
+            "cooc": 4
+          },
+          {
+            "source": 45,
+            "target": 310,
+            "weight": 2.2063,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 489,
+            "weight": 2.0717,
+            "cooc": 3
+          },
+          {
+            "source": 45,
+            "target": 81,
+            "weight": 1.9651,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 115,
+            "weight": 1.948,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 395,
+            "weight": 1.9041,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 63,
+            "weight": 1.6711,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 29,
+            "weight": 1.2041,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 109,
+            "weight": 1.1971,
+            "cooc": 2
+          },
+          {
+            "source": 45,
+            "target": 546,
+            "weight": 1.1439,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 3
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 3
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 2
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 2
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 2
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 2
+        },
+        {
+          "o_id": 543,
+          "name": "Syrie",
+          "lat": 35.0,
+          "lng": 38.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 454,
+          "name": "Jordanie",
+          "lat": 31.0,
+          "lng": 36.0,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        },
+        {
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 353,
+          "name": "Liban",
+          "lat": 33.83333,
+          "lng": 35.83333,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 73300,
+          "name": "Malaisie",
+          "lat": 3.780511,
+          "lng": 102.314362,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 1
+        },
+        {
+          "o_id": 63375,
+          "name": "Bosnie-Herzégovine",
+          "lat": 44.0,
+          "lng": 18.0,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 63389,
+          "name": "Angleterre",
+          "lat": 53.0,
+          "lng": -1.0,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -803,20 +803,28 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 }
 
 /* =========================================================================
- * Person Dashboard — layout
+ * Person + Entity Dashboards — shared layout
+ *
+ * The entity dashboard (Lieux/Organisations/Sujets/Événements) reuses
+ * the same panel modules as the person dashboard with a no-op facet,
+ * so the two share the same body/stats/grid structure under different
+ * BEM prefixes.
  * ========================================================================= */
 
-.iwac-vis-person {
+.iwac-vis-person,
+.iwac-vis-entity {
     display: block;
 }
 
-.iwac-vis-person__body {
+.iwac-vis-person__body,
+.iwac-vis-entity__body {
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 1rem);
 }
 
-.iwac-vis-person__stats {
+.iwac-vis-person__stats,
+.iwac-vis-entity__stats {
     margin-bottom: var(--space-3, 0.75rem);
 }
 

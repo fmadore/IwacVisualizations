@@ -1,0 +1,405 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:14.650945+00:00",
+  "entity": {
+    "o_id": 60473,
+    "title": "Aéroport International Gnassingbé Eyadéma",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 1982,
+        "year_max": 2022,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1999,
+          2022
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1982,
+          "year_max": 1982
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1999,
+          "year_max": 1999
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 60473,
+            "title": "Aéroport International Gnassingbé Eyadéma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2157,
+            "title": "Gbégnon Amégboh",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.4083
+          },
+          {
+            "o_id": 2166,
+            "title": "Kpotivi Têvi-Djidjogbé Théodore Laclé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.651
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 4.6857
+          },
+          {
+            "o_id": 829,
+            "title": "Rassemblement du Peuple Togolais",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.088
+          },
+          {
+            "o_id": 508,
+            "title": "Kara",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.6677
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.2937
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2215
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3125
+          },
+          {
+            "o_id": 351,
+            "title": "Koweït",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2774
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6183
+          }
+        ],
+        "edges": [
+          {
+            "source": 60473,
+            "target": 2157,
+            "weight": 6.4083,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 2166,
+            "weight": 5.651,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 457,
+            "weight": 4.6857,
+            "cooc": 4
+          },
+          {
+            "source": 60473,
+            "target": 829,
+            "weight": 4.088,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 508,
+            "weight": 3.6677,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 2128,
+            "weight": 3.2937,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 830,
+            "weight": 3.2215,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 544,
+            "weight": 2.3125,
+            "cooc": 3
+          },
+          {
+            "source": 60473,
+            "target": 351,
+            "weight": 2.2774,
+            "cooc": 2
+          },
+          {
+            "source": 60473,
+            "target": 55,
+            "weight": 1.6183,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 60473,
+          "name": "Aéroport International Gnassingbé Eyadéma",
+          "lat": 6.1658333333333,
+          "lng": 1.2541666666667,
+          "count": 4
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 4
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 3
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 2
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 2
+        },
+        {
+          "o_id": 534,
+          "name": "Kabou",
+          "lat": 9.45,
+          "lng": 0.816667,
+          "count": 1
+        },
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 1
+        },
+        {
+          "o_id": 562,
+          "name": "Namibie",
+          "lat": -23.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60536,
+          "name": "Pagouda",
+          "lat": 9.75,
+          "lng": 1.316667,
+          "count": 1
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 1
+        },
+        {
+          "o_id": 510,
+          "name": "Kétao",
+          "lat": 9.6611111111111,
+          "lng": 1.3113888888889,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 60550,
+          "name": "Togblékopé",
+          "lat": 6.2738571,
+          "lng": 1.209831,
+          "count": 1
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        },
+        {
+          "o_id": 499,
+          "name": "Bafilo",
+          "lat": 9.35,
+          "lng": 1.26666667,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

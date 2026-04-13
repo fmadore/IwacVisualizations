@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:12.916899+00:00",
+  "entity": {
+    "o_id": 23568,
+    "title": "Université Musulmane Africaine",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 3,
+          "articles": 0,
+          "publications": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23568,
+            "title": "Université Musulmane Africaine",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          }
+        ],
+        "edges": [
+          {
+            "source": 23568,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23568,
+          "name": "Université Musulmane Africaine",
+          "lat": 5.371117023113153,
+          "lng": -3.9657553615550776,
+          "count": 3
+        }
+      ]
+    }
+  }
+}

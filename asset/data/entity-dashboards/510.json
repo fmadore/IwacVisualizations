@@ -1,0 +1,600 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:08.878827+00:00",
+  "entity": {
+    "o_id": 510,
+    "title": "Kétao",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1982,
+        "year_max": 2024,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1982,
+          1989,
+          1996,
+          2013,
+          2024
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nouvelle Marche",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1982,
+          "year_max": 1989
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2024,
+          "year_max": 2024
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1996,
+          "year_max": 1996
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 510,
+            "title": "Kétao",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 60536,
+            "title": "Pagouda",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 9.1297
+          },
+          {
+            "o_id": 534,
+            "title": "Kabou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 7.0813
+          },
+          {
+            "o_id": 60480,
+            "title": "Binah",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.5059
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 5.8572
+          },
+          {
+            "o_id": 519,
+            "title": "Sokodé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.6125
+          },
+          {
+            "o_id": 508,
+            "title": "Kara",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.5016
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 4.9406
+          },
+          {
+            "o_id": 514,
+            "title": "Mango",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.8401
+          },
+          {
+            "o_id": 522,
+            "title": "Tchamba",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.7137
+          },
+          {
+            "o_id": 523,
+            "title": "Tchaoudjo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.331
+          },
+          {
+            "o_id": 512,
+            "title": "Kpalimé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.0388
+          },
+          {
+            "o_id": 13522,
+            "title": "Jérusalem",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.8983
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 3.0833
+          },
+          {
+            "o_id": 408,
+            "title": "Israël",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.7623
+          },
+          {
+            "o_id": 351,
+            "title": "Koweït",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.2774
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6183
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.4813
+          }
+        ],
+        "edges": [
+          {
+            "source": 510,
+            "target": 60536,
+            "weight": 9.1297,
+            "cooc": 3
+          },
+          {
+            "source": 510,
+            "target": 534,
+            "weight": 7.0813,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 60480,
+            "weight": 6.5059,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 457,
+            "weight": 5.8572,
+            "cooc": 5
+          },
+          {
+            "source": 510,
+            "target": 519,
+            "weight": 5.6125,
+            "cooc": 3
+          },
+          {
+            "source": 510,
+            "target": 508,
+            "weight": 5.5016,
+            "cooc": 3
+          },
+          {
+            "source": 510,
+            "target": 2128,
+            "weight": 4.9406,
+            "cooc": 3
+          },
+          {
+            "source": 510,
+            "target": 514,
+            "weight": 4.8401,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 522,
+            "weight": 4.7137,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 523,
+            "weight": 4.331,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 512,
+            "weight": 4.0388,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 13522,
+            "weight": 3.8983,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 544,
+            "weight": 3.0833,
+            "cooc": 4
+          },
+          {
+            "source": 510,
+            "target": 408,
+            "weight": 2.7623,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 351,
+            "weight": 2.2774,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 55,
+            "weight": 1.6183,
+            "cooc": 2
+          },
+          {
+            "source": 510,
+            "target": 283,
+            "weight": 1.4813,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 510,
+          "name": "Kétao",
+          "lat": 9.6611111111111,
+          "lng": 1.3113888888889,
+          "count": 7
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 5
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 4
+        },
+        {
+          "o_id": 60536,
+          "name": "Pagouda",
+          "lat": 9.75,
+          "lng": 1.316667,
+          "count": 3
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
+          "count": 3
+        },
+        {
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
+          "count": 3
+        },
+        {
+          "o_id": 512,
+          "name": "Kpalimé",
+          "lat": 6.91,
+          "lng": 0.62805555555556,
+          "count": 2
+        },
+        {
+          "o_id": 514,
+          "name": "Mango",
+          "lat": 10.355555555556,
+          "lng": 0.47555555555556,
+          "count": 2
+        },
+        {
+          "o_id": 60480,
+          "name": "Binah",
+          "lat": 9.75,
+          "lng": 1.31667,
+          "count": 2
+        },
+        {
+          "o_id": 534,
+          "name": "Kabou",
+          "lat": 9.45,
+          "lng": 0.816667,
+          "count": 2
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 2
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 2
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 2
+        },
+        {
+          "o_id": 522,
+          "name": "Tchamba",
+          "lat": 9.0333333333333,
+          "lng": 1.4166666666667,
+          "count": 2
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 2
+        },
+        {
+          "o_id": 515,
+          "name": "Niamtougou",
+          "lat": 9.7666666666667,
+          "lng": 1.1,
+          "count": 1
+        },
+        {
+          "o_id": 524,
+          "name": "Tsévié",
+          "lat": 6.4333333333333,
+          "lng": 1.2166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60491,
+          "name": "Doufelgou",
+          "lat": 9.76666667,
+          "lng": 1.1,
+          "count": 1
+        },
+        {
+          "o_id": 27795,
+          "name": "Oti",
+          "lat": 10.357222,
+          "lng": 0.471111,
+          "count": 1
+        },
+        {
+          "o_id": 500,
+          "name": "Bassar",
+          "lat": 9.25,
+          "lng": 0.78333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 532,
+          "name": "Kloto",
+          "lat": 7.083333,
+          "lng": 0.75,
+          "count": 1
+        },
+        {
+          "o_id": 60500,
+          "name": "Guérin-Kouka",
+          "lat": 9.6905555555556,
+          "lng": 0.61138888888889,
+          "count": 1
+        },
+        {
+          "o_id": 536,
+          "name": "Zio",
+          "lat": 6.433333,
+          "lng": 1.216667,
+          "count": 1
+        },
+        {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 1
+        },
+        {
+          "o_id": 555,
+          "name": "Afrique du Sud",
+          "lat": -29.0,
+          "lng": 24.0,
+          "count": 1
+        },
+        {
+          "o_id": 562,
+          "name": "Namibie",
+          "lat": -23.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 60473,
+          "name": "Aéroport International Gnassingbé Eyadéma",
+          "lat": 6.1658333333333,
+          "lng": 1.2541666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 60559,
+          "name": "Région des plateaux",
+          "lat": 7.5,
+          "lng": 1.1,
+          "count": 1
+        },
+        {
+          "o_id": 60542,
+          "name": "Région des Savanes",
+          "lat": 10.5,
+          "lng": 0.5,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 509,
+          "name": "Kéran",
+          "lat": 10.083333333333,
+          "lng": 1.0,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 496,
+          "name": "Assoli",
+          "lat": 9.35,
+          "lng": 1.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 503,
+          "name": "Cinkassé",
+          "lat": 11.096876,
+          "lng": 0.016393,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

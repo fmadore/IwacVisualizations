@@ -1,0 +1,199 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.783901+00:00",
+  "entity": {
+    "o_id": 27708,
+    "title": "Congrès UMT (1997)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 1997,
+        "year_max": 1997,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1997
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            3
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo-Presse",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1997,
+          "year_max": 1997
+        },
+        {
+          "name": "Le Démocrate",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 1997,
+          "year_max": 1997
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Togo",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 27708,
+            "title": "Congrès UMT (1997)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 15188,
+            "title": "Idrissou Sakibou Traoré",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 8.9336
+          },
+          {
+            "o_id": 2118,
+            "title": "Kwadzo Amouzou",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.1722
+          },
+          {
+            "o_id": 27999,
+            "title": "Kwassi Klutsé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 6.4403
+          },
+          {
+            "o_id": 830,
+            "title": "Union Musulmane du Togo",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.8322
+          },
+          {
+            "o_id": 2128,
+            "title": "Gnassingbé Eyadéma",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 3.2937
+          },
+          {
+            "o_id": 457,
+            "title": "Lomé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.3429
+          },
+          {
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.5417
+          }
+        ],
+        "edges": [
+          {
+            "source": 27708,
+            "target": 15188,
+            "weight": 8.9336,
+            "cooc": 3
+          },
+          {
+            "source": 27708,
+            "target": 2118,
+            "weight": 7.1722,
+            "cooc": 2
+          },
+          {
+            "source": 27708,
+            "target": 27999,
+            "weight": 6.4403,
+            "cooc": 2
+          },
+          {
+            "source": 27708,
+            "target": 830,
+            "weight": 4.8322,
+            "cooc": 3
+          },
+          {
+            "source": 27708,
+            "target": 2128,
+            "weight": 3.2937,
+            "cooc": 2
+          },
+          {
+            "source": 27708,
+            "target": 457,
+            "weight": 2.3429,
+            "cooc": 2
+          },
+          {
+            "source": 27708,
+            "target": 544,
+            "weight": 1.5417,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 2
+        }
+      ]
+    }
+  }
+}

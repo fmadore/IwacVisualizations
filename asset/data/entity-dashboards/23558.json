@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.714507+00:00",
+  "entity": {
+    "o_id": 23558,
+    "title": "Festival International de la Mode Islamique",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2014,
+        "year_max": 2017,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 4,
+          "articles": 0,
+          "publications": 4,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2016
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23558,
+            "title": "Festival International de la Mode Islamique",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.856
+          }
+        ],
+        "edges": [
+          {
+            "source": 23558,
+            "target": 33,
+            "weight": 1.856,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

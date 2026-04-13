@@ -1,0 +1,390 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:06.783372+00:00",
+  "entity": {
+    "o_id": 406,
+    "title": "Zogbodomey",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2014,
+        "year_max": 2021,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2014,
+          2019,
+          2021
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            2,
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2014,
+          "year_max": 2019
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 406,
+            "title": "Zogbodomey",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 76346,
+            "title": "Jama'at Islamique Ahmadiyya Bénin",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.022
+          },
+          {
+            "o_id": 2014,
+            "title": "Rana Farooq Ahmad",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.8546
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 4.7613
+          },
+          {
+            "o_id": 286,
+            "title": "Bohicon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.9073
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.2086
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.9626
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.368
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7437
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.1553
+          }
+        ],
+        "edges": [
+          {
+            "source": 406,
+            "target": 76346,
+            "weight": 5.022,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 2014,
+            "weight": 4.8546,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 10,
+            "weight": 4.7613,
+            "cooc": 4
+          },
+          {
+            "source": 406,
+            "target": 286,
+            "weight": 3.9073,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 76335,
+            "weight": 3.2086,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 283,
+            "weight": 2.9626,
+            "cooc": 4
+          },
+          {
+            "source": 406,
+            "target": 299,
+            "weight": 2.368,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 76039,
+            "weight": 1.7437,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          },
+          {
+            "source": 406,
+            "target": 13908,
+            "weight": 1.1553,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 406,
+          "name": "Zogbodomey",
+          "lat": 7.018,
+          "lng": 2.183,
+          "count": 6
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 4
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 2
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 2
+        },
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "count": 1
+        },
+        {
+          "o_id": 355,
+          "name": "Lokossa",
+          "lat": 6.63869,
+          "lng": 1.71674,
+          "count": 1
+        },
+        {
+          "o_id": 278,
+          "name": "Athiémé",
+          "lat": 6.5808,
+          "lng": 1.6696,
+          "count": 1
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 1
+        },
+        {
+          "o_id": 392,
+          "name": "Savalou",
+          "lat": 7.92807,
+          "lng": 1.97558,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 549,
+          "name": "Inde",
+          "lat": 22.0,
+          "lng": 79.0,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 300,
+          "name": "Cové",
+          "lat": 7.22097,
+          "lng": 2.34017,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

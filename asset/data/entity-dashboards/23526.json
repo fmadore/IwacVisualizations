@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:21.890035+00:00",
+  "entity": {
+    "o_id": 23526,
+    "title": "Association des Jeunes Musulmans de Treichville",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 7,
+        "year_min": 1992,
+        "year_max": 2018,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1992,
+          2005,
+          2009,
+          2015,
+          2017,
+          2018
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 5,
+          "articles": 0,
+          "publications": 5,
+          "country": "Côte d'Ivoire",
+          "year_min": 2009,
+          "year_max": 2018
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1992,
+          "year_max": 1992
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 7
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23526,
+            "title": "Association des Jeunes Musulmans de Treichville",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0486
+          },
+          {
+            "o_id": 24,
+            "title": "Islamisme",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.681
+          },
+          {
+            "o_id": 10,
+            "title": "Charité",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.571
+          },
+          {
+            "o_id": 23689,
+            "title": "Ligue Islamique des Prédicateurs de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 3.5201
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1946
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.028
+          },
+          {
+            "o_id": 5,
+            "title": "Laïcité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5085
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2041
+          }
+        ],
+        "edges": [
+          {
+            "source": 23526,
+            "target": 23636,
+            "weight": 4.0486,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 24,
+            "weight": 3.681,
+            "cooc": 3
+          },
+          {
+            "source": 23526,
+            "target": 10,
+            "weight": 3.571,
+            "cooc": 3
+          },
+          {
+            "source": 23526,
+            "target": 23689,
+            "weight": 3.5201,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 59,
+            "weight": 2.1946,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 56,
+            "weight": 2.028,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 5,
+            "weight": 1.5085,
+            "cooc": 2
+          },
+          {
+            "source": 23526,
+            "target": 29,
+            "weight": 1.2041,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23506,
+          "name": "Université Islamique Al-Fourqane",
+          "lat": 5.318399197445977,
+          "lng": -4.112374498969468,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,415 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.881322+00:00",
+  "entity": {
+    "o_id": 46326,
+    "title": "Tentative de coup d'État de 2002 en Côte d'Ivoire",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 4,
+        "year_min": 2002,
+        "year_max": 2003,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2002,
+          2003
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            3,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2002,
+          "year_max": 2002
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 4
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 46326,
+            "title": "Tentative de coup d'État de 2002 en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.9959
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.747
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6236
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.5347
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.2288
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.2063
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.1869
+          },
+          {
+            "o_id": 76042,
+            "title": "Conflit",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9617
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6652
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.55
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 46326,
+            "target": 46194,
+            "weight": 2.9959,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 43055,
+            "weight": 2.747,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 43069,
+            "weight": 2.6236,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 1057,
+            "weight": 2.5347,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 46326,
+            "target": 298,
+            "weight": 2.2288,
+            "cooc": 4
+          },
+          {
+            "source": 46326,
+            "target": 653,
+            "weight": 2.2063,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 662,
+            "weight": 2.1869,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 76042,
+            "weight": 1.9617,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 9,
+            "weight": 1.6652,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 269,
+            "weight": 1.55,
+            "cooc": 2
+          },
+          {
+            "source": 46326,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 4
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
+          "o_id": 76449,
+          "name": "Boundiali",
+          "lat": 9.516667,
+          "lng": -6.483333,
+          "count": 1
+        },
+        {
+          "o_id": 15273,
+          "name": "Liberia",
+          "lat": 6.533333,
+          "lng": -9.75,
+          "count": 1
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "count": 1
+        },
+        {
+          "o_id": 63412,
+          "name": "Kong",
+          "lat": 9.150632,
+          "lng": -4.610263,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 63416,
+          "name": "Mankono",
+          "lat": 8.05,
+          "lng": -6.18333333,
+          "count": 1
+        },
+        {
+          "o_id": 12886,
+          "name": "New York",
+          "lat": 40.712778,
+          "lng": -74.006111,
+          "count": 1
+        },
+        {
+          "o_id": 60543,
+          "name": "Sierra Leone",
+          "lat": 8.5,
+          "lng": -12.1,
+          "count": 1
+        },
+        {
+          "o_id": 67746,
+          "name": "Mosquée An Nour Riviera 2",
+          "lat": 5.351224783601886,
+          "lng": -3.980895863811308,
+          "count": 1
+        },
+        {
+          "o_id": 63383,
+          "name": "Aghien",
+          "lat": 5.388123,
+          "lng": -3.999984,
+          "count": 1
+        },
+        {
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
+          "o_id": 63432,
+          "name": "Séguéla",
+          "lat": 7.9611111111111,
+          "lng": -6.6730555555556,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

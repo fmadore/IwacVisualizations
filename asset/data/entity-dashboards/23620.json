@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.761389+00:00",
+  "entity": {
+    "o_id": 23620,
+    "title": "Festival National des Arts et de la Culture Islamique",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 6,
+        "year_min": 2006,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2008,
+          2012,
+          2014,
+          2017
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 6,
+          "articles": 0,
+          "publications": 6,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 6
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23620,
+            "title": "Festival National des Arts et de la Culture Islamique",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 615,
+            "title": "Association des Jeunes Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 8.8378
+          },
+          {
+            "o_id": 1789,
+            "title": "Nurudine Oyewolé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.8812
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0486
+          },
+          {
+            "o_id": 588,
+            "title": "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.6918
+          },
+          {
+            "o_id": 54,
+            "title": "Construction mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.3058
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 1.8062
+          },
+          {
+            "o_id": 33,
+            "title": "Terrorisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2373
+          }
+        ],
+        "edges": [
+          {
+            "source": 23620,
+            "target": 615,
+            "weight": 8.8378,
+            "cooc": 5
+          },
+          {
+            "source": 23620,
+            "target": 1789,
+            "weight": 5.8812,
+            "cooc": 2
+          },
+          {
+            "source": 23620,
+            "target": 23636,
+            "weight": 4.0486,
+            "cooc": 2
+          },
+          {
+            "source": 23620,
+            "target": 588,
+            "weight": 2.6918,
+            "cooc": 2
+          },
+          {
+            "source": 23620,
+            "target": 54,
+            "weight": 2.3058,
+            "cooc": 2
+          },
+          {
+            "source": 23620,
+            "target": 29,
+            "weight": 1.8062,
+            "cooc": 3
+          },
+          {
+            "source": 23620,
+            "target": 33,
+            "weight": 1.2373,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

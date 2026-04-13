@@ -1,0 +1,862 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:04.117041+00:00",
+  "entity": {
+    "o_id": 343,
+    "title": "Kétou",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 14,
+        "year_min": 1976,
+        "year_max": 2023,
+        "newspapers_count": 6,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1976,
+          1983,
+          2010,
+          2011,
+          2012,
+          2016,
+          2018,
+          2019,
+          2020,
+          2022,
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 8,
+          "articles": 8,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2010,
+          "year_max": 2020
+        },
+        {
+          "name": "Ehuzu",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1976,
+          "year_max": 1983
+        },
+        {
+          "name": "Agence Bénin Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 14
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 343,
+            "title": "Kétou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 393,
+            "title": "Savé",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 12.1732
+          },
+          {
+            "o_id": 384,
+            "title": "Pobé",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 11.0904
+          },
+          {
+            "o_id": 385,
+            "title": "Porto-Novo",
+            "type": "Lieux",
+            "cooc": 7,
+            "score": 9.8499
+          },
+          {
+            "o_id": 388,
+            "title": "Sakété",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 8.7494
+          },
+          {
+            "o_id": 283,
+            "title": "Bénin",
+            "type": "Lieux",
+            "cooc": 10,
+            "score": 7.4065
+          },
+          {
+            "o_id": 299,
+            "title": "Cotonou",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 7.1039
+          },
+          {
+            "o_id": 356,
+            "title": "Malanville",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.3971
+          },
+          {
+            "o_id": 14293,
+            "title": "Ouémé",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 6.1469
+          },
+          {
+            "o_id": 1432,
+            "title": "Zul Kifl Salami",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 5.7399
+          },
+          {
+            "o_id": 270,
+            "title": "Abomey",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.5381
+          },
+          {
+            "o_id": 14218,
+            "title": "Sèmè-Podji",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 5.5044
+          },
+          {
+            "o_id": 774,
+            "title": "Banque arabe pour le développement économique en Afrique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5044
+          },
+          {
+            "o_id": 14732,
+            "title": "Agriculture",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.4775
+          },
+          {
+            "o_id": 17,
+            "title": "Développement économique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 5.1375
+          },
+          {
+            "o_id": 55,
+            "title": "Coopération",
+            "type": "Sujets",
+            "cooc": 6,
+            "score": 4.855
+          },
+          {
+            "o_id": 333,
+            "title": "Kandi",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.2539
+          },
+          {
+            "o_id": 277,
+            "title": "Arabie saoudite",
+            "type": "Lieux",
+            "cooc": 6,
+            "score": 4.0516
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 3.7027
+          },
+          {
+            "o_id": 16,
+            "title": "Covid-19",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 3.2409
+          },
+          {
+            "o_id": 379,
+            "title": "Parakou",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1269
+          },
+          {
+            "o_id": 636,
+            "title": "Banque Islamique de Développement",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.9168
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.3106
+          },
+          {
+            "o_id": 75967,
+            "title": "Développement",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.1498
+          },
+          {
+            "o_id": 541,
+            "title": "Nigéria",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.972
+          },
+          {
+            "o_id": 105,
+            "title": "Coran",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.9377
+          },
+          {
+            "o_id": 14391,
+            "title": "Imamat",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7685
+          },
+          {
+            "o_id": 76039,
+            "title": "Solidarité",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.7437
+          },
+          {
+            "o_id": 32,
+            "title": "Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.6771
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.3786
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          }
+        ],
+        "edges": [
+          {
+            "source": 343,
+            "target": 393,
+            "weight": 12.1732,
+            "cooc": 5
+          },
+          {
+            "source": 343,
+            "target": 384,
+            "weight": 11.0904,
+            "cooc": 4
+          },
+          {
+            "source": 343,
+            "target": 385,
+            "weight": 9.8499,
+            "cooc": 7
+          },
+          {
+            "source": 343,
+            "target": 388,
+            "weight": 8.7494,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 283,
+            "weight": 7.4065,
+            "cooc": 10
+          },
+          {
+            "source": 343,
+            "target": 299,
+            "weight": 7.1039,
+            "cooc": 6
+          },
+          {
+            "source": 343,
+            "target": 356,
+            "weight": 6.3971,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 14293,
+            "weight": 6.1469,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 1432,
+            "weight": 5.7399,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 270,
+            "weight": 5.5381,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 14218,
+            "weight": 5.5044,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 774,
+            "weight": 5.5044,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 14732,
+            "weight": 5.4775,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 17,
+            "weight": 5.1375,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 55,
+            "weight": 4.855,
+            "cooc": 6
+          },
+          {
+            "source": 343,
+            "target": 333,
+            "weight": 4.2539,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 277,
+            "weight": 4.0516,
+            "cooc": 6
+          },
+          {
+            "source": 343,
+            "target": 61328,
+            "weight": 3.7027,
+            "cooc": 4
+          },
+          {
+            "source": 343,
+            "target": 16,
+            "weight": 3.2409,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 379,
+            "weight": 3.1269,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 636,
+            "weight": 2.9168,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 13908,
+            "weight": 2.3106,
+            "cooc": 4
+          },
+          {
+            "source": 343,
+            "target": 75967,
+            "weight": 2.1498,
+            "cooc": 3
+          },
+          {
+            "source": 343,
+            "target": 541,
+            "weight": 1.972,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 105,
+            "weight": 1.9377,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 14391,
+            "weight": 1.7685,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 76039,
+            "weight": 1.7437,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 32,
+            "weight": 1.6771,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 15831,
+            "weight": 1.3786,
+            "cooc": 2
+          },
+          {
+            "source": 343,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 343,
+          "name": "Kétou",
+          "lat": 7.45,
+          "lng": 2.626,
+          "count": 14
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 10
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 7
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 6
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 6
+        },
+        {
+          "o_id": 393,
+          "name": "Savé",
+          "lat": 8.03424,
+          "lng": 2.4866,
+          "count": 5
+        },
+        {
+          "o_id": 384,
+          "name": "Pobé",
+          "lat": 6.98008,
+          "lng": 2.6649,
+          "count": 4
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 3
+        },
+        {
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 3
+        },
+        {
+          "o_id": 356,
+          "name": "Malanville",
+          "lat": 11.86819,
+          "lng": 3.38327,
+          "count": 3
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 3
+        },
+        {
+          "o_id": 14218,
+          "name": "Sèmè-Podji",
+          "lat": 6.366667,
+          "lng": 2.616667,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 2
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 2
+        },
+        {
+          "o_id": 76032,
+          "name": "Mozambique",
+          "lat": -19.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 76313,
+          "name": "Kaaba",
+          "lat": 21.4225,
+          "lng": 39.826167,
+          "count": 1
+        },
+        {
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 15429,
+          "name": "Tanzanie",
+          "lat": -6.306944,
+          "lng": 34.853889,
+          "count": 1
+        },
+        {
+          "o_id": 459,
+          "name": "Mosquée centrale de Porto-Novo",
+          "lat": 6.470333,
+          "lng": 2.626611,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 60535,
+          "name": "Ouganda",
+          "lat": 1.28,
+          "lng": 32.39,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 13665,
+          "name": "Burundi",
+          "lat": -3.666667,
+          "lng": 29.816667,
+          "count": 1
+        },
+        {
+          "o_id": 62026,
+          "name": "Porga",
+          "lat": 11.05,
+          "lng": 0.966667,
+          "count": 1
+        },
+        {
+          "o_id": 14637,
+          "name": "Rwanda",
+          "lat": -2.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 337,
+          "name": "Kérou",
+          "lat": 10.91433,
+          "lng": 1.99153,
+          "count": 1
+        },
+        {
+          "o_id": 372,
+          "name": "Nikki",
+          "lat": 9.94009,
+          "lng": 3.21075,
+          "count": 1
+        },
+        {
+          "o_id": 302,
+          "name": "Dassa-Zoumè",
+          "lat": 7.696,
+          "lng": 2.278,
+          "count": 1
+        },
+        {
+          "o_id": 440,
+          "name": "Belgique",
+          "lat": 50.75,
+          "lng": 4.5,
+          "count": 1
+        },
+        {
+          "o_id": 543,
+          "name": "Syrie",
+          "lat": 35.0,
+          "lng": 38.0,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 452,
+          "name": "Université d'Abomey-Calavi",
+          "lat": 6.44105,
+          "lng": 2.35238,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

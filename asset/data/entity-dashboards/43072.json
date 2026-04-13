@@ -1,0 +1,343 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.846404+00:00",
+  "entity": {
+    "o_id": 43072,
+    "title": "Congrès AFMCI (1994)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 1994,
+        "year_max": 1994,
+        "newspapers_count": 4,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            5
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Alif",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Fraternité Matin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 43072,
+            "title": "Congrès AFMCI (1994)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23531,
+            "title": "Association des Femmes Musulmanes de Côte d'Ivoire",
+            "type": "Organisations",
+            "cooc": 5,
+            "score": 10.423
+          },
+          {
+            "o_id": 62031,
+            "title": "Kadiatou Touré Konaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.6056
+          },
+          {
+            "o_id": 23504,
+            "title": "Moustapha Diaby",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3971
+          },
+          {
+            "o_id": 23601,
+            "title": "Conseil Supérieur Islamique",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 4.672
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 4,
+            "score": 4.4125
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.2804
+          },
+          {
+            "o_id": 46316,
+            "title": "Adjamé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8354
+          },
+          {
+            "o_id": 46294,
+            "title": "Yopougon",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8143
+          },
+          {
+            "o_id": 1057,
+            "title": "Idriss Koudouss Koné",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.5347
+          },
+          {
+            "o_id": 23699,
+            "title": "Front de la Oumat Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.4321
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.3546
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.3181
+          },
+          {
+            "o_id": 59,
+            "title": "Intégrisme",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1946
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          }
+        ],
+        "edges": [
+          {
+            "source": 43072,
+            "target": 23531,
+            "weight": 10.423,
+            "cooc": 5
+          },
+          {
+            "source": 43072,
+            "target": 62031,
+            "weight": 8.6056,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 23504,
+            "weight": 6.3971,
+            "cooc": 3
+          },
+          {
+            "source": 43072,
+            "target": 23601,
+            "weight": 4.672,
+            "cooc": 3
+          },
+          {
+            "source": 43072,
+            "target": 653,
+            "weight": 4.4125,
+            "cooc": 4
+          },
+          {
+            "source": 43072,
+            "target": 662,
+            "weight": 3.2804,
+            "cooc": 3
+          },
+          {
+            "source": 43072,
+            "target": 46316,
+            "weight": 2.8354,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 46294,
+            "weight": 2.8143,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 1057,
+            "weight": 2.5347,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 23699,
+            "weight": 2.4321,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 36,
+            "weight": 2.3546,
+            "cooc": 3
+          },
+          {
+            "source": 43072,
+            "target": 945,
+            "weight": 2.3181,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 59,
+            "weight": 2.1946,
+            "cooc": 2
+          },
+          {
+            "source": 43072,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

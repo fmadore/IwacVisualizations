@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.940242+00:00",
+  "entity": {
+    "o_id": 73466,
+    "title": "Élections législatives ivoiriennes de 2016",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2016,
+        "year_max": 2016,
+        "newspapers_count": 3,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            5
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Le Débat Ivoirien",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2016,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 73466,
+            "title": "Élections législatives ivoiriennes de 2016",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23507,
+            "title": "Référendum constitutionnel ivoirien de 2016",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.7631
+          },
+          {
+            "o_id": 63441,
+            "title": "Mosquée de la Riviéra 3",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 6.754
+          },
+          {
+            "o_id": 23548,
+            "title": "Hamed Bakayoko",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 6.3008
+          },
+          {
+            "o_id": 23648,
+            "title": "Mosquée de la Riviéra Golf",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 6.291
+          },
+          {
+            "o_id": 63384,
+            "title": "Riviera Golf",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 5.7407
+          },
+          {
+            "o_id": 23658,
+            "title": "Aboubacar Samassi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 4.9905
+          },
+          {
+            "o_id": 23606,
+            "title": "Alassane Ouattara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 4.0825
+          },
+          {
+            "o_id": 945,
+            "title": "Aboubacar Fofana",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 3.4771
+          },
+          {
+            "o_id": 662,
+            "title": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 3.2804
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 3.0635
+          },
+          {
+            "o_id": 63402,
+            "title": "Cocody",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.0191
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3251
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 2.2288
+          }
+        ],
+        "edges": [
+          {
+            "source": 73466,
+            "target": 23507,
+            "weight": 7.7631,
+            "cooc": 2
+          },
+          {
+            "source": 73466,
+            "target": 63441,
+            "weight": 6.754,
+            "cooc": 2
+          },
+          {
+            "source": 73466,
+            "target": 23548,
+            "weight": 6.3008,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 23648,
+            "weight": 6.291,
+            "cooc": 4
+          },
+          {
+            "source": 73466,
+            "target": 63384,
+            "weight": 5.7407,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 23658,
+            "weight": 4.9905,
+            "cooc": 2
+          },
+          {
+            "source": 73466,
+            "target": 23606,
+            "weight": 4.0825,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 945,
+            "weight": 3.4771,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 662,
+            "weight": 3.2804,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 76269,
+            "weight": 3.0635,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 63402,
+            "weight": 3.0191,
+            "cooc": 2
+          },
+          {
+            "source": 73466,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 269,
+            "weight": 2.3251,
+            "cooc": 3
+          },
+          {
+            "source": 73466,
+            "target": 298,
+            "weight": 2.2288,
+            "cooc": 4
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 4
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 4
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 2
+        },
+        {
+          "o_id": 63441,
+          "name": "Mosquée de la Riviéra 3",
+          "lat": 5.348374315507951,
+          "lng": -3.954733469340994,
+          "count": 2
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        },
+        {
+          "o_id": 76499,
+          "name": "Bongouanou",
+          "lat": 6.65,
+          "lng": -4.2,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

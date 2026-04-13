@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.780606+00:00",
+  "entity": {
+    "o_id": 23657,
+    "title": "Congrès AJMCI (2012)",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2013,
+        "year_max": 2013,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23657,
+            "title": "Congrès AJMCI (2012)",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23636,
+            "title": "Amicale des Anciens de l'AEEMCI",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.0486
+          }
+        ],
+        "edges": [
+          {
+            "source": 23657,
+            "target": 23636,
+            "weight": 4.0486,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": []
+    }
+  }
+}

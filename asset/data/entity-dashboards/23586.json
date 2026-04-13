@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:22.105995+00:00",
+  "entity": {
+    "o_id": 23586,
+    "title": "Plateforme de la Jeunesse Musulmane en Côte d'Ivoire",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 3,
+        "year_min": 2015,
+        "year_max": 2018,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2018
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2015,
+          "year_max": 2018
+        },
+        {
+          "name": "APA News",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2018,
+          "year_max": 2018
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23586,
+            "title": "Plateforme de la Jeunesse Musulmane en Côte d'Ivoire",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 23599,
+            "title": "Affaire Tariq Ramadan",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 7.96
+          }
+        ],
+        "edges": [
+          {
+            "source": 23586,
+            "target": 23599,
+            "weight": 7.96,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 429,
+          "name": "Suisse",
+          "lat": 47.00016,
+          "lng": 8.01427,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

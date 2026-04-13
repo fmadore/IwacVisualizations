@@ -1,0 +1,665 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:17.534318+00:00",
+  "entity": {
+    "o_id": 76485,
+    "title": "Conakry",
+    "type": "Lieux"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 8,
+        "year_min": 1977,
+        "year_max": 2017,
+        "newspapers_count": 6,
+        "countries_count": 2
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          1977,
+          1984,
+          1987,
+          1994,
+          1998,
+          2002,
+          2017
+        ],
+        "countries": [
+          "Bénin",
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Bénin": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "Côte d'Ivoire": [
+            1,
+            1,
+            0,
+            2,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Fraternité Matin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1984,
+          "year_max": 1998
+        },
+        {
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "L'Inter",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Ehuzu",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1987,
+          "year_max": 1987
+        },
+        {
+          "name": "Fraternité Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1977,
+          "year_max": 1977
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2017,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 7
+        },
+        {
+          "name": "Bénin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 76485,
+            "title": "Conakry",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 328,
+            "title": "Guinée",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 6.0912
+          },
+          {
+            "o_id": 43055,
+            "title": "Henri Konan Bédié",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 4.1205
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 4.0603
+          },
+          {
+            "o_id": 62020,
+            "title": "Bamako",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.2474
+          },
+          {
+            "o_id": 490,
+            "title": "Niamey",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1768
+          },
+          {
+            "o_id": 23648,
+            "title": "Mosquée de la Riviéra Golf",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 3.1455
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 4,
+            "score": 3.1001
+          },
+          {
+            "o_id": 46194,
+            "title": "Laurent Gbagbo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.9959
+          },
+          {
+            "o_id": 13908,
+            "title": "Éducation",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 2.8883
+          },
+          {
+            "o_id": 60484,
+            "title": "Dakar",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8461
+          },
+          {
+            "o_id": 46316,
+            "title": "Adjamé",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 2.8354
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 5,
+            "score": 2.786
+          },
+          {
+            "o_id": 15831,
+            "title": "Mosquée",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 2.7572
+          },
+          {
+            "o_id": 43069,
+            "title": "Félix Houphouët-Boigny",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 2.6236
+          },
+          {
+            "o_id": 9,
+            "title": "Jeunesse",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4978
+          },
+          {
+            "o_id": 357,
+            "title": "Mali",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.4188
+          },
+          {
+            "o_id": 653,
+            "title": "Conseil National Islamique",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 2.2063
+          },
+          {
+            "o_id": 76041,
+            "title": "Jeûne",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.1985
+          },
+          {
+            "o_id": 540,
+            "title": "Niger",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.695
+          },
+          {
+            "o_id": 489,
+            "title": "La Mecque",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 1.3811
+          },
+          {
+            "o_id": 2013,
+            "title": "Mahomet",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 1.2931
+          },
+          {
+            "o_id": 86,
+            "title": "Prière",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2907
+          },
+          {
+            "o_id": 29,
+            "title": "Hadj",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.2041
+          }
+        ],
+        "edges": [
+          {
+            "source": 76485,
+            "target": 328,
+            "weight": 6.0912,
+            "cooc": 5
+          },
+          {
+            "source": 76485,
+            "target": 43055,
+            "weight": 4.1205,
+            "cooc": 3
+          },
+          {
+            "source": 76485,
+            "target": 76268,
+            "weight": 4.0603,
+            "cooc": 5
+          },
+          {
+            "source": 76485,
+            "target": 62020,
+            "weight": 3.2474,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 490,
+            "weight": 3.1768,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 23648,
+            "weight": 3.1455,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 269,
+            "weight": 3.1001,
+            "cooc": 4
+          },
+          {
+            "source": 76485,
+            "target": 46194,
+            "weight": 2.9959,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 13908,
+            "weight": 2.8883,
+            "cooc": 5
+          },
+          {
+            "source": 76485,
+            "target": 60484,
+            "weight": 2.8461,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 46316,
+            "weight": 2.8354,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 298,
+            "weight": 2.786,
+            "cooc": 5
+          },
+          {
+            "source": 76485,
+            "target": 15831,
+            "weight": 2.7572,
+            "cooc": 4
+          },
+          {
+            "source": 76485,
+            "target": 43069,
+            "weight": 2.6236,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 9,
+            "weight": 2.4978,
+            "cooc": 3
+          },
+          {
+            "source": 76485,
+            "target": 357,
+            "weight": 2.4188,
+            "cooc": 3
+          },
+          {
+            "source": 76485,
+            "target": 653,
+            "weight": 2.2063,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 76041,
+            "weight": 2.1985,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 540,
+            "weight": 1.695,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 489,
+            "weight": 1.3811,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 2013,
+            "weight": 1.2931,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 86,
+            "weight": 1.2907,
+            "cooc": 2
+          },
+          {
+            "source": 76485,
+            "target": 29,
+            "weight": 1.2041,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 76485,
+          "name": "Conakry",
+          "lat": 9.5091666666667,
+          "lng": -13.712222222222,
+          "count": 8
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 5
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 5
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 4
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 3
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
+        {
+          "o_id": 62020,
+          "name": "Bamako",
+          "lat": 12.645833,
+          "lng": -7.992222,
+          "count": 2
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 2
+        },
+        {
+          "o_id": 490,
+          "name": "Niamey",
+          "lat": 13.515,
+          "lng": 2.1175,
+          "count": 2
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 76492,
+          "name": "Ségou",
+          "lat": 13.45,
+          "lng": -6.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 61324,
+          "name": "Grande Mosquée d'Adjamé",
+          "lat": 5.353286615241792,
+          "lng": -4.026326534959187,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 63382,
+          "name": "Touba",
+          "lat": 8.283333,
+          "lng": -7.683333,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

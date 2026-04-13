@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:20.872245+00:00",
+  "entity": {
+    "o_id": 788,
+    "title": "Union des Femmes Musulmanes du Mono",
+    "type": "Organisations"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 2,
+        "year_min": 2009,
+        "year_max": 2017,
+        "newspapers_count": 1,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2009,
+          2017
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "La Nation",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2009,
+          "year_max": 2017
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Bénin",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 788,
+            "title": "Union des Femmes Musulmanes du Mono",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 355,
+            "title": "Lokossa",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.66
+          },
+          {
+            "o_id": 63419,
+            "title": "Mono",
+            "type": "Lieux",
+            "cooc": 2,
+            "score": 4.1486
+          },
+          {
+            "o_id": 61328,
+            "title": "Santé",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.8514
+          },
+          {
+            "o_id": 36,
+            "title": "Femmes",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 1.5697
+          }
+        ],
+        "edges": [
+          {
+            "source": 788,
+            "target": 355,
+            "weight": 4.66,
+            "cooc": 2
+          },
+          {
+            "source": 788,
+            "target": 63419,
+            "weight": 4.1486,
+            "cooc": 2
+          },
+          {
+            "source": 788,
+            "target": 61328,
+            "weight": 1.8514,
+            "cooc": 2
+          },
+          {
+            "source": 788,
+            "target": 36,
+            "weight": 1.5697,
+            "cooc": 2
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 355,
+          "name": "Lokossa",
+          "lat": 6.63869,
+          "lng": 1.71674,
+          "count": 2
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
+          "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
+      ]
+    }
+  }
+}

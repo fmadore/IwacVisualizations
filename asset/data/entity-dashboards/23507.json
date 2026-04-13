@@ -1,0 +1,255 @@
+{
+  "version": 1,
+  "generated_at": "2026-04-13T09:32:24.681922+00:00",
+  "entity": {
+    "o_id": 23507,
+    "title": "Référendum constitutionnel ivoirien de 2016",
+    "type": "Événements"
+  },
+  "summary": {
+    "by_role": {
+      "all": {
+        "total_mentions": 5,
+        "year_min": 2016,
+        "year_max": 2016,
+        "newspapers_count": 2,
+        "countries_count": 1
+      }
+    }
+  },
+  "timeline": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            5
+          ]
+        }
+      }
+    }
+  },
+  "newspapers": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Le Patriote",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Islam Info",
+          "total": 2,
+          "articles": 0,
+          "publications": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2016,
+          "year_max": 2016
+        }
+      ]
+    }
+  },
+  "countries": {
+    "by_role": {
+      "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
+        }
+      ]
+    }
+  },
+  "network": {
+    "by_role": {
+      "all": {
+        "nodes": [
+          {
+            "o_id": 23507,
+            "title": "Référendum constitutionnel ivoirien de 2016",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 73466,
+            "title": "Élections législatives ivoiriennes de 2016",
+            "type": "Événements",
+            "cooc": 2,
+            "score": 7.8922
+          },
+          {
+            "o_id": 76514,
+            "title": "Constitution",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.0331
+          },
+          {
+            "o_id": 23543,
+            "title": "Commission Électorale Indépendante",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.8113
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 3,
+            "score": 2.4362
+          },
+          {
+            "o_id": 269,
+            "title": "Abidjan",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 2.3251
+          },
+          {
+            "o_id": 76269,
+            "title": "Élections",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 2.0423
+          },
+          {
+            "o_id": 298,
+            "title": "Côte d'Ivoire",
+            "type": "Lieux",
+            "cooc": 3,
+            "score": 1.6716
+          }
+        ],
+        "edges": [
+          {
+            "source": 23507,
+            "target": 73466,
+            "weight": 7.8922,
+            "cooc": 2
+          },
+          {
+            "source": 23507,
+            "target": 76514,
+            "weight": 6.0331,
+            "cooc": 2
+          },
+          {
+            "source": 23507,
+            "target": 23543,
+            "weight": 4.8113,
+            "cooc": 2
+          },
+          {
+            "source": 23507,
+            "target": 76268,
+            "weight": 2.4362,
+            "cooc": 3
+          },
+          {
+            "source": 23507,
+            "target": 269,
+            "weight": 2.3251,
+            "cooc": 3
+          },
+          {
+            "source": 23507,
+            "target": 76269,
+            "weight": 2.0423,
+            "cooc": 2
+          },
+          {
+            "source": 23507,
+            "target": 298,
+            "weight": 1.6716,
+            "cooc": 3
+          }
+        ]
+      }
+    }
+  },
+  "locations": {
+    "by_role": {
+      "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        },
+        {
+          "o_id": 23692,
+          "name": "Grande mosquée de Treichville",
+          "lat": 5.3080303344696205,
+          "lng": -4.01092342679036,
+          "count": 1
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 1
+        },
+        {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        },
+        {
+          "o_id": 76499,
+          "name": "Bongouanou",
+          "lat": 6.65,
+          "lng": -4.2,
+          "count": 1
+        }
+      ]
+    }
+  }
+}
