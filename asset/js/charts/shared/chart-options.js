@@ -256,7 +256,8 @@
         var data = (entries || []).map(function (e) {
             return { name: e[nameKey], value: e[valueKey] };
         });
-        return {
+
+        var base = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -271,26 +272,51 @@
                 itemWidth: 12,
                 itemHeight: 10
             },
-            series: [
-                {
-                    type: 'pie',
-                    radius: ['40%', '68%'],
-                    center: ['38%', '50%'],
-                    avoidLabelOverlap: true,
-                    label: {
-                        show: true,
-                        formatter: function (p) {
-                            return p.percent >= 5 ? p.name + '\n' + p.percent + '%' : '';
-                        }
-                    },
-                    emphasis: {
-                        label: { show: true, fontWeight: 'bold' }
-                    },
-                    labelLine: { show: true },
-                    data: data
-                }
-            ]
+            series: [{
+                type: 'pie',
+                radius: ['40%', '68%'],
+                center: ['38%', '50%'],
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    formatter: function (p) {
+                        return p.percent >= 5 ? p.name + '\n' + p.percent + '%' : '';
+                    }
+                },
+                emphasis: {
+                    label: { show: true, fontWeight: 'bold' },
+                    scale: true,
+                    scaleSize: 6
+                },
+                labelLine: { show: true },
+                data: data
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        var pieMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    legend: {
+                        orient: 'horizontal',
+                        left: 'center',
+                        bottom: 0,
+                        top: null,
+                        right: null
+                    },
+                    series: [{
+                        center: ['50%', '45%'],
+                        radius: ['30%', '58%']
+                    }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, pieMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -522,9 +548,12 @@
         var months = growth.months || [];
         var monthly = growth.monthly_additions || [];
         var cumulative = growth.cumulative_total || [];
-        var useZoom = months.length > 24;
-        return {
-            grid: { left: 48, right: 56, top: 48, bottom: useZoom ? 56 : 32, containLabel: true },
+        var barDef = C._barDefaults('vertical');
+        var dataZoom = C._dataZoom(months.length, { threshold: 24 });
+        var useZoom = dataZoom.length > 0;
+
+        var base = {
+            grid: C._grid({ right: 56, bottom: useZoom ? 56 : 32 }),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             legend: {
                 top: 4,
@@ -543,18 +572,16 @@
                 { type: 'value', name: t('Monthly') },
                 { type: 'value', name: t('Cumulative'), splitLine: { show: false } }
             ],
-            dataZoom: useZoom ? [
-                { type: 'slider', start: 60, end: 100, bottom: 8, height: 18 },
-                { type: 'inside' }
-            ] : [],
+            dataZoom: dataZoom,
             series: [
                 {
                     name: t('Monthly additions'),
                     type: 'bar',
                     yAxisIndex: 0,
                     data: monthly,
-                    barMaxWidth: 20,
-                    emphasis: { focus: 'series' }
+                    barMaxWidth: barDef.barMaxWidth - 8,
+                    emphasis: barDef.emphasis,
+                    itemStyle: barDef.itemStyle
                 },
                 {
                     name: t('Cumulative total'),
@@ -565,8 +592,14 @@
                     symbol: 'none',
                     lineStyle: { width: 2 }
                 }
-            ]
+            ],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
