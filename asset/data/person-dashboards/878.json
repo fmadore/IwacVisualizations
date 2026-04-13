@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:21.816696+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:22.540331+00:00",
   "person": {
     "o_id": 878,
     "title": "François Compaoré",
@@ -854,6 +854,1085 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 6
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.75,
+            "rated_articles": 6
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.33,
+            "rated_articles": 6
+          }
+        },
+        "articles_total": 6
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 6
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.75,
+            "rated_articles": 6
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.33,
+            "rated_articles": 6
+          }
+        },
+        "articles_total": 6
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2010,
+          2013,
+          2014,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          2010,
+          2013,
+          2014,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Blaise Compaoré",
+          "Oumarou Kanazoé",
+          "Congrès pour la Démocratie et le Progrès",
+          "Simon Compaoré",
+          "Assimi Kouanda",
+          "Fédération associative pour la paix et le progrès avec Blaise Compaoré",
+          "Élection présidentielle de 2010 au Burkina Faso",
+          "Roch Marc Christian Kaboré",
+          "Élections",
+          "Politique",
+          "Sénat et article 37",
+          "Tertius Zongo",
+          "Musique",
+          "Gabriel Sama",
+          "Adama Sakandé"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            0,
+            1,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            1,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            2,
+            3,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Blaise Compaoré",
+          "Oumarou Kanazoé",
+          "Congrès pour la Démocratie et le Progrès",
+          "Simon Compaoré",
+          "Assimi Kouanda",
+          "Fédération associative pour la paix et le progrès avec Blaise Compaoré",
+          "Élection présidentielle de 2010 au Burkina Faso",
+          "Roch Marc Christian Kaboré",
+          "Élections",
+          "Politique",
+          "Sénat et article 37",
+          "Tertius Zongo",
+          "Musique",
+          "Gabriel Sama",
+          "Adama Sakandé"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            0,
+            1,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            1,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            2,
+            3,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

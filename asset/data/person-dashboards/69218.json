@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:37.012673+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:41.239943+00:00",
   "person": {
     "o_id": 69218,
     "title": "Ali Maman",
@@ -874,6 +874,1013 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 10
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 9
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 6
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 6
+        },
+        {
+          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
+          "count": 5
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 5
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 4
+        },
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 3
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 3
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 2
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 2
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 10
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 9
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 6
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 6
+        },
+        {
+          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
+          "count": 5
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 5
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 4
+        },
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 3
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 3
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 2
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 7
+              },
+              {
+                "name": "Positif",
+                "count": 29
+              },
+              {
+                "name": "Neutre",
+                "count": 26
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 20
+              },
+              {
+                "name": "Central",
+                "count": 13
+              },
+              {
+                "name": "Secondaire",
+                "count": 7
+              },
+              {
+                "name": "Marginal",
+                "count": 22
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 1.71,
+            "rated_articles": 64
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 26
+              },
+              {
+                "name": "Neutre",
+                "count": 34
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 19
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 13
+              },
+              {
+                "name": "Marginal",
+                "count": 22
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 1.74,
+            "rated_articles": 64
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 26
+              },
+              {
+                "name": "Neutre",
+                "count": 31
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              },
+              {
+                "name": "Central",
+                "count": 25
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 21
+              }
+            ],
+            "subjectivite_avg": 1.77,
+            "rated_articles": 64
+          }
+        },
+        "articles_total": 64
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 7
+              },
+              {
+                "name": "Positif",
+                "count": 29
+              },
+              {
+                "name": "Neutre",
+                "count": 26
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 20
+              },
+              {
+                "name": "Central",
+                "count": 13
+              },
+              {
+                "name": "Secondaire",
+                "count": 7
+              },
+              {
+                "name": "Marginal",
+                "count": 22
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 1.71,
+            "rated_articles": 64
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 26
+              },
+              {
+                "name": "Neutre",
+                "count": 34
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 19
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 13
+              },
+              {
+                "name": "Marginal",
+                "count": 22
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 1.74,
+            "rated_articles": 64
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 26
+              },
+              {
+                "name": "Neutre",
+                "count": 31
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              },
+              {
+                "name": "Central",
+                "count": 25
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 21
+              }
+            ],
+            "subjectivite_avg": 1.77,
+            "rated_articles": 64
+          }
+        },
+        "articles_total": 64
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            5,
+            6,
+            3
+          ],
+          [
+            5,
+            7,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            2,
+            4
+          ],
+          [
+            6,
+            4,
+            1
+          ],
+          [
+            6,
+            5,
+            2
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            5,
+            8,
+            4
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            6,
+            1,
+            2
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            9,
+            2
+          ],
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            3,
+            9,
+            2
+          ],
+          [
+            3,
+            10,
+            1
+          ],
+          [
+            4,
+            2,
+            2
+          ],
+          [
+            4,
+            3,
+            2
+          ],
+          [
+            4,
+            5,
+            2
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            9,
+            2
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            5,
+            5,
+            2
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            6,
+            3,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            4,
+            7,
+            2
+          ]
+        ]
+      },
+      "subject": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "creator": {
+        "years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            5,
+            6,
+            3
+          ],
+          [
+            5,
+            7,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            2,
+            4
+          ],
+          [
+            6,
+            4,
+            1
+          ],
+          [
+            6,
+            5,
+            2
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            5,
+            8,
+            4
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            6,
+            1,
+            2
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            2,
+            9,
+            2
+          ],
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            3,
+            9,
+            2
+          ],
+          [
+            3,
+            10,
+            1
+          ],
+          [
+            4,
+            2,
+            2
+          ],
+          [
+            4,
+            3,
+            2
+          ],
+          [
+            4,
+            5,
+            2
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            9,
+            2
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            5,
+            5,
+            2
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            6,
+            3,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            4,
+            7,
+            2
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Hadi Oumarou",
+          "Abdoul-Aziz Ibrahim"
+        ],
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [],
+        "matrix": []
+      },
+      "creator": {
+        "names": [
+          "Hadi Oumarou",
+          "Abdoul-Aziz Ibrahim"
+        ],
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:24.300172+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:25.911215+00:00",
   "person": {
     "o_id": 2040,
     "title": "Benoît Assouan Comlan Dègla",
@@ -794,6 +794,1015 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2012,
+          2013,
+          2020
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          2011,
+          2012,
+          2013,
+          2020
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Gouvernement",
+          "Thomas Boni Yayi",
+          "Paix",
+          "Sécurité",
+          "Lambert Koty",
+          "Mosquée",
+          "Josué F. Mehouenou",
+          "Gouvernance",
+          "Issiaka Alao Ligali",
+          "Prière",
+          "Ramadan",
+          "Solidarité",
+          "Terrorisme",
+          "Radicalisation",
+          "Pluralisme religieux"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            0,
+            2,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            0,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Gouvernement",
+          "Thomas Boni Yayi",
+          "Paix",
+          "Sécurité",
+          "Lambert Koty",
+          "Mosquée",
+          "Josué F. Mehouenou",
+          "Gouvernance",
+          "Issiaka Alao Ligali",
+          "Prière",
+          "Ramadan",
+          "Solidarité",
+          "Terrorisme",
+          "Radicalisation",
+          "Pluralisme religieux"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            0,
+            2,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            0,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

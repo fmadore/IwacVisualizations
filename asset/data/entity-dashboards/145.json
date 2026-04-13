@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.309037+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.483295+00:00",
   "entity": {
     "o_id": 145,
     "title": "Visite de Cheick Sharifu Khalifa en Côte d'Ivoire",
@@ -128,34 +128,6 @@
           "count": 2
         },
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
-          "count": 1
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
-          "count": 1
-        },
-        {
           "o_id": 299,
           "name": "Cotonou",
           "lat": 6.36536,
@@ -182,8 +154,468 @@
           "lat": 9.5,
           "lng": 2.25,
           "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 4.0,
+            "rated_articles": 2
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.5,
+            "rated_articles": 2
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 4.5,
+            "rated_articles": 2
+          }
+        },
+        "articles_total": 2
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Mathieu Kérékou",
+          "Tanzanie",
+          "Enfant",
+          "Coran",
+          "Cotonou",
+          "Côte d'Ivoire",
+          "Abidjan",
+          "Conversion",
+          "Prière",
+          "Bénin",
+          "Mahomet",
+          "Burkina Faso",
+          "Dakar",
+          "Sénégal",
+          "Henri Konan Bédié"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

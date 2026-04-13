@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:08.755596+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:26.794311+00:00",
   "entity": {
     "o_id": 502,
     "title": "Cathédrale du Sacré-Cœur de Lomé",
@@ -399,13 +399,6 @@
           "count": 3
         },
         {
-          "o_id": 60467,
-          "name": "Apégamé",
-          "lat": 6.85,
-          "lng": 0.73333,
-          "count": 2
-        },
-        {
           "o_id": 73289,
           "name": "Préfecture du Golfe",
           "lat": 6.133333,
@@ -413,11 +406,11 @@
           "count": 2
         },
         {
-          "o_id": 60534,
-          "name": "Nyékonakpoé",
-          "lat": 6.1305555555555555,
-          "lng": 1.2055555555555555,
-          "count": 1
+          "o_id": 60467,
+          "name": "Apégamé",
+          "lat": 6.85,
+          "lng": 0.73333,
+          "count": 2
         },
         {
           "o_id": 562,
@@ -448,6 +441,13 @@
           "count": 1
         },
         {
+          "o_id": 60534,
+          "name": "Nyékonakpoé",
+          "lat": 6.1305555555555555,
+          "lng": 1.2055555555555555,
+          "count": 1
+        },
+        {
           "o_id": 73293,
           "name": "Monument de l'Indépendance",
           "lat": 6.13,
@@ -455,6 +455,519 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 9
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 11
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.62,
+            "rated_articles": 13
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 2.38,
+            "rated_articles": 13
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 13
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 1.92,
+            "rated_articles": 13
+          }
+        },
+        "articles_total": 13
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1970,
+          1974,
+          1975,
+          1983,
+          1985,
+          1986,
+          1987,
+          1988,
+          1989,
+          1990,
+          1995,
+          2006
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            8,
+            8,
+            1
+          ],
+          [
+            11,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            10,
+            3,
+            1
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            8,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            9,
+            2,
+            1
+          ],
+          [
+            6,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Togo",
+          "Lomé",
+          "Gnassingbé Eyadéma",
+          "Union Musulmane du Togo",
+          "Église évangélique du Togo",
+          "Robert-Casimir Dosseh-Anyron",
+          "Samon Kortho",
+          "Forces Armées Togolaises",
+          "Gbégnon Amégboh",
+          "Grande mosquée de Lomé",
+          "Palais des congrès de Lomé",
+          "Église Méthodiste du Togo",
+          "Yaovi Mensah",
+          "Kpotivi Têvi-Djidjogbé Théodore Laclé",
+          "Boukari Bassabi Bonfoh"
+        ],
+        "matrix": [
+          [
+            0,
+            13,
+            11,
+            10,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            13,
+            0,
+            11,
+            10,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            11,
+            11,
+            0,
+            10,
+            6,
+            5,
+            5,
+            4,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            10,
+            10,
+            10,
+            0,
+            6,
+            5,
+            5,
+            4,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            6,
+            6,
+            6,
+            0,
+            4,
+            5,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            6,
+            6,
+            5,
+            5,
+            4,
+            0,
+            4,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            1,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            4,
+            0,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            0,
+            2,
+            2,
+            3,
+            3,
+            3,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            4,
+            3,
+            4,
+            2,
+            0,
+            3,
+            2,
+            2,
+            2,
+            3,
+            1
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            3,
+            2,
+            3,
+            2,
+            3,
+            0,
+            1,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            0,
+            3,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            3,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            3,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            2,
+            0,
+            3,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

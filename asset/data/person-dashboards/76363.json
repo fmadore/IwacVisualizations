@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:38.592373+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:43.304160+00:00",
   "person": {
     "o_id": 76363,
     "title": "Aguib Touré",
@@ -278,6 +278,373 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 3
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 3
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.67,
+            "rated_articles": 3
+          }
+        },
+        "articles_total": 3
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 3
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 3
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.67,
+            "rated_articles": 3
+          }
+        },
+        "articles_total": 3
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            6,
+            3
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          2018
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            6,
+            3
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Intégrisme",
+          "Hervé Makré"
+        ],
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Intégrisme",
+          "Hervé Makré"
+        ],
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

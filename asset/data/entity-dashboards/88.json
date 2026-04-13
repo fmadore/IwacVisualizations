@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:32.128102+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:58.076151+00:00",
   "entity": {
     "o_id": 88,
     "title": "Bid'a",
@@ -55,13 +55,13 @@
           "year_max": 2010
         },
         {
-          "name": "An-Nasr Trimestriel",
+          "name": "La Preuve",
           "total": 1,
           "articles": 0,
           "publications": 1,
           "country": "Burkina Faso",
-          "year_min": 2011,
-          "year_max": 2011
+          "year_min": 2009,
+          "year_max": 2009
         },
         {
           "name": "Le vrai visage de l'islam",
@@ -73,13 +73,13 @@
           "year_max": 2014
         },
         {
-          "name": "La Preuve",
+          "name": "An-Nasr Trimestriel",
           "total": 1,
           "articles": 0,
           "publications": 1,
           "country": "Burkina Faso",
-          "year_min": 2009,
-          "year_max": 2009
+          "year_min": 2011,
+          "year_max": 2011
         }
       ]
     }
@@ -278,13 +278,6 @@
           "count": 3
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
-        },
-        {
           "o_id": 443,
           "name": "Médine",
           "lat": 24.46861,
@@ -292,25 +285,11 @@
           "count": 2
         },
         {
-          "o_id": 294,
-          "name": "Centre culturel islamique AEEMB",
-          "lat": 12.37545088285411,
-          "lng": -1.4871601188636745,
-          "count": 1
-        },
-        {
-          "o_id": 401,
-          "name": "Tougan",
-          "lat": 13.05913,
-          "lng": -3.07527,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
         },
         {
           "o_id": 269,
@@ -339,8 +318,400 @@
           "lat": 29.5,
           "lng": 47.75,
           "count": 1
+        },
+        {
+          "o_id": 401,
+          "name": "Tougan",
+          "lat": 13.05913,
+          "lng": -3.07527,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2004,
+          2009,
+          2010,
+          2011,
+          2014
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Hadith",
+          "Sunnah",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Ouagadougou",
+          "Laïcité",
+          "Enseignement confessionnel islamique",
+          "Médine",
+          "Civilisation occidentale",
+          "Bobo-Dioulasso",
+          "Fédération des Associations Islamiques du Burkina",
+          "Femmes",
+          "Mawlid",
+          "Benoît XVI",
+          "Extrémisme"
+        ],
+        "matrix": [
+          [
+            0,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            0,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            3,
+            0,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

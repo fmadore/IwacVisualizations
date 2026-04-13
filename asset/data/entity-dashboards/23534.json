@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:35.506006+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:54:03.396642+00:00",
   "entity": {
     "o_id": 23534,
     "title": "Émergence",
@@ -725,17 +725,17 @@
           "count": 5
         },
         {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 3
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
           "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
           "count": 3
         },
         {
@@ -802,6 +802,528 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 2.25,
+            "rated_articles": 8
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.62,
+            "rated_articles": 8
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 8
+          }
+        },
+        "articles_total": 8
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            7,
+            2
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            3,
+            2
+          ],
+          [
+            5,
+            5,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            3,
+            8,
+            3
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            4,
+            1,
+            3
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            3,
+            7,
+            3
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            5,
+            4,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Côte d'Ivoire",
+          "Alassane Ouattara",
+          "Terrorisme",
+          "Association des Jeunes Musulmans de Côte d'Ivoire",
+          "Ramadan",
+          "Mosquée de la Riviéra Golf",
+          "Mamadou Koné",
+          "Élection présidentielle ivoirienne de 2015",
+          "Développement",
+          "Laïcité",
+          "Mamadou Traoré",
+          "Extrémisme",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Paix"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            3,
+            2,
+            0,
+            0,
+            4,
+            2,
+            0,
+            2,
+            0,
+            3,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            6,
+            1,
+            1,
+            5,
+            5,
+            0,
+            1,
+            4,
+            0,
+            3,
+            0,
+            2,
+            3
+          ],
+          [
+            0,
+            6,
+            0,
+            1,
+            0,
+            5,
+            4,
+            0,
+            1,
+            4,
+            0,
+            4,
+            0,
+            2,
+            3
+          ],
+          [
+            3,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            3,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            5,
+            1,
+            0,
+            0,
+            3,
+            0,
+            1,
+            4,
+            0,
+            3,
+            0,
+            1,
+            3
+          ],
+          [
+            0,
+            5,
+            4,
+            1,
+            1,
+            3,
+            0,
+            0,
+            0,
+            3,
+            0,
+            3,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            1,
+            0,
+            3,
+            2,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            4,
+            1,
+            0,
+            4,
+            3,
+            0,
+            1,
+            0,
+            0,
+            3,
+            0,
+            1,
+            3
+          ],
+          [
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            3,
+            4,
+            1,
+            0,
+            3,
+            3,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            3,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            3,
+            3,
+            1,
+            0,
+            3,
+            2,
+            0,
+            1,
+            3,
+            0,
+            2,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

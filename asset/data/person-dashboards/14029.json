@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:22.912321+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:23.932952+00:00",
   "person": {
     "o_id": 14029,
     "title": "Herman Frédéric Bassolé",
@@ -782,6 +782,1227 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 3
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 2
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 2
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 2
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ],
+      "subject": [],
+      "creator": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 3
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 2
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 2
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 2
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.75,
+            "rated_articles": 17
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 6
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.21,
+            "rated_articles": 17
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.12,
+            "rated_articles": 17
+          }
+        },
+        "articles_total": 17
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.75,
+            "rated_articles": 17
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 6
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.21,
+            "rated_articles": 17
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.12,
+            "rated_articles": 17
+          }
+        },
+        "articles_total": 17
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2020
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            2,
+            2
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            0,
+            10,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "creator": {
+        "years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2020
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            2,
+            2
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            0,
+            10,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Terrorisme",
+          "Radicalisation",
+          "Fédération des Associations Islamiques du Burkina",
+          "Dori",
+          "Union Fraternelle des Croyants de Dori",
+          "Hadj",
+          "Charité",
+          "Pluralisme religieux",
+          "Catholiques",
+          "Djibo",
+          "Soum",
+          "Blaise Compaoré",
+          "Construction mosquée",
+          "Adama Sakandé"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            4,
+            0,
+            3,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            4,
+            0,
+            0,
+            3,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            3,
+            0,
+            0,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            3,
+            3,
+            0,
+            3,
+            0,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [],
+        "matrix": []
+      },
+      "creator": {
+        "names": [
+          "Ouagadougou",
+          "Terrorisme",
+          "Radicalisation",
+          "Fédération des Associations Islamiques du Burkina",
+          "Dori",
+          "Union Fraternelle des Croyants de Dori",
+          "Hadj",
+          "Charité",
+          "Pluralisme religieux",
+          "Catholiques",
+          "Djibo",
+          "Soum",
+          "Blaise Compaoré",
+          "Construction mosquée",
+          "Adama Sakandé"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            4,
+            0,
+            3,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            4,
+            0,
+            0,
+            3,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            3,
+            0,
+            0,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            3,
+            3,
+            0,
+            3,
+            0,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

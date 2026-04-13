@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:19.154984+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:39.505399+00:00",
   "entity": {
     "o_id": 616,
     "title": "Association des jeunes musulmans pour un développement solidaire",
@@ -53,15 +53,6 @@
           "year_max": 2014
         },
         {
-          "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1999,
-          "year_max": 1999
-        },
-        {
           "name": "Le vrai visage de l'islam",
           "total": 1,
           "articles": 0,
@@ -69,6 +60,15 @@
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1999,
+          "year_max": 1999
         }
       ]
     }
@@ -300,20 +300,6 @@
           "count": 2
         },
         {
-          "o_id": 391,
-          "name": "Sapouy",
-          "lat": 11.55444,
-          "lng": -1.77361,
-          "count": 1
-        },
-        {
-          "o_id": 352,
-          "name": "Léo",
-          "lat": 11.10033,
-          "lng": -2.10654,
-          "count": 1
-        },
-        {
           "o_id": 284,
           "name": "Bobo-Dioulasso",
           "lat": 11.17715,
@@ -347,8 +333,463 @@
           "lat": 24.46861,
           "lng": 39.61417,
           "count": 1
+        },
+        {
+          "o_id": 391,
+          "name": "Sapouy",
+          "lat": 11.55444,
+          "lng": -1.77361,
+          "count": 1
+        },
+        {
+          "o_id": 352,
+          "name": "Léo",
+          "lat": 11.10033,
+          "lng": -2.10654,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 3
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.25,
+            "rated_articles": 4
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 4
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 4
+          }
+        },
+        "articles_total": 4
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2012,
+          2013,
+          2014
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            3,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Paix",
+          "Éducation",
+          "Femmes",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Mouvement Sunnite du Burkina Faso",
+          "Sunnah",
+          "Mohammed Kindo",
+          "Jeunesse",
+          "Pluralisme religieux",
+          "Abdoul Aziz Compaoré",
+          "Mahomet",
+          "Solidarité",
+          "Burkina Faso",
+          "Laïcité"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          [
+            3,
+            2,
+            0,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            2,
+            0,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

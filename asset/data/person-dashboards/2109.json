@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:28.883143+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:31.246245+00:00",
   "person": {
     "o_id": 2109,
     "title": "Banafey Assih",
@@ -1061,6 +1061,1564 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 5
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 4
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 5
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 6
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.67,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 4
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.6,
+            "rated_articles": 6
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.4,
+            "rated_articles": 6
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 6
+          }
+        },
+        "articles_total": 6
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 6
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.67,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 4
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1987,
+          1988,
+          1989,
+          1990,
+          1991
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          1988,
+          1989,
+          1990,
+          1991
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [
+          1987,
+          1988,
+          1989,
+          1990,
+          1991
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Union Musulmane du Togo",
+          "Gnassingbé Eyadéma",
+          "Église évangélique du Togo",
+          "Samon Kortho",
+          "Forces Armées Togolaises",
+          "Tètè Attikossie",
+          "Barray Gérard Amana",
+          "Terrorisme",
+          "Robert-Casimir Dosseh-Anyron",
+          "Nassiki Awrufo",
+          "Yaovi Mensah",
+          "Kwadzo Amouzou",
+          "Église Méthodiste du Togo",
+          "Gbégnon Amégboh",
+          "Pya"
+        ],
+        "matrix": [
+          [
+            0,
+            4,
+            5,
+            5,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
+            0,
+            4,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            4,
+            0,
+            4,
+            3,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            3,
+            4,
+            0,
+            2,
+            3,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            0,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1
+          ],
+          [
+            3,
+            2,
+            2,
+            3,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            0,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Union Musulmane du Togo",
+          "Samon Kortho",
+          "Gnassingbé Eyadéma",
+          "Église évangélique du Togo",
+          "Tètè Attikossie",
+          "Terrorisme",
+          "Robert-Casimir Dosseh-Anyron",
+          "Nassiki Awrufo",
+          "Yaovi Mensah",
+          "Kwadzo Amouzou",
+          "Forces Armées Togolaises",
+          "Église Méthodiste du Togo",
+          "Gbégnon Amégboh",
+          "Abdou-Salami Abdou Rahim",
+          "Pasteur Agbi-Awumé"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            3,
+            4,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            0,
+            3,
+            4,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            0,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [
+          "Union Musulmane du Togo",
+          "Gnassingbé Eyadéma",
+          "Église évangélique du Togo",
+          "Samon Kortho",
+          "Forces Armées Togolaises",
+          "Tètè Attikossie",
+          "Barray Gérard Amana",
+          "Terrorisme",
+          "Robert-Casimir Dosseh-Anyron",
+          "Nassiki Awrufo",
+          "Yaovi Mensah",
+          "Kwadzo Amouzou",
+          "Église Méthodiste du Togo",
+          "Gbégnon Amégboh",
+          "Pya"
+        ],
+        "matrix": [
+          [
+            0,
+            4,
+            5,
+            5,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
+            0,
+            4,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            4,
+            0,
+            4,
+            3,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            3,
+            4,
+            0,
+            2,
+            3,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            0,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1
+          ],
+          [
+            3,
+            2,
+            2,
+            3,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            0,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

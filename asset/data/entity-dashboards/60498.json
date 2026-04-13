@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:14.848437+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:34.158718+00:00",
   "entity": {
     "o_id": 60498,
     "title": "Bande de Gaza",
@@ -88,24 +88,6 @@
           "year_max": 2023
         },
         {
-          "name": "Notre Voie",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2009,
-          "year_max": 2009
-        },
-        {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2009,
-          "year_max": 2009
-        },
-        {
           "name": "ASSALAM",
           "total": 1,
           "articles": 0,
@@ -113,6 +95,24 @@
           "country": "Bénin",
           "year_min": 2010,
           "year_max": 2010
+        },
+        {
+          "name": "Togo-Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Togo",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Notre Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
         },
         {
           "name": "Nord-Sud",
@@ -124,11 +124,11 @@
           "year_max": 2011
         },
         {
-          "name": "Togo-Presse",
+          "name": "Le Patriote",
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Togo",
+          "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2009
         }
@@ -139,15 +139,15 @@
     "by_role": {
       "all": [
         {
-          "name": "Côte d'Ivoire",
-          "count": 3
-        },
-        {
           "name": "Niger",
           "count": 3
         },
         {
           "name": "Togo",
+          "count": 3
+        },
+        {
+          "name": "Côte d'Ivoire",
           "count": 3
         },
         {
@@ -348,10 +348,10 @@
           "count": 5
         },
         {
-          "o_id": 331,
-          "name": "Iran",
-          "lat": 32.0,
-          "lng": 53.0,
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 4
         },
         {
@@ -362,25 +362,11 @@
           "count": 4
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
           "count": 4
-        },
-        {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 2
-        },
-        {
-          "o_id": 63404,
-          "name": "Damas",
-          "lat": 33.513055555556,
-          "lng": 36.291944444444,
-          "count": 2
         },
         {
           "o_id": 312,
@@ -394,6 +380,13 @@
           "name": "Cisjordanie",
           "lat": 32.0,
           "lng": 35.35,
+          "count": 2
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
           "count": 2
         },
         {
@@ -411,32 +404,11 @@
           "count": 2
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 1
-        },
-        {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 60523,
-          "name": "Londres",
-          "lat": 51.507222222222,
-          "lng": -0.1275,
-          "count": 1
-        },
-        {
-          "o_id": 60540,
-          "name": "Sahel",
-          "lat": 14.474672,
-          "lng": 13.511696,
-          "count": 1
+          "o_id": 63404,
+          "name": "Damas",
+          "lat": 33.513055555556,
+          "lng": 36.291944444444,
+          "count": 2
         },
         {
           "o_id": 385,
@@ -572,6 +544,55 @@
           "count": 1
         },
         {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
+          "count": 1
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
           "o_id": 76453,
           "name": "Palais de la Culture de Treichville",
           "lat": 5.311792930011962,
@@ -597,6 +618,20 @@
           "name": "Treichville",
           "lat": 5.3,
           "lng": -4.0,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
           "count": 1
         },
         {
@@ -654,43 +689,522 @@
           "lat": 35.0,
           "lng": 38.0,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
         },
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
+          "label": "afrique - africain - islamique - coopération - arabe - conférence",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         },
         {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
+          "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 6
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 9
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 9
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 7
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 9
+          }
+        },
+        "articles_total": 9
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2009,
+          2010,
+          2011,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            4,
+            4,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Israël",
+          "États-Unis",
+          "Palestine",
+          "Iran",
+          "France",
+          "Cisjordanie",
+          "Paris",
+          "Irak",
+          "Éducation",
+          "Mahomet",
+          "Lomé",
+          "Damas",
+          "Porto-Novo",
+          "Benoît XVI",
+          "Savalou"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            3,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            1,
+            1,
+            0,
+            1,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

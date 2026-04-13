@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:27.897760+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:30.819313+00:00",
   "person": {
     "o_id": 2080,
     "title": "Dodji Amouzouvi",
@@ -762,6 +762,925 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 2
+        }
+      ],
+      "subject": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 2
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 3.2,
+            "rated_articles": 5
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 5
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.6,
+            "rated_articles": 5
+          }
+        },
+        "articles_total": 5
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 3.2,
+            "rated_articles": 5
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 5
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.6,
+            "rated_articles": 5
+          }
+        },
+        "articles_total": 5
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2020,
+          2022
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            0,
+            9,
+            2
+          ],
+          [
+            1,
+            5,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          2019,
+          2020,
+          2022
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            0,
+            9,
+            2
+          ],
+          [
+            1,
+            5,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Éducation",
+          "Enseignement confessionnel islamique",
+          "Aziz Badarou",
+          "Laboratoire d'Analyse et de Recherche, Religions, Espaces et Développement",
+          "Formation",
+          "Abdoul Jalili Yéssoufou",
+          "Union Islamique du Bénin",
+          "Thomas Boni Yayi",
+          "Discrimination",
+          "VIH/Sida",
+          "Santé",
+          "Polygamie",
+          "Ali Houdou",
+          "Coopération",
+          "Ibrahim Ousmane"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            3,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            0,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Éducation",
+          "Enseignement confessionnel islamique",
+          "Aziz Badarou",
+          "Laboratoire d'Analyse et de Recherche, Religions, Espaces et Développement",
+          "Formation",
+          "Abdoul Jalili Yéssoufou",
+          "Union Islamique du Bénin",
+          "Thomas Boni Yayi",
+          "Discrimination",
+          "VIH/Sida",
+          "Santé",
+          "Polygamie",
+          "Ali Houdou",
+          "Coopération",
+          "Ibrahim Ousmane"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            3,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            0,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

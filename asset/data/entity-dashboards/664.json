@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:20.127983+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:40.820036+00:00",
   "entity": {
     "o_id": 664,
     "title": "Communauté spirituelle des soufis du Burkina Faso",
@@ -50,21 +50,21 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Pays",
-          "total": 6,
-          "articles": 6,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2009,
-          "year_max": 2017
-        },
-        {
           "name": "Sidwaya",
           "total": 6,
           "articles": 6,
           "publications": 0,
           "country": "Burkina Faso",
           "year_min": 2010,
+          "year_max": 2017
+        },
+        {
+          "name": "Le Pays",
+          "total": 6,
+          "articles": 6,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2009,
           "year_max": 2017
         },
         {
@@ -621,6 +621,13 @@
           "count": 6
         },
         {
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 3
+        },
+        {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
@@ -628,11 +635,25 @@
           "count": 3
         },
         {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
-          "count": 3
+          "o_id": 390,
+          "name": "Sanmatenga",
+          "lat": 13.25,
+          "lng": -1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
         },
         {
           "o_id": 395,
@@ -649,13 +670,6 @@
           "count": 2
         },
         {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 2
-        },
-        {
           "o_id": 319,
           "name": "Ghana",
           "lat": 8.1,
@@ -663,31 +677,38 @@
           "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 2
-        },
-        {
-          "o_id": 390,
-          "name": "Sanmatenga",
-          "lat": 13.25,
-          "lng": -1.08333,
-          "count": 2
-        },
-        {
-          "o_id": 405,
-          "name": "Ziniaré",
-          "lat": 12.58186,
-          "lng": -1.2971,
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
           "count": 1
         },
         {
-          "o_id": 549,
-          "name": "Inde",
-          "lat": 22.0,
-          "lng": 79.0,
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
+          "count": 1
+        },
+        {
+          "o_id": 60540,
+          "name": "Sahel",
+          "lat": 14.474672,
+          "lng": 13.511696,
           "count": 1
         },
         {
@@ -702,6 +723,13 @@
           "name": "Médine",
           "lat": 24.46861,
           "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
           "count": 1
         },
         {
@@ -726,41 +754,519 @@
           "count": 1
         },
         {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
-        },
-        {
-          "o_id": 275,
-          "name": "Allemagne",
-          "lat": 51.5,
-          "lng": 10.5,
-          "count": 1
-        },
-        {
-          "o_id": 60540,
-          "name": "Sahel",
-          "lat": 14.474672,
-          "lng": 13.511696,
-          "count": 1
-        },
-        {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
+          "o_id": 549,
+          "name": "Inde",
+          "lat": 22.0,
+          "lng": 79.0,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 6
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 6
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 8
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.11,
+            "rated_articles": 18
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 16
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.61,
+            "rated_articles": 18
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 14
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 13
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.06,
+            "rated_articles": 18
+          }
+        },
+        "articles_total": 18
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2009,
+          2010,
+          2012,
+          2013,
+          2017,
+          2018
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            2
+          ],
+          [
+            6,
+            0,
+            1
+          ],
+          [
+            5,
+            10,
+            1
+          ],
+          [
+            5,
+            9,
+            4
+          ],
+          [
+            3,
+            4,
+            2
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            2,
+            6,
+            2
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Cheick Soufi Moaze Ouédraogo",
+          "Burkina Faso",
+          "Pluralisme religieux",
+          "Paix",
+          "Ouagadougou",
+          "Prière",
+          "Soufisme",
+          "Terrorisme",
+          "Mahomet",
+          "Radicalisation",
+          "Mawlid",
+          "Violence",
+          "Mali",
+          "Coran",
+          "Réconciliation"
+        ],
+        "matrix": [
+          [
+            0,
+            16,
+            12,
+            12,
+            12,
+            9,
+            9,
+            9,
+            8,
+            8,
+            6,
+            6,
+            6,
+            4,
+            4
+          ],
+          [
+            16,
+            0,
+            10,
+            12,
+            11,
+            9,
+            9,
+            7,
+            8,
+            6,
+            6,
+            6,
+            6,
+            4,
+            4
+          ],
+          [
+            12,
+            10,
+            0,
+            9,
+            9,
+            5,
+            4,
+            9,
+            5,
+            8,
+            3,
+            6,
+            3,
+            3,
+            3
+          ],
+          [
+            12,
+            12,
+            9,
+            0,
+            8,
+            8,
+            7,
+            6,
+            7,
+            5,
+            5,
+            6,
+            5,
+            4,
+            3
+          ],
+          [
+            12,
+            11,
+            9,
+            8,
+            0,
+            5,
+            5,
+            8,
+            6,
+            7,
+            3,
+            5,
+            5,
+            2,
+            4
+          ],
+          [
+            9,
+            9,
+            5,
+            8,
+            5,
+            0,
+            6,
+            2,
+            4,
+            2,
+            4,
+            4,
+            4,
+            3,
+            1
+          ],
+          [
+            9,
+            9,
+            4,
+            7,
+            5,
+            6,
+            0,
+            2,
+            4,
+            2,
+            5,
+            4,
+            5,
+            3,
+            0
+          ],
+          [
+            9,
+            7,
+            9,
+            6,
+            8,
+            2,
+            2,
+            0,
+            4,
+            8,
+            2,
+            4,
+            3,
+            2,
+            3
+          ],
+          [
+            8,
+            8,
+            5,
+            7,
+            6,
+            4,
+            4,
+            4,
+            0,
+            3,
+            4,
+            3,
+            4,
+            3,
+            2
+          ],
+          [
+            8,
+            6,
+            8,
+            5,
+            7,
+            2,
+            2,
+            8,
+            3,
+            0,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            6,
+            6,
+            3,
+            5,
+            3,
+            4,
+            5,
+            2,
+            4,
+            2,
+            0,
+            2,
+            4,
+            4,
+            0
+          ],
+          [
+            6,
+            6,
+            6,
+            6,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            2,
+            0,
+            3,
+            2,
+            1
+          ],
+          [
+            6,
+            6,
+            3,
+            5,
+            5,
+            4,
+            5,
+            3,
+            4,
+            3,
+            4,
+            3,
+            0,
+            2,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            2,
+            3,
+            3,
+            2,
+            3,
+            2,
+            4,
+            2,
+            2,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            3,
+            4,
+            1,
+            0,
+            3,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

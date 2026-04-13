@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.623695+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.934390+00:00",
   "entity": {
     "o_id": 13590,
     "title": "Congrès UIB (2019)",
@@ -49,15 +49,6 @@
           "year_max": 2019
         },
         {
-          "name": "Banouto",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2022
-        },
-        {
           "name": "Matin Libre",
           "total": 3,
           "articles": 3,
@@ -74,6 +65,15 @@
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
+        },
+        {
+          "name": "Banouto",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2022
         },
         {
           "name": "24 Heures au Bénin",
@@ -554,17 +554,17 @@
           "count": 6
         },
         {
-          "o_id": 459,
-          "name": "Mosquée centrale de Porto-Novo",
-          "lat": 6.470333,
-          "lng": 2.626611,
-          "count": 4
-        },
-        {
           "o_id": 379,
           "name": "Parakou",
           "lat": 9.33716,
           "lng": 2.63031,
+          "count": 4
+        },
+        {
+          "o_id": 459,
+          "name": "Mosquée centrale de Porto-Novo",
+          "lat": 6.470333,
+          "lng": 2.626611,
           "count": 4
         },
         {
@@ -645,6 +645,464 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 8
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 3
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 18
+              }
+            ],
+            "subjectivite_avg": 2.11,
+            "rated_articles": 18
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 11
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 18
+              }
+            ],
+            "subjectivite_avg": 2.17,
+            "rated_articles": 18
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 10
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 17
+              }
+            ],
+            "subjectivite_avg": 2.28,
+            "rated_articles": 18
+          }
+        },
+        "articles_total": 18
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2019,
+          2022
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            3,
+            13
+          ],
+          [
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            4,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Union Islamique du Bénin",
+          "Bénin",
+          "Unité et divisions",
+          "Cotonou",
+          "Porto-Novo",
+          "Crise",
+          "Médiation",
+          "Houzéifa Amzat",
+          "Imamat",
+          "Patrice Talon",
+          "Réconciliation",
+          "Élections",
+          "Bohicon",
+          "Idrissou Aboubakar Lemanou",
+          "Paix"
+        ],
+        "matrix": [
+          [
+            0,
+            18,
+            14,
+            13,
+            12,
+            10,
+            9,
+            9,
+            8,
+            7,
+            6,
+            6,
+            6,
+            6,
+            5
+          ],
+          [
+            18,
+            0,
+            14,
+            13,
+            12,
+            10,
+            9,
+            9,
+            8,
+            7,
+            6,
+            6,
+            6,
+            6,
+            5
+          ],
+          [
+            14,
+            14,
+            0,
+            9,
+            10,
+            8,
+            7,
+            6,
+            6,
+            7,
+            6,
+            4,
+            4,
+            4,
+            5
+          ],
+          [
+            13,
+            13,
+            9,
+            0,
+            10,
+            7,
+            8,
+            6,
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3
+          ],
+          [
+            12,
+            12,
+            10,
+            10,
+            0,
+            7,
+            7,
+            7,
+            7,
+            4,
+            4,
+            6,
+            5,
+            5,
+            2
+          ],
+          [
+            10,
+            10,
+            8,
+            7,
+            7,
+            0,
+            6,
+            5,
+            5,
+            4,
+            3,
+            5,
+            4,
+            4,
+            3
+          ],
+          [
+            9,
+            9,
+            7,
+            8,
+            7,
+            6,
+            0,
+            2,
+            3,
+            6,
+            4,
+            3,
+            2,
+            2,
+            4
+          ],
+          [
+            9,
+            9,
+            6,
+            6,
+            7,
+            5,
+            2,
+            0,
+            7,
+            0,
+            1,
+            5,
+            6,
+            6,
+            0
+          ],
+          [
+            8,
+            8,
+            6,
+            5,
+            7,
+            5,
+            3,
+            7,
+            0,
+            0,
+            0,
+            5,
+            5,
+            5,
+            0
+          ],
+          [
+            7,
+            7,
+            7,
+            5,
+            4,
+            4,
+            6,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            5
+          ],
+          [
+            6,
+            6,
+            6,
+            5,
+            4,
+            3,
+            4,
+            1,
+            0,
+            5,
+            0,
+            1,
+            1,
+            1,
+            4
+          ],
+          [
+            6,
+            6,
+            4,
+            5,
+            6,
+            5,
+            3,
+            5,
+            5,
+            0,
+            1,
+            0,
+            5,
+            5,
+            0
+          ],
+          [
+            6,
+            6,
+            4,
+            4,
+            5,
+            4,
+            2,
+            6,
+            5,
+            0,
+            1,
+            5,
+            0,
+            6,
+            0
+          ],
+          [
+            6,
+            6,
+            4,
+            4,
+            5,
+            4,
+            2,
+            6,
+            5,
+            0,
+            1,
+            5,
+            6,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            3,
+            2,
+            3,
+            4,
+            0,
+            0,
+            5,
+            4,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

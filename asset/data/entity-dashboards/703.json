@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:20.372864+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:41.122114+00:00",
   "entity": {
     "o_id": 703,
     "title": "Nas-Air Charter Aviation",
@@ -464,34 +464,6 @@
           "count": 2
         },
         {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
-          "count": 1
-        },
-        {
-          "o_id": 386,
-          "name": "Pouytenga",
-          "lat": 12.25162,
-          "lng": -0.42565,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
-          "count": 1
-        },
-        {
-          "o_id": 405,
-          "name": "Ziniaré",
-          "lat": 12.58186,
-          "lng": -1.2971,
-          "count": 1
-        },
-        {
           "o_id": 73295,
           "name": "Indonésie",
           "lat": -2.0,
@@ -503,6 +475,20 @@
           "name": "Malaisie",
           "lat": 3.780511,
           "lng": 102.314362,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
           "count": 1
         },
         {
@@ -534,6 +520,34 @@
           "count": 1
         },
         {
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
+          "count": 1
+        },
+        {
+          "o_id": 386,
+          "name": "Pouytenga",
+          "lat": 12.25162,
+          "lng": -0.42565,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
+          "count": 1
+        },
+        {
           "o_id": 400,
           "name": "Tenkodogo",
           "lat": 11.78,
@@ -546,22 +560,454 @@
           "lat": 18.0,
           "lng": 9.0,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 18
         },
         {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 19
+              }
+            ],
+            "subjectivite_avg": 1.68,
+            "rated_articles": 19
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 19
+              }
+            ],
+            "subjectivite_avg": 1.84,
+            "rated_articles": 19
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 10
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 17
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 19
+          }
+        },
+        "articles_total": 19
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2008,
+          2013,
+          2014,
+          2016
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            8,
+            6
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            0,
+            10,
+            1
+          ],
+          [
+            2,
+            8,
+            7
+          ],
+          [
+            2,
+            9,
+            3
+          ],
+          [
+            3,
+            9,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Hadj",
+          "Ouagadougou",
+          "Arabie saoudite",
+          "Bobo-Dioulasso",
+          "La Mecque",
+          "Burkina Faso",
+          "Djeddah",
+          "Comité National de Suivi du Pèlerinage à la Mecque",
+          "Mahamadi Ouédraogo",
+          "Médine",
+          "Ebola",
+          "Paix",
+          "Gouvernement",
+          "Santé",
+          "Sana Voyages"
+        ],
+        "matrix": [
+          [
+            0,
+            16,
+            11,
+            11,
+            10,
+            9,
+            8,
+            8,
+            7,
+            6,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          [
+            16,
+            0,
+            9,
+            11,
+            8,
+            7,
+            6,
+            6,
+            5,
+            6,
+            4,
+            3,
+            3,
+            2,
+            3
+          ],
+          [
+            11,
+            9,
+            0,
+            7,
+            6,
+            5,
+            5,
+            5,
+            6,
+            4,
+            2,
+            1,
+            2,
+            0,
+            2
+          ],
+          [
+            11,
+            11,
+            7,
+            0,
+            5,
+            4,
+            4,
+            3,
+            4,
+            4,
+            2,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            10,
+            8,
+            6,
+            5,
+            0,
+            8,
+            7,
+            5,
+            5,
+            5,
+            3,
+            4,
+            3,
+            3,
+            2
+          ],
+          [
+            9,
+            7,
+            5,
+            4,
+            8,
+            0,
+            6,
+            6,
+            5,
+            4,
+            3,
+            4,
+            2,
+            3,
+            1
+          ],
+          [
+            8,
+            6,
+            5,
+            4,
+            7,
+            6,
+            0,
+            4,
+            5,
+            4,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            8,
+            6,
+            5,
+            3,
+            5,
+            6,
+            4,
+            0,
+            4,
+            2,
+            1,
+            2,
+            2,
+            3,
+            0
+          ],
+          [
+            7,
+            5,
+            6,
+            4,
+            5,
+            5,
+            5,
+            4,
+            0,
+            2,
+            1,
+            1,
+            2,
+            1,
+            2
+          ],
+          [
+            6,
+            6,
+            4,
+            4,
+            5,
+            4,
+            4,
+            2,
+            2,
+            0,
+            3,
+            3,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            2,
+            2,
+            3,
+            3,
+            1,
+            1,
+            1,
+            3,
+            0,
+            3,
+            1,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            1,
+            1,
+            4,
+            4,
+            2,
+            2,
+            1,
+            3,
+            3,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            1,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            0,
+            1,
+            3,
+            3,
+            2,
+            3,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

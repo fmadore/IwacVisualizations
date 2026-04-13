@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:17.406095+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:37.307496+00:00",
   "entity": {
     "o_id": 76467,
     "title": "Koffikro-Afféma",
@@ -448,17 +448,17 @@
           "count": 4
         },
         {
-          "o_id": 46316,
-          "name": "Adjamé",
-          "lat": 5.3648,
-          "lng": -4.02366,
-          "count": 3
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
           "lng": -4.00167,
+          "count": 3
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
           "count": 3
         },
         {
@@ -467,27 +467,6 @@
           "lat": 5.466667,
           "lng": -3.2,
           "count": 3
-        },
-        {
-          "o_id": 46271,
-          "name": "Gagnoa",
-          "lat": 6.13333,
-          "lng": -5.93333,
-          "count": 2
-        },
-        {
-          "o_id": 46248,
-          "name": "Yamoussoukro",
-          "lat": 6.816111,
-          "lng": -5.274167,
-          "count": 2
-        },
-        {
-          "o_id": 48425,
-          "name": "Divo",
-          "lat": 5.837222,
-          "lng": -5.357222,
-          "count": 2
         },
         {
           "o_id": 23691,
@@ -518,11 +497,25 @@
           "count": 2
         },
         {
-          "o_id": 61326,
-          "name": "San-Pédro",
-          "lat": 4.733333,
-          "lng": -6.633333,
-          "count": 1
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "count": 2
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 2
+        },
+        {
+          "o_id": 48425,
+          "name": "Divo",
+          "lat": 5.837222,
+          "lng": -5.357222,
+          "count": 2
         },
         {
           "o_id": 25602,
@@ -607,8 +600,467 @@
           "lat": 5.5,
           "lng": -3.25,
           "count": 1
+        },
+        {
+          "o_id": 61326,
+          "name": "San-Pédro",
+          "lat": 4.733333,
+          "lng": -6.633333,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 2.29,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 2.29,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1976,
+          1990,
+          2003,
+          2009,
+          2011,
+          2012
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            2,
+            11,
+            2
+          ],
+          [
+            0,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Éducation",
+          "Santé",
+          "Ahmadiyya",
+          "Abengourou",
+          "Londres",
+          "Abidjan",
+          "Mosquée",
+          "Adjamé",
+          "Aboisso",
+          "Coran",
+          "Abobo",
+          "Mirza Ghulam Ahmad",
+          "Grand-Bassam",
+          "Oumé"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            5,
+            5,
+            5,
+            4,
+            3,
+            2,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            0,
+            5,
+            5,
+            5,
+            4,
+            3,
+            2,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            0,
+            5,
+            5,
+            4,
+            3,
+            2,
+            3,
+            1,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            5,
+            0,
+            5,
+            4,
+            3,
+            2,
+            3,
+            1,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            0,
+            4,
+            3,
+            2,
+            3,
+            1,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            2,
+            1,
+            3,
+            1,
+            3,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            0,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            2,
+            1,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            2,
+            1,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }

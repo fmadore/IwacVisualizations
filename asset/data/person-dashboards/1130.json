@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:19.665373+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:19.989183+00:00",
   "person": {
     "o_id": 1130,
     "title": "Moumouni Zoundi Ilboudo",
@@ -536,6 +536,651 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 8
+        }
+      ],
+      "subject": [
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 8
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.12,
+            "rated_articles": 8
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.38,
+            "rated_articles": 8
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 8
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.75,
+            "rated_articles": 8
+          }
+        },
+        "articles_total": 8
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.12,
+            "rated_articles": 8
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.38,
+            "rated_articles": 8
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 8
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.75,
+            "rated_articles": 8
+          }
+        },
+        "articles_total": 8
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            8,
+            3
+          ],
+          [
+            0,
+            2,
+            3
+          ],
+          [
+            0,
+            4,
+            2
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            8,
+            3
+          ],
+          [
+            0,
+            2,
+            3
+          ],
+          [
+            0,
+            4,
+            2
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Hadj",
+          "Siméon Sawadogo",
+          "Comité National de Suivi du Pèlerinage à la Mecque",
+          "Fédération des Associations Islamiques du Burkina",
+          "Santé",
+          "Arabie saoudite",
+          "Moussa Diallo",
+          "Ylkohanno Somé",
+          "Hamadi Baro",
+          "Aboubacar Yugo",
+          "Ouagadougou"
+        ],
+        "matrix": [
+          [
+            0,
+            8,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            8,
+            0,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Hadj",
+          "Siméon Sawadogo",
+          "Comité National de Suivi du Pèlerinage à la Mecque",
+          "Fédération des Associations Islamiques du Burkina",
+          "Santé",
+          "Arabie saoudite",
+          "Moussa Diallo",
+          "Ylkohanno Somé",
+          "Hamadi Baro",
+          "Aboubacar Yugo",
+          "Ouagadougou"
+        ],
+        "matrix": [
+          [
+            0,
+            8,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            8,
+            0,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

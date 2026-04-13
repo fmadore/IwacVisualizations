@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:14.939734+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:34.267772+00:00",
   "entity": {
     "o_id": 60516,
     "title": "Kpélé",
@@ -75,15 +75,6 @@
           "year_max": 2016
         },
         {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2001,
-          "year_max": 2001
-        },
-        {
           "name": "La Nouvelle Marche",
           "total": 1,
           "articles": 1,
@@ -91,6 +82,15 @@
           "country": "Togo",
           "year_min": 1989,
           "year_max": 1989
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2001,
+          "year_max": 2001
         }
       ]
     }
@@ -368,6 +368,20 @@
           "count": 3
         },
         {
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 2
+        },
+        {
           "o_id": 550,
           "name": "Pakistan",
           "lat": 30.0,
@@ -389,24 +403,52 @@
           "count": 2
         },
         {
-          "o_id": 428,
-          "name": "Danemark",
-          "lat": 56.0,
-          "lng": 10.0,
-          "count": 2
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
+          "o_id": 60468,
+          "name": "Danyi-Apéyémé",
+          "lat": 7.25,
+          "lng": 0.95,
+          "count": 1
+        },
+        {
+          "o_id": 60559,
+          "name": "Région des plateaux",
+          "lat": 7.5,
+          "lng": 1.1,
+          "count": 1
         },
         {
           "o_id": 60531,
           "name": "Notsé",
           "lat": 6.948333333333333,
           "lng": 1.1680555555555556,
+          "count": 1
+        },
+        {
+          "o_id": 60522,
+          "name": "Lom-Nava",
+          "lat": 6.732716667,
+          "lng": 0.9893666667,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
           "count": 1
         },
         {
@@ -443,50 +485,549 @@
           "lat": 5.33757653748572,
           "lng": -3.9788409923568815,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 7
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 4
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         },
         {
-          "o_id": 60468,
-          "name": "Danyi-Apéyémé",
-          "lat": 7.25,
-          "lng": 0.95,
-          "count": 1
-        },
-        {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
-          "count": 1
-        },
-        {
-          "o_id": 60559,
-          "name": "Région des plateaux",
-          "lat": 7.5,
-          "lng": 1.1,
-          "count": 1
-        },
-        {
-          "o_id": 60522,
-          "name": "Lom-Nava",
-          "lat": 6.732716667,
-          "lng": 0.9893666667,
-          "count": 1
-        },
-        {
-          "o_id": 457,
-          "name": "Lomé",
-          "lat": 6.12874,
-          "lng": 1.22154,
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 1.69,
+            "rated_articles": 13
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.83,
+            "rated_articles": 13
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 7
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.91,
+            "rated_articles": 13
+          }
+        },
+        "articles_total": 13
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1989,
+          2001,
+          2008,
+          2016,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            5,
+            2,
+            1
+          ],
+          [
+            5,
+            3,
+            2
+          ],
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            5,
+            4,
+            2
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Agou",
+          "Kloto",
+          "Kpalimé",
+          "Danyi",
+          "Adéta",
+          "Togo",
+          "Agou-Gadzépé",
+          "Danemark",
+          "Arabie saoudite",
+          "Pakistan",
+          "Humanity First",
+          "Ahmadiyya",
+          "Allemagne",
+          "Haho",
+          "La Mecque"
+        ],
+        "matrix": [
+          [
+            0,
+            9,
+            8,
+            7,
+            4,
+            2,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            9,
+            0,
+            8,
+            7,
+            4,
+            2,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            8,
+            8,
+            0,
+            7,
+            3,
+            2,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            7,
+            7,
+            7,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            2,
+            0,
+            0,
+            3,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            3,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

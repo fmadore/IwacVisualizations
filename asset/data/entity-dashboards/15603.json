@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:21.602777+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:42.767628+00:00",
   "entity": {
     "o_id": 15603,
     "title": "Ensemble Agence de Voyage du Togo pour le Hadj",
@@ -332,6 +332,13 @@
           "count": 5
         },
         {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 3
+        },
+        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
@@ -346,24 +353,17 @@
           "count": 3
         },
         {
-          "o_id": 457,
-          "name": "Lomé",
-          "lat": 6.12874,
-          "lng": 1.22154,
-          "count": 3
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
+          "count": 2
         },
         {
           "o_id": 538,
           "name": "Maison du Hadj",
           "lat": 6.181735,
           "lng": 1.255005,
-          "count": 2
-        },
-        {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
           "count": 2
         },
         {
@@ -381,6 +381,456 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 6
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 1.71,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2008,
+          2010,
+          2015,
+          2017,
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            5,
+            7,
+            3
+          ],
+          [
+            4,
+            5,
+            2
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Hadj",
+          "Togo",
+          "La Mecque",
+          "Moussouloumi Boukari",
+          "Union Musulmane du Togo",
+          "Mohamed Atcha Titikpina",
+          "Commission Nationale du Hadj",
+          "Lomé",
+          "Arabie saoudite",
+          "Médine",
+          "Mont Arafat",
+          "Sani Karim",
+          "Moitapari Kouko",
+          "Maison du Hadj",
+          "Terrorisme"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            5,
+            5,
+            5,
+            4,
+            4,
+            2,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            0,
+            5,
+            5,
+            3,
+            3,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            5,
+            5,
+            0,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            5,
+            5,
+            4,
+            0,
+            2,
+            2,
+            4,
+            1,
+            2,
+            3,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            5,
+            3,
+            3,
+            2,
+            0,
+            3,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            3,
+            3,
+            2,
+            3,
+            0,
+            1,
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            1,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            3,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            3,
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            2,
+            1,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:25.275751+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:26.991677+00:00",
   "person": {
     "o_id": 1023,
     "title": "Djiguiba Cissé",
@@ -4085,6 +4085,2752 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 47
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 33
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 22
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 16
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 15
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 13
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 10
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 8
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 8
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 6
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 6
+        },
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 6
+        }
+      ],
+      "subject": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 47
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 33
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 22
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 16
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 15
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 13
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 10
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 8
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 8
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 6
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 6
+        },
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 6
+        }
+      ],
+      "creator": [
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 2
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 37
+              },
+              {
+                "name": "Positif",
+                "count": 116
+              },
+              {
+                "name": "Neutre",
+                "count": 46
+              },
+              {
+                "name": "Négatif",
+                "count": 15
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 177
+              },
+              {
+                "name": "Central",
+                "count": 26
+              },
+              {
+                "name": "Secondaire",
+                "count": 6
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.46,
+            "rated_articles": 215
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 14
+              },
+              {
+                "name": "Positif",
+                "count": 155
+              },
+              {
+                "name": "Neutre",
+                "count": 35
+              },
+              {
+                "name": "Négatif",
+                "count": 9
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 164
+              },
+              {
+                "name": "Central",
+                "count": 35
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.77,
+            "rated_articles": 215
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 9
+              },
+              {
+                "name": "Positif",
+                "count": 129
+              },
+              {
+                "name": "Neutre",
+                "count": 51
+              },
+              {
+                "name": "Négatif",
+                "count": 22
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 41
+              },
+              {
+                "name": "Central",
+                "count": 159
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 5
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.33,
+            "rated_articles": 215
+          }
+        },
+        "articles_total": 215
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 36
+              },
+              {
+                "name": "Positif",
+                "count": 116
+              },
+              {
+                "name": "Neutre",
+                "count": 46
+              },
+              {
+                "name": "Négatif",
+                "count": 15
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 176
+              },
+              {
+                "name": "Central",
+                "count": 26
+              },
+              {
+                "name": "Secondaire",
+                "count": 6
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.45,
+            "rated_articles": 214
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 13
+              },
+              {
+                "name": "Positif",
+                "count": 155
+              },
+              {
+                "name": "Neutre",
+                "count": 35
+              },
+              {
+                "name": "Négatif",
+                "count": 9
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 163
+              },
+              {
+                "name": "Central",
+                "count": 35
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.76,
+            "rated_articles": 214
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 8
+              },
+              {
+                "name": "Positif",
+                "count": 129
+              },
+              {
+                "name": "Neutre",
+                "count": 51
+              },
+              {
+                "name": "Négatif",
+                "count": 22
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 40
+              },
+              {
+                "name": "Central",
+                "count": 159
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 5
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.33,
+            "rated_articles": 214
+          }
+        },
+        "articles_total": 214
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 4.8,
+            "rated_articles": 5
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 4.4,
+            "rated_articles": 5
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 3.2,
+            "rated_articles": 5
+          }
+        },
+        "articles_total": 5
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1991,
+          1992,
+          1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            8,
+            8,
+            2
+          ],
+          [
+            28,
+            4,
+            2
+          ],
+          [
+            24,
+            1,
+            1
+          ],
+          [
+            10,
+            5,
+            4
+          ],
+          [
+            10,
+            11,
+            1
+          ],
+          [
+            11,
+            5,
+            1
+          ],
+          [
+            12,
+            11,
+            1
+          ],
+          [
+            13,
+            4,
+            1
+          ],
+          [
+            15,
+            7,
+            5
+          ],
+          [
+            15,
+            10,
+            3
+          ],
+          [
+            16,
+            5,
+            4
+          ],
+          [
+            23,
+            1,
+            2
+          ],
+          [
+            17,
+            11,
+            3
+          ],
+          [
+            19,
+            6,
+            2
+          ],
+          [
+            21,
+            9,
+            2
+          ],
+          [
+            22,
+            3,
+            2
+          ],
+          [
+            22,
+            8,
+            4
+          ],
+          [
+            23,
+            5,
+            2
+          ],
+          [
+            25,
+            10,
+            2
+          ],
+          [
+            25,
+            3,
+            5
+          ],
+          [
+            25,
+            4,
+            1
+          ],
+          [
+            8,
+            2,
+            2
+          ],
+          [
+            8,
+            5,
+            4
+          ],
+          [
+            9,
+            7,
+            6
+          ],
+          [
+            9,
+            8,
+            1
+          ],
+          [
+            9,
+            9,
+            1
+          ],
+          [
+            10,
+            9,
+            1
+          ],
+          [
+            12,
+            3,
+            1
+          ],
+          [
+            13,
+            1,
+            3
+          ],
+          [
+            25,
+            5,
+            1
+          ],
+          [
+            25,
+            7,
+            1
+          ],
+          [
+            4,
+            1,
+            4
+          ],
+          [
+            4,
+            2,
+            2
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            4,
+            0,
+            3
+          ],
+          [
+            3,
+            7,
+            5
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            2,
+            3
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            2,
+            2,
+            3
+          ],
+          [
+            4,
+            3,
+            2
+          ],
+          [
+            7,
+            3,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            2,
+            7,
+            2
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            5,
+            6,
+            2
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            5,
+            1,
+            10
+          ],
+          [
+            4,
+            7,
+            2
+          ],
+          [
+            7,
+            2,
+            2
+          ],
+          [
+            8,
+            6,
+            1
+          ],
+          [
+            8,
+            3,
+            6
+          ],
+          [
+            8,
+            0,
+            3
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            7,
+            10,
+            2
+          ],
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            17,
+            9,
+            1
+          ],
+          [
+            17,
+            10,
+            2
+          ],
+          [
+            17,
+            0,
+            1
+          ],
+          [
+            17,
+            1,
+            1
+          ],
+          [
+            13,
+            5,
+            3
+          ],
+          [
+            16,
+            2,
+            3
+          ],
+          [
+            16,
+            1,
+            8
+          ],
+          [
+            16,
+            0,
+            1
+          ],
+          [
+            15,
+            11,
+            2
+          ],
+          [
+            15,
+            6,
+            1
+          ],
+          [
+            15,
+            1,
+            2
+          ],
+          [
+            14,
+            10,
+            1
+          ],
+          [
+            14,
+            9,
+            2
+          ],
+          [
+            14,
+            8,
+            3
+          ],
+          [
+            14,
+            7,
+            5
+          ],
+          [
+            14,
+            4,
+            1
+          ],
+          [
+            22,
+            10,
+            1
+          ],
+          [
+            5,
+            2,
+            1
+          ],
+          [
+            18,
+            7,
+            2
+          ],
+          [
+            18,
+            2,
+            2
+          ],
+          [
+            12,
+            7,
+            1
+          ],
+          [
+            11,
+            3,
+            1
+          ],
+          [
+            19,
+            0,
+            1
+          ],
+          [
+            18,
+            8,
+            2
+          ],
+          [
+            18,
+            5,
+            1
+          ],
+          [
+            20,
+            10,
+            1
+          ],
+          [
+            20,
+            7,
+            1
+          ],
+          [
+            19,
+            9,
+            1
+          ],
+          [
+            11,
+            10,
+            1
+          ],
+          [
+            22,
+            7,
+            1
+          ],
+          [
+            15,
+            4,
+            2
+          ],
+          [
+            16,
+            6,
+            1
+          ],
+          [
+            13,
+            7,
+            1
+          ],
+          [
+            14,
+            11,
+            4
+          ],
+          [
+            13,
+            6,
+            1
+          ],
+          [
+            15,
+            3,
+            2
+          ],
+          [
+            14,
+            1,
+            1
+          ],
+          [
+            18,
+            10,
+            1
+          ],
+          [
+            27,
+            1,
+            1
+          ],
+          [
+            27,
+            4,
+            4
+          ],
+          [
+            27,
+            10,
+            2
+          ],
+          [
+            29,
+            0,
+            1
+          ],
+          [
+            28,
+            11,
+            1
+          ],
+          [
+            23,
+            3,
+            2
+          ],
+          [
+            23,
+            11,
+            2
+          ],
+          [
+            9,
+            4,
+            1
+          ],
+          [
+            9,
+            0,
+            2
+          ],
+          [
+            16,
+            9,
+            2
+          ],
+          [
+            27,
+            9,
+            1
+          ],
+          [
+            22,
+            9,
+            1
+          ],
+          [
+            19,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            24,
+            8,
+            1
+          ],
+          [
+            26,
+            1,
+            1
+          ],
+          [
+            28,
+            6,
+            1
+          ],
+          [
+            15,
+            8,
+            1
+          ],
+          [
+            15,
+            9,
+            1
+          ],
+          [
+            18,
+            0,
+            1
+          ],
+          [
+            18,
+            3,
+            1
+          ],
+          [
+            20,
+            5,
+            1
+          ],
+          [
+            13,
+            9,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          1991,
+          1992,
+          1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            8,
+            8,
+            2
+          ],
+          [
+            28,
+            4,
+            2
+          ],
+          [
+            24,
+            1,
+            1
+          ],
+          [
+            10,
+            5,
+            4
+          ],
+          [
+            10,
+            11,
+            1
+          ],
+          [
+            11,
+            5,
+            1
+          ],
+          [
+            12,
+            11,
+            1
+          ],
+          [
+            13,
+            4,
+            1
+          ],
+          [
+            15,
+            7,
+            5
+          ],
+          [
+            15,
+            10,
+            3
+          ],
+          [
+            16,
+            5,
+            4
+          ],
+          [
+            23,
+            1,
+            2
+          ],
+          [
+            17,
+            11,
+            3
+          ],
+          [
+            19,
+            6,
+            2
+          ],
+          [
+            21,
+            9,
+            2
+          ],
+          [
+            22,
+            3,
+            2
+          ],
+          [
+            22,
+            8,
+            4
+          ],
+          [
+            23,
+            5,
+            2
+          ],
+          [
+            25,
+            10,
+            2
+          ],
+          [
+            25,
+            3,
+            5
+          ],
+          [
+            25,
+            4,
+            1
+          ],
+          [
+            8,
+            2,
+            2
+          ],
+          [
+            8,
+            5,
+            4
+          ],
+          [
+            9,
+            7,
+            6
+          ],
+          [
+            9,
+            8,
+            1
+          ],
+          [
+            9,
+            9,
+            1
+          ],
+          [
+            10,
+            9,
+            1
+          ],
+          [
+            12,
+            3,
+            1
+          ],
+          [
+            13,
+            1,
+            3
+          ],
+          [
+            25,
+            5,
+            1
+          ],
+          [
+            25,
+            7,
+            1
+          ],
+          [
+            4,
+            1,
+            4
+          ],
+          [
+            4,
+            2,
+            2
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            4,
+            0,
+            3
+          ],
+          [
+            3,
+            7,
+            5
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            3,
+            2,
+            3
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            2,
+            2,
+            3
+          ],
+          [
+            4,
+            3,
+            2
+          ],
+          [
+            7,
+            3,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            2,
+            7,
+            2
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            5,
+            6,
+            2
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            5,
+            1,
+            9
+          ],
+          [
+            4,
+            7,
+            2
+          ],
+          [
+            7,
+            2,
+            2
+          ],
+          [
+            8,
+            6,
+            1
+          ],
+          [
+            8,
+            3,
+            6
+          ],
+          [
+            8,
+            0,
+            3
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            7,
+            10,
+            2
+          ],
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            17,
+            9,
+            1
+          ],
+          [
+            17,
+            10,
+            2
+          ],
+          [
+            17,
+            0,
+            1
+          ],
+          [
+            17,
+            1,
+            1
+          ],
+          [
+            13,
+            5,
+            3
+          ],
+          [
+            16,
+            2,
+            3
+          ],
+          [
+            16,
+            1,
+            8
+          ],
+          [
+            16,
+            0,
+            1
+          ],
+          [
+            15,
+            11,
+            2
+          ],
+          [
+            15,
+            6,
+            1
+          ],
+          [
+            15,
+            1,
+            2
+          ],
+          [
+            14,
+            10,
+            1
+          ],
+          [
+            14,
+            9,
+            2
+          ],
+          [
+            14,
+            8,
+            3
+          ],
+          [
+            14,
+            7,
+            5
+          ],
+          [
+            14,
+            4,
+            1
+          ],
+          [
+            22,
+            10,
+            1
+          ],
+          [
+            5,
+            2,
+            1
+          ],
+          [
+            18,
+            7,
+            2
+          ],
+          [
+            18,
+            2,
+            2
+          ],
+          [
+            12,
+            7,
+            1
+          ],
+          [
+            11,
+            3,
+            1
+          ],
+          [
+            19,
+            0,
+            1
+          ],
+          [
+            18,
+            8,
+            2
+          ],
+          [
+            18,
+            5,
+            1
+          ],
+          [
+            20,
+            10,
+            1
+          ],
+          [
+            20,
+            7,
+            1
+          ],
+          [
+            19,
+            9,
+            1
+          ],
+          [
+            11,
+            10,
+            1
+          ],
+          [
+            22,
+            7,
+            1
+          ],
+          [
+            15,
+            4,
+            2
+          ],
+          [
+            16,
+            6,
+            1
+          ],
+          [
+            13,
+            7,
+            1
+          ],
+          [
+            14,
+            11,
+            4
+          ],
+          [
+            13,
+            6,
+            1
+          ],
+          [
+            15,
+            3,
+            2
+          ],
+          [
+            14,
+            1,
+            1
+          ],
+          [
+            18,
+            10,
+            1
+          ],
+          [
+            27,
+            1,
+            1
+          ],
+          [
+            27,
+            4,
+            4
+          ],
+          [
+            27,
+            10,
+            2
+          ],
+          [
+            29,
+            0,
+            1
+          ],
+          [
+            28,
+            11,
+            1
+          ],
+          [
+            23,
+            3,
+            2
+          ],
+          [
+            23,
+            11,
+            2
+          ],
+          [
+            9,
+            4,
+            1
+          ],
+          [
+            9,
+            0,
+            2
+          ],
+          [
+            16,
+            9,
+            2
+          ],
+          [
+            27,
+            9,
+            1
+          ],
+          [
+            22,
+            9,
+            1
+          ],
+          [
+            19,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            24,
+            8,
+            1
+          ],
+          [
+            26,
+            1,
+            1
+          ],
+          [
+            28,
+            6,
+            1
+          ],
+          [
+            15,
+            8,
+            1
+          ],
+          [
+            15,
+            9,
+            1
+          ],
+          [
+            18,
+            0,
+            1
+          ],
+          [
+            18,
+            3,
+            1
+          ],
+          [
+            20,
+            5,
+            1
+          ],
+          [
+            13,
+            9,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [
+          1993,
+          1994,
+          1996,
+          1999
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            3,
+            5,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Conseil National Islamique",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Politique",
+          "Prière",
+          "Paix",
+          "Idriss Koudouss Koné",
+          "Aboubacar Fofana",
+          "Radio Al Bayane",
+          "Mahomet",
+          "Éducation",
+          "Coran",
+          "Mosquée",
+          "Ramadan",
+          "Conflit",
+          "Henri Konan Bédié"
+        ],
+        "matrix": [
+          [
+            0,
+            48,
+            36,
+            29,
+            27,
+            47,
+            31,
+            10,
+            28,
+            17,
+            14,
+            21,
+            18,
+            19,
+            28
+          ],
+          [
+            48,
+            0,
+            27,
+            24,
+            28,
+            24,
+            37,
+            16,
+            20,
+            15,
+            9,
+            15,
+            13,
+            16,
+            17
+          ],
+          [
+            36,
+            27,
+            0,
+            9,
+            22,
+            23,
+            18,
+            4,
+            11,
+            8,
+            5,
+            9,
+            5,
+            21,
+            17
+          ],
+          [
+            29,
+            24,
+            9,
+            0,
+            18,
+            15,
+            15,
+            10,
+            28,
+            14,
+            24,
+            16,
+            19,
+            4,
+            12
+          ],
+          [
+            27,
+            28,
+            22,
+            18,
+            0,
+            14,
+            16,
+            9,
+            19,
+            12,
+            14,
+            11,
+            14,
+            10,
+            10
+          ],
+          [
+            47,
+            24,
+            23,
+            15,
+            14,
+            0,
+            19,
+            7,
+            18,
+            9,
+            9,
+            8,
+            6,
+            12,
+            17
+          ],
+          [
+            31,
+            37,
+            18,
+            15,
+            16,
+            19,
+            0,
+            9,
+            12,
+            12,
+            5,
+            9,
+            9,
+            12,
+            9
+          ],
+          [
+            10,
+            16,
+            4,
+            10,
+            9,
+            7,
+            9,
+            0,
+            7,
+            13,
+            7,
+            5,
+            8,
+            2,
+            2
+          ],
+          [
+            28,
+            20,
+            11,
+            28,
+            19,
+            18,
+            12,
+            7,
+            0,
+            16,
+            25,
+            12,
+            13,
+            3,
+            10
+          ],
+          [
+            17,
+            15,
+            8,
+            14,
+            12,
+            9,
+            12,
+            13,
+            16,
+            0,
+            13,
+            10,
+            6,
+            5,
+            8
+          ],
+          [
+            14,
+            9,
+            5,
+            24,
+            14,
+            9,
+            5,
+            7,
+            25,
+            13,
+            0,
+            8,
+            14,
+            1,
+            5
+          ],
+          [
+            21,
+            15,
+            9,
+            16,
+            11,
+            8,
+            9,
+            5,
+            12,
+            10,
+            8,
+            0,
+            11,
+            4,
+            16
+          ],
+          [
+            18,
+            13,
+            5,
+            19,
+            14,
+            6,
+            9,
+            8,
+            13,
+            6,
+            14,
+            11,
+            0,
+            4,
+            6
+          ],
+          [
+            19,
+            16,
+            21,
+            4,
+            10,
+            12,
+            12,
+            2,
+            3,
+            5,
+            1,
+            4,
+            4,
+            0,
+            9
+          ],
+          [
+            28,
+            17,
+            17,
+            12,
+            10,
+            17,
+            9,
+            2,
+            10,
+            8,
+            5,
+            16,
+            6,
+            9,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Conseil National Islamique",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Politique",
+          "Prière",
+          "Idriss Koudouss Koné",
+          "Paix",
+          "Radio Al Bayane",
+          "Aboubacar Fofana",
+          "Mahomet",
+          "Éducation",
+          "Coran",
+          "Mosquée",
+          "Ramadan",
+          "Henri Konan Bédié",
+          "Conflit"
+        ],
+        "matrix": [
+          [
+            0,
+            47,
+            35,
+            29,
+            47,
+            26,
+            10,
+            30,
+            28,
+            17,
+            14,
+            21,
+            17,
+            28,
+            18
+          ],
+          [
+            47,
+            0,
+            26,
+            24,
+            24,
+            27,
+            16,
+            36,
+            20,
+            15,
+            9,
+            15,
+            12,
+            17,
+            15
+          ],
+          [
+            35,
+            26,
+            0,
+            9,
+            23,
+            21,
+            4,
+            17,
+            11,
+            8,
+            5,
+            9,
+            4,
+            17,
+            20
+          ],
+          [
+            29,
+            24,
+            9,
+            0,
+            15,
+            18,
+            10,
+            15,
+            28,
+            14,
+            24,
+            16,
+            19,
+            12,
+            4
+          ],
+          [
+            47,
+            24,
+            23,
+            15,
+            0,
+            14,
+            7,
+            19,
+            18,
+            9,
+            9,
+            8,
+            6,
+            17,
+            12
+          ],
+          [
+            26,
+            27,
+            21,
+            18,
+            14,
+            0,
+            9,
+            15,
+            19,
+            12,
+            14,
+            11,
+            13,
+            10,
+            9
+          ],
+          [
+            10,
+            16,
+            4,
+            10,
+            7,
+            9,
+            0,
+            9,
+            7,
+            13,
+            7,
+            5,
+            8,
+            2,
+            2
+          ],
+          [
+            30,
+            36,
+            17,
+            15,
+            19,
+            15,
+            9,
+            0,
+            12,
+            12,
+            5,
+            9,
+            8,
+            9,
+            11
+          ],
+          [
+            28,
+            20,
+            11,
+            28,
+            18,
+            19,
+            7,
+            12,
+            0,
+            16,
+            25,
+            12,
+            13,
+            10,
+            3
+          ],
+          [
+            17,
+            15,
+            8,
+            14,
+            9,
+            12,
+            13,
+            12,
+            16,
+            0,
+            13,
+            10,
+            6,
+            8,
+            5
+          ],
+          [
+            14,
+            9,
+            5,
+            24,
+            9,
+            14,
+            7,
+            5,
+            25,
+            13,
+            0,
+            8,
+            14,
+            5,
+            1
+          ],
+          [
+            21,
+            15,
+            9,
+            16,
+            8,
+            11,
+            5,
+            9,
+            12,
+            10,
+            8,
+            0,
+            11,
+            16,
+            4
+          ],
+          [
+            17,
+            12,
+            4,
+            19,
+            6,
+            13,
+            8,
+            8,
+            13,
+            6,
+            14,
+            11,
+            0,
+            6,
+            3
+          ],
+          [
+            28,
+            17,
+            17,
+            12,
+            17,
+            10,
+            2,
+            9,
+            10,
+            8,
+            5,
+            16,
+            6,
+            0,
+            9
+          ],
+          [
+            18,
+            15,
+            20,
+            4,
+            12,
+            9,
+            2,
+            11,
+            3,
+            5,
+            1,
+            4,
+            3,
+            9,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [
+          "Conseil National Islamique",
+          "Pluralisme religieux",
+          "Politique",
+          "Paix",
+          "Mahomet",
+          "Moïse",
+          "Ramadan",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Aboubacar Fofana",
+          "Solidarité",
+          "Conflit",
+          "Aïd el-Fitr",
+          "Abobo",
+          "Ivoirité",
+          "Intégrisme"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            3,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            3,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

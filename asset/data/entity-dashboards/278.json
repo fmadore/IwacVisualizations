@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:00.270284+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:14.488692+00:00",
   "entity": {
     "o_id": 278,
     "title": "Athiémé",
@@ -494,13 +494,6 @@
           "count": 4
         },
         {
-          "o_id": 322,
-          "name": "Grand Popo",
-          "lat": 6.28333,
-          "lng": 1.83333,
-          "count": 2
-        },
-        {
           "o_id": 270,
           "name": "Abomey",
           "lat": 7.18286,
@@ -529,18 +522,11 @@
           "count": 2
         },
         {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
-          "count": 1
-        },
-        {
-          "o_id": 406,
-          "name": "Zogbodomey",
-          "lat": 7.018,
-          "lng": 2.183,
-          "count": 1
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "count": 2
         },
         {
           "o_id": 275,
@@ -571,6 +557,13 @@
           "count": 1
         },
         {
+          "o_id": 62024,
+          "name": "Couffo",
+          "lat": 6.961944,
+          "lng": 1.801667,
+          "count": 1
+        },
+        {
           "o_id": 351,
           "name": "Koweït",
           "lat": 29.5,
@@ -582,6 +575,20 @@
           "name": "Djakotomey",
           "lat": 6.9,
           "lng": 1.716667,
+          "count": 1
+        },
+        {
+          "o_id": 406,
+          "name": "Zogbodomey",
+          "lat": 7.018,
+          "lng": 2.183,
+          "count": 1
+        },
+        {
+          "o_id": 297,
+          "name": "Comè",
+          "lat": 6.40764,
+          "lng": 1.88198,
           "count": 1
         },
         {
@@ -613,20 +620,574 @@
           "count": 1
         },
         {
-          "o_id": 62024,
-          "name": "Couffo",
-          "lat": 6.961944,
-          "lng": 1.801667,
-          "count": 1
-        },
-        {
-          "o_id": 297,
-          "name": "Comè",
-          "lat": 6.40764,
-          "lng": 1.88198,
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 1
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 10
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.8,
+            "rated_articles": 11
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.9,
+            "rated_articles": 11
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 11
+          }
+        },
+        "articles_total": 11
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1984,
+          1993,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            5,
+            1,
+            3
+          ],
+          [
+            5,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Mono",
+          "Charité",
+          "Bénin",
+          "Ahmadiyya",
+          "Rana Farooq Ahmad",
+          "Prière",
+          "Lokossa",
+          "Porto-Novo",
+          "Solidarité",
+          "Jama'at Islamique Ahmadiyya Bénin",
+          "Santé",
+          "Ramadan",
+          "Jeûne",
+          "Développement",
+          "Abomey"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            5,
+            6,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            1
+          ],
+          [
+            6,
+            0,
+            4,
+            6,
+            4,
+            3,
+            3,
+            3,
+            4,
+            4,
+            3,
+            3,
+            3,
+            0,
+            1
+          ],
+          [
+            5,
+            4,
+            0,
+            5,
+            5,
+            2,
+            3,
+            4,
+            3,
+            4,
+            3,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            6,
+            6,
+            5,
+            0,
+            5,
+            3,
+            4,
+            3,
+            4,
+            4,
+            3,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            5,
+            5,
+            0,
+            1,
+            2,
+            3,
+            3,
+            4,
+            3,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            2,
+            3,
+            1,
+            0,
+            4,
+            0,
+            1,
+            0,
+            0,
+            3,
+            3,
+            1,
+            0
+          ],
+          [
+            4,
+            3,
+            3,
+            4,
+            2,
+            4,
+            0,
+            0,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            4,
+            3,
+            3,
+            0,
+            0,
+            0,
+            2,
+            3,
+            3,
+            0,
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            4,
+            3,
+            4,
+            3,
+            1,
+            2,
+            2,
+            0,
+            3,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            3,
+            4,
+            4,
+            4,
+            4,
+            0,
+            1,
+            3,
+            3,
+            0,
+            3,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            3,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            0,
+            3,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            0,
+            3,
+            2,
+            0,
+            1,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

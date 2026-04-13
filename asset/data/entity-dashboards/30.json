@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:27.289005+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:50.823870+00:00",
   "entity": {
     "o_id": 30,
     "title": "Peul",
@@ -71,6 +71,24 @@
           "year_max": 2018
         },
         {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
           "name": "LeFaso.net",
           "total": 1,
           "articles": 1,
@@ -96,24 +114,6 @@
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
-        },
-        {
-          "name": "Fraternité",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2022,
-          "year_max": 2022
-        },
-        {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2020,
-          "year_max": 2020
         }
       ]
     }
@@ -239,17 +239,17 @@
             "score": 2.2877
           },
           {
-            "o_id": 284,
-            "title": "Bobo-Dioulasso",
-            "type": "Lieux",
-            "cooc": 2,
-            "score": 2.2219
-          },
-          {
             "o_id": 283,
             "title": "Bénin",
             "type": "Lieux",
             "cooc": 3,
+            "score": 2.2219
+          },
+          {
+            "o_id": 284,
+            "title": "Bobo-Dioulasso",
+            "type": "Lieux",
+            "cooc": 2,
             "score": 2.2219
           },
           {
@@ -369,15 +369,15 @@
           },
           {
             "source": 30,
-            "target": 284,
-            "weight": 2.2219,
-            "cooc": 2
-          },
-          {
-            "source": 30,
             "target": 283,
             "weight": 2.2219,
             "cooc": 3
+          },
+          {
+            "source": 30,
+            "target": 284,
+            "weight": 2.2219,
+            "cooc": 2
           },
           {
             "source": 30,
@@ -424,13 +424,6 @@
           "count": 4
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 3
-        },
-        {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
@@ -438,38 +431,17 @@
           "count": 3
         },
         {
-          "o_id": 540,
-          "name": "Niger",
+          "o_id": 357,
+          "name": "Mali",
           "lat": 18.0,
-          "lng": 9.0,
-          "count": 2
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 2
+          "lng": -2.0,
+          "count": 3
         },
         {
           "o_id": 397,
           "name": "Soum",
           "lat": 14.1,
           "lng": -1.633333,
-          "count": 2
-        },
-        {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
-          "count": 2
-        },
-        {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
           "count": 2
         },
         {
@@ -487,87 +459,45 @@
           "count": 2
         },
         {
-          "o_id": 33161,
-          "name": "Sebba",
-          "lat": 13.43916667,
-          "lng": 0.52888889,
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 2
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
           "count": 1
         },
         {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 410,
-          "name": "Tchad",
-          "lat": 15.0,
-          "lng": 19.0,
-          "count": 1
-        },
-        {
-          "o_id": 320,
-          "name": "Gorom-Gorom",
-          "lat": 14.45417,
-          "lng": -0.21895,
-          "count": 1
-        },
-        {
-          "o_id": 60497,
-          "name": "Gao",
-          "lat": 16.266666666667,
-          "lng": -0.05,
-          "count": 1
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 1
-        },
-        {
-          "o_id": 76344,
-          "name": "Atacora",
-          "lat": 10.3,
-          "lng": 1.366667,
-          "count": 1
-        },
-        {
-          "o_id": 308,
-          "name": "Égypte",
-          "lat": 27.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 1
-        },
-        {
-          "o_id": 352,
-          "name": "Léo",
-          "lat": 11.10033,
-          "lng": -2.10654,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
-          "count": 1
-        },
-        {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
+          "o_id": 369,
+          "name": "Nassoumbou",
+          "lat": 14.4089,
+          "lng": -1.5507,
           "count": 1
         },
         {
@@ -613,20 +543,564 @@
           "count": 1
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
+          "o_id": 76344,
+          "name": "Atacora",
+          "lat": 10.3,
+          "lng": 1.366667,
           "count": 1
         },
         {
-          "o_id": 369,
-          "name": "Nassoumbou",
-          "lat": 14.4089,
-          "lng": -1.5507,
+          "o_id": 33161,
+          "name": "Sebba",
+          "lat": 13.43916667,
+          "lng": 0.52888889,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 320,
+          "name": "Gorom-Gorom",
+          "lat": 14.45417,
+          "lng": -0.21895,
+          "count": 1
+        },
+        {
+          "o_id": 60497,
+          "name": "Gao",
+          "lat": 16.266666666667,
+          "lng": -0.05,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 352,
+          "name": "Léo",
+          "lat": 11.10033,
+          "lng": -2.10654,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 1
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 4
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.43,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.14,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.57,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2020,
+          2022,
+          2023
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            3,
+            1,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Terrorisme",
+          "Radicalisation",
+          "Burkina Faso",
+          "Extrémisme",
+          "Bénin",
+          "Mali",
+          "Cohésion sociale",
+          "Soum",
+          "Gouvernance",
+          "Djibo",
+          "Sécurité",
+          "Dori",
+          "Ibrahim Malam Dicko",
+          "Cohabitation religieuse",
+          "Nigéria"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            4,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            6,
+            0,
+            4,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
+            4,
+            0,
+            3,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            0,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

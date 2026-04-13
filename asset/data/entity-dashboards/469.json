@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:07.556549+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:25.289316+00:00",
   "entity": {
     "o_id": 469,
     "title": "Mosquée centrale de Natitingou",
@@ -79,15 +79,6 @@
           "year_max": 2018
         },
         {
-          "name": "24 Heures au Bénin",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2013,
-          "year_max": 2013
-        },
-        {
           "name": "Matin Libre",
           "total": 1,
           "articles": 1,
@@ -95,6 +86,15 @@
           "country": "Bénin",
           "year_min": 2016,
           "year_max": 2016
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2013
         },
         {
           "name": "Fraternité",
@@ -826,6 +826,20 @@
           "count": 3
         },
         {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 2
+        },
+        {
           "o_id": 385,
           "name": "Porto-Novo",
           "lat": 6.49646,
@@ -847,31 +861,17 @@
           "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 2
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 1
         },
         {
           "o_id": 305,
           "name": "Djougou",
           "lat": 9.70853,
           "lng": 1.66598,
-          "count": 1
-        },
-        {
-          "o_id": 286,
-          "name": "Bohicon",
-          "lat": 7.17826,
-          "lng": 2.0667,
           "count": 1
         },
         {
@@ -896,6 +896,556 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 16
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 2
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 12
+              },
+              {
+                "name": "Neutre",
+                "count": 8
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 24
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.68,
+            "rated_articles": 25
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 15
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 24
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.24,
+            "rated_articles": 25
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 12
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 25
+              }
+            ],
+            "subjectivite_avg": 2.24,
+            "rated_articles": 25
+          }
+        },
+        "articles_total": 25
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            6,
+            3
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            6,
+            5,
+            3
+          ],
+          [
+            5,
+            5,
+            1
+          ],
+          [
+            5,
+            7,
+            2
+          ],
+          [
+            6,
+            4,
+            1
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            7,
+            5,
+            2
+          ],
+          [
+            4,
+            1,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            0,
+            7,
+            2
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            7,
+            6,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Natitingou",
+          "Nourou Dine Mouhamed Sanni",
+          "Atacora",
+          "Prière",
+          "Bénin",
+          "Mosquée",
+          "Union Islamique du Bénin",
+          "Paix",
+          "Imamat",
+          "Covid-19",
+          "Ramadan",
+          "Lydie Déré Chabi Nah",
+          "Pluralisme religieux",
+          "Aïd al-Adha (Tabaski)",
+          "Sécurité"
+        ],
+        "matrix": [
+          [
+            0,
+            19,
+            14,
+            13,
+            13,
+            12,
+            9,
+            9,
+            8,
+            8,
+            7,
+            6,
+            6,
+            6,
+            5
+          ],
+          [
+            19,
+            0,
+            12,
+            12,
+            9,
+            10,
+            6,
+            5,
+            7,
+            7,
+            7,
+            5,
+            4,
+            5,
+            5
+          ],
+          [
+            14,
+            12,
+            0,
+            9,
+            8,
+            6,
+            3,
+            5,
+            4,
+            5,
+            4,
+            6,
+            5,
+            5,
+            3
+          ],
+          [
+            13,
+            12,
+            9,
+            0,
+            7,
+            8,
+            3,
+            6,
+            5,
+            3,
+            7,
+            4,
+            5,
+            5,
+            4
+          ],
+          [
+            13,
+            9,
+            8,
+            7,
+            0,
+            5,
+            8,
+            6,
+            3,
+            3,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          [
+            12,
+            10,
+            6,
+            8,
+            5,
+            0,
+            6,
+            2,
+            7,
+            5,
+            4,
+            2,
+            1,
+            3,
+            4
+          ],
+          [
+            9,
+            6,
+            3,
+            3,
+            8,
+            6,
+            0,
+            2,
+            4,
+            3,
+            2,
+            0,
+            0,
+            1,
+            3
+          ],
+          [
+            9,
+            5,
+            5,
+            6,
+            6,
+            2,
+            2,
+            0,
+            1,
+            0,
+            3,
+            3,
+            4,
+            2,
+            0
+          ],
+          [
+            8,
+            7,
+            4,
+            5,
+            3,
+            7,
+            4,
+            1,
+            0,
+            2,
+            4,
+            1,
+            0,
+            2,
+            4
+          ],
+          [
+            8,
+            7,
+            5,
+            3,
+            3,
+            5,
+            3,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            7,
+            7,
+            4,
+            7,
+            4,
+            4,
+            2,
+            3,
+            4,
+            1,
+            0,
+            2,
+            2,
+            1,
+            3
+          ],
+          [
+            6,
+            5,
+            6,
+            4,
+            3,
+            2,
+            0,
+            3,
+            1,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1
+          ],
+          [
+            6,
+            4,
+            5,
+            5,
+            4,
+            1,
+            0,
+            4,
+            0,
+            1,
+            2,
+            2,
+            0,
+            3,
+            1
+          ],
+          [
+            6,
+            5,
+            5,
+            5,
+            3,
+            3,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2,
+            3,
+            0,
+            2
+          ],
+          [
+            5,
+            5,
+            3,
+            4,
+            3,
+            4,
+            3,
+            0,
+            4,
+            0,
+            3,
+            1,
+            1,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }

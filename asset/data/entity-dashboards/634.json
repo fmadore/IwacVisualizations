@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:19.229132+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:39.638838+00:00",
   "entity": {
     "o_id": 634,
     "title": "Mutuelle d'épargne et de crédit Baïtoul Maal",
@@ -53,15 +53,6 @@
           "year_max": 1999
         },
         {
-          "name": "An-Nasr Trimestriel",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2005,
-          "year_max": 2005
-        },
-        {
           "name": "La Preuve",
           "total": 1,
           "articles": 0,
@@ -69,6 +60,15 @@
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
+        },
+        {
+          "name": "An-Nasr Trimestriel",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2005,
+          "year_max": 2005
         }
       ]
     }
@@ -334,6 +334,41 @@
           "count": 1
         },
         {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 344,
+          "name": "Kombissiri",
+          "lat": 12.06884,
+          "lng": -1.33644,
+          "count": 1
+        },
+        {
           "o_id": 303,
           "name": "Dédougou",
           "lat": 12.46338,
@@ -395,43 +430,383 @@
           "lat": 13.32583,
           "lng": -1.53472,
           "count": 1
-        },
-        {
-          "o_id": 408,
-          "name": "Israël",
-          "lat": 31.5,
-          "lng": 34.75,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 1
-        },
-        {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
-          "count": 1
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 344,
-          "name": "Kombissiri",
-          "lat": 12.06884,
-          "lng": -1.33644,
-          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1998,
+          1999,
+          2005,
+          2009
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            0,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Lassané Sawadogo",
+          "Obscurantisme",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Terrorisme",
+          "Commission Nationale d'Organisation du Pèlerinage à La Mecque",
+          "Hadj",
+          "Fondation Omar Ben Khattab",
+          "Ouahigouya",
+          "Laïcité",
+          "Bobo-Dioulasso",
+          "Islamisme",
+          "Aïd el-Fitr",
+          "Charité"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            1,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            1,
+            1,
+            0,
+            2,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            1,
+            1,
+            0,
+            2,
+            3,
+            0,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            0,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

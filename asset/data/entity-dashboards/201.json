@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.492782+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.767550+00:00",
   "entity": {
     "o_id": 201,
     "title": "Sécurité islamique Pouytenga",
@@ -581,6 +581,13 @@
           "count": 2
         },
         {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
           "o_id": 391,
           "name": "Sapouy",
           "lat": 11.55444,
@@ -592,6 +599,13 @@
           "name": "Kaya",
           "lat": 13.09167,
           "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 76323,
+          "name": "Palais Kosyam",
+          "lat": 12.288426,
+          "lng": -1.50273,
           "count": 1
         },
         {
@@ -609,17 +623,24 @@
           "count": 1
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
           "o_id": 335,
           "name": "Kassoum",
           "lat": 13.0788,
           "lng": -3.3024,
+          "count": 1
+        },
+        {
+          "o_id": 60497,
+          "name": "Gao",
+          "lat": 16.266666666667,
+          "lng": -0.05,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
           "count": 1
         },
         {
@@ -642,29 +663,510 @@
           "lat": 10.0,
           "lng": 8.0,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 9
         },
         {
-          "o_id": 60497,
-          "name": "Gao",
-          "lat": 16.266666666667,
-          "lng": -0.05,
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 8
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 7
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 3
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "label": "ouédraogo - population - village - commune - man - maire",
           "count": 1
         },
         {
-          "o_id": 76323,
-          "name": "Palais Kosyam",
-          "lat": 12.288426,
-          "lng": -1.50273,
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 21
+              },
+              {
+                "name": "Négatif",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 20
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.63,
+            "rated_articles": 30
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 17
+              },
+              {
+                "name": "Négatif",
+                "count": 8
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 21
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.6,
+            "rated_articles": 30
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 17
+              },
+              {
+                "name": "Négatif",
+                "count": 10
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 21
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 3.1,
+            "rated_articles": 30
+          }
+        },
+        "articles_total": 30
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            2,
+            25
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            3,
+            3
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Pouytenga",
+          "Burkina Faso",
+          "Sécurité",
+          "Ouagadougou",
+          "Mouvement Sunnite du Burkina Faso",
+          "Terrorisme",
+          "Radicalisation",
+          "Koglweogo",
+          "Pluralisme religieux",
+          "Fédération des Associations Islamiques du Burkina",
+          "Police",
+          "Association Islamique Nachroul islam de Pouytenga",
+          "Laïcité",
+          "Mosquée",
+          "Justice"
+        ],
+        "matrix": [
+          [
+            0,
+            11,
+            11,
+            10,
+            9,
+            9,
+            9,
+            8,
+            6,
+            6,
+            6,
+            6,
+            5,
+            4,
+            3
+          ],
+          [
+            11,
+            0,
+            9,
+            4,
+            5,
+            4,
+            4,
+            4,
+            3,
+            2,
+            6,
+            5,
+            3,
+            4,
+            3
+          ],
+          [
+            11,
+            9,
+            0,
+            5,
+            5,
+            4,
+            4,
+            4,
+            2,
+            2,
+            6,
+            6,
+            3,
+            4,
+            3
+          ],
+          [
+            10,
+            4,
+            5,
+            0,
+            6,
+            3,
+            3,
+            2,
+            1,
+            5,
+            2,
+            2,
+            0,
+            3,
+            1
+          ],
+          [
+            9,
+            5,
+            5,
+            6,
+            0,
+            4,
+            4,
+            2,
+            2,
+            4,
+            4,
+            4,
+            1,
+            3,
+            1
+          ],
+          [
+            9,
+            4,
+            4,
+            3,
+            4,
+            0,
+            9,
+            4,
+            2,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1
+          ],
+          [
+            9,
+            4,
+            4,
+            3,
+            4,
+            9,
+            0,
+            4,
+            2,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1
+          ],
+          [
+            8,
+            4,
+            4,
+            2,
+            2,
+            4,
+            4,
+            0,
+            1,
+            0,
+            3,
+            3,
+            4,
+            1,
+            3
+          ],
+          [
+            6,
+            3,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            6,
+            2,
+            2,
+            5,
+            4,
+            2,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            6,
+            6,
+            6,
+            2,
+            4,
+            2,
+            2,
+            3,
+            2,
+            1,
+            0,
+            4,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            5,
+            6,
+            2,
+            4,
+            3,
+            3,
+            3,
+            1,
+            0,
+            4,
+            0,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            3,
+            3,
+            0,
+            1,
+            3,
+            3,
+            4,
+            2,
+            0,
+            3,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            3,
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            3,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            3,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

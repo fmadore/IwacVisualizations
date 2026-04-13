@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:20.624680+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:41.417450+00:00",
   "entity": {
     "o_id": 758,
     "title": "Communauté Islamique Universitaire du Bénin",
@@ -590,17 +590,17 @@
           "count": 4
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 3
-        },
-        {
           "o_id": 385,
           "name": "Porto-Novo",
           "lat": 6.49646,
           "lng": 2.60359,
+          "count": 3
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 3
         },
         {
@@ -611,17 +611,17 @@
           "count": 3
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 2
-        },
-        {
           "o_id": 281,
           "name": "Bassila",
           "lat": 9.00814,
           "lng": 1.6654,
+          "count": 2
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
           "count": 2
         },
         {
@@ -646,17 +646,17 @@
           "count": 2
         },
         {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 2
+        },
+        {
           "o_id": 356,
           "name": "Malanville",
           "lat": 11.86819,
           "lng": 3.38327,
-          "count": 2
-        },
-        {
-          "o_id": 333,
-          "name": "Kandi",
-          "lat": 11.13417,
-          "lng": 2.93861,
           "count": 2
         },
         {
@@ -667,24 +667,17 @@
           "count": 2
         },
         {
-          "o_id": 457,
-          "name": "Lomé",
-          "lat": 6.12874,
-          "lng": 1.22154,
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
           "count": 1
         },
         {
-          "o_id": 270,
-          "name": "Abomey",
-          "lat": 7.18286,
-          "lng": 1.99119,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 1
         },
         {
@@ -786,20 +779,6 @@
           "count": 1
         },
         {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
@@ -853,6 +832,27 @@
           "name": "Nikki",
           "lat": 9.94009,
           "lng": 3.21075,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
           "count": 1
         },
         {
@@ -947,6 +947,498 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 1
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 3
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.67,
+            "rated_articles": 3
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 3
+          }
+        },
+        "articles_total": 3
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          2011,
+          2012,
+          2018,
+          2020
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Bénin",
+          "Université d'Abomey-Calavi",
+          "Abomey-Calavi",
+          "Éducation",
+          "Djibril Boussou",
+          "Amicale des Intellectuels Musulmans du Bénin",
+          "Libye",
+          "Union Islamique du Bénin",
+          "Laïcité",
+          "Hadj",
+          "Cotonou",
+          "Association Culturelle des Étudiants et Élèves Musulmans du Bénin",
+          "Parakou",
+          "Porto-Novo",
+          "Jeunesse"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            6,
+            6,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            6,
+            0,
+            5,
+            5,
+            4,
+            4,
+            3,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            6,
+            5,
+            0,
+            5,
+            5,
+            5,
+            3,
+            4,
+            3,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            6,
+            5,
+            5,
+            0,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            5,
+            4,
+            5,
+            4,
+            0,
+            5,
+            2,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            5,
+            4,
+            5,
+            4,
+            5,
+            0,
+            2,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            4,
+            3,
+            3,
+            4,
+            2,
+            2,
+            0,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            3,
+            3,
+            3,
+            0,
+            2,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            3,
+            3,
+            2,
+            2,
+            0,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            4,
+            4,
+            2,
+            3,
+            3,
+            0,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            4,
+            4,
+            2,
+            3,
+            3,
+            4,
+            0,
+            4,
+            4,
+            3,
+            3
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            4,
+            4,
+            2,
+            3,
+            3,
+            4,
+            4,
+            0,
+            4,
+            3,
+            3
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            4,
+            4,
+            2,
+            3,
+            3,
+            4,
+            4,
+            4,
+            0,
+            3,
+            3
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ]
+        ]
+      }
     }
   }
 }

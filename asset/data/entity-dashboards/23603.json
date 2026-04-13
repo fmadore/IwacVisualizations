@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.742142+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:47.111846+00:00",
   "entity": {
     "o_id": 23603,
     "title": "Mutineries de 2017 en Côte d'Ivoire",
@@ -383,17 +383,17 @@
           "count": 5
         },
         {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
-          "count": 3
-        },
-        {
           "o_id": 46238,
           "name": "Bouaké",
           "lat": 7.68333,
           "lng": -5.03306,
+          "count": 3
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
           "count": 3
         },
         {
@@ -402,13 +402,6 @@
           "lat": 7.695784756725776,
           "lng": -5.025757353982737,
           "count": 2
-        },
-        {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
         },
         {
           "o_id": 46245,
@@ -458,8 +451,547 @@
           "lat": 5.348374315507951,
           "lng": -3.954733469340994,
           "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 4
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.11,
+            "rated_articles": 10
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.56,
+            "rated_articles": 10
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 10
+          }
+        },
+        "articles_total": 10
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016,
+          2017
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            8,
+            3
+          ],
+          [
+            1,
+            0,
+            3
+          ],
+          [
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            0,
+            11,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Alassane Ouattara",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Conflit",
+          "Paix",
+          "Abidjan",
+          "Politique",
+          "Mamadou Traoré",
+          "Aboubacar Fofana",
+          "Bouaké",
+          "Gouvernement",
+          "Développement",
+          "Mosquée de la Riviéra Golf",
+          "Hadj",
+          "Terrorisme"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            5,
+            6,
+            6,
+            4,
+            5,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            1
+          ],
+          [
+            5,
+            0,
+            4,
+            3,
+            4,
+            3,
+            4,
+            4,
+            2,
+            1,
+            1,
+            2,
+            3,
+            2,
+            1
+          ],
+          [
+            5,
+            4,
+            0,
+            3,
+            3,
+            2,
+            3,
+            2,
+            4,
+            1,
+            1,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            6,
+            3,
+            3,
+            0,
+            5,
+            2,
+            3,
+            2,
+            1,
+            2,
+            2,
+            3,
+            2,
+            0,
+            1
+          ],
+          [
+            6,
+            4,
+            3,
+            5,
+            0,
+            2,
+            3,
+            2,
+            1,
+            1,
+            1,
+            3,
+            3,
+            0,
+            1
+          ],
+          [
+            4,
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            5,
+            4,
+            3,
+            3,
+            3,
+            2,
+            0,
+            1,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            4,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            2,
+            4,
+            1,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            3,
+            3,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            3,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

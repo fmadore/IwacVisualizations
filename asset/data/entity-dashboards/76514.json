@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:40.509113+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:54:10.292433+00:00",
   "entity": {
     "o_id": 76514,
     "title": "Constitution",
@@ -237,15 +237,15 @@
             "score": 5.494
           },
           {
-            "o_id": 48418,
-            "title": "Parti ivoirien des travailleurs",
+            "o_id": 46200,
+            "title": "Radiodiffusion télévision ivoirienne",
             "type": "Organisations",
             "cooc": 2,
             "score": 5.4644
           },
           {
-            "o_id": 46200,
-            "title": "Radiodiffusion télévision ivoirienne",
+            "o_id": 48418,
+            "title": "Parti ivoirien des travailleurs",
             "type": "Organisations",
             "cooc": 2,
             "score": 5.4644
@@ -286,15 +286,15 @@
             "score": 4.7883
           },
           {
-            "o_id": 23647,
-            "title": "Ousmane Diakité",
+            "o_id": 23633,
+            "title": "Ediémou Blin Jacob",
             "type": "Personnes",
             "cooc": 2,
             "score": 4.7829
           },
           {
-            "o_id": 23633,
-            "title": "Ediémou Blin Jacob",
+            "o_id": 23647,
+            "title": "Ousmane Diakité",
             "type": "Personnes",
             "cooc": 2,
             "score": 4.7829
@@ -525,13 +525,13 @@
           },
           {
             "source": 76514,
-            "target": 48418,
+            "target": 46200,
             "weight": 5.4644,
             "cooc": 2
           },
           {
             "source": 76514,
-            "target": 46200,
+            "target": 48418,
             "weight": 5.4644,
             "cooc": 2
           },
@@ -567,13 +567,13 @@
           },
           {
             "source": 76514,
-            "target": 23647,
+            "target": 23633,
             "weight": 4.7829,
             "cooc": 2
           },
           {
             "source": 76514,
-            "target": 23633,
+            "target": 23647,
             "weight": 4.7829,
             "cooc": 2
           },
@@ -735,6 +735,27 @@
           "count": 1
         },
         {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
           "o_id": 23692,
           "name": "Grande mosquée de Treichville",
           "lat": 5.3080303344696205,
@@ -749,10 +770,31 @@
           "count": 1
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
+          "o_id": 14216,
+          "name": "Portugal",
+          "lat": 38.7,
+          "lng": -9.183333,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
           "count": 1
         },
         {
@@ -812,52 +854,10 @@
           "count": 1
         },
         {
-          "o_id": 14216,
-          "name": "Portugal",
-          "lat": 38.7,
-          "lng": -9.183333,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 408,
-          "name": "Israël",
-          "lat": 31.5,
-          "lng": 34.75,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
           "o_id": 46294,
           "name": "Yopougon",
           "lat": 5.316667,
           "lng": -4.066667,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
-          "count": 1
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
           "count": 1
         },
         {
@@ -882,6 +882,528 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 11
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 4
+        },
+        {
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 10
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.75,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 8
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 8
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 3.12,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 12
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1998,
+          1999,
+          2000,
+          2001,
+          2002,
+          2003,
+          2005,
+          2006,
+          2012,
+          2016
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            9,
+            8,
+            1
+          ],
+          [
+            7,
+            10,
+            4
+          ],
+          [
+            8,
+            5,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            9,
+            9,
+            1
+          ],
+          [
+            6,
+            3,
+            2
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            9,
+            5,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Politique",
+          "Conseil National Islamique",
+          "Paix",
+          "Élections",
+          "Laurent Gbagbo",
+          "Alassane Ouattara",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Conflit",
+          "Église du christianisme céleste",
+          "Idriss Koudouss Koné",
+          "Abidjan",
+          "Christianisme",
+          "Crise",
+          "Mamadou Dosso"
+        ],
+        "matrix": [
+          [
+            0,
+            13,
+            8,
+            8,
+            7,
+            7,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4
+          ],
+          [
+            13,
+            0,
+            7,
+            6,
+            7,
+            6,
+            5,
+            4,
+            4,
+            4,
+            5,
+            3,
+            3,
+            4,
+            3
+          ],
+          [
+            8,
+            7,
+            0,
+            6,
+            4,
+            6,
+            2,
+            4,
+            4,
+            4,
+            5,
+            0,
+            3,
+            3,
+            4
+          ],
+          [
+            8,
+            6,
+            6,
+            0,
+            4,
+            5,
+            2,
+            5,
+            3,
+            5,
+            3,
+            0,
+            3,
+            4,
+            4
+          ],
+          [
+            7,
+            7,
+            4,
+            4,
+            0,
+            3,
+            3,
+            2,
+            3,
+            2,
+            3,
+            1,
+            2,
+            3,
+            2
+          ],
+          [
+            7,
+            6,
+            6,
+            5,
+            3,
+            0,
+            3,
+            3,
+            3,
+            4,
+            3,
+            0,
+            3,
+            3,
+            4
+          ],
+          [
+            6,
+            5,
+            2,
+            2,
+            3,
+            3,
+            0,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            6,
+            4,
+            4,
+            5,
+            2,
+            3,
+            1,
+            0,
+            2,
+            3,
+            1,
+            1,
+            2,
+            2,
+            3
+          ],
+          [
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            0,
+            2,
+            3,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            4,
+            4,
+            5,
+            2,
+            4,
+            0,
+            3,
+            2,
+            0,
+            1,
+            0,
+            2,
+            3,
+            3
+          ],
+          [
+            5,
+            5,
+            5,
+            3,
+            3,
+            3,
+            2,
+            1,
+            3,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            3,
+            3,
+            3,
+            2,
+            3,
+            1,
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            2,
+            3
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            3,
+            3,
+            1,
+            2,
+            0,
+            3,
+            1,
+            0,
+            2,
+            0,
+            3
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            2,
+            4,
+            1,
+            3,
+            1,
+            3,
+            1,
+            0,
+            3,
+            3,
+            0
+          ]
+        ]
+      }
     }
   }
 }

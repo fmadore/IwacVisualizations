@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:22.009933+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:43.224565+00:00",
   "entity": {
     "o_id": 23549,
     "title": "Coordination des Organisations de Jeunesse Musulmane en Côte d'Ivoire",
@@ -660,6 +660,13 @@
           "count": 3
         },
         {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 2
+        },
+        {
           "o_id": 67746,
           "name": "Mosquée An Nour Riviera 2",
           "lat": 5.351224783601886,
@@ -667,11 +674,11 @@
           "count": 2
         },
         {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 2
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
         },
         {
           "o_id": 46294,
@@ -681,10 +688,17 @@
           "count": 1
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
+          "o_id": 76448,
+          "name": "Grande Mosquée de Williamsville",
+          "lat": 5.364913926999096,
+          "lng": -4.020681656463771,
+          "count": 1
+        },
+        {
+          "o_id": 13118,
+          "name": "Accra",
+          "lat": 5.533333,
+          "lng": -0.216667,
           "count": 1
         },
         {
@@ -714,22 +728,525 @@
           "lat": 5.35,
           "lng": -3.9666666666667,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
         },
         {
-          "o_id": 76448,
-          "name": "Grande Mosquée de Williamsville",
-          "lat": 5.364913926999096,
-          "lng": -4.020681656463771,
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         },
         {
-          "o_id": 13118,
-          "name": "Accra",
-          "lat": 5.533333,
-          "lng": -0.216667,
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              }
+            ],
+            "subjectivite_avg": 3.55,
+            "rated_articles": 11
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              }
+            ],
+            "subjectivite_avg": 3.55,
+            "rated_articles": 11
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 6
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 10
+              }
+            ],
+            "subjectivite_avg": 3.82,
+            "rated_articles": 11
+          }
+        },
+        "articles_total": 11
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2000,
+          2001,
+          2004,
+          2006,
+          2007,
+          2009,
+          2010
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            3,
+            11,
+            2
+          ],
+          [
+            4,
+            1,
+            3
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            1,
+            7,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            3,
+            6,
+            2
+          ],
+          [
+            4,
+            2,
+            2
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Association des Jeunes Musulmans de Côte d'Ivoire",
+          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Jeunesse",
+          "Côte d'Ivoire",
+          "Hadj",
+          "Amicale des Anciens de l'AEEMCI",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Conseil National Islamique",
+          "Nuit du Destin",
+          "Idriss Koudouss Koné",
+          "Djiguiba Cissé",
+          "Réconciliation",
+          "Mosquée Salam du Plateau",
+          "Nurudine Oyewolé",
+          "Enseignement confessionnel islamique"
+        ],
+        "matrix": [
+          [
+            0,
+            8,
+            5,
+            5,
+            3,
+            7,
+            2,
+            4,
+            2,
+            2,
+            2,
+            4,
+            2,
+            1,
+            1
+          ],
+          [
+            8,
+            0,
+            5,
+            5,
+            4,
+            6,
+            2,
+            4,
+            1,
+            2,
+            1,
+            4,
+            1,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            0,
+            8,
+            4,
+            4,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2,
+            3,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            8,
+            0,
+            3,
+            5,
+            2,
+            3,
+            0,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1
+          ],
+          [
+            3,
+            4,
+            4,
+            3,
+            0,
+            2,
+            3,
+            2,
+            3,
+            2,
+            1,
+            0,
+            0,
+            3,
+            1
+          ],
+          [
+            7,
+            6,
+            4,
+            5,
+            2,
+            0,
+            2,
+            3,
+            2,
+            3,
+            2,
+            4,
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            3,
+            2,
+            0,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            2,
+            1
+          ],
+          [
+            4,
+            4,
+            2,
+            3,
+            2,
+            3,
+            1,
+            0,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            3,
+            2,
+            1,
+            2,
+            0,
+            2,
+            2,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            2,
+            2,
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            1,
+            3,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            2,
+            3,
+            0,
+            4,
+            1,
+            2,
+            0,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            3,
+            3,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            3,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            2,
+            3,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:15.997993+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:35.560573+00:00",
   "entity": {
     "o_id": 63385,
     "title": "Riviera III",
@@ -77,15 +77,6 @@
           "year_max": 2007
         },
         {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1998,
-          "year_max": 1998
-        },
-        {
           "name": "Le Jour Plus",
           "total": 1,
           "articles": 1,
@@ -93,6 +84,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1998,
+          "year_max": 1998
         }
       ]
     }
@@ -602,31 +602,10 @@
           "count": 2
         },
         {
-          "o_id": 23692,
-          "name": "Grande mosquée de Treichville",
-          "lat": 5.3080303344696205,
-          "lng": -4.01092342679036,
-          "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 63425,
-          "name": "Rouen",
-          "lat": 49.443055555556,
-          "lng": 1.1025,
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
           "count": 1
         },
         {
@@ -686,10 +665,24 @@
           "count": 1
         },
         {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 76500,
+          "name": "Biétry",
+          "lat": 5.274939,
+          "lng": -3.974712,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
           "count": 1
         },
         {
@@ -721,27 +714,498 @@
           "count": 1
         },
         {
-          "o_id": 23691,
-          "name": "Abobo",
-          "lat": 5.418889,
-          "lng": -4.020556,
+          "o_id": 23692,
+          "name": "Grande mosquée de Treichville",
+          "lat": 5.3080303344696205,
+          "lng": -4.01092342679036,
           "count": 1
         },
         {
-          "o_id": 76500,
-          "name": "Biétry",
-          "lat": 5.274939,
-          "lng": -3.974712,
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
           "count": 1
         },
         {
-          "o_id": 46175,
-          "name": "Attécoubé",
-          "lat": 5.333333,
-          "lng": -4.033333,
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 63425,
+          "name": "Rouen",
+          "lat": 49.443055555556,
+          "lng": 1.1025,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 5
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 2.22,
+            "rated_articles": 9
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 2.78,
+            "rated_articles": 9
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 9
+          }
+        },
+        "articles_total": 9
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          1995,
+          1997,
+          1998,
+          2005,
+          2007,
+          2012
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Paix",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Mosquée de la Riviéra Golf",
+          "Ramadan",
+          "Aboubacar Samassi",
+          "Treichville",
+          "Marcory",
+          "Prière",
+          "Mahomet",
+          "Conseil National Islamique",
+          "Coran",
+          "Aboubacar Fofana",
+          "Riviera Golf",
+          "Jeûne"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            5,
+            5,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            4,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            0,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            3,
+            1
+          ],
+          [
+            5,
+            5,
+            0,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            1
+          ],
+          [
+            5,
+            4,
+            3,
+            0,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            3,
+            3,
+            3,
+            3,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            0,
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            3,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            3,
+            2,
+            0,
+            4,
+            4,
+            2,
+            2,
+            0,
+            1,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            3,
+            2,
+            4,
+            0,
+            4,
+            2,
+            2,
+            0,
+            1,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            3,
+            2,
+            4,
+            4,
+            0,
+            2,
+            2,
+            0,
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            2,
+            3,
+            1,
+            2,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            3,
+            3,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            3,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

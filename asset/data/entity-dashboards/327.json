@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:03.745032+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:19.099269+00:00",
   "entity": {
     "o_id": 327,
     "title": "Grande Mosquée Sunnite de Ouagadougou",
@@ -594,17 +594,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 327,
-          "name": "Grande Mosquée Sunnite de Ouagadougou",
-          "lat": 12.360522000171635,
-          "lng": -1.5185420989673841,
-          "count": 17
-        },
-        {
           "o_id": 376,
           "name": "Ouagadougou",
           "lat": 12.36566,
           "lng": -1.53388,
+          "count": 17
+        },
+        {
+          "o_id": 327,
+          "name": "Grande Mosquée Sunnite de Ouagadougou",
+          "lat": 12.360522000171635,
+          "lng": -1.5185420989673841,
           "count": 17
         },
         {
@@ -622,17 +622,17 @@
           "count": 8
         },
         {
-          "o_id": 405,
-          "name": "Ziniaré",
-          "lat": 12.58186,
-          "lng": -1.2971,
-          "count": 3
-        },
-        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 3
+        },
+        {
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
           "count": 3
         },
         {
@@ -641,6 +641,13 @@
           "lat": 24.46861,
           "lng": 39.61417,
           "count": 3
+        },
+        {
+          "o_id": 76314,
+          "name": "Kadiogo",
+          "lat": 12.333333,
+          "lng": -1.5,
+          "count": 2
         },
         {
           "o_id": 304,
@@ -657,20 +664,6 @@
           "count": 2
         },
         {
-          "o_id": 76314,
-          "name": "Kadiogo",
-          "lat": 12.333333,
-          "lng": -1.5,
-          "count": 2
-        },
-        {
-          "o_id": 287,
-          "name": "Boromo",
-          "lat": 11.75,
-          "lng": -2.93333,
-          "count": 1
-        },
-        {
           "o_id": 309,
           "name": "Émirats arabes unis",
           "lat": 23.75,
@@ -682,6 +675,41 @@
           "name": "Koweït",
           "lat": 29.5,
           "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
+          "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 350,
+          "name": "Koupéla",
+          "lat": 12.17864,
+          "lng": -0.35103,
+          "count": 1
+        },
+        {
+          "o_id": 287,
+          "name": "Boromo",
+          "lat": 11.75,
+          "lng": -2.93333,
           "count": 1
         },
         {
@@ -732,36 +760,505 @@
           "lat": 21.4225,
           "lng": 39.826111,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 7
         },
         {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         },
         {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
-          "o_id": 408,
-          "name": "Israël",
-          "lat": 31.5,
-          "lng": 34.75,
+          "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         },
         {
-          "o_id": 350,
-          "name": "Koupéla",
-          "lat": 12.17864,
-          "lng": -0.35103,
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 14
+              }
+            ],
+            "subjectivite_avg": 2.29,
+            "rated_articles": 14
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 14
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 14
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 14
+          }
+        },
+        "articles_total": 14
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          1996,
+          2002,
+          2006,
+          2014,
+          2015
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            1,
+            0,
+            4
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            2,
+            8,
+            2
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            5,
+            6,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Mouvement Sunnite du Burkina Faso",
+          "Mosquée",
+          "Mouvement Sunnite (crises internes)",
+          "Burkina Faso",
+          "Idrissa Semdé",
+          "Bobo-Dioulasso",
+          "Oumarou Kanazoé",
+          "Violence",
+          "Sayouba Ouédraogo",
+          "Réconciliation",
+          "Conflit",
+          "Prière",
+          "Imamat",
+          "Yéro Boly"
+        ],
+        "matrix": [
+          [
+            0,
+            17,
+            14,
+            13,
+            8,
+            8,
+            8,
+            7,
+            7,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4
+          ],
+          [
+            17,
+            0,
+            14,
+            13,
+            8,
+            8,
+            8,
+            7,
+            7,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4
+          ],
+          [
+            14,
+            14,
+            0,
+            13,
+            8,
+            8,
+            5,
+            7,
+            7,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4
+          ],
+          [
+            13,
+            13,
+            13,
+            0,
+            7,
+            7,
+            5,
+            7,
+            6,
+            5,
+            6,
+            4,
+            5,
+            5,
+            4
+          ],
+          [
+            8,
+            8,
+            8,
+            7,
+            0,
+            5,
+            3,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            2,
+            4
+          ],
+          [
+            8,
+            8,
+            8,
+            7,
+            5,
+            0,
+            4,
+            4,
+            4,
+            6,
+            3,
+            5,
+            2,
+            3,
+            2
+          ],
+          [
+            8,
+            8,
+            5,
+            5,
+            3,
+            4,
+            0,
+            3,
+            2,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2
+          ],
+          [
+            7,
+            7,
+            7,
+            7,
+            4,
+            4,
+            3,
+            0,
+            2,
+            4,
+            6,
+            2,
+            5,
+            3,
+            4
+          ],
+          [
+            7,
+            7,
+            7,
+            6,
+            4,
+            4,
+            2,
+            2,
+            0,
+            3,
+            2,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            6,
+            6,
+            6,
+            5,
+            4,
+            6,
+            3,
+            4,
+            3,
+            0,
+            3,
+            4,
+            2,
+            1,
+            2
+          ],
+          [
+            6,
+            6,
+            6,
+            6,
+            4,
+            3,
+            3,
+            6,
+            2,
+            3,
+            0,
+            1,
+            4,
+            2,
+            4
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            3,
+            5,
+            2,
+            2,
+            1,
+            4,
+            1,
+            0,
+            2,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            3,
+            2,
+            1,
+            5,
+            0,
+            2,
+            4,
+            2,
+            0,
+            3,
+            3
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            2,
+            3,
+            2,
+            3,
+            1,
+            1,
+            2,
+            2,
+            3,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            2,
+            2,
+            4,
+            1,
+            2,
+            4,
+            1,
+            3,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

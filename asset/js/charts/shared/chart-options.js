@@ -1092,4 +1092,418 @@
             ? R.withMedia(base, networkMedia)
             : base;
     };
+
+    /* ------------------------------------------------------------------ */
+    /*  Segmented bar — single-row horizontal stacked bar                 */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Render an ordered list of {name, count} segments as a single
+     * horizontal stacked bar with inside-bar percentage labels and
+     * a bottom legend. Reused by the sentiment panel for both the
+     * polarité and centralité distributions; equally applicable to
+     * any other categorical distribution where the user wants to see
+     * percentages at a glance instead of absolute counts.
+     *
+     * Colors are resolved by the caller from CSS variables / theme
+     * tokens (NEVER hardcoded hex) and passed in via opts.colors.
+     *
+     * @param {Array<{name:string, count:number}>} segments
+     * @param {Object} opts
+     * @param {Object<string,string>} opts.colors      segment name → CSS color
+     * @param {string}                opts.axisLabel   y-axis row label
+     * @param {string}                [opts.fallbackColor] used when a segment is not in opts.colors
+     */
+    C.segmentedBar = function (segments, opts) {
+        opts = opts || {};
+        var colors = opts.colors || {};
+        var fallback = opts.fallbackColor || '';
+        var total = segments.reduce(function (s, e) { return s + (e.count || 0); }, 0);
+
+        var series = segments.map(function (seg) {
+            return {
+                name: seg.name,
+                type: 'bar',
+                stack: 'total',
+                barMaxWidth: 28,
+                data: [seg.count || 0],
+                itemStyle: { color: colors[seg.name] || fallback || undefined },
+                label: {
+                    show: total > 0 && (seg.count / total) >= 0.04,
+                    position: 'inside',
+                    formatter: function (p) {
+                        var pct = total > 0 ? Math.round((p.value / total) * 100) : 0;
+                        return pct + '%';
+                    },
+                    color: '#fff',
+                    fontSize: 11,
+                    fontWeight: 600
+                },
+                emphasis: { focus: 'series' }
+            };
+        });
+
+        return {
+            grid: { top: 10, bottom: 32, left: 90, right: 16, containLabel: false },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                formatter: function (params) {
+                    var lines = [];
+                    params.forEach(function (p) {
+                        var pct = total > 0 ? Math.round((p.value / total) * 100) : 0;
+                        lines.push(
+                            p.marker + ' ' + esc(p.seriesName) +
+                            ': <strong>' + fmt(p.value) + '</strong> (' + pct + '%)'
+                        );
+                    });
+                    return lines.join('<br>');
+                }
+            },
+            legend: {
+                bottom: 0,
+                itemWidth: 12,
+                itemHeight: 10,
+                textStyle: { fontSize: 11 }
+            },
+            xAxis: {
+                type: 'value',
+                show: false,
+                max: total || undefined
+            },
+            yAxis: {
+                type: 'category',
+                data: [opts.axisLabel || ''],
+                axisLine: { show: false },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 11 }
+            },
+            series: series
+        };
+    };
+
+    /* ------------------------------------------------------------------ */
+    /*  Chord — circular pairwise relations                                */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Render a symmetric pairwise matrix as a circular ECharts graph.
+     * ECharts has no first-class "chord" series, so this is implemented
+     * as `series-graph` with `layout: 'circular'` — every node sits on
+     * the perimeter and edge thickness encodes co-occurrence count.
+     *
+     * @param {{names: string[], matrix: number[][]}} data
+     * @param {Object} [opts]
+     * @param {number} [opts.minWeight=1] Edges below this are dropped
+     */
+    C.chord = function (data, opts) {
+        opts = opts || {};
+        var minWeight = opts.minWeight || 1;
+        var names = (data && data.names) || [];
+        var matrix = (data && data.matrix) || [];
+        var palette = (ns.getPalette && ns.getPalette())
+            || ['#d97706', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
+
+        var nodes = names.map(function (name, i) {
+            // Node radius reflects the row sum (total cooccurrences)
+            var rowSum = (matrix[i] || []).reduce(function (a, b) { return a + b; }, 0);
+            return {
+                id: String(i),
+                name: C._truncate(name, 28),
+                fullName: name,
+                value: rowSum,
+                symbolSize: 14 + Math.sqrt(rowSum) * 2,
+                itemStyle: { color: palette[i % palette.length] }
+            };
+        });
+
+        // Build undirected edges (i < j only) so each pair counts once.
+        var maxWeight = 1;
+        var rawEdges = [];
+        for (var i = 0; i < names.length; i++) {
+            for (var j = i + 1; j < names.length; j++) {
+                var w = (matrix[i] && matrix[i][j]) || 0;
+                if (w >= minWeight) {
+                    if (w > maxWeight) maxWeight = w;
+                    rawEdges.push({ source: String(i), target: String(j), value: w });
+                }
+            }
+        }
+        var edges = rawEdges.map(function (e) {
+            var norm = Math.max(0, Math.min(1, e.value / maxWeight));
+            return {
+                source: e.source,
+                target: e.target,
+                value: e.value,
+                lineStyle: {
+                    width: 1 + Math.sqrt(norm) * 5,
+                    opacity: 0.55,
+                    curveness: 0.3
+                }
+            };
+        });
+
+        var base = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    if (p.dataType === 'node') {
+                        return '<strong>' + esc(p.data.fullName || '') + '</strong><br>' +
+                               (t('Total') + ': ' + fmt(p.data.value));
+                    }
+                    if (p.dataType === 'edge') {
+                        var srcIdx = parseInt(p.data.source, 10);
+                        var tgtIdx = parseInt(p.data.target, 10);
+                        return '<strong>' + esc(names[srcIdx] || '') + '</strong><br>' +
+                               '<strong>' + esc(names[tgtIdx] || '') + '</strong><br>' +
+                               t('mentions_count', { count: fmt(p.data.value) });
+                    }
+                    return '';
+                }
+            },
+            series: [{
+                type: 'graph',
+                layout: 'circular',
+                circular: { rotateLabel: true },
+                top: 40,
+                bottom: 40,
+                left: 40,
+                right: 40,
+                roam: true,
+                draggable: false,
+                focusNodeAdjacency: true,
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: { width: 6 }
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}',
+                    fontSize: 11
+                },
+                data: nodes,
+                links: edges,
+                cursor: 'pointer'
+            }],
+            animationDuration: 600
+        };
+        return base;
+    };
+
+    /* ------------------------------------------------------------------ */
+    /*  Sankey — flow diagram                                              */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Standard ECharts sankey wrapper.
+     * @param {{nodes: {name:string}[], links: {source:string,target:string,value:number}[]}} data
+     */
+    C.sankey = function (data, opts) {
+        opts = opts || {};
+        var nodes = (data && data.nodes) || [];
+        var links = (data && data.links) || [];
+        return {
+            tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove',
+                formatter: function (p) {
+                    if (p.dataType === 'node') {
+                        return esc(p.data.name) + ': ' + fmt(p.value || 0);
+                    }
+                    return esc(p.data.source) + ' \u2192 ' + esc(p.data.target) +
+                        '<br>' + fmt(p.data.value || 0);
+                }
+            },
+            series: [{
+                type: 'sankey',
+                top: 16,
+                bottom: 16,
+                left: 16,
+                right: 80,
+                data: nodes,
+                links: links,
+                emphasis: { focus: 'adjacency' },
+                lineStyle: { color: 'gradient', curveness: 0.5 },
+                label: { fontSize: 11 },
+                nodeAlign: opts.nodeAlign || 'justify'
+            }]
+        };
+    };
+
+    /* ------------------------------------------------------------------ */
+    /*  Sunburst — hierarchical pie                                        */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Standard ECharts sunburst wrapper.
+     * @param {{name:string, value?:number, children?:Array}[]} tree Root children
+     */
+    C.sunburst = function (tree, opts) {
+        opts = opts || {};
+        return {
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    return esc(p.name) + ': ' + fmt(p.value || 0);
+                }
+            },
+            series: [{
+                type: 'sunburst',
+                radius: ['10%', '95%'],
+                data: tree || [],
+                label: {
+                    rotate: 'radial',
+                    minAngle: 8,
+                    fontSize: 11
+                },
+                emphasis: { focus: 'ancestor' },
+                levels: opts.levels || [
+                    {},
+                    { r0: '10%', r: '40%', label: { rotate: 0 } },
+                    { r0: '40%', r: '70%' },
+                    { r0: '70%', r: '95%' }
+                ]
+            }]
+        };
+    };
+
+    /* ------------------------------------------------------------------ */
+    /*  Beeswarm — jittered scatter on a single axis                       */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Beeswarm/strip plot. Each point is positioned on the value axis
+     * with a small deterministic Y jitter so overlapping points spread
+     * out vertically. Useful for showing distributions without the
+     * smoothing of a histogram.
+     *
+     * @param {{value:number, label?:string, group?:string}[]} points
+     * @param {Object} [opts]
+     * @param {string} [opts.xAxisName] Axis label
+     */
+    C.beeswarm = function (points, opts) {
+        opts = opts || {};
+        // Deterministic jitter so pan/zoom doesn't reshuffle the swarm.
+        function jitter(i) {
+            var x = Math.sin(i * 12.9898) * 43758.5453;
+            return (x - Math.floor(x) - 0.5) * 0.8;
+        }
+        var data = (points || []).map(function (p, i) {
+            return {
+                value: [p.value, jitter(i)],
+                name: p.label || '',
+                group: p.group || ''
+            };
+        });
+        return {
+            grid: C._grid({ top: 16, bottom: 32, left: 32, right: 16 }),
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    var d = p.data || {};
+                    return (d.name ? '<strong>' + esc(d.name) + '</strong><br>' : '') +
+                        fmt(d.value[0]);
+                }
+            },
+            xAxis: {
+                type: 'value',
+                name: opts.xAxisName || '',
+                nameLocation: 'middle',
+                nameGap: 24
+            },
+            yAxis: {
+                type: 'value',
+                show: false,
+                min: -1,
+                max: 1
+            },
+            series: [{
+                type: 'scatter',
+                data: data,
+                symbolSize: 9,
+                itemStyle: { opacity: 0.7 }
+            }]
+        };
+    };
+
+    /* ------------------------------------------------------------------ */
+    /*  Heatmap — year × month calendar grid                               */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * Discrete year × month heatmap. Cells come in as
+     * ``[year_index, month_index, count]`` triples — same shape ECharts
+     * heatmap expects, no transformation required.
+     *
+     * @param {{years:number[], months:number[], cells:Array}} data
+     */
+    C.heatmap = function (data, opts) {
+        opts = opts || {};
+        var years = (data && data.years) || [];
+        var cells = (data && data.cells) || [];
+        var monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        if (ns.locale === 'fr') {
+            monthLabels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
+                           'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+        }
+        var max = 1;
+        cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
+
+        return {
+            tooltip: {
+                position: 'top',
+                formatter: function (p) {
+                    var year = years[p.data[0]];
+                    var month = monthLabels[p.data[1]];
+                    return '<strong>' + month + ' ' + year + '</strong><br>' +
+                        t('mentions_count', { count: fmt(p.data[2]) });
+                }
+            },
+            grid: C._grid({ top: 24, bottom: 32, left: 56, right: 56 }),
+            xAxis: {
+                type: 'category',
+                data: monthLabels,
+                splitArea: { show: true },
+                axisTick: { show: false }
+            },
+            yAxis: {
+                type: 'category',
+                data: years.map(String),
+                splitArea: { show: true },
+                axisTick: { show: false }
+            },
+            visualMap: {
+                min: 0,
+                max: max,
+                calculable: true,
+                orient: 'vertical',
+                right: 0,
+                top: 'middle',
+                itemHeight: 100,
+                itemWidth: 12,
+                textStyle: { fontSize: 10 },
+                inRange: {
+                    color: [
+                        'rgba(217, 119, 6, 0.06)',
+                        'rgba(217, 119, 6, 0.35)',
+                        'rgba(217, 119, 6, 0.65)',
+                        'rgba(217, 119, 6, 0.95)'
+                    ]
+                }
+            },
+            series: [{
+                type: 'heatmap',
+                data: cells,
+                label: { show: false },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 8,
+                        shadowColor: 'rgba(0, 0, 0, 0.4)'
+                    }
+                }
+            }]
+        };
+    };
 })();

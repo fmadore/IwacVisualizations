@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:19.183693+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:39.567498+00:00",
   "entity": {
     "o_id": 627,
     "title": "Ançar Dine",
@@ -104,15 +104,6 @@
           "year_max": 2013
         },
         {
-          "name": "Sidwaya",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2010,
-          "year_max": 2015
-        },
-        {
           "name": "Islam Info",
           "total": 2,
           "articles": 0,
@@ -122,13 +113,13 @@
           "year_max": 2009
         },
         {
-          "name": "Le Pays",
-          "total": 1,
-          "articles": 1,
+          "name": "Sidwaya",
+          "total": 2,
+          "articles": 2,
           "publications": 0,
           "country": "Burkina Faso",
-          "year_min": 2012,
-          "year_max": 2012
+          "year_min": 2010,
+          "year_max": 2015
         },
         {
           "name": "Le Patriote",
@@ -147,6 +138,15 @@
           "country": "Bénin",
           "year_min": 1974,
           "year_max": 1974
+        },
+        {
+          "name": "Le Pays",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2012
         }
       ]
     }
@@ -530,13 +530,6 @@
           "count": 3
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
-        },
-        {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
@@ -558,11 +551,11 @@
           "count": 2
         },
         {
-          "o_id": 76324,
-          "name": "Houet",
-          "lat": 11.333333,
-          "lng": -4.25,
-          "count": 1
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
         },
         {
           "o_id": 395,
@@ -621,20 +614,6 @@
           "count": 1
         },
         {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
           "o_id": 46316,
           "name": "Adjamé",
           "lat": 5.3648,
@@ -653,6 +632,20 @@
           "name": "Porto-Novo",
           "lat": 6.49646,
           "lng": 2.60359,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
           "count": 1
         },
         {
@@ -689,8 +682,532 @@
           "lat": 43.4,
           "lng": 45.716694444444,
           "count": 1
+        },
+        {
+          "o_id": 76324,
+          "name": "Houet",
+          "lat": 11.333333,
+          "lng": -4.25,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 2
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.58,
+            "rated_articles": 12
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 12
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 11
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 5
+              }
+            ],
+            "subjectivite_avg": 2.25,
+            "rated_articles": 12
+          }
+        },
+        "articles_total": 12
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1974,
+          2004,
+          2005,
+          2006,
+          2009,
+          2010,
+          2012,
+          2013,
+          2015,
+          2016,
+          2017
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            8,
+            5,
+            1
+          ],
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            9,
+            11,
+            1
+          ],
+          [
+            8,
+            11,
+            1
+          ],
+          [
+            3,
+            1,
+            1
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            6,
+            4,
+            1
+          ],
+          [
+            10,
+            11,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            7,
+            5,
+            1
+          ],
+          [
+            8,
+            4,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Mahomet",
+          "Terrorisme",
+          "Ouagadougou",
+          "Mali",
+          "Radicalisation",
+          "Chérif Ousmane Madane Haïdara",
+          "Côte d'Ivoire",
+          "Éducation",
+          "Burkina Faso",
+          "Paix",
+          "Mawlid",
+          "Pluralisme religieux",
+          "Solidarité",
+          "Bénin",
+          "VIH/Sida"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            1,
+            3,
+            2,
+            1,
+            4,
+            3,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2
+          ],
+          [
+            2,
+            0,
+            4,
+            3,
+            5,
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            4,
+            0,
+            2,
+            4,
+            3,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            3,
+            2,
+            2,
+            2,
+            3,
+            1,
+            2,
+            1,
+            2,
+            1,
+            2
+          ],
+          [
+            2,
+            5,
+            4,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            2,
+            3,
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            2,
+            1,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            1,
+            0,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            3,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

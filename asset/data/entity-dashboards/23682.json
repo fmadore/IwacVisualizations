@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:22.556349+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:43.904606+00:00",
   "entity": {
     "o_id": 23682,
     "title": "Fédération Ivoirienne Pour l'Organisation du Pèlerinage à la Mecque",
@@ -793,6 +793,13 @@
           "count": 6
         },
         {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 4
+        },
+        {
           "o_id": 46316,
           "name": "Adjamé",
           "lat": 5.3648,
@@ -804,13 +811,6 @@
           "name": "Mosquée de la Riviéra Golf",
           "lat": 5.33757653748572,
           "lng": -3.9788409923568815,
-          "count": 4
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
           "count": 4
         },
         {
@@ -835,17 +835,17 @@
           "count": 3
         },
         {
-          "o_id": 76448,
-          "name": "Grande Mosquée de Williamsville",
-          "lat": 5.364913926999096,
-          "lng": -4.020681656463771,
-          "count": 1
-        },
-        {
           "o_id": 23506,
           "name": "Université Islamique Al-Fourqane",
           "lat": 5.318399197445977,
           "lng": -4.112374498969468,
+          "count": 1
+        },
+        {
+          "o_id": 76448,
+          "name": "Grande Mosquée de Williamsville",
+          "lat": 5.364913926999096,
+          "lng": -4.020681656463771,
           "count": 1
         },
         {
@@ -863,6 +863,516 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 13
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              },
+              {
+                "name": "Négatif",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 3.38,
+            "rated_articles": 13
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 12
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.46,
+            "rated_articles": 13
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              },
+              {
+                "name": "Négatif",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 3.23,
+            "rated_articles": 13
+          }
+        },
+        "articles_total": 13
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2007,
+          2009,
+          2010,
+          2011,
+          2012
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            7,
+            5
+          ],
+          [
+            2,
+            6,
+            3
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            2,
+            5,
+            3
+          ],
+          [
+            2,
+            7,
+            3
+          ],
+          [
+            2,
+            4,
+            2
+          ],
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            3,
+            9,
+            2
+          ],
+          [
+            0,
+            5,
+            2
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            4,
+            0,
+            2
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Hadj",
+          "La Mecque",
+          "Aboubacar Fofana",
+          "Nuit du Destin",
+          "Bureau Ivoirien du Hadj et de la Oumra",
+          "Conseil National Islamique",
+          "Laïcité",
+          "Côte d'Ivoire",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Idriss Koudouss Koné",
+          "Arabie saoudite",
+          "Terrorisme",
+          "Association des Musulmans Sunnites de Côte d'Ivoire",
+          "Abidjan",
+          "Extrémisme"
+        ],
+        "matrix": [
+          [
+            0,
+            12,
+            9,
+            7,
+            7,
+            9,
+            7,
+            9,
+            8,
+            5,
+            8,
+            8,
+            5,
+            6,
+            3
+          ],
+          [
+            12,
+            0,
+            5,
+            0,
+            5,
+            8,
+            1,
+            9,
+            6,
+            5,
+            8,
+            0,
+            1,
+            5,
+            0
+          ],
+          [
+            9,
+            5,
+            0,
+            3,
+            5,
+            6,
+            3,
+            5,
+            8,
+            4,
+            5,
+            2,
+            2,
+            0,
+            2
+          ],
+          [
+            7,
+            0,
+            3,
+            0,
+            5,
+            1,
+            4,
+            0,
+            1,
+            2,
+            0,
+            5,
+            2,
+            0,
+            2
+          ],
+          [
+            7,
+            5,
+            5,
+            5,
+            0,
+            4,
+            2,
+            5,
+            3,
+            3,
+            3,
+            0,
+            3,
+            1,
+            1
+          ],
+          [
+            9,
+            8,
+            6,
+            1,
+            4,
+            0,
+            0,
+            6,
+            6,
+            5,
+            6,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            7,
+            1,
+            3,
+            4,
+            2,
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            5,
+            2,
+            1,
+            4
+          ],
+          [
+            9,
+            9,
+            5,
+            0,
+            5,
+            6,
+            1,
+            0,
+            6,
+            3,
+            6,
+            0,
+            1,
+            3,
+            0
+          ],
+          [
+            8,
+            6,
+            8,
+            1,
+            3,
+            6,
+            2,
+            6,
+            0,
+            3,
+            6,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            5,
+            5,
+            4,
+            2,
+            3,
+            5,
+            0,
+            3,
+            3,
+            0,
+            4,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            8,
+            8,
+            5,
+            0,
+            3,
+            6,
+            0,
+            6,
+            6,
+            4,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            8,
+            0,
+            2,
+            5,
+            0,
+            1,
+            5,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            5,
+            1,
+            2,
+            2,
+            3,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            6,
+            5,
+            0,
+            0,
+            1,
+            1,
+            1,
+            3,
+            1,
+            1,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            2,
+            1,
+            0,
+            4,
+            0,
+            2,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

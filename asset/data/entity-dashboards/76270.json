@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:38.774714+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:54:07.942204+00:00",
   "entity": {
     "o_id": 76270,
     "title": "Injustice",
@@ -160,15 +160,6 @@
           "year_max": 2013
         },
         {
-          "name": "Fraternité",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2009,
-          "year_max": 2009
-        },
-        {
           "name": "Fraternité Matin",
           "total": 1,
           "articles": 1,
@@ -178,13 +169,13 @@
           "year_max": 2003
         },
         {
-          "name": "La Voie",
+          "name": "Fraternité",
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1994,
-          "year_max": 1994
+          "country": "Bénin",
+          "year_min": 2009,
+          "year_max": 2009
         },
         {
           "name": "Daho-Express",
@@ -194,6 +185,15 @@
           "country": "Bénin",
           "year_min": 1975,
           "year_max": 1975
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
         }
       ]
     }
@@ -901,10 +901,17 @@
           "count": 5
         },
         {
-          "o_id": 330,
-          "name": "Irak",
-          "lat": 33.0,
-          "lng": 44.0,
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 3
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
           "count": 3
         },
         {
@@ -922,18 +929,18 @@
           "count": 3
         },
         {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
+          "o_id": 330,
+          "name": "Irak",
+          "lat": 33.0,
+          "lng": 44.0,
           "count": 3
         },
         {
-          "o_id": 23691,
-          "name": "Abobo",
-          "lat": 5.418889,
-          "lng": -4.020556,
-          "count": 3
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 2
         },
         {
           "o_id": 273,
@@ -943,10 +950,17 @@
           "count": 2
         },
         {
-          "o_id": 408,
-          "name": "Israël",
-          "lat": 31.5,
-          "lng": 34.75,
+          "o_id": 409,
+          "name": "Somalie",
+          "lat": 6.0,
+          "lng": 48.0,
+          "count": 2
+        },
+        {
+          "o_id": 14637,
+          "name": "Rwanda",
+          "lat": -2.0,
+          "lng": 30.0,
           "count": 2
         },
         {
@@ -964,20 +978,6 @@
           "count": 2
         },
         {
-          "o_id": 46256,
-          "name": "Treichville",
-          "lat": 5.3,
-          "lng": -4.0,
-          "count": 2
-        },
-        {
-          "o_id": 14637,
-          "name": "Rwanda",
-          "lat": -2.0,
-          "lng": 30.0,
-          "count": 2
-        },
-        {
           "o_id": 489,
           "name": "La Mecque",
           "lat": 21.4225,
@@ -985,17 +985,10 @@
           "count": 2
         },
         {
-          "o_id": 409,
-          "name": "Somalie",
-          "lat": 6.0,
-          "lng": 48.0,
-          "count": 2
-        },
-        {
-          "o_id": 46294,
-          "name": "Yopougon",
-          "lat": 5.316667,
-          "lng": -4.066667,
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
           "count": 2
         },
         {
@@ -1006,10 +999,122 @@
           "count": 2
         },
         {
-          "o_id": 46175,
-          "name": "Attécoubé",
-          "lat": 5.333333,
-          "lng": -4.033333,
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 2
+        },
+        {
+          "o_id": 62240,
+          "name": "Palais des Sports de Treichville",
+          "lat": 5.298056,
+          "lng": -4.005278,
+          "count": 1
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 76279,
+          "name": "Abobo Banco",
+          "lat": 5.41301,
+          "lng": -4.02092,
+          "count": 1
+        },
+        {
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 1
+        },
+        {
+          "o_id": 60457,
+          "name": "Afghanistan",
+          "lat": 33.0,
+          "lng": 66.0,
+          "count": 1
+        },
+        {
+          "o_id": 14774,
+          "name": "Beyrouth",
+          "lat": 33.886944,
+          "lng": 35.513056,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 1
+        },
+        {
+          "o_id": 63428,
+          "name": "Sassandra",
+          "lat": 4.95,
+          "lng": -6.0833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 63433,
+          "name": "Tabou",
+          "lat": 4.4230555555556,
+          "lng": -7.3527777777778,
+          "count": 1
+        },
+        {
+          "o_id": 61326,
+          "name": "San-Pédro",
+          "lat": 4.733333,
+          "lng": -6.633333,
+          "count": 1
+        },
+        {
+          "o_id": 454,
+          "name": "Jordanie",
+          "lat": 31.0,
+          "lng": 36.0,
+          "count": 1
+        },
+        {
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 62018,
+          "name": "Alibori",
+          "lat": 11.128611,
+          "lng": 2.936944,
           "count": 1
         },
         {
@@ -1048,6 +1153,48 @@
           "count": 1
         },
         {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 63383,
+          "name": "Aghien",
+          "lat": 5.388123,
+          "lng": -3.999984,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 23600,
+          "name": "Grande mosquée des II-Plateaux Aghien",
+          "lat": 5.382535557731071,
+          "lng": -3.993870062858185,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
           "o_id": 15273,
           "name": "Liberia",
           "lat": 6.533333,
@@ -1055,10 +1202,17 @@
           "count": 1
         },
         {
-          "o_id": 454,
-          "name": "Jordanie",
-          "lat": 31.0,
-          "lng": 36.0,
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
+          "count": 1
+        },
+        {
+          "o_id": 46263,
+          "name": "Daoukro",
+          "lat": 7.057778,
+          "lng": -3.966111,
           "count": 1
         },
         {
@@ -1088,162 +1242,667 @@
           "lat": 7.4125,
           "lng": -7.553611,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 7
         },
         {
-          "o_id": 442,
-          "name": "Djeddah",
-          "lat": 21.49012,
-          "lng": 39.18624,
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 2
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 2
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 2
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 2
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
-          "o_id": 63383,
-          "name": "Aghien",
-          "lat": 5.388123,
-          "lng": -3.999984,
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
           "count": 1
         },
         {
-          "o_id": 23600,
-          "name": "Grande mosquée des II-Plateaux Aghien",
-          "lat": 5.382535557731071,
-          "lng": -3.993870062858185,
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         },
         {
-          "o_id": 308,
-          "name": "Égypte",
-          "lat": 27.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 76279,
-          "name": "Abobo Banco",
-          "lat": 5.41301,
-          "lng": -4.02092,
-          "count": 1
-        },
-        {
-          "o_id": 60482,
-          "name": "Borgou",
-          "lat": 10.74821385974019,
-          "lng": 0.6196353130056622,
-          "count": 1
-        },
-        {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 1
-        },
-        {
-          "o_id": 62018,
-          "name": "Alibori",
-          "lat": 11.128611,
-          "lng": 2.936944,
-          "count": 1
-        },
-        {
-          "o_id": 60457,
-          "name": "Afghanistan",
-          "lat": 33.0,
-          "lng": 66.0,
-          "count": 1
-        },
-        {
-          "o_id": 14774,
-          "name": "Beyrouth",
-          "lat": 33.886944,
-          "lng": 35.513056,
-          "count": 1
-        },
-        {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
-        },
-        {
-          "o_id": 13522,
-          "name": "Jérusalem",
-          "lat": 31.778889,
-          "lng": 35.225556,
-          "count": 1
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
-          "o_id": 63428,
-          "name": "Sassandra",
-          "lat": 4.95,
-          "lng": -6.0833333333333,
-          "count": 1
-        },
-        {
-          "o_id": 63433,
-          "name": "Tabou",
-          "lat": 4.4230555555556,
-          "lng": -7.3527777777778,
-          "count": 1
-        },
-        {
-          "o_id": 61326,
-          "name": "San-Pédro",
-          "lat": 4.733333,
-          "lng": -6.633333,
-          "count": 1
-        },
-        {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
-          "count": 1
-        },
-        {
-          "o_id": 62240,
-          "name": "Palais des Sports de Treichville",
-          "lat": 5.298056,
-          "lng": -4.005278,
-          "count": 1
-        },
-        {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
-          "count": 1
-        },
-        {
-          "o_id": 23632,
-          "name": "Bingerville",
-          "lat": 5.35,
-          "lng": -3.9,
-          "count": 1
-        },
-        {
-          "o_id": 46263,
-          "name": "Daoukro",
-          "lat": 7.057778,
-          "lng": -3.966111,
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 18
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.36,
+            "rated_articles": 24
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 17
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 18
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.27,
+            "rated_articles": 24
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 9
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 16
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.35,
+            "rated_articles": 24
+          }
+        },
+        "articles_total": 24
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1975,
+          1994,
+          1995,
+          1996,
+          1997,
+          1999,
+          2000,
+          2001,
+          2003,
+          2005,
+          2009,
+          2011,
+          2012,
+          2013,
+          2016,
+          2017
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            13,
+            5,
+            1
+          ],
+          [
+            6,
+            11,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            8,
+            10,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            8,
+            6,
+            1
+          ],
+          [
+            11,
+            2,
+            1
+          ],
+          [
+            10,
+            9,
+            1
+          ],
+          [
+            9,
+            9,
+            2
+          ],
+          [
+            10,
+            2,
+            1
+          ],
+          [
+            14,
+            7,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            12,
+            6,
+            1
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            7,
+            9,
+            1
+          ],
+          [
+            15,
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            11,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Politique",
+          "Conseil National Islamique",
+          "Conflit",
+          "Mahomet",
+          "Gouvernement",
+          "Paix",
+          "Justice",
+          "Abidjan",
+          "Alassane Ouattara",
+          "Aboubacar Fofana",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Prière",
+          "Médias",
+          "Félix Houphouët-Boigny"
+        ],
+        "matrix": [
+          [
+            0,
+            9,
+            6,
+            4,
+            4,
+            3,
+            5,
+            2,
+            5,
+            3,
+            4,
+            4,
+            2,
+            2,
+            4
+          ],
+          [
+            9,
+            0,
+            4,
+            5,
+            3,
+            3,
+            4,
+            3,
+            4,
+            3,
+            2,
+            2,
+            1,
+            4,
+            4
+          ],
+          [
+            6,
+            4,
+            0,
+            4,
+            5,
+            2,
+            4,
+            1,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            3
+          ],
+          [
+            4,
+            5,
+            4,
+            0,
+            1,
+            3,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            4,
+            3,
+            5,
+            1,
+            0,
+            0,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            3
+          ],
+          [
+            3,
+            3,
+            2,
+            3,
+            0,
+            0,
+            0,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          [
+            5,
+            4,
+            4,
+            2,
+            3,
+            0,
+            0,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            3,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            5,
+            4,
+            2,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            2,
+            1,
+            0,
+            1,
+            1,
+            2,
+            0,
+            1,
+            2,
+            0,
+            5,
+            2,
+            0,
+            1
+          ],
+          [
+            4,
+            2,
+            1,
+            0,
+            1,
+            1,
+            2,
+            0,
+            1,
+            2,
+            5,
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            4,
+            1,
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            3,
+            1,
+            3,
+            0,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

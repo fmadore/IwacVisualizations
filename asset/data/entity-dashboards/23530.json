@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:21.892876+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:43.095074+00:00",
   "entity": {
     "o_id": 23530,
     "title": "Confédération des Femmes Musulmanes de Côte d'Ivoire",
@@ -69,6 +69,15 @@
           "year_max": 2018
         },
         {
+          "name": "Al Minbar",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
           "name": "Le Jour",
           "total": 1,
           "articles": 1,
@@ -76,15 +85,6 @@
           "country": "Côte d'Ivoire",
           "year_min": 2002,
           "year_max": 2002
-        },
-        {
-          "name": "Le Temps",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2010,
-          "year_max": 2010
         },
         {
           "name": "Le Jour Plus",
@@ -96,6 +96,15 @@
           "year_max": 2011
         },
         {
+          "name": "Le Temps",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
           "name": "Le Patriote",
           "total": 1,
           "articles": 1,
@@ -103,15 +112,6 @@
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2006
-        },
-        {
-          "name": "Al Minbar",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 2013,
-          "year_max": 2013
         }
       ]
     }
@@ -759,17 +759,17 @@
           "count": 2
         },
         {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
-          "count": 1
-        },
-        {
           "o_id": 76453,
           "name": "Palais de la Culture de Treichville",
           "lat": 5.311792930011962,
           "lng": -4.012379174255093,
+          "count": 1
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
           "count": 1
         },
         {
@@ -808,6 +808,565 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 4
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 3.0,
+            "rated_articles": 4
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 4
+          }
+        },
+        "articles_total": 4
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2002,
+          2006,
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2017,
+          2018
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            10,
+            5,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            7,
+            5,
+            1
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            10,
+            8,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            5,
+            7,
+            1
+          ],
+          [
+            11,
+            0,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            8,
+            9,
+            1
+          ],
+          [
+            3,
+            10,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            7,
+            2,
+            1
+          ],
+          [
+            9,
+            6,
+            2
+          ],
+          [
+            9,
+            8,
+            1
+          ],
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            9,
+            5,
+            1
+          ],
+          [
+            9,
+            3,
+            1
+          ],
+          [
+            9,
+            4,
+            1
+          ],
+          [
+            5,
+            4,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Mariam Fofana",
+          "Nuit du Destin",
+          "Réconciliation",
+          "Laïcité",
+          "Extrémisme",
+          "Association des Femmes Musulmanes de Côte d'Ivoire",
+          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Association des Musulmans Sunnites de Côte d'Ivoire",
+          "Association des Jeunes Musulmans de Côte d'Ivoire",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Fadiga Moussa Al Farouk",
+          "Hadj",
+          "Adam Fofana",
+          "Femmes",
+          "Côte d'Ivoire"
+        ],
+        "matrix": [
+          [
+            0,
+            8,
+            8,
+            4,
+            6,
+            6,
+            6,
+            4,
+            4,
+            3,
+            4,
+            2,
+            3,
+            4,
+            4
+          ],
+          [
+            8,
+            0,
+            1,
+            3,
+            5,
+            3,
+            3,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0
+          ],
+          [
+            8,
+            1,
+            0,
+            1,
+            0,
+            2,
+            3,
+            2,
+            1,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            1,
+            0,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            6,
+            5,
+            0,
+            2,
+            0,
+            2,
+            1,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            6,
+            3,
+            2,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            6,
+            3,
+            3,
+            0,
+            1,
+            1,
+            0,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            0,
+            2,
+            1,
+            3,
+            0,
+            2,
+            1,
+            0
+          ],
+          [
+            4,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            1,
+            3,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            3,
+            2,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }

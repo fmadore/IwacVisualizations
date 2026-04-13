@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:06.399516+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:22.697376+00:00",
   "entity": {
     "o_id": 391,
     "title": "Sapouy",
@@ -105,6 +105,15 @@
           "year_max": 1999
         },
         {
+          "name": "Al Mawadda",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2008,
+          "year_max": 2008
+        },
+        {
           "name": "An-Nasr Trimestriel",
           "total": 1,
           "articles": 0,
@@ -123,6 +132,15 @@
           "year_max": 2008
         },
         {
+          "name": "L'Evénement",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2022,
+          "year_max": 2022
+        },
+        {
           "name": "FasoZine",
           "total": 1,
           "articles": 1,
@@ -139,24 +157,6 @@
           "country": "Niger",
           "year_min": 2024,
           "year_max": 2024
-        },
-        {
-          "name": "Al Mawadda",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2008,
-          "year_max": 2008
-        },
-        {
-          "name": "L'Evénement",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2022,
-          "year_max": 2022
         }
       ]
     }
@@ -348,16 +348,16 @@
             "score": 5.4447
           },
           {
-            "o_id": 671,
-            "title": "Fédération des Églises et Missions Évangéliques",
-            "type": "Organisations",
+            "o_id": 1109,
+            "title": "Mamadou Alioune Diouf",
+            "type": "Personnes",
             "cooc": 2,
             "score": 5.054
           },
           {
-            "o_id": 1109,
-            "title": "Mamadou Alioune Diouf",
-            "type": "Personnes",
+            "o_id": 671,
+            "title": "Fédération des Églises et Missions Évangéliques",
+            "type": "Organisations",
             "cooc": 2,
             "score": 5.054
           },
@@ -678,13 +678,13 @@
           },
           {
             "source": 391,
-            "target": 671,
+            "target": 1109,
             "weight": 5.054,
             "cooc": 2
           },
           {
             "source": 391,
-            "target": 1109,
+            "target": 671,
             "weight": 5.054,
             "cooc": 2
           },
@@ -888,13 +888,6 @@
           "count": 5
         },
         {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 4
-        },
-        {
           "o_id": 377,
           "name": "Ouahigouya",
           "lat": 13.58278,
@@ -902,10 +895,17 @@
           "count": 4
         },
         {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 4
+        },
+        {
+          "o_id": 352,
+          "name": "Léo",
+          "lat": 11.10033,
+          "lng": -2.10654,
           "count": 3
         },
         {
@@ -916,11 +916,25 @@
           "count": 3
         },
         {
-          "o_id": 352,
-          "name": "Léo",
-          "lat": 11.10033,
-          "lng": -2.10654,
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
           "count": 3
+        },
+        {
+          "o_id": 346,
+          "name": "Kongoussi",
+          "lat": 13.32583,
+          "lng": -1.53472,
+          "count": 2
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 2
         },
         {
           "o_id": 386,
@@ -958,10 +972,10 @@
           "count": 2
         },
         {
-          "o_id": 13955,
-          "name": "République centrafricaine",
-          "lat": 6.7,
-          "lng": 20.9,
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
           "count": 2
         },
         {
@@ -972,17 +986,17 @@
           "count": 2
         },
         {
+          "o_id": 13955,
+          "name": "République centrafricaine",
+          "lat": 6.7,
+          "lng": 20.9,
+          "count": 2
+        },
+        {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
-          "count": 2
-        },
-        {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
           "count": 2
         },
         {
@@ -993,18 +1007,67 @@
           "count": 2
         },
         {
-          "o_id": 346,
-          "name": "Kongoussi",
-          "lat": 13.32583,
-          "lng": -1.53472,
-          "count": 2
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
         },
         {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
-          "count": 2
+          "o_id": 76315,
+          "name": "Yatenga",
+          "lat": 13.583333,
+          "lng": -2.416667,
+          "count": 1
+        },
+        {
+          "o_id": 76338,
+          "name": "Stade du 4-août",
+          "lat": 12.368694,
+          "lng": -1.553444,
+          "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 33165,
+          "name": "Niangoloko",
+          "lat": 10.283333333333,
+          "lng": -4.9166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76322,
+          "name": "Dioulassoba",
+          "lat": 11.178,
+          "lng": -4.2961,
+          "count": 1
+        },
+        {
+          "o_id": 401,
+          "name": "Tougan",
+          "lat": 13.05913,
+          "lng": -3.07527,
+          "count": 1
+        },
+        {
+          "o_id": 408,
+          "name": "Israël",
+          "lat": 31.5,
+          "lng": 34.75,
+          "count": 1
+        },
+        {
+          "o_id": 374,
+          "name": "Orodara",
+          "lat": 10.98568,
+          "lng": -4.92612,
+          "count": 1
         },
         {
           "o_id": 404,
@@ -1084,6 +1147,27 @@
           "count": 1
         },
         {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
           "o_id": 541,
           "name": "Nigéria",
           "lat": 10.0,
@@ -1133,97 +1217,604 @@
           "count": 1
         },
         {
-          "o_id": 401,
-          "name": "Tougan",
-          "lat": 13.05913,
-          "lng": -3.07527,
-          "count": 1
-        },
-        {
-          "o_id": 408,
-          "name": "Israël",
-          "lat": 31.5,
-          "lng": 34.75,
-          "count": 1
-        },
-        {
-          "o_id": 374,
-          "name": "Orodara",
-          "lat": 10.98568,
-          "lng": -4.92612,
-          "count": 1
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
           "lng": -4.00167,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 5
         },
         {
-          "o_id": 545,
-          "name": "Turquie",
-          "lat": 39.0,
-          "lng": 35.0,
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 2
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         },
         {
-          "o_id": 33165,
-          "name": "Niangoloko",
-          "lat": 10.283333333333,
-          "lng": -4.9166666666667,
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "o_id": 76322,
-          "name": "Dioulassoba",
-          "lat": 11.178,
-          "lng": -4.2961,
+          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
           "count": 1
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
-          "o_id": 531,
-          "name": "Riyad",
-          "lat": 24.65,
-          "lng": 46.71,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 76315,
-          "name": "Yatenga",
-          "lat": 13.583333,
-          "lng": -2.416667,
-          "count": 1
-        },
-        {
-          "o_id": 76338,
-          "name": "Stade du 4-août",
-          "lat": 12.368694,
-          "lng": -1.553444,
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 12
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 1.88,
+            "rated_articles": 17
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 4
+              },
+              {
+                "name": "Non abordé",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.2,
+            "rated_articles": 17
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 12
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.29,
+            "rated_articles": 17
+          }
+        },
+        "articles_total": 17
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2000,
+          2001,
+          2005,
+          2008,
+          2014,
+          2018,
+          2019,
+          2022,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            0,
+            0,
+            3
+          ],
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            0,
+            4,
+            3
+          ],
+          [
+            7,
+            0,
+            2
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            0,
+            10,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            4,
+            1,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            8,
+            10,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            9,
+            8,
+            1
+          ],
+          [
+            0,
+            5,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Burkina Faso",
+          "Bobo-Dioulasso",
+          "Paix",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Justice",
+          "Assassinat de Norbert Zongo",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Norbert Zongo",
+          "Kaya",
+          "Blaise Compaoré",
+          "Fada N'Gourma",
+          "Réconciliation",
+          "Mouvement Sunnite du Burkina Faso",
+          "Ouahigouya"
+        ],
+        "matrix": [
+          [
+            0,
+            12,
+            10,
+            7,
+            8,
+            7,
+            7,
+            7,
+            6,
+            6,
+            4,
+            5,
+            3,
+            4,
+            4
+          ],
+          [
+            12,
+            0,
+            3,
+            7,
+            2,
+            6,
+            5,
+            2,
+            4,
+            2,
+            4,
+            3,
+            3,
+            2,
+            0
+          ],
+          [
+            10,
+            3,
+            0,
+            1,
+            5,
+            1,
+            1,
+            4,
+            2,
+            4,
+            2,
+            2,
+            2,
+            2,
+            3
+          ],
+          [
+            7,
+            7,
+            1,
+            0,
+            2,
+            5,
+            5,
+            2,
+            3,
+            0,
+            3,
+            1,
+            3,
+            2,
+            0
+          ],
+          [
+            8,
+            2,
+            5,
+            2,
+            0,
+            2,
+            3,
+            7,
+            4,
+            4,
+            0,
+            2,
+            0,
+            4,
+            4
+          ],
+          [
+            7,
+            6,
+            1,
+            5,
+            2,
+            0,
+            4,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            7,
+            5,
+            1,
+            5,
+            3,
+            4,
+            0,
+            3,
+            5,
+            1,
+            2,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            7,
+            2,
+            4,
+            2,
+            7,
+            2,
+            3,
+            0,
+            4,
+            4,
+            0,
+            1,
+            0,
+            4,
+            3
+          ],
+          [
+            6,
+            4,
+            2,
+            3,
+            4,
+            3,
+            5,
+            4,
+            0,
+            2,
+            2,
+            0,
+            1,
+            3,
+            2
+          ],
+          [
+            6,
+            2,
+            4,
+            0,
+            4,
+            2,
+            1,
+            4,
+            2,
+            0,
+            0,
+            3,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            2,
+            3,
+            0,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            5,
+            3,
+            2,
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            3,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            3,
+            0,
+            2,
+            1,
+            0,
+            1,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            2,
+            2,
+            2,
+            4,
+            2,
+            2,
+            4,
+            3,
+            2,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            0,
+            3,
+            0,
+            4,
+            0,
+            1,
+            3,
+            2,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

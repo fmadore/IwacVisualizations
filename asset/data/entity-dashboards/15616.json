@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.641637+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.960949+00:00",
   "entity": {
     "o_id": 15616,
     "title": "Concours National de Récitation du Saint Coran",
@@ -618,13 +618,6 @@
           "count": 4
         },
         {
-          "o_id": 504,
-          "name": "Dapaong",
-          "lat": 10.866666666667,
-          "lng": 0.2,
-          "count": 3
-        },
-        {
           "o_id": 73289,
           "name": "Préfecture du Golfe",
           "lat": 6.133333,
@@ -639,24 +632,17 @@
           "count": 3
         },
         {
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 3
+        },
+        {
           "o_id": 559,
           "name": "Université de Lomé",
           "lat": 6.173669,
           "lng": 1.215866,
-          "count": 2
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 2
-        },
-        {
-          "o_id": 522,
-          "name": "Tchamba",
-          "lat": 9.0333333333333,
-          "lng": 1.4166666666667,
           "count": 2
         },
         {
@@ -674,24 +660,24 @@
           "count": 2
         },
         {
-          "o_id": 73288,
-          "name": "Tokoin",
-          "lat": 6.15,
-          "lng": 1.216667,
-          "count": 1
+          "o_id": 522,
+          "name": "Tchamba",
+          "lat": 9.0333333333333,
+          "lng": 1.4166666666667,
+          "count": 2
         },
         {
-          "o_id": 545,
-          "name": "Turquie",
-          "lat": 39.0,
-          "lng": 35.0,
-          "count": 1
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 2
         },
         {
-          "o_id": 538,
-          "name": "Maison du Hadj",
-          "lat": 6.181735,
-          "lng": 1.255005,
+          "o_id": 309,
+          "name": "Émirats arabes unis",
+          "lat": 23.75,
+          "lng": 54.5,
           "count": 1
         },
         {
@@ -699,6 +685,41 @@
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 523,
+          "name": "Tchaoudjo",
+          "lat": 8.98333333,
+          "lng": 1.13333333,
+          "count": 1
+        },
+        {
+          "o_id": 73288,
+          "name": "Tokoin",
+          "lat": 6.15,
+          "lng": 1.216667,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 495,
+          "name": "Anié",
+          "lat": 7.76111111,
+          "lng": 1.19166667,
+          "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
           "count": 1
         },
         {
@@ -723,41 +744,6 @@
           "count": 1
         },
         {
-          "o_id": 309,
-          "name": "Émirats arabes unis",
-          "lat": 23.75,
-          "lng": 54.5,
-          "count": 1
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
-          "o_id": 328,
-          "name": "Guinée",
-          "lat": 10.83333,
-          "lng": -10.66667,
-          "count": 1
-        },
-        {
-          "o_id": 495,
-          "name": "Anié",
-          "lat": 7.76111111,
-          "lng": 1.19166667,
-          "count": 1
-        },
-        {
-          "o_id": 523,
-          "name": "Tchaoudjo",
-          "lat": 8.98333333,
-          "lng": 1.13333333,
-          "count": 1
-        },
-        {
           "o_id": 496,
           "name": "Assoli",
           "lat": 9.35,
@@ -777,8 +763,527 @@
           "lat": 9.583333,
           "lng": 1.166667,
           "count": 1
+        },
+        {
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 1
+        },
+        {
+          "o_id": 538,
+          "name": "Maison du Hadj",
+          "lat": 6.181735,
+          "lng": 1.255005,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 12
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 12
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 1.38,
+            "rated_articles": 13
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 13
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 1.54,
+            "rated_articles": 13
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 10
+              }
+            ],
+            "subjectivite_avg": 1.77,
+            "rated_articles": 13
+          }
+        },
+        "articles_total": 13
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          2000,
+          2001,
+          2002,
+          2003,
+          2004,
+          2005,
+          2006,
+          2007,
+          2008,
+          2009,
+          2011,
+          2013,
+          2014,
+          2018,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            12,
+            7,
+            2
+          ],
+          [
+            8,
+            8,
+            1
+          ],
+          [
+            14,
+            7,
+            1
+          ],
+          [
+            3,
+            10,
+            1
+          ],
+          [
+            13,
+            6,
+            2
+          ],
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            5,
+            10,
+            3
+          ],
+          [
+            7,
+            9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            8,
+            9,
+            2
+          ],
+          [
+            9,
+            8,
+            2
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            10,
+            8,
+            3
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            11,
+            7,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            15,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Association des Élèves et Étudiants Musulmans au Togo",
+          "Union Musulmane du Togo",
+          "Togo",
+          "Lomé",
+          "Inoussa Bouraïma",
+          "Palais des congrès de Lomé",
+          "Centre Culturel Islamique de Lomé II",
+          "Ahmed Têtou",
+          "Aboudou Assouma",
+          "Hadj",
+          "Bénin",
+          "Ibrahima Ouro-Gouni",
+          "Kara",
+          "Rassemblement du Peuple Togolais",
+          "Coopération"
+        ],
+        "matrix": [
+          [
+            0,
+            18,
+            11,
+            11,
+            8,
+            7,
+            5,
+            5,
+            6,
+            5,
+            5,
+            4,
+            3,
+            3,
+            3
+          ],
+          [
+            18,
+            0,
+            9,
+            9,
+            9,
+            4,
+            5,
+            6,
+            6,
+            5,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          [
+            11,
+            9,
+            0,
+            13,
+            4,
+            7,
+            2,
+            3,
+            2,
+            0,
+            5,
+            1,
+            4,
+            0,
+            0
+          ],
+          [
+            11,
+            9,
+            13,
+            0,
+            4,
+            7,
+            2,
+            3,
+            2,
+            0,
+            5,
+            1,
+            4,
+            0,
+            0
+          ],
+          [
+            8,
+            9,
+            4,
+            4,
+            0,
+            2,
+            2,
+            2,
+            4,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            7,
+            4,
+            7,
+            7,
+            2,
+            0,
+            1,
+            2,
+            2,
+            0,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            2,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            2
+          ],
+          [
+            5,
+            6,
+            3,
+            3,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            3,
+            0,
+            0,
+            2
+          ],
+          [
+            6,
+            6,
+            2,
+            2,
+            4,
+            2,
+            0,
+            1,
+            0,
+            3,
+            0,
+            1,
+            0,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            0,
+            0,
+            2,
+            0,
+            1,
+            2,
+            3,
+            0,
+            0,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            5,
+            4,
+            5,
+            5,
+            1,
+            3,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            1,
+            1,
+            2,
+            1,
+            2,
+            3,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            3,
+            4,
+            4,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            0,
+            0,
+            1,
+            0,
+            2,
+            2,
+            1,
+            2,
+            0,
+            2,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

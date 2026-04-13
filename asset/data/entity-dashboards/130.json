@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.239362+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.356945+00:00",
   "entity": {
     "o_id": 130,
     "title": "Attentat de Ouagadougou de 2018",
@@ -568,17 +568,17 @@
           "count": 10
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 3
-        },
-        {
           "o_id": 310,
           "name": "États-Unis",
           "lat": 39.76,
           "lng": -98.5,
+          "count": 3
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
           "count": 3
         },
         {
@@ -587,6 +587,20 @@
           "lat": 12.288426,
           "lng": -1.50273,
           "count": 2
+        },
+        {
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 1
+        },
+        {
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
+          "count": 1
         },
         {
           "o_id": 14637,
@@ -652,13 +666,6 @@
           "count": 1
         },
         {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
-          "count": 1
-        },
-        {
           "o_id": 397,
           "name": "Soum",
           "lat": 14.1,
@@ -678,15 +685,514 @@
           "lat": 11.17715,
           "lng": -4.2979,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 13
         },
         {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 3
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 11
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 8
+              }
+            ],
+            "subjectivite_avg": 2.27,
+            "rated_articles": 22
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 8
+              },
+              {
+                "name": "Très négatif",
+                "count": 2
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 8
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.71,
+            "rated_articles": 22
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 12
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 16
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.73,
+            "rated_articles": 22
+          }
+        },
+        "articles_total": 22
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            2,
+            17
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            0,
+            4,
+            2
+          ],
+          [
+            1,
+            2,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Terrorisme",
+          "Radicalisation",
+          "Ouagadougou",
+          "France",
+          "Groupe de Soutien à l'Islam et aux Musulmans",
+          "Iyad Ag Ghaly",
+          "Burkina Faso",
+          "Djihadisme",
+          "Sécurité",
+          "Blaise Compaoré",
+          "Forces de Défense et de Sécurité",
+          "G5 Sahel",
+          "Roch Marc Christian Kaboré",
+          "Justice",
+          "Armée"
+        ],
+        "matrix": [
+          [
+            0,
+            22,
+            19,
+            14,
+            14,
+            12,
+            10,
+            7,
+            7,
+            6,
+            6,
+            6,
+            6,
+            5,
+            5
+          ],
+          [
+            22,
+            0,
+            19,
+            14,
+            14,
+            12,
+            10,
+            7,
+            7,
+            6,
+            6,
+            6,
+            6,
+            5,
+            5
+          ],
+          [
+            19,
+            19,
+            0,
+            12,
+            13,
+            11,
+            9,
+            5,
+            7,
+            5,
+            6,
+            5,
+            4,
+            4,
+            5
+          ],
+          [
+            14,
+            14,
+            12,
+            0,
+            12,
+            10,
+            7,
+            7,
+            5,
+            5,
+            5,
+            6,
+            3,
+            3,
+            4
+          ],
+          [
+            14,
+            14,
+            13,
+            12,
+            0,
+            11,
+            8,
+            5,
+            7,
+            6,
+            6,
+            6,
+            3,
+            4,
+            5
+          ],
+          [
+            12,
+            12,
+            11,
+            10,
+            11,
+            0,
+            6,
+            5,
+            5,
+            5,
+            4,
+            5,
+            3,
+            4,
+            4
+          ],
+          [
+            10,
+            10,
+            9,
+            7,
+            8,
+            6,
+            0,
+            3,
+            6,
+            2,
+            6,
+            2,
+            2,
+            5,
+            4
+          ],
+          [
+            7,
+            7,
+            5,
+            7,
+            5,
+            5,
+            3,
+            0,
+            3,
+            3,
+            2,
+            4,
+            1,
+            2,
+            3
+          ],
+          [
+            7,
+            7,
+            7,
+            5,
+            7,
+            5,
+            6,
+            3,
+            0,
+            3,
+            5,
+            3,
+            0,
+            4,
+            5
+          ],
+          [
+            6,
+            6,
+            5,
+            5,
+            6,
+            5,
+            2,
+            3,
+            3,
+            0,
+            1,
+            3,
+            1,
+            2,
+            3
+          ],
+          [
+            6,
+            6,
+            6,
+            5,
+            6,
+            4,
+            6,
+            2,
+            5,
+            1,
+            0,
+            2,
+            0,
+            3,
+            3
+          ],
+          [
+            6,
+            6,
+            5,
+            6,
+            6,
+            5,
+            2,
+            4,
+            3,
+            3,
+            2,
+            0,
+            2,
+            1,
+            3
+          ],
+          [
+            6,
+            6,
+            4,
+            3,
+            3,
+            3,
+            2,
+            1,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            4,
+            3,
+            4,
+            4,
+            5,
+            2,
+            4,
+            2,
+            3,
+            1,
+            0,
+            0,
+            3
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            5,
+            4,
+            4,
+            3,
+            5,
+            3,
+            3,
+            3,
+            0,
+            3,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:07.013084+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:24.573102+00:00",
   "entity": {
     "o_id": 455,
     "title": "Mosquée Oumar Ibn Khattab",
@@ -642,6 +642,13 @@
           "count": 4
         },
         {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 3
+        },
+        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
@@ -656,11 +663,32 @@
           "count": 3
         },
         {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 3
+          "o_id": 403,
+          "name": "Tripoli",
+          "lat": 32.88743,
+          "lng": 13.18733,
+          "count": 2
+        },
+        {
+          "o_id": 453,
+          "name": "Institut de la Langue Arabe et de la Culture Islamique",
+          "lat": 6.42047,
+          "lng": 2.34345,
+          "count": 2
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 2
         },
         {
           "o_id": 273,
@@ -681,13 +709,6 @@
           "name": "Gabon",
           "lat": -1.0,
           "lng": 11.75,
-          "count": 2
-        },
-        {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
           "count": 2
         },
         {
@@ -712,25 +733,53 @@
           "count": 2
         },
         {
-          "o_id": 453,
-          "name": "Institut de la Langue Arabe et de la Culture Islamique",
-          "lat": 6.42047,
-          "lng": 2.34345,
-          "count": 2
+          "o_id": 543,
+          "name": "Syrie",
+          "lat": 35.0,
+          "lng": 38.0,
+          "count": 1
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
-          "count": 2
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
         },
         {
-          "o_id": 403,
-          "name": "Tripoli",
-          "lat": 32.88743,
-          "lng": 13.18733,
-          "count": 2
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 392,
+          "name": "Savalou",
+          "lat": 7.92807,
+          "lng": 1.97558,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
         },
         {
           "o_id": 25602,
@@ -866,27 +915,6 @@
           "count": 1
         },
         {
-          "o_id": 392,
-          "name": "Savalou",
-          "lat": 7.92807,
-          "lng": 1.97558,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 410,
-          "name": "Tchad",
-          "lat": 15.0,
-          "lng": 19.0,
-          "count": 1
-        },
-        {
           "o_id": 395,
           "name": "Sénégal",
           "lat": 14.5,
@@ -962,36 +990,378 @@
           "lat": 51.507222222222,
           "lng": -0.1275,
           "count": 1
-        },
-        {
-          "o_id": 543,
-          "name": "Syrie",
-          "lat": 35.0,
-          "lng": 38.0,
-          "count": 1
-        },
-        {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2011,
+          2012,
+          2018,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            0,
+            9,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Abomey-Calavi",
+          "Bénin",
+          "Cotonou",
+          "Association Culturelle des Étudiants et Élèves Musulmans du Bénin",
+          "Éducation",
+          "Porto-Novo",
+          "Université d'Abomey-Calavi",
+          "Mahomet",
+          "Parakou",
+          "Union Islamique du Bénin",
+          "Santé",
+          "Djibril Boussou",
+          "Libye",
+          "Jeunesse",
+          "Hadj"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            5,
+            0,
+            5,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            5,
+            5,
+            0,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            5,
+            5,
+            5,
+            0,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            0,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            3,
+            3,
+            4,
+            3,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            0,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            0,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            0,
+            3,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            0,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            1,
+            0,
+            3,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            1,
+            3,
+            0,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            2,
+            3,
+            1,
+            2,
+            2,
+            0,
+            3
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            2,
+            3,
+            1,
+            2,
+            2,
+            3,
+            0
+          ]
+        ]
+      }
     }
   }
 }

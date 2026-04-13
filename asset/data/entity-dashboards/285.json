@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:01.293581+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:15.847845+00:00",
   "entity": {
     "o_id": 285,
     "title": "Bogandé",
@@ -90,15 +90,6 @@
           "year_max": 2024
         },
         {
-          "name": "LeFaso.net",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2019,
-          "year_max": 2019
-        },
-        {
           "name": "La Preuve",
           "total": 1,
           "articles": 0,
@@ -115,6 +106,15 @@
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2001
+        },
+        {
+          "name": "LeFaso.net",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
         }
       ]
     }
@@ -415,17 +415,17 @@
           "count": 5
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 4
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
+          "count": 4
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
           "count": 4
         },
         {
@@ -492,6 +492,13 @@
           "count": 2
         },
         {
+          "o_id": 288,
+          "name": "Boulsa",
+          "lat": 12.65,
+          "lng": -0.567,
+          "count": 1
+        },
+        {
           "o_id": 60556,
           "name": "Yémen",
           "lat": 15.5,
@@ -538,27 +545,6 @@
           "name": "Bogodogo",
           "lat": 12.352169909817203,
           "lng": -1.4886685037354437,
-          "count": 1
-        },
-        {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 1
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
           "count": 1
         },
         {
@@ -636,6 +622,27 @@
           "name": "Kassoum",
           "lat": 13.0788,
           "lng": -3.3024,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
           "count": 1
         },
         {
@@ -735,15 +742,540 @@
           "lat": 31.92157,
           "lng": 35.20329,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 2
         },
         {
-          "o_id": 288,
-          "name": "Boulsa",
-          "lat": 12.65,
-          "lng": -0.567,
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.25,
+            "rated_articles": 8
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.29,
+            "rated_articles": 8
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.25,
+            "rated_articles": 8
+          }
+        },
+        "articles_total": 8
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1999,
+          2001,
+          2008,
+          2010,
+          2013,
+          2019,
+          2020,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            2,
+            9,
+            2
+          ],
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Burkina Faso",
+          "Bobo-Dioulasso",
+          "Fada N'Gourma",
+          "Ghana",
+          "Boromo",
+          "Dédougou",
+          "Gaoua",
+          "Éducation",
+          "Ouahigouya",
+          "Pô",
+          "Dori",
+          "Prière",
+          "Aïd el-Fitr",
+          "Congrès pour la Démocratie et le Progrès"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            4,
+            3,
+            4,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            2,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            0,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            2,
+            3,
+            2,
+            0,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            2,
+            0,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            0,
+            3,
+            2,
+            3,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            3,
+            0,
+            2,
+            3,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            3,
+            1,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            2,
+            0,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            2,
+            3,
+            0,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.794601+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:47.201360+00:00",
   "entity": {
     "o_id": 43052,
     "title": "Procès CNI-CSI",
@@ -472,17 +472,10 @@
           "count": 4
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 3
-        },
-        {
-          "o_id": 46294,
-          "name": "Yopougon",
-          "lat": 5.316667,
-          "lng": -4.066667,
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 3
         },
         {
@@ -493,18 +486,18 @@
           "count": 3
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
           "count": 3
         },
         {
-          "o_id": 61326,
-          "name": "San-Pédro",
-          "lat": 4.733333,
-          "lng": -6.633333,
-          "count": 2
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 3
         },
         {
           "o_id": 46256,
@@ -521,10 +514,31 @@
           "count": 2
         },
         {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
+          "o_id": 61326,
+          "name": "San-Pédro",
+          "lat": 4.733333,
+          "lng": -6.633333,
+          "count": 2
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        },
+        {
+          "o_id": 61324,
+          "name": "Grande Mosquée d'Adjamé",
+          "lat": 5.353286615241792,
+          "lng": -4.026326534959187,
+          "count": 1
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
           "count": 1
         },
         {
@@ -535,10 +549,10 @@
           "count": 1
         },
         {
-          "o_id": 61325,
-          "name": "Mosquée Bilal",
-          "lat": 5.249081568964093,
-          "lng": -3.9182779270167036,
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
           "count": 1
         },
         {
@@ -584,17 +598,10 @@
           "count": 1
         },
         {
-          "o_id": 61324,
-          "name": "Grande Mosquée d'Adjamé",
-          "lat": 5.353286615241792,
-          "lng": -4.026326534959187,
-          "count": 1
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
+          "o_id": 61325,
+          "name": "Mosquée Bilal",
+          "lat": 5.249081568964093,
+          "lng": -3.9182779270167036,
           "count": 1
         },
         {
@@ -603,15 +610,474 @@
           "lat": 7.4125,
           "lng": -7.553611,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 6
         },
         {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 3
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              }
+            ],
+            "subjectivite_avg": 3.91,
+            "rated_articles": 11
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              }
+            ],
+            "subjectivite_avg": 4.0,
+            "rated_articles": 11
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 8
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 4.0,
+            "rated_articles": 11
+          }
+        },
+        "articles_total": 11
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1994
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            6,
+            8
+          ],
+          [
+            0,
+            7,
+            2
+          ],
+          [
+            0,
+            10,
+            1
+          ],
+          [
+            0,
+            8,
+            2
+          ],
+          [
+            0,
+            9,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Conseil National Islamique",
+          "Conseil Supérieur Islamique",
+          "Diaby Moustapha",
+          "Idriss Koudouss Koné",
+          "Politique",
+          "Conflit",
+          "Côte d'Ivoire",
+          "Justice",
+          "Intégrisme",
+          "Henri Konan Bédié",
+          "Gouvernement",
+          "Laïcité",
+          "Abobo",
+          "Arabie saoudite",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques"
+        ],
+        "matrix": [
+          [
+            0,
+            14,
+            10,
+            9,
+            9,
+            8,
+            8,
+            8,
+            6,
+            5,
+            5,
+            5,
+            4,
+            3,
+            3
+          ],
+          [
+            14,
+            0,
+            10,
+            9,
+            9,
+            8,
+            8,
+            8,
+            6,
+            5,
+            5,
+            5,
+            4,
+            3,
+            3
+          ],
+          [
+            10,
+            10,
+            0,
+            9,
+            8,
+            8,
+            8,
+            7,
+            3,
+            5,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          [
+            9,
+            9,
+            9,
+            0,
+            7,
+            7,
+            7,
+            7,
+            2,
+            4,
+            4,
+            2,
+            4,
+            3,
+            3
+          ],
+          [
+            9,
+            9,
+            8,
+            7,
+            0,
+            6,
+            7,
+            6,
+            3,
+            5,
+            4,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            8,
+            8,
+            8,
+            7,
+            6,
+            0,
+            7,
+            7,
+            2,
+            3,
+            3,
+            1,
+            3,
+            2,
+            2
+          ],
+          [
+            8,
+            8,
+            8,
+            7,
+            7,
+            7,
+            0,
+            6,
+            2,
+            4,
+            3,
+            2,
+            3,
+            2,
+            2
+          ],
+          [
+            8,
+            8,
+            7,
+            7,
+            6,
+            7,
+            6,
+            0,
+            1,
+            2,
+            4,
+            0,
+            3,
+            2,
+            2
+          ],
+          [
+            6,
+            6,
+            3,
+            2,
+            3,
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            4,
+            0,
+            1,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            5,
+            3,
+            4,
+            2,
+            2,
+            0,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            4,
+            1,
+            2,
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            3,
+            2,
+            3,
+            1,
+            2,
+            0,
+            4,
+            3,
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            0,
+            3,
+            1,
+            1,
+            0,
+            1,
+            3
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            3,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

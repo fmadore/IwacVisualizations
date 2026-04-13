@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:01.356919+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:15.925331+00:00",
   "entity": {
     "o_id": 293,
     "title": "Centre culturel arabe libyen",
@@ -742,24 +742,10 @@
           "count": 3
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 2
-        },
-        {
           "o_id": 76321,
           "name": "Oubritenga",
           "lat": 12.583333,
           "lng": -1.416667,
-          "count": 2
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
           "count": 2
         },
         {
@@ -770,24 +756,38 @@
           "count": 2
         },
         {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
           "count": 1
         },
         {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
+          "o_id": 554,
+          "name": "Italie",
+          "lat": 42.5,
+          "lng": 12.5,
           "count": 1
         },
         {
-          "o_id": 63422,
-          "name": "Passoré",
-          "lat": 12.95,
-          "lng": -2.2666666666667,
+          "o_id": 63431,
+          "name": "Sourou",
+          "lat": 13.066666666667,
+          "lng": -3.0666666666667,
           "count": 1
         },
         {
@@ -802,6 +802,20 @@
           "name": "Kongoussi",
           "lat": 13.32583,
           "lng": -1.53472,
+          "count": 1
+        },
+        {
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
+          "count": 1
+        },
+        {
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
           "count": 1
         },
         {
@@ -833,6 +847,20 @@
           "count": 1
         },
         {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
           "o_id": 391,
           "name": "Sapouy",
           "lat": 11.55444,
@@ -861,48 +889,589 @@
           "count": 1
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
           "count": 1
         },
         {
-          "o_id": 303,
-          "name": "Dédougou",
-          "lat": 12.46338,
-          "lng": -3.46075,
-          "count": 1
-        },
-        {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 554,
-          "name": "Italie",
-          "lat": 42.5,
-          "lng": 12.5,
-          "count": 1
-        },
-        {
-          "o_id": 63431,
-          "name": "Sourou",
-          "lat": 13.066666666667,
-          "lng": -3.0666666666667,
+          "o_id": 63422,
+          "name": "Passoré",
+          "lat": 12.95,
+          "lng": -2.2666666666667,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 11
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 4
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "afrique - africain - islamique - coopération - arabe - conférence",
+          "count": 1
+        },
+        {
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 12
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 15
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 19
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 15
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 13
+              },
+              {
+                "name": "Central",
+                "count": 2
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.11,
+            "rated_articles": 19
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 7
+              },
+              {
+                "name": "Central",
+                "count": 7
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 1.84,
+            "rated_articles": 19
+          }
+        },
+        "articles_total": 19
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1978,
+          1985,
+          1990,
+          1993,
+          1994,
+          1995,
+          1997,
+          1998,
+          1999,
+          2001,
+          2003,
+          2010
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            9,
+            4
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            7,
+            5,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            9,
+            7,
+            1
+          ],
+          [
+            9,
+            3,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            10,
+            9,
+            1
+          ],
+          [
+            11,
+            0,
+            1
+          ],
+          [
+            9,
+            10,
+            2
+          ],
+          [
+            9,
+            1,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            5,
+            7,
+            1
+          ],
+          [
+            8,
+            4,
+            1
+          ],
+          [
+            8,
+            5,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Burkina Faso",
+          "Ouagadougou",
+          "Formation",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Coran",
+          "Association Mondiale de l'Appel Islamique",
+          "Libye",
+          "Kadiogo",
+          "Femmes",
+          "Culture",
+          "Coopération",
+          "Unité",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Imamat",
+          "Formation des imams et des prêcheurs"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            6,
+            1,
+            3,
+            5,
+            6,
+            2,
+            4,
+            4,
+            5,
+            2,
+            2,
+            4,
+            4
+          ],
+          [
+            5,
+            0,
+            5,
+            6,
+            3,
+            4,
+            3,
+            4,
+            3,
+            2,
+            3,
+            4,
+            3,
+            2,
+            2
+          ],
+          [
+            6,
+            5,
+            0,
+            2,
+            3,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            3,
+            3
+          ],
+          [
+            1,
+            6,
+            2,
+            0,
+            5,
+            1,
+            0,
+            5,
+            2,
+            1,
+            0,
+            3,
+            4,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            5,
+            0,
+            1,
+            2,
+            4,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            5,
+            4,
+            3,
+            1,
+            1,
+            0,
+            2,
+            1,
+            3,
+            0,
+            1,
+            2,
+            2,
+            4,
+            4
+          ],
+          [
+            6,
+            3,
+            4,
+            0,
+            2,
+            2,
+            0,
+            1,
+            2,
+            3,
+            4,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            2,
+            4,
+            3,
+            5,
+            4,
+            1,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            2,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            3,
+            2,
+            2,
+            3,
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            2,
+            3,
+            3
+          ],
+          [
+            4,
+            2,
+            3,
+            1,
+            1,
+            0,
+            3,
+            1,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            3,
+            3,
+            0,
+            1,
+            1,
+            4,
+            0,
+            1,
+            3,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            4,
+            0,
+            3,
+            1,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            3,
+            0,
+            4,
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            2,
+            3,
+            0,
+            1,
+            4,
+            2,
+            1,
+            3,
+            0,
+            1,
+            0,
+            0,
+            0,
+            4
+          ],
+          [
+            4,
+            2,
+            3,
+            0,
+            1,
+            4,
+            2,
+            1,
+            3,
+            0,
+            1,
+            0,
+            0,
+            4,
+            0
+          ]
+        ]
+      }
     }
   }
 }

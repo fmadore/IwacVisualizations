@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:23.088609+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:24.169986+00:00",
   "person": {
     "o_id": 15285,
     "title": "Mirza Ghulam Ahmad",
@@ -1511,6 +1511,1033 @@
         }
       ],
       "creator": []
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 10
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 4
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 10
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 4
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        }
+      ],
+      "creator": []
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 4
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.56,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.94,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 11
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 2.12,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 4
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.56,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.94,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 11
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 13
+              }
+            ],
+            "subjectivite_avg": 2.12,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1989,
+          1990,
+          1991,
+          1992,
+          1995,
+          1999,
+          2009,
+          2011,
+          2012,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            9,
+            0,
+            1
+          ],
+          [
+            9,
+            10,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            8,
+            1,
+            1
+          ],
+          [
+            6,
+            11,
+            3
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          1989,
+          1990,
+          1991,
+          1992,
+          1995,
+          1999,
+          2009,
+          2011,
+          2012,
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            9,
+            0,
+            1
+          ],
+          [
+            9,
+            10,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            3,
+            11,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            8,
+            1,
+            1
+          ],
+          [
+            6,
+            11,
+            3
+          ]
+        ]
+      },
+      "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Mahomet",
+          "Ahmadiyya",
+          "Ahmadiyya CI",
+          "Coran",
+          "Éducation",
+          "Santé",
+          "Paix",
+          "Abdul Quyyom Pasha",
+          "Humanity First",
+          "Guerre",
+          "Charité",
+          "Pluralisme religieux",
+          "Moïse",
+          "Économie",
+          "Coulibaly Zié Oumar"
+        ],
+        "matrix": [
+          [
+            0,
+            10,
+            7,
+            7,
+            5,
+            5,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            10,
+            0,
+            6,
+            6,
+            6,
+            6,
+            6,
+            4,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            7,
+            6,
+            0,
+            6,
+            3,
+            3,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2
+          ],
+          [
+            7,
+            6,
+            6,
+            0,
+            3,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            6,
+            3,
+            3,
+            0,
+            6,
+            2,
+            2,
+            3,
+            1,
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            6,
+            3,
+            3,
+            6,
+            0,
+            2,
+            2,
+            3,
+            1,
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            6,
+            2,
+            3,
+            2,
+            2,
+            0,
+            3,
+            1,
+            2,
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            4,
+            0,
+            2,
+            2,
+            2,
+            3,
+            0,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            1,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Mahomet",
+          "Ahmadiyya",
+          "Ahmadiyya CI",
+          "Coran",
+          "Éducation",
+          "Santé",
+          "Paix",
+          "Abdul Quyyom Pasha",
+          "Humanity First",
+          "Guerre",
+          "Charité",
+          "Pluralisme religieux",
+          "Moïse",
+          "Économie",
+          "Coulibaly Zié Oumar"
+        ],
+        "matrix": [
+          [
+            0,
+            10,
+            7,
+            7,
+            5,
+            5,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            10,
+            0,
+            6,
+            6,
+            6,
+            6,
+            6,
+            4,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            7,
+            6,
+            0,
+            6,
+            3,
+            3,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2
+          ],
+          [
+            7,
+            6,
+            6,
+            0,
+            3,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            6,
+            3,
+            3,
+            0,
+            6,
+            2,
+            2,
+            3,
+            1,
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            6,
+            3,
+            3,
+            6,
+            0,
+            2,
+            2,
+            3,
+            1,
+            1,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            6,
+            2,
+            3,
+            2,
+            2,
+            0,
+            3,
+            1,
+            2,
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            4,
+            0,
+            2,
+            2,
+            2,
+            3,
+            0,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            1,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [],
+        "matrix": []
+      }
     }
   }
 }

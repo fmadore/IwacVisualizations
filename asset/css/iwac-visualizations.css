@@ -20,6 +20,39 @@
 */
 
 /* ------------------------------------------------------------------- */
+/*  Semantic palettes                                                   */
+/*                                                                      */
+/*  Module-scoped tokens for charts that need a divergent or sequential */
+/*  scale the IWAC theme doesn't already define. Each token references  */
+/*  an IWAC theme variable (so dark mode + admin overrides flow         */
+/*  through automatically) with an inline fallback for when the theme   */
+/*  isn't installed. Read at runtime by chart panels via                */
+/*  getComputedStyle — never hardcode hex in the JS.                    */
+/* ------------------------------------------------------------------- */
+
+:root {
+    /* Sentiment polarité — divergent (positive → neutral → negative).
+       Maps to the IWAC theme's success/warning/error tokens when
+       available, otherwise to the same colorblind-safe fallbacks the
+       IWAC palette uses elsewhere. */
+    --iwac-vis-sent-pos-strong: var(--success-strong, #15803d);
+    --iwac-vis-sent-pos:        var(--success,        #65a30d);
+    --iwac-vis-sent-neutral:    var(--muted,          #6e7a82);
+    --iwac-vis-sent-neg:        var(--warning,        #ea580c);
+    --iwac-vis-sent-neg-strong: var(--error,          #b91c1c);
+    --iwac-vis-sent-na:         var(--border-light,   var(--border, #dcd7ce));
+
+    /* Centralité — sequential (single hue, fading toward background).
+       Built from --primary so the centrality palette tracks whichever
+       accent color the IWAC theme is currently configured with. */
+    --iwac-vis-cent-1: var(--primary, #e67a14);
+    --iwac-vis-cent-2: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-3: color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-4: color-mix(in srgb, var(--primary, #e67a14) 30%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-na: var(--border-light, var(--border, #dcd7ce));
+}
+
+/* ------------------------------------------------------------------- */
 /*  Block wrapper                                                       */
 /* ------------------------------------------------------------------- */
 
@@ -842,6 +875,41 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     font-size: var(--text-sm, 0.9rem);
     line-height: 1.5;
     max-width: 72ch;
+}
+
+/* -------------------------------------------------------------------------
+ * Sentiment panel — model picker + stacked bars
+ *
+ * The polarité chart uses --iwac-vis-sent-* tokens, the centralité
+ * chart uses --iwac-vis-cent-* tokens (defined at the top of this
+ * file). The JS reads them via getComputedStyle — never hex literals.
+ * ------------------------------------------------------------------------- */
+
+.iwac-vis-sentiment {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-sentiment__picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-sentiment__caption {
+    font-size: var(--text-sm, 0.9rem);
+    color: var(--muted, #6e7a82);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-sentiment__chart {
+    width: 100%;
+    min-height: 110px;
+}
+
+.iwac-vis-sentiment__chart--cen {
+    margin-top: var(--space-2, 0.5rem);
 }
 
 /* -------------------------------------------------------------------------

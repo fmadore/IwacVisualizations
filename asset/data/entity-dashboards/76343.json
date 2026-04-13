@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:40.476246+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:54:10.250201+00:00",
   "entity": {
     "o_id": 76343,
     "title": "Médersas",
@@ -52,15 +52,6 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Pays",
-          "total": 5,
-          "articles": 5,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1993,
-          "year_max": 2013
-        },
-        {
           "name": "Sidwaya",
           "total": 5,
           "articles": 5,
@@ -68,6 +59,15 @@
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2004
+        },
+        {
+          "name": "Le Pays",
+          "total": 5,
+          "articles": 5,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 2013
         },
         {
           "name": "L'Observateur Paalga",
@@ -413,13 +413,6 @@
           "count": 2
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
-        },
-        {
           "o_id": 63422,
           "name": "Passoré",
           "lat": 12.95,
@@ -427,24 +420,31 @@
           "count": 2
         },
         {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
           "count": 1
         },
         {
-          "o_id": 368,
-          "name": "Namissiguima",
-          "lat": 13.59468,
-          "lng": -2.21892,
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 1
         },
         {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
+          "o_id": 76316,
+          "name": "Gounghin",
+          "lat": 12.35641975819987,
+          "lng": -1.5480543813205,
           "count": 1
         },
         {
@@ -476,27 +476,518 @@
           "count": 1
         },
         {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
           "count": 1
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
+          "o_id": 368,
+          "name": "Namissiguima",
+          "lat": 13.59468,
+          "lng": -2.21892,
           "count": 1
         },
         {
-          "o_id": 76316,
-          "name": "Gounghin",
-          "lat": 12.35641975819987,
-          "lng": -1.5480543813205,
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 9
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 11
+              },
+              {
+                "name": "Central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.08,
+            "rated_articles": 13
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              },
+              {
+                "name": "Central",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.15,
+            "rated_articles": 13
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 8
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 12
+              }
+            ],
+            "subjectivite_avg": 2.08,
+            "rated_articles": 13
+          }
+        },
+        "articles_total": 13
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1993,
+          1994,
+          1996,
+          1999,
+          2000,
+          2001,
+          2004,
+          2013
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            1,
+            9,
+            1
+          ],
+          [
+            0,
+            0,
+            2
+          ],
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            7,
+            5,
+            1
+          ],
+          [
+            5,
+            2,
+            1
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Burkina Faso",
+          "Éducation",
+          "Enseignement confessionnel islamique",
+          "Ouagadougou",
+          "Coopération",
+          "Alphabétisation",
+          "Communauté Musulmane du Burkina Faso",
+          "Formation",
+          "Yako",
+          "Association Mondiale de l'Appel Islamique",
+          "Toumani Triandé",
+          "Oumarou Kanazoé",
+          "Centre culturel arabe libyen",
+          "UNICEF",
+          "Ouahigouya"
+        ],
+        "matrix": [
+          [
+            0,
+            12,
+            12,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2
+          ],
+          [
+            12,
+            0,
+            11,
+            4,
+            3,
+            3,
+            4,
+            3,
+            4,
+            2,
+            3,
+            3,
+            2,
+            2,
+            2
+          ],
+          [
+            12,
+            11,
+            0,
+            5,
+            4,
+            4,
+            3,
+            4,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            4,
+            5,
+            0,
+            3,
+            1,
+            1,
+            2,
+            0,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            3,
+            4,
+            3,
+            0,
+            1,
+            0,
+            2,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            3,
+            4,
+            1,
+            1,
+            0,
+            0,
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            3,
+            1,
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            3,
+            4,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            0,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            2,
+            3,
+            2,
+            3,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            0,
+            0,
+            3,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            0,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

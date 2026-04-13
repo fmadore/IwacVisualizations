@@ -204,6 +204,24 @@
             'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named.',
             'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
+            // New shared panels (person + entity)
+            'Year × month heatmap':        'Year × month heatmap',
+            'Top LDA topics':              'Top LDA topics',
+            'AI sentiment':                'AI sentiment',
+            'Subject co-occurrence':       'Subject co-occurrence',
+            'desc_year_month_heatmap':     'Mention counts per year and month, drawn only from items with a parseable YYYY-MM date. Cells stay blank when no date can be resolved.',
+            'desc_lda_topics':             'Top 12 LDA-30 topic labels for items mentioning this entity, by article count. Topics come from the precomputed LDA model on the articles subset; publications and references contribute to mention counts but not to the topic mix.',
+            'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, with a side-by-side comparison of the three AI raters (Gemini, ChatGPT, Mistral). The model picker switches between them; the bars update in place. Articles only — publications and references are not rated.',
+            'desc_subject_cooccurrence':   'Pairwise co-occurrence among the top 15 entities mentioned alongside this one. Distinct from the Associated entities network: that one is ego-centric (this entity at the centre), this one is pair-wise (which neighbours always travel together?).',
+
+            // AI sentiment — model + axis labels
+            'Gemini':       'Gemini',
+            'ChatGPT':      'ChatGPT',
+            'Mistral':      'Mistral',
+            'Polarity':     'Polarity',
+            'Centrality':   'Centrality',
+            'Subjectivity': 'Subjectivity',
+
             // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
             'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
             'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
@@ -383,6 +401,24 @@
             'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
             'desc_entity_associated_entities':  'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette entit\u00e9 est nomm\u00e9e.',
             'desc_entity_associated_locations': 'Lieux g\u00e9ographiques mentionn\u00e9s dans les m\u00eames notices que cette entit\u00e9, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
+
+            // New shared panels (person + entity)
+            'Year × month heatmap':        'Carte de chaleur ann\u00e9e \u00d7 mois',
+            'Top LDA topics':              'Th\u00e8mes LDA principaux',
+            'AI sentiment':                'Sentiment IA',
+            'Subject co-occurrence':       'Co-occurrence de sujets',
+            'desc_year_month_heatmap':     'Nombre de mentions par ann\u00e9e et par mois, calcul\u00e9 uniquement \u00e0 partir des notices dont la date YYYY-MM peut \u00eatre extraite. Les cellules restent vides quand la date n\u2019est pas r\u00e9solue.',
+            'desc_lda_topics':             'Les 12 \u00e9tiquettes de th\u00e8mes LDA les plus fr\u00e9quentes pour les articles mentionnant cette entit\u00e9. Issu du mod\u00e8le LDA pr\u00e9calcul\u00e9 sur le sous-ensemble des articles ; publications et r\u00e9f\u00e9rences contribuent aux comptes de mentions mais pas au mix th\u00e9matique.',
+            'desc_ai_sentiment':           'Polarit\u00e9 et centralit\u00e9 des articles mentionnant cette entit\u00e9, avec comparaison des trois mod\u00e8les IA (Gemini, ChatGPT, Mistral). Le s\u00e9lecteur de mod\u00e8le bascule entre eux ; les barres se mettent \u00e0 jour sur place. Articles uniquement — publications et r\u00e9f\u00e9rences ne sont pas \u00e9valu\u00e9es.',
+            'desc_subject_cooccurrence':   'Co-occurrence par paires parmi les 15 entit\u00e9s les plus mentionn\u00e9es aux c\u00f4t\u00e9s de celle-ci. Distinct du panneau Entit\u00e9s associ\u00e9es : celui-l\u00e0 est centr\u00e9 sur l\u2019entit\u00e9 (poids = TF-IDF vers le centre), celui-ci est par paires (quels voisins voyagent toujours ensemble ?).',
+
+            // AI sentiment — model + axis labels
+            'Gemini':       'Gemini',
+            'ChatGPT':      'ChatGPT',
+            'Mistral':      'Mistral',
+            'Polarity':     'Polarit\u00e9',
+            'Centrality':   'Centralit\u00e9',
+            'Subjectivity': 'Subjectivit\u00e9',
 
             // Network panel toolbar
             'Zoom in': 'Zoom avant',

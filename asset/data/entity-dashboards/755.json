@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:20.602770+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:41.394287+00:00",
   "entity": {
     "o_id": 755,
     "title": "État islamique dans le Grand Sahara",
@@ -69,15 +69,6 @@
           "year_max": 2020
         },
         {
-          "name": "Sidwaya",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2020,
-          "year_max": 2020
-        },
-        {
           "name": "La Nouvelle Tribune",
           "total": 2,
           "articles": 2,
@@ -94,6 +85,15 @@
           "country": "Bénin",
           "year_min": 2022,
           "year_max": 2023
+        },
+        {
+          "name": "Sidwaya",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
         },
         {
           "name": "Le Pays",
@@ -114,15 +114,6 @@
           "year_max": 2021
         },
         {
-          "name": "Burkina 24",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2020,
-          "year_max": 2020
-        },
-        {
           "name": "24 Heures au Bénin",
           "total": 1,
           "articles": 1,
@@ -139,6 +130,15 @@
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2016
+        },
+        {
+          "name": "Burkina 24",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
         }
       ]
     }
@@ -523,6 +523,13 @@
           "count": 6
         },
         {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 5
+        },
+        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -534,13 +541,6 @@
           "name": "France",
           "lat": 46.0,
           "lng": 2.0,
-          "count": 5
-        },
-        {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
           "count": 5
         },
         {
@@ -565,17 +565,17 @@
           "count": 2
         },
         {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 2
-        },
-        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
           "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
           "count": 2
         },
         {
@@ -584,20 +584,6 @@
           "lat": 28.0,
           "lng": 17.0,
           "count": 2
-        },
-        {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
-          "count": 1
-        },
-        {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
-          "count": 1
         },
         {
           "o_id": 273,
@@ -635,41 +621,6 @@
           "count": 1
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 1
-        },
-        {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
-          "count": 1
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 1
-        },
-        {
-          "o_id": 14637,
-          "name": "Rwanda",
-          "lat": -2.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 333,
-          "name": "Kandi",
-          "lat": 11.13417,
-          "lng": 2.93861,
-          "count": 1
-        },
-        {
           "o_id": 62026,
           "name": "Porga",
           "lat": 11.05,
@@ -691,10 +642,10 @@
           "count": 1
         },
         {
-          "o_id": 547,
-          "name": "Cameroun",
-          "lat": 6.0,
-          "lng": 12.5,
+          "o_id": 14637,
+          "name": "Rwanda",
+          "lat": -2.0,
+          "lng": 30.0,
           "count": 1
         },
         {
@@ -703,8 +654,580 @@
           "lat": 10.92821,
           "lng": 3.69429,
           "count": 1
+        },
+        {
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
+          "count": 1
+        },
+        {
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 1
+        },
+        {
+          "o_id": 547,
+          "name": "Cameroun",
+          "lat": 6.0,
+          "lng": 12.5,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 15
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 13
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 7
+              },
+              {
+                "name": "Marginal",
+                "count": 6
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              },
+              {
+                "name": "Négatif",
+                "count": 8
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 2.31,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 10
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 11
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.5,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2016,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            5,
+            8,
+            2
+          ],
+          [
+            6,
+            2,
+            2
+          ],
+          [
+            2,
+            10,
+            2
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            3,
+            5,
+            2
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Terrorisme",
+          "Radicalisation",
+          "Sécurité",
+          "Groupe de Soutien à l'Islam et aux Musulmans",
+          "Mali",
+          "Niger",
+          "Burkina Faso",
+          "France",
+          "Bénin",
+          "Djihadisme",
+          "Forces de Défense et de Sécurité",
+          "G5 Sahel",
+          "Alibori",
+          "Armée",
+          "Al-Qaïda au Maghreb Islamique"
+        ],
+        "matrix": [
+          [
+            0,
+            16,
+            8,
+            7,
+            6,
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            16,
+            0,
+            8,
+            7,
+            6,
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            8,
+            8,
+            0,
+            4,
+            3,
+            4,
+            5,
+            4,
+            5,
+            4,
+            3,
+            2,
+            3,
+            2,
+            2
+          ],
+          [
+            7,
+            7,
+            4,
+            0,
+            3,
+            3,
+            4,
+            4,
+            3,
+            1,
+            3,
+            3,
+            0,
+            0,
+            2
+          ],
+          [
+            6,
+            6,
+            3,
+            3,
+            0,
+            4,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            5,
+            5,
+            4,
+            3,
+            4,
+            0,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            3,
+            3,
+            0,
+            4,
+            3,
+            2,
+            3,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            5,
+            5,
+            4,
+            4,
+            3,
+            3,
+            4,
+            0,
+            2,
+            2,
+            3,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            3,
+            2,
+            3,
+            3,
+            2,
+            0,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            3,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

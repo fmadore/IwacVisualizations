@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:15.490940+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:34.927742+00:00",
   "entity": {
     "o_id": 61326,
     "title": "San-Pédro",
@@ -156,15 +156,6 @@
           "year_max": 2016
         },
         {
-          "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2018,
-          "year_max": 2018
-        },
-        {
           "name": "Le Temps",
           "total": 1,
           "articles": 1,
@@ -174,15 +165,6 @@
           "year_max": 2011
         },
         {
-          "name": "Fraternité Hebdo",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1977,
-          "year_max": 1977
-        },
-        {
           "name": "Le Nouvel Horizon",
           "total": 1,
           "articles": 1,
@@ -190,6 +172,24 @@
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Fraternité Hebdo",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1977,
+          "year_max": 1977
         },
         {
           "name": "Le Jour",
@@ -537,15 +537,15 @@
             "score": 8.0516
           },
           {
-            "o_id": 76482,
-            "title": "Tiébissou",
+            "o_id": 63433,
+            "title": "Tabou",
             "type": "Lieux",
             "cooc": 3,
             "score": 7.9955
           },
           {
-            "o_id": 63433,
-            "title": "Tabou",
+            "o_id": 76482,
+            "title": "Tiébissou",
             "type": "Lieux",
             "cooc": 3,
             "score": 7.9955
@@ -846,13 +846,13 @@
           },
           {
             "source": 61326,
-            "target": 76482,
+            "target": 63433,
             "weight": 7.9955,
             "cooc": 3
           },
           {
             "source": 61326,
-            "target": 63433,
+            "target": 76482,
             "weight": 7.9955,
             "cooc": 3
           },
@@ -944,17 +944,17 @@
           "count": 13
         },
         {
-          "o_id": 46316,
-          "name": "Adjamé",
-          "lat": 5.3648,
-          "lng": -4.02366,
-          "count": 12
-        },
-        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 12
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
           "count": 12
         },
         {
@@ -972,13 +972,6 @@
           "count": 11
         },
         {
-          "o_id": 46256,
-          "name": "Treichville",
-          "lat": 5.3,
-          "lng": -4.0,
-          "count": 10
-        },
-        {
           "o_id": 46294,
           "name": "Yopougon",
           "lat": 5.316667,
@@ -990,6 +983,13 @@
           "name": "La Mecque",
           "lat": 21.4225,
           "lng": 39.826111,
+          "count": 10
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
           "count": 10
         },
         {
@@ -1021,10 +1021,10 @@
           "count": 7
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
           "count": 6
         },
         {
@@ -1035,18 +1035,11 @@
           "count": 6
         },
         {
-          "o_id": 46218,
-          "name": "Agboville",
-          "lat": 5.933333,
-          "lng": -4.216667,
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
           "count": 6
-        },
-        {
-          "o_id": 46196,
-          "name": "Man",
-          "lat": 7.4125,
-          "lng": -7.553611,
-          "count": 5
         },
         {
           "o_id": 46279,
@@ -1063,10 +1056,10 @@
           "count": 5
         },
         {
-          "o_id": 76469,
-          "name": "Bouna",
-          "lat": 9.26666667,
-          "lng": -3.0,
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
           "count": 5
         },
         {
@@ -1077,31 +1070,17 @@
           "count": 5
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 4
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 4
+          "o_id": 76469,
+          "name": "Bouna",
+          "lat": 9.26666667,
+          "lng": -3.0,
+          "count": 5
         },
         {
           "o_id": 61324,
           "name": "Grande Mosquée d'Adjamé",
           "lat": 5.353286615241792,
           "lng": -4.026326534959187,
-          "count": 4
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
           "count": 4
         },
         {
@@ -1126,10 +1105,31 @@
           "count": 4
         },
         {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 4
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 4
+        },
+        {
           "o_id": 63428,
           "name": "Sassandra",
           "lat": 4.95,
           "lng": -6.0833333333333,
+          "count": 4
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
           "count": 4
         },
         {
@@ -1140,24 +1140,17 @@
           "count": 4
         },
         {
-          "o_id": 539,
-          "name": "Mauritanie",
-          "lat": 20.25,
-          "lng": -10.5,
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
           "count": 3
         },
         {
-          "o_id": 442,
-          "name": "Djeddah",
-          "lat": 21.49012,
-          "lng": 39.18624,
-          "count": 3
-        },
-        {
-          "o_id": 60484,
-          "name": "Dakar",
-          "lat": 14.731944444444,
-          "lng": -17.457222222222,
+          "o_id": 63421,
+          "name": "Oumé",
+          "lat": 6.3833333333333,
+          "lng": -5.4166666666667,
           "count": 3
         },
         {
@@ -1182,31 +1175,10 @@
           "count": 3
         },
         {
-          "o_id": 76482,
-          "name": "Tiébissou",
-          "lat": 7.15,
-          "lng": -5.2333333333333,
-          "count": 3
-        },
-        {
           "o_id": 328,
           "name": "Guinée",
           "lat": 10.83333,
           "lng": -10.66667,
-          "count": 3
-        },
-        {
-          "o_id": 76472,
-          "name": "Katiola",
-          "lat": 8.13333333,
-          "lng": -5.1,
-          "count": 3
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
           "count": 3
         },
         {
@@ -1224,10 +1196,45 @@
           "count": 3
         },
         {
+          "o_id": 76482,
+          "name": "Tiébissou",
+          "lat": 7.15,
+          "lng": -5.2333333333333,
+          "count": 3
+        },
+        {
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 3
+        },
+        {
+          "o_id": 60484,
+          "name": "Dakar",
+          "lat": 14.731944444444,
+          "lng": -17.457222222222,
+          "count": 3
+        },
+        {
+          "o_id": 539,
+          "name": "Mauritanie",
+          "lat": 20.25,
+          "lng": -10.5,
+          "count": 3
+        },
+        {
           "o_id": 76449,
           "name": "Boundiali",
           "lat": 9.516667,
           "lng": -6.483333,
+          "count": 3
+        },
+        {
+          "o_id": 76472,
+          "name": "Katiola",
+          "lat": 8.13333333,
+          "lng": -5.1,
           "count": 3
         },
         {
@@ -1238,66 +1245,38 @@
           "count": 3
         },
         {
-          "o_id": 63421,
-          "name": "Oumé",
-          "lat": 6.3833333333333,
-          "lng": -5.4166666666667,
-          "count": 3
-        },
-        {
-          "o_id": 25602,
-          "name": "Gambie",
-          "lat": 13.5,
-          "lng": -15.5,
+          "o_id": 48426,
+          "name": "Lakota",
+          "lat": 5.8475,
+          "lng": -5.681944,
           "count": 2
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "o_id": 76491,
+          "name": "Bonon",
+          "lat": 6.9333333333333,
+          "lng": -6.05,
           "count": 2
         },
         {
-          "o_id": 413,
-          "name": "Tunisie",
-          "lat": 34.0,
-          "lng": 9.0,
+          "o_id": 76493,
+          "name": "Ouragahio",
+          "lat": 6.41667,
+          "lng": -5.91667,
           "count": 2
         },
         {
-          "o_id": 60543,
-          "name": "Sierra Leone",
-          "lat": 8.5,
-          "lng": -12.1,
+          "o_id": 76497,
+          "name": "Vavoua",
+          "lat": 7.38333333,
+          "lng": -6.48333333,
           "count": 2
         },
         {
-          "o_id": 63391,
-          "name": "Anyama",
-          "lat": 5.4944444444444,
-          "lng": -4.0516666666667,
-          "count": 2
-        },
-        {
-          "o_id": 48419,
-          "name": "Koumassi",
-          "lat": 5.3,
-          "lng": -3.95,
-          "count": 2
-        },
-        {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
+          "o_id": 76470,
+          "name": "Issia",
+          "lat": 6.4922222222222,
+          "lng": -6.5855555555556,
           "count": 2
         },
         {
@@ -1308,17 +1287,10 @@
           "count": 2
         },
         {
-          "o_id": 76483,
-          "name": "Gbêkê",
-          "lat": 7.68333333,
-          "lng": -5.01666667,
-          "count": 2
-        },
-        {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
+          "o_id": 76463,
+          "name": "Fès",
+          "lat": 34.043333,
+          "lng": -5.003333,
           "count": 2
         },
         {
@@ -1336,20 +1308,6 @@
           "count": 2
         },
         {
-          "o_id": 76443,
-          "name": "Williamsville",
-          "lat": 5.372656157414483,
-          "lng": -4.0202704387950305,
-          "count": 2
-        },
-        {
-          "o_id": 76491,
-          "name": "Bonon",
-          "lat": 6.9333333333333,
-          "lng": -6.05,
-          "count": 2
-        },
-        {
           "o_id": 76446,
           "name": "Aéroport International Félix Houphouët-Boigny",
           "lat": 5.261417,
@@ -1357,10 +1315,52 @@
           "count": 2
         },
         {
-          "o_id": 76463,
-          "name": "Fès",
-          "lat": 34.043333,
-          "lng": -5.003333,
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 2
+        },
+        {
+          "o_id": 76483,
+          "name": "Gbêkê",
+          "lat": 7.68333333,
+          "lng": -5.01666667,
+          "count": 2
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
+          "count": 2
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 2
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 2
+        },
+        {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
           "count": 2
         },
         {
@@ -1371,6 +1371,27 @@
           "count": 2
         },
         {
+          "o_id": 14522,
+          "name": "Mina",
+          "lat": 21.413333,
+          "lng": 39.893333,
+          "count": 2
+        },
+        {
+          "o_id": 25602,
+          "name": "Gambie",
+          "lat": 13.5,
+          "lng": -15.5,
+          "count": 2
+        },
+        {
+          "o_id": 60543,
+          "name": "Sierra Leone",
+          "lat": 8.5,
+          "lng": -12.1,
+          "count": 2
+        },
+        {
           "o_id": 63382,
           "name": "Touba",
           "lat": 8.283333,
@@ -1378,10 +1399,17 @@
           "count": 2
         },
         {
-          "o_id": 48426,
-          "name": "Lakota",
-          "lat": 5.8475,
-          "lng": -5.681944,
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
+        {
+          "o_id": 413,
+          "name": "Tunisie",
+          "lat": 34.0,
+          "lng": 9.0,
           "count": 2
         },
         {
@@ -1392,13 +1420,6 @@
           "count": 2
         },
         {
-          "o_id": 76470,
-          "name": "Issia",
-          "lat": 6.4922222222222,
-          "lng": -6.5855555555556,
-          "count": 2
-        },
-        {
           "o_id": 76499,
           "name": "Bongouanou",
           "lat": 6.65,
@@ -1406,25 +1427,130 @@
           "count": 2
         },
         {
-          "o_id": 14522,
-          "name": "Mina",
-          "lat": 21.413333,
-          "lng": 39.893333,
-          "count": 2
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
         },
         {
-          "o_id": 76493,
-          "name": "Ouragahio",
-          "lat": 6.41667,
-          "lng": -5.91667,
-          "count": 2
+          "o_id": 61325,
+          "name": "Mosquée Bilal",
+          "lat": 5.249081568964093,
+          "lng": -3.9182779270167036,
+          "count": 1
         },
         {
-          "o_id": 76497,
-          "name": "Vavoua",
-          "lat": 7.38333333,
-          "lng": -6.48333333,
-          "count": 2
+          "o_id": 76500,
+          "name": "Biétry",
+          "lat": 5.274939,
+          "lng": -3.974712,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
+          "count": 1
+        },
+        {
+          "o_id": 76461,
+          "name": "Riviéra 2",
+          "lat": 5.347059329725747,
+          "lng": -3.977945412685864,
+          "count": 1
+        },
+        {
+          "o_id": 548,
+          "name": "Gabon",
+          "lat": -1.0,
+          "lng": 11.75,
+          "count": 1
+        },
+        {
+          "o_id": 76457,
+          "name": "Cocody Angré",
+          "lat": 5.386217444874156,
+          "lng": -3.9826822579490044,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
+          "count": 1
+        },
+        {
+          "o_id": 15273,
+          "name": "Liberia",
+          "lat": 6.533333,
+          "lng": -9.75,
+          "count": 1
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 76468,
+          "name": "Goulia",
+          "lat": 10.019144689457782,
+          "lng": -7.200250689201636,
+          "count": 1
+        },
+        {
+          "o_id": 63426,
+          "name": "Samatiguila",
+          "lat": 9.8333333333333,
+          "lng": -7.5666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76496,
+          "name": "Tienko",
+          "lat": 10.216666666667,
+          "lng": -7.4833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
         },
         {
           "o_id": 414,
@@ -1469,38 +1595,24 @@
           "count": 1
         },
         {
-          "o_id": 76468,
-          "name": "Goulia",
-          "lat": 10.019144689457782,
-          "lng": -7.200250689201636,
+          "o_id": 13837,
+          "name": "Chine",
+          "lat": 35.844722,
+          "lng": 103.451944,
           "count": 1
         },
         {
-          "o_id": 63426,
-          "name": "Samatiguila",
-          "lat": 9.8333333333333,
-          "lng": -7.5666666666667,
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
           "count": 1
         },
         {
-          "o_id": 76496,
-          "name": "Tienko",
-          "lat": 10.216666666667,
-          "lng": -7.4833333333333,
-          "count": 1
-        },
-        {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 1
-        },
-        {
-          "o_id": 23632,
-          "name": "Bingerville",
-          "lat": 5.35,
-          "lng": -3.9,
+          "o_id": 353,
+          "name": "Liban",
+          "lat": 33.83333,
+          "lng": 35.83333,
           "count": 1
         },
         {
@@ -1529,118 +1641,6 @@
           "name": "Nouakchott",
           "lat": 18.08581,
           "lng": -15.9785,
-          "count": 1
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 1
-        },
-        {
-          "o_id": 13448,
-          "name": "Le Caire",
-          "lat": 30.044444,
-          "lng": 31.235833,
-          "count": 1
-        },
-        {
-          "o_id": 76461,
-          "name": "Riviéra 2",
-          "lat": 5.347059329725747,
-          "lng": -3.977945412685864,
-          "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 76457,
-          "name": "Cocody Angré",
-          "lat": 5.386217444874156,
-          "lng": -3.9826822579490044,
-          "count": 1
-        },
-        {
-          "o_id": 13837,
-          "name": "Chine",
-          "lat": 35.844722,
-          "lng": 103.451944,
-          "count": 1
-        },
-        {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 353,
-          "name": "Liban",
-          "lat": 33.83333,
-          "lng": 35.83333,
-          "count": 1
-        },
-        {
-          "o_id": 548,
-          "name": "Gabon",
-          "lat": -1.0,
-          "lng": 11.75,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 531,
-          "name": "Riyad",
-          "lat": 24.65,
-          "lng": 46.71,
-          "count": 1
-        },
-        {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
-          "count": 1
-        },
-        {
-          "o_id": 61325,
-          "name": "Mosquée Bilal",
-          "lat": 5.249081568964093,
-          "lng": -3.9182779270167036,
-          "count": 1
-        },
-        {
-          "o_id": 76500,
-          "name": "Biétry",
-          "lat": 5.274939,
-          "lng": -3.974712,
-          "count": 1
-        },
-        {
-          "o_id": 15273,
-          "name": "Liberia",
-          "lat": 6.533333,
-          "lng": -9.75,
-          "count": 1
-        },
-        {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
           "count": 1
         },
         {
@@ -1700,10 +1700,10 @@
           "count": 1
         },
         {
-          "o_id": 63417,
-          "name": "Marcory",
-          "lat": 5.3,
-          "lng": -3.9833333333333,
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
           "count": 1
         },
         {
@@ -1728,6 +1728,733 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 11
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 6
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 5
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 4
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 4
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 4
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 3
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "count": 2
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 1
+        },
+        {
+          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 4
+              },
+              {
+                "name": "Positif",
+                "count": 23
+              },
+              {
+                "name": "Neutre",
+                "count": 16
+              },
+              {
+                "name": "Négatif",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 41
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.68,
+            "rated_articles": 50
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 33
+              },
+              {
+                "name": "Neutre",
+                "count": 10
+              },
+              {
+                "name": "Négatif",
+                "count": 6
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 38
+              },
+              {
+                "name": "Central",
+                "count": 7
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.8,
+            "rated_articles": 50
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 25
+              },
+              {
+                "name": "Neutre",
+                "count": 10
+              },
+              {
+                "name": "Négatif",
+                "count": 13
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              },
+              {
+                "name": "Central",
+                "count": 35
+              },
+              {
+                "name": "Secondaire",
+                "count": 4
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.55,
+            "rated_articles": 50
+          }
+        },
+        "articles_total": 50
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1973,
+          1977,
+          1981,
+          1986,
+          1992,
+          1993,
+          1994,
+          1995,
+          1996,
+          2001,
+          2003,
+          2007,
+          2008,
+          2009,
+          2010,
+          2011,
+          2013,
+          2014,
+          2016,
+          2017,
+          2018
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            16,
+            8,
+            2
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            11,
+            1,
+            2
+          ],
+          [
+            15,
+            2,
+            1
+          ],
+          [
+            6,
+            2,
+            4
+          ],
+          [
+            5,
+            0,
+            2
+          ],
+          [
+            11,
+            8,
+            1
+          ],
+          [
+            15,
+            7,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            12,
+            2,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            13,
+            9,
+            1
+          ],
+          [
+            19,
+            7,
+            1
+          ],
+          [
+            6,
+            4,
+            1
+          ],
+          [
+            9,
+            5,
+            1
+          ],
+          [
+            17,
+            3,
+            2
+          ],
+          [
+            10,
+            0,
+            2
+          ],
+          [
+            19,
+            9,
+            1
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            20,
+            7,
+            1
+          ],
+          [
+            6,
+            7,
+            2
+          ],
+          [
+            13,
+            3,
+            1
+          ],
+          [
+            15,
+            9,
+            2
+          ],
+          [
+            16,
+            7,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            18,
+            7,
+            2
+          ],
+          [
+            4,
+            11,
+            2
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            16,
+            1,
+            1
+          ],
+          [
+            8,
+            1,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            15,
+            10,
+            1
+          ],
+          [
+            14,
+            7,
+            1
+          ],
+          [
+            11,
+            9,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Abidjan",
+          "Bouaké",
+          "Yamoussoukro",
+          "Éducation",
+          "Politique",
+          "Conseil National Islamique",
+          "Daloa",
+          "Gagnoa",
+          "Korhogo",
+          "Arabie saoudite",
+          "Adjamé",
+          "Cocody",
+          "Paix",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques"
+        ],
+        "matrix": [
+          [
+            0,
+            17,
+            16,
+            12,
+            13,
+            11,
+            12,
+            12,
+            7,
+            10,
+            7,
+            7,
+            5,
+            10,
+            9
+          ],
+          [
+            17,
+            0,
+            19,
+            12,
+            7,
+            7,
+            7,
+            12,
+            11,
+            11,
+            10,
+            9,
+            9,
+            5,
+            4
+          ],
+          [
+            16,
+            19,
+            0,
+            13,
+            5,
+            4,
+            5,
+            12,
+            10,
+            10,
+            11,
+            9,
+            8,
+            3,
+            4
+          ],
+          [
+            12,
+            12,
+            13,
+            0,
+            5,
+            2,
+            2,
+            7,
+            9,
+            9,
+            6,
+            4,
+            4,
+            2,
+            3
+          ],
+          [
+            13,
+            7,
+            5,
+            5,
+            0,
+            5,
+            7,
+            3,
+            0,
+            3,
+            2,
+            4,
+            3,
+            2,
+            3
+          ],
+          [
+            11,
+            7,
+            4,
+            2,
+            5,
+            0,
+            9,
+            3,
+            2,
+            0,
+            3,
+            5,
+            3,
+            3,
+            4
+          ],
+          [
+            12,
+            7,
+            5,
+            2,
+            7,
+            9,
+            0,
+            3,
+            3,
+            1,
+            2,
+            6,
+            4,
+            1,
+            8
+          ],
+          [
+            12,
+            12,
+            12,
+            7,
+            3,
+            3,
+            3,
+            0,
+            9,
+            7,
+            5,
+            6,
+            4,
+            1,
+            3
+          ],
+          [
+            7,
+            11,
+            10,
+            9,
+            0,
+            2,
+            3,
+            9,
+            0,
+            6,
+            5,
+            2,
+            3,
+            0,
+            4
+          ],
+          [
+            10,
+            11,
+            10,
+            9,
+            3,
+            0,
+            1,
+            7,
+            6,
+            0,
+            5,
+            1,
+            4,
+            3,
+            1
+          ],
+          [
+            7,
+            10,
+            11,
+            6,
+            2,
+            3,
+            2,
+            5,
+            5,
+            5,
+            0,
+            6,
+            6,
+            1,
+            1
+          ],
+          [
+            7,
+            9,
+            9,
+            4,
+            4,
+            5,
+            6,
+            6,
+            2,
+            1,
+            6,
+            0,
+            7,
+            0,
+            3
+          ],
+          [
+            5,
+            9,
+            8,
+            4,
+            3,
+            3,
+            4,
+            4,
+            3,
+            4,
+            6,
+            7,
+            0,
+            1,
+            0
+          ],
+          [
+            10,
+            5,
+            3,
+            2,
+            2,
+            3,
+            1,
+            1,
+            0,
+            3,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            9,
+            4,
+            4,
+            3,
+            3,
+            4,
+            8,
+            3,
+            4,
+            1,
+            1,
+            3,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

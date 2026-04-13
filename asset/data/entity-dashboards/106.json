@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:32.533041+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:58.711097+00:00",
   "entity": {
     "o_id": 106,
     "title": "Athéisme",
@@ -75,15 +75,6 @@
           "year_max": 2010
         },
         {
-          "name": "L'Observateur",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1979,
-          "year_max": 1979
-        },
-        {
           "name": "Carrefour africain",
           "total": 1,
           "articles": 1,
@@ -93,13 +84,22 @@
           "year_max": 1972
         },
         {
-          "name": "Daho-Express",
+          "name": "Le vrai visage de l'islam",
           "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 1974,
-          "year_max": 1974
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "country": "Burkina Faso",
+          "year_min": 2007,
+          "year_max": 2007
         },
         {
           "name": "An-Nasr Vendredi",
@@ -120,22 +120,22 @@
           "year_max": 1985
         },
         {
-          "name": "Le vrai visage de l'islam",
+          "name": "L'Observateur",
           "total": 1,
-          "articles": 0,
-          "publications": 1,
+          "articles": 1,
+          "publications": 0,
           "country": "Burkina Faso",
-          "year_min": 2012,
-          "year_max": 2012
+          "year_min": 1979,
+          "year_max": 1979
         },
         {
-          "name": "Le CERFIste",
+          "name": "Daho-Express",
           "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2007,
-          "year_max": 2007
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 1974,
+          "year_max": 1974
         }
       ]
     }
@@ -502,13 +502,6 @@
           "count": 2
         },
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
           "o_id": 385,
           "name": "Porto-Novo",
           "lat": 6.49646,
@@ -558,20 +551,6 @@
           "count": 1
         },
         {
-          "o_id": 299,
-          "name": "Cotonou",
-          "lat": 6.36536,
-          "lng": 2.41833,
-          "count": 1
-        },
-        {
-          "o_id": 370,
-          "name": "Natitingou",
-          "lat": 10.30416,
-          "lng": 1.37962,
-          "count": 1
-        },
-        {
           "o_id": 408,
           "name": "Israël",
           "lat": 31.5,
@@ -605,8 +584,527 @@
           "lat": 13.58278,
           "lng": -2.42158,
           "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 1
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 3.33,
+            "rated_articles": 6
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 0
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.33,
+            "rated_articles": 6
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.83,
+            "rated_articles": 6
+          }
+        },
+        "articles_total": 6
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1972,
+          1974,
+          1979,
+          1985,
+          1994,
+          2007,
+          2008,
+          2010,
+          2012
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            7,
+            11,
+            1
+          ],
+          [
+            8,
+            8,
+            1
+          ],
+          [
+            5,
+            8,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            2,
+            7,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Laïcité",
+          "Violence",
+          "Bénin",
+          "Catholiques",
+          "Extrémisme",
+          "Pluralisme religieux",
+          "Civilisation occidentale",
+          "Hadith",
+          "Christianisme",
+          "Démocratie",
+          "Paix",
+          "Parakou",
+          "Religions endogènes",
+          "Sunnah"
+        ],
+        "matrix": [
+          [
+            0,
+            3,
+            2,
+            0,
+            1,
+            3,
+            1,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            0,
+            1,
+            2,
+            2,
+            2,
+            1,
+            3,
+            3,
+            0,
+            1,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            3,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            2,
+            2,
+            0,
+            3,
+            0,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            3,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          [
+            3,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            1,
+            1,
+            3,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            3,
+            0,
+            0,
+            0,
+            2,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            0,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -44,12 +44,17 @@ $this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 
 
 // Reuse the person panel modules: the entity precompute wraps every
 // section in `by_role.all` precisely so these modules work unchanged
-// with a no-op facet provided by entity-dashboard.js.
+// with a no-op facet provided by entity-dashboard.js. Same source
+// files load on person and entity pages — zero forked panel JS.
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.js', 'IwacVisualizations'));
 
 // Orchestrator — must load LAST

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.591253+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.890731+00:00",
   "entity": {
     "o_id": 229,
     "title": "4e Colloque International des Musulmans de l'Espace Francophone",
@@ -51,25 +51,7 @@
           "year_max": 2006
         },
         {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2006,
-          "year_max": 2006
-        },
-        {
           "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2006,
-          "year_max": 2006
-        },
-        {
-          "name": "L'Evénement",
           "total": 1,
           "articles": 1,
           "publications": 0,
@@ -87,6 +69,15 @@
           "year_max": 2010
         },
         {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2006,
+          "year_max": 2006
+        },
+        {
           "name": "An-Nasr Trimestriel",
           "total": 1,
           "articles": 0,
@@ -94,6 +85,15 @@
           "country": "Burkina Faso",
           "year_min": 2007,
           "year_max": 2007
+        },
+        {
+          "name": "L'Evénement",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2006,
+          "year_max": 2006
         }
       ]
     }
@@ -507,13 +507,6 @@
           "count": 3
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
-        },
-        {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
@@ -549,6 +542,13 @@
           "count": 2
         },
         {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 2
+        },
+        {
           "o_id": 407,
           "name": "Palestine",
           "lat": 31.92157,
@@ -561,6 +561,13 @@
           "lat": 31.5,
           "lng": 34.75,
           "count": 2
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 1
         },
         {
           "o_id": 397,
@@ -619,20 +626,6 @@
           "count": 1
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
@@ -659,8 +652,448 @@
           "lat": 10.98568,
           "lng": -4.92612,
           "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "afrique - africain - islamique - coopération - arabe - conférence",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 3
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.33,
+            "rated_articles": 3
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 3
+          }
+        },
+        "articles_total": 3
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2007,
+          2010
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            6,
+            2
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Colloque International des Musulmans de l'Espace Francophone",
+          "Fédération des Associations Islamiques du Burkina",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Hadith",
+          "Laïcité",
+          "Abidjan",
+          "Intégrisme",
+          "Séminaire International de Formation des Responsables d'Associations Musulmanes",
+          "Civilisation occidentale",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Oumarou Kanazoé",
+          "Bénin",
+          "Niger",
+          "Burkina Faso"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            6,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            0,
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            5,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            3,
+            0,
+            4,
+            1,
+            1,
+            1,
+            1,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            4,
+            0,
+            1,
+            1,
+            1,
+            1,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            0,
+            3,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            3,
+            0,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            3,
+            3,
+            0,
+            3,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            1,
+            3,
+            3,
+            3,
+            0,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            2,
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }

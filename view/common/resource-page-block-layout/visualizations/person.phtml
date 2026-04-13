@@ -43,13 +43,20 @@ $this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'Iw
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 'IwacVisualizations'));
 
-// Person panel modules (self-registering IIFEs)
+// Person panel modules (self-registering IIFEs). Each file is a tiny
+// IIFE that registers itself on IWACVis.personDashboard — the entity
+// dashboard reuses these same modules with a no-op facet, which is
+// why they live under person-dashboard/ rather than per-template.
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/facet.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.js', 'IwacVisualizations'));
 
 // Orchestrator — must load LAST

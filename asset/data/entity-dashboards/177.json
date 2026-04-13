@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.396866+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.644402+00:00",
   "entity": {
     "o_id": 177,
     "title": "Congrès CMBF (2015)",
@@ -62,15 +62,6 @@
           "year_max": 2021
         },
         {
-          "name": "Sidwaya",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2015,
-          "year_max": 2021
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 3,
           "articles": 3,
@@ -78,6 +69,15 @@
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2020
+        },
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2021
         },
         {
           "name": "L'Autre Regard",
@@ -234,15 +234,15 @@
             "score": 5.5547
           },
           {
-            "o_id": 1134,
-            "title": "Moussa Semdé",
+            "o_id": 1180,
+            "title": "Sidi Mohamed Koné",
             "type": "Personnes",
             "cooc": 2,
             "score": 5.4058
           },
           {
-            "o_id": 1180,
-            "title": "Sidi Mohamed Koné",
+            "o_id": 1134,
+            "title": "Moussa Semdé",
             "type": "Personnes",
             "cooc": 2,
             "score": 5.4058
@@ -543,13 +543,13 @@
           },
           {
             "source": 177,
-            "target": 1134,
+            "target": 1180,
             "weight": 5.4058,
             "cooc": 2
           },
           {
             "source": 177,
-            "target": 1180,
+            "target": 1134,
             "weight": 5.4058,
             "cooc": 2
           },
@@ -764,13 +764,6 @@
           "count": 2
         },
         {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 2
-        },
-        {
           "o_id": 407,
           "name": "Palestine",
           "lat": 31.92157,
@@ -799,25 +792,11 @@
           "count": 2
         },
         {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
-          "count": 1
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 1
-        },
-        {
-          "o_id": 323,
-          "name": "Grande Mosquée de Ouagadougou",
-          "lat": 12.36625,
-          "lng": -1.52122,
-          "count": 1
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
+          "count": 2
         },
         {
           "o_id": 540,
@@ -855,24 +834,17 @@
           "count": 1
         },
         {
-          "o_id": 321,
-          "name": "Gourcy",
-          "lat": 13.20776,
-          "lng": -2.35893,
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 1
         },
         {
-          "o_id": 327,
-          "name": "Grande Mosquée Sunnite de Ouagadougou",
-          "lat": 12.360522000171635,
-          "lng": -1.5185420989673841,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
+          "o_id": 323,
+          "name": "Grande Mosquée de Ouagadougou",
+          "lat": 12.36625,
+          "lng": -1.52122,
           "count": 1
         },
         {
@@ -895,8 +867,565 @@
           "lat": 10.98568,
           "lng": -4.92612,
           "count": 1
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
+          "count": 1
+        },
+        {
+          "o_id": 321,
+          "name": "Gourcy",
+          "lat": 13.20776,
+          "lng": -2.35893,
+          "count": 1
+        },
+        {
+          "o_id": 327,
+          "name": "Grande Mosquée Sunnite de Ouagadougou",
+          "lat": 12.360522000171635,
+          "lng": -1.5185420989673841,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 6
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 4
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 2
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 9
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 15
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.75,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 9
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 15
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.88,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 7
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 14
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.56,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2015,
+          2016,
+          2020,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            0,
+            7,
+            2
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            0,
+            5,
+            3
+          ],
+          [
+            1,
+            7,
+            2
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            6,
+            2
+          ],
+          [
+            2,
+            6,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Communauté Musulmane du Burkina Faso",
+          "Abdou Rasmané Sana",
+          "Ouagadougou",
+          "Burkina Faso",
+          "Fada N'Gourma",
+          "CMHV/CMBF (Crises internes)",
+          "Fédération des Associations Islamiques du Burkina",
+          "Oumarou Kanazoé",
+          "Paix",
+          "Crise",
+          "Bobo-Dioulasso",
+          "Terrorisme",
+          "Ousséni Tapsoba",
+          "Adama Sakandé",
+          "Violence"
+        ],
+        "matrix": [
+          [
+            0,
+            12,
+            13,
+            11,
+            10,
+            7,
+            7,
+            5,
+            6,
+            6,
+            5,
+            5,
+            5,
+            4,
+            4
+          ],
+          [
+            12,
+            0,
+            9,
+            7,
+            9,
+            5,
+            5,
+            4,
+            3,
+            4,
+            5,
+            4,
+            4,
+            3,
+            2
+          ],
+          [
+            13,
+            9,
+            0,
+            10,
+            8,
+            5,
+            7,
+            5,
+            6,
+            5,
+            4,
+            5,
+            4,
+            4,
+            4
+          ],
+          [
+            11,
+            7,
+            10,
+            0,
+            7,
+            5,
+            5,
+            5,
+            6,
+            6,
+            2,
+            2,
+            3,
+            3,
+            4
+          ],
+          [
+            10,
+            9,
+            8,
+            7,
+            0,
+            6,
+            4,
+            3,
+            3,
+            5,
+            4,
+            2,
+            3,
+            2,
+            3
+          ],
+          [
+            7,
+            5,
+            5,
+            5,
+            6,
+            0,
+            2,
+            2,
+            3,
+            5,
+            1,
+            2,
+            3,
+            1,
+            2
+          ],
+          [
+            7,
+            5,
+            7,
+            5,
+            4,
+            2,
+            0,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            5,
+            4,
+            5,
+            5,
+            3,
+            2,
+            3,
+            0,
+            4,
+            2,
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            6,
+            3,
+            6,
+            6,
+            3,
+            3,
+            4,
+            4,
+            0,
+            3,
+            0,
+            2,
+            2,
+            2,
+            3
+          ],
+          [
+            6,
+            4,
+            5,
+            6,
+            5,
+            5,
+            3,
+            2,
+            3,
+            0,
+            1,
+            1,
+            3,
+            1,
+            2
+          ],
+          [
+            5,
+            5,
+            4,
+            2,
+            4,
+            1,
+            3,
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            5,
+            4,
+            5,
+            2,
+            2,
+            2,
+            3,
+            1,
+            2,
+            1,
+            2,
+            0,
+            1,
+            2,
+            0
+          ],
+          [
+            5,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            1,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            4,
+            3,
+            2,
+            1,
+            3,
+            3,
+            2,
+            1,
+            1,
+            2,
+            1,
+            0,
+            2
+          ],
+          [
+            4,
+            2,
+            4,
+            4,
+            3,
+            2,
+            2,
+            4,
+            3,
+            2,
+            0,
+            0,
+            2,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }

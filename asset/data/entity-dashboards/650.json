@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:19.389124+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:39.833893+00:00",
   "entity": {
     "o_id": 650,
     "title": "Communauté Musulmane de Ouagadougou",
@@ -68,13 +68,13 @@
           "year_max": 2003
         },
         {
-          "name": "Sidwaya",
+          "name": "Carrefour africain",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Burkina Faso",
-          "year_min": 1998,
-          "year_max": 1998
+          "year_min": 1962,
+          "year_max": 1962
         },
         {
           "name": "L'Observateur",
@@ -86,13 +86,13 @@
           "year_max": 1979
         },
         {
-          "name": "Carrefour africain",
+          "name": "Sidwaya",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Burkina Faso",
-          "year_min": 1962,
-          "year_max": 1962
+          "year_min": 1998,
+          "year_max": 1998
         }
       ]
     }
@@ -357,20 +357,6 @@
           "count": 2
         },
         {
-          "o_id": 346,
-          "name": "Kongoussi",
-          "lat": 13.32583,
-          "lng": -1.53472,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
-          "count": 1
-        },
-        {
           "o_id": 284,
           "name": "Bobo-Dioulasso",
           "lat": 11.17715,
@@ -397,8 +383,485 @@
           "lat": 21.4225,
           "lng": 39.826111,
           "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 346,
+          "name": "Kongoussi",
+          "lat": 13.32583,
+          "lng": -1.53472,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 4
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 2
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 1.44,
+            "rated_articles": 9
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 9
+              }
+            ],
+            "subjectivite_avg": 1.56,
+            "rated_articles": 9
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 7
+              }
+            ],
+            "subjectivite_avg": 1.67,
+            "rated_articles": 9
+          }
+        },
+        "articles_total": 9
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1962,
+          1979,
+          1993,
+          1998,
+          1999,
+          2003,
+          2013
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            2,
+            4,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            6,
+            1,
+            1
+          ],
+          [
+            3,
+            4,
+            2
+          ],
+          [
+            4,
+            2,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Ouagadougou",
+          "Prière",
+          "Burkina Faso",
+          "Aïd al-Adha (Tabaski)",
+          "Aïd el-Fitr",
+          "Communauté Musulmane du Burkina Faso",
+          "Mosquée",
+          "Ibrahim Kouanda",
+          "Place de la Révolution",
+          "Aboubacar Sana",
+          "Sacrifice",
+          "Enfant",
+          "Paix",
+          "Mahomet",
+          "Zorgho"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            5,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            6,
+            0,
+            4,
+            3,
+            2,
+            0,
+            0,
+            3,
+            3,
+            1,
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            5,
+            4,
+            0,
+            3,
+            2,
+            1,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            4,
+            3,
+            3,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            3,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            1,
+            1,
+            1,
+            0,
+            3,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            0,
+            1,
+            1,
+            1,
+            3,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            3,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            1,
+            0,
+            0,
+            3,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            1,
+            1,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

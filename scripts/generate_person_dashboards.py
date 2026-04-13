@@ -75,6 +75,41 @@ SPATIAL_FIELDS = {
     "references":   "spatial",
 }
 
+# Sentiment + LDA columns only exist on the articles subset. Items
+# from publications/references contribute to mention counts but are
+# silently skipped by the sentiment / topics / heatmap aggregators.
+SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")
+SENTIMENT_FIELDS = {
+    "polarite":     "{model}_polarite",
+    "centralite":   "{model}_centralite_islam_musulmans",
+    "subjectivite": "{model}_subjectivite_score",
+}
+
+# Polarité ordering — kept as the canonical IWAC scale so the chart
+# segments always render in this order regardless of dataset row order.
+POLARITE_ORDER = [
+    "Très positif",
+    "Positif",
+    "Neutre",
+    "Négatif",
+    "Très négatif",
+    "Non applicable",
+]
+CENTRALITE_ORDER = [
+    "Très central",
+    "Central",
+    "Secondaire",
+    "Marginal",
+    "Non abordé",
+]
+
+# How many top entities to keep in the cooccurrence chord matrix. The
+# chord layout becomes unreadable above ~15 nodes.
+TOP_N_COOCCURRENCE = 15
+
+# How many LDA topics to keep in the topics horizontal bar.
+TOP_N_TOPICS = 12
+
 # Minimum co-occurrence before a neighbor qualifies for the network.
 # Singletons produce noisy TF-IDF scores.
 MIN_COOCCURRENCE = 2
@@ -87,6 +122,46 @@ PERSON_TEMPLATE_TYPE = "Personnes"
 
 # Module-level logger. Populated by ``main()`` via ``global logger``.
 logger: Optional[logging.Logger] = None
+
+
+def _clean_str(value: Any) -> str:
+    """Strip-and-cast a dataframe cell, treating NaN/None as empty."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    return str(value).strip()
+
+
+def _clean_float(value: Any) -> Optional[float]:
+    """Cast a dataframe cell to float, or None for NaN/missing/garbage."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+_MONTH_PATTERN = __import__("re").compile(r"^\d{4}-(\d{2})")
+
+
+def _extract_month_num(date_str: str) -> Optional[int]:
+    """Pull a 1-12 month number out of an ISO-ish ``YYYY-MM[-DD]`` date.
+
+    Returns None for anything that doesn't have a recognisable month
+    component, including bare year strings like ``"1995"``.
+    """
+    if not date_str:
+        return None
+    m = _MONTH_PATTERN.match(date_str)
+    if not m:
+        return None
+    try:
+        n = int(m.group(1))
+    except (TypeError, ValueError):
+        return None
+    if 1 <= n <= 12:
+        return n
+    return None
 
 
 class PersonDashboardGenerator:
@@ -259,6 +334,17 @@ class PersonDashboardGenerator:
             country_col = find_column(df, ["country", "countries"])
             newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
 
+            # Sentiment + LDA columns only exist on the articles subset.
+            # On other subsets these resolve to None and the
+            # corresponding aggregators silently skip the item.
+            lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
+            sentiment_cols: Dict[str, Dict[str, Optional[str]]] = {}
+            for model in SENTIMENT_MODELS:
+                sentiment_cols[model] = {
+                    k: (tpl.format(model=model) if tpl.format(model=model) in df.columns else None)
+                    for k, tpl in SENTIMENT_FIELDS.items()
+                }
+
             for _, row in df.iterrows():
                 raw_id = row.get(id_col)
                 try:
@@ -267,13 +353,20 @@ class PersonDashboardGenerator:
                     continue
                 item_key = f"{subset}:{item_o_id}"
 
-                self.items_meta[item_key] = {
+                meta: Dict[str, Any] = {
                     "o_id": item_o_id,
                     "subset": subset,
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
+                    "lda_label": _clean_str(row.get(lda_label_col)) if lda_label_col else "",
                 }
+                for model in SENTIMENT_MODELS:
+                    cols = sentiment_cols[model]
+                    meta[f"{model}_polarite"]     = _clean_str(row.get(cols["polarite"]))     if cols["polarite"]     else ""
+                    meta[f"{model}_centralite"]   = _clean_str(row.get(cols["centralite"]))   if cols["centralite"]   else ""
+                    meta[f"{model}_subjectivite"] = _clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
+                self.items_meta[item_key] = meta
 
                 roles: Dict[str, List[int]] = {"subject": [], "creator": []}
 
@@ -498,6 +591,190 @@ class PersonDashboardGenerator:
         return {"by_role": by_role}
 
     # ------------------------------------------------------------------
+    # Topic mix (LDA) — articles only
+    # ------------------------------------------------------------------
+
+    def compute_topics(self, person_o_id: int) -> Dict[str, Any]:
+        """Top LDA topic labels for items mentioning this person.
+
+        Articles are the only subset with LDA fields; publications and
+        references contribute to the mention count but not the topic
+        bar. Each item counts once toward exactly one label.
+        """
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            counter: Counter = Counter()
+            for key in self._items_for_role(person_o_id, role):
+                label = self.items_meta.get(key, {}).get("lda_label") or ""
+                if label:
+                    counter[label] += 1
+            entries = [
+                {"label": label, "count": count}
+                for label, count in counter.most_common(TOP_N_TOPICS)
+            ]
+            by_role[role] = entries
+        return {"by_role": by_role}
+
+    # ------------------------------------------------------------------
+    # Sentiment — articles only, faceted by AI model
+    # ------------------------------------------------------------------
+
+    def compute_sentiment(self, person_o_id: int) -> Dict[str, Any]:
+        """Polarité / centralité / subjectivité counts for the 3 AI models.
+
+        Returns a structure the JS panel can flip between models without
+        re-fetching. Categories are forced into IWAC display order so
+        the stacked bar segments stay consistent.
+        """
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            by_model: Dict[str, Any] = {}
+            articles_total = 0
+            for key in item_keys:
+                if self.items_meta.get(key, {}).get("subset") == "articles":
+                    articles_total += 1
+            for model in SENTIMENT_MODELS:
+                pol_counter: Counter = Counter()
+                cen_counter: Counter = Counter()
+                sub_values: List[float] = []
+                rated = 0
+                for key in item_keys:
+                    meta = self.items_meta.get(key, {})
+                    if meta.get("subset") != "articles":
+                        continue
+                    pol = meta.get(f"{model}_polarite") or ""
+                    cen = meta.get(f"{model}_centralite") or ""
+                    sub = meta.get(f"{model}_subjectivite")
+                    if pol:
+                        pol_counter[pol] += 1
+                    if cen:
+                        cen_counter[cen] += 1
+                    if sub is not None:
+                        sub_values.append(float(sub))
+                    if pol or cen or sub is not None:
+                        rated += 1
+                # Force the canonical ordering even when categories are absent
+                pol_ordered = [{"name": n, "count": pol_counter.get(n, 0)} for n in POLARITE_ORDER]
+                cen_ordered = [{"name": n, "count": cen_counter.get(n, 0)} for n in CENTRALITE_ORDER]
+                # Drop trailing all-zero categories (visual noise) but keep
+                # the canonical order in between.
+                while pol_ordered and pol_ordered[-1]["count"] == 0:
+                    pol_ordered.pop()
+                while cen_ordered and cen_ordered[-1]["count"] == 0:
+                    cen_ordered.pop()
+                by_model[model] = {
+                    "polarite": pol_ordered,
+                    "centralite": cen_ordered,
+                    "subjectivite_avg": (
+                        round(sum(sub_values) / len(sub_values), 2)
+                        if sub_values else None
+                    ),
+                    "rated_articles": rated,
+                }
+            by_role[role] = {
+                "models": list(SENTIMENT_MODELS),
+                "by_model": by_model,
+                "articles_total": articles_total,
+            }
+        return {"by_role": by_role}
+
+    # ------------------------------------------------------------------
+    # Year × month heatmap
+    # ------------------------------------------------------------------
+
+    def compute_heatmap(self, person_o_id: int) -> Dict[str, Any]:
+        """Year × month mention counts as ECharts heatmap cells.
+
+        Cells are emitted as ``[year_index, month_index, count]`` so the
+        ECharts heatmap series can consume them directly. Years that
+        have no items at all are dropped from the y axis.
+        """
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            buckets: Dict[Tuple[int, int], int] = Counter()
+            years_seen: Set[int] = set()
+            for key in self._items_for_role(person_o_id, role):
+                date = self.items_meta.get(key, {}).get("pub_date") or ""
+                year = extract_year(date)
+                if year is None:
+                    continue
+                # Try to extract a 1-12 month number from the date string.
+                month = _extract_month_num(date)
+                if month is None:
+                    continue
+                buckets[(year, month)] += 1
+                years_seen.add(year)
+            if not years_seen:
+                by_role[role] = {"years": [], "months": list(range(1, 13)), "cells": []}
+                continue
+            years = sorted(years_seen)
+            cells = [
+                [years.index(y), m - 1, count]
+                for (y, m), count in buckets.items()
+            ]
+            by_role[role] = {
+                "years": years,
+                "months": list(range(1, 13)),
+                "cells": cells,
+            }
+        return {"by_role": by_role}
+
+    # ------------------------------------------------------------------
+    # Pairwise cooccurrence chord
+    # ------------------------------------------------------------------
+
+    def compute_cooccurrence(self, person_o_id: int) -> Dict[str, Any]:
+        """Pairwise cooccurrence matrix among the top N neighbours.
+
+        Distinct from the existing network panel: that one is ego-
+        centric (this person at the centre, weights = TF-IDF to the
+        person). This is pair-wise — for each item the person is in,
+        every PAIR of other entities in that item gets one count. The
+        result is a symmetric matrix the chord builder can render.
+        """
+        by_role: Dict[str, Any] = {}
+        for role in ("all", "subject", "creator"):
+            item_keys = self._items_for_role(person_o_id, role)
+            # Pick the N most-frequent neighbours (by raw co-occurrence
+            # with the person, not by TF-IDF) so the chord nodes are the
+            # ones the user is most likely to recognise.
+            neighbour_counter: Counter = Counter()
+            for key in item_keys:
+                roles = self.item_entities.get(key, {})
+                seen: Set[int] = set()
+                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                    if o_id != person_o_id and o_id not in seen:
+                        seen.add(o_id)
+                        neighbour_counter[o_id] += 1
+            top = [o_id for o_id, _ in neighbour_counter.most_common(TOP_N_COOCCURRENCE)]
+            top_set = set(top)
+            if not top:
+                by_role[role] = {"names": [], "matrix": []}
+                continue
+            index = {o_id: i for i, o_id in enumerate(top)}
+            n = len(top)
+            matrix = [[0] * n for _ in range(n)]
+            for key in item_keys:
+                roles = self.item_entities.get(key, {})
+                here: Set[int] = set()
+                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                    if o_id in top_set:
+                        here.add(o_id)
+                ids = sorted(here)
+                for i in range(len(ids)):
+                    for j in range(i + 1, len(ids)):
+                        a, b = index[ids[i]], index[ids[j]]
+                        matrix[a][b] += 1
+                        matrix[b][a] += 1
+            names = [
+                self.id_to_entity.get(o_id, {}).get("title", f"#{o_id}")
+                for o_id in top
+            ]
+            by_role[role] = {"names": names, "matrix": matrix}
+        return {"by_role": by_role}
+
+    # ------------------------------------------------------------------
     # TF-IDF document frequency — computed once across all persons
     # ------------------------------------------------------------------
 
@@ -619,23 +896,20 @@ class PersonDashboardGenerator:
     def build_person_json(self, person_o_id: int) -> Dict[str, Any]:
         person_info = self.persons[person_o_id]
 
-        summary = self.compute_summary(person_o_id)
-        timeline = self.compute_timeline(person_o_id)
-        newspapers = self.compute_newspapers(person_o_id)
-        countries = self.compute_countries(person_o_id)
-        network = self.compute_network(person_o_id)
-        locations = self.compute_locations(person_o_id)
-
         return {
-            "version": 1,
+            "version": 2,
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "person": self._build_person_header(person_info),
-            "summary": summary,
-            "timeline": timeline,
-            "newspapers": newspapers,
-            "countries": countries,
-            "network": network,
-            "locations": locations,
+            "person":        self._build_person_header(person_info),
+            "summary":       self.compute_summary(person_o_id),
+            "timeline":      self.compute_timeline(person_o_id),
+            "newspapers":    self.compute_newspapers(person_o_id),
+            "countries":     self.compute_countries(person_o_id),
+            "network":       self.compute_network(person_o_id),
+            "locations":     self.compute_locations(person_o_id),
+            "topics":        self.compute_topics(person_o_id),
+            "sentiment":     self.compute_sentiment(person_o_id),
+            "heatmap":       self.compute_heatmap(person_o_id),
+            "cooccurrence":  self.compute_cooccurrence(person_o_id),
         }
 
     def generate_all(self) -> int:

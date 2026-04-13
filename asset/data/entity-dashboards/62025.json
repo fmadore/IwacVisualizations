@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:15.626594+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:35.105112+00:00",
   "entity": {
     "o_id": 62025,
     "title": "Donga",
@@ -96,15 +96,6 @@
           "year_max": 2023
         },
         {
-          "name": "La Nouvelle Tribune",
-          "total": 4,
-          "articles": 4,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2023
-        },
-        {
           "name": "24 Heures au Bénin",
           "total": 4,
           "articles": 4,
@@ -114,13 +105,13 @@
           "year_max": 2022
         },
         {
-          "name": "Banouto",
-          "total": 3,
-          "articles": 3,
+          "name": "La Nouvelle Tribune",
+          "total": 4,
+          "articles": 4,
           "publications": 0,
           "country": "Bénin",
           "year_min": 2019,
-          "year_max": 2022
+          "year_max": 2023
         },
         {
           "name": "Fraternité",
@@ -130,6 +121,15 @@
           "country": "Bénin",
           "year_min": 2006,
           "year_max": 2017
+        },
+        {
+          "name": "Banouto",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2022
         },
         {
           "name": "Le Matinal",
@@ -868,17 +868,17 @@
           "count": 22
         },
         {
-          "o_id": 60482,
-          "name": "Borgou",
-          "lat": 10.74821385974019,
-          "lng": 0.6196353130056622,
-          "count": 19
-        },
-        {
           "o_id": 62018,
           "name": "Alibori",
           "lat": 11.128611,
           "lng": 2.936944,
+          "count": 19
+        },
+        {
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
           "count": 19
         },
         {
@@ -959,6 +959,13 @@
           "count": 5
         },
         {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 4
+        },
+        {
           "o_id": 281,
           "name": "Bassila",
           "lat": 9.00814,
@@ -987,38 +994,10 @@
           "count": 4
         },
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 4
-        },
-        {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 3
-        },
-        {
-          "o_id": 286,
-          "name": "Bohicon",
-          "lat": 7.17826,
-          "lng": 2.0667,
-          "count": 3
-        },
-        {
-          "o_id": 270,
-          "name": "Abomey",
-          "lat": 7.18286,
-          "lng": 1.99119,
-          "count": 3
-        },
-        {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 3
         },
         {
@@ -1036,17 +1015,38 @@
           "count": 3
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
           "count": 3
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
+          "o_id": 286,
+          "name": "Bohicon",
+          "lat": 7.17826,
+          "lng": 2.0667,
+          "count": 3
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 3
+        },
+        {
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
+          "count": 3
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
           "count": 2
         },
         {
@@ -1054,6 +1054,13 @@
           "name": "Segbana",
           "lat": 10.92821,
           "lng": 3.69429,
+          "count": 2
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
           "count": 2
         },
         {
@@ -1071,13 +1078,6 @@
           "count": 2
         },
         {
-          "o_id": 271,
-          "name": "Abomey-Calavi",
-          "lat": 6.44852,
-          "lng": 2.35566,
-          "count": 2
-        },
-        {
           "o_id": 273,
           "name": "Algérie",
           "lat": 28.0,
@@ -1092,10 +1092,52 @@
           "count": 2
         },
         {
-          "o_id": 479,
-          "name": "Pèrèrè",
-          "lat": 9.58703,
-          "lng": 2.99607,
+          "o_id": 63389,
+          "name": "Angleterre",
+          "lat": 53.0,
+          "lng": -1.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 491,
+          "name": "Mosquée centrale Médine II d'Agori Plateau",
+          "lat": 6.4327785,
+          "lng": 2.3442182,
+          "count": 1
+        },
+        {
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 1
         },
         {
@@ -1110,41 +1152,6 @@
           "name": "Italie",
           "lat": 42.5,
           "lng": 12.5,
-          "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 276,
-          "name": "Aplahoué",
-          "lat": 6.93333,
-          "lng": 1.68333,
-          "count": 1
-        },
-        {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
-          "count": 1
-        },
-        {
-          "o_id": 62028,
-          "name": "Djakotomey",
-          "lat": 6.9,
-          "lng": 1.716667,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
           "count": 1
         },
         {
@@ -1183,24 +1190,31 @@
           "count": 1
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
           "count": 1
         },
         {
-          "o_id": 280,
-          "name": "Banikoara",
-          "lat": 11.33966,
-          "lng": 2.45915,
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 1
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
+          "o_id": 276,
+          "name": "Aplahoué",
+          "lat": 6.93333,
+          "lng": 1.68333,
+          "count": 1
+        },
+        {
+          "o_id": 479,
+          "name": "Pèrèrè",
+          "lat": 9.58703,
+          "lng": 2.99607,
           "count": 1
         },
         {
@@ -1218,34 +1232,708 @@
           "count": 1
         },
         {
-          "o_id": 63389,
-          "name": "Angleterre",
-          "lat": 53.0,
-          "lng": -1.0,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 1
         },
         {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
-          "o_id": 491,
-          "name": "Mosquée centrale Médine II d'Agori Plateau",
-          "lat": 6.4327785,
-          "lng": 2.3442182,
-          "count": 1
-        },
-        {
-          "o_id": 60523,
-          "name": "Londres",
-          "lat": 51.507222222222,
-          "lng": -0.1275,
+          "o_id": 62028,
+          "name": "Djakotomey",
+          "lat": 6.9,
+          "lng": 1.716667,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 18
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 16
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 5
+        },
+        {
+          "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 3
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 3
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 2
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 2
+        },
+        {
+          "label": "ministre - gouvernement - etat - affaire - commission - concerner",
+          "count": 2
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 3
+              },
+              {
+                "name": "Positif",
+                "count": 21
+              },
+              {
+                "name": "Neutre",
+                "count": 25
+              },
+              {
+                "name": "Négatif",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 37
+              },
+              {
+                "name": "Central",
+                "count": 9
+              },
+              {
+                "name": "Secondaire",
+                "count": 4
+              },
+              {
+                "name": "Marginal",
+                "count": 4
+              }
+            ],
+            "subjectivite_avg": 2.02,
+            "rated_articles": 54
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 25
+              },
+              {
+                "name": "Neutre",
+                "count": 20
+              },
+              {
+                "name": "Négatif",
+                "count": 9
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 32
+              },
+              {
+                "name": "Central",
+                "count": 14
+              },
+              {
+                "name": "Secondaire",
+                "count": 6
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 2.15,
+            "rated_articles": 54
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 20
+              },
+              {
+                "name": "Neutre",
+                "count": 23
+              },
+              {
+                "name": "Négatif",
+                "count": 8
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 41
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.13,
+            "rated_articles": 54
+          }
+        },
+        "articles_total": 54
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2001,
+          2006,
+          2011,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            9,
+            7,
+            1
+          ],
+          [
+            7,
+            0,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ],
+          [
+            8,
+            0,
+            9
+          ],
+          [
+            1,
+            11,
+            1
+          ],
+          [
+            10,
+            4,
+            3
+          ],
+          [
+            7,
+            7,
+            4
+          ],
+          [
+            9,
+            0,
+            1
+          ],
+          [
+            4,
+            6,
+            2
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            9,
+            1,
+            2
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            7,
+            9,
+            2
+          ],
+          [
+            1,
+            6,
+            1
+          ],
+          [
+            9,
+            4,
+            1
+          ],
+          [
+            8,
+            8,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            5,
+            9,
+            1
+          ],
+          [
+            3,
+            1,
+            1
+          ],
+          [
+            10,
+            10,
+            1
+          ],
+          [
+            5,
+            5,
+            1
+          ],
+          [
+            5,
+            8,
+            2
+          ],
+          [
+            2,
+            8,
+            1
+          ],
+          [
+            11,
+            0,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            11,
+            4,
+            2
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            7,
+            5,
+            1
+          ],
+          [
+            5,
+            6,
+            1
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            9,
+            2,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Bénin",
+          "Djougou",
+          "Atacora",
+          "Natitingou",
+          "Alibori",
+          "Borgou",
+          "Éducation",
+          "Parakou",
+          "Prière",
+          "Mosquée",
+          "Radicalisation",
+          "Malanville",
+          "Nikki",
+          "Extrémisme",
+          "Tanguiéta"
+        ],
+        "matrix": [
+          [
+            0,
+            35,
+            25,
+            21,
+            19,
+            19,
+            15,
+            17,
+            10,
+            10,
+            13,
+            13,
+            13,
+            12,
+            11
+          ],
+          [
+            35,
+            0,
+            18,
+            16,
+            16,
+            16,
+            14,
+            14,
+            10,
+            10,
+            12,
+            13,
+            13,
+            12,
+            11
+          ],
+          [
+            25,
+            18,
+            0,
+            17,
+            17,
+            17,
+            9,
+            15,
+            5,
+            7,
+            11,
+            12,
+            12,
+            10,
+            10
+          ],
+          [
+            21,
+            16,
+            17,
+            0,
+            13,
+            13,
+            9,
+            14,
+            4,
+            7,
+            12,
+            11,
+            11,
+            12,
+            10
+          ],
+          [
+            19,
+            16,
+            17,
+            13,
+            0,
+            19,
+            8,
+            14,
+            1,
+            4,
+            11,
+            12,
+            13,
+            11,
+            10
+          ],
+          [
+            19,
+            16,
+            17,
+            13,
+            19,
+            0,
+            8,
+            14,
+            1,
+            4,
+            11,
+            12,
+            13,
+            11,
+            10
+          ],
+          [
+            15,
+            14,
+            9,
+            9,
+            8,
+            8,
+            0,
+            9,
+            1,
+            3,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          [
+            17,
+            14,
+            15,
+            14,
+            14,
+            14,
+            9,
+            0,
+            1,
+            3,
+            12,
+            12,
+            11,
+            10,
+            10
+          ],
+          [
+            10,
+            10,
+            5,
+            4,
+            1,
+            1,
+            1,
+            1,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            10,
+            10,
+            7,
+            7,
+            4,
+            4,
+            3,
+            3,
+            3,
+            0,
+            1,
+            1,
+            2,
+            1,
+            1
+          ],
+          [
+            13,
+            12,
+            11,
+            12,
+            11,
+            11,
+            5,
+            12,
+            0,
+            1,
+            0,
+            12,
+            11,
+            11,
+            10
+          ],
+          [
+            13,
+            13,
+            12,
+            11,
+            12,
+            12,
+            5,
+            12,
+            0,
+            1,
+            12,
+            0,
+            12,
+            11,
+            10
+          ],
+          [
+            13,
+            13,
+            12,
+            11,
+            13,
+            13,
+            5,
+            11,
+            0,
+            2,
+            11,
+            12,
+            0,
+            11,
+            10
+          ],
+          [
+            12,
+            12,
+            10,
+            12,
+            11,
+            11,
+            5,
+            10,
+            0,
+            1,
+            11,
+            11,
+            11,
+            0,
+            10
+          ],
+          [
+            11,
+            11,
+            10,
+            10,
+            10,
+            10,
+            5,
+            10,
+            0,
+            1,
+            10,
+            10,
+            10,
+            10,
+            0
+          ]
+        ]
+      }
     }
   }
 }

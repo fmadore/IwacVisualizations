@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:14.991465+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:34.330727+00:00",
   "entity": {
     "o_id": 60525,
     "title": "Moyen-Mono",
@@ -306,17 +306,17 @@
           "count": 5
         },
         {
-          "o_id": 498,
-          "name": "Badou",
-          "lat": 7.584327,
-          "lng": 0.606651,
-          "count": 5
-        },
-        {
           "o_id": 60562,
           "name": "Wawa",
           "lat": 7.583333,
           "lng": 0.6,
+          "count": 5
+        },
+        {
+          "o_id": 498,
+          "name": "Badou",
+          "lat": 7.584327,
+          "lng": 0.606651,
           "count": 5
         },
         {
@@ -334,17 +334,17 @@
           "count": 4
         },
         {
+          "o_id": 60464,
+          "name": "Amou",
+          "lat": 7.5,
+          "lng": 1.05,
+          "count": 4
+        },
+        {
           "o_id": 497,
           "name": "Atakpamé",
           "lat": 7.5269444444444,
           "lng": 1.1266666666667,
-          "count": 4
-        },
-        {
-          "o_id": 60501,
-          "name": "Haho",
-          "lat": 6.95,
-          "lng": 1.16666667,
           "count": 4
         },
         {
@@ -355,10 +355,10 @@
           "count": 4
         },
         {
-          "o_id": 60464,
-          "name": "Amou",
-          "lat": 7.5,
-          "lng": 1.05,
+          "o_id": 60501,
+          "name": "Haho",
+          "lat": 6.95,
+          "lng": 1.16666667,
           "count": 4
         },
         {
@@ -401,6 +401,13 @@
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
+          "count": 1
+        },
+        {
+          "o_id": 493,
+          "name": "Amlamé",
+          "lat": 7.4605555555556,
+          "lng": 0.90305555555556,
           "count": 1
         },
         {
@@ -453,13 +460,6 @@
           "count": 1
         },
         {
-          "o_id": 493,
-          "name": "Amlamé",
-          "lat": 7.4605555555556,
-          "lng": 0.90305555555556,
-          "count": 1
-        },
-        {
           "o_id": 489,
           "name": "La Mecque",
           "lat": 21.4225,
@@ -467,6 +467,518 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 6
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.29,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 1
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.67,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 5
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.83,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2006,
+          2011,
+          2016,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ],
+          [
+            3,
+            3,
+            1
+          ],
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Akébou",
+          "Wawa",
+          "Badou",
+          "Elavagnon",
+          "Anié",
+          "Amou",
+          "Atakpamé",
+          "Est-Mono",
+          "Haho",
+          "Ogou",
+          "Tohoun",
+          "Lomé",
+          "Togo",
+          "Notsé",
+          "Nyékonakpoé"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            1,
+            1,
+            2,
+            2
+          ],
+          [
+            5,
+            0,
+            5,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            1,
+            1,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            0,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            1,
+            1,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            4,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

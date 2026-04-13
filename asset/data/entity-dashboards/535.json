@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:09.460119+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:27.886227+00:00",
   "entity": {
     "o_id": 535,
     "title": "Temple œcuménique de Pya",
@@ -125,16 +125,16 @@
             "score": 9.8811
           },
           {
-            "o_id": 515,
-            "title": "Niamtougou",
-            "type": "Lieux",
+            "o_id": 851,
+            "title": "Église évangélique du Togo",
+            "type": "Organisations",
             "cooc": 3,
             "score": 8.8586
           },
           {
-            "o_id": 851,
-            "title": "Église évangélique du Togo",
-            "type": "Organisations",
+            "o_id": 515,
+            "title": "Niamtougou",
+            "type": "Lieux",
             "cooc": 3,
             "score": 8.8586
           },
@@ -284,13 +284,13 @@
           },
           {
             "source": 535,
-            "target": 515,
+            "target": 851,
             "weight": 8.8586,
             "cooc": 3
           },
           {
             "source": 535,
-            "target": 851,
+            "target": 515,
             "weight": 8.8586,
             "cooc": 3
           },
@@ -433,10 +433,10 @@
           "count": 4
         },
         {
-          "o_id": 515,
-          "name": "Niamtougou",
-          "lat": 9.7666666666667,
-          "lng": 1.1,
+          "o_id": 519,
+          "name": "Sokodé",
+          "lat": 8.9833333333333,
+          "lng": 1.1333333333333,
           "count": 3
         },
         {
@@ -454,10 +454,10 @@
           "count": 3
         },
         {
-          "o_id": 519,
-          "name": "Sokodé",
-          "lat": 8.9833333333333,
-          "lng": 1.1333333333333,
+          "o_id": 515,
+          "name": "Niamtougou",
+          "lat": 9.7666666666667,
+          "lng": 1.1,
           "count": 3
         },
         {
@@ -475,10 +475,24 @@
           "count": 2
         },
         {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
+          "count": 1
+        },
+        {
           "o_id": 500,
           "name": "Bassar",
           "lat": 9.25,
           "lng": 0.78333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 548,
+          "name": "Gabon",
+          "lat": -1.0,
+          "lng": 11.75,
           "count": 1
         },
         {
@@ -501,22 +515,488 @@
           "lat": 13.09167,
           "lng": -1.08444,
           "count": 1
+        }
+      ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 4
         },
         {
-          "o_id": 497,
-          "name": "Atakpamé",
-          "lat": 7.5269444444444,
-          "lng": 1.1266666666667,
+          "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         },
         {
-          "o_id": 548,
-          "name": "Gabon",
-          "lat": -1.0,
-          "lng": 11.75,
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         }
       ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 3
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 1.83,
+            "rated_articles": 6
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 4
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 5
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.17,
+            "rated_articles": 6
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 0
+              },
+              {
+                "name": "Neutre",
+                "count": 6
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 0
+              },
+              {
+                "name": "Central",
+                "count": 0
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              },
+              {
+                "name": "Marginal",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 6
+          }
+        },
+        "articles_total": 6
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1979,
+          1987,
+          1988,
+          1989,
+          1990,
+          2017
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            2,
+            5,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Togo",
+          "Pya",
+          "Gnassingbé Eyadéma",
+          "Kara",
+          "Union Musulmane du Togo",
+          "Lomé",
+          "Maman N'Danida",
+          "France",
+          "Sokodé",
+          "Yadé",
+          "Église évangélique du Togo",
+          "Kozah",
+          "Niamtougou",
+          "Protestants",
+          "Femmes"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            6,
+            6,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            0,
+            6,
+            6,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            6,
+            0,
+            6,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            6,
+            6,
+            6,
+            0,
+            5,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            0,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            4,
+            2,
+            3,
+            3,
+            3,
+            3,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            2,
+            3,
+            3,
+            3,
+            3,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            2,
+            3,
+            3,
+            3,
+            3,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            0,
+            3,
+            3,
+            2,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            0,
+            3,
+            2,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            0,
+            2,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:01.384708+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:15.955238+00:00",
   "entity": {
     "o_id": 296,
     "title": "Cocotomey",
@@ -55,6 +55,15 @@
           "year_max": 2020
         },
         {
+          "name": "Boulevard des Infos",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
           "name": "Matin Libre",
           "total": 1,
           "articles": 1,
@@ -80,15 +89,6 @@
           "country": "Bénin",
           "year_min": 2021,
           "year_max": 2021
-        },
-        {
-          "name": "Boulevard des Infos",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2019
         }
       ]
     }
@@ -346,17 +346,17 @@
           "count": 5
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 3
-        },
-        {
           "o_id": 271,
           "name": "Abomey-Calavi",
           "lat": 6.44852,
           "lng": 2.35566,
+          "count": 3
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
           "count": 3
         },
         {
@@ -367,10 +367,10 @@
           "count": 2
         },
         {
-          "o_id": 275,
-          "name": "Allemagne",
-          "lat": 51.5,
-          "lng": 10.5,
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
           "count": 2
         },
         {
@@ -381,10 +381,10 @@
           "count": 2
         },
         {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
           "count": 2
         },
         {
@@ -409,6 +409,465 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 3
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 6
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.86,
+            "rated_articles": 7
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 7
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.14,
+            "rated_articles": 7
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 5
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 3
+              }
+            ],
+            "subjectivite_avg": 1.86,
+            "rated_articles": 7
+          }
+        },
+        "articles_total": 7
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          2013,
+          2015,
+          2019,
+          2020,
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            11,
+            2
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Bénin",
+          "Charité",
+          "Humanity First",
+          "Ahmadiyya",
+          "Santé",
+          "Abomey-Calavi",
+          "Porto-Novo",
+          "Développement",
+          "Mosquée",
+          "Enfant",
+          "Ouémé",
+          "Rana Farooq Ahmad",
+          "Parakou",
+          "Cotonou",
+          "Allemagne"
+        ],
+        "matrix": [
+          [
+            0,
+            4,
+            4,
+            4,
+            4,
+            2,
+            3,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            4,
+            0,
+            4,
+            4,
+            4,
+            1,
+            3,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            0,
+            4,
+            4,
+            1,
+            3,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            0,
+            4,
+            1,
+            3,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            0,
+            1,
+            3,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            1,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            2,
+            0,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

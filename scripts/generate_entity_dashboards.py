@@ -78,6 +78,33 @@ SPATIAL_FIELDS = {
     "references":   "spatial",
 }
 
+# Sentiment + LDA columns only exist on the articles subset.
+SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")
+SENTIMENT_FIELDS = {
+    "polarite":     "{model}_polarite",
+    "centralite":   "{model}_centralite_islam_musulmans",
+    "subjectivite": "{model}_subjectivite_score",
+}
+
+POLARITE_ORDER = [
+    "Très positif",
+    "Positif",
+    "Neutre",
+    "Négatif",
+    "Très négatif",
+    "Non applicable",
+]
+CENTRALITE_ORDER = [
+    "Très central",
+    "Central",
+    "Secondaire",
+    "Marginal",
+    "Non abordé",
+]
+
+TOP_N_COOCCURRENCE = 15
+TOP_N_TOPICS = 12
+
 # Index Type values that we treat as "non-person entities" for this
 # generator. Keys are the Type values from the IWAC index; values are
 # Omeka resource template ids on islam.zmo.de.
@@ -97,6 +124,39 @@ MIN_COOCCURRENCE = 2
 TOP_N_NEIGHBORS = 50
 
 logger: Optional[logging.Logger] = None
+
+
+def _clean_str(value: Any) -> str:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    return str(value).strip()
+
+
+def _clean_float(value: Any) -> Optional[float]:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+_MONTH_PATTERN = __import__("re").compile(r"^\d{4}-(\d{2})")
+
+
+def _extract_month_num(date_str: str) -> Optional[int]:
+    if not date_str:
+        return None
+    m = _MONTH_PATTERN.match(date_str)
+    if not m:
+        return None
+    try:
+        n = int(m.group(1))
+    except (TypeError, ValueError):
+        return None
+    if 1 <= n <= 12:
+        return n
+    return None
 
 
 class EntityDashboardGenerator:
@@ -252,6 +312,15 @@ class EntityDashboardGenerator:
             country_col = find_column(df, ["country", "countries"])
             newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
 
+            # Sentiment + LDA columns only exist on the articles subset.
+            lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
+            sentiment_cols: Dict[str, Dict[str, Optional[str]]] = {}
+            for model in SENTIMENT_MODELS:
+                sentiment_cols[model] = {
+                    k: (tpl.format(model=model) if tpl.format(model=model) in df.columns else None)
+                    for k, tpl in SENTIMENT_FIELDS.items()
+                }
+
             for _, row in df.iterrows():
                 raw_id = row.get(id_col)
                 try:
@@ -260,13 +329,20 @@ class EntityDashboardGenerator:
                     continue
                 item_key = f"{subset}:{item_o_id}"
 
-                self.items_meta[item_key] = {
+                meta: Dict[str, Any] = {
                     "o_id": item_o_id,
                     "subset": subset,
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
+                    "lda_label": _clean_str(row.get(lda_label_col)) if lda_label_col else "",
                 }
+                for model in SENTIMENT_MODELS:
+                    cols = sentiment_cols[model]
+                    meta[f"{model}_polarite"]     = _clean_str(row.get(cols["polarite"]))     if cols["polarite"]     else ""
+                    meta[f"{model}_centralite"]   = _clean_str(row.get(cols["centralite"]))   if cols["centralite"]   else ""
+                    meta[f"{model}_subjectivite"] = _clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
+                self.items_meta[item_key] = meta
 
                 refs: Set[int] = set()
 
@@ -439,6 +515,138 @@ class EntityDashboardGenerator:
         return self._wrap(entries)
 
     # ------------------------------------------------------------------
+    # Topic mix (LDA) — articles only
+    # ------------------------------------------------------------------
+
+    def compute_topics(self, entity_o_id: int) -> Dict[str, Any]:
+        item_keys = self.entity_items.get(entity_o_id, set())
+        counter: Counter = Counter()
+        for key in item_keys:
+            label = self.items_meta.get(key, {}).get("lda_label") or ""
+            if label:
+                counter[label] += 1
+        entries = [
+            {"label": label, "count": count}
+            for label, count in counter.most_common(TOP_N_TOPICS)
+        ]
+        return self._wrap(entries)
+
+    # ------------------------------------------------------------------
+    # Sentiment — articles only, faceted by AI model
+    # ------------------------------------------------------------------
+
+    def compute_sentiment(self, entity_o_id: int) -> Dict[str, Any]:
+        item_keys = self.entity_items.get(entity_o_id, set())
+        articles_total = sum(
+            1 for k in item_keys
+            if self.items_meta.get(k, {}).get("subset") == "articles"
+        )
+        by_model: Dict[str, Any] = {}
+        for model in SENTIMENT_MODELS:
+            pol_counter: Counter = Counter()
+            cen_counter: Counter = Counter()
+            sub_values: List[float] = []
+            rated = 0
+            for key in item_keys:
+                meta = self.items_meta.get(key, {})
+                if meta.get("subset") != "articles":
+                    continue
+                pol = meta.get(f"{model}_polarite") or ""
+                cen = meta.get(f"{model}_centralite") or ""
+                sub = meta.get(f"{model}_subjectivite")
+                if pol:
+                    pol_counter[pol] += 1
+                if cen:
+                    cen_counter[cen] += 1
+                if sub is not None:
+                    sub_values.append(float(sub))
+                if pol or cen or sub is not None:
+                    rated += 1
+            pol_ordered = [{"name": n, "count": pol_counter.get(n, 0)} for n in POLARITE_ORDER]
+            cen_ordered = [{"name": n, "count": cen_counter.get(n, 0)} for n in CENTRALITE_ORDER]
+            while pol_ordered and pol_ordered[-1]["count"] == 0:
+                pol_ordered.pop()
+            while cen_ordered and cen_ordered[-1]["count"] == 0:
+                cen_ordered.pop()
+            by_model[model] = {
+                "polarite": pol_ordered,
+                "centralite": cen_ordered,
+                "subjectivite_avg": (
+                    round(sum(sub_values) / len(sub_values), 2)
+                    if sub_values else None
+                ),
+                "rated_articles": rated,
+            }
+        return self._wrap({
+            "models": list(SENTIMENT_MODELS),
+            "by_model": by_model,
+            "articles_total": articles_total,
+        })
+
+    # ------------------------------------------------------------------
+    # Year × month heatmap
+    # ------------------------------------------------------------------
+
+    def compute_heatmap(self, entity_o_id: int) -> Dict[str, Any]:
+        item_keys = self.entity_items.get(entity_o_id, set())
+        buckets: Dict[Tuple[int, int], int] = Counter()
+        years_seen: Set[int] = set()
+        for key in item_keys:
+            date = self.items_meta.get(key, {}).get("pub_date") or ""
+            year = extract_year(date)
+            if year is None:
+                continue
+            month = _extract_month_num(date)
+            if month is None:
+                continue
+            buckets[(year, month)] += 1
+            years_seen.add(year)
+        if not years_seen:
+            return self._wrap({"years": [], "months": list(range(1, 13)), "cells": []})
+        years = sorted(years_seen)
+        cells = [
+            [years.index(y), m - 1, count]
+            for (y, m), count in buckets.items()
+        ]
+        return self._wrap({
+            "years": years,
+            "months": list(range(1, 13)),
+            "cells": cells,
+        })
+
+    # ------------------------------------------------------------------
+    # Pairwise cooccurrence chord
+    # ------------------------------------------------------------------
+
+    def compute_cooccurrence(self, entity_o_id: int) -> Dict[str, Any]:
+        item_keys = self.entity_items.get(entity_o_id, set())
+        neighbour_counter: Counter = Counter()
+        for key in item_keys:
+            for o_id in self.item_entities.get(key, set()):
+                if o_id != entity_o_id:
+                    neighbour_counter[o_id] += 1
+        top = [o_id for o_id, _ in neighbour_counter.most_common(TOP_N_COOCCURRENCE)]
+        if not top:
+            return self._wrap({"names": [], "matrix": []})
+        index = {o_id: i for i, o_id in enumerate(top)}
+        top_set = set(top)
+        n = len(top)
+        matrix = [[0] * n for _ in range(n)]
+        for key in item_keys:
+            here = [o_id for o_id in self.item_entities.get(key, set()) if o_id in top_set]
+            here.sort()
+            for i in range(len(here)):
+                for j in range(i + 1, len(here)):
+                    a, b = index[here[i]], index[here[j]]
+                    matrix[a][b] += 1
+                    matrix[b][a] += 1
+        names = [
+            self.id_to_entity.get(o_id, {}).get("title", f"#{o_id}")
+            for o_id in top
+        ]
+        return self._wrap({"names": names, "matrix": matrix})
+
+    # ------------------------------------------------------------------
     # TF-IDF document frequency — computed once across all target
     # entities, used for the neighbor network ranking.
     # ------------------------------------------------------------------
@@ -527,19 +735,23 @@ class EntityDashboardGenerator:
     def build_entity_json(self, entity_o_id: int) -> Dict[str, Any]:
         info = self.entities[entity_o_id]
         return {
-            "version": 1,
+            "version": 2,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "entity": {
                 "o_id": entity_o_id,
                 "title": info["title"],
                 "type": info["type"],
             },
-            "summary":    self.compute_summary(entity_o_id),
-            "timeline":   self.compute_timeline(entity_o_id),
-            "newspapers": self.compute_newspapers(entity_o_id),
-            "countries":  self.compute_countries(entity_o_id),
-            "network":    self.compute_network(entity_o_id),
-            "locations":  self.compute_locations(entity_o_id),
+            "summary":      self.compute_summary(entity_o_id),
+            "timeline":     self.compute_timeline(entity_o_id),
+            "newspapers":   self.compute_newspapers(entity_o_id),
+            "countries":    self.compute_countries(entity_o_id),
+            "network":      self.compute_network(entity_o_id),
+            "locations":    self.compute_locations(entity_o_id),
+            "topics":       self.compute_topics(entity_o_id),
+            "sentiment":    self.compute_sentiment(entity_o_id),
+            "heatmap":      self.compute_heatmap(entity_o_id),
+            "cooccurrence": self.compute_cooccurrence(entity_o_id),
         }
 
     def generate_all(self) -> int:

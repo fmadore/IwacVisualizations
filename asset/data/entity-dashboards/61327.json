@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:15.513522+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:34.956838+00:00",
   "entity": {
     "o_id": 61327,
     "title": "Stade Félix Houphouët-Boigny",
@@ -68,15 +68,6 @@
           "year_max": 2013
         },
         {
-          "name": "Le Jour Plus",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2013,
-          "year_max": 2013
-        },
-        {
           "name": "Notre Voie",
           "total": 1,
           "articles": 1,
@@ -93,6 +84,15 @@
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 1995
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
         }
       ]
     }
@@ -442,17 +442,45 @@
           "count": 2
         },
         {
-          "o_id": 76493,
-          "name": "Ouragahio",
-          "lat": 6.41667,
-          "lng": -5.91667,
+          "o_id": 25155,
+          "name": "Russie",
+          "lat": 66.416667,
+          "lng": 94.25,
           "count": 1
         },
         {
-          "o_id": 60538,
-          "name": "Rabat",
-          "lat": 34.025277777778,
-          "lng": -6.8361111111111,
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
           "count": 1
         },
         {
@@ -498,48 +526,526 @@
           "count": 1
         },
         {
-          "o_id": 25155,
-          "name": "Russie",
-          "lat": 66.416667,
-          "lng": 94.25,
+          "o_id": 76493,
+          "name": "Ouragahio",
+          "lat": 6.41667,
+          "lng": -5.91667,
           "count": 1
         },
         {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
-          "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
+          "o_id": 60538,
+          "name": "Rabat",
+          "lat": 34.025277777778,
+          "lng": -6.8361111111111,
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 3
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "count": 2
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 3
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 4
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 3.3,
+            "rated_articles": 10
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 6
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              },
+              {
+                "name": "Très négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 3
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.3,
+            "rated_articles": 10
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 2
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 5
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 7
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.3,
+            "rated_articles": 10
+          }
+        },
+        "articles_total": 10
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1995,
+          2000,
+          2003,
+          2004,
+          2005,
+          2009,
+          2013
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            6,
+            2,
+            2
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            0,
+            8,
+            1
+          ],
+          [
+            3,
+            5,
+            3
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            1,
+            10,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Côte d'Ivoire",
+          "Politique",
+          "Christianisme",
+          "Abidjan",
+          "Conseil National Islamique",
+          "Paix",
+          "Henri Konan Bédié",
+          "Laurent Gbagbo",
+          "Hadj",
+          "Front populaire ivoirien",
+          "Rassemblement des républicains de Côte d'Ivoire",
+          "Conflit",
+          "Harrissou Fofana",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Laïcité"
+        ],
+        "matrix": [
+          [
+            0,
+            5,
+            5,
+            3,
+            4,
+            3,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          [
+            5,
+            0,
+            4,
+            3,
+            4,
+            2,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            3,
+            3,
+            2
+          ],
+          [
+            5,
+            4,
+            0,
+            1,
+            2,
+            3,
+            2,
+            2,
+            2,
+            3,
+            3,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            1,
+            0,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            3,
+            1
+          ],
+          [
+            4,
+            4,
+            2,
+            3,
+            0,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            3,
+            2
+          ],
+          [
+            3,
+            2,
+            3,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            1,
+            2,
+            0,
+            0,
+            3,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            2,
+            1,
+            2,
+            0,
+            3,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            2
+          ],
+          [
+            2,
+            3,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            3,
+            1,
+            1,
+            2,
+            0,
+            0,
+            1,
+            2,
+            0,
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            3,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            3,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            2,
+            1,
+            2,
+            2,
+            0,
+            2,
+            0
+          ],
+          [
+            3,
+            3,
+            1,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
     }
   }
 }

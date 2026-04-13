@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T07:32:32.660828+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:35.877529+00:00",
   "person": {
     "o_id": 44465,
     "title": "Affou Sanogo",
@@ -2523,6 +2523,1510 @@
           "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 15
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 7
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 1
+        },
+        {
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "count": 1
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 1
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        }
+      ],
+      "subject": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 15
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 7
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 5
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 1
+        },
+        {
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "count": 1
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
+          "count": 1
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        }
+      ],
+      "creator": [
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 9
+              },
+              {
+                "name": "Positif",
+                "count": 18
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 33
+              }
+            ],
+            "subjectivite_avg": 2.58,
+            "rated_articles": 33
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 29
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 33
+              }
+            ],
+            "subjectivite_avg": 2.85,
+            "rated_articles": 33
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 27
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 12
+              },
+              {
+                "name": "Central",
+                "count": 21
+              }
+            ],
+            "subjectivite_avg": 2.27,
+            "rated_articles": 33
+          }
+        },
+        "articles_total": 33
+      },
+      "subject": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 9
+              },
+              {
+                "name": "Positif",
+                "count": 18
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 33
+              }
+            ],
+            "subjectivite_avg": 2.58,
+            "rated_articles": 33
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              },
+              {
+                "name": "Positif",
+                "count": 29
+              },
+              {
+                "name": "Neutre",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 33
+              }
+            ],
+            "subjectivite_avg": 2.85,
+            "rated_articles": 33
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 27
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 12
+              },
+              {
+                "name": "Central",
+                "count": 21
+              }
+            ],
+            "subjectivite_avg": 2.27,
+            "rated_articles": 33
+          }
+        },
+        "articles_total": 33
+      },
+      "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 3.5,
+            "rated_articles": 2
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              }
+            ],
+            "subjectivite_avg": 4.0,
+            "rated_articles": 2
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 1
+              },
+              {
+                "name": "Central",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.0,
+            "rated_articles": 2
+          }
+        },
+        "articles_total": 2
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1974,
+          1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2005,
+          2007,
+          2008
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            11,
+            3,
+            1
+          ],
+          [
+            8,
+            7,
+            1
+          ],
+          [
+            9,
+            6,
+            2
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            4,
+            3
+          ],
+          [
+            6,
+            0,
+            3
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            5,
+            6,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            2
+          ],
+          [
+            6,
+            3,
+            1
+          ],
+          [
+            7,
+            6,
+            1
+          ],
+          [
+            7,
+            2,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            12,
+            7,
+            1
+          ],
+          [
+            11,
+            7,
+            1
+          ],
+          [
+            10,
+            8,
+            1
+          ],
+          [
+            8,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "subject": {
+        "years": [
+          1974,
+          1993,
+          1994,
+          1995,
+          1996,
+          1997,
+          1998,
+          1999,
+          2000,
+          2001,
+          2005,
+          2007,
+          2008
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            11,
+            3,
+            1
+          ],
+          [
+            8,
+            7,
+            1
+          ],
+          [
+            9,
+            6,
+            2
+          ],
+          [
+            3,
+            8,
+            1
+          ],
+          [
+            3,
+            9,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            2,
+            11,
+            1
+          ],
+          [
+            3,
+            4,
+            3
+          ],
+          [
+            6,
+            0,
+            3
+          ],
+          [
+            0,
+            11,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            5,
+            6,
+            1
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            4,
+            9,
+            2
+          ],
+          [
+            6,
+            3,
+            1
+          ],
+          [
+            7,
+            6,
+            1
+          ],
+          [
+            7,
+            2,
+            1
+          ],
+          [
+            6,
+            2,
+            1
+          ],
+          [
+            6,
+            10,
+            1
+          ],
+          [
+            6,
+            7,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            4,
+            8,
+            1
+          ],
+          [
+            12,
+            7,
+            1
+          ],
+          [
+            11,
+            7,
+            1
+          ],
+          [
+            10,
+            8,
+            1
+          ],
+          [
+            8,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "creator": {
+        "years": [
+          1998,
+          2000
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Conseil National Islamique",
+          "Idriss Koudouss Koné",
+          "Aboubacar Fofana",
+          "Henri Konan Bédié",
+          "Anzoumana Konaté",
+          "Paix",
+          "Imamat",
+          "Unité",
+          "Prière",
+          "Mosquée",
+          "Politique",
+          "Conflit",
+          "Aïd al-Adha (Tabaski)",
+          "Diaby Salif"
+        ],
+        "matrix": [
+          [
+            0,
+            21,
+            19,
+            12,
+            11,
+            11,
+            10,
+            13,
+            10,
+            8,
+            7,
+            7,
+            7,
+            4,
+            4
+          ],
+          [
+            21,
+            0,
+            18,
+            12,
+            10,
+            7,
+            7,
+            10,
+            10,
+            6,
+            8,
+            4,
+            6,
+            2,
+            4
+          ],
+          [
+            19,
+            18,
+            0,
+            9,
+            10,
+            9,
+            5,
+            9,
+            8,
+            4,
+            6,
+            5,
+            4,
+            0,
+            3
+          ],
+          [
+            12,
+            12,
+            9,
+            0,
+            10,
+            9,
+            6,
+            5,
+            8,
+            6,
+            5,
+            4,
+            5,
+            5,
+            5
+          ],
+          [
+            11,
+            10,
+            10,
+            10,
+            0,
+            6,
+            7,
+            5,
+            8,
+            5,
+            7,
+            6,
+            2,
+            3,
+            7
+          ],
+          [
+            11,
+            7,
+            9,
+            9,
+            6,
+            0,
+            6,
+            6,
+            5,
+            5,
+            3,
+            4,
+            4,
+            4,
+            4
+          ],
+          [
+            10,
+            7,
+            5,
+            6,
+            7,
+            6,
+            0,
+            3,
+            5,
+            9,
+            3,
+            2,
+            3,
+            7,
+            4
+          ],
+          [
+            13,
+            10,
+            9,
+            5,
+            5,
+            6,
+            3,
+            0,
+            3,
+            3,
+            5,
+            4,
+            1,
+            2,
+            3
+          ],
+          [
+            10,
+            10,
+            8,
+            8,
+            8,
+            5,
+            5,
+            3,
+            0,
+            4,
+            6,
+            2,
+            4,
+            2,
+            4
+          ],
+          [
+            8,
+            6,
+            4,
+            6,
+            5,
+            5,
+            9,
+            3,
+            4,
+            0,
+            2,
+            1,
+            3,
+            6,
+            4
+          ],
+          [
+            7,
+            8,
+            6,
+            5,
+            7,
+            3,
+            3,
+            5,
+            6,
+            2,
+            0,
+            2,
+            1,
+            1,
+            5
+          ],
+          [
+            7,
+            4,
+            5,
+            4,
+            6,
+            4,
+            2,
+            4,
+            2,
+            1,
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            7,
+            6,
+            4,
+            5,
+            2,
+            4,
+            3,
+            1,
+            4,
+            3,
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            4,
+            2,
+            0,
+            5,
+            3,
+            4,
+            7,
+            2,
+            2,
+            6,
+            1,
+            0,
+            1,
+            0,
+            3
+          ],
+          [
+            4,
+            4,
+            3,
+            5,
+            7,
+            4,
+            4,
+            3,
+            4,
+            4,
+            5,
+            2,
+            2,
+            3,
+            0
+          ]
+        ]
+      },
+      "subject": {
+        "names": [
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Conseil National Islamique",
+          "Idriss Koudouss Koné",
+          "Aboubacar Fofana",
+          "Henri Konan Bédié",
+          "Anzoumana Konaté",
+          "Paix",
+          "Imamat",
+          "Unité",
+          "Prière",
+          "Mosquée",
+          "Politique",
+          "Conflit",
+          "Aïd al-Adha (Tabaski)",
+          "Diaby Salif"
+        ],
+        "matrix": [
+          [
+            0,
+            21,
+            19,
+            12,
+            11,
+            11,
+            10,
+            13,
+            10,
+            8,
+            7,
+            7,
+            7,
+            4,
+            4
+          ],
+          [
+            21,
+            0,
+            18,
+            12,
+            10,
+            7,
+            7,
+            10,
+            10,
+            6,
+            8,
+            4,
+            6,
+            2,
+            4
+          ],
+          [
+            19,
+            18,
+            0,
+            9,
+            10,
+            9,
+            5,
+            9,
+            8,
+            4,
+            6,
+            5,
+            4,
+            0,
+            3
+          ],
+          [
+            12,
+            12,
+            9,
+            0,
+            10,
+            9,
+            6,
+            5,
+            8,
+            6,
+            5,
+            4,
+            5,
+            5,
+            5
+          ],
+          [
+            11,
+            10,
+            10,
+            10,
+            0,
+            6,
+            7,
+            5,
+            8,
+            5,
+            7,
+            6,
+            2,
+            3,
+            7
+          ],
+          [
+            11,
+            7,
+            9,
+            9,
+            6,
+            0,
+            6,
+            6,
+            5,
+            5,
+            3,
+            4,
+            4,
+            4,
+            4
+          ],
+          [
+            10,
+            7,
+            5,
+            6,
+            7,
+            6,
+            0,
+            3,
+            5,
+            9,
+            3,
+            2,
+            3,
+            7,
+            4
+          ],
+          [
+            13,
+            10,
+            9,
+            5,
+            5,
+            6,
+            3,
+            0,
+            3,
+            3,
+            5,
+            4,
+            1,
+            2,
+            3
+          ],
+          [
+            10,
+            10,
+            8,
+            8,
+            8,
+            5,
+            5,
+            3,
+            0,
+            4,
+            6,
+            2,
+            4,
+            2,
+            4
+          ],
+          [
+            8,
+            6,
+            4,
+            6,
+            5,
+            5,
+            9,
+            3,
+            4,
+            0,
+            2,
+            1,
+            3,
+            6,
+            4
+          ],
+          [
+            7,
+            8,
+            6,
+            5,
+            7,
+            3,
+            3,
+            5,
+            6,
+            2,
+            0,
+            2,
+            1,
+            1,
+            5
+          ],
+          [
+            7,
+            4,
+            5,
+            4,
+            6,
+            4,
+            2,
+            4,
+            2,
+            1,
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            7,
+            6,
+            4,
+            5,
+            2,
+            4,
+            3,
+            1,
+            4,
+            3,
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            4,
+            2,
+            0,
+            5,
+            3,
+            4,
+            7,
+            2,
+            2,
+            6,
+            1,
+            0,
+            1,
+            0,
+            3
+          ],
+          [
+            4,
+            4,
+            3,
+            5,
+            7,
+            4,
+            4,
+            3,
+            4,
+            4,
+            5,
+            2,
+            2,
+            3,
+            0
+          ]
+        ]
+      },
+      "creator": {
+        "names": [
+          "Conseil National Islamique",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Idriss Koudouss Koné",
+          "Anzoumana Konaté",
+          "Moussa Touré",
+          "Prière",
+          "Ramadan",
+          "Jeûne",
+          "Paix",
+          "Tribalisme",
+          "Aïd el-Fitr",
+          "Conflit",
+          "Front populaire ivoirien"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

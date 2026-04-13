@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:08.596911+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:26.610037+00:00",
   "entity": {
     "o_id": 495,
     "title": "Anié",
@@ -646,17 +646,17 @@
           "count": 4
         },
         {
-          "o_id": 494,
-          "name": "Aného",
-          "lat": 6.2288888888889,
-          "lng": 1.5930555555556,
-          "count": 4
-        },
-        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
           "lng": 1.08333,
+          "count": 4
+        },
+        {
+          "o_id": 494,
+          "name": "Aného",
+          "lat": 6.2288888888889,
+          "lng": 1.5930555555556,
           "count": 4
         },
         {
@@ -681,17 +681,17 @@
           "count": 4
         },
         {
-          "o_id": 60501,
-          "name": "Haho",
-          "lat": 6.95,
-          "lng": 1.16666667,
-          "count": 4
-        },
-        {
           "o_id": 60565,
           "name": "Est-Mono",
           "lat": 7.4475,
           "lng": 0.847222,
+          "count": 4
+        },
+        {
+          "o_id": 60501,
+          "name": "Haho",
+          "lat": 6.95,
+          "lng": 1.16666667,
           "count": 4
         },
         {
@@ -758,34 +758,6 @@
           "count": 2
         },
         {
-          "o_id": 549,
-          "name": "Inde",
-          "lat": 22.0,
-          "lng": 79.0,
-          "count": 1
-        },
-        {
-          "o_id": 60523,
-          "name": "Londres",
-          "lat": 51.507222222222,
-          "lng": -0.1275,
-          "count": 1
-        },
-        {
-          "o_id": 503,
-          "name": "Cinkassé",
-          "lat": 11.096876,
-          "lng": 0.016393,
-          "count": 1
-        },
-        {
-          "o_id": 532,
-          "name": "Kloto",
-          "lat": 7.083333,
-          "lng": 0.75,
-          "count": 1
-        },
-        {
           "o_id": 60544,
           "name": "Soudou",
           "lat": 9.3166666666667,
@@ -828,10 +800,24 @@
           "count": 1
         },
         {
-          "o_id": 60558,
-          "name": "Agoé-Nyivé",
-          "lat": 6.2575,
-          "lng": 1.1929,
+          "o_id": 549,
+          "name": "Inde",
+          "lat": 22.0,
+          "lng": 79.0,
+          "count": 1
+        },
+        {
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
+          "count": 1
+        },
+        {
+          "o_id": 503,
+          "name": "Cinkassé",
+          "lat": 11.096876,
+          "lng": 0.016393,
           "count": 1
         },
         {
@@ -940,6 +926,13 @@
           "count": 1
         },
         {
+          "o_id": 60558,
+          "name": "Agoé-Nyivé",
+          "lat": 6.2575,
+          "lng": 1.1929,
+          "count": 1
+        },
+        {
           "o_id": 73334,
           "name": "Région maritime",
           "lat": 6.5,
@@ -952,8 +945,622 @@
           "lat": 21.4225,
           "lng": 39.826111,
           "count": 1
+        },
+        {
+          "o_id": 532,
+          "name": "Kloto",
+          "lat": 7.083333,
+          "lng": 0.75,
+          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 5
+        },
+        {
+          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "count": 3
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 2
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 2
+        },
+        {
+          "label": "islam - religion - chrétien - histoire - communauté - catholique",
+          "count": 1
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 12
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 12
+              },
+              {
+                "name": "Central",
+                "count": 3
+              },
+              {
+                "name": "Secondaire",
+                "count": 0
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.62,
+            "rated_articles": 17
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 1
+              },
+              {
+                "name": "Positif",
+                "count": 12
+              },
+              {
+                "name": "Neutre",
+                "count": 3
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 10
+              },
+              {
+                "name": "Central",
+                "count": 4
+              },
+              {
+                "name": "Secondaire",
+                "count": 1
+              },
+              {
+                "name": "Marginal",
+                "count": 1
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 1.88,
+            "rated_articles": 17
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 11
+              },
+              {
+                "name": "Neutre",
+                "count": 5
+              },
+              {
+                "name": "Négatif",
+                "count": 0
+              },
+              {
+                "name": "Très négatif",
+                "count": 0
+              },
+              {
+                "name": "Non applicable",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 2
+              },
+              {
+                "name": "Central",
+                "count": 12
+              },
+              {
+                "name": "Secondaire",
+                "count": 2
+              },
+              {
+                "name": "Marginal",
+                "count": 0
+              },
+              {
+                "name": "Non abordé",
+                "count": 1
+              }
+            ],
+            "subjectivite_avg": 2.12,
+            "rated_articles": 17
+          }
+        },
+        "articles_total": 17
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1990,
+          1992,
+          2006,
+          2015,
+          2016,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            9,
+            9,
+            1
+          ],
+          [
+            8,
+            11,
+            1
+          ],
+          [
+            2,
+            9,
+            1
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            10,
+            4,
+            1
+          ],
+          [
+            5,
+            11,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            9,
+            3,
+            1
+          ],
+          [
+            10,
+            3,
+            1
+          ],
+          [
+            4,
+            5,
+            2
+          ],
+          [
+            9,
+            5,
+            1
+          ],
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            9,
+            7,
+            1
+          ],
+          [
+            4,
+            4,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Atakpamé",
+          "Lomé",
+          "Badou",
+          "Ogou",
+          "Amou",
+          "Union Musulmane du Togo",
+          "Wawa",
+          "Kpalimé",
+          "Sokodé",
+          "Tchamba",
+          "Bénin",
+          "Togo",
+          "Association des Élèves et Étudiants Musulmans au Togo",
+          "Aného",
+          "Elavagnon"
+        ],
+        "matrix": [
+          [
+            0,
+            6,
+            7,
+            7,
+            6,
+            4,
+            5,
+            3,
+            4,
+            4,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          [
+            6,
+            0,
+            2,
+            2,
+            1,
+            5,
+            0,
+            4,
+            4,
+            3,
+            4,
+            3,
+            4,
+            2,
+            0
+          ],
+          [
+            7,
+            2,
+            0,
+            5,
+            5,
+            1,
+            5,
+            1,
+            2,
+            3,
+            1,
+            1,
+            0,
+            2,
+            4
+          ],
+          [
+            7,
+            2,
+            5,
+            0,
+            5,
+            2,
+            5,
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            1,
+            4
+          ],
+          [
+            6,
+            1,
+            5,
+            5,
+            0,
+            0,
+            5,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            1,
+            4
+          ],
+          [
+            4,
+            5,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            1,
+            2,
+            3,
+            2,
+            0
+          ],
+          [
+            5,
+            0,
+            5,
+            5,
+            5,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            4
+          ],
+          [
+            3,
+            4,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            3,
+            2,
+            2,
+            2,
+            0,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            2,
+            0,
+            1,
+            2,
+            0,
+            3,
+            0,
+            3,
+            2,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            4,
+            3,
+            3,
+            1,
+            2,
+            1,
+            1,
+            2,
+            3,
+            0,
+            2,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            4,
+            1,
+            0,
+            1,
+            1,
+            0,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            2,
+            3,
+            1,
+            1,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0
+          ],
+          [
+            2,
+            4,
+            0,
+            2,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            4,
+            4,
+            4,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
     }
   }
 }

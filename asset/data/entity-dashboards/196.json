@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "generated_at": "2026-04-13T09:32:24.447423+00:00",
+  "version": 2,
+  "generated_at": "2026-04-13T09:53:46.733472+00:00",
   "entity": {
     "o_id": 196,
     "title": "Journées de la femme musulmane",
@@ -90,15 +90,6 @@
           "year_max": 1993
         },
         {
-          "name": "L'Appel",
-          "total": 2,
-          "articles": 0,
-          "publications": 2,
-          "country": "Burkina Faso",
-          "year_min": 1995,
-          "year_max": 1998
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 2,
           "articles": 2,
@@ -108,22 +99,22 @@
           "year_max": 1997
         },
         {
-          "name": "Plume Libre",
-          "total": 1,
+          "name": "L'Appel",
+          "total": 2,
           "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 1992,
-          "year_max": 1992
+          "publications": 2,
+          "country": "Burkina Faso",
+          "year_min": 1995,
+          "year_max": 1998
         },
         {
-          "name": "Le Jour",
+          "name": "La Voie",
           "total": 1,
           "articles": 1,
           "publications": 0,
           "country": "Côte d'Ivoire",
-          "year_min": 1997,
-          "year_max": 1997
+          "year_min": 1992,
+          "year_max": 1992
         },
         {
           "name": "An-Nasr Trimestriel",
@@ -135,10 +126,19 @@
           "year_max": 2007
         },
         {
-          "name": "La Voie",
+          "name": "Le Jour",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1997,
+          "year_max": 1997
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1992
@@ -361,16 +361,16 @@
             "score": 4.2647
           },
           {
-            "o_id": 429,
-            "title": "Suisse",
-            "type": "Lieux",
+            "o_id": 80,
+            "title": "Prostitution",
+            "type": "Sujets",
             "cooc": 2,
             "score": 4.2111
           },
           {
-            "o_id": 80,
-            "title": "Prostitution",
-            "type": "Sujets",
+            "o_id": 429,
+            "title": "Suisse",
+            "type": "Lieux",
             "cooc": 2,
             "score": 4.2111
           },
@@ -687,13 +687,13 @@
           },
           {
             "source": 196,
-            "target": 429,
+            "target": 80,
             "weight": 4.2111,
             "cooc": 2
           },
           {
             "source": 196,
-            "target": 80,
+            "target": 429,
             "weight": 4.2111,
             "cooc": 2
           },
@@ -873,10 +873,10 @@
           "count": 5
         },
         {
-          "o_id": 76319,
-          "name": "Maison du Peuple",
-          "lat": 12.3722,
-          "lng": -1.5236,
+          "o_id": 23632,
+          "name": "Bingerville",
+          "lat": 5.35,
+          "lng": -3.9,
           "count": 4
         },
         {
@@ -887,24 +887,17 @@
           "count": 4
         },
         {
-          "o_id": 23632,
-          "name": "Bingerville",
-          "lat": 5.35,
-          "lng": -3.9,
+          "o_id": 76319,
+          "name": "Maison du Peuple",
+          "lat": 12.3722,
+          "lng": -1.5236,
           "count": 4
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 2
-        },
-        {
-          "o_id": 429,
-          "name": "Suisse",
-          "lat": 47.00016,
-          "lng": 8.01427,
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
           "count": 2
         },
         {
@@ -922,17 +915,38 @@
           "count": 2
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 2
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
+          "o_id": 429,
+          "name": "Suisse",
+          "lat": 47.00016,
+          "lng": 8.01427,
+          "count": 2
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
           "count": 1
         },
         {
@@ -950,10 +964,10 @@
           "count": 1
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
+          "o_id": 61323,
+          "name": "Dabou",
+          "lat": 5.325556,
+          "lng": -4.376667,
           "count": 1
         },
         {
@@ -964,10 +978,24 @@
           "count": 1
         },
         {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
           "o_id": 541,
           "name": "Nigéria",
           "lat": 10.0,
           "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 1
         },
         {
@@ -976,36 +1004,488 @@
           "lat": 5.35,
           "lng": -3.9666666666667,
           "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
-          "count": 1
-        },
-        {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 61323,
-          "name": "Dabou",
-          "lat": 5.325556,
-          "lng": -4.376667,
-          "count": 1
         }
       ]
+    }
+  },
+  "topics": {
+    "by_role": {
+      "all": [
+        {
+          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "count": 7
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 7
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "sentiment": {
+    "by_role": {
+      "all": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 15
+              },
+              {
+                "name": "Neutre",
+                "count": 1
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.25,
+            "rated_articles": 16
+          },
+          "chatgpt": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 16
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 16
+              }
+            ],
+            "subjectivite_avg": 2.81,
+            "rated_articles": 16
+          },
+          "mistral": {
+            "polarite": [
+              {
+                "name": "Très positif",
+                "count": 0
+              },
+              {
+                "name": "Positif",
+                "count": 10
+              },
+              {
+                "name": "Neutre",
+                "count": 4
+              },
+              {
+                "name": "Négatif",
+                "count": 2
+              }
+            ],
+            "centralite": [
+              {
+                "name": "Très central",
+                "count": 5
+              },
+              {
+                "name": "Central",
+                "count": 11
+              }
+            ],
+            "subjectivite_avg": 2.38,
+            "rated_articles": 16
+          }
+        },
+        "articles_total": 16
+      }
+    }
+  },
+  "heatmap": {
+    "by_role": {
+      "all": {
+        "years": [
+          1991,
+          1992,
+          1993,
+          1995,
+          1996,
+          1997,
+          1998,
+          2007
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": [
+          [
+            4,
+            3,
+            1
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            2,
+            5
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ],
+          [
+            7,
+            3,
+            1
+          ],
+          [
+            6,
+            2,
+            3
+          ],
+          [
+            5,
+            3,
+            1
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            1,
+            4,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "cooccurrence": {
+    "by_role": {
+      "all": {
+        "names": [
+          "Femmes",
+          "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Éducation",
+          "Côte d'Ivoire",
+          "Burkina Faso",
+          "Ouagadougou",
+          "Mali",
+          "Ramata Boly",
+          "Mariage",
+          "Rissalatou Diawara",
+          "Niger",
+          "VIH/Sida",
+          "Famille",
+          "Djiguiba Cissé",
+          "Togo"
+        ],
+        "matrix": [
+          [
+            0,
+            14,
+            12,
+            12,
+            11,
+            9,
+            8,
+            7,
+            6,
+            6,
+            6,
+            5,
+            5,
+            5,
+            5
+          ],
+          [
+            14,
+            0,
+            7,
+            8,
+            10,
+            9,
+            7,
+            7,
+            3,
+            6,
+            6,
+            5,
+            2,
+            4,
+            5
+          ],
+          [
+            12,
+            7,
+            0,
+            9,
+            7,
+            4,
+            5,
+            5,
+            6,
+            3,
+            5,
+            3,
+            5,
+            3,
+            1
+          ],
+          [
+            12,
+            8,
+            9,
+            0,
+            9,
+            4,
+            8,
+            6,
+            6,
+            5,
+            6,
+            3,
+            4,
+            5,
+            4
+          ],
+          [
+            11,
+            10,
+            7,
+            9,
+            0,
+            6,
+            8,
+            7,
+            3,
+            5,
+            6,
+            4,
+            3,
+            4,
+            4
+          ],
+          [
+            9,
+            9,
+            4,
+            4,
+            6,
+            0,
+            4,
+            5,
+            1,
+            4,
+            2,
+            3,
+            1,
+            3,
+            3
+          ],
+          [
+            8,
+            7,
+            5,
+            8,
+            8,
+            4,
+            0,
+            5,
+            2,
+            5,
+            5,
+            3,
+            3,
+            3,
+            4
+          ],
+          [
+            7,
+            7,
+            5,
+            6,
+            7,
+            5,
+            5,
+            0,
+            3,
+            5,
+            4,
+            2,
+            1,
+            4,
+            2
+          ],
+          [
+            6,
+            3,
+            6,
+            6,
+            3,
+            1,
+            2,
+            3,
+            0,
+            2,
+            3,
+            1,
+            1,
+            2,
+            0
+          ],
+          [
+            6,
+            6,
+            3,
+            5,
+            5,
+            4,
+            5,
+            5,
+            2,
+            0,
+            3,
+            1,
+            1,
+            3,
+            2
+          ],
+          [
+            6,
+            6,
+            5,
+            6,
+            6,
+            2,
+            5,
+            4,
+            3,
+            3,
+            0,
+            3,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            3,
+            3,
+            4,
+            3,
+            3,
+            2,
+            1,
+            1,
+            3,
+            0,
+            1,
+            0,
+            3
+          ],
+          [
+            5,
+            2,
+            5,
+            4,
+            3,
+            1,
+            3,
+            1,
+            1,
+            1,
+            2,
+            1,
+            0,
+            2,
+            1
+          ],
+          [
+            5,
+            4,
+            3,
+            5,
+            4,
+            3,
+            3,
+            4,
+            2,
+            3,
+            2,
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            5,
+            5,
+            1,
+            4,
+            4,
+            3,
+            4,
+            2,
+            0,
+            2,
+            2,
+            3,
+            1,
+            2,
+            0
+          ]
+        ]
+      }
     }
   }
 }
