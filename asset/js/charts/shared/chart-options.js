@@ -351,7 +351,7 @@
         };
 
         return R && R.withMedia
-            ? R.withMedia(base, R.gridMedia)
+            ? R.withMedia(base, R.labelMedia({ smWidth: 120, smFontSize: 11 }), R.gridMedia)
             : base;
     };
 
