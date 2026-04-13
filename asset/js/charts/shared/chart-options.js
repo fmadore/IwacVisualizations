@@ -478,11 +478,9 @@
      */
     C.treemap = function (tree, opts) {
         opts = opts || {};
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var surfaceColor = tokens.surface || '#fdfdfc';
 
-        // Sanitize: only leaves carry value, parents only carry children.
-        // This sidesteps an ECharts 6 bug in the treemap layout where
-        // `upperLabel` on non-leaf levels + value-carrying parents crashes
-        // with `Cannot set properties of undefined (setting '2')` in di().
         function sanitize(node, depth, depthRef) {
             if (!node || typeof node !== 'object') return null;
             depthRef.max = Math.max(depthRef.max, depth);
@@ -496,7 +494,6 @@
                 if (cleanKids.length > 0) {
                     return { name: node.name || '', children: cleanKids };
                 }
-                // kids array was effectively empty → treat as leaf if it has value
             }
             if (node.value != null && Number(node.value) > 0) {
                 return { name: node.name || '', value: Number(node.value) };
@@ -516,24 +513,24 @@
                     return crumbs + '<br><strong>' + fmt(info.value) + '</strong>';
                 }
             },
-            series: [
-                {
-                    type: 'treemap',
-                    name: opts.rootName || (tree && tree.name) || 'Root',
-                    roam: false,
-                    nodeClick: 'zoomToNode',
-                    leafDepth: 2,
-                    breadcrumb: { show: true, bottom: 4 },
-                    label: { show: true, formatter: '{b}' },
-                    itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: '#fff' },
-                    levels: [
-                        { itemStyle: { borderWidth: 0, gapWidth: 3 } },
-                        { itemStyle: { gapWidth: 2 } },
-                        { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1 } }
-                    ],
-                    data: children
-                }
-            ]
+            series: [{
+                type: 'treemap',
+                name: opts.rootName || (tree && tree.name) || 'Root',
+                roam: false,
+                nodeClick: 'zoomToNode',
+                leafDepth: 2,
+                breadcrumb: { show: true, bottom: 4 },
+                label: { show: true, formatter: '{b}' },
+                itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: surfaceColor },
+                levels: [
+                    { itemStyle: { borderWidth: 0, gapWidth: 3, borderColor: surfaceColor } },
+                    { itemStyle: { gapWidth: 2, borderColor: surfaceColor } },
+                    { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1, borderColor: surfaceColor } }
+                ],
+                data: children
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
     };
 
@@ -835,14 +832,12 @@
         var minFont = count > 100 ? 10 : count > 50 ? 12 : 14;
         var maxFont = count > 100 ? 56 : count > 50 ? 64 : (count > 10 ? 72 : 88);
         var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
+        var smMaxFont = Math.round(maxFont * 0.8);
 
-        // Palette pulled from the live IWAC theme when available, with a
-        // warm-to-cool default set as fallback. Randomized per-word so the
-        // cloud has visual variety instead of one flat colour.
-        var palette = (window.IWACVis && window.IWACVis.getPalette && window.IWACVis.getPalette())
+        var palette = (ns.getPalette && ns.getPalette())
             || ['#e67a14', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
 
-        return {
+        var base = {
             tooltip: {
                 confine: true,
                 formatter: function (p) {
@@ -852,8 +847,6 @@
             aria: { enabled: true },
             series: [{
                 type: 'wordCloud',
-                // Inverse-square shape function: behaves as a rectangle but
-                // lets the wordcloud layout actually fill the box.
                 shape: function (theta) {
                     var cos = Math.abs(Math.cos(theta));
                     var sin = Math.abs(Math.sin(theta));
@@ -882,13 +875,26 @@
                 emphasis: {
                     textStyle: {
                         fontWeight: 'bold',
-                        shadowBlur: 10,
-                        shadowColor: 'rgba(0,0,0,0.3)'
+                        shadowBlur: 14,
+                        shadowColor: 'rgba(0,0,0,0.4)'
                     }
                 },
                 data: data
             }]
         };
+
+        var wcMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    series: [{ sizeRange: [minFont, smMaxFont] }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, wcMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -939,13 +945,6 @@
             }
         }
 
-        function truncate(name) {
-            if (!name || name.length <= maxLen) return name || '';
-            var head = Math.floor((maxLen - 1) / 2);
-            var tail = maxLen - 1 - head;
-            return name.slice(0, head) + '\u2026' + name.slice(-tail);
-        }
-
         var scores = nodes.map(function (n) { return n.score || 0; });
         var maxScore = Math.max.apply(null, scores.concat([1]));
         var weights = edges.map(function (e) { return e.weight || 0; });
@@ -957,7 +956,7 @@
             var symbolSize = isCenter ? 46 : 14 + Math.sqrt(normScore) * 26;
             return {
                 id: String(n.o_id),
-                name: truncate(n.title || ''),
+                name: C._truncate(n.title || '', maxLen),
                 fullTitle: n.title || '',
                 entityType: n.type,
                 o_id: n.o_id,
@@ -995,27 +994,27 @@
             };
         });
 
-        return {
+        var base = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
                     if (p.dataType === 'node') {
-                        var data = p.data || {};
-                        var lines = ['<strong>' + esc(data.fullTitle || '') + '</strong>'];
-                        if (data.entityType && data.entityType !== 'center') {
-                            lines.push(t('entity_type_' + data.entityType));
+                        var nodeData = p.data || {};
+                        var lines = ['<strong>' + esc(nodeData.fullTitle || '') + '</strong>'];
+                        if (nodeData.entityType && nodeData.entityType !== 'center') {
+                            lines.push(t('entity_type_' + nodeData.entityType));
                         }
-                        if (data.cooc != null) {
-                            lines.push(t('mentions_count', { count: fmt(data.cooc) }));
+                        if (nodeData.cooc != null) {
+                            lines.push(t('mentions_count', { count: fmt(nodeData.cooc) }));
                         }
-                        if (data.score != null) {
-                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(data.score * 10) / 10));
+                        if (nodeData.score != null) {
+                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(nodeData.score * 10) / 10));
                         }
                         return lines.join('<br>');
                     }
                     if (p.dataType === 'edge') {
-                        var e = p.data || {};
-                        return t('mentions_count', { count: fmt(e.cooc || 0) });
+                        var edgeData = p.data || {};
+                        return t('mentions_count', { count: fmt(edgeData.cooc || 0) });
                     }
                     return '';
                 }
@@ -1034,7 +1033,9 @@
                 focusNodeAdjacency: true,
                 emphasis: {
                     focus: 'adjacency',
-                    lineStyle: { width: 3 }
+                    lineStyle: { width: 4 },
+                    scale: true,
+                    scaleSize: 3
                 },
                 force: {
                     repulsion: 180,
@@ -1044,7 +1045,27 @@
                 data: graphNodes,
                 links: graphEdges,
                 cursor: 'pointer'
-            }]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        var networkMedia = [
+            {
+                query: { maxWidth: R ? R.BP.sm : 640 },
+                option: {
+                    series: [{
+                        force: {
+                            repulsion: 120,
+                            edgeLength: [30, 80]
+                        }
+                    }]
+                }
+            }
+        ];
+
+        return R && R.withMedia
+            ? R.withMedia(base, networkMedia)
+            : base;
     };
 })();
