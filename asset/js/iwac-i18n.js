@@ -261,6 +261,7 @@
             'Toggle fullscreen': 'Toggle fullscreen',
 
             // Entity type labels (used by C.network legend + tooltips)
+            'entity_type_center': 'Center',
             'entity_type_Personnes': 'Persons',
             'entity_type_Organisations': 'Organizations',
             'entity_type_Lieux': 'Places',
@@ -476,6 +477,7 @@
             'Toggle fullscreen': 'Basculer en plein \u00e9cran',
 
             // Entity type labels (used by C.network legend + tooltips)
+            'entity_type_center': 'Centre',
             'entity_type_Personnes': 'Personnes',
             'entity_type_Organisations': 'Organisations',
             'entity_type_Lieux': 'Lieux',

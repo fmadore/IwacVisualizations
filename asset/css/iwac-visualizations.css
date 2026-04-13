@@ -892,7 +892,10 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     color: var(--muted, #6e7a82);
     font-size: var(--text-sm, 0.9rem);
     line-height: 1.5;
-    max-width: 72ch;
+    /* Deliberately no max-width: the description should span the
+       full panel width so --wide panels don't look awkwardly half-
+       filled. Readability is fine at card widths because body text
+       naturally wraps on the chart-grid 1fr / 1fr 1fr columns. */
 }
 
 /* -------------------------------------------------------------------------

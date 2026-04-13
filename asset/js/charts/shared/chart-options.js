@@ -952,6 +952,29 @@
         var weights = edges.map(function (e) { return e.weight || 0; });
         var maxWeight = Math.max.apply(null, weights.concat([1]));
 
+        // Build the categories array that ECharts needs for legend
+        // toggling. Category 0 is always the centre so it can keep its
+        // distinctive palette[0] color; non-centre types get their own
+        // category in order of first appearance. Legend data is then
+        // built FROM categories[].name, so legend names automatically
+        // match series categories — clicking a legend entry toggles
+        // all nodes with that category without the panel having to
+        // replace the whole option.
+        var categoryIndex = { 'center': 0 };
+        var categories = [{
+            name: t('entity_type_center') || 'Center',
+            itemStyle: { color: TYPE_COLORS.center }
+        }];
+        nodes.forEach(function (n) {
+            if (!n.type || n.type === 'center') return;
+            if (categoryIndex[n.type] != null) return;
+            categoryIndex[n.type] = categories.length;
+            categories.push({
+                name: t('entity_type_' + n.type),
+                itemStyle: { color: TYPE_COLORS[n.type] || palette[categories.length % palette.length] }
+            });
+        });
+
         var graphNodes = nodes.map(function (n, idx) {
             var isCenter = n.type === 'center';
             var normScore = isCenter ? 1 : Math.max(0, Math.min(1, (n.score || 0) / maxScore));
@@ -967,7 +990,7 @@
                 cooc: n.cooc,
                 score: n.score,
                 symbolSize: symbolSize,
-                itemStyle: { color: TYPE_COLORS[n.type] || palette[idx % palette.length] },
+                category: categoryIndex[n.type] != null ? categoryIndex[n.type] : 0,
                 // Intentionally NO `fixed` and NO x/y seed: pinning the
                 // centre at (0,0) made the auto-fit asymmetric — nodes
                 // clustered around the pin and ECharts couldn't centre
@@ -993,14 +1016,11 @@
             };
         });
 
-        var uniqueTypes = {};
-        nodes.forEach(function (n) { if (n.type && n.type !== 'center') uniqueTypes[n.type] = true; });
-        var legendData = Object.keys(uniqueTypes).map(function (type) {
-            return {
-                name: t('entity_type_' + type),
-                itemStyle: { color: TYPE_COLORS[type] }
-            };
-        });
+        // Legend data = category names excluding the centre, so the
+        // centre is always visible but the user can toggle off any
+        // type they don't care about. Clicking a legend entry now
+        // works because the names are guaranteed to match a category.
+        var legendData = categories.slice(1).map(function (c) { return c.name; });
 
         var base = {
             tooltip: {
@@ -1033,9 +1053,14 @@
                 // overrides without any hardcoded rgba.
                 var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
                 return [{
+                    // Legend data now matches series categories by name,
+                    // so ECharts can toggle categories on/off when the
+                    // user clicks a legend entry. The old implementation
+                    // passed object literals with no series match and
+                    // the legend rendered as an empty box.
                     data: legendData,
                     show: opts.showLegend !== false,
-                    top: 6,
+                    bottom: 8,
                     left: 'center',
                     orient: 'horizontal',
                     itemWidth: 14,
@@ -1052,10 +1077,11 @@
             series: [{
                 type: 'graph',
                 layout: 'force',
-                // Reserve room for the top legend; the rest of the panel
-                // is handed to the force simulation + auto-fit.
-                top: 44,
-                bottom: 16,
+                // Reserve room for the bottom legend only when it is
+                // actually visible; otherwise the force layout gets the
+                // whole panel below the top padding.
+                top: 16,
+                bottom: opts.showLegend !== false ? 56 : 16,
                 left: 16,
                 right: 16,
                 roam: true,
@@ -1068,6 +1094,12 @@
                 nodeScaleRatio: 0.6,
                 focusNodeAdjacency: true,
                 labelLayout: { hideOverlap: true },
+                // Categories drive the legend. Each entry's name must
+                // match the legend.data entries (which we built from
+                // the same array), so clicks on the legend toggle the
+                // corresponding category without the panel JS having
+                // to rebuild the whole option.
+                categories: categories,
                 emphasis: {
                     focus: 'adjacency',
                     lineStyle: { width: 4 },
@@ -1084,7 +1116,14 @@
                     edgeLength: [60, 140],
                     gravity: 0.08,
                     friction: 0.6,
-                    layoutAnimation: true
+                    // Disabled so the force simulation runs once,
+                    // synchronously, and the final positions are
+                    // frozen. Without this the graph re-animates on
+                    // every resize / fullscreen / merge-mode setOption
+                    // — unsettling edge jumps the user complained
+                    // about. ECharts docs explicitly recommend
+                    // disabling layoutAnimation for larger graphs.
+                    layoutAnimation: false
                 },
                 data: graphNodes,
                 links: graphEdges,

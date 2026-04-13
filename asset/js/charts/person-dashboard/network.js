@@ -63,13 +63,17 @@
 
         panelEl.chart.classList.add('iwac-vis-graph-host');
 
-        function buildOption() {
+        // Build the full option only when the graph itself changes
+        // (facet switch, role flip). Legend + fullscreen toggles use
+        // merge-mode setOption so the force simulation doesn't restart
+        // — that was the "unsettling edge movement" on every click.
+        function buildFullOption() {
             return C.network(currentGraph(), { showLegend: legendVisible });
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {
             if (hasData(currentGraph())) {
-                instance.setOption(buildOption(), true);
+                instance.setOption(buildFullOption(), true);
             } else {
                 instance.clear();
             }
@@ -93,13 +97,17 @@
                 if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
             }));
 
-            // Legend toggle — rebuild the option with showLegend flipped.
-            // We set it via a full setOption(..., true) instead of a
-            // merge so the legend config is swapped atomically.
+            // Legend toggle — merge mode so only legend.show and the
+            // series bottom margin change. No force rerun, no edge
+            // jumps. The series margin expands/shrinks to cover the
+            // space the legend used to occupy.
             var legendBtn = buildButton('\u25A4', P.t('Toggle legend'), function () {
                 if (chart.isDisposed()) return;
                 legendVisible = !legendVisible;
-                chart.setOption(buildOption(), true);
+                chart.setOption({
+                    legend: [{ show: legendVisible }],
+                    series: [{ bottom: legendVisible ? 56 : 16 }]
+                });
                 legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
             });
             bar.appendChild(legendBtn);
@@ -147,10 +155,13 @@
         }
 
         // ---------------- Facet reactivity ----------------
+        // Role flips DO change the graph (different nodes + edges), so
+        // rebuild the full option. Force layout runs once synchronously
+        // because layoutAnimation is disabled in C.network.
         facet.subscribe(function () {
             if (chart && !chart.isDisposed()) {
                 if (hasData(currentGraph())) {
-                    chart.setOption(buildOption(), true);
+                    chart.setOption(buildFullOption(), true);
                 } else {
                     chart.clear();
                 }
