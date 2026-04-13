@@ -204,12 +204,11 @@
         }
         var names = list.map(function (e) { return e[nameKey]; });
         var values = list.map(function (e) { return e[valueKey]; });
-        return {
-            grid: { left: 8, right: 28, top: 8, bottom: 8, containLabel: true },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
+        var barDef = C._barDefaults('horizontal');
+
+        var base = {
+            grid: C._grid({ left: 8, top: 8, bottom: 8 }),
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: { type: 'value' },
             yAxis: {
                 type: 'category',
@@ -217,19 +216,24 @@
                 inverse: true,
                 axisTick: { show: false }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 22,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    }
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 2,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
                 }
-            ]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -304,8 +308,10 @@
         var list = entries || [];
         var names = list.map(function (e) { return e.name; });
         var values = list.map(function (e) { return e.total; });
-        return {
-            grid: { left: 8, right: 48, top: 8, bottom: 8, containLabel: true },
+        var barDef = C._barDefaults('horizontal');
+
+        var base = {
+            grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -329,19 +335,24 @@
                 inverse: true,
                 axisTick: { show: false }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 18,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    }
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 6,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
                 }
-            ]
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
@@ -365,16 +376,10 @@
         var values = list.map(function (e) {
             return { value: e.frequency, o_id: e.o_id };
         });
+        var barDef = C._barDefaults('horizontal');
 
-        function truncate(name) {
-            if (!name || name.length <= maxLen) return name || '';
-            var head = Math.floor((maxLen - 1) / 2);
-            var tail = maxLen - 1 - head;
-            return name.slice(0, head) + '\u2026' + name.slice(-tail);
-        }
-
-        return {
-            grid: { left: 8, right: 48, top: 8, bottom: 8, containLabel: true },
+        var base = {
+            grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -403,23 +408,28 @@
                 axisLabel: {
                     width: 220,
                     overflow: 'truncate',
-                    formatter: truncate
+                    formatter: function (v) { return C._truncate(v, maxLen); }
                 }
             },
-            series: [
-                {
-                    type: 'bar',
-                    data: values,
-                    barMaxWidth: 20,
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function (p) { return fmt(p.value); }
-                    },
-                    cursor: 'pointer'
-                }
-            ]
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth - 4,
+                itemStyle: barDef.itemStyle,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
+                },
+                cursor: 'pointer'
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
         };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 120, smFontSize: 11 }), R.gridMedia)
+            : base;
     };
 
     /* ----------------------------------------------------------------- */
