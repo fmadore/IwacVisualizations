@@ -24,42 +24,38 @@
     /* ----------------------------------------------------------------- */
 
     R.containerWidth = function (el) {
-        var node = el && (el.parentElement || el);
-        if (!node) return window.innerWidth;
-        return node.getBoundingClientRect().width || window.innerWidth;
+        var parent = el && el.parentElement;
+        if (!parent) return window.innerWidth;
+        return parent.getBoundingClientRect().width || window.innerWidth;
     };
 
     /* ----------------------------------------------------------------- */
     /*  ECharts media presets                                              */
     /* ----------------------------------------------------------------- */
 
-    R.legendMedia = function () {
-        return [
-            {
-                query: { maxWidth: R.BP.sm },
-                option: {
-                    legend: {
-                        orient: 'horizontal',
-                        left: 'center',
-                        bottom: 0,
-                        top: null,
-                        right: null
-                    }
+    R.legendMedia = [
+        {
+            query: { maxWidth: R.BP.sm },
+            option: {
+                legend: {
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: 0,
+                    top: null,
+                    right: null
                 }
             }
-        ];
-    };
+        }
+    ];
 
-    R.gridMedia = function () {
-        return [
-            {
-                query: { maxWidth: R.BP.sm },
-                option: {
-                    grid: { left: 24, right: 12, top: 36, bottom: 24 }
-                }
+    R.gridMedia = [
+        {
+            query: { maxWidth: R.BP.sm },
+            option: {
+                grid: { left: 24, right: 12, top: 36, bottom: 24 }
             }
-        ];
-    };
+        }
+    ];
 
     R.labelMedia = function (opts) {
         opts = opts || {};
@@ -81,16 +77,14 @@
         ];
     };
 
-    R.dataZoomMedia = function () {
-        return [
-            {
-                query: { maxWidth: R.BP.sm },
-                option: {
-                    dataZoom: [{ height: 14 }]
-                }
+    R.dataZoomMedia = [
+        {
+            query: { maxWidth: R.BP.sm },
+            option: {
+                dataZoom: [{ height: 14 }]
             }
-        ];
-    };
+        }
+    ];
 
     /* ----------------------------------------------------------------- */
     /*  Merge utility                                                     */
