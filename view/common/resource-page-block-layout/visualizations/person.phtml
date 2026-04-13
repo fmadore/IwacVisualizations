@@ -1,6 +1,6 @@
 <?php
 /**
- * Person Dashboard resource page block.
+ * Visualizations: person template partial.
  *
  * Renders the static header card server-side from the Omeka item
  * representation, then an async container that the JS orchestrator
@@ -8,16 +8,14 @@
  * asset/data/person-dashboards/{o_id}.json.
  *
  * Assets: the item controller already enqueues i18n / theme / core
- * via Module::addAssets(). This template enqueues the shared primitives
- * and block-specific orchestrator + panel modules.
+ * via Module::addAssets(). This partial enqueues the shared primitives
+ * and person-specific orchestrator + panel modules.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
 // Shared primitives that aren't on the default item-controller bundle.
-// Module::addAssets() currently attaches i18n/theme/core; panel-specific
-// shared primitives are enqueued here in load order.
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'));
 $this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'));
@@ -49,22 +47,25 @@ $title = (string) $resource->displayTitle();
 // Primary thumbnail, square — falls back to medium if square unavailable
 $thumbUrl = $resource->thumbnailDisplayUrl('square') ?: $resource->thumbnailDisplayUrl('medium');
 
-// Short description (dcterms:description) — first language-matching value wins,
-// else the first value in any language.
+// Short description (dcterms:description) — first non-empty value wins.
 $description = '';
 foreach ($resource->value('dcterms:description', ['all' => true, 'default' => []]) as $value) {
     $description = (string) $value;
     if ($description !== '') break;
 }
 
-// Gender (foaf:gender) — item link label or literal string.
+// Gender (foaf:gender) — may be a linked item (e.g. "Homme") or a literal.
+// ValueRepresentation has no displayTitle(); call it on the linked resource.
 $gender = '';
 $genderValue = $resource->value('foaf:gender');
 if ($genderValue) {
-    $gender = (string) $genderValue->displayTitle() ?: (string) $genderValue;
+    $linkedGender = $genderValue->valueResource();
+    $gender = $linkedGender
+        ? (string) $linkedGender->displayTitle()
+        : (string) $genderValue;
 }
 
-// Wikidata URI — dcterms:identifier value that starts with the wikidata host.
+// Wikidata URI — dcterms:identifier value that points at wikidata.org.
 $wikidata = '';
 foreach ($resource->value('dcterms:identifier', ['all' => true, 'default' => []]) as $value) {
     $s = (string) $value;

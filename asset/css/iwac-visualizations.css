@@ -133,46 +133,6 @@
 }
 
 /* ------------------------------------------------------------------- */
-/*  Knowledge graph                                                     */
-/* ------------------------------------------------------------------- */
-
-.knowledge-graph-block {
-    position: relative;
-}
-
-.knowledge-graph-toolbar {
-    position: absolute;
-    top: var(--space-2, 0.5rem);
-    right: var(--space-2, 0.5rem);
-    z-index: 5;
-    display: flex;
-    gap: var(--space-1, 0.25rem);
-}
-
-.knowledge-graph-container {
-    position: relative;
-    min-height: 500px;
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: var(--panel-border, 1px solid var(--border, #dcd7ce));
-    border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
-    overflow: hidden;
-}
-
-.knowledge-graph-block.iwac-vis-fullscreen {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    margin: 0;
-    background: var(--background, #f5f3ee);
-    padding: var(--space-4, 1rem);
-}
-
-.knowledge-graph-block.iwac-vis-fullscreen .knowledge-graph-container {
-    height: calc(100vh - var(--space-8, 2rem));
-    min-height: 0;
-}
-
-/* ------------------------------------------------------------------- */
 /*  Buttons                                                             */
 /* ------------------------------------------------------------------- */
 

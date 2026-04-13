@@ -11,10 +11,8 @@ return [
     ],
     'resource_page_block_layouts' => [
         'invokables' => [
-            'knowledgeGraph' => Site\ResourcePageBlockLayout\KnowledgeGraph::class,
+            'visualizations' => Site\ResourcePageBlockLayout\Visualizations::class,
             'itemSetDashboard' => Site\ResourcePageBlockLayout\ItemSetDashboard::class,
-            'linkedItemsDashboard' => Site\ResourcePageBlockLayout\LinkedItemsDashboard::class,
-            'personDashboard' => Site\ResourcePageBlockLayout\PersonDashboard::class,
         ],
     ],
     'view_manager' => [
