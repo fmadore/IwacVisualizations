@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.513708+00:00",
+  "generated_at": "2026-04-14T06:30:32.855890+00:00",
   "person": {
     "o_id": 1284,
     "title": "Abdoulaye Sounaye",
@@ -26,11 +26,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 33,
+        "total_mentions": 44,
         "year_min": 2005,
-        "year_max": 2021,
-        "newspapers_count": 0,
-        "countries_count": 2
+        "year_max": 2023,
+        "newspapers_count": 29,
+        "countries_count": 5
       },
       "subject": {
         "total_mentions": 0,
@@ -43,8 +43,15 @@
         "total_mentions": 33,
         "year_min": 2005,
         "year_max": 2021,
-        "newspapers_count": 0,
+        "newspapers_count": 28,
         "countries_count": 2
+      },
+      "editor": {
+        "total_mentions": 11,
+        "year_min": 2022,
+        "year_max": 2023,
+        "newspapers_count": 2,
+        "countries_count": 5
       }
     }
   },
@@ -66,11 +73,16 @@
           2018,
           2019,
           2020,
-          2021
+          2021,
+          2022,
+          2023
         ],
         "countries": [
           "Burkina Faso",
-          "Niger"
+          "Côte d'Ivoire",
+          "Niger",
+          "Nigeria",
+          "Togo"
         ],
         "series": {
           "Burkina Faso": [
@@ -88,7 +100,28 @@
             0,
             1,
             0,
+            0,
+            1,
             0
+          ],
+          "Côte d'Ivoire": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            3
           ],
           "Niger": [
             2,
@@ -105,7 +138,47 @@
             2,
             0,
             2,
-            4
+            4,
+            0,
+            2
+          ],
+          "Nigeria": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "Togo": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
           ]
         }
       },
@@ -172,14 +245,373 @@
             4
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2022,
+          2023
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte d'Ivoire",
+          "Niger",
+          "Nigeria",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1,
+            0
+          ],
+          "Côte d'Ivoire": [
+            2,
+            3
+          ],
+          "Niger": [
+            0,
+            2
+          ],
+          "Nigeria": [
+            1,
+            1
+          ],
+          "Togo": [
+            0,
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "LIT Verlag",
+          "total": 7,
+          "articles": 0,
+          "publications": 0,
+          "references": 7,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "De Gruyter",
+          "total": 5,
+          "articles": 0,
+          "publications": 0,
+          "references": 5,
+          "country": "Burkina Faso",
+          "year_min": 2021,
+          "year_max": 2022
+        },
+        {
+          "name": "Karthala",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Niger",
+          "year_min": 2005,
+          "year_max": 2012
+        },
+        {
+          "name": "Journal of Religion in Africa",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2009,
+          "year_max": 2016
+        },
+        {
+          "name": "Routledge",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2020
+        },
+        {
+          "name": "Ufahamu",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Islamic Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Histoire, monde et cultures religieuses",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Social Compass",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Journal of African Cultural Studies",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Cahiers d'études africaines",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "CODESRIA Bulletin",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Bulletin de l'APAD",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "The Muslim World",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Karthala",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Niger",
+          "year_min": 2005,
+          "year_max": 2012
+        },
+        {
+          "name": "Journal of Religion in Africa",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2017,
+          "year_max": 2017
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2009,
+          "year_max": 2016
+        },
+        {
+          "name": "Routledge",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2020
+        },
+        {
+          "name": "Ufahamu",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2018,
+          "year_max": 2018
+        },
+        {
+          "name": "Islamic Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Histoire, monde et cultures religieuses",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Social Compass",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Journal of African Cultural Studies",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Cahiers d'études africaines",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "CODESRIA Bulletin",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Bulletin de l'APAD",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "The Muslim World",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Ethnographiques.org",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "American Journal of Islamic Social Sciences",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2009,
+          "year_max": 2009
+        }
+      ],
+      "editor": [
+        {
+          "name": "LIT Verlag",
+          "total": 7,
+          "articles": 0,
+          "publications": 0,
+          "references": 7,
+          "country": "Togo",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "De Gruyter",
+          "total": 4,
+          "articles": 0,
+          "publications": 0,
+          "references": 4,
+          "country": "Burkina Faso",
+          "year_min": 2022,
+          "year_max": 2022
+        }
+      ]
     }
   },
   "countries": {
@@ -187,10 +619,22 @@
       "all": [
         {
           "name": "Niger",
-          "count": 32
+          "count": 34
+        },
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
         },
         {
           "name": "Burkina Faso",
+          "count": 2
+        },
+        {
+          "name": "Nigeria",
+          "count": 2
+        },
+        {
+          "name": "Togo",
           "count": 1
         }
       ],
@@ -202,6 +646,28 @@
         },
         {
           "name": "Burkina Faso",
+          "count": 1
+        }
+      ],
+      "editor": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 5
+        },
+        {
+          "name": "Nigeria",
+          "count": 2
+        },
+        {
+          "name": "Niger",
+          "count": 2
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        },
+        {
+          "name": "Togo",
           "count": 1
         }
       ]
@@ -219,31 +685,83 @@
             "score": null
           },
           {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 33.6952
+          },
+          {
+            "o_id": 1468,
+            "title": "André Chappatte",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
             "o_id": 490,
             "title": "Niamey",
             "type": "Lieux",
             "cooc": 4,
-            "score": 24.6293
+            "score": 23.4786
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.7137
+          },
+          {
+            "o_id": 1211,
+            "title": "Issouf Binaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.382
           },
           {
             "o_id": 76268,
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           }
         ],
         "edges": [
           {
             "source": 1284,
-            "target": 490,
+            "target": 858,
+            "weight": 33.6952,
+            "cooc": 7
+          },
+          {
+            "source": 1284,
+            "target": 1468,
             "weight": 24.6293,
             "cooc": 4
           },
           {
             "source": 1284,
+            "target": 490,
+            "weight": 23.4786,
+            "cooc": 4
+          },
+          {
+            "source": 1284,
+            "target": 1208,
+            "weight": 14.7137,
+            "cooc": 3
+          },
+          {
+            "source": 1284,
+            "target": 1211,
+            "weight": 9.382,
+            "cooc": 2
+          },
+          {
+            "source": 1284,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           }
         ]
@@ -274,27 +792,92 @@
             "title": "Niamey",
             "type": "Lieux",
             "cooc": 4,
-            "score": 24.6293
+            "score": 23.4786
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.7137
           },
           {
             "o_id": 76268,
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           }
         ],
         "edges": [
           {
             "source": 1284,
             "target": 490,
+            "weight": 23.4786,
+            "cooc": 4
+          },
+          {
+            "source": 1284,
+            "target": 1208,
+            "weight": 14.7137,
+            "cooc": 3
+          },
+          {
+            "source": 1284,
+            "target": 76268,
+            "weight": 2.6054,
+            "cooc": 2
+          }
+        ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1284,
+            "title": "Abdoulaye Sounaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 858,
+            "title": "Frédérick Madore",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 33.6952
+          },
+          {
+            "o_id": 1468,
+            "title": "André Chappatte",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 24.6293
+          },
+          {
+            "o_id": 1211,
+            "title": "Issouf Binaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.382
+          }
+        ],
+        "edges": [
+          {
+            "source": 1284,
+            "target": 858,
+            "weight": 33.6952,
+            "cooc": 7
+          },
+          {
+            "source": 1284,
+            "target": 1468,
             "weight": 24.6293,
             "cooc": 4
           },
           {
             "source": 1284,
-            "target": 76268,
-            "weight": 2.6158,
+            "target": 1211,
+            "weight": 9.382,
             "cooc": 2
           }
         ]
@@ -309,7 +892,14 @@
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
-          "count": 32
+          "count": 35
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 5
         },
         {
           "o_id": 490,
@@ -323,14 +913,21 @@
           "name": "Nigéria",
           "lat": 10.0,
           "lng": 8.0,
-          "count": 1
+          "count": 4
         },
         {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
-          "count": 1
+          "count": 2
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
         },
         {
           "o_id": 60540,
@@ -377,6 +974,43 @@
           "lng": 13.511696,
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 5
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 3
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 3
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 2
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        }
       ]
     }
   },
@@ -384,7 +1018,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -670,6 +1305,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -693,7 +1422,9 @@
           2018,
           2019,
           2020,
-          2021
+          2021,
+          2022,
+          2023
         ],
         "months": [
           1,
@@ -776,6 +1507,27 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [
+          2022,
+          2023
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -783,13 +1535,21 @@
     "by_role": {
       "all": {
         "names": [
+          "Frédérick Madore",
+          "André Chappatte",
           "Niamey",
+          "Muriel Gomez-Perez",
+          "Issouf Binaté",
           "Politique",
+          "Koudbi Kaboré",
           "Khutba",
           "Birgit Meyer",
           "Sunnah",
-          "Sahel",
-          "Hijab"
+          "Leonardo A. Villalón",
+          "Mamadou Bodian",
+          "Elina Oinas",
+          "Henri Onodera",
+          "Leena Suurpää"
         ],
         "matrix": [
           [
@@ -797,11 +1557,78 @@
             0,
             0,
             0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
           ],
           [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -817,9 +1644,110 @@
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -835,7 +1763,15 @@
             0,
             0,
             0,
-            0
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
           ],
           [
             0,
@@ -844,7 +1780,15 @@
             0,
             0,
             0,
-            0
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1
           ],
           [
             0,
@@ -853,6 +1797,14 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             0
           ]
         ]
@@ -864,12 +1816,20 @@
       "creator": {
         "names": [
           "Niamey",
+          "Muriel Gomez-Perez",
           "Politique",
           "Khutba",
           "Birgit Meyer",
           "Sunnah",
+          "Leonardo A. Villalón",
+          "Mamadou Bodian",
+          "Elina Oinas",
+          "Henri Onodera",
+          "Leena Suurpää",
+          "Laurent Fourchard",
+          "Odile Goerg",
           "Sahel",
-          "Hijab"
+          "Jeanine Elif Dağyeli"
         ],
         "matrix": [
           [
@@ -879,9 +1839,59 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -897,10 +1907,94 @@
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             1,
             0,
@@ -915,6 +2009,48 @@
             0,
             0,
             0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
             0
           ],
           [
@@ -924,9 +2060,161 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Frédérick Madore",
+          "André Chappatte",
+          "Issouf Binaté",
+          "Koudbi Kaboré",
+          "Ulrike Freitag",
+          "Bourahima Diomandé",
+          "Vincent Favier",
+          "Youssoufou Bakayoko",
+          "Mahamadou Bello Adamou",
+          "Stephen T. Ogundipe"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
             0
           ],
           [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
             0,
             0,
             0,

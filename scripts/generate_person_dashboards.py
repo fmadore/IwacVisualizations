@@ -63,6 +63,17 @@ CREATOR_FIELDS = {
     "publications": "author",
     "references":   "author",
 }
+# Editor is a separate role from creator (author). Only the references
+# subset distinguishes editors — bibliographic entries for edited volumes
+# list the editor in ``editor`` and the chapter/book author in ``author``.
+EDITOR_FIELDS = {
+    "references": "editor",
+}
+
+# Canonical role ordering. Every per-role aggregator iterates this tuple
+# so adding a role is a one-line change here plus a persons_items init
+# update. ``"all"`` is the union across subject/creator/editor item sets.
+ROLES: Tuple[str, ...] = ("all", "subject", "creator", "editor")
 
 # Spatial coverage field — multivalue, pipe-separated, contains place
 # names that may or may not match an index Lieux entry. The previous
@@ -184,14 +195,14 @@ class PersonDashboardGenerator:
         self.id_to_entity: Dict[int, Dict[str, Any]] = {}  # o_id -> entity info (reverse index)
         self.lieux_rows: Dict[int, Tuple[float, float]] = {}  # o_id -> (lat, lng)
         self.persons: Dict[int, Dict[str, Any]] = {}
-        self.item_entities: Dict[str, Dict[str, List[int]]] = {}  # item_key -> {'subject': [o_id, ...], 'creator': [...]}
+        self.item_entities: Dict[str, Dict[str, List[int]]] = {}  # item_key -> {'subject': [o_id, ...], 'creator': [...], 'editor': [...]}
         # item_key -> set of Lieux o_ids parsed from the dcterms:spatial field.
         # Kept separate from item_entities because spatial coverage isn't a
         # "role" of the entity, it's a property of the item.
         self.item_spatial: Dict[str, Set[int]] = {}
         self.items_meta: Dict[str, Dict[str, Any]] = {}           # item_key -> {o_id, pub_date, newspaper, country, subset}
         self.persons_items: Dict[int, Dict[str, Set[str]]] = defaultdict(
-            lambda: {"subject": set(), "creator": set()}
+            lambda: {"subject": set(), "creator": set(), "editor": set()}
         )
         self.df: Dict[int, int] = {}  # document frequency for TF-IDF
         self.n_persons: int = 0
@@ -328,6 +339,9 @@ class PersonDashboardGenerator:
             creator_col = CREATOR_FIELDS.get(subset)
             if creator_col and creator_col not in df.columns:
                 creator_col = None
+            editor_col = EDITOR_FIELDS.get(subset)
+            if editor_col and editor_col not in df.columns:
+                editor_col = None
             spatial_col = find_column(df, [
                 SPATIAL_FIELDS.get(subset, "spatial"),
                 "spatial",
@@ -337,7 +351,13 @@ class PersonDashboardGenerator:
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
             country_col = find_column(df, ["country", "countries"])
-            newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
+            # References are books/edited volumes — the per-item "outlet"
+            # lives in ``publisher``, not ``newspaper``. Other subsets keep
+            # the newspaper-first fallback chain.
+            if subset == "references":
+                newspaper_col = find_column(df, ["publisher", "dcterms:publisher"])
+            else:
+                newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
 
             # Sentiment + LDA columns only exist on the articles subset.
             # On other subsets these resolve to None and the
@@ -373,7 +393,7 @@ class PersonDashboardGenerator:
                     meta[f"{model}_subjectivite"] = _clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
                 self.items_meta[item_key] = meta
 
-                roles: Dict[str, List[int]] = {"subject": [], "creator": []}
+                roles: Dict[str, List[int]] = {"subject": [], "creator": [], "editor": []}
 
                 if subject_col:
                     for name in parse_pipe_separated(row.get(subject_col)):
@@ -386,6 +406,12 @@ class PersonDashboardGenerator:
                         entity = self.entity_lookup.get(normalize_location_name(name))
                         if entity:
                             roles["creator"].append(entity["o_id"])
+
+                if editor_col:
+                    for name in parse_pipe_separated(row.get(editor_col)):
+                        entity = self.entity_lookup.get(normalize_location_name(name))
+                        if entity:
+                            roles["editor"].append(entity["o_id"])
 
                 self.item_entities[item_key] = roles
 
@@ -411,7 +437,7 @@ class PersonDashboardGenerator:
 
         logger.info(
             f"Resolved {len(self.item_entities)} items; "
-            f"{sum(1 for p in self.persons_items if self.persons_items[p]['subject'] or self.persons_items[p]['creator'])} "
+            f"{sum(1 for p in self.persons_items if self.persons_items[p]['subject'] or self.persons_items[p]['creator'] or self.persons_items[p]['editor'])} "
             f"persons have at least one mention"
         )
         logger.info(
@@ -447,12 +473,13 @@ class PersonDashboardGenerator:
             return sorted(
                 self.persons_items[person_o_id]["subject"]
                 | self.persons_items[person_o_id]["creator"]
+                | self.persons_items[person_o_id]["editor"]
             )
         return sorted(self.persons_items[person_o_id][role])
 
     def compute_summary(self, person_o_id: int) -> Dict[str, Any]:
         by_role: Dict[str, Dict[str, Any]] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             if not item_keys:
                 by_role[role] = dict(self.EMPTY_SUMMARY)
@@ -481,7 +508,7 @@ class PersonDashboardGenerator:
     def compute_timeline(self, person_o_id: int) -> Dict[str, Any]:
         """Year × country stacked series, mirrors C.timeline shape."""
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             year_country: Dict[Tuple[int, str], int] = Counter()
             countries: Set[str] = set()
@@ -513,7 +540,7 @@ class PersonDashboardGenerator:
 
     def compute_newspapers(self, person_o_id: int, top_n: int = 15) -> Dict[str, Any]:
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             stats: Dict[str, Dict[str, Any]] = {}
             for key in item_keys:
@@ -526,6 +553,7 @@ class PersonDashboardGenerator:
                     "total": 0,
                     "articles": 0,
                     "publications": 0,
+                    "references": 0,
                     "country": meta.get("country") or "",
                     "year_min": None,
                     "year_max": None,
@@ -535,6 +563,8 @@ class PersonDashboardGenerator:
                     s["articles"] += 1
                 elif meta.get("subset") == "publications":
                     s["publications"] += 1
+                elif meta.get("subset") == "references":
+                    s["references"] += 1
                 y = extract_year(meta.get("pub_date"))
                 if y is not None:
                     s["year_min"] = y if s["year_min"] is None else min(s["year_min"], y)
@@ -545,7 +575,7 @@ class PersonDashboardGenerator:
 
     def compute_countries(self, person_o_id: int) -> Dict[str, Any]:
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             counter: Counter = Counter()
             for key in item_keys:
@@ -570,13 +600,13 @@ class PersonDashboardGenerator:
         in ``build_entity_lookup`` (o_id → (lat, lng, country)).
         """
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             loc_counter: Counter = Counter()
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
                 seen_here: Set[int] = set(self.item_spatial.get(key, set()))
-                for entity_o_id in roles.get("subject", []) + roles.get("creator", []):
+                for entity_o_id in roles.get("subject", []) + roles.get("creator", []) + roles.get("editor", []):
                     if entity_o_id in self.lieux_rows:
                         seen_here.add(entity_o_id)
                 for entity_o_id in seen_here:
@@ -607,7 +637,7 @@ class PersonDashboardGenerator:
         bar. Each item counts once toward exactly one label.
         """
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             counter: Counter = Counter()
             for key in self._items_for_role(person_o_id, role):
                 label = self.items_meta.get(key, {}).get("lda_label") or ""
@@ -632,7 +662,7 @@ class PersonDashboardGenerator:
         the stacked bar segments stay consistent.
         """
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             by_model: Dict[str, Any] = {}
             articles_total = 0
@@ -704,7 +734,7 @@ class PersonDashboardGenerator:
         parseable YYYY-MM date; gap years render as an empty row.
         """
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             buckets: Dict[Tuple[int, int], int] = Counter()
             all_years: Set[int] = set()  # any year we can extract (YYYY or finer)
             for key in self._items_for_role(person_o_id, role):
@@ -748,7 +778,7 @@ class PersonDashboardGenerator:
         result is a symmetric matrix the chord builder can render.
         """
         by_role: Dict[str, Any] = {}
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             # Pick the N most-frequent neighbours (by raw co-occurrence
             # with the person, not by TF-IDF) so the chord nodes are the
@@ -757,7 +787,7 @@ class PersonDashboardGenerator:
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
                 seen: Set[int] = set()
-                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                for o_id in roles.get("subject", []) + roles.get("creator", []) + roles.get("editor", []):
                     if o_id != person_o_id and o_id not in seen:
                         seen.add(o_id)
                         neighbour_counter[o_id] += 1
@@ -772,7 +802,7 @@ class PersonDashboardGenerator:
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
                 here: Set[int] = set()
-                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                for o_id in roles.get("subject", []) + roles.get("creator", []) + roles.get("editor", []):
                     if o_id in top_set:
                         here.add(o_id)
                 ids = sorted(here)
@@ -800,9 +830,9 @@ class PersonDashboardGenerator:
         """
         for person_o_id, role_items in self.persons_items.items():
             touched: Set[int] = set()
-            for item_key in role_items["subject"] | role_items["creator"]:
+            for item_key in role_items["subject"] | role_items["creator"] | role_items["editor"]:
                 roles = self.item_entities.get(item_key, {})
-                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                for o_id in roles.get("subject", []) + roles.get("creator", []) + roles.get("editor", []):
                     if o_id != person_o_id:
                         touched.add(o_id)
             for o_id in touched:
@@ -819,13 +849,13 @@ class PersonDashboardGenerator:
         person_info = self.persons[person_o_id]
         by_role: Dict[str, Any] = {}
 
-        for role in ("all", "subject", "creator"):
+        for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             cooc: Counter = Counter()
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
                 seen_here: Set[int] = set()
-                for o_id in roles.get("subject", []) + roles.get("creator", []):
+                for o_id in roles.get("subject", []) + roles.get("creator", []) + roles.get("editor", []):
                     if o_id == person_o_id:
                         continue
                     if o_id in seen_here:

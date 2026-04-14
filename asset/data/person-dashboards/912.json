@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:42.267147+00:00",
+  "generated_at": "2026-04-14T06:30:14.281336+00:00",
   "person": {
     "o_id": 912,
     "title": "Toumani Triandé",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -130,6 +137,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -141,6 +153,7 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1985,
           "year_max": 1997
@@ -150,6 +163,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1991,
           "year_max": 2001
@@ -159,6 +173,7 @@
           "total": 11,
           "articles": 11,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2000
@@ -168,6 +183,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1982,
           "year_max": 1984
@@ -177,6 +193,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1964,
           "year_max": 1964
@@ -188,6 +205,7 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1985,
           "year_max": 1997
@@ -197,6 +215,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1991,
           "year_max": 2001
@@ -206,6 +225,7 @@
           "total": 11,
           "articles": 11,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2000
@@ -215,6 +235,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1982,
           "year_max": 1984
@@ -224,12 +245,14 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1964,
           "year_max": 1964
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -246,7 +269,8 @@
           "count": 41
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -265,7 +289,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 24,
-            "score": 60.4739
+            "score": 59.9533
           },
           {
             "o_id": 855,
@@ -433,7 +457,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 10,
-            "score": 11.193
+            "score": 11.1822
           },
           {
             "o_id": 903,
@@ -447,7 +471,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 1198,
@@ -496,7 +520,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 5,
-            "score": 10.1779
+            "score": 10.151
           },
           {
             "o_id": 1021,
@@ -513,18 +537,18 @@
             "score": 9.7161
           },
           {
-            "o_id": 735,
-            "title": "Communauté Musulmane de Haute-Volta",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 9.4604
-          },
-          {
             "o_id": 9,
             "title": "Jeunesse",
             "type": "Sujets",
             "cooc": 6,
             "score": 9.4138
+          },
+          {
+            "o_id": 735,
+            "title": "Communauté Musulmane de Haute-Volta",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.0958
           },
           {
             "o_id": 196,
@@ -615,7 +639,7 @@
           {
             "source": 912,
             "target": 578,
-            "weight": 60.4739,
+            "weight": 59.9533,
             "cooc": 24
           },
           {
@@ -759,7 +783,7 @@
           {
             "source": 912,
             "target": 29,
-            "weight": 11.193,
+            "weight": 11.1822,
             "cooc": 10
           },
           {
@@ -771,7 +795,7 @@
           {
             "source": 912,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -813,7 +837,7 @@
           {
             "source": 912,
             "target": 56,
-            "weight": 10.1779,
+            "weight": 10.151,
             "cooc": 5
           },
           {
@@ -830,15 +854,15 @@
           },
           {
             "source": 912,
-            "target": 735,
-            "weight": 9.4604,
-            "cooc": 2
-          },
-          {
-            "source": 912,
             "target": 9,
             "weight": 9.4138,
             "cooc": 6
+          },
+          {
+            "source": 912,
+            "target": 735,
+            "weight": 9.0958,
+            "cooc": 2
           },
           {
             "source": 912,
@@ -928,7 +952,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 24,
-            "score": 60.4739
+            "score": 59.9533
           },
           {
             "o_id": 855,
@@ -1096,7 +1120,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 10,
-            "score": 11.193
+            "score": 11.1822
           },
           {
             "o_id": 903,
@@ -1110,7 +1134,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 1198,
@@ -1159,7 +1183,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 5,
-            "score": 10.1779
+            "score": 10.151
           },
           {
             "o_id": 1021,
@@ -1176,18 +1200,18 @@
             "score": 9.7161
           },
           {
-            "o_id": 735,
-            "title": "Communauté Musulmane de Haute-Volta",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 9.4604
-          },
-          {
             "o_id": 9,
             "title": "Jeunesse",
             "type": "Sujets",
             "cooc": 6,
             "score": 9.4138
+          },
+          {
+            "o_id": 735,
+            "title": "Communauté Musulmane de Haute-Volta",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 9.0958
           },
           {
             "o_id": 196,
@@ -1278,7 +1302,7 @@
           {
             "source": 912,
             "target": 578,
-            "weight": 60.4739,
+            "weight": 59.9533,
             "cooc": 24
           },
           {
@@ -1422,7 +1446,7 @@
           {
             "source": 912,
             "target": 29,
-            "weight": 11.193,
+            "weight": 11.1822,
             "cooc": 10
           },
           {
@@ -1434,7 +1458,7 @@
           {
             "source": 912,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -1476,7 +1500,7 @@
           {
             "source": 912,
             "target": 56,
-            "weight": 10.1779,
+            "weight": 10.151,
             "cooc": 5
           },
           {
@@ -1493,15 +1517,15 @@
           },
           {
             "source": 912,
-            "target": 735,
-            "weight": 9.4604,
-            "cooc": 2
-          },
-          {
-            "source": 912,
             "target": 9,
             "weight": 9.4138,
             "cooc": 6
+          },
+          {
+            "source": 912,
+            "target": 735,
+            "weight": 9.0958,
+            "cooc": 2
           },
           {
             "source": 912,
@@ -1578,6 +1602,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 912,
+            "title": "Toumani Triandé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 912,
@@ -2703,7 +2739,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2808,7 +2845,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3214,6 +3252,100 @@
         "articles_total": 41
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -3758,6 +3890,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -4332,6 +4482,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

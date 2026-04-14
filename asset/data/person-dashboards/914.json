@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:34.470365+00:00",
+  "generated_at": "2026-04-14T06:30:07.374903+00:00",
   "person": {
     "o_id": 914,
     "title": "Yacouba Isaac Zida",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -78,6 +85,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -89,6 +101,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2015
@@ -98,6 +111,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2015
@@ -107,6 +121,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -116,6 +131,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -125,6 +141,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -136,6 +153,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2015
@@ -145,6 +163,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2015
@@ -154,6 +173,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -163,6 +183,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -172,12 +193,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -194,7 +217,8 @@
           "count": 18
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -293,13 +317,6 @@
             "score": 10.0019
           },
           {
-            "o_id": 869,
-            "title": "Assimi Kouanda",
-            "type": "Personnes",
-            "cooc": 2,
-            "score": 7.6439
-          },
-          {
             "o_id": 284,
             "title": "Bobo-Dioulasso",
             "type": "Lieux",
@@ -312,6 +329,13 @@
             "type": "Personnes",
             "cooc": 2,
             "score": 7.3728
+          },
+          {
+            "o_id": 869,
+            "title": "Assimi Kouanda",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3173
           },
           {
             "o_id": 911,
@@ -346,7 +370,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 113,
@@ -367,14 +391,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 76268,
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           },
           {
             "o_id": 86,
@@ -459,12 +483,6 @@
           },
           {
             "source": 914,
-            "target": 869,
-            "weight": 7.6439,
-            "cooc": 2
-          },
-          {
-            "source": 914,
             "target": 284,
             "weight": 7.5189,
             "cooc": 2
@@ -473,6 +491,12 @@
             "source": 914,
             "target": 1187,
             "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 914,
+            "target": 869,
+            "weight": 7.3173,
             "cooc": 2
           },
           {
@@ -502,7 +526,7 @@
           {
             "source": 914,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -520,13 +544,13 @@
           {
             "source": 914,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 914,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           },
           {
@@ -631,13 +655,6 @@
             "score": 10.0019
           },
           {
-            "o_id": 869,
-            "title": "Assimi Kouanda",
-            "type": "Personnes",
-            "cooc": 2,
-            "score": 7.6439
-          },
-          {
             "o_id": 284,
             "title": "Bobo-Dioulasso",
             "type": "Lieux",
@@ -650,6 +667,13 @@
             "type": "Personnes",
             "cooc": 2,
             "score": 7.3728
+          },
+          {
+            "o_id": 869,
+            "title": "Assimi Kouanda",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 7.3173
           },
           {
             "o_id": 911,
@@ -684,7 +708,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 113,
@@ -705,14 +729,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 76268,
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           },
           {
             "o_id": 86,
@@ -797,12 +821,6 @@
           },
           {
             "source": 914,
-            "target": 869,
-            "weight": 7.6439,
-            "cooc": 2
-          },
-          {
-            "source": 914,
             "target": 284,
             "weight": 7.5189,
             "cooc": 2
@@ -811,6 +829,12 @@
             "source": 914,
             "target": 1187,
             "weight": 7.3728,
+            "cooc": 2
+          },
+          {
+            "source": 914,
+            "target": 869,
+            "weight": 7.3173,
             "cooc": 2
           },
           {
@@ -840,7 +864,7 @@
           {
             "source": 914,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -858,13 +882,13 @@
           {
             "source": 914,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 914,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           },
           {
@@ -876,6 +900,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 914,
+            "title": "Yacouba Isaac Zida",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 914,
@@ -1077,7 +1113,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -1158,7 +1195,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1696,6 +1734,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1854,6 +1986,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -2428,6 +2578,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

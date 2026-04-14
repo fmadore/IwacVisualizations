@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.333764+00:00",
+  "generated_at": "2026-04-14T06:30:20.711343+00:00",
   "entity": {
     "o_id": 60492,
     "title": "Elavagnon",
@@ -48,6 +48,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2023,
           "year_max": 2024
@@ -57,6 +58,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1982,
           "year_max": 1982
@@ -66,6 +68,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2005,
           "year_max": 2005
@@ -308,13 +311,6 @@
           "count": 4
         },
         {
-          "o_id": 60464,
-          "name": "Amou",
-          "lat": 7.5,
-          "lng": 1.05,
-          "count": 4
-        },
-        {
           "o_id": 497,
           "name": "Atakpamé",
           "lat": 7.5269444444444,
@@ -343,6 +339,13 @@
           "count": 4
         },
         {
+          "o_id": 60464,
+          "name": "Amou",
+          "lat": 7.5,
+          "lng": 1.05,
+          "count": 4
+        },
+        {
           "o_id": 537,
           "name": "Ogou",
           "lat": 7.516667,
@@ -364,17 +367,17 @@
           "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
           "o_id": 493,
           "name": "Amlamé",
           "lat": 7.4605555555556,
           "lng": 0.90305555555556,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 1
         },
         {
@@ -700,22 +703,12 @@
         "cells": [
           [
             41,
-            5,
-            1
-          ],
-          [
-            41,
             3,
             1
           ],
           [
-            0,
-            9,
-            1
-          ],
-          [
-            23,
-            1,
+            41,
+            5,
             1
           ],
           [
@@ -724,8 +717,18 @@
             1
           ],
           [
+            0,
+            9,
+            1
+          ],
+          [
             42,
             3,
+            1
+          ],
+          [
+            23,
+            1,
             1
           ]
         ]
@@ -740,17 +743,17 @@
           "Moyen-Mono",
           "Akébou",
           "Anié",
-          "Amou",
           "Atakpamé",
           "Wawa",
           "Badou",
           "Haho",
+          "Amou",
           "Ogou",
           "Notsé",
           "Nyékonakpoé",
           "Gnassingbé Eyadéma",
-          "Tohoun",
-          "La Mecque"
+          "Amlamé",
+          "Tohoun"
         ],
         "matrix": [
           [
@@ -954,7 +957,7 @@
             1,
             0,
             0,
-            1,
+            0,
             1
           ],
           [
@@ -986,10 +989,10 @@
             1,
             1,
             1,
-            1,
             0,
             0,
-            1
+            0,
+            0
           ],
           [
             1,
@@ -1005,7 +1008,7 @@
             1,
             1,
             0,
-            1,
+            0,
             0
           ]
         ]

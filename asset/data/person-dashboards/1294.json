@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.257423+00:00",
+  "generated_at": "2026-04-14T06:30:32.497513+00:00",
   "person": {
     "o_id": 1294,
     "title": "Marie Nathalie LeBlanc",
@@ -20,11 +20,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 25,
+        "total_mentions": 31,
         "year_min": 1996,
         "year_max": 2023,
-        "newspapers_count": 0,
-        "countries_count": 2
+        "newspapers_count": 20,
+        "countries_count": 3
       },
       "subject": {
         "total_mentions": 0,
@@ -37,8 +37,15 @@
         "total_mentions": 25,
         "year_min": 1996,
         "year_max": 2023,
-        "newspapers_count": 0,
+        "newspapers_count": 19,
         "countries_count": 2
+      },
+      "editor": {
+        "total_mentions": 8,
+        "year_min": 2012,
+        "year_max": 2016,
+        "newspapers_count": 3,
+        "countries_count": 3
       }
     }
   },
@@ -66,6 +73,7 @@
         ],
         "countries": [
           "Burkina Faso",
+          "Bénin",
           "Côte d'Ivoire"
         ],
         "series": {
@@ -80,10 +88,29 @@
             0,
             1,
             0,
-            1,
+            2,
             0,
             1,
+            4,
+            0,
+            0,
+            0
+          ],
+          "Bénin": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -102,7 +129,7 @@
             0,
             1,
             0,
-            1,
+            2,
             1,
             1,
             1
@@ -178,14 +205,377 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2012,
+          2013,
+          2016
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Bénin",
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Burkina Faso": [
+            0,
+            1,
+            4
+          ],
+          "Bénin": [
+            1,
+            0,
+            0
+          ],
+          "Côte d'Ivoire": [
+            0,
+            0,
+            2
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Pluto Press",
+          "total": 7,
+          "articles": 0,
+          "publications": 0,
+          "references": 7,
+          "country": "Burkina Faso",
+          "year_min": 2006,
+          "year_max": 2016
+        },
+        {
+          "name": "Karthala",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Bénin",
+          "year_min": 2005,
+          "year_max": 2012
+        },
+        {
+          "name": "Cahiers d'études africaines",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2022
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2009
+        },
+        {
+          "name": "Ethnologie française",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "Brill",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Journal of Religion in Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Sociologie et sociétés",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "Université du Québec à Montréal",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "African Affairs",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        },
+        {
+          "name": "Islamic Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Anthropologica",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "Anthropologie et Societés",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        },
+        {
+          "name": "Paideuma",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Pluto Press",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Burkina Faso",
+          "year_min": 2006,
+          "year_max": 2016
+        },
+        {
+          "name": "Cahiers d'études africaines",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2022
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2009
+        },
+        {
+          "name": "Karthala",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2009
+        },
+        {
+          "name": "Ethnologie française",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2023,
+          "year_max": 2023
+        },
+        {
+          "name": "Brill",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "Journal of Religion in Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "Sociologie et sociétés",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "African Affairs",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1999,
+          "year_max": 1999
+        },
+        {
+          "name": "Islamic Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Anthropologica",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "Anthropologie et Societés",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        },
+        {
+          "name": "Paideuma",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 2000,
+          "year_max": 2000
+        },
+        {
+          "name": "Bulletin du GIDIS-CI",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1996,
+          "year_max": 1996
+        }
+      ],
+      "editor": [
+        {
+          "name": "Pluto Press",
+          "total": 6,
+          "articles": 0,
+          "publications": 0,
+          "references": 6,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2012,
+          "year_max": 2012
+        },
+        {
+          "name": "Université du Québec à Montréal",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2013,
+          "year_max": 2013
+        }
+      ]
     }
   },
   "countries": {
@@ -193,11 +583,15 @@
       "all": [
         {
           "name": "Côte d'Ivoire",
-          "count": 20
+          "count": 21
         },
         {
           "name": "Burkina Faso",
-          "count": 5
+          "count": 9
+        },
+        {
+          "name": "Bénin",
+          "count": 1
         }
       ],
       "subject": [],
@@ -209,6 +603,20 @@
         {
           "name": "Burkina Faso",
           "count": 5
+        }
+      ],
+      "editor": [
+        {
+          "name": "Burkina Faso",
+          "count": 5
+        },
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        },
+        {
+          "name": "Bénin",
+          "count": 1
         }
       ]
     }
@@ -225,31 +633,70 @@
             "score": null
           },
           {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 8,
+            "score": 40.4698
+          },
+          {
             "o_id": 1208,
             "title": "Muriel Gomez-Perez",
             "type": "Personnes",
-            "cooc": 4,
-            "score": 25.3586
+            "cooc": 8,
+            "score": 39.2366
           },
           {
             "o_id": 1295,
             "title": "Mathias Boukary Savadogo",
             "type": "Personnes",
             "cooc": 2,
-            "score": 13.701
+            "score": 10.9284
+          },
+          {
+            "o_id": 1306,
+            "title": "Odile Goerg",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
+          },
+          {
+            "o_id": 1211,
+            "title": "Issouf Binaté",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.382
           }
         ],
         "edges": [
           {
             "source": 1294,
+            "target": 859,
+            "weight": 40.4698,
+            "cooc": 8
+          },
+          {
+            "source": 1294,
             "target": 1208,
-            "weight": 25.3586,
-            "cooc": 4
+            "weight": 39.2366,
+            "cooc": 8
           },
           {
             "source": 1294,
             "target": 1295,
-            "weight": 13.701,
+            "weight": 10.9284,
+            "cooc": 2
+          },
+          {
+            "source": 1294,
+            "target": 1306,
+            "weight": 10.6201,
+            "cooc": 2
+          },
+          {
+            "source": 1294,
+            "target": 1211,
+            "weight": 9.382,
             "cooc": 2
           }
         ]
@@ -279,29 +726,94 @@
             "o_id": 1208,
             "title": "Muriel Gomez-Perez",
             "type": "Personnes",
-            "cooc": 4,
-            "score": 25.3586
+            "cooc": 6,
+            "score": 29.4274
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 15.1762
           },
           {
             "o_id": 1295,
             "title": "Mathias Boukary Savadogo",
             "type": "Personnes",
             "cooc": 2,
-            "score": 13.701
+            "score": 10.9284
+          },
+          {
+            "o_id": 1306,
+            "title": "Odile Goerg",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.6201
           }
         ],
         "edges": [
           {
             "source": 1294,
             "target": 1208,
-            "weight": 25.3586,
-            "cooc": 4
+            "weight": 29.4274,
+            "cooc": 6
+          },
+          {
+            "source": 1294,
+            "target": 859,
+            "weight": 15.1762,
+            "cooc": 3
           },
           {
             "source": 1294,
             "target": 1295,
-            "weight": 13.701,
+            "weight": 10.9284,
             "cooc": 2
+          },
+          {
+            "source": 1294,
+            "target": 1306,
+            "weight": 10.6201,
+            "cooc": 2
+          }
+        ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1294,
+            "title": "Marie Nathalie LeBlanc",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 7,
+            "score": 35.411
+          },
+          {
+            "o_id": 1208,
+            "title": "Muriel Gomez-Perez",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 14.7137
+          }
+        ],
+        "edges": [
+          {
+            "source": 1294,
+            "target": 859,
+            "weight": 35.411,
+            "cooc": 7
+          },
+          {
+            "source": 1294,
+            "target": 1208,
+            "weight": 14.7137,
+            "cooc": 3
           }
         ]
       }
@@ -315,14 +827,14 @@
           "name": "Côte d'Ivoire",
           "lat": 8.0,
           "lng": -5.5,
-          "count": 24
+          "count": 26
         },
         {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
-          "count": 5
+          "count": 9
         },
         {
           "o_id": 395,
@@ -337,6 +849,13 @@
           "lat": 18.0,
           "lng": -2.0,
           "count": 2
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
         }
       ],
       "subject": [],
@@ -369,6 +888,29 @@
           "lng": -2.0,
           "count": 2
         }
+      ],
+      "editor": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 5
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 4
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 1
+        }
       ]
     }
   },
@@ -376,7 +918,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -662,6 +1205,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -778,6 +1415,30 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -786,46 +1447,64 @@
       "all": {
         "names": [
           "Muriel Gomez-Perez",
+          "Louis Audet Gosselin",
           "Mathias Boukary Savadogo",
+          "Issouf Binaté",
+          "Odile Goerg",
+          "Denise Brégand",
           "Boris Koenig",
           "Benjamin Soares",
-          "Issouf Binaté",
-          "Catholiques",
-          "Protestants",
-          "Louis Audet Gosselin"
+          "Kadya Tall",
+          "Marie-Emmanuelle Pommerolle",
+          "Michel Cahen",
+          "Kathéry Couillard",
+          "Frédérick Madore",
+          "Mara Vitale",
+          "Laurent Fourchard"
         ],
         "matrix": [
           [
             0,
+            3,
             2,
             0,
+            1,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,
             1,
+            0,
             1
+          ],
+          [
+            3,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
           ],
           [
             2,
+            1,
             0,
             0,
             0,
             0,
             0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             0,
             0,
             0,
@@ -836,6 +1515,13 @@
             0
           ],
           [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -852,16 +1538,13 @@
             0,
             0,
             0,
-            1,
-            1
-          ],
-          [
-            1,
             0,
             0,
             0,
             0,
-            1,
+            0,
+            0,
+            0,
             0,
             1
           ],
@@ -871,8 +1554,168 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]
@@ -884,21 +1727,297 @@
       "creator": {
         "names": [
           "Muriel Gomez-Perez",
+          "Louis Audet Gosselin",
           "Mathias Boukary Savadogo",
+          "Odile Goerg",
           "Boris Koenig",
           "Benjamin Soares",
+          "Kadya Tall",
+          "Marie-Emmanuelle Pommerolle",
+          "Michel Cahen",
           "Issouf Binaté",
-          "Catholiques",
-          "Protestants",
-          "Louis Audet Gosselin"
+          "Laurent Fourchard",
+          "Gilles Holder",
+          "Vered Amit",
+          "Noel Dyck",
+          "Catherine Coquery-Vidrovitch"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Louis Audet Gosselin",
+          "Muriel Gomez-Perez",
+          "Denise Brégand",
+          "Kathéry Couillard",
+          "Frédérick Madore",
+          "Mathias Boukary Savadogo",
+          "Mara Vitale",
+          "Issouf Binaté"
         ],
         "matrix": [
           [
             0,
             2,
             0,
-            0,
-            0,
+            1,
+            1,
             1,
             1,
             1
@@ -906,36 +2025,16 @@
           [
             2,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0
           ],
           [
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
+            1,
             0,
             0,
             0,
@@ -945,13 +2044,33 @@
           ],
           [
             1,
-            0,
-            0,
-            0,
+            1,
             0,
             0,
             1,
-            1
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -959,9 +2078,9 @@
             0,
             0,
             0,
-            1,
             0,
-            1
+            0,
+            0
           ],
           [
             1,
@@ -969,8 +2088,8 @@
             0,
             0,
             0,
-            1,
-            1,
+            0,
+            0,
             0
           ]
         ]

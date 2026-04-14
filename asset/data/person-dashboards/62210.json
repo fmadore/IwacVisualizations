@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.632561+00:00",
+  "generated_at": "2026-04-14T06:30:27.798794+00:00",
   "person": {
     "o_id": 62210,
     "title": "Yaya Sow",
@@ -35,6 +35,13 @@
         "year_max": 1993,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -114,6 +121,11 @@
             9
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -125,6 +137,7 @@
           "total": 24,
           "articles": 24,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1993
@@ -136,6 +149,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1981,
           "year_max": 1981
@@ -147,11 +161,13 @@
           "total": 24,
           "articles": 24,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1993
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -173,7 +189,8 @@
           "name": "Côte d'Ivoire",
           "count": 24
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -479,21 +496,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
-          },
-          {
-            "o_id": 60,
-            "title": "NTIC et islam",
-            "type": "Sujets",
-            "cooc": 2,
-            "score": 6.5525
-          },
-          {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
+            "score": 6.7093
           },
           {
             "o_id": 76035,
@@ -501,6 +504,20 @@
             "type": "Sujets",
             "cooc": 3,
             "score": 6.5236
+          },
+          {
+            "o_id": 60,
+            "title": "NTIC et islam",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.5155
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 125,
@@ -788,26 +805,26 @@
           {
             "source": 62210,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
-          },
-          {
-            "source": 62210,
-            "target": 60,
-            "weight": 6.5525,
-            "cooc": 2
-          },
-          {
-            "source": 62210,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
           },
           {
             "source": 62210,
             "target": 76035,
             "weight": 6.5236,
             "cooc": 3
+          },
+          {
+            "source": 62210,
+            "target": 60,
+            "weight": 6.5155,
+            "cooc": 2
+          },
+          {
+            "source": 62210,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 62210,
@@ -1154,21 +1171,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
-          },
-          {
-            "o_id": 60,
-            "title": "NTIC et islam",
-            "type": "Sujets",
-            "cooc": 2,
-            "score": 6.5525
-          },
-          {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
+            "score": 6.7093
           },
           {
             "o_id": 76035,
@@ -1176,6 +1179,20 @@
             "type": "Sujets",
             "cooc": 3,
             "score": 6.5236
+          },
+          {
+            "o_id": 60,
+            "title": "NTIC et islam",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 6.5155
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 125,
@@ -1463,26 +1480,26 @@
           {
             "source": 62210,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
-          },
-          {
-            "source": 62210,
-            "target": 60,
-            "weight": 6.5525,
-            "cooc": 2
-          },
-          {
-            "source": 62210,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
           },
           {
             "source": 62210,
             "target": 76035,
             "weight": 6.5236,
             "cooc": 3
+          },
+          {
+            "source": 62210,
+            "target": 60,
+            "weight": 6.5155,
+            "cooc": 2
+          },
+          {
+            "source": 62210,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 62210,
@@ -1515,6 +1532,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 62210,
+            "title": "Yaya Sow",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2533,7 +2562,8 @@
           "lng": -3.496389,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2627,7 +2657,8 @@
           "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3083,6 +3114,100 @@
           }
         },
         "articles_total": 24
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3381,6 +3506,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4213,6 +4356,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

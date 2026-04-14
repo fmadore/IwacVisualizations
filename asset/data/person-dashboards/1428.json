@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:44.625999+00:00",
+  "generated_at": "2026-04-14T06:30:16.363786+00:00",
   "person": {
     "o_id": 1428,
     "title": "Théodore Holo",
@@ -35,6 +35,13 @@
         "year_max": 2017,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -98,6 +105,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -109,6 +121,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1991,
           "year_max": 2017
@@ -118,6 +131,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2013
@@ -129,6 +143,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1991,
           "year_max": 2017
@@ -138,6 +153,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2013
@@ -149,11 +165,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2017,
           "year_max": 2017
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -175,7 +193,8 @@
           "name": "Bénin",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -208,7 +227,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 13712,
@@ -243,7 +262,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 75967,
@@ -283,7 +302,7 @@
           {
             "source": 1428,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -313,7 +332,7 @@
           {
             "source": 1428,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -364,7 +383,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 13712,
@@ -399,7 +418,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 75967,
@@ -439,7 +458,7 @@
           {
             "source": 1428,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -469,7 +488,7 @@
           {
             "source": 1428,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -493,6 +512,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1428,
+            "title": "Théodore Holo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1428,
@@ -1066,7 +1097,8 @@
           "lng": 2.25,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1112,7 +1144,8 @@
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1752,6 +1785,100 @@
           }
         },
         "articles_total": 1
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1946,6 +2073,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2562,6 +2707,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

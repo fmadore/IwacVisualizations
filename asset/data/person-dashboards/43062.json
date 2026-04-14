@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:53.207423+00:00",
+  "generated_at": "2026-04-14T06:30:25.469533+00:00",
   "person": {
     "o_id": 43062,
     "title": "Émile Constant Bombet",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -106,6 +113,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -117,6 +129,7 @@
           "total": 31,
           "articles": 31,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1987,
           "year_max": 1999
@@ -126,6 +139,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1994
@@ -135,6 +149,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2002
@@ -144,6 +159,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1998,
           "year_max": 1999
@@ -153,6 +169,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -162,6 +179,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1992
@@ -173,6 +191,7 @@
           "total": 31,
           "articles": 31,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1987,
           "year_max": 1999
@@ -182,6 +201,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1994
@@ -191,6 +211,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2002
@@ -200,6 +221,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1998,
           "year_max": 1999
@@ -209,6 +231,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -218,12 +241,14 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1992
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -240,7 +265,8 @@
           "count": 50
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -294,7 +320,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 26,
-            "score": 34.0056
+            "score": 33.8702
           },
           {
             "o_id": 46210,
@@ -434,7 +460,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 15,
-            "score": 16.7895
+            "score": 16.7733
           },
           {
             "o_id": 63519,
@@ -639,7 +665,7 @@
           {
             "source": 43062,
             "target": 76268,
-            "weight": 34.0056,
+            "weight": 33.8702,
             "cooc": 26
           },
           {
@@ -759,7 +785,7 @@
           {
             "source": 43062,
             "target": 29,
-            "weight": 16.7895,
+            "weight": 16.7733,
             "cooc": 15
           },
           {
@@ -957,7 +983,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 26,
-            "score": 34.0056
+            "score": 33.8702
           },
           {
             "o_id": 46210,
@@ -1097,7 +1123,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 15,
-            "score": 16.7895
+            "score": 16.7733
           },
           {
             "o_id": 63519,
@@ -1302,7 +1328,7 @@
           {
             "source": 43062,
             "target": 76268,
-            "weight": 34.0056,
+            "weight": 33.8702,
             "cooc": 26
           },
           {
@@ -1422,7 +1448,7 @@
           {
             "source": 43062,
             "target": 29,
-            "weight": 16.7895,
+            "weight": 16.7733,
             "cooc": 15
           },
           {
@@ -1572,6 +1598,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 43062,
+            "title": "Émile Constant Bombet",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 43062,
@@ -2711,7 +2749,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2800,7 +2839,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3306,6 +3346,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3694,6 +3828,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -4268,6 +4420,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

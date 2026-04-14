@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:01.067008+00:00",
+  "generated_at": "2026-04-14T06:30:32.946771+00:00",
   "entity": {
     "o_id": 23651,
     "title": "Journée de l'Enfant Musulman",
@@ -60,6 +60,7 @@
           "total": 10,
           "articles": 0,
           "publications": 10,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2012
@@ -69,6 +70,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2009
@@ -78,33 +80,37 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2007
-        },
-        {
-          "name": "Al-Azan",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 2006,
-          "year_max": 2006
         },
         {
           "name": "Le Jour",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2000
+        },
+        {
+          "name": "Al-Azan",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2006,
+          "year_max": 2006
         },
         {
           "name": "Plume Libre",
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
@@ -750,6 +756,13 @@
           "count": 2
         },
         {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
           "o_id": 531,
           "name": "Riyad",
           "lat": 24.65,
@@ -771,20 +784,6 @@
           "count": 1
         },
         {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 63385,
-          "name": "Riviera III",
-          "lat": 5.348571,
-          "lng": -3.953459,
-          "count": 1
-        },
-        {
           "o_id": 62236,
           "name": "Hôtel Ivoire",
           "lat": 5.3269,
@@ -799,10 +798,17 @@
           "count": 1
         },
         {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63385,
+          "name": "Riviera III",
+          "lat": 5.348571,
+          "lng": -3.953459,
           "count": 1
         }
       ]
@@ -816,19 +822,19 @@
           "count": 8
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
-          "count": 2
-        },
-        {
           "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 2
         },
         {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
-          "count": 1
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
         },
         {
           "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
       ]
@@ -1020,13 +1026,53 @@
         ],
         "cells": [
           [
+            9,
+            0,
+            3
+          ],
+          [
+            12,
+            11,
+            1
+          ],
+          [
+            7,
+            2,
+            6
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
             6,
             2,
             4
           ],
           [
+            5,
+            1,
+            2
+          ],
+          [
             6,
             4,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            10,
+            11,
+            1
+          ],
+          [
+            9,
+            11,
             1
           ],
           [
@@ -1035,13 +1081,8 @@
             2
           ],
           [
-            7,
-            2,
-            6
-          ],
-          [
             10,
-            11,
+            0,
             1
           ],
           [
@@ -1052,41 +1093,6 @@
           [
             8,
             1,
-            1
-          ],
-          [
-            5,
-            1,
-            2
-          ],
-          [
-            9,
-            0,
-            3
-          ],
-          [
-            0,
-            3,
-            1
-          ],
-          [
-            10,
-            0,
-            1
-          ],
-          [
-            1,
-            3,
-            1
-          ],
-          [
-            12,
-            11,
-            1
-          ],
-          [
-            9,
-            11,
             1
           ]
         ]
@@ -1102,16 +1108,16 @@
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Éducation",
           "Côte d'Ivoire",
-          "Conseil National Islamique",
           "Treichville",
+          "Conseil National Islamique",
           "Abidjan",
           "Mahomet",
+          "Laïcité",
+          "Radio Al Bayane",
+          "Palais de la Culture de Treichville",
           "Jeunesse",
-          "Paix",
-          "Prière",
-          "Aboubacar Fofana",
           "Coran",
-          "Idriss Koudouss Koné"
+          "Aboubacar Fofana"
         ],
         "matrix": [
           [
@@ -1137,16 +1143,16 @@
             4,
             8,
             5,
+            5,
             2,
             5,
             5,
-            5,
-            3,
-            4,
-            3,
+            1,
             0,
             3,
-            1
+            3,
+            3,
+            0
           ],
           [
             9,
@@ -1158,12 +1164,12 @@
             2,
             1,
             2,
+            0,
+            1,
+            2,
             3,
             2,
-            2,
-            4,
-            2,
-            1
+            4
           ],
           [
             8,
@@ -1171,16 +1177,16 @@
             5,
             0,
             6,
-            1,
-            3,
-            4,
-            4,
-            4,
-            4,
             3,
             1,
+            4,
+            4,
+            1,
+            0,
+            3,
+            4,
             2,
-            0
+            1
           ],
           [
             7,
@@ -1188,33 +1194,16 @@
             3,
             6,
             0,
-            1,
             3,
-            2,
-            2,
-            3,
-            2,
-            2,
             1,
             2,
-            0
-          ],
-          [
-            7,
             2,
-            2,
-            1,
             1,
             0,
             3,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            1,
-            2
+            3,
+            2,
+            1
           ],
           [
             7,
@@ -1222,16 +1211,33 @@
             2,
             3,
             3,
-            3,
             0,
+            3,
             2,
             1,
-            1,
-            2,
-            2,
+            0,
+            0,
+            3,
             1,
             3,
             1
+          ],
+          [
+            7,
+            2,
+            2,
+            1,
+            1,
+            3,
+            0,
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0
           ],
           [
             5,
@@ -1239,14 +1245,14 @@
             1,
             4,
             2,
+            2,
             1,
-            2,
             0,
             3,
-            2,
-            3,
-            2,
+            1,
             0,
+            0,
+            2,
             1,
             0
           ],
@@ -1256,16 +1262,67 @@
             2,
             4,
             2,
-            0,
             1,
+            0,
             3,
             0,
             1,
-            2,
-            3,
             0,
+            1,
+            1,
             1,
             0
+          ],
+          [
+            4,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            3,
+            2,
+            3,
+            3,
+            3,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
           ],
           [
             4,
@@ -1273,66 +1330,15 @@
             3,
             4,
             3,
-            0,
-            1,
-            2,
             1,
             0,
-            1,
             2,
-            1,
-            2,
-            0
-          ],
-          [
-            4,
-            4,
-            2,
-            4,
-            2,
-            1,
-            2,
-            3,
-            2,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            4,
-            3,
-            2,
-            3,
-            2,
-            0,
-            2,
-            2,
-            3,
-            2,
-            1,
-            0,
-            1,
-            2,
-            0
-          ],
-          [
-            4,
-            0,
-            4,
-            1,
-            1,
-            0,
             1,
             0,
             0,
             1,
             0,
-            1,
-            0,
-            1,
+            2,
             1
           ],
           [
@@ -1341,30 +1347,30 @@
             2,
             2,
             2,
-            1,
             3,
             1,
             1,
-            2,
-            0,
-            2,
             1,
+            0,
+            0,
+            1,
+            2,
             0,
             1
           ],
           [
             4,
+            0,
+            4,
             1,
             1,
-            0,
-            0,
-            2,
             1,
             0,
             0,
             0,
             0,
             0,
+            1,
             1,
             1,
             0

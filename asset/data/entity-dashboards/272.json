@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:26.727492+00:00",
+  "generated_at": "2026-04-14T06:30:00.669746+00:00",
   "entity": {
     "o_id": 272,
     "title": "Adjarra",
@@ -60,6 +60,7 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2018
@@ -69,33 +70,37 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2017,
           "year_max": 2023
-        },
-        {
-          "name": "24 Heures au Bénin",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2022
         },
         {
           "name": "Fraternité",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2021
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2022
         },
         {
           "name": "Le Matinal",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2015
@@ -695,17 +700,17 @@
           "count": 6
         },
         {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 3
-        },
-        {
           "o_id": 14293,
           "name": "Ouémé",
           "lat": 6.5,
           "lng": 2.6,
+          "count": 3
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
           "count": 3
         },
         {
@@ -723,6 +728,20 @@
           "count": 2
         },
         {
+          "o_id": 384,
+          "name": "Pobé",
+          "lat": 6.98008,
+          "lng": 2.6649,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
@@ -737,18 +756,46 @@
           "count": 2
         },
         {
-          "o_id": 384,
-          "name": "Pobé",
-          "lat": 6.98008,
-          "lng": 2.6649,
-          "count": 2
+          "o_id": 388,
+          "name": "Sakété",
+          "lat": 6.73618,
+          "lng": 2.65866,
+          "count": 1
         },
         {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 2
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
         },
         {
           "o_id": 489,
@@ -798,48 +845,6 @@
           "lat": 10.30416,
           "lng": 1.37962,
           "count": 1
-        },
-        {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 1
-        },
-        {
-          "o_id": 410,
-          "name": "Tchad",
-          "lat": 15.0,
-          "lng": 19.0,
-          "count": 1
-        },
-        {
-          "o_id": 388,
-          "name": "Sakété",
-          "lat": 6.73618,
-          "lng": 2.65866,
-          "count": 1
-        },
-        {
-          "o_id": 271,
-          "name": "Abomey-Calavi",
-          "lat": 6.44852,
-          "lng": 2.35566,
-          "count": 1
-        },
-        {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
-          "count": 1
-        },
-        {
-          "o_id": 333,
-          "name": "Kandi",
-          "lat": 11.13417,
-          "lng": 2.93861,
-          "count": 1
         }
       ]
     }
@@ -860,15 +865,11 @@
           "count": 2
         },
         {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
           "label": "politique - président - parti - candidat - élection - gbagbo",
-          "count": 1
-        },
-        {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
-          "count": 1
-        },
-        {
-          "label": "prix - marché - mouton - client - commerçant - vendre",
           "count": 1
         },
         {
@@ -880,11 +881,15 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "count": 1
+        },
+        {
+          "label": "prix - marché - mouton - client - commerçant - vendre",
           "count": 1
         }
       ]
@@ -1142,63 +1147,23 @@
         ],
         "cells": [
           [
+            0,
+            3,
+            1
+          ],
+          [
             6,
             1,
             1
           ],
           [
-            4,
-            11,
+            0,
+            6,
             1
           ],
           [
             9,
-            3,
-            1
-          ],
-          [
-            10,
-            11,
-            1
-          ],
-          [
-            2,
-            6,
-            1
-          ],
-          [
-            1,
-            6,
-            1
-          ],
-          [
             4,
-            7,
-            1
-          ],
-          [
-            4,
-            6,
-            1
-          ],
-          [
-            0,
-            3,
-            1
-          ],
-          [
-            0,
-            6,
-            1
-          ],
-          [
-            5,
-            2,
-            1
-          ],
-          [
-            4,
-            5,
             1
           ],
           [
@@ -1208,7 +1173,42 @@
           ],
           [
             1,
+            6,
+            1
+          ],
+          [
+            1,
             9,
+            1
+          ],
+          [
+            4,
+            10,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            4,
+            5,
+            1
+          ],
+          [
+            4,
+            11,
+            1
+          ],
+          [
+            4,
+            6,
+            1
+          ],
+          [
+            9,
+            3,
             1
           ],
           [
@@ -1217,7 +1217,12 @@
             1
           ],
           [
-            8,
+            2,
+            6,
+            1
+          ],
+          [
+            5,
             2,
             1
           ],
@@ -1227,18 +1232,18 @@
             1
           ],
           [
-            4,
-            10,
-            1
-          ],
-          [
-            9,
-            4,
-            1
-          ],
-          [
             2,
             3,
+            1
+          ],
+          [
+            10,
+            11,
+            1
+          ],
+          [
+            4,
+            7,
             1
           ]
         ]
@@ -1256,9 +1261,9 @@
           "Rana Farooq Ahmad",
           "Ramadan",
           "Aïd al-Adha (Tabaski)",
+          "Pauvreté",
           "Cotonou",
           "Jama'at Islamique Ahmadiyya Bénin",
-          "Pauvreté",
           "Politique",
           "Paix",
           "Mosquée",
@@ -1291,9 +1296,9 @@
             7,
             5,
             5,
-            5,
-            5,
             4,
+            5,
+            5,
             2,
             4,
             3,
@@ -1308,8 +1313,8 @@
             9,
             5,
             5,
-            2,
             6,
+            2,
             6,
             0,
             2,
@@ -1325,9 +1330,9 @@
             8,
             5,
             5,
+            6,
             1,
             5,
-            6,
             0,
             1,
             0,
@@ -1342,9 +1347,9 @@
             0,
             5,
             5,
+            5,
             2,
             6,
-            5,
             0,
             1,
             0,
@@ -1359,9 +1364,9 @@
             5,
             0,
             4,
+            3,
             2,
             4,
-            3,
             0,
             0,
             2,
@@ -1376,46 +1381,12 @@
             5,
             4,
             0,
+            4,
             2,
             3,
-            4,
             1,
             1,
             1,
-            2,
-            0
-          ],
-          [
-            6,
-            5,
-            2,
-            1,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            0,
-            0,
-            2,
-            2,
-            0
-          ],
-          [
-            6,
-            5,
-            6,
-            5,
-            6,
-            4,
-            3,
-            1,
-            0,
-            2,
-            0,
-            1,
-            0,
             2,
             0
           ],
@@ -1427,13 +1398,47 @@
             5,
             3,
             4,
+            0,
             1,
             2,
             0,
             0,
             0,
+            1,
+            0
+          ],
+          [
+            6,
+            5,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
             0,
             1,
+            0,
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            6,
+            5,
+            6,
+            5,
+            6,
+            4,
+            3,
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            2,
             0
           ],
           [
@@ -1462,8 +1467,8 @@
             0,
             1,
             0,
-            1,
             0,
+            1,
             2,
             0,
             1,
@@ -1478,8 +1483,8 @@
             0,
             2,
             1,
-            2,
             0,
+            2,
             0,
             2,
             1,
@@ -1495,9 +1500,9 @@
             3,
             1,
             2,
-            2,
-            2,
             1,
+            2,
+            2,
             0,
             1,
             0,

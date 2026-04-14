@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:44.837257+00:00",
+  "generated_at": "2026-04-14T06:30:16.554464+00:00",
   "person": {
     "o_id": 1480,
     "title": "Désiré Gbodougbé",
@@ -35,6 +35,13 @@
         "year_max": 2015,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -118,6 +125,11 @@
             4
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -129,6 +141,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1995,
           "year_max": 2015
@@ -141,11 +154,13 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1995,
           "year_max": 2015
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -162,7 +177,8 @@
           "name": "Bénin",
           "count": 35
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -272,7 +288,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 4,
-            "score": 11.1144
+            "score": 11.0468
           },
           {
             "o_id": 214,
@@ -307,7 +323,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 7,
-            "score": 9.5115
+            "score": 9.5019
           },
           {
             "o_id": 124,
@@ -433,7 +449,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.6032
+            "score": 5.5686
           },
           {
             "o_id": 765,
@@ -489,7 +505,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 23699,
@@ -503,7 +519,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 14425,
@@ -524,7 +540,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           }
         ],
         "edges": [
@@ -609,7 +625,7 @@
           {
             "source": 1480,
             "target": 76335,
-            "weight": 11.1144,
+            "weight": 11.0468,
             "cooc": 4
           },
           {
@@ -639,7 +655,7 @@
           {
             "source": 1480,
             "target": 44,
-            "weight": 9.5115,
+            "weight": 9.5019,
             "cooc": 7
           },
           {
@@ -747,7 +763,7 @@
           {
             "source": 1480,
             "target": 61,
-            "weight": 5.6032,
+            "weight": 5.5686,
             "cooc": 2
           },
           {
@@ -795,7 +811,7 @@
           {
             "source": 1480,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -807,7 +823,7 @@
           {
             "source": 1480,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -825,7 +841,7 @@
           {
             "source": 1480,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           }
         ]
@@ -947,7 +963,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 4,
-            "score": 11.1144
+            "score": 11.0468
           },
           {
             "o_id": 214,
@@ -982,7 +998,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 7,
-            "score": 9.5115
+            "score": 9.5019
           },
           {
             "o_id": 124,
@@ -1108,7 +1124,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.6032
+            "score": 5.5686
           },
           {
             "o_id": 765,
@@ -1164,7 +1180,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 23699,
@@ -1178,7 +1194,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 14425,
@@ -1199,7 +1215,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           }
         ],
         "edges": [
@@ -1284,7 +1300,7 @@
           {
             "source": 1480,
             "target": 76335,
-            "weight": 11.1144,
+            "weight": 11.0468,
             "cooc": 4
           },
           {
@@ -1314,7 +1330,7 @@
           {
             "source": 1480,
             "target": 44,
-            "weight": 9.5115,
+            "weight": 9.5019,
             "cooc": 7
           },
           {
@@ -1422,7 +1438,7 @@
           {
             "source": 1480,
             "target": 61,
-            "weight": 5.6032,
+            "weight": 5.5686,
             "cooc": 2
           },
           {
@@ -1470,7 +1486,7 @@
           {
             "source": 1480,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -1482,7 +1498,7 @@
           {
             "source": 1480,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -1500,10 +1516,22 @@
           {
             "source": 1480,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1480,
+            "title": "Désiré Gbodougbé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2283,7 +2311,8 @@
           "lng": 2.4866,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2388,7 +2417,8 @@
           "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2950,6 +2980,100 @@
           }
         },
         "articles_total": 35
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3344,6 +3468,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3904,6 +4046,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

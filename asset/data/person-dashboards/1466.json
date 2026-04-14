@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:45.012832+00:00",
+  "generated_at": "2026-04-14T06:30:16.732011+00:00",
   "person": {
     "o_id": 1466,
     "title": "Raphiou Toukourou",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -146,6 +153,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -157,6 +169,7 @@
           "total": 25,
           "articles": 25,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2016
@@ -166,6 +179,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2017
@@ -175,6 +189,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1986,
           "year_max": 1986
@@ -184,6 +199,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
@@ -193,6 +209,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2005,
           "year_max": 2005
@@ -202,6 +219,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2020,
           "year_max": 2020
@@ -211,6 +229,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2012,
           "year_max": 2012
@@ -222,6 +241,7 @@
           "total": 25,
           "articles": 25,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2016
@@ -231,6 +251,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2017
@@ -240,6 +261,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1986,
           "year_max": 1986
@@ -249,6 +271,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
@@ -258,6 +281,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2005,
           "year_max": 2005
@@ -267,6 +291,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2020,
           "year_max": 2020
@@ -276,12 +301,14 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2012,
           "year_max": 2012
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -298,7 +325,8 @@
           "count": 32
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -387,7 +415,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 76280,
@@ -534,7 +562,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 3,
-            "score": 7.5461
+            "score": 7.533
           },
           {
             "o_id": 31,
@@ -548,7 +576,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 32,
@@ -727,7 +755,7 @@
           {
             "source": 1466,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -853,7 +881,7 @@
           {
             "source": 1466,
             "target": 12906,
-            "weight": 7.5461,
+            "weight": 7.533,
             "cooc": 3
           },
           {
@@ -865,7 +893,7 @@
           {
             "source": 1466,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -1050,7 +1078,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 76280,
@@ -1197,7 +1225,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 3,
-            "score": 7.5461
+            "score": 7.533
           },
           {
             "o_id": 31,
@@ -1211,7 +1239,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 32,
@@ -1390,7 +1418,7 @@
           {
             "source": 1466,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1516,7 +1544,7 @@
           {
             "source": 1466,
             "target": 12906,
-            "weight": 7.5461,
+            "weight": 7.533,
             "cooc": 3
           },
           {
@@ -1528,7 +1556,7 @@
           {
             "source": 1466,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -1630,6 +1658,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1466,
+            "title": "Raphiou Toukourou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1466,
@@ -2265,7 +2305,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2330,7 +2371,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2696,6 +2738,100 @@
         "articles_total": 31
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -3190,6 +3326,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -3764,6 +3918,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

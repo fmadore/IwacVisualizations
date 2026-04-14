@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:56.548945+00:00",
+  "generated_at": "2026-04-14T06:30:28.759354+00:00",
   "person": {
     "o_id": 1762,
     "title": "Vassiriki Touré",
@@ -19,7 +19,7 @@
         "total_mentions": 9,
         "year_min": 1988,
         "year_max": 2014,
-        "newspapers_count": 3,
+        "newspapers_count": 4,
         "countries_count": 1
       },
       "subject": {
@@ -33,8 +33,15 @@
         "total_mentions": 2,
         "year_min": 2008,
         "year_max": 2008,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -92,6 +99,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -103,6 +115,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2014
@@ -112,15 +125,27 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1988,
           "year_max": 1993
+        },
+        {
+          "name": "Les Classiques ivoiriens",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
         },
         {
           "name": "Islam Info",
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
@@ -132,6 +157,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2014
@@ -141,6 +167,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1988,
           "year_max": 1993
@@ -150,12 +177,25 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
         }
       ],
-      "creator": []
+      "creator": [
+        {
+          "name": "Les Classiques ivoiriens",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2008,
+          "year_max": 2008
+        }
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -177,7 +217,8 @@
           "name": "Côte d'Ivoire",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -231,7 +272,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 23548,
@@ -317,7 +358,7 @@
           {
             "source": 1762,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -413,7 +454,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 23548,
@@ -499,7 +540,7 @@
           {
             "source": 1762,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -547,6 +588,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1762,
+            "title": "Vassiriki Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1762,
@@ -798,7 +851,8 @@
           "lng": -5.5,
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -823,7 +877,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1249,6 +1304,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1412,6 +1561,24 @@
         "years": [
           2008
         ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
+        "years": [],
         "months": [
           1,
           2,
@@ -1985,6 +2152,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

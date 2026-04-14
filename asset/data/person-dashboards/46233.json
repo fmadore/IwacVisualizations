@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.522963+00:00",
+  "generated_at": "2026-04-14T06:30:22.284685+00:00",
   "person": {
     "o_id": 46233,
     "title": "Edmond Gomon",
@@ -35,6 +35,13 @@
         "year_max": 2017,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -110,6 +117,11 @@
             8
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 39,
           "articles": 39,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2017
@@ -133,11 +146,13 @@
           "total": 39,
           "articles": 39,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2017
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -154,7 +169,8 @@
           "name": "Côte d'Ivoire",
           "count": 39
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -236,7 +252,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 12,
-            "score": 15.6949
+            "score": 15.6324
           },
           {
             "o_id": 46168,
@@ -250,7 +266,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 13,
-            "score": 14.5509
+            "score": 14.5368
           },
           {
             "o_id": 62150,
@@ -425,7 +441,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 6,
-            "score": 8.1527
+            "score": 8.1445
           },
           {
             "o_id": 14536,
@@ -577,7 +593,7 @@
           {
             "source": 46233,
             "target": 76268,
-            "weight": 15.6949,
+            "weight": 15.6324,
             "cooc": 12
           },
           {
@@ -589,7 +605,7 @@
           {
             "source": 46233,
             "target": 29,
-            "weight": 14.5509,
+            "weight": 14.5368,
             "cooc": 13
           },
           {
@@ -739,7 +755,7 @@
           {
             "source": 46233,
             "target": 44,
-            "weight": 8.1527,
+            "weight": 8.1445,
             "cooc": 6
           },
           {
@@ -911,7 +927,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 12,
-            "score": 15.6949
+            "score": 15.6324
           },
           {
             "o_id": 46168,
@@ -925,7 +941,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 13,
-            "score": 14.5509
+            "score": 14.5368
           },
           {
             "o_id": 62150,
@@ -1100,7 +1116,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 6,
-            "score": 8.1527
+            "score": 8.1445
           },
           {
             "o_id": 14536,
@@ -1252,7 +1268,7 @@
           {
             "source": 46233,
             "target": 76268,
-            "weight": 15.6949,
+            "weight": 15.6324,
             "cooc": 12
           },
           {
@@ -1264,7 +1280,7 @@
           {
             "source": 46233,
             "target": 29,
-            "weight": 14.5509,
+            "weight": 14.5368,
             "cooc": 13
           },
           {
@@ -1414,7 +1430,7 @@
           {
             "source": 46233,
             "target": 44,
-            "weight": 8.1527,
+            "weight": 8.1445,
             "cooc": 6
           },
           {
@@ -1496,6 +1512,18 @@
             "cooc": 6
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 46233,
+            "title": "Edmond Gomon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2079,7 +2107,8 @@
           "lng": -5.93333,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2184,7 +2213,8 @@
           "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2650,6 +2680,100 @@
           }
         },
         "articles_total": 39
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3000,6 +3124,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3560,6 +3702,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

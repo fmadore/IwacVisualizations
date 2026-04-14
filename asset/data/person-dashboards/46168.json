@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.820149+00:00",
+  "generated_at": "2026-04-14T06:30:24.220094+00:00",
   "person": {
     "o_id": 46168,
     "title": "Noël Yao",
@@ -35,6 +35,13 @@
         "year_max": 1989,
         "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -92,6 +99,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -103,6 +115,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2009
@@ -112,6 +125,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2009
@@ -121,6 +135,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2009
@@ -130,6 +145,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1989,
           "year_max": 1989
@@ -139,6 +155,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1980,
           "year_max": 1980
@@ -150,6 +167,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2009
@@ -159,6 +177,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2009
@@ -168,6 +187,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2009
@@ -179,6 +199,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1989,
           "year_max": 1989
@@ -188,11 +209,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1980,
           "year_max": 1980
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -214,7 +237,8 @@
           "name": "Côte d'Ivoire",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -254,7 +278,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 12,
-            "score": 13.4316
+            "score": 13.4186
           },
           {
             "o_id": 46233,
@@ -349,7 +373,7 @@
           {
             "source": 46168,
             "target": 29,
-            "weight": 13.4316,
+            "weight": 13.4186,
             "cooc": 12
           },
           {
@@ -449,7 +473,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 12,
-            "score": 13.4316
+            "score": 13.4186
           },
           {
             "o_id": 46233,
@@ -537,7 +561,7 @@
           {
             "source": 46168,
             "target": 29,
-            "weight": 13.4316,
+            "weight": 13.4186,
             "cooc": 12
           },
           {
@@ -597,6 +621,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 46168,
+            "title": "Noël Yao",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 46168,
@@ -890,7 +926,8 @@
           "lng": -3.986111,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -924,7 +961,8 @@
           "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1384,6 +1422,100 @@
           }
         },
         "articles_total": 2
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1581,6 +1713,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2323,6 +2473,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:47.059376+00:00",
+  "generated_at": "2026-04-14T06:30:18.636845+00:00",
   "person": {
     "o_id": 1464,
     "title": "Galilou Abdoulaye",
@@ -19,7 +19,7 @@
         "total_mentions": 9,
         "year_min": 1997,
         "year_max": 2023,
-        "newspapers_count": 2,
+        "newspapers_count": 8,
         "countries_count": 1
       },
       "subject": {
@@ -33,8 +33,15 @@
         "total_mentions": 7,
         "year_min": 1997,
         "year_max": 2022,
-        "newspapers_count": 0,
+        "newspapers_count": 6,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -104,6 +111,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -111,10 +123,21 @@
     "by_role": {
       "all": [
         {
+          "name": "Johannes Gutenberg-Universität",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Bénin",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
           "name": "Fraternité",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -124,9 +147,60 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
+        },
+        {
+          "name": "Rüdiger Köppe Verlag",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "LIT Verlag",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Université d'Abomey-Calavi",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 1997,
+          "year_max": 1997
+        },
+        {
+          "name": "Journal de la recherche scientifique de l'Université du Bénin",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Council for the Development of Social Science Research in Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
         }
       ],
       "subject": [
@@ -135,6 +209,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -144,12 +219,75 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
         }
       ],
-      "creator": []
+      "creator": [
+        {
+          "name": "Johannes Gutenberg-Universität",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Bénin",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Rüdiger Köppe Verlag",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "LIT Verlag",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Université d'Abomey-Calavi",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 1997,
+          "year_max": 1997
+        },
+        {
+          "name": "Journal de la recherche scientifique de l'Université du Bénin",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Council for the Development of Social Science Research in Africa",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
+        }
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -171,7 +309,8 @@
           "name": "Bénin",
           "count": 7
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -190,7 +329,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 13908,
@@ -204,7 +343,7 @@
           {
             "source": 1464,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -229,7 +368,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 13908,
@@ -243,7 +382,7 @@
           {
             "source": 1464,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -255,6 +394,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1464,
+            "title": "Galilou Abdoulaye",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1464,
@@ -422,7 +573,8 @@
           "lng": 2.25,
           "count": 7
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -447,7 +599,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -889,6 +1042,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1015,6 +1262,24 @@
           2021,
           2022
         ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
+        "years": [],
         "months": [
           1,
           2,
@@ -1588,6 +1853,52 @@
         ]
       },
       "creator": {
+        "names": [
+          "Thomas Bierschenk",
+          "Georg Stauth",
+          "Maud Saint-Lary",
+          "Fabienne Samson",
+          "Mame Penda Ba"
+        ],
+        "matrix": [
+          [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

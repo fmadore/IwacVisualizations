@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:37.850594+00:00",
+  "generated_at": "2026-04-14T06:30:10.432541+00:00",
   "person": {
     "o_id": 1738,
     "title": "Amadou Soumana",
@@ -20,7 +20,7 @@
         "total_mentions": 6,
         "year_min": 1993,
         "year_max": 2006,
-        "newspapers_count": 3,
+        "newspapers_count": 4,
         "countries_count": 2
       },
       "subject": {
@@ -34,8 +34,15 @@
         "total_mentions": 1,
         "year_min": 2001,
         "year_max": 2001,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -101,6 +108,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -112,6 +124,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2006
@@ -121,6 +134,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 1994
@@ -130,9 +144,20 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
+        },
+        {
+          "name": "Éthiopiques",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2001,
+          "year_max": 2001
         }
       ],
       "subject": [
@@ -141,6 +166,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2006
@@ -150,6 +176,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 1994
@@ -159,12 +186,25 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
         }
       ],
-      "creator": []
+      "creator": [
+        {
+          "name": "Éthiopiques",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -190,7 +230,8 @@
           "name": "Niger",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -216,7 +257,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 5,
-            "score": 13.893
+            "score": 13.8085
           },
           {
             "o_id": 2013,
@@ -257,7 +298,7 @@
           {
             "source": 1738,
             "target": 76335,
-            "weight": 13.893,
+            "weight": 13.8085,
             "cooc": 5
           },
           {
@@ -307,7 +348,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 5,
-            "score": 13.893
+            "score": 13.8085
           },
           {
             "o_id": 2013,
@@ -348,7 +389,7 @@
           {
             "source": 1738,
             "target": 76335,
-            "weight": 13.893,
+            "weight": 13.8085,
             "cooc": 5
           },
           {
@@ -378,6 +419,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1738,
+            "title": "Amadou Soumana",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1738,
@@ -538,7 +591,8 @@
           "lng": 9.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -555,7 +609,8 @@
           "count": 5
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -949,6 +1004,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1076,6 +1225,24 @@
         "years": [
           2001
         ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
+        "years": [],
         "months": [
           1,
           2,
@@ -1649,6 +1816,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

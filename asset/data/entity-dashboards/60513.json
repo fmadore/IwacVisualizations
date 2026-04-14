@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.482963+00:00",
+  "generated_at": "2026-04-14T06:30:20.852141+00:00",
   "entity": {
     "o_id": 60513,
     "title": "Kpassouadè",
@@ -46,6 +46,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2023,
           "year_max": 2024
@@ -55,6 +56,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1994,
           "year_max": 1994
@@ -167,6 +169,13 @@
           "count": 1
         },
         {
+          "o_id": 60497,
+          "name": "Gao",
+          "lat": 16.266666666667,
+          "lng": -0.05,
+          "count": 1
+        },
+        {
           "o_id": 512,
           "name": "Kpalimé",
           "lat": 6.91,
@@ -200,13 +209,6 @@
           "lat": 25.0,
           "lng": 45.0,
           "count": 1
-        },
-        {
-          "o_id": 60497,
-          "name": "Gao",
-          "lat": 16.266666666667,
-          "lng": -0.05,
-          "count": 1
         }
       ]
     }
@@ -219,11 +221,11 @@
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -474,13 +476,13 @@
             1
           ],
           [
+            29,
             0,
-            7,
             1
           ],
           [
-            29,
             0,
+            7,
             1
           ]
         ]
@@ -499,13 +501,13 @@
           "Tchamba",
           "Didaourè",
           "Koussountou",
+          "Kéméni",
+          "Fazao",
+          "Gao",
           "Kpalimé",
           "Togo",
           "Assemblée mondiale de la jeunesse musulmane",
-          "Organisation de la Coopération Islamique",
-          "Charité",
-          "Chiisme",
-          "Iqra"
+          "Organisation de la Coopération Islamique"
         ],
         "matrix": [
           [
@@ -534,9 +536,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -551,9 +553,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -646,8 +648,8 @@
           ],
           [
             1,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             0,
@@ -656,7 +658,58 @@
             0,
             1,
             1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1
@@ -670,60 +723,9 @@
             0,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
             1,
             0,
             1,
@@ -738,9 +740,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             0,
@@ -755,9 +757,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,

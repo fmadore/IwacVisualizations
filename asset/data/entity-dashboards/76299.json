@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:59.232707+00:00",
+  "generated_at": "2026-04-14T06:30:31.206415+00:00",
   "entity": {
     "o_id": 76299,
     "title": "Front Populaire",
@@ -58,6 +58,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1987,
           "year_max": 1991
@@ -67,6 +68,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
@@ -222,34 +224,6 @@
           "count": 2
         },
         {
-          "o_id": 76319,
-          "name": "Maison du Peuple",
-          "lat": 12.3722,
-          "lng": -1.5236,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 63418,
-          "name": "Marseille",
-          "lat": 43.296666666667,
-          "lng": 5.3763888888889,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
-        },
-        {
           "o_id": 62240,
           "name": "Palais des Sports de Treichville",
           "lat": 5.298056,
@@ -339,6 +313,34 @@
           "lat": 18.0,
           "lng": -2.0,
           "count": 1
+        },
+        {
+          "o_id": 76319,
+          "name": "Maison du Peuple",
+          "lat": 12.3722,
+          "lng": -1.5236,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 63418,
+          "name": "Marseille",
+          "lat": 43.296666666667,
+          "lng": 5.3763888888889,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
         }
       ]
     }
@@ -351,15 +353,15 @@
           "count": 2
         },
         {
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 1
+        },
+        {
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         },
         {
           "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
-          "count": 1
-        },
-        {
-          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -621,8 +623,13 @@
         ],
         "cells": [
           [
+            14,
+            11,
+            1
+          ],
+          [
+            1,
             2,
-            6,
             1
           ],
           [
@@ -631,18 +638,13 @@
             1
           ],
           [
-            14,
-            11,
+            2,
+            6,
             1
           ],
           [
             0,
             10,
-            1
-          ],
-          [
-            1,
-            2,
             1
           ]
         ]
@@ -654,61 +656,44 @@
       "all": {
         "names": [
           "Burkina Faso",
+          "Gouvernement",
           "Sénégal",
           "Mauritanie",
           "Niger",
-          "Gouvernement",
           "Ouagadougou",
-          "Maison du Peuple",
-          "Sacrifice",
-          "France",
-          "Marseille",
-          "Agence France-Presse",
-          "Alassane Maïga",
-          "Prière",
-          "Koudougou",
-          "Commerce"
+          "Confédération Islamique du Développement de la Côte d'Ivoire",
+          "Laïcité",
+          "Conflit",
+          "Conseil National Islamique",
+          "Harrissou Fofana",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+          "Palais des Sports de Treichville",
+          "Émile Boga Doudou",
+          "Côte d'Ivoire"
         ],
         "matrix": [
           [
             0,
+            1,
             2,
             2,
             2,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
-            2,
+            1,
             0,
-            2,
-            2,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            0,
-            2,
             1,
             1,
             1,
@@ -723,37 +708,54 @@
           ],
           [
             2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
             2,
             2,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             1,
@@ -762,23 +764,23 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
@@ -790,12 +792,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             1,
@@ -807,12 +809,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             0,
@@ -824,12 +826,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -841,12 +843,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -858,12 +860,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -875,12 +877,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -892,12 +894,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -909,12 +911,12 @@
             1
           ],
           [
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,

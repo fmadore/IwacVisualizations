@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.593661+00:00",
+  "generated_at": "2026-04-14T06:30:27.761902+00:00",
   "person": {
     "o_id": 62132,
     "title": "Ben Ismaël",
@@ -35,6 +35,13 @@
         "year_max": 1994,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -102,6 +109,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -113,6 +125,7 @@
           "total": 30,
           "articles": 30,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1977,
           "year_max": 1994
@@ -124,6 +137,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -135,11 +149,13 @@
           "total": 30,
           "articles": 30,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1977,
           "year_max": 1994
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -161,7 +177,8 @@
           "name": "Côte d'Ivoire",
           "count": 30
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -257,7 +274,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 10,
-            "score": 13.0791
+            "score": 13.027
           },
           {
             "o_id": 945,
@@ -390,7 +407,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 3,
-            "score": 7.5461
+            "score": 7.533
           },
           {
             "o_id": 202,
@@ -453,7 +470,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.1068
+            "score": 6.0906
           },
           {
             "o_id": 1197,
@@ -495,7 +512,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 5,
-            "score": 5.5965
+            "score": 5.5911
           },
           {
             "o_id": 76297,
@@ -596,7 +613,7 @@
           {
             "source": 62132,
             "target": 76268,
-            "weight": 13.0791,
+            "weight": 13.027,
             "cooc": 10
           },
           {
@@ -710,7 +727,7 @@
           {
             "source": 62132,
             "target": 12906,
-            "weight": 7.5461,
+            "weight": 7.533,
             "cooc": 3
           },
           {
@@ -764,7 +781,7 @@
           {
             "source": 62132,
             "target": 56,
-            "weight": 6.1068,
+            "weight": 6.0906,
             "cooc": 3
           },
           {
@@ -800,7 +817,7 @@
           {
             "source": 62132,
             "target": 29,
-            "weight": 5.5965,
+            "weight": 5.5911,
             "cooc": 5
           },
           {
@@ -932,7 +949,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 10,
-            "score": 13.0791
+            "score": 13.027
           },
           {
             "o_id": 945,
@@ -1065,7 +1082,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 3,
-            "score": 7.5461
+            "score": 7.533
           },
           {
             "o_id": 202,
@@ -1128,7 +1145,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.1068
+            "score": 6.0906
           },
           {
             "o_id": 1197,
@@ -1170,7 +1187,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 5,
-            "score": 5.5965
+            "score": 5.5911
           },
           {
             "o_id": 76297,
@@ -1271,7 +1288,7 @@
           {
             "source": 62132,
             "target": 76268,
-            "weight": 13.0791,
+            "weight": 13.027,
             "cooc": 10
           },
           {
@@ -1385,7 +1402,7 @@
           {
             "source": 62132,
             "target": 12906,
-            "weight": 7.5461,
+            "weight": 7.533,
             "cooc": 3
           },
           {
@@ -1439,7 +1456,7 @@
           {
             "source": 62132,
             "target": 56,
-            "weight": 6.1068,
+            "weight": 6.0906,
             "cooc": 3
           },
           {
@@ -1475,7 +1492,7 @@
           {
             "source": 62132,
             "target": 29,
-            "weight": 5.5965,
+            "weight": 5.5911,
             "cooc": 5
           },
           {
@@ -1503,6 +1520,18 @@
             "cooc": 3
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 62132,
+            "title": "Ben Ismaël",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2367,7 +2396,8 @@
           "lng": -3.9,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2461,7 +2491,8 @@
           "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2949,6 +2980,100 @@
           }
         },
         "articles_total": 30
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3235,6 +3360,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4067,6 +4210,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.544813+00:00",
+  "generated_at": "2026-04-14T06:30:30.533606+00:00",
   "entity": {
     "o_id": 27741,
     "title": "Parti National Panafricain",
@@ -40,22 +40,24 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Rendez-Vous",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Togo",
-          "year_min": 2014,
-          "year_max": 2014
-        },
-        {
           "name": "Togo-Presse",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Togo",
+          "year_min": 2014,
+          "year_max": 2014
         }
       ]
     }
@@ -338,13 +340,13 @@
         ],
         "cells": [
           [
-            0,
-            11,
+            3,
+            9,
             1
           ],
           [
-            3,
-            9,
+            0,
+            11,
             1
           ]
         ]
@@ -356,13 +358,13 @@
       "all": {
         "names": [
           "Terrorisme",
-          "Tikpi Salifou Atchadam",
-          "Secte",
           "Sokodé",
           "Lomé",
           "Radicalisation",
           "Extrémisme",
-          "Bafilo"
+          "Bafilo",
+          "Tikpi Salifou Atchadam",
+          "Secte"
         ],
         "matrix": [
           [
@@ -379,9 +381,9 @@
             1,
             0,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0
           ],
@@ -389,8 +391,38 @@
             1,
             1,
             0,
+            1,
+            1,
+            1,
             0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
             0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -400,38 +432,8 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
             0,
             1
           ],
@@ -439,9 +441,9 @@
             1,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             0
           ]

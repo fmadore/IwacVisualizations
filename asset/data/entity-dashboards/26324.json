@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.510449+00:00",
+  "generated_at": "2026-04-14T06:30:30.502800+00:00",
   "entity": {
     "o_id": 26324,
     "title": "Fédération des Associations des Femmes Musulmanes du Togo",
@@ -42,31 +42,34 @@
     "by_role": {
       "all": [
         {
-          "name": "Togo-Presse",
+          "name": "Le Rendez-Vous",
           "total": 1,
-          "articles": 1,
-          "publications": 0,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
           "country": "Togo",
-          "year_min": 2016,
-          "year_max": 2016
+          "year_min": 2010,
+          "year_max": 2010
         },
         {
           "name": "Agence Togolaise de Presse",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2023,
           "year_max": 2023
         },
         {
-          "name": "Le Rendez-Vous",
+          "name": "Togo-Presse",
           "total": 1,
-          "articles": 0,
-          "publications": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
           "country": "Togo",
-          "year_min": 2010,
-          "year_max": 2010
+          "year_min": 2016,
+          "year_max": 2016
         }
       ]
     }
@@ -101,27 +104,6 @@
     "by_role": {
       "all": [
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 1
-        },
-        {
-          "o_id": 533,
-          "name": "Kozah",
-          "lat": 9.583333,
-          "lng": 1.166667,
-          "count": 1
-        },
-        {
-          "o_id": 508,
-          "name": "Kara",
-          "lat": 9.5488888888889,
-          "lng": 1.1905555555556,
-          "count": 1
-        },
-        {
           "o_id": 60481,
           "name": "Blitta",
           "lat": 8.316667,
@@ -140,6 +122,27 @@
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
+          "count": 1
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
           "count": 1
         }
       ]
@@ -334,8 +337,8 @@
         ],
         "cells": [
           [
+            0,
             6,
-            2,
             1
           ],
           [
@@ -344,8 +347,8 @@
             1
           ],
           [
-            0,
             6,
+            2,
             1
           ]
         ]
@@ -356,27 +359,27 @@
     "by_role": {
       "all": {
         "names": [
-          "Togo",
-          "Kozah",
-          "Kara",
-          "Blitta",
-          "Danemark",
-          "Arabie saoudite",
           "Femmes",
           "UMT reports du congrès",
           "Union Musulmane du Togo",
           "Centre Culturel Islamique de Lomé II",
           "Sani Karim",
-          "Katari Foli-Bazi"
+          "Katari Foli-Bazi",
+          "Blitta",
+          "Danemark",
+          "Arabie saoudite",
+          "Togo",
+          "Kozah",
+          "Kara"
         ],
         "matrix": [
           [
             0,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -388,9 +391,9 @@
             1,
             0,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -402,8 +405,50 @@
             1,
             1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -417,39 +462,11 @@
             0,
             0,
             0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             0,
             0,
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
             0,
             0,
             0
@@ -461,10 +478,38 @@
             0,
             0,
             0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
-            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -475,51 +520,9 @@
             0,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
             1,
             0,
             1
@@ -531,9 +534,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             0

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.584241+00:00",
+  "generated_at": "2026-04-14T06:30:30.574035+00:00",
   "entity": {
     "o_id": 45831,
     "title": "Collectif des Communautés Musulmanes de Cocody",
@@ -46,6 +46,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2012
@@ -55,6 +56,17 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2005,
+          "year_max": 2005
+        },
+        {
+          "name": "Al-Azan",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2005
@@ -64,18 +76,10 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2009
-        },
-        {
-          "name": "Al-Azan",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 2005,
-          "year_max": 2005
         }
       ]
     }
@@ -222,13 +226,6 @@
           "count": 5
         },
         {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
-          "count": 2
-        },
-        {
           "o_id": 76457,
           "name": "Cocody Angré",
           "lat": 5.386217444874156,
@@ -236,10 +233,38 @@
           "count": 2
         },
         {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 2
+        },
+        {
+          "o_id": 63379,
+          "name": "Port-Bouët",
+          "lat": 5.266667,
+          "lng": -3.9,
+          "count": 1
+        },
+        {
+          "o_id": 46294,
+          "name": "Yopougon",
+          "lat": 5.316667,
+          "lng": -4.066667,
+          "count": 1
+        },
+        {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
           "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 63385,
+          "name": "Riviera III",
+          "lat": 5.348571,
+          "lng": -3.953459,
           "count": 1
         },
         {
@@ -276,27 +301,6 @@
           "lat": 24.46861,
           "lng": 39.61417,
           "count": 1
-        },
-        {
-          "o_id": 63379,
-          "name": "Port-Bouët",
-          "lat": 5.266667,
-          "lng": -3.9,
-          "count": 1
-        },
-        {
-          "o_id": 46294,
-          "name": "Yopougon",
-          "lat": 5.316667,
-          "lng": -4.066667,
-          "count": 1
-        },
-        {
-          "o_id": 63385,
-          "name": "Riviera III",
-          "lat": 5.348571,
-          "lng": -3.953459,
-          "count": 1
         }
       ]
     }
@@ -305,11 +309,11 @@
     "by_role": {
       "all": [
         {
-          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 2
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 2
         },
         {
@@ -516,28 +520,28 @@
         ],
         "cells": [
           [
-            7,
-            2,
-            1
-          ],
-          [
-            0,
-            2,
-            1
-          ],
-          [
             4,
             2,
             2
           ],
           [
             0,
+            3,
+            1
+          ],
+          [
+            7,
+            2,
+            1
+          ],
+          [
+            0,
             7,
             1
           ],
           [
             0,
-            3,
+            2,
             1
           ]
         ]
@@ -552,17 +556,17 @@
           "Éducation",
           "Mahomet",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
-          "Mosquée de la Riviéra Golf",
-          "Pluralisme religieux",
-          "Enfant",
           "Cocody Angré",
-          "Solidarité",
-          "Conflit",
-          "Côte d'Ivoire",
-          "Pardon",
-          "Unité",
-          "Fama Touré",
-          "Riviera Palmeraie"
+          "Pluralisme religieux",
+          "Mosquée de la Riviéra Golf",
+          "Enfant",
+          "Jeunesse",
+          "Ali Ouattara",
+          "Paix",
+          "Santé",
+          "Port-Bouët",
+          "Yopougon",
+          "Islamisme"
         ],
         "matrix": [
           [
@@ -580,7 +584,7 @@
             1,
             1,
             1,
-            1
+            0
           ],
           [
             4,
@@ -596,7 +600,7 @@
             1,
             1,
             1,
-            0,
+            1,
             0
           ],
           [
@@ -613,7 +617,7 @@
             1,
             1,
             1,
-            0,
+            1,
             0
           ],
           [
@@ -621,32 +625,66 @@
             2,
             2,
             0,
+            1,
+            1,
             0,
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
             0,
             1,
-            1
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
           ],
           [
             2,
             2,
             2,
             0,
+            1,
+            1,
             0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0
           ],
@@ -657,40 +695,6 @@
             1,
             1,
             0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
             1,
             0,
             0,
@@ -705,12 +709,97 @@
             1,
             1,
             1,
+            1,
+            1,
+            1,
             0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             0,
             0,
+            1,
             0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
             1,
             1,
             1,
@@ -719,78 +808,6 @@
             0
           ],
           [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
             0,
             0,
             0,
@@ -801,23 +818,10 @@
             0,
             0,
             0,
-            1
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
             0,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
             0
           ]
         ]

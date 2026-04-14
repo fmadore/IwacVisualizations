@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:33.443126+00:00",
+  "generated_at": "2026-04-14T06:30:06.422075+00:00",
   "person": {
     "o_id": 855,
     "title": "Abdoul Salam Tiemtoré",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -154,6 +161,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -165,6 +177,7 @@
           "total": 26,
           "articles": 26,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1984,
           "year_max": 1998
@@ -174,6 +187,7 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1991,
           "year_max": 1999
@@ -183,6 +197,7 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1979,
           "year_max": 1984
@@ -192,6 +207,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2008
@@ -201,6 +217,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1971,
           "year_max": 1986
@@ -210,6 +227,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2011
@@ -219,6 +237,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1998,
           "year_max": 1998
@@ -230,6 +249,7 @@
           "total": 26,
           "articles": 26,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1984,
           "year_max": 1998
@@ -239,6 +259,7 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1991,
           "year_max": 1999
@@ -248,6 +269,7 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1979,
           "year_max": 1984
@@ -257,6 +279,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2008
@@ -266,6 +289,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1971,
           "year_max": 1986
@@ -275,6 +299,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2011
@@ -284,12 +309,14 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1998,
           "year_max": 1998
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -306,7 +333,8 @@
           "count": 67
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -353,7 +381,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 15,
-            "score": 37.7962
+            "score": 37.4708
           },
           {
             "o_id": 125,
@@ -398,18 +426,18 @@
             "score": 31.8464
           },
           {
-            "o_id": 735,
-            "title": "Communauté Musulmane de Haute-Volta",
-            "type": "Organisations",
-            "cooc": 6,
-            "score": 28.3813
-          },
-          {
             "o_id": 32,
             "title": "Ramadan",
             "type": "Sujets",
             "cooc": 21,
             "score": 28.0499
+          },
+          {
+            "o_id": 735,
+            "title": "Communauté Musulmane de Haute-Volta",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 27.2874
           },
           {
             "o_id": 76041,
@@ -528,7 +556,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 577,
@@ -699,7 +727,7 @@
           {
             "source": 855,
             "target": 578,
-            "weight": 37.7962,
+            "weight": 37.4708,
             "cooc": 15
           },
           {
@@ -740,15 +768,15 @@
           },
           {
             "source": 855,
-            "target": 735,
-            "weight": 28.3813,
-            "cooc": 6
-          },
-          {
-            "source": 855,
             "target": 32,
             "weight": 28.0499,
             "cooc": 21
+          },
+          {
+            "source": 855,
+            "target": 735,
+            "weight": 27.2874,
+            "cooc": 6
           },
           {
             "source": 855,
@@ -849,7 +877,7 @@
           {
             "source": 855,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1016,7 +1044,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 15,
-            "score": 37.7962
+            "score": 37.4708
           },
           {
             "o_id": 125,
@@ -1061,18 +1089,18 @@
             "score": 31.8464
           },
           {
-            "o_id": 735,
-            "title": "Communauté Musulmane de Haute-Volta",
-            "type": "Organisations",
-            "cooc": 6,
-            "score": 28.3813
-          },
-          {
             "o_id": 32,
             "title": "Ramadan",
             "type": "Sujets",
             "cooc": 21,
             "score": 28.0499
+          },
+          {
+            "o_id": 735,
+            "title": "Communauté Musulmane de Haute-Volta",
+            "type": "Organisations",
+            "cooc": 6,
+            "score": 27.2874
           },
           {
             "o_id": 76041,
@@ -1191,7 +1219,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 577,
@@ -1362,7 +1390,7 @@
           {
             "source": 855,
             "target": 578,
-            "weight": 37.7962,
+            "weight": 37.4708,
             "cooc": 15
           },
           {
@@ -1403,15 +1431,15 @@
           },
           {
             "source": 855,
-            "target": 735,
-            "weight": 28.3813,
-            "cooc": 6
-          },
-          {
-            "source": 855,
             "target": 32,
             "weight": 28.0499,
             "cooc": 21
+          },
+          {
+            "source": 855,
+            "target": 735,
+            "weight": 27.2874,
+            "cooc": 6
           },
           {
             "source": 855,
@@ -1512,7 +1540,7 @@
           {
             "source": 855,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1638,6 +1666,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 855,
+            "title": "Abdoul Salam Tiemtoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 855,
@@ -2735,7 +2775,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2840,7 +2881,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3206,6 +3248,100 @@
         "articles_total": 65
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -3932,6 +4068,24 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4490,6 +4644,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

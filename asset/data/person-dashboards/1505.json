@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:45.626904+00:00",
+  "generated_at": "2026-04-14T06:30:17.325328+00:00",
   "person": {
     "o_id": 1505,
     "title": "Ronie Floride Agamma",
@@ -35,6 +35,13 @@
         "year_max": 2016,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -74,6 +81,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -85,6 +97,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2016
@@ -97,11 +110,13 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2016
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -118,7 +133,8 @@
           "name": "Bénin",
           "count": 5
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -144,7 +160,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 3,
-            "score": 8.3358
+            "score": 8.2851
           },
           {
             "o_id": 76346,
@@ -158,7 +174,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -171,7 +187,7 @@
           {
             "source": 1505,
             "target": 76335,
-            "weight": 8.3358,
+            "weight": 8.2851,
             "cooc": 3
           },
           {
@@ -183,7 +199,7 @@
           {
             "source": 1505,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -221,7 +237,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 3,
-            "score": 8.3358
+            "score": 8.2851
           },
           {
             "o_id": 76346,
@@ -235,7 +251,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -248,7 +264,7 @@
           {
             "source": 1505,
             "target": 76335,
-            "weight": 8.3358,
+            "weight": 8.2851,
             "cooc": 3
           },
           {
@@ -260,10 +276,22 @@
           {
             "source": 1505,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1505,
+            "title": "Ronie Floride Agamma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -413,7 +441,8 @@
           "lng": 39.893333,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -454,7 +483,8 @@
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -888,6 +918,100 @@
           }
         },
         "articles_total": 5
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -994,6 +1118,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -1554,6 +1696,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

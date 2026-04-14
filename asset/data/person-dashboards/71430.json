@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.940598+00:00",
+  "generated_at": "2026-04-14T06:30:31.146162+00:00",
   "person": {
     "o_id": 71430,
     "title": "Fangma Coulibaly",
@@ -35,6 +35,13 @@
         "year_max": 2013,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -74,6 +81,11 @@
             30
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -85,6 +97,7 @@
           "total": 40,
           "articles": 40,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2013
@@ -97,11 +110,13 @@
           "total": 40,
           "articles": 40,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2013
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -118,7 +133,8 @@
           "name": "Côte d'Ivoire",
           "count": 40
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -165,7 +181,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 14,
-            "score": 15.6702
+            "score": 15.655
           },
           {
             "o_id": 662,
@@ -350,18 +366,18 @@
             "score": 6.5786
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
-          },
-          {
             "o_id": 76035,
             "title": "Famille",
             "type": "Sujets",
             "cooc": 3,
             "score": 6.5236
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 9,
@@ -452,7 +468,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           }
         ],
         "edges": [
@@ -483,7 +499,7 @@
           {
             "source": 71430,
             "target": 29,
-            "weight": 15.6702,
+            "weight": 15.655,
             "cooc": 14
           },
           {
@@ -644,15 +660,15 @@
           },
           {
             "source": 71430,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
-          },
-          {
-            "source": 71430,
             "target": 76035,
             "weight": 6.5236,
             "cooc": 3
+          },
+          {
+            "source": 71430,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 71430,
@@ -729,7 +745,7 @@
           {
             "source": 71430,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           }
         ]
@@ -788,7 +804,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 14,
-            "score": 15.6702
+            "score": 15.655
           },
           {
             "o_id": 662,
@@ -973,18 +989,18 @@
             "score": 6.5786
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
-          },
-          {
             "o_id": 76035,
             "title": "Famille",
             "type": "Sujets",
             "cooc": 3,
             "score": 6.5236
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 9,
@@ -1075,7 +1091,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           }
         ],
         "edges": [
@@ -1106,7 +1122,7 @@
           {
             "source": 71430,
             "target": 29,
-            "weight": 15.6702,
+            "weight": 15.655,
             "cooc": 14
           },
           {
@@ -1267,15 +1283,15 @@
           },
           {
             "source": 71430,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
-          },
-          {
-            "source": 71430,
             "target": 76035,
             "weight": 6.5236,
             "cooc": 3
+          },
+          {
+            "source": 71430,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 71430,
@@ -1352,10 +1368,22 @@
           {
             "source": 71430,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 71430,
+            "title": "Fangma Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1939,7 +1967,8 @@
           "lng": -7.56666667,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2044,7 +2073,8 @@
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2534,6 +2564,100 @@
           }
         },
         "articles_total": 40
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2770,6 +2894,24 @@
             3
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3330,6 +3472,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

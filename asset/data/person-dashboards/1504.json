@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:44.658565+00:00",
+  "generated_at": "2026-04-14T06:30:16.395764+00:00",
   "person": {
     "o_id": 1504,
     "title": "Pothin Gnanvi",
@@ -35,6 +35,13 @@
         "year_max": 2000,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -82,6 +89,11 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -93,6 +105,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1992,
           "year_max": 2000
@@ -105,11 +118,13 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1992,
           "year_max": 2000
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -126,7 +141,8 @@
           "name": "Bénin",
           "count": 8
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -610,6 +626,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1504,
+            "title": "Pothin Gnanvi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1347,7 +1375,8 @@
           "lng": 1.22154,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1372,7 +1401,8 @@
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 3
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1934,6 +1964,100 @@
           }
         },
         "articles_total": 8
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2064,6 +2188,24 @@
             2
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2624,6 +2766,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

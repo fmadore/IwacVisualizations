@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.219559+00:00",
+  "generated_at": "2026-04-14T06:30:10.777673+00:00",
   "person": {
     "o_id": 963,
     "title": "Adama Sedgo",
@@ -35,6 +35,13 @@
         "year_max": 2020,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -90,6 +97,11 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -101,6 +113,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2012,
           "year_max": 2020
@@ -113,11 +126,13 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2012,
           "year_max": 2020
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -134,7 +149,8 @@
           "name": "Burkina Faso",
           "count": 10
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -167,7 +183,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 125,
@@ -312,7 +328,7 @@
           {
             "source": 963,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -465,7 +481,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 125,
@@ -610,7 +626,7 @@
           {
             "source": 963,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -722,6 +738,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 963,
+            "title": "Adama Sedgo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -941,7 +969,8 @@
           "lng": 45.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1006,7 +1035,8 @@
           "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1448,6 +1478,100 @@
           }
         },
         "articles_total": 10
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1628,6 +1752,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2188,6 +2330,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

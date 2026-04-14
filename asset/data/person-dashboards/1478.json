@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:40.712456+00:00",
+  "generated_at": "2026-04-14T06:30:12.911417+00:00",
   "person": {
     "o_id": 1478,
     "title": "Thibaud C. Nagnonhou",
@@ -35,6 +35,13 @@
         "year_max": 2024,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -122,6 +129,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -133,6 +145,7 @@
           "total": 76,
           "articles": 76,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2008,
           "year_max": 2024
@@ -145,11 +158,13 @@
           "total": 76,
           "articles": 76,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2008,
           "year_max": 2024
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -166,7 +181,8 @@
           "name": "Bénin",
           "count": 76
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -206,7 +222,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 20,
-            "score": 55.5722
+            "score": 55.2341
           },
           {
             "o_id": 2014,
@@ -318,7 +334,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 15,
-            "score": 20.3819
+            "score": 20.3613
           },
           {
             "o_id": 32,
@@ -332,7 +348,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 7,
-            "score": 19.6112
+            "score": 19.4901
           },
           {
             "o_id": 75967,
@@ -367,7 +383,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 8,
-            "score": 16.0085
+            "score": 15.946
           },
           {
             "o_id": 2019,
@@ -465,7 +481,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 81,
@@ -553,7 +569,7 @@
           {
             "source": 1478,
             "target": 76335,
-            "weight": 55.5722,
+            "weight": 55.2341,
             "cooc": 20
           },
           {
@@ -649,7 +665,7 @@
           {
             "source": 1478,
             "target": 44,
-            "weight": 20.3819,
+            "weight": 20.3613,
             "cooc": 15
           },
           {
@@ -661,7 +677,7 @@
           {
             "source": 1478,
             "target": 61,
-            "weight": 19.6112,
+            "weight": 19.4901,
             "cooc": 7
           },
           {
@@ -691,7 +707,7 @@
           {
             "source": 1478,
             "target": 42,
-            "weight": 16.0085,
+            "weight": 15.946,
             "cooc": 8
           },
           {
@@ -775,7 +791,7 @@
           {
             "source": 1478,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -881,7 +897,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 20,
-            "score": 55.5722
+            "score": 55.2341
           },
           {
             "o_id": 2014,
@@ -993,7 +1009,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 15,
-            "score": 20.3819
+            "score": 20.3613
           },
           {
             "o_id": 32,
@@ -1007,7 +1023,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 7,
-            "score": 19.6112
+            "score": 19.4901
           },
           {
             "o_id": 75967,
@@ -1042,7 +1058,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 8,
-            "score": 16.0085
+            "score": 15.946
           },
           {
             "o_id": 2019,
@@ -1140,7 +1156,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 81,
@@ -1228,7 +1244,7 @@
           {
             "source": 1478,
             "target": 76335,
-            "weight": 55.5722,
+            "weight": 55.2341,
             "cooc": 20
           },
           {
@@ -1324,7 +1340,7 @@
           {
             "source": 1478,
             "target": 44,
-            "weight": 20.3819,
+            "weight": 20.3613,
             "cooc": 15
           },
           {
@@ -1336,7 +1352,7 @@
           {
             "source": 1478,
             "target": 61,
-            "weight": 19.6112,
+            "weight": 19.4901,
             "cooc": 7
           },
           {
@@ -1366,7 +1382,7 @@
           {
             "source": 1478,
             "target": 42,
-            "weight": 16.0085,
+            "weight": 15.946,
             "cooc": 8
           },
           {
@@ -1450,7 +1466,7 @@
           {
             "source": 1478,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1508,6 +1524,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1478,
+            "title": "Thibaud C. Nagnonhou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2455,7 +2483,8 @@
           "lng": 3.21075,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2560,7 +2589,8 @@
           "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3122,6 +3152,100 @@
           }
         },
         "articles_total": 76
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3688,6 +3812,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4248,6 +4390,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

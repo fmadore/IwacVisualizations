@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:48.664365+00:00",
+  "generated_at": "2026-04-14T06:30:20.093931+00:00",
   "person": {
     "o_id": 73308,
     "title": "Komi Selom Klassou",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -86,6 +93,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -97,6 +109,7 @@
           "total": 19,
           "articles": 19,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2015,
           "year_max": 2019
@@ -108,12 +121,14 @@
           "total": 19,
           "articles": 19,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2015,
           "year_max": 2019
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -130,7 +145,8 @@
           "count": 19
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -212,7 +228,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 4,
-            "score": 11.2064
+            "score": 11.1372
           },
           {
             "o_id": 73329,
@@ -240,7 +256,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 5,
-            "score": 10.0053
+            "score": 9.9663
           },
           {
             "o_id": 65721,
@@ -350,7 +366,7 @@
           {
             "source": 73308,
             "target": 61,
-            "weight": 11.2064,
+            "weight": 11.1372,
             "cooc": 4
           },
           {
@@ -374,7 +390,7 @@
           {
             "source": 73308,
             "target": 42,
-            "weight": 10.0053,
+            "weight": 9.9663,
             "cooc": 5
           },
           {
@@ -498,7 +514,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 4,
-            "score": 11.2064
+            "score": 11.1372
           },
           {
             "o_id": 73329,
@@ -526,7 +542,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 5,
-            "score": 10.0053
+            "score": 9.9663
           },
           {
             "o_id": 65721,
@@ -636,7 +652,7 @@
           {
             "source": 73308,
             "target": 61,
-            "weight": 11.2064,
+            "weight": 11.1372,
             "cooc": 4
           },
           {
@@ -660,7 +676,7 @@
           {
             "source": 73308,
             "target": 42,
-            "weight": 10.0053,
+            "weight": 9.9663,
             "cooc": 5
           },
           {
@@ -708,6 +724,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 73308,
+            "title": "Komi Selom Klassou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 73308,
@@ -923,7 +951,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -972,7 +1001,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1534,6 +1564,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1720,6 +1844,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -2294,6 +2436,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.834786+00:00",
+  "generated_at": "2026-04-14T06:30:33.696583+00:00",
   "person": {
     "o_id": 1899,
     "title": "N'buéké A. Goeh-Akue",
@@ -16,10 +16,10 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 1,
+        "total_mentions": 2,
         "year_min": 2011,
-        "year_max": 2011,
-        "newspapers_count": 0,
+        "year_max": 2014,
+        "newspapers_count": 2,
         "countries_count": 1
       },
       "subject": {
@@ -33,7 +33,14 @@
         "total_mentions": 1,
         "year_min": 2011,
         "year_max": 2011,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 1,
+        "year_min": 2014,
+        "year_max": 2014,
+        "newspapers_count": 1,
         "countries_count": 1
       }
     }
@@ -42,13 +49,15 @@
     "by_role": {
       "all": {
         "years": [
-          2011
+          2011,
+          2014
         ],
         "countries": [
           "Togo"
         ],
         "series": {
           "Togo": [
+            1,
             1
           ]
         }
@@ -70,14 +79,71 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2014
+        ],
+        "countries": [
+          "Togo"
+        ],
+        "series": {
+          "Togo": [
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Université de Lomé",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Karthala|Presses de l'Université de Lomé",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Karthala|Presses de l'Université de Lomé",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2011,
+          "year_max": 2011
+        }
+      ],
+      "editor": [
+        {
+          "name": "Université de Lomé",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2014,
+          "year_max": 2014
+        }
+      ]
     }
   },
   "countries": {
@@ -85,11 +151,17 @@
       "all": [
         {
           "name": "Togo",
-          "count": 1
+          "count": 2
         }
       ],
       "subject": [],
       "creator": [
+        {
+          "name": "Togo",
+          "count": 1
+        }
+      ],
+      "editor": [
         {
           "name": "Togo",
           "count": 1
@@ -134,6 +206,18 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1899,
+            "title": "N'buéké A. Goeh-Akue",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -145,11 +229,20 @@
           "name": "Togo",
           "lat": 8.66667,
           "lng": 1.08333,
-          "count": 1
+          "count": 2
         }
       ],
       "subject": [],
       "creator": [
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        }
+      ],
+      "editor": [
         {
           "o_id": 544,
           "name": "Togo",
@@ -164,7 +257,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -450,6 +544,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -457,7 +645,10 @@
     "by_role": {
       "all": {
         "years": [
-          2011
+          2011,
+          2012,
+          2013,
+          2014
         ],
         "months": [
           1,
@@ -512,6 +703,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2014
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -519,10 +730,34 @@
     "by_role": {
       "all": {
         "names": [
-          "Badjow K. Tcham"
+          "Egbèssi Ahogla Gbamehossou",
+          "Koffi Nutefé Tsigbé",
+          "Badjow K. Tcham",
+          "Nicoué Lodjou Gayibor"
         ],
         "matrix": [
           [
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
             0
           ]
         ]
@@ -533,10 +768,32 @@
       },
       "creator": {
         "names": [
-          "Badjow K. Tcham"
+          "Badjow K. Tcham",
+          "Nicoué Lodjou Gayibor"
         ],
         "matrix": [
           [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Egbèssi Ahogla Gbamehossou",
+          "Koffi Nutefé Tsigbé"
+        ],
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
             0
           ]
         ]

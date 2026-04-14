@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.995450+00:00",
+  "generated_at": "2026-04-14T06:30:28.073331+00:00",
   "entity": {
     "o_id": 787,
     "title": "Réseau des Associations et ONG Islamiques du Bénin",
@@ -46,10 +46,31 @@
     "by_role": {
       "all": [
         {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2015,
+          "year_max": 2015
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
           "name": "Fraternité",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2013
@@ -59,33 +80,17 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2017,
           "year_max": 2017
-        },
-        {
-          "name": "La Nation",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2009,
-          "year_max": 2009
-        },
-        {
-          "name": "Matin Libre",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2015,
-          "year_max": 2015
         },
         {
           "name": "Boulevard des Infos",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2023,
           "year_max": 2023
@@ -274,6 +279,27 @@
           "count": 5
         },
         {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 2
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 2
+        },
+        {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
@@ -295,59 +321,10 @@
           "count": 2
         },
         {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 2
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 2
-        },
-        {
-          "o_id": 299,
-          "name": "Cotonou",
-          "lat": 6.36536,
-          "lng": 2.41833,
-          "count": 2
-        },
-        {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
-          "count": 1
-        },
-        {
-          "o_id": 393,
-          "name": "Savé",
-          "lat": 8.03424,
-          "lng": 2.4866,
-          "count": 1
-        },
-        {
-          "o_id": 271,
-          "name": "Abomey-Calavi",
-          "lat": 6.44852,
-          "lng": 2.35566,
-          "count": 1
-        },
-        {
-          "o_id": 63394,
-          "name": "Bangladesh",
-          "lat": 24.016666666666666,
-          "lng": 89.86666666666666,
-          "count": 1
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 1
         },
         {
@@ -470,10 +447,38 @@
           "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
+          "count": 1
+        },
+        {
+          "o_id": 393,
+          "name": "Savé",
+          "lat": 8.03424,
+          "lng": 2.4866,
+          "count": 1
+        },
+        {
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 63394,
+          "name": "Bangladesh",
+          "lat": 24.016666666666666,
+          "lng": 89.86666666666666,
+          "count": 1
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
           "count": 1
         },
         {
@@ -494,11 +499,11 @@
           "count": 2
         },
         {
-          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         },
         {
-          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 1
         }
       ]
@@ -708,13 +713,8 @@
         ],
         "cells": [
           [
-            4,
-            10,
-            1
-          ],
-          [
-            8,
-            8,
+            6,
+            9,
             1
           ],
           [
@@ -723,8 +723,13 @@
             1
           ],
           [
-            6,
-            9,
+            4,
+            10,
+            1
+          ],
+          [
+            8,
+            8,
             1
           ],
           [
@@ -742,19 +747,19 @@
         "names": [
           "Bénin",
           "Union Islamique du Bénin",
-          "Éducation",
-          "Mosquée",
+          "La Mecque",
+          "Cotonou",
+          "Médine",
           "Niger",
           "Togo",
           "Burkina Faso",
           "Femmes",
-          "Médine",
-          "La Mecque",
-          "Cotonou",
-          "Porto-Novo",
-          "Enfant",
-          "Imamat",
-          "Mosquée centrale de Ouando"
+          "Éducation",
+          "Mosquée",
+          "François Abiola",
+          "Issiaka Alao Ligali",
+          "Lauriano Kifouli",
+          "Thomas Boni Yayi"
         ],
         "matrix": [
           [
@@ -777,14 +782,48 @@
           [
             3,
             0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             2,
             2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            2,
             1,
             1,
             1,
             1,
             1,
             1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
             0,
             1,
             1,
@@ -793,25 +832,9 @@
           ],
           [
             2,
+            1,
             2,
-            0,
-            2,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
             0,
             1,
             1,
@@ -819,7 +842,6 @@
             1,
             1,
             1,
-            0,
             1,
             1,
             1,
@@ -830,62 +852,11 @@
             1,
             1,
             1,
-            0,
-            2,
-            2,
-            2,
-            1,
-            1,
             1,
             0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            2,
-            2,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
-            2,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
             2,
             2,
             2,
-            0,
-            1,
             1,
             1,
             0,
@@ -899,11 +870,11 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
+            2,
             0,
             2,
+            2,
+            1,
             1,
             0,
             0,
@@ -916,11 +887,11 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
+            2,
             2,
             0,
+            2,
+            1,
             1,
             0,
             0,
@@ -929,15 +900,49 @@
           ],
           [
             2,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1,
             0,
             0,
             0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
             1,
             1,
             1,
             1,
             1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
             1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
             0,
             0,
             0,
@@ -946,10 +951,10 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -963,10 +968,10 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -980,10 +985,10 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -997,10 +1002,10 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,

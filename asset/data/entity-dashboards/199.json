@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.717619+00:00",
+  "generated_at": "2026-04-14T06:30:32.605120+00:00",
   "entity": {
     "o_id": 199,
     "title": "Projet ZACA",
@@ -48,6 +48,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2002
@@ -57,8 +58,19 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
+          "year_max": 2002
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2002,
           "year_max": 2002
         },
         {
@@ -66,18 +78,10 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2004,
           "year_max": 2022
-        },
-        {
-          "name": "L'Observateur Paalga",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2002,
-          "year_max": 2002
         }
       ]
     }
@@ -211,6 +215,27 @@
           "count": 11
         },
         {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
+          "count": 1
+        },
+        {
+          "o_id": 327,
+          "name": "Grande Mosquée Sunnite de Ouagadougou",
+          "lat": 12.360522000171635,
+          "lng": -1.5185420989673841,
+          "count": 1
+        },
+        {
           "o_id": 323,
           "name": "Grande Mosquée de Ouagadougou",
           "lat": 12.36625,
@@ -232,13 +257,6 @@
           "count": 1
         },
         {
-          "o_id": 327,
-          "name": "Grande Mosquée Sunnite de Ouagadougou",
-          "lat": 12.360522000171635,
-          "lng": -1.5185420989673841,
-          "count": 1
-        },
-        {
           "o_id": 391,
           "name": "Sapouy",
           "lat": 11.55444,
@@ -250,20 +268,6 @@
           "name": "Riyad",
           "lat": 24.65,
           "lng": 46.71,
-          "count": 1
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
           "count": 1
         }
       ]
@@ -277,7 +281,7 @@
           "count": 10
         },
         {
-          "label": "jamais - aucun - raison - homme - propos - état",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         },
         {
@@ -285,7 +289,7 @@
           "count": 1
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         }
       ]
@@ -554,8 +558,8 @@
         ],
         "cells": [
           [
-            3,
-            9,
+            1,
+            7,
             1
           ],
           [
@@ -564,24 +568,19 @@
             4
           ],
           [
-            0,
-            9,
-            2
-          ],
-          [
-            1,
-            0,
-            1
-          ],
-          [
-            1,
             3,
+            9,
             1
           ],
           [
             1,
             2,
             1
+          ],
+          [
+            0,
+            9,
+            2
           ],
           [
             21,
@@ -595,7 +594,12 @@
           ],
           [
             1,
-            7,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
             1
           ]
         ]
@@ -606,56 +610,56 @@
     "by_role": {
       "all": {
         "names": [
-          "Ouagadougou",
           "Saïdou Bangré",
+          "Ouagadougou",
           "Violence",
           "Police",
-          "Mouvement Sunnite (crises internes)",
           "Mouvement Sunnite du Burkina Faso",
+          "Mouvement Sunnite (crises internes)",
           "Mosquée",
+          "Burkina Faso",
+          "Santé",
+          "Éducation",
+          "Ouaga 2000",
+          "Grande Mosquée Sunnite de Ouagadougou",
           "Communauté Musulmane du Burkina Faso",
           "Idrissa Semdé",
-          "Grande Mosquée de Ouagadougou",
-          "Congrès CMHV (1982)",
-          "Congrès CMBF (1997)",
-          "Congrès CMBF (2004)",
-          "Thomas Sankara",
-          "Kassoum"
+          "Grande Mosquée de Ouagadougou"
         ],
         "matrix": [
           [
             0,
             9,
             4,
-            2,
-            2,
-            2,
-            2,
+            3,
+            0,
+            0,
             1,
             1,
             1,
             1,
             1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0
           ],
           [
             9,
             0,
             4,
-            3,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
             0,
             0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             4,
@@ -669,15 +673,15 @@
             0,
             0,
             0,
-            0,
+            1,
             0,
             0,
             0
           ],
           [
+            3,
             2,
             3,
-            3,
             0,
             0,
             0,
@@ -692,43 +696,43 @@
             0
           ],
           [
-            2,
-            0,
-            1,
-            0,
             0,
             2,
             1,
+            0,
+            0,
+            2,
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
             1
           ],
           [
+            0,
+            2,
+            1,
+            0,
             2,
             0,
             1,
             0,
-            2,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             1,
             1
           ],
           [
+            1,
             2,
             1,
-            1,
             0,
             1,
             1,
@@ -737,6 +741,23 @@
             0,
             0,
             0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -747,56 +768,53 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            1,
+            0,
             1,
             1,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0
           ],
           [
             1,
             0,
             0,
             0,
+            0,
+            0,
+            0,
             1,
             1,
             0,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0
           ],
           [
             1,
             0,
             0,
             0,
-            1,
-            1,
+            0,
+            0,
             0,
             1,
             1,
+            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0
           ],
           [
-            1,
-            0,
-            0,
             0,
             1,
             1,
@@ -805,75 +823,61 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
-            1,
-            0,
-            0,
             0,
             1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
             0,
             0,
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1
           ],
           [
+            0,
+            1,
+            0,
+            0,
+            1,
             1,
             0,
             0,
             0,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             0,
             1
           ],
           [
+            0,
+            1,
+            0,
+            0,
+            1,
             1,
             0,
             0,
             0,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             1,
             0

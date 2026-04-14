@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:53.641495+00:00",
+  "generated_at": "2026-04-14T06:30:25.892782+00:00",
   "person": {
     "o_id": 48493,
     "title": "Jean-Marc Kossou",
@@ -35,6 +35,13 @@
         "year_max": 2005,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -96,6 +103,11 @@
             5
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -107,6 +119,7 @@
           "total": 28,
           "articles": 28,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2005
@@ -116,6 +129,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2008
@@ -127,6 +141,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2008
@@ -138,11 +153,13 @@
           "total": 28,
           "articles": 28,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2005
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -164,7 +181,8 @@
           "name": "Côte d'Ivoire",
           "count": 28
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -249,18 +267,18 @@
             "score": 12.1973
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 9,
-            "score": 11.7712
-          },
-          {
             "o_id": 73490,
             "title": "Ahmed Ouattara",
             "type": "Personnes",
             "cooc": 2,
             "score": 11.7393
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 9,
+            "score": 11.7243
           },
           {
             "o_id": 113,
@@ -295,7 +313,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 9,
-            "score": 10.0737
+            "score": 10.064
           },
           {
             "o_id": 588,
@@ -512,7 +530,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 125,
@@ -592,15 +610,15 @@
           },
           {
             "source": 48493,
-            "target": 76268,
-            "weight": 11.7712,
-            "cooc": 9
-          },
-          {
-            "source": 48493,
             "target": 73490,
             "weight": 11.7393,
             "cooc": 2
+          },
+          {
+            "source": 48493,
+            "target": 76268,
+            "weight": 11.7243,
+            "cooc": 9
           },
           {
             "source": 48493,
@@ -629,7 +647,7 @@
           {
             "source": 48493,
             "target": 29,
-            "weight": 10.0737,
+            "weight": 10.064,
             "cooc": 9
           },
           {
@@ -815,7 +833,7 @@
           {
             "source": 48493,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -924,18 +942,18 @@
             "score": 12.1973
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 9,
-            "score": 11.7712
-          },
-          {
             "o_id": 73490,
             "title": "Ahmed Ouattara",
             "type": "Personnes",
             "cooc": 2,
             "score": 11.7393
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 9,
+            "score": 11.7243
           },
           {
             "o_id": 113,
@@ -970,7 +988,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 9,
-            "score": 10.0737
+            "score": 10.064
           },
           {
             "o_id": 62194,
@@ -1180,7 +1198,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 125,
@@ -1267,15 +1285,15 @@
           },
           {
             "source": 48493,
-            "target": 76268,
-            "weight": 11.7712,
-            "cooc": 9
-          },
-          {
-            "source": 48493,
             "target": 73490,
             "weight": 11.7393,
             "cooc": 2
+          },
+          {
+            "source": 48493,
+            "target": 76268,
+            "weight": 11.7243,
+            "cooc": 9
           },
           {
             "source": 48493,
@@ -1304,7 +1322,7 @@
           {
             "source": 48493,
             "target": 29,
-            "weight": 10.0737,
+            "weight": 10.064,
             "cooc": 9
           },
           {
@@ -1484,7 +1502,7 @@
           {
             "source": 48493,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1506,6 +1524,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 48493,
+            "title": "Jean-Marc Kossou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2237,7 +2267,8 @@
           "lng": -3.9182779270167036,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2323,7 +2354,8 @@
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2831,6 +2863,100 @@
           }
         },
         "articles_total": 28
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3079,6 +3205,24 @@
             2
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3681,6 +3825,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

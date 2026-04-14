@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.389411+00:00",
+  "generated_at": "2026-04-14T06:30:27.501406+00:00",
   "entity": {
     "o_id": 709,
     "title": "Observatoire National des Faits Religieux",
@@ -54,6 +54,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2020
@@ -63,6 +64,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2024
@@ -72,24 +74,17 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2020
-        },
-        {
-          "name": "L'Observateur Paalga",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2016,
-          "year_max": 2016
         },
         {
           "name": "L'Autre Regard",
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -99,6 +94,17 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "L'Observateur Paalga",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2016
@@ -607,10 +613,10 @@
           "count": 2
         },
         {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
           "count": 2
         },
         {
@@ -621,18 +627,11 @@
           "count": 2
         },
         {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
           "count": 2
-        },
-        {
-          "o_id": 294,
-          "name": "Centre culturel islamique AEEMB",
-          "lat": 12.37545088285411,
-          "lng": -1.4871601188636745,
-          "count": 1
         },
         {
           "o_id": 407,
@@ -688,6 +687,13 @@
           "name": "Ouahigouya",
           "lat": 13.58278,
           "lng": -2.42158,
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
           "count": 1
         },
         {
@@ -1008,13 +1014,8 @@
             4
           ],
           [
-            1,
-            7,
-            2
-          ],
-          [
-            1,
             0,
+            4,
             1
           ],
           [
@@ -1023,12 +1024,7 @@
             1
           ],
           [
-            2,
-            10,
-            1
-          ],
-          [
-            3,
+            4,
             10,
             1
           ],
@@ -1036,11 +1032,6 @@
             0,
             1,
             2
-          ],
-          [
-            0,
-            5,
-            1
           ],
           [
             1,
@@ -1048,8 +1039,18 @@
             1
           ],
           [
+            1,
+            7,
+            2
+          ],
+          [
+            3,
+            10,
+            1
+          ],
+          [
             0,
-            4,
+            5,
             1
           ],
           [
@@ -1058,17 +1059,12 @@
             2
           ],
           [
-            0,
-            3,
-            1
-          ],
-          [
             9,
             6,
             1
           ],
           [
-            1,
+            0,
             3,
             1
           ],
@@ -1078,7 +1074,17 @@
             1
           ],
           [
-            4,
+            1,
+            3,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            2,
             10,
             1
           ]
@@ -1094,16 +1100,16 @@
           "Ouagadougou",
           "Fédération des Associations Islamiques du Burkina",
           "Burkina Faso",
-          "Terrorisme",
           "Laïcité",
+          "Terrorisme",
           "Conseil Supérieur de la Communication",
           "Radicalisation",
           "Fédération des Églises et Missions Évangéliques",
           "Catholiques",
           "Protestants",
-          "Cohésion sociale",
           "Extrémisme",
           "Ismaël Tiendrébéogo",
+          "Cohésion sociale",
           "Simon Compaoré"
         ],
         "matrix": [
@@ -1112,8 +1118,8 @@
             6,
             5,
             4,
-            3,
             4,
+            3,
             3,
             2,
             4,
@@ -1129,16 +1135,16 @@
             0,
             6,
             5,
+            4,
             5,
-            4,
             2,
             4,
             3,
             3,
             3,
             3,
-            3,
             2,
+            3,
             1
           ],
           [
@@ -1146,16 +1152,16 @@
             6,
             0,
             5,
-            2,
             4,
+            2,
             2,
             2,
             4,
             1,
             1,
+            2,
+            2,
             3,
-            2,
-            2,
             2
           ],
           [
@@ -1163,33 +1169,16 @@
             5,
             5,
             0,
-            2,
             4,
+            2,
             3,
             1,
             4,
             2,
             2,
+            3,
+            1,
             4,
-            3,
-            1,
-            1
-          ],
-          [
-            3,
-            5,
-            2,
-            2,
-            0,
-            4,
-            2,
-            5,
-            0,
-            1,
-            1,
-            1,
-            3,
-            2,
             1
           ],
           [
@@ -1197,49 +1186,66 @@
             4,
             4,
             4,
-            4,
             0,
+            4,
             3,
             3,
             1,
             2,
             2,
-            3,
             4,
             2,
+            3,
             0
           ],
           [
             3,
-            2,
-            2,
-            3,
-            2,
-            3,
-            0,
-            2,
-            1,
-            0,
-            0,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            4,
-            2,
-            1,
             5,
+            2,
+            2,
+            4,
+            0,
+            2,
+            5,
+            0,
+            1,
+            1,
+            3,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            2,
+            3,
             3,
             2,
             0,
-            0,
-            0,
-            0,
-            1,
             2,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2,
+            0
+          ],
+          [
+            2,
+            4,
+            2,
+            1,
+            3,
+            5,
+            2,
+            0,
+            0,
+            0,
+            0,
+            2,
+            1,
             1,
             1
           ],
@@ -1248,16 +1254,16 @@
             3,
             4,
             4,
+            1,
+            0,
+            1,
+            0,
             0,
             1,
             1,
             0,
             0,
-            1,
-            1,
             2,
-            0,
-            0,
             0
           ],
           [
@@ -1265,16 +1271,16 @@
             3,
             1,
             2,
-            1,
             2,
+            1,
             0,
             0,
             1,
             0,
             4,
             1,
-            1,
             0,
+            1,
             0
           ],
           [
@@ -1282,16 +1288,50 @@
             3,
             1,
             2,
-            1,
             2,
+            1,
             0,
             0,
             1,
             4,
             0,
             1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            3,
+            2,
+            3,
+            4,
+            3,
+            2,
+            2,
+            0,
+            1,
             1,
             0,
+            2,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            1,
             0
           ],
           [
@@ -1299,49 +1339,15 @@
             3,
             3,
             4,
-            1,
             3,
-            2,
             1,
             2,
             1,
-            1,
-            0,
             2,
-            1,
-            0
-          ],
-          [
-            1,
-            3,
-            2,
-            3,
-            3,
-            4,
-            2,
-            2,
-            0,
             1,
             1,
             2,
-            0,
-            2,
-            0
-          ],
-          [
             1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            2,
-            1,
-            0,
-            0,
-            0,
-            1,
-            2,
             0,
             0
           ],
@@ -1350,8 +1356,8 @@
             1,
             2,
             1,
-            1,
             0,
+            1,
             0,
             1,
             0,

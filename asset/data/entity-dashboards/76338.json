@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.917294+00:00",
+  "generated_at": "2026-04-14T06:30:23.466052+00:00",
   "entity": {
     "o_id": 76338,
     "title": "Stade du 4-août",
@@ -54,6 +54,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2005
@@ -63,6 +64,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2011
@@ -72,6 +74,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1985,
           "year_max": 2001
@@ -770,41 +773,6 @@
           "count": 3
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 2
-        },
-        {
-          "o_id": 76315,
-          "name": "Yatenga",
-          "lat": 13.583333,
-          "lng": -2.416667,
-          "count": 2
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 2
-        },
-        {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 2
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 2
-        },
-        {
           "o_id": 303,
           "name": "Dédougou",
           "lat": 12.46338,
@@ -823,6 +791,41 @@
           "name": "Ouahigouya",
           "lat": 13.58278,
           "lng": -2.42158,
+          "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 2
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
+        {
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 2
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 2
+        },
+        {
+          "o_id": 76315,
+          "name": "Yatenga",
+          "lat": 13.583333,
+          "lng": -2.416667,
           "count": 2
         },
         {
@@ -847,6 +850,20 @@
           "count": 1
         },
         {
+          "o_id": 386,
+          "name": "Pouytenga",
+          "lat": 12.25162,
+          "lng": -0.42565,
+          "count": 1
+        },
+        {
+          "o_id": 350,
+          "name": "Koupéla",
+          "lat": 12.17864,
+          "lng": -0.35103,
+          "count": 1
+        },
+        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
@@ -865,20 +882,6 @@
           "name": "Djibouti",
           "lat": 11.8,
           "lng": 42.433333,
-          "count": 1
-        },
-        {
-          "o_id": 391,
-          "name": "Sapouy",
-          "lat": 11.55444,
-          "lng": -1.77361,
-          "count": 1
-        },
-        {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
           "count": 1
         },
         {
@@ -945,17 +948,17 @@
           "count": 1
         },
         {
-          "o_id": 386,
-          "name": "Pouytenga",
-          "lat": 12.25162,
-          "lng": -0.42565,
+          "o_id": 391,
+          "name": "Sapouy",
+          "lat": 11.55444,
+          "lng": -1.77361,
           "count": 1
         },
         {
-          "o_id": 350,
-          "name": "Koupéla",
-          "lat": 12.17864,
-          "lng": -0.35103,
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
           "count": 1
         }
       ]
@@ -969,15 +972,15 @@
           "count": 4
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
-          "count": 2
-        },
-        {
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 2
         },
         {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 2
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 2
         },
         {
@@ -1267,6 +1270,11 @@
         ],
         "cells": [
           [
+            18,
+            10,
+            2
+          ],
+          [
             16,
             3,
             3
@@ -1277,19 +1285,9 @@
             2
           ],
           [
-            20,
-            11,
-            1
-          ],
-          [
-            18,
             10,
-            2
-          ],
-          [
-            16,
-            2,
-            2
+            6,
+            1
           ],
           [
             0,
@@ -1302,8 +1300,13 @@
             1
           ],
           [
-            10,
-            6,
+            16,
+            2,
+            2
+          ],
+          [
+            20,
+            11,
             1
           ],
           [
@@ -1332,8 +1335,8 @@
           "Aboubacar Maïga II",
           "Aboubacar Sana",
           "Solidarité",
-          "Ramatoulaye",
-          "Saye Zerbo"
+          "Formation",
+          "Ramatoulaye"
         ],
         "matrix": [
           [
@@ -1367,7 +1370,7 @@
             4,
             4,
             2,
-            3,
+            2,
             3
           ],
           [
@@ -1384,8 +1387,8 @@
             3,
             3,
             0,
-            3,
-            2
+            2,
+            3
           ],
           [
             6,
@@ -1401,7 +1404,7 @@
             4,
             4,
             1,
-            3,
+            0,
             3
           ],
           [
@@ -1418,7 +1421,7 @@
             4,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1435,8 +1438,8 @@
             3,
             3,
             2,
-            2,
-            3
+            1,
+            2
           ],
           [
             5,
@@ -1452,7 +1455,7 @@
             4,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1469,7 +1472,7 @@
             4,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1486,7 +1489,7 @@
             4,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1503,7 +1506,7 @@
             4,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1520,7 +1523,7 @@
             0,
             4,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1537,7 +1540,7 @@
             4,
             0,
             0,
-            3,
+            0,
             3
           ],
           [
@@ -1554,6 +1557,23 @@
             0,
             0,
             0,
+            1,
+            0
+          ],
+          [
+            3,
+            2,
+            2,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             0
           ],
@@ -1572,23 +1592,6 @@
             3,
             0,
             0,
-            2
-          ],
-          [
-            3,
-            3,
-            2,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            0,
-            2,
             0
           ]
         ]

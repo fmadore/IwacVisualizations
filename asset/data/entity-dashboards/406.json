@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:37.463394+00:00",
+  "generated_at": "2026-04-14T06:30:09.949674+00:00",
   "entity": {
     "o_id": 406,
     "title": "Zogbodomey",
@@ -46,6 +46,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2014,
           "year_max": 2019
@@ -55,6 +56,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2021,
           "year_max": 2021
@@ -64,6 +66,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -259,13 +262,6 @@
           "count": 4
         },
         {
-          "o_id": 299,
-          "name": "Cotonou",
-          "lat": 6.36536,
-          "lng": 2.41833,
-          "count": 2
-        },
-        {
           "o_id": 286,
           "name": "Bohicon",
           "lat": 7.17826,
@@ -273,10 +269,59 @@
           "count": 2
         },
         {
+          "o_id": 299,
+          "name": "Cotonou",
+          "lat": 6.36536,
+          "lng": 2.41833,
+          "count": 2
+        },
+        {
+          "o_id": 392,
+          "name": "Savalou",
+          "lat": 7.92807,
+          "lng": 1.97558,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
           "o_id": 388,
           "name": "Sakété",
           "lat": 6.73618,
           "lng": 2.65866,
+          "count": 1
+        },
+        {
+          "o_id": 322,
+          "name": "Grand Popo",
+          "lat": 6.28333,
+          "lng": 1.83333,
+          "count": 1
+        },
+        {
+          "o_id": 355,
+          "name": "Lokossa",
+          "lat": 6.63869,
+          "lng": 1.71674,
+          "count": 1
+        },
+        {
+          "o_id": 278,
+          "name": "Athiémé",
+          "lat": 6.5808,
+          "lng": 1.6696,
+          "count": 1
+        },
+        {
+          "o_id": 63419,
+          "name": "Mono",
+          "lat": 6.6333333333333,
+          "lng": 1.7166666666667,
           "count": 1
         },
         {
@@ -341,48 +386,6 @@
           "lat": 9.33716,
           "lng": 2.63031,
           "count": 1
-        },
-        {
-          "o_id": 322,
-          "name": "Grand Popo",
-          "lat": 6.28333,
-          "lng": 1.83333,
-          "count": 1
-        },
-        {
-          "o_id": 355,
-          "name": "Lokossa",
-          "lat": 6.63869,
-          "lng": 1.71674,
-          "count": 1
-        },
-        {
-          "o_id": 278,
-          "name": "Athiémé",
-          "lat": 6.5808,
-          "lng": 1.6696,
-          "count": 1
-        },
-        {
-          "o_id": 63419,
-          "name": "Mono",
-          "lat": 6.6333333333333,
-          "lng": 1.7166666666667,
-          "count": 1
-        },
-        {
-          "o_id": 392,
-          "name": "Savalou",
-          "lat": 7.92807,
-          "lng": 1.97558,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
         }
       ]
     }
@@ -395,7 +398,11 @@
           "count": 2
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
@@ -403,11 +410,7 @@
           "count": 1
         },
         {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
-          "count": 1
-        },
-        {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -614,12 +617,7 @@
         ],
         "cells": [
           [
-            7,
-            3,
-            1
-          ],
-          [
-            5,
+            0,
             9,
             1
           ],
@@ -629,13 +627,18 @@
             2
           ],
           [
-            0,
-            9,
+            7,
+            3,
             1
           ],
           [
             0,
             0,
+            1
+          ],
+          [
+            5,
+            9,
             1
           ]
         ]
@@ -648,50 +651,67 @@
         "names": [
           "Charité",
           "Bénin",
-          "Cotonou",
+          "Prière",
+          "Mosquée",
           "Bohicon",
-          "Éducation",
           "Solidarité",
           "Ahmadiyya",
           "Jama'at Islamique Ahmadiyya Bénin",
           "Rana Farooq Ahmad",
-          "Prière",
-          "Mosquée",
-          "Ramadan",
-          "Sakété",
-          "Paix",
-          "Développement"
+          "Cotonou",
+          "Éducation",
+          "Savalou",
+          "Coran",
+          "La Mecque",
+          "Pauvreté"
         ],
         "matrix": [
           [
             0,
             3,
             1,
+            1,
             0,
-            1,
             2,
             2,
             2,
             2,
             1,
             1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0
           ],
           [
             3,
             0,
-            2,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
             0,
             0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             1,
             1,
             1,
@@ -699,16 +719,16 @@
           ],
           [
             1,
+            0,
             2,
             0,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
             1,
             1,
@@ -718,23 +738,6 @@
             0,
             1,
             1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
             1,
             0,
             0,
@@ -743,10 +746,10 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1
           ],
           [
             2,
@@ -818,33 +821,16 @@
           ],
           [
             1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
             2,
             0,
             0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
             1,
             0,
             0,
             0,
             0,
-            2,
             0,
+            1,
             0,
             0,
             0,
@@ -854,8 +840,25 @@
             1,
             1,
             1,
+            1,
+            1,
             0,
             0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -868,11 +871,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
             0,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -885,11 +888,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
             0,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -902,11 +905,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
             0,
             0,
+            1,
+            1,
+            1,
             0,
             0,
             0,

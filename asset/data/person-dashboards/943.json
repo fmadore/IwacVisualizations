@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:35.245246+00:00",
+  "generated_at": "2026-04-14T06:30:08.091792+00:00",
   "person": {
     "o_id": 943,
     "title": "Aboubacar Dermé",
@@ -35,6 +35,13 @@
         "year_max": 2021,
         "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -104,6 +111,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -115,6 +127,7 @@
           "total": 24,
           "articles": 24,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -124,6 +137,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
@@ -135,6 +149,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2020
@@ -146,6 +161,7 @@
           "total": 23,
           "articles": 23,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -155,11 +171,13 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -181,7 +199,8 @@
           "name": "Burkina Faso",
           "count": 26
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -242,7 +261,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 7,
-            "score": 17.6382
+            "score": 17.4864
           },
           {
             "o_id": 376,
@@ -396,14 +415,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 1158,
@@ -459,7 +478,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 81,
@@ -543,7 +562,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           }
         ],
         "edges": [
@@ -586,7 +605,7 @@
           {
             "source": 943,
             "target": 578,
-            "weight": 17.6382,
+            "weight": 17.4864,
             "cooc": 7
           },
           {
@@ -718,13 +737,13 @@
           {
             "source": 943,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
             "source": 943,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -772,7 +791,7 @@
           {
             "source": 943,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -844,7 +863,7 @@
           {
             "source": 943,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           }
         ]
@@ -877,7 +896,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 2,
-            "score": 5.0395
+            "score": 4.9961
           },
           {
             "o_id": 86,
@@ -891,7 +910,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 9,
@@ -931,7 +950,7 @@
           {
             "source": 943,
             "target": 578,
-            "weight": 5.0395,
+            "weight": 4.9961,
             "cooc": 2
           },
           {
@@ -943,7 +962,7 @@
           {
             "source": 943,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -1022,7 +1041,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 7,
-            "score": 17.6382
+            "score": 17.4864
           },
           {
             "o_id": 376,
@@ -1162,14 +1181,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 32,
@@ -1225,7 +1244,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 81,
@@ -1316,7 +1335,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 124,
@@ -1366,7 +1385,7 @@
           {
             "source": 943,
             "target": 578,
-            "weight": 17.6382,
+            "weight": 17.4864,
             "cooc": 7
           },
           {
@@ -1486,13 +1505,13 @@
           {
             "source": 943,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
             "source": 943,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -1540,7 +1559,7 @@
           {
             "source": 943,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -1618,7 +1637,7 @@
           {
             "source": 943,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -1628,6 +1647,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 943,
+            "title": "Aboubacar Dermé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2114,7 +2145,8 @@
           "lng": 47.75,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2236,7 +2268,8 @@
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2776,6 +2809,100 @@
           }
         },
         "articles_total": 26
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3083,6 +3210,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3915,6 +4060,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

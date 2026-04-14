@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:40.447880+00:00",
+  "generated_at": "2026-04-14T06:30:12.687697+00:00",
   "person": {
     "o_id": 1479,
     "title": "Valentin Sovide",
@@ -35,6 +35,13 @@
         "year_max": 2024,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -158,6 +165,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -169,6 +181,7 @@
           "total": 51,
           "articles": 51,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1994,
           "year_max": 2024
@@ -181,11 +194,13 @@
           "total": 51,
           "articles": 51,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1994,
           "year_max": 2024
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -202,7 +217,8 @@
           "name": "Bénin",
           "count": 51
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -228,7 +244,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 10,
-            "score": 27.7861
+            "score": 27.6171
           },
           {
             "o_id": 105,
@@ -340,7 +356,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 12,
-            "score": 16.3055
+            "score": 16.289
           },
           {
             "o_id": 1615,
@@ -494,7 +510,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 55,
@@ -577,7 +593,7 @@
           {
             "source": 1479,
             "target": 76335,
-            "weight": 27.7861,
+            "weight": 27.6171,
             "cooc": 10
           },
           {
@@ -673,7 +689,7 @@
           {
             "source": 1479,
             "target": 44,
-            "weight": 16.3055,
+            "weight": 16.289,
             "cooc": 12
           },
           {
@@ -805,7 +821,7 @@
           {
             "source": 1479,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -903,7 +919,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 10,
-            "score": 27.7861
+            "score": 27.6171
           },
           {
             "o_id": 105,
@@ -1015,7 +1031,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 12,
-            "score": 16.3055
+            "score": 16.289
           },
           {
             "o_id": 1615,
@@ -1169,7 +1185,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 55,
@@ -1252,7 +1268,7 @@
           {
             "source": 1479,
             "target": 76335,
-            "weight": 27.7861,
+            "weight": 27.6171,
             "cooc": 10
           },
           {
@@ -1348,7 +1364,7 @@
           {
             "source": 1479,
             "target": 44,
-            "weight": 16.3055,
+            "weight": 16.289,
             "cooc": 12
           },
           {
@@ -1480,7 +1496,7 @@
           {
             "source": 1479,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -1544,6 +1560,18 @@
             "cooc": 3
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1479,
+            "title": "Valentin Sovide",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2337,7 +2365,8 @@
           "lng": 2.08506,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2442,7 +2471,8 @@
           "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3004,6 +3034,100 @@
           }
         },
         "articles_total": 51
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3548,6 +3672,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4108,6 +4250,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

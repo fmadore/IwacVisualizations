@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.538963+00:00",
+  "generated_at": "2026-04-14T06:30:23.132650+00:00",
   "person": {
     "o_id": 76284,
     "title": "Essy Amara",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -126,6 +133,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -137,6 +149,7 @@
           "total": 32,
           "articles": 32,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1987,
           "year_max": 1999
@@ -146,6 +159,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2009
@@ -155,6 +169,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1994
@@ -164,6 +179,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 1998
@@ -173,6 +189,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2006
@@ -182,6 +199,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2006
@@ -193,6 +211,7 @@
           "total": 32,
           "articles": 32,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1987,
           "year_max": 1999
@@ -202,6 +221,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2009
@@ -211,6 +231,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1994
@@ -220,6 +241,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 1998
@@ -229,6 +251,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2006
@@ -238,12 +261,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2006
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -260,7 +285,8 @@
           "count": 43
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -433,7 +459,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 15,
-            "score": 19.6186
+            "score": 19.5405
           },
           {
             "o_id": 46178,
@@ -468,7 +494,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 13,
-            "score": 17.6643
+            "score": 17.6464
           },
           {
             "o_id": 76290,
@@ -552,7 +578,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 23648,
@@ -761,7 +787,7 @@
           {
             "source": 76284,
             "target": 76268,
-            "weight": 19.6186,
+            "weight": 19.5405,
             "cooc": 15
           },
           {
@@ -791,7 +817,7 @@
           {
             "source": 76284,
             "target": 44,
-            "weight": 17.6643,
+            "weight": 17.6464,
             "cooc": 13
           },
           {
@@ -863,7 +889,7 @@
           {
             "source": 76284,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1096,7 +1122,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 15,
-            "score": 19.6186
+            "score": 19.5405
           },
           {
             "o_id": 46178,
@@ -1131,7 +1157,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 13,
-            "score": 17.6643
+            "score": 17.6464
           },
           {
             "o_id": 76290,
@@ -1215,7 +1241,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 23648,
@@ -1424,7 +1450,7 @@
           {
             "source": 76284,
             "target": 76268,
-            "weight": 19.6186,
+            "weight": 19.5405,
             "cooc": 15
           },
           {
@@ -1454,7 +1480,7 @@
           {
             "source": 76284,
             "target": 44,
-            "weight": 17.6643,
+            "weight": 17.6464,
             "cooc": 13
           },
           {
@@ -1526,7 +1552,7 @@
           {
             "source": 76284,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1592,6 +1618,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 76284,
+            "title": "Essy Amara",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 76284,
@@ -3039,7 +3077,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -3128,7 +3167,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3658,6 +3698,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -4020,6 +4154,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -4594,6 +4746,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

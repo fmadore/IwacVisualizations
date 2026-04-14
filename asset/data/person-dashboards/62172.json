@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.780185+00:00",
+  "generated_at": "2026-04-14T06:30:27.941449+00:00",
   "person": {
     "o_id": 62172,
     "title": "Lamine Fadiga",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -110,6 +117,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1970,
           "year_max": 1995
@@ -130,6 +143,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1985,
           "year_max": 1987
@@ -139,6 +153,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
@@ -148,6 +163,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2015,
           "year_max": 2015
@@ -157,6 +173,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2000
@@ -166,6 +183,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -177,6 +195,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1970,
           "year_max": 1995
@@ -186,6 +205,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1985,
           "year_max": 1987
@@ -195,6 +215,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
@@ -204,6 +225,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2015,
           "year_max": 2015
@@ -213,6 +235,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2000
@@ -222,12 +245,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -244,7 +269,8 @@
           "count": 15
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -406,18 +432,18 @@
             "score": 6.6318
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
-          },
-          {
             "o_id": 62180,
             "title": "Mamadou Coulibaly",
             "type": "Personnes",
             "cooc": 2,
             "score": 6.5155
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 76273,
@@ -445,14 +471,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 5,
-            "score": 5.5965
+            "score": 5.5911
           },
           {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.4352
+            "score": 5.4297
           },
           {
             "o_id": 75967,
@@ -487,7 +513,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 588,
@@ -710,15 +736,15 @@
           },
           {
             "source": 62172,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
-          },
-          {
-            "source": 62172,
             "target": 62180,
             "weight": 6.5155,
             "cooc": 2
+          },
+          {
+            "source": 62172,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 62172,
@@ -741,13 +767,13 @@
           {
             "source": 62172,
             "target": 29,
-            "weight": 5.5965,
+            "weight": 5.5911,
             "cooc": 5
           },
           {
             "source": 62172,
             "target": 44,
-            "weight": 5.4352,
+            "weight": 5.4297,
             "cooc": 4
           },
           {
@@ -777,7 +803,7 @@
           {
             "source": 62172,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1017,18 +1043,18 @@
             "score": 6.6318
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
-          },
-          {
             "o_id": 62180,
             "title": "Mamadou Coulibaly",
             "type": "Personnes",
             "cooc": 2,
             "score": 6.5155
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 76273,
@@ -1056,14 +1082,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 5,
-            "score": 5.5965
+            "score": 5.5911
           },
           {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.4352
+            "score": 5.4297
           },
           {
             "o_id": 75967,
@@ -1098,7 +1124,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 588,
@@ -1321,15 +1347,15 @@
           },
           {
             "source": 62172,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
-          },
-          {
-            "source": 62172,
             "target": 62180,
             "weight": 6.5155,
             "cooc": 2
+          },
+          {
+            "source": 62172,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 62172,
@@ -1352,13 +1378,13 @@
           {
             "source": 62172,
             "target": 29,
-            "weight": 5.5965,
+            "weight": 5.5911,
             "cooc": 5
           },
           {
             "source": 62172,
             "target": 44,
-            "weight": 5.4352,
+            "weight": 5.4297,
             "cooc": 4
           },
           {
@@ -1388,7 +1414,7 @@
           {
             "source": 62172,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1472,6 +1498,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 62172,
+            "title": "Lamine Fadiga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 62172,
@@ -2121,7 +2159,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2194,7 +2233,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2676,6 +2716,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2944,6 +3078,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -3518,6 +3670,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:12.582607+00:00",
+  "generated_at": "2026-04-14T06:30:44.288541+00:00",
   "entity": {
     "o_id": 103,
     "title": "Oumra",
@@ -102,6 +102,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2013
@@ -111,6 +112,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2017
@@ -120,6 +122,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2020
@@ -129,26 +132,39 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2013
-        },
-        {
-          "name": "Notre Voie",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2009,
-          "year_max": 2010
         },
         {
           "name": "L'Observateur Paalga",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
+          "year_max": 2008
+        },
+        {
+          "name": "Notre Voie",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2009,
+          "year_max": 2010
+        },
+        {
+          "name": "Nord-Sud",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2008,
           "year_max": 2008
         },
         {
@@ -156,6 +172,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2016,
           "year_max": 2016
@@ -165,18 +182,10 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": null,
           "year_max": null
-        },
-        {
-          "name": "Nord-Sud",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2008,
-          "year_max": 2008
         }
       ]
     }
@@ -634,13 +643,6 @@
           "count": 16
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 8
-        },
-        {
           "o_id": 60469,
           "name": "Mont Arafat",
           "lat": 21.354831,
@@ -648,17 +650,24 @@
           "count": 8
         },
         {
-          "o_id": 76313,
-          "name": "Kaaba",
-          "lat": 21.4225,
-          "lng": 39.826167,
-          "count": 6
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 8
         },
         {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
           "lng": -5.5,
+          "count": 6
+        },
+        {
+          "o_id": 76313,
+          "name": "Kaaba",
+          "lat": 21.4225,
+          "lng": 39.826167,
           "count": 6
         },
         {
@@ -676,10 +685,10 @@
           "count": 5
         },
         {
-          "o_id": 14522,
-          "name": "Mina",
-          "lat": 21.413333,
-          "lng": 39.893333,
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
           "count": 2
         },
         {
@@ -690,11 +699,46 @@
           "count": 2
         },
         {
-          "o_id": 442,
-          "name": "Djeddah",
-          "lat": 21.49012,
-          "lng": 39.18624,
+          "o_id": 14522,
+          "name": "Mina",
+          "lat": 21.413333,
+          "lng": 39.893333,
           "count": 2
+        },
+        {
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
+          "count": 1
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
+          "count": 1
+        },
+        {
+          "o_id": 13522,
+          "name": "Jérusalem",
+          "lat": 31.778889,
+          "lng": 35.225556,
+          "count": 1
         },
         {
           "o_id": 76032,
@@ -781,34 +825,6 @@
           "count": 1
         },
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
-        },
-        {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
-          "count": 1
-        },
-        {
-          "o_id": 531,
-          "name": "Riyad",
-          "lat": 24.65,
-          "lng": 46.71,
-          "count": 1
-        },
-        {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
-          "count": 1
-        },
-        {
           "o_id": 23648,
           "name": "Mosquée de la Riviéra Golf",
           "lat": 5.33757653748572,
@@ -823,20 +839,6 @@
           "count": 1
         },
         {
-          "o_id": 13522,
-          "name": "Jérusalem",
-          "lat": 31.778889,
-          "lng": 35.225556,
-          "count": 1
-        },
-        {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 1
-        },
-        {
           "o_id": 359,
           "name": "Maroc",
           "lat": 28.5,
@@ -848,6 +850,13 @@
           "name": "Algérie",
           "lat": 28.0,
           "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
           "count": 1
         }
       ]
@@ -869,15 +878,15 @@
           "count": 2
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
-          "count": 1
-        },
-        {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
           "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
+          "count": 1
+        },
+        {
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 1
         }
       ]
@@ -1111,83 +1120,18 @@
         ],
         "cells": [
           [
-            22,
-            4,
-            1
-          ],
-          [
-            14,
-            11,
-            1
-          ],
-          [
-            16,
-            5,
-            1
-          ],
-          [
-            3,
-            2,
-            1
-          ],
-          [
-            0,
-            4,
-            1
-          ],
-          [
-            23,
-            7,
-            1
-          ],
-          [
-            19,
-            8,
-            1
-          ],
-          [
             17,
             7,
             1
           ],
           [
-            11,
-            8,
-            1
-          ],
-          [
-            15,
-            2,
-            1
-          ],
-          [
-            16,
-            4,
-            1
-          ],
-          [
-            14,
-            8,
-            1
-          ],
-          [
-            7,
-            1,
-            1
-          ],
-          [
-            1,
             3,
+            2,
             1
           ],
           [
             12,
             10,
-            1
-          ],
-          [
-            19,
-            5,
             1
           ],
           [
@@ -1198,6 +1142,71 @@
           [
             1,
             2,
+            1
+          ],
+          [
+            19,
+            8,
+            1
+          ],
+          [
+            16,
+            5,
+            1
+          ],
+          [
+            14,
+            11,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            11,
+            8,
+            1
+          ],
+          [
+            14,
+            8,
+            1
+          ],
+          [
+            22,
+            4,
+            1
+          ],
+          [
+            7,
+            1,
+            1
+          ],
+          [
+            16,
+            4,
+            1
+          ],
+          [
+            15,
+            2,
+            1
+          ],
+          [
+            19,
+            5,
+            1
+          ],
+          [
+            23,
+            7,
             1
           ]
         ]
@@ -1210,19 +1219,19 @@
         "names": [
           "Hadj",
           "La Mecque",
-          "Arabie saoudite",
           "Mont Arafat",
-          "Kaaba",
-          "Prière",
+          "Arabie saoudite",
           "Côte d'Ivoire",
-          "Médine",
+          "Prière",
+          "Kaaba",
           "Coran",
+          "Médine",
           "Burkina Faso",
           "Économie",
           "Abraham",
           "Mahomet",
           "Santé",
-          "Ramadan"
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques"
         ],
         "matrix": [
           [
@@ -1230,135 +1239,118 @@
             16,
             8,
             8,
+            5,
+            5,
             6,
-            5,
-            5,
-            5,
             4,
+            5,
             5,
             3,
             4,
             4,
             4,
-            3
+            2
           ],
           [
             16,
             0,
-            6,
             8,
             6,
             5,
             5,
+            6,
+            4,
             5,
-            4,
             3,
             3,
             4,
             4,
             3,
-            3
+            2
           ],
           [
             8,
-            6,
+            8,
             0,
             1,
-            1,
-            1,
-            2,
-            4,
             1,
             3,
+            5,
             1,
-            0,
-            0,
+            2,
+            1,
+            2,
+            3,
+            2,
             2,
             0
           ],
           [
             8,
-            8,
+            6,
             1,
             0,
-            5,
+            2,
+            1,
+            1,
+            1,
+            4,
             3,
             1,
-            2,
-            1,
-            1,
-            2,
-            3,
-            2,
+            0,
+            0,
             2,
             2
           ],
           [
-            6,
-            6,
-            1,
-            5,
-            0,
-            3,
-            1,
-            2,
-            1,
-            1,
-            2,
-            2,
-            1,
-            2,
-            1
-          ],
-          [
             5,
             5,
             1,
-            3,
-            3,
+            2,
             0,
             2,
-            2,
-            4,
-            1,
             1,
             2,
+            1,
+            0,
             2,
+            0,
+            1,
             0,
             3
           ],
           [
             5,
             5,
-            2,
-            1,
-            1,
-            2,
-            0,
+            3,
             1,
             2,
             0,
+            3,
+            4,
             2,
-            0,
             1,
+            1,
+            2,
+            2,
             0,
             1
           ],
           [
+            6,
+            6,
             5,
-            5,
-            4,
-            2,
-            2,
-            2,
             1,
+            1,
+            3,
             0,
             1,
-            0,
+            2,
             1,
+            2,
+            2,
             1,
-            1,
-            0,
+            2,
             0
           ],
           [
@@ -1366,94 +1358,111 @@
             4,
             1,
             1,
-            1,
+            2,
             4,
-            2,
             1,
             0,
             1,
             1,
             1,
+            1,
             2,
             0,
+            1
+          ],
+          [
+            5,
+            5,
+            2,
+            4,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            3,
+            1,
+            3,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            3,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            2,
             2
           ],
           [
-            5,
+            4,
+            4,
             3,
-            3,
-            1,
-            1,
-            1,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            3,
-            1
-          ],
-          [
-            3,
-            3,
-            1,
             2,
             2,
             1,
-            2,
-            1,
             1,
             1,
             0,
             0,
+            3,
             0,
-            2,
             0
           ],
           [
             4,
             4,
-            0,
-            3,
-            2,
             2,
             0,
             1,
-            1,
-            1,
-            0,
-            0,
-            3,
-            0,
-            1
-          ],
-          [
-            4,
-            4,
-            0,
             2,
             1,
             2,
             1,
-            1,
-            2,
             1,
             0,
             3,
             0,
             0,
-            1
+            0
           ],
           [
             4,
             3,
             2,
             2,
+            0,
+            0,
             2,
-            0,
-            0,
             0,
             0,
             3,
@@ -1464,19 +1473,19 @@
             0
           ],
           [
-            3,
-            3,
+            2,
+            2,
             0,
             2,
-            1,
             3,
             1,
             0,
-            2,
+            1,
             1,
             0,
-            1,
-            1,
+            2,
+            0,
+            0,
             0,
             0
           ]

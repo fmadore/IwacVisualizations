@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.027777+00:00",
+  "generated_at": "2026-04-14T06:30:22.685094+00:00",
   "entity": {
     "o_id": 63423,
     "title": "Poura",
@@ -46,28 +46,31 @@
     "by_role": {
       "all": [
         {
-          "name": "Sidwaya",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1985,
-          "year_max": 1995
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1992,
           "year_max": 2007
+        },
+        {
+          "name": "Sidwaya",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 1985,
+          "year_max": 1995
         },
         {
           "name": "Le Pays",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -322,17 +325,10 @@
           "count": 3
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 2
-        },
-        {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
           "count": 2
         },
         {
@@ -350,11 +346,46 @@
           "count": 2
         },
         {
-          "o_id": 303,
-          "name": "Dédougou",
-          "lat": 12.46338,
-          "lng": -3.46075,
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 2
+        },
+        {
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 2
+        },
+        {
+          "o_id": 318,
+          "name": "Gaoua",
+          "lat": 10.38247,
+          "lng": -3.16475,
+          "count": 1
+        },
+        {
+          "o_id": 76320,
+          "name": "Boucle du Mouhoun",
+          "lat": 12.5,
+          "lng": -3.5,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 63427,
+          "name": "Sanguié",
+          "lat": 12.316666666667,
+          "lng": -2.4666666666667,
+          "count": 1
         },
         {
           "o_id": 63431,
@@ -399,27 +430,6 @@
           "count": 1
         },
         {
-          "o_id": 76320,
-          "name": "Boucle du Mouhoun",
-          "lat": 12.5,
-          "lng": -3.5,
-          "count": 1
-        },
-        {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 1
-        },
-        {
-          "o_id": 318,
-          "name": "Gaoua",
-          "lat": 10.38247,
-          "lng": -3.16475,
-          "count": 1
-        },
-        {
           "o_id": 489,
           "name": "La Mecque",
           "lat": 21.4225,
@@ -446,13 +456,6 @@
           "lat": 8.1,
           "lng": -1.2,
           "count": 1
-        },
-        {
-          "o_id": 63427,
-          "name": "Sanguié",
-          "lat": 12.316666666667,
-          "lng": -2.4666666666667,
-          "count": 1
         }
       ]
     }
@@ -465,15 +468,15 @@
           "count": 2
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
-          "count": 1
-        },
-        {
           "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         },
         {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 1
+        },
+        {
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
       ]
@@ -705,8 +708,8 @@
         ],
         "cells": [
           [
-            0,
-            7,
+            32,
+            5,
             1
           ],
           [
@@ -715,18 +718,18 @@
             1
           ],
           [
-            32,
-            5,
+            10,
+            7,
+            1
+          ],
+          [
+            0,
+            7,
             1
           ],
           [
             7,
             2,
-            1
-          ],
-          [
-            10,
-            7,
             1
           ]
         ]
@@ -740,17 +743,17 @@
           "Bobo-Dioulasso",
           "Burkina Faso",
           "Mosquée",
-          "Hamdalaye",
-          "Côte d'Ivoire",
-          "Ouagadougou",
-          "Djihad",
-          "Hadj",
-          "Boromo",
-          "Ramadan",
-          "Bagdad",
           "Djihadisme",
           "Dédougou",
+          "Boromo",
+          "Djihad",
+          "Hadj",
+          "Ramadan",
+          "Bagdad",
+          "Côte d'Ivoire",
           "Enseignement confessionnel islamique",
+          "Hamdalaye",
+          "Ouagadougou",
           "Prière"
         ],
         "matrix": [
@@ -780,12 +783,12 @@
             1,
             2,
             2,
-            1,
             2,
             2,
             1,
-            1,
             2,
+            1,
+            1,
             2
           ],
           [
@@ -797,12 +800,12 @@
             1,
             2,
             2,
-            1,
             2,
             2,
             1,
-            1,
             2,
+            1,
+            1,
             2
           ],
           [
@@ -865,12 +868,12 @@
             1,
             0,
             2,
-            1,
             2,
             2,
             1,
-            1,
             2,
+            1,
+            1,
             1
           ],
           [
@@ -882,12 +885,46 @@
             1,
             2,
             0,
-            1,
             2,
             2,
             1,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
             1,
             2,
+            2,
+            0,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            1,
+            1,
             1
           ],
           [
@@ -899,12 +936,12 @@
             1,
             1,
             1,
+            1,
+            1,
             0,
             1,
-            1,
             2,
             2,
-            1,
             0
           ],
           [
@@ -916,29 +953,12 @@
             1,
             2,
             2,
-            1,
-            0,
-            2,
-            1,
-            1,
-            2,
-            1
-          ],
-          [
-            2,
             2,
             2,
             1,
-            1,
-            1,
-            2,
-            2,
-            1,
-            2,
             0,
             1,
             1,
-            2,
             1
           ],
           [
@@ -950,12 +970,12 @@
             1,
             1,
             1,
-            2,
             1,
+            1,
+            2,
             1,
             0,
             2,
-            1,
             0
           ],
           [
@@ -967,32 +987,15 @@
             1,
             1,
             1,
-            2,
             1,
+            1,
+            2,
             1,
             2,
             0,
-            1,
             0
           ],
           [
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
-            1,
-            0,
-            1
-          ],
-          [
             1,
             2,
             2,
@@ -1001,12 +1004,12 @@
             0,
             1,
             1,
-            0,
             1,
             1,
             0,
-            0,
             1,
+            0,
+            0,
             0
           ]
         ]

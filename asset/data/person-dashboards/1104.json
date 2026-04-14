@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:34.217841+00:00",
+  "generated_at": "2026-04-14T06:30:07.097798+00:00",
   "person": {
     "o_id": 1104,
     "title": "Mahmood Nasir Saqib",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -110,6 +117,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 23,
           "articles": 23,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -130,6 +143,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2017
@@ -139,6 +153,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2003,
           "year_max": 2017
@@ -148,6 +163,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -157,6 +173,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
@@ -166,6 +183,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2016
@@ -177,6 +195,7 @@
           "total": 23,
           "articles": 23,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -186,6 +205,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2017
@@ -195,6 +215,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2003,
           "year_max": 2017
@@ -204,6 +225,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -213,6 +235,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
@@ -222,12 +245,14 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2016
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -244,7 +269,8 @@
           "count": 39
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -263,7 +289,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 31,
-            "score": 86.1368
+            "score": 85.6129
           },
           {
             "o_id": 609,
@@ -319,7 +345,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 11,
-            "score": 14.9467
+            "score": 14.9316
           },
           {
             "o_id": 14929,
@@ -445,7 +471,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 76041,
@@ -473,14 +499,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
           {
             "source": 1104,
             "target": 76335,
-            "weight": 86.1368,
+            "weight": 85.6129,
             "cooc": 31
           },
           {
@@ -528,7 +554,7 @@
           {
             "source": 1104,
             "target": 44,
-            "weight": 14.9467,
+            "weight": 14.9316,
             "cooc": 11
           },
           {
@@ -636,7 +662,7 @@
           {
             "source": 1104,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -660,7 +686,7 @@
           {
             "source": 1104,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -679,7 +705,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 31,
-            "score": 86.1368
+            "score": 85.6129
           },
           {
             "o_id": 609,
@@ -735,7 +761,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 11,
-            "score": 14.9467
+            "score": 14.9316
           },
           {
             "o_id": 14929,
@@ -861,7 +887,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 76041,
@@ -889,14 +915,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
           {
             "source": 1104,
             "target": 76335,
-            "weight": 86.1368,
+            "weight": 85.6129,
             "cooc": 31
           },
           {
@@ -944,7 +970,7 @@
           {
             "source": 1104,
             "target": 44,
-            "weight": 14.9467,
+            "weight": 14.9316,
             "cooc": 11
           },
           {
@@ -1052,7 +1078,7 @@
           {
             "source": 1104,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -1076,12 +1102,24 @@
           {
             "source": 1104,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1104,
+            "title": "Mahmood Nasir Saqib",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1104,
@@ -1339,7 +1377,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -1436,7 +1475,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1778,6 +1818,100 @@
         "articles_total": 39
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -2258,6 +2392,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -2832,6 +2984,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

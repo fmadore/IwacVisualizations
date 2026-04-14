@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.313849+00:00",
+  "generated_at": "2026-04-14T06:30:23.773750+00:00",
   "entity": {
     "o_id": 76460,
     "title": "Chu de Treichville",
@@ -46,28 +46,31 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Patriote",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2013,
-          "year_max": 2015
-        },
-        {
           "name": "Fraternité Matin",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1984,
           "year_max": 1994
+        },
+        {
+          "name": "Le Patriote",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2015
         },
         {
           "name": "Le Jour Plus",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
@@ -237,13 +240,6 @@
           "count": 4
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 3
-        },
-        {
           "o_id": 269,
           "name": "Abidjan",
           "lat": 5.35444,
@@ -251,11 +247,11 @@
           "count": 3
         },
         {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
-          "count": 2
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 3
         },
         {
           "o_id": 48427,
@@ -265,25 +261,11 @@
           "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 14522,
-          "name": "Mina",
-          "lat": 21.413333,
-          "lng": 39.893333,
-          "count": 1
-        },
-        {
-          "o_id": 76446,
-          "name": "Aéroport International Félix Houphouët-Boigny",
-          "lat": 5.261417,
-          "lng": -3.925778,
-          "count": 1
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 2
         },
         {
           "o_id": 456,
@@ -305,6 +287,27 @@
           "lat": 5.266667,
           "lng": -3.9,
           "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 14522,
+          "name": "Mina",
+          "lat": 21.413333,
+          "lng": 39.893333,
+          "count": 1
+        },
+        {
+          "o_id": 76446,
+          "name": "Aéroport International Félix Houphouët-Boigny",
+          "lat": 5.261417,
+          "lng": -3.925778,
+          "count": 1
         }
       ]
     }
@@ -313,11 +316,11 @@
     "by_role": {
       "all": [
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         },
         {
@@ -329,7 +332,7 @@
           "count": 1
         },
         {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
       ]
@@ -576,13 +579,13 @@
         ],
         "cells": [
           [
-            31,
-            9,
+            10,
+            8,
             1
           ],
           [
-            10,
-            8,
+            28,
+            7,
             1
           ],
           [
@@ -596,8 +599,8 @@
             1
           ],
           [
-            28,
-            7,
+            31,
+            9,
             1
           ]
         ]
@@ -609,140 +612,72 @@
       "all": {
         "names": [
           "Treichville",
-          "Côte d'Ivoire",
           "Abidjan",
-          "Mosquée de la Riviéra Golf",
+          "Côte d'Ivoire",
+          "Odienné",
+          "Ramadan",
           "Santé",
           "Riviera Golf",
           "Alassane Ouattara",
-          "Odienné",
-          "Ramadan",
-          "Egypt Air",
-          "La Mecque",
-          "Abdoulaye Touré",
-          "Mamadou Traoré",
-          "Direction Générale des Cultes",
-          "Sécurité"
+          "Mosquée de la Riviéra Golf",
+          "Police",
+          "Idriss Koudouss Koné",
+          "Conflit",
+          "Conseil National Islamique",
+          "Conseil Supérieur Islamique",
+          "Violence"
         ],
         "matrix": [
           [
             0,
+            2,
             3,
             2,
-            2,
+            1,
             1,
             2,
             2,
             2,
-            1,
             1,
             1,
             1,
             1,
             1,
             1
+          ],
+          [
+            2,
+            0,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
             3,
-            0,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            0,
-            1,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
-            1,
-            2,
             2,
             0,
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            2,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             2,
             2,
-            1,
-            2,
-            1,
-            0,
-            2,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            1,
-            2,
-            1,
             2,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            0,
+            0,
+            0,
+            0
           ],
           [
             2,
@@ -753,6 +688,91 @@
             0,
             0,
             0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            2,
+            2,
             0,
             0,
             0,
@@ -763,29 +783,12 @@
           ],
           [
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
@@ -797,12 +800,12 @@
           ],
           [
             1,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -814,12 +817,12 @@
           ],
           [
             1,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -831,12 +834,12 @@
           ],
           [
             1,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -848,12 +851,12 @@
           ],
           [
             1,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,
@@ -865,12 +868,12 @@
           ],
           [
             1,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             0,
             0,
             1,

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.627576+00:00",
+  "generated_at": "2026-04-14T06:30:33.004872+00:00",
   "person": {
     "o_id": 1831,
     "title": "Jean-Claude Barbier",
@@ -20,7 +20,7 @@
         "total_mentions": 4,
         "year_min": 1991,
         "year_max": 2002,
-        "newspapers_count": 0,
+        "newspapers_count": 4,
         "countries_count": 2
       },
       "subject": {
@@ -34,8 +34,15 @@
         "total_mentions": 4,
         "year_min": 1991,
         "year_max": 2002,
-        "newspapers_count": 0,
+        "newspapers_count": 4,
         "countries_count": 2
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -97,14 +104,102 @@
             0
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "ORSTOM",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1995,
+          "year_max": 1995
+        },
+        {
+          "name": "Islam et sociétés au sud du Sahara",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1991,
+          "year_max": 1991
+        },
+        {
+          "name": "Bulletin de l’association de géographes français",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Éditions HAHO|Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "ORSTOM",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1995,
+          "year_max": 1995
+        },
+        {
+          "name": "Islam et sociétés au sud du Sahara",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1991,
+          "year_max": 1991
+        },
+        {
+          "name": "Bulletin de l’association de géographes français",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Bénin",
+          "year_min": 2002,
+          "year_max": 2002
+        },
+        {
+          "name": "Éditions HAHO|Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 2001,
+          "year_max": 2001
+        }
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -129,7 +224,8 @@
           "name": "Bénin",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -197,6 +293,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1831,
+            "title": "Jean-Claude Barbier",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -234,14 +342,16 @@
           "lng": 2.25,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -527,6 +637,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -611,6 +815,24 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -651,6 +873,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

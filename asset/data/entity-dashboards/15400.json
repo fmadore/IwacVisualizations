@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:46.592955+00:00",
+  "generated_at": "2026-04-14T06:30:18.185332+00:00",
   "entity": {
     "o_id": 15400,
     "title": "Site d'accueil des pèlerins (Akpakpa)",
@@ -40,19 +40,11 @@
     "by_role": {
       "all": [
         {
-          "name": "La Nation",
+          "name": "Le Matinal",
           "total": 3,
           "articles": 3,
           "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2020
-        },
-        {
-          "name": "L'Evénement Précis",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -62,24 +54,27 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
         },
         {
-          "name": "Le Matinal",
+          "name": "La Nation",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
-          "year_max": 2019
+          "year_max": 2020
         },
         {
-          "name": "Matin Libre",
-          "total": 2,
-          "articles": 2,
+          "name": "L'Evénement Précis",
+          "total": 3,
+          "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -89,6 +84,17 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -98,6 +104,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -107,6 +114,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -213,16 +221,16 @@
             "score": 8.4236
           },
           {
-            "o_id": 781,
-            "title": "Conseil National de la Coordination du Hadj au Bénin",
-            "type": "Organisations",
+            "o_id": 1387,
+            "title": "Bernardin Gantin",
+            "type": "Personnes",
             "cooc": 2,
             "score": 6.5737
           },
           {
-            "o_id": 1387,
-            "title": "Bernardin Gantin",
-            "type": "Personnes",
+            "o_id": 781,
+            "title": "Conseil National de la Coordination du Hadj au Bénin",
+            "type": "Organisations",
             "cooc": 2,
             "score": 6.5737
           },
@@ -345,13 +353,13 @@
           },
           {
             "source": 15400,
-            "target": 781,
+            "target": 1387,
             "weight": 6.5737,
             "cooc": 2
           },
           {
             "source": 15400,
-            "target": 1387,
+            "target": 781,
             "weight": 6.5737,
             "cooc": 2
           },
@@ -452,13 +460,6 @@
           "lat": 7.18286,
           "lng": 1.99119,
           "count": 2
-        },
-        {
-          "o_id": 305,
-          "name": "Djougou",
-          "lat": 9.70853,
-          "lng": 1.66598,
-          "count": 1
         },
         {
           "o_id": 385,
@@ -594,10 +595,10 @@
           "count": 1
         },
         {
-          "o_id": 14218,
-          "name": "Sèmè-Podji",
-          "lat": 6.366667,
-          "lng": 2.616667,
+          "o_id": 305,
+          "name": "Djougou",
+          "lat": 9.70853,
+          "lng": 1.66598,
           "count": 1
         },
         {
@@ -605,6 +606,13 @@
           "name": "Médine",
           "lat": 24.46861,
           "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 14218,
+          "name": "Sèmè-Podji",
+          "lat": 6.366667,
+          "lng": 2.616667,
           "count": 1
         }
       ]
@@ -630,15 +638,15 @@
           "count": 1
         },
         {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        },
+        {
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         },
         {
           "label": "homme - mort - attendre - maison - enfant - sou",
-          "count": 1
-        },
-        {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
       ]
@@ -848,6 +856,11 @@
         "cells": [
           [
             0,
+            5,
+            11
+          ],
+          [
+            0,
             7,
             6
           ],
@@ -855,11 +868,6 @@
             1,
             4,
             1
-          ],
-          [
-            0,
-            5,
-            11
           ]
         ]
       }
@@ -876,14 +884,14 @@
           "Cotonou",
           "Akpakpa",
           "Patrice Talon",
-          "Arabie saoudite",
           "José Didier Tonato",
+          "Arabie saoudite",
           "Alassane Seidou",
           "Aurélien Agbénonci",
           "Sécurité",
           "Abomey-Calavi",
-          "Bachir Gbadamassi",
-          "Conseil National de la Coordination du Hadj au Bénin"
+          "Bernardin Gantin",
+          "Abomey"
         ],
         "matrix": [
           [
@@ -928,14 +936,14 @@
             5,
             6,
             7,
-            5,
             3,
+            5,
             3,
             4,
             3,
             2,
-            2,
-            2
+            1,
+            1
           ],
           [
             12,
@@ -945,8 +953,8 @@
             8,
             6,
             4,
-            5,
             4,
+            5,
             1,
             2,
             2,
@@ -962,14 +970,14 @@
             0,
             5,
             4,
+            3,
             4,
-            3,
             2,
             1,
             2,
             3,
-            1,
-            1
+            2,
+            2
           ],
           [
             9,
@@ -979,8 +987,8 @@
             5,
             0,
             4,
-            4,
             3,
+            4,
             1,
             1,
             2,
@@ -996,31 +1004,14 @@
             4,
             4,
             0,
-            2,
             4,
+            2,
             4,
             2,
             2,
             0,
-            1,
-            1
-          ],
-          [
-            6,
-            5,
-            5,
-            5,
-            4,
-            4,
-            2,
             0,
-            0,
-            0,
-            1,
-            2,
-            1,
-            2,
-            2
+            0
           ],
           [
             6,
@@ -1040,6 +1031,23 @@
             0
           ],
           [
+            6,
+            5,
+            5,
+            5,
+            4,
+            4,
+            2,
+            0,
+            0,
+            0,
+            1,
+            2,
+            1,
+            0,
+            0
+          ],
+          [
             5,
             3,
             3,
@@ -1047,8 +1055,8 @@
             2,
             1,
             4,
-            0,
             3,
+            0,
             0,
             2,
             0,
@@ -1064,8 +1072,8 @@
             1,
             1,
             2,
-            1,
             0,
+            1,
             2,
             0,
             0,
@@ -1081,63 +1089,63 @@
             2,
             2,
             2,
-            2,
-            0,
-            0,
-            0,
-            0,
             0,
             2,
-            2
-          ],
-          [
-            3,
-            3,
-            2,
-            3,
-            3,
-            2,
-            0,
-            1,
             0,
             0,
-            1,
             0,
             0,
             0,
             0
           ],
           [
+            3,
+            3,
             2,
+            3,
+            3,
             2,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            2,
+            2
+          ],
+          [
             2,
             2,
             1,
-            1,
-            1,
             2,
+            2,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
             2,
-            0,
             0,
             2
           ],
           [
             2,
             2,
+            1,
             2,
             2,
             1,
-            1,
-            1,
-            2,
+            0,
+            0,
+            0,
             0,
             0,
             0,
             2,
-            0,
             2,
             0
           ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:57.093288+00:00",
+  "generated_at": "2026-04-14T06:30:29.272588+00:00",
   "person": {
     "o_id": 1314,
     "title": "Mamadou Bamba",
@@ -21,11 +21,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 10,
+        "total_mentions": 29,
         "year_min": 1979,
         "year_max": 2019,
-        "newspapers_count": 2,
-        "countries_count": 1
+        "newspapers_count": 4,
+        "countries_count": 3
       },
       "subject": {
         "total_mentions": 5,
@@ -38,8 +38,15 @@
         "total_mentions": 5,
         "year_min": 2002,
         "year_max": 2019,
-        "newspapers_count": 0,
+        "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 21,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
+        "countries_count": 3
       }
     }
   },
@@ -56,9 +63,20 @@
           2019
         ],
         "countries": [
-          "Côte d'Ivoire"
+          "Burkina Faso",
+          "Côte d'Ivoire",
+          "Togo"
         ],
         "series": {
+          "Burkina Faso": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ],
           "Côte d'Ivoire": [
             1,
             1,
@@ -66,6 +84,15 @@
             1,
             3,
             1,
+            17
+          ],
+          "Togo": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             2
           ]
         }
@@ -107,6 +134,27 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Burkina Faso",
+          "Côte d'Ivoire",
+          "Togo"
+        ],
+        "series": {
+          "Burkina Faso": [
+            2
+          ],
+          "Côte d'Ivoire": [
+            17
+          ],
+          "Togo": [
+            2
+          ]
+        }
       }
     }
   },
@@ -114,19 +162,41 @@
     "by_role": {
       "all": [
         {
+          "name": "Presses de l'Université de Lomé",
+          "total": 21,
+          "articles": 0,
+          "publications": 0,
+          "references": 21,
+          "country": "Togo",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
           "name": "Fraternité Matin",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1989
+        },
+        {
+          "name": "Université Félix Houphouët-Boigny",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2002,
+          "year_max": 2008
         },
         {
           "name": "Le Jour",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2003
@@ -138,6 +208,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1989
@@ -147,12 +218,46 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2003
         }
       ],
-      "creator": []
+      "creator": [
+        {
+          "name": "Université Félix Houphouët-Boigny",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Côte d'Ivoire",
+          "year_min": 2002,
+          "year_max": 2008
+        },
+        {
+          "name": "Presses de l'Université de Lomé",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ],
+      "editor": [
+        {
+          "name": "Presses de l'Université de Lomé",
+          "total": 21,
+          "articles": 0,
+          "publications": 0,
+          "references": 21,
+          "country": "Togo",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
     }
   },
   "countries": {
@@ -160,7 +265,15 @@
       "all": [
         {
           "name": "Côte d'Ivoire",
-          "count": 10
+          "count": 25
+        },
+        {
+          "name": "Togo",
+          "count": 2
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 2
         }
       ],
       "subject": [
@@ -173,6 +286,20 @@
         {
           "name": "Côte d'Ivoire",
           "count": 5
+        }
+      ],
+      "editor": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 17
+        },
+        {
+          "name": "Togo",
+          "count": 2
+        },
+        {
+          "name": "Burkina Faso",
+          "count": 2
         }
       ]
     }
@@ -187,6 +314,13 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1315,
+            "title": "Essohanam Batchana",
+            "type": "Personnes",
+            "cooc": 21,
+            "score": 102.996
           },
           {
             "o_id": 76283,
@@ -316,6 +450,12 @@
           }
         ],
         "edges": [
+          {
+            "source": 1314,
+            "target": 1315,
+            "weight": 102.996,
+            "cooc": 21
+          },
           {
             "source": 1314,
             "target": 76283,
@@ -681,9 +821,49 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1315,
+            "title": "Essohanam Batchana",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.8091
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1314,
+            "target": 1315,
+            "weight": 9.8091,
+            "cooc": 2
+          }
+        ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1314,
+            "title": "Mamadou Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1315,
+            "title": "Essohanam Batchana",
+            "type": "Personnes",
+            "cooc": 21,
+            "score": 102.996
+          }
+        ],
+        "edges": [
+          {
+            "source": 1314,
+            "target": 1315,
+            "weight": 102.996,
+            "cooc": 21
+          }
+        ]
       }
     }
   },
@@ -695,7 +875,7 @@
           "name": "Côte d'Ivoire",
           "lat": 8.0,
           "lng": -5.5,
-          "count": 9
+          "count": 25
         },
         {
           "o_id": 269,
@@ -709,6 +889,13 @@
           "name": "Treichville",
           "lat": 5.3,
           "lng": -4.0,
+          "count": 3
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
           "count": 3
         },
         {
@@ -751,6 +938,13 @@
           "name": "Riyad",
           "lat": 24.65,
           "lng": 46.71,
+          "count": 2
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
           "count": 2
         },
         {
@@ -953,6 +1147,29 @@
           "lng": -5.5,
           "count": 5
         }
+      ],
+      "editor": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 18
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 3
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 2
+        }
       ]
     }
   },
@@ -986,7 +1203,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1508,6 +1726,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1695,6 +2007,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -1702,6 +2034,7 @@
     "by_role": {
       "all": {
         "names": [
+          "Essohanam Batchana",
           "Gouvernement",
           "Prière",
           "Mosquée",
@@ -1715,13 +2048,29 @@
           "Paix",
           "Jeûne",
           "Yaya Ouattara",
-          "Diaby Salif",
-          "Abou Traoré"
+          "Diaby Salif"
         ],
         "matrix": [
           [
             0,
-            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
             2,
             2,
             2,
@@ -1737,6 +2086,7 @@
             2
           ],
           [
+            0,
             2,
             0,
             3,
@@ -1750,10 +2100,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             3,
             0,
@@ -1767,10 +2117,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1784,10 +2134,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1801,10 +2151,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1818,10 +2168,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1835,10 +2185,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1852,10 +2202,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1869,10 +2219,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1886,10 +2236,10 @@
             2,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1903,10 +2253,10 @@
             0,
             2,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1920,10 +2270,10 @@
             2,
             0,
             2,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1937,10 +2287,10 @@
             2,
             2,
             0,
-            2,
-            0
+            2
           ],
           [
+            0,
             2,
             2,
             2,
@@ -1954,24 +2304,6 @@
             2,
             2,
             2,
-            0,
-            0
-          ],
-          [
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         ]
@@ -2253,8 +2585,296 @@
         ]
       },
       "creator": {
-        "names": [],
-        "matrix": []
+        "names": [
+          "Essohanam Batchana",
+          "Sékou Bamba"
+        ],
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Essohanam Batchana",
+          "Djamilou Ouro-Agoro",
+          "Tiantio Sanogo",
+          "Aïcha Gninin Touré",
+          "Yéo Mitanhantcha",
+          "Jacques Djidjé Kazio",
+          "Diakaridja Ouattara",
+          "Mohamed Keita",
+          "Raphael Bekoin",
+          "Houphouët Jean Félix Komenan",
+          "Blesson Florent Sohi",
+          "Aman Jean Pierre M'Besso",
+          "Arna Konaté",
+          "Adama Kamara",
+          "Ouattara Bakary Kamagate"
+        ],
+        "matrix": [
+          [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
       }
     }
   }

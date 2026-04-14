@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.244124+00:00",
+  "generated_at": "2026-04-14T06:30:32.483202+00:00",
   "person": {
     "o_id": 1212,
     "title": "Sylvie Bredeloup",
@@ -16,10 +16,10 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 3,
+        "total_mentions": 4,
         "year_min": 2005,
-        "year_max": 2014,
-        "newspapers_count": 0,
+        "year_max": 2019,
+        "newspapers_count": 4,
         "countries_count": 1
       },
       "subject": {
@@ -33,7 +33,14 @@
         "total_mentions": 3,
         "year_min": 2005,
         "year_max": 2014,
-        "newspapers_count": 0,
+        "newspapers_count": 3,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 1,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 1,
         "countries_count": 1
       }
     }
@@ -44,13 +51,15 @@
         "years": [
           2005,
           2009,
-          2014
+          2014,
+          2019
         ],
         "countries": [
           "Burkina Faso"
         ],
         "series": {
           "Burkina Faso": [
+            1,
             1,
             1,
             1
@@ -78,14 +87,111 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "IRMC-Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "L’Année du Maghreb",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Autrepart",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "IRMC-Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2009,
+          "year_max": 2009
+        },
+        {
+          "name": "L’Année du Maghreb",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2014,
+          "year_max": 2014
+        },
+        {
+          "name": "Autrepart",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2005,
+          "year_max": 2005
+        }
+      ],
+      "editor": [
+        {
+          "name": "L'Harmattan",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
     }
   },
   "countries": {
@@ -93,7 +199,7 @@
       "all": [
         {
           "name": "Burkina Faso",
-          "count": 3
+          "count": 4
         }
       ],
       "subject": [],
@@ -101,6 +207,12 @@
         {
           "name": "Burkina Faso",
           "count": 3
+        }
+      ],
+      "editor": [
+        {
+          "name": "Burkina Faso",
+          "count": 1
         }
       ]
     }
@@ -142,6 +254,18 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1212,
+            "title": "Sylvie Bredeloup",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -153,7 +277,7 @@
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
-          "count": 3
+          "count": 4
         }
       ],
       "subject": [],
@@ -165,6 +289,15 @@
           "lng": -1.66667,
           "count": 3
         }
+      ],
+      "editor": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        }
       ]
     }
   },
@@ -172,7 +305,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -458,6 +592,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -474,7 +702,12 @@
           2011,
           2012,
           2013,
-          2014
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
         ],
         "months": [
           1,
@@ -538,6 +771,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -545,10 +798,46 @@
     "by_role": {
       "all": {
         "names": [
+          "Sylvie Mazzella",
+          "Yacouba Ouédraogo",
+          "Alice Degorce",
+          "Augustin Palé",
           "Mahamadou Zongo"
         ],
         "matrix": [
           [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]
@@ -559,10 +848,40 @@
       },
       "creator": {
         "names": [
+          "Sylvie Mazzella",
           "Mahamadou Zongo"
         ],
         "matrix": [
           [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Yacouba Ouédraogo",
+          "Alice Degorce",
+          "Augustin Palé"
+        ],
+        "matrix": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
             0
           ]
         ]

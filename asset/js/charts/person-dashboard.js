@@ -26,6 +26,28 @@
     }
     var P = ns.panels;
 
+    // Whether the given precompute slice has any data at all. Empty
+    // slices are elided from the layout so persons with zero AI
+    // sentiment / LDA / newspaper coverage don't show dead cards.
+    function hasNewspapersData(data) {
+        var all = data && data.newspapers && data.newspapers.by_role && data.newspapers.by_role.all;
+        return !!(all && all.length > 0);
+    }
+    function hasTopicsData(data) {
+        var all = data && data.topics && data.topics.by_role && data.topics.by_role.all;
+        return !!(all && all.length > 0);
+    }
+    function hasSentimentData(data) {
+        var all = data && data.sentiment && data.sentiment.by_role && data.sentiment.by_role.all;
+        if (!all || !all.by_model) return false;
+        var models = all.models || Object.keys(all.by_model);
+        for (var i = 0; i < models.length; i++) {
+            var m = all.by_model[models[i]];
+            if (m && m.polarite && m.polarite.length > 0) return true;
+        }
+        return false;
+    }
+
     function buildLayout(container, data, facet) {
         container.querySelector('.iwac-vis-person__loading') &&
             container.querySelector('.iwac-vis-person__loading').remove();
@@ -48,17 +70,23 @@
 
         var timelinePanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Mentions'),               P.t('desc_mentions_timeline'));
         var heatmapPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Year × month heatmap'),   P.t('desc_year_month_heatmap'));
-        var newspapersPanel   = P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'),         P.t('desc_top_newspapers'));
+        var newspapersPanel   = hasNewspapersData(data)
+            ? P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'),         P.t('desc_top_newspapers'))
+            : null;
         var countriesPanel    = P.buildPanel('iwac-vis-panel',                      P.t('Countries covered'),      P.t('desc_countries_covered'));
-        var topicsPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top LDA topics'),         P.t('desc_lda_topics'));
-        var sentimentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('AI sentiment'),           P.t('desc_ai_sentiment'));
+        var topicsPanel       = hasTopicsData(data)
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top LDA topics'),         P.t('desc_lda_topics'))
+            : null;
+        var sentimentPanel    = hasSentimentData(data)
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('AI sentiment'),           P.t('desc_ai_sentiment'))
+            : null;
         var networkPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated entities'),    P.t('desc_associated_entities'));
         var cooccurrencePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Subject co-occurrence'),  P.t('desc_subject_cooccurrence'));
         var mapPanel          = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated locations'),   P.t('desc_associated_locations'));
 
         [timelinePanel, heatmapPanel, newspapersPanel, countriesPanel,
          topicsPanel, sentimentPanel, networkPanel, cooccurrencePanel, mapPanel]
-            .forEach(function (p) { grid.appendChild(p.panel); });
+            .forEach(function (p) { if (p) grid.appendChild(p.panel); });
 
         return {
             stats: statsHost,
@@ -97,17 +125,17 @@
 
                 var h = buildLayout(container, data, facet);
 
-                if (pd.stats)        pd.stats.render(h.stats, data, facet);
-                if (pd.facet)        pd.facet.render(h.facetHost, data, facet);
-                if (pd.timeline)     pd.timeline.render(h.timeline, data, facet);
-                if (pd.heatmap)      pd.heatmap.render(h.heatmap, data, facet);
-                if (pd.newspapers)   pd.newspapers.render(h.newspapers, data, facet, ctx);
-                if (pd.countries)    pd.countries.render(h.countries, data, facet);
-                if (pd.topics)       pd.topics.render(h.topics, data, facet);
-                if (pd.sentiment)    pd.sentiment.render(h.sentiment, data, facet);
-                if (pd.network)      pd.network.render(h.network, data, facet, ctx);
-                if (pd.cooccurrence) pd.cooccurrence.render(h.cooccurrence, data, facet);
-                if (pd.map)          pd.map.render(h.map, data, facet, ctx);
+                if (pd.stats)                     pd.stats.render(h.stats, data, facet);
+                if (pd.facet)                     pd.facet.render(h.facetHost, data, facet);
+                if (pd.timeline)                  pd.timeline.render(h.timeline, data, facet);
+                if (pd.heatmap)                   pd.heatmap.render(h.heatmap, data, facet);
+                if (pd.newspapers && h.newspapers) pd.newspapers.render(h.newspapers, data, facet, ctx);
+                if (pd.countries)                 pd.countries.render(h.countries, data, facet);
+                if (pd.topics && h.topics)        pd.topics.render(h.topics, data, facet);
+                if (pd.sentiment && h.sentiment)  pd.sentiment.render(h.sentiment, data, facet);
+                if (pd.network)                   pd.network.render(h.network, data, facet, ctx);
+                if (pd.cooccurrence)              pd.cooccurrence.render(h.cooccurrence, data, facet);
+                if (pd.map)                       pd.map.render(h.map, data, facet, ctx);
             })
             .catch(function (err) {
                 console.error('IWACVis person dashboard:', err);

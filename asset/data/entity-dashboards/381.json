@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:35.804733+00:00",
+  "generated_at": "2026-04-14T06:30:08.959867+00:00",
   "entity": {
     "o_id": 381,
     "title": "Parc national du W",
@@ -51,46 +51,61 @@
     "by_role": {
       "all": [
         {
-          "name": "L'Evénement Précis",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2021,
-          "year_max": 2021
-        },
-        {
           "name": "Matin Libre",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2023
         },
         {
-          "name": "Fraternité",
+          "name": "L'Evénement Précis",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "La Nation",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
-          "year_min": 2022,
-          "year_max": 2022
+          "year_min": 2019,
+          "year_max": 2019
         },
         {
           "name": "Banouto",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2021,
           "year_max": 2021
         },
         {
-          "name": "La Nouvelle Tribune",
+          "name": "24 Heures au Bénin",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2022,
           "year_max": 2022
@@ -100,27 +115,20 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
         },
         {
-          "name": "24 Heures au Bénin",
+          "name": "La Nouvelle Tribune",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2019
-        },
-        {
-          "name": "La Nation",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2019
+          "year_min": 2022,
+          "year_max": 2022
         }
       ]
     }
@@ -433,17 +441,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 283,
-          "name": "Bénin",
-          "lat": 9.5,
-          "lng": 2.25,
-          "count": 10
-        },
-        {
           "o_id": 381,
           "name": "Parc national du W",
           "lat": 12.07596,
           "lng": 2.5235,
+          "count": 10
+        },
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
           "count": 10
         },
         {
@@ -475,20 +483,6 @@
           "count": 4
         },
         {
-          "o_id": 62026,
-          "name": "Porga",
-          "lat": 11.05,
-          "lng": 0.966667,
-          "count": 3
-        },
-        {
-          "o_id": 319,
-          "name": "Ghana",
-          "lat": 8.1,
-          "lng": -1.2,
-          "count": 3
-        },
-        {
           "o_id": 62018,
           "name": "Alibori",
           "lat": 11.128611,
@@ -503,10 +497,24 @@
           "count": 3
         },
         {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
+          "o_id": 319,
+          "name": "Ghana",
+          "lat": 8.1,
+          "lng": -1.2,
+          "count": 3
+        },
+        {
+          "o_id": 62026,
+          "name": "Porga",
+          "lat": 11.05,
+          "lng": 0.966667,
+          "count": 3
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
           "count": 2
         },
         {
@@ -517,39 +525,11 @@
           "count": 2
         },
         {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
           "count": 2
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 1
-        },
-        {
-          "o_id": 63388,
-          "name": "Alger",
-          "lat": 36.776388888889,
-          "lng": 3.0586111111111,
-          "count": 1
-        },
-        {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 280,
-          "name": "Banikoara",
-          "lat": 11.33966,
-          "lng": 2.45915,
-          "count": 1
         },
         {
           "o_id": 441,
@@ -661,6 +641,34 @@
           "name": "Parakou",
           "lat": 9.33716,
           "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
+        },
+        {
+          "o_id": 63388,
+          "name": "Alger",
+          "lat": 36.776388888889,
+          "lng": 3.0586111111111,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
           "count": 1
         }
       ]
@@ -926,14 +934,9 @@
         ],
         "cells": [
           [
+            0,
             3,
-            1,
-            2
-          ],
-          [
-            2,
-            6,
-            1
+            3
           ],
           [
             2,
@@ -941,18 +944,23 @@
             2
           ],
           [
+            4,
+            2,
+            1
+          ],
+          [
+            3,
+            1,
+            2
+          ],
+          [
             0,
             2,
             1
           ],
           [
-            0,
-            3,
-            3
-          ],
-          [
-            4,
             2,
+            6,
             1
           ]
         ]
@@ -970,14 +978,14 @@
           "Djihadisme",
           "Burkina Faso",
           "Niger",
-          "Parc national de la Pendjari",
           "Armée",
-          "Forces de Défense et de Sécurité",
+          "Parc national de la Pendjari",
           "Togo",
-          "Porga",
+          "Forces de Défense et de Sécurité",
+          "Alibori",
           "Patrice Talon",
-          "Ghana",
-          "Alibori"
+          "Opération Djidjoho",
+          "Atacora"
         ],
         "matrix": [
           [
@@ -1073,11 +1081,11 @@
             4,
             0,
             5,
-            3,
             4,
+            3,
+            3,
             1,
             3,
-            2,
             2,
             3,
             3
@@ -1090,10 +1098,27 @@
             4,
             5,
             0,
-            2,
             3,
             2,
             4,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3,
+            0,
+            1,
+            2,
+            2,
             2,
             2,
             3,
@@ -1107,8 +1132,8 @@
             4,
             3,
             2,
-            0,
             1,
+            0,
             1,
             1,
             2,
@@ -1117,108 +1142,91 @@
             2
           ],
           [
-            5,
-            5,
-            5,
-            5,
+            4,
+            4,
+            4,
             4,
             4,
             3,
+            4,
+            2,
             1,
             0,
             2,
+            1,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            2,
+            3
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            0,
+            2,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            1,
             2,
             1,
             2,
             2,
+            0,
             2
           ],
           [
-            4,
-            4,
-            4,
-            4,
-            4,
-            1,
-            2,
-            1,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            4,
-            4,
-            4,
-            4,
-            4,
-            3,
-            4,
-            1,
-            2,
-            2,
-            0,
-            1,
-            2,
-            3,
-            1
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            3,
-            2,
-            2,
-            1,
-            2,
-            1,
-            2,
-            0,
-            0,
-            2,
-            1
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            1,
-            2,
-            1,
-            3,
-            1,
-            2,
-            0,
-            1
-          ],
-          [
             3,
             3,
             3,
@@ -1230,9 +1238,9 @@
             2,
             1,
             1,
+            3,
             1,
-            1,
-            1,
+            2,
             0
           ]
         ]

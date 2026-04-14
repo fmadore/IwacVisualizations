@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.610613+00:00",
+  "generated_at": "2026-04-14T06:30:32.979218+00:00",
   "person": {
     "o_id": 1247,
     "title": "Pascal Labazée",
@@ -22,7 +22,7 @@
         "total_mentions": 2,
         "year_min": 1993,
         "year_max": 1993,
-        "newspapers_count": 0,
+        "newspapers_count": 2,
         "countries_count": 2
       },
       "subject": {
@@ -36,8 +36,15 @@
         "total_mentions": 2,
         "year_min": 1993,
         "year_max": 1993,
-        "newspapers_count": 0,
+        "newspapers_count": 2,
         "countries_count": 2
+      },
+      "editor": {
+        "total_mentions": 1,
+        "year_min": 1993,
+        "year_max": 1993,
+        "newspapers_count": 1,
+        "countries_count": 1
       }
     }
   },
@@ -81,14 +88,81 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          1993
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Cahiers des sciences humaines",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Cahiers des sciences humaines",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Côte d'Ivoire",
+          "year_min": 1993,
+          "year_max": 1993
+        },
+        {
+          "name": "Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ],
+      "editor": [
+        {
+          "name": "Karthala",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 1993,
+          "year_max": 1993
+        }
+      ]
     }
   },
   "countries": {
@@ -113,6 +187,12 @@
           "name": "Burkina Faso",
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "name": "Burkina Faso",
+          "count": 1
+        }
       ]
     }
   },
@@ -126,9 +206,23 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1339,
+            "title": "Emmanuel Grégoire",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1247,
+            "target": 1339,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -143,6 +237,32 @@
         "edges": []
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1247,
+            "title": "Pascal Labazée",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1339,
+            "title": "Emmanuel Grégoire",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 1247,
+            "target": 1339,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1247,
@@ -218,6 +338,22 @@
           "lng": -1.66667,
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        }
       ]
     }
   },
@@ -225,7 +361,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -511,6 +648,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -573,6 +804,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          1993
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -580,8 +831,8 @@
     "by_role": {
       "all": {
         "names": [
-          "Korhogo",
-          "Emmanuel Grégoire"
+          "Emmanuel Grégoire",
+          "Korhogo"
         ],
         "matrix": [
           [
@@ -600,8 +851,8 @@
       },
       "creator": {
         "names": [
-          "Korhogo",
-          "Emmanuel Grégoire"
+          "Emmanuel Grégoire",
+          "Korhogo"
         ],
         "matrix": [
           [
@@ -610,6 +861,16 @@
           ],
           [
             1,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Emmanuel Grégoire"
+        ],
+        "matrix": [
+          [
             0
           ]
         ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:33.813457+00:00",
+  "generated_at": "2026-04-14T06:30:06.743347+00:00",
   "person": {
     "o_id": 915,
     "title": "Yéro Boly",
@@ -35,6 +35,13 @@
         "year_max": 1998,
         "newspapers_count": 3,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -132,6 +139,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -143,6 +155,7 @@
           "total": 29,
           "articles": 29,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2010
@@ -152,6 +165,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2011
@@ -161,6 +175,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2009
@@ -170,6 +185,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2003,
           "year_max": 2003
@@ -179,6 +195,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2007,
           "year_max": 2007
@@ -190,6 +207,7 @@
           "total": 29,
           "articles": 29,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2010
@@ -199,6 +217,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2011
@@ -208,6 +227,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2009
@@ -217,6 +237,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2003,
           "year_max": 2003
@@ -226,6 +247,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2007,
           "year_max": 2007
@@ -237,6 +259,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 1998
@@ -246,6 +269,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 1996
@@ -255,11 +279,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 1996
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -281,7 +307,8 @@
           "name": "Burkina Faso",
           "count": 4
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -321,7 +348,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 40,
-            "score": 44.7719
+            "score": 44.7287
           },
           {
             "o_id": 1053,
@@ -352,18 +379,18 @@
             "score": 26.029
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 10,
-            "score": 25.1975
-          },
-          {
             "o_id": 582,
             "title": "Mouvement Sunnite du Burkina Faso",
             "type": "Organisations",
             "cooc": 9,
             "score": 25.1103
+          },
+          {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 10,
+            "score": 24.9805
           },
           {
             "o_id": 76274,
@@ -668,7 +695,7 @@
           {
             "source": 915,
             "target": 29,
-            "weight": 44.7719,
+            "weight": 44.7287,
             "cooc": 40
           },
           {
@@ -697,15 +724,15 @@
           },
           {
             "source": 915,
-            "target": 578,
-            "weight": 25.1975,
-            "cooc": 10
-          },
-          {
-            "source": 915,
             "target": 582,
             "weight": 25.1103,
             "cooc": 9
+          },
+          {
+            "source": 915,
+            "target": 578,
+            "weight": 24.9805,
+            "cooc": 10
           },
           {
             "source": 915,
@@ -984,7 +1011,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 40,
-            "score": 44.7719
+            "score": 44.7287
           },
           {
             "o_id": 1053,
@@ -1015,18 +1042,18 @@
             "score": 26.029
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 10,
-            "score": 25.1975
-          },
-          {
             "o_id": 582,
             "title": "Mouvement Sunnite du Burkina Faso",
             "type": "Organisations",
             "cooc": 9,
             "score": 25.1103
+          },
+          {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 10,
+            "score": 24.9805
           },
           {
             "o_id": 76274,
@@ -1331,7 +1358,7 @@
           {
             "source": 915,
             "target": 29,
-            "weight": 44.7719,
+            "weight": 44.7287,
             "cooc": 40
           },
           {
@@ -1360,15 +1387,15 @@
           },
           {
             "source": 915,
-            "target": 578,
-            "weight": 25.1975,
-            "cooc": 10
-          },
-          {
-            "source": 915,
             "target": 582,
             "weight": 25.1103,
             "cooc": 9
+          },
+          {
+            "source": 915,
+            "target": 578,
+            "weight": 24.9805,
+            "cooc": 10
           },
           {
             "source": 915,
@@ -1654,7 +1681,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           }
         ],
         "edges": [
@@ -1685,10 +1712,22 @@
           {
             "source": 915,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 915,
+            "title": "Yéro Boly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2420,7 +2459,8 @@
           "lng": -1.53388,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2534,7 +2574,8 @@
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3102,6 +3143,100 @@
           }
         },
         "articles_total": 4
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3523,6 +3658,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4155,6 +4308,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

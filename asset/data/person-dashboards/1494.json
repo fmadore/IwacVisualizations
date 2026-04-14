@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:44.882890+00:00",
+  "generated_at": "2026-04-14T06:30:16.598260+00:00",
   "person": {
     "o_id": 1494,
     "title": "Reine Azifan",
@@ -35,6 +35,13 @@
         "year_max": 2008,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -94,6 +101,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -105,6 +117,7 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2008
@@ -117,11 +130,13 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2008
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -138,7 +153,8 @@
           "name": "Bénin",
           "count": 13
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -227,7 +243,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 61328,
@@ -357,7 +373,7 @@
           {
             "source": 1494,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -512,7 +528,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 61328,
@@ -642,7 +658,7 @@
           {
             "source": 1494,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -700,6 +716,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1494,
+            "title": "Reine Azifan",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1031,7 +1059,8 @@
           "lng": 102.314362,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1104,7 +1133,8 @@
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1666,6 +1696,100 @@
           }
         },
         "articles_total": 13
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1862,6 +1986,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2422,6 +2564,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

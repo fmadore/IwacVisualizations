@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.383660+00:00",
+  "generated_at": "2026-04-14T06:30:32.278670+00:00",
   "entity": {
     "o_id": 129,
     "title": "Attentat de Ouagadougou de 2017",
@@ -44,6 +44,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -53,15 +54,17 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2018
         },
         {
-          "name": "FasoZine",
+          "name": "Sidwaya",
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -71,15 +74,17 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
         },
         {
-          "name": "Sidwaya",
+          "name": "FasoZine",
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -89,6 +94,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -98,6 +104,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -344,15 +351,15 @@
             "score": 3.7612
           },
           {
-            "o_id": 545,
-            "title": "Turquie",
+            "o_id": 531,
+            "title": "Riyad",
             "type": "Lieux",
             "cooc": 2,
             "score": 3.287
           },
           {
-            "o_id": 531,
-            "title": "Riyad",
+            "o_id": 545,
+            "title": "Turquie",
             "type": "Lieux",
             "cooc": 2,
             "score": 3.287
@@ -659,13 +666,13 @@
           },
           {
             "source": 129,
-            "target": 545,
+            "target": 531,
             "weight": 3.287,
             "cooc": 2
           },
           {
             "source": 129,
-            "target": 531,
+            "target": 545,
             "weight": 3.287,
             "cooc": 2
           },
@@ -815,13 +822,6 @@
           "count": 3
         },
         {
-          "o_id": 545,
-          "name": "Turquie",
-          "lat": 39.0,
-          "lng": 35.0,
-          "count": 2
-        },
-        {
           "o_id": 312,
           "name": "France",
           "lat": 46.0,
@@ -836,17 +836,10 @@
           "count": 2
         },
         {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 2
-        },
-        {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
           "count": 2
         },
         {
@@ -857,31 +850,52 @@
           "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
           "count": 2
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
+          "o_id": 545,
+          "name": "Turquie",
+          "lat": 39.0,
+          "lng": 35.0,
+          "count": 2
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 2
+        },
+        {
+          "o_id": 76323,
+          "name": "Palais Kosyam",
+          "lat": 12.288426,
+          "lng": -1.50273,
           "count": 1
         },
         {
-          "o_id": 430,
-          "name": "Canada",
-          "lat": 60.10867,
-          "lng": -113.64258,
+          "o_id": 375,
+          "name": "Ouaga 2000",
+          "lat": 12.31538,
+          "lng": -1.50888,
           "count": 1
         },
         {
-          "o_id": 76337,
-          "name": "Bogodogo",
-          "lat": 12.352169909817203,
-          "lng": -1.4886685037354437,
+          "o_id": 275,
+          "name": "Allemagne",
+          "lat": 51.5,
+          "lng": 10.5,
+          "count": 1
+        },
+        {
+          "o_id": 60478,
+          "name": "Berlin",
+          "lat": 52.516666666667,
+          "lng": 13.383333333333,
           "count": 1
         },
         {
@@ -913,17 +927,52 @@
           "count": 1
         },
         {
-          "o_id": 76323,
-          "name": "Palais Kosyam",
-          "lat": 12.288426,
-          "lng": -1.50273,
+          "o_id": 60556,
+          "name": "Yémen",
+          "lat": 15.5,
+          "lng": 48.0,
           "count": 1
         },
         {
-          "o_id": 375,
-          "name": "Ouaga 2000",
-          "lat": 12.31538,
-          "lng": -1.50888,
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
+          "count": 1
+        },
+        {
+          "o_id": 374,
+          "name": "Orodara",
+          "lat": 10.98568,
+          "lng": -4.92612,
+          "count": 1
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 1
+        },
+        {
+          "o_id": 430,
+          "name": "Canada",
+          "lat": 60.10867,
+          "lng": -113.64258,
+          "count": 1
+        },
+        {
+          "o_id": 76337,
+          "name": "Bogodogo",
+          "lat": 12.352169909817203,
+          "lng": -1.4886685037354437,
           "count": 1
         },
         {
@@ -953,48 +1002,6 @@
           "lat": -12.35,
           "lng": 17.35,
           "count": 1
-        },
-        {
-          "o_id": 60556,
-          "name": "Yémen",
-          "lat": 15.5,
-          "lng": 48.0,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
-          "o_id": 328,
-          "name": "Guinée",
-          "lat": 10.83333,
-          "lng": -10.66667,
-          "count": 1
-        },
-        {
-          "o_id": 374,
-          "name": "Orodara",
-          "lat": 10.98568,
-          "lng": -4.92612,
-          "count": 1
-        },
-        {
-          "o_id": 275,
-          "name": "Allemagne",
-          "lat": 51.5,
-          "lng": 10.5,
-          "count": 1
-        },
-        {
-          "o_id": 60478,
-          "name": "Berlin",
-          "lat": 52.516666666667,
-          "lng": 13.383333333333,
-          "count": 1
         }
       ]
     }
@@ -1015,10 +1022,6 @@
           "count": 4
         },
         {
-          "label": "ouédraogo - population - village - commune - man - maire",
-          "count": 2
-        },
-        {
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 2
         },
@@ -1027,7 +1030,11 @@
           "count": 2
         },
         {
-          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "label": "ouédraogo - population - village - commune - man - maire",
+          "count": 2
+        },
+        {
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         },
         {
@@ -1035,7 +1042,7 @@
           "count": 1
         },
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
       ]
@@ -1300,6 +1307,11 @@
         ],
         "cells": [
           [
+            1,
+            2,
+            1
+          ],
+          [
             0,
             7,
             25
@@ -1308,11 +1320,6 @@
             0,
             8,
             6
-          ],
-          [
-            1,
-            2,
-            1
           ]
         ]
       }
@@ -1335,8 +1342,8 @@
           "Bobo-Dioulasso",
           "Blaise Compaoré",
           "Nigéria",
-          "Abdou Rasmané Sana",
-          "Attentat de Ouagadougou de 2016"
+          "Attentat de Ouagadougou de 2016",
+          "G5 Sahel"
         ],
         "matrix": [
           [
@@ -1370,8 +1377,8 @@
             4,
             4,
             2,
-            3,
-            2
+            2,
+            3
           ],
           [
             24,
@@ -1404,8 +1411,8 @@
             1,
             1,
             3,
-            0,
-            2
+            2,
+            3
           ],
           [
             8,
@@ -1422,7 +1429,7 @@
             1,
             2,
             1,
-            1
+            3
           ],
           [
             7,
@@ -1438,8 +1445,8 @@
             1,
             3,
             1,
-            3,
-            1
+            1,
+            0
           ],
           [
             6,
@@ -1455,61 +1462,61 @@
             0,
             1,
             1,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            3,
+            2,
+            3,
+            0,
+            0,
+            2,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            5,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            5,
+            5,
+            5,
+            4,
+            4,
+            1,
+            2,
+            2,
+            1,
+            0,
+            0,
+            1,
+            2,
             0,
             2
           ],
           [
-            5,
-            5,
-            5,
-            4,
-            3,
-            2,
-            3,
-            0,
-            0,
-            2,
-            0,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            4,
-            4,
-            5,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            5,
-            5,
-            5,
-            4,
-            4,
-            1,
-            2,
-            2,
-            1,
-            0,
-            0,
-            1,
-            2,
-            0,
-            0
-          ],
-          [
             4,
             4,
             4,
@@ -1523,7 +1530,7 @@
             0,
             0,
             1,
-            1,
+            0,
             0
           ],
           [
@@ -1540,7 +1547,7 @@
             0,
             0,
             0,
-            2,
+            0,
             0
           ],
           [
@@ -1557,6 +1564,23 @@
             1,
             0,
             0,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            3,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             0,
             1
           ],
@@ -1564,34 +1588,17 @@
             3,
             3,
             3,
-            0,
-            1,
+            3,
             3,
             0,
-            0,
-            0,
+            1,
             0,
             1,
             2,
             0,
             0,
-            0
-          ],
-          [
-            3,
-            2,
-            3,
-            2,
             1,
             1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
             0
           ]
         ]

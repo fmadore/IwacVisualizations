@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.776751+00:00",
+  "generated_at": "2026-04-14T06:30:33.478678+00:00",
   "person": {
     "o_id": 1900,
     "title": "Nehemia Levtzion",
@@ -17,11 +17,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 1,
+        "total_mentions": 3,
         "year_min": 1969,
-        "year_max": 1969,
-        "newspapers_count": 0,
-        "countries_count": 1
+        "year_max": 1987,
+        "newspapers_count": 2,
+        "countries_count": 2
       },
       "subject": {
         "total_mentions": 0,
@@ -34,7 +34,14 @@
         "total_mentions": 1,
         "year_min": 1969,
         "year_max": 1969,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 2,
+        "year_min": 1987,
+        "year_max": 1987,
+        "newspapers_count": 1,
         "countries_count": 1
       }
     }
@@ -43,14 +50,21 @@
     "by_role": {
       "all": {
         "years": [
-          1969
+          1969,
+          1987
         ],
         "countries": [
+          "Côte d'Ivoire",
           "Togo"
         ],
         "series": {
+          "Côte d'Ivoire": [
+            0,
+            2
+          ],
           "Togo": [
-            1
+            1,
+            0
           ]
         }
       },
@@ -71,19 +85,80 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          1987
+        ],
+        "countries": [
+          "Côte d'Ivoire"
+        ],
+        "series": {
+          "Côte d'Ivoire": [
+            2
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Lynne Rienner Publishers",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 1987,
+          "year_max": 1987
+        },
+        {
+          "name": "Van Nostrand",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1969,
+          "year_max": 1969
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Van Nostrand",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Togo",
+          "year_min": 1969,
+          "year_max": 1969
+        }
+      ],
+      "editor": [
+        {
+          "name": "Lynne Rienner Publishers",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Côte d'Ivoire",
+          "year_min": 1987,
+          "year_max": 1987
+        }
+      ]
     }
   },
   "countries": {
     "by_role": {
       "all": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
+        },
         {
           "name": "Togo",
           "count": 1
@@ -94,6 +169,12 @@
         {
           "name": "Togo",
           "count": 1
+        }
+      ],
+      "editor": [
+        {
+          "name": "Côte d'Ivoire",
+          "count": 2
         }
       ]
     }
@@ -108,9 +189,23 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1937,
+            "title": "Humphrey J. Fisher",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.701
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1900,
+            "target": 1937,
+            "weight": 13.701,
+            "cooc": 2
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -135,12 +230,45 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1900,
+            "title": "Nehemia Levtzion",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1937,
+            "title": "Humphrey J. Fisher",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 13.701
+          }
+        ],
+        "edges": [
+          {
+            "source": 1900,
+            "target": 1937,
+            "weight": 13.701,
+            "cooc": 2
+          }
+        ]
       }
     }
   },
   "locations": {
     "by_role": {
       "all": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        },
         {
           "o_id": 544,
           "name": "Togo",
@@ -158,6 +286,15 @@
           "lng": 1.08333,
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 2
+        }
       ]
     }
   },
@@ -165,7 +302,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -451,6 +589,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -458,7 +690,25 @@
     "by_role": {
       "all": {
         "years": [
-          1969
+          1969,
+          1970,
+          1971,
+          1972,
+          1973,
+          1974,
+          1975,
+          1976,
+          1977,
+          1978,
+          1979,
+          1980,
+          1981,
+          1982,
+          1983,
+          1984,
+          1985,
+          1986,
+          1987
         ],
         "months": [
           1,
@@ -513,22 +763,120 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          1987
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
   "cooccurrence": {
     "by_role": {
       "all": {
-        "names": [],
-        "matrix": []
+        "names": [
+          "Humphrey J. Fisher",
+          "James Kritzeck",
+          "William H. Lewis",
+          "Kathryn L. Green",
+          "May Yacoob"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
       },
       "subject": {
         "names": [],
         "matrix": []
       },
       "creator": {
-        "names": [],
-        "matrix": []
+        "names": [
+          "James Kritzeck",
+          "William H. Lewis"
+        ],
+        "matrix": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Humphrey J. Fisher",
+          "Kathryn L. Green",
+          "May Yacoob"
+        ],
+        "matrix": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ]
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.809762+00:00",
+  "generated_at": "2026-04-14T06:30:33.507627+00:00",
   "person": {
     "o_id": 1707,
     "title": "Élodie Apard",
@@ -19,11 +19,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 3,
+        "total_mentions": 12,
         "year_min": 2021,
         "year_max": 2021,
-        "newspapers_count": 0,
-        "countries_count": 1
+        "newspapers_count": 2,
+        "countries_count": 2
       },
       "subject": {
         "total_mentions": 0,
@@ -36,8 +36,15 @@
         "total_mentions": 3,
         "year_min": 2021,
         "year_max": 2021,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 12,
+        "year_min": 2021,
+        "year_max": 2021,
+        "newspapers_count": 2,
+        "countries_count": 2
       }
     }
   },
@@ -48,11 +55,15 @@
           2021
         ],
         "countries": [
-          "Niger"
+          "Niger",
+          "Nigeria"
         ],
         "series": {
           "Niger": [
-            3
+            11
+          ],
+          "Nigeria": [
+            1
           ]
         }
       },
@@ -73,14 +84,85 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2021
+        ],
+        "countries": [
+          "Niger",
+          "Nigeria"
+        ],
+        "series": {
+          "Niger": [
+            11
+          ],
+          "Nigeria": [
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "French Institute for Research in Africa|African Studies Centre Leiden",
+          "total": 10,
+          "articles": 0,
+          "publications": 0,
+          "references": 10,
+          "country": "Nigeria",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "IFRA-Nigeria|French Institute for Research in Africa",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "French Institute for Research in Africa|African Studies Centre Leiden",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Niger",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
+      "editor": [
+        {
+          "name": "French Institute for Research in Africa|African Studies Centre Leiden",
+          "total": 10,
+          "articles": 0,
+          "publications": 0,
+          "references": 10,
+          "country": "Nigeria",
+          "year_min": 2021,
+          "year_max": 2021
+        },
+        {
+          "name": "IFRA-Nigeria|French Institute for Research in Africa",
+          "total": 2,
+          "articles": 0,
+          "publications": 0,
+          "references": 2,
+          "country": "Niger",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ]
     }
   },
   "countries": {
@@ -88,7 +170,11 @@
       "all": [
         {
           "name": "Niger",
-          "count": 3
+          "count": 11
+        },
+        {
+          "name": "Nigeria",
+          "count": 1
         }
       ],
       "subject": [],
@@ -96,6 +182,16 @@
         {
           "name": "Niger",
           "count": 3
+        }
+      ],
+      "editor": [
+        {
+          "name": "Niger",
+          "count": 11
+        },
+        {
+          "name": "Nigeria",
+          "count": 1
         }
       ]
     }
@@ -110,9 +206,49 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 2009,
+            "title": "Adam Higazi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          },
+          {
+            "o_id": 2010,
+            "title": "Marc-Antoine Pérouse de Montclos",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          },
+          {
+            "o_id": 576,
+            "title": "Boko Haram",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6651
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1707,
+            "target": 2009,
+            "weight": 15.8982,
+            "cooc": 2
+          },
+          {
+            "source": 1707,
+            "target": 2010,
+            "weight": 15.8982,
+            "cooc": 2
+          },
+          {
+            "source": 1707,
+            "target": 576,
+            "weight": 9.6651,
+            "cooc": 3
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -137,6 +273,58 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1707,
+            "title": "Élodie Apard",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2009,
+            "title": "Adam Higazi",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          },
+          {
+            "o_id": 2010,
+            "title": "Marc-Antoine Pérouse de Montclos",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 15.8982
+          },
+          {
+            "o_id": 576,
+            "title": "Boko Haram",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 9.6651
+          }
+        ],
+        "edges": [
+          {
+            "source": 1707,
+            "target": 2009,
+            "weight": 15.8982,
+            "cooc": 2
+          },
+          {
+            "source": 1707,
+            "target": 2010,
+            "weight": 15.8982,
+            "cooc": 2
+          },
+          {
+            "source": 1707,
+            "target": 576,
+            "weight": 9.6651,
+            "cooc": 3
+          }
+        ]
       }
     }
   },
@@ -148,14 +336,14 @@
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
-          "count": 3
+          "count": 11
         },
         {
           "o_id": 541,
           "name": "Nigéria",
           "lat": 10.0,
           "lng": 8.0,
-          "count": 3
+          "count": 11
         }
       ],
       "subject": [],
@@ -174,6 +362,22 @@
           "lng": 8.0,
           "count": 3
         }
+      ],
+      "editor": [
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 11
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 11
+        }
       ]
     }
   },
@@ -181,7 +385,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -467,6 +672,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -529,6 +828,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2021
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -536,10 +855,94 @@
     "by_role": {
       "all": {
         "names": [
-          "Boko Haram"
+          "Boko Haram",
+          "Adam Higazi",
+          "Marc-Antoine Pérouse de Montclos",
+          "Abdoulaye Sounaye",
+          "Kyari Mohammed",
+          "Peul",
+          "Abdourahmane Idrissa",
+          "Muhammadu Mustapha Gwadabe"
         ],
         "matrix": [
           [
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]
@@ -554,6 +957,100 @@
         ],
         "matrix": [
           [
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Boko Haram",
+          "Adam Higazi",
+          "Marc-Antoine Pérouse de Montclos",
+          "Abdoulaye Sounaye",
+          "Kyari Mohammed",
+          "Peul",
+          "Abdourahmane Idrissa",
+          "Muhammadu Mustapha Gwadabe"
+        ],
+        "matrix": [
+          [
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]

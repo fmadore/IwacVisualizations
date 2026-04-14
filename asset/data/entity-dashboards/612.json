@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:53.593764+00:00",
+  "generated_at": "2026-04-14T06:30:25.831576+00:00",
   "entity": {
     "o_id": 612,
     "title": "Association Islamique Nachroul islam de Pouytenga",
@@ -42,6 +42,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2018,
           "year_max": 2018
@@ -51,6 +52,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2018,
           "year_max": 2018
@@ -60,6 +62,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2018,
           "year_max": 2018
@@ -314,20 +317,6 @@
           "count": 2
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 1
-        },
-        {
-          "o_id": 60497,
-          "name": "Gao",
-          "lat": 16.266666666667,
-          "lng": -0.05,
-          "count": 1
-        },
-        {
           "o_id": 350,
           "name": "Koupéla",
           "lat": 12.17864,
@@ -340,6 +329,20 @@
           "lat": 12.06157,
           "lng": 0.35843,
           "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 60497,
+          "name": "Gao",
+          "lat": 16.266666666667,
+          "lng": -0.05,
+          "count": 1
         }
       ]
     }
@@ -348,19 +351,19 @@
     "by_role": {
       "all": [
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
-          "count": 2
-        },
-        {
           "label": "président - victime - crise - aucun - responsable - décider",
           "count": 2
         },
         {
-          "label": "ouédraogo - population - village - commune - man - maire",
-          "count": 1
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 2
         },
         {
           "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "ouédraogo - population - village - commune - man - maire",
           "count": 1
         }
       ]
@@ -584,17 +587,17 @@
           "Sécurité islamique Pouytenga",
           "Sécurité",
           "Burkina Faso",
-          "Police",
           "Mouvement Sunnite du Burkina Faso",
+          "Police",
           "Terrorisme",
           "Radicalisation",
           "Koglweogo",
-          "Jeunesse",
-          "Laïcité",
-          "Justice",
           "Extrémisme",
           "Mosquée",
-          "Ouagadougou"
+          "Ouagadougou",
+          "Jeunesse",
+          "Laïcité",
+          "Justice"
         ],
         "matrix": [
           [
@@ -658,10 +661,10 @@
             3,
             3,
             3,
+            2,
+            2,
+            2,
             1,
-            2,
-            2,
-            2,
             2,
             2
           ],
@@ -672,10 +675,10 @@
             4,
             0,
             3,
-            2,
-            2,
             3,
-            1,
+            3,
+            2,
+            2,
             2,
             2,
             1,
@@ -689,47 +692,13 @@
             4,
             3,
             0,
-            3,
-            3,
             2,
+            2,
+            3,
             1,
             1,
             1,
-            2,
-            2,
-            2
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            2,
-            3,
-            0,
-            3,
-            2,
-            0,
             1,
-            1,
-            2,
-            2,
-            2
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            2,
-            3,
-            3,
-            0,
-            2,
-            0,
-            1,
-            1,
-            2,
             2,
             2
           ],
@@ -740,15 +709,100 @@
             3,
             3,
             2,
+            0,
+            3,
+            2,
+            2,
             2,
             2,
             0,
-            0,
-            2,
-            2,
-            1,
             1,
             1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            3,
+            2,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
           ],
           [
             2,
@@ -772,66 +826,15 @@
             2,
             2,
             2,
+            1,
             2,
             1,
             1,
-            1,
-            2,
-            0,
-            0,
-            2,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            2,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            2,
-            2,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            2,
             2,
             1,
             0,
             0,
             0,
-            1,
             0,
             2
           ],
@@ -842,13 +845,13 @@
             2,
             1,
             2,
-            2,
+            1,
+            1,
             2,
             1,
             0,
             0,
             0,
-            1,
             2,
             0
           ]

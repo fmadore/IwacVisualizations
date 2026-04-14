@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.525909+00:00",
+  "generated_at": "2026-04-14T06:30:11.066486+00:00",
   "person": {
     "o_id": 1055,
     "title": "Ibrahima Traoré",
@@ -36,6 +36,13 @@
         "year_max": 2019,
         "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -121,6 +128,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -132,6 +144,7 @@
           "total": 16,
           "articles": 16,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2019
@@ -141,6 +154,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2012,
           "year_max": 2018
@@ -150,6 +164,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1981
@@ -159,6 +174,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1979
@@ -170,6 +186,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1981
@@ -179,6 +196,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1979
@@ -190,6 +208,7 @@
           "total": 16,
           "articles": 16,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2019
@@ -199,11 +218,13 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2012,
           "year_max": 2018
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -229,7 +250,8 @@
           "name": "Burkina Faso",
           "count": 20
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -248,7 +270,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 15,
-            "score": 41.6791
+            "score": 41.4256
           },
           {
             "o_id": 1104,
@@ -353,7 +375,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 124,
@@ -388,7 +410,7 @@
           {
             "source": 1055,
             "target": 76335,
-            "weight": 41.6791,
+            "weight": 41.4256,
             "cooc": 15
           },
           {
@@ -478,7 +500,7 @@
           {
             "source": 1055,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
@@ -625,7 +647,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 15,
-            "score": 41.6791
+            "score": 41.4256
           },
           {
             "o_id": 1104,
@@ -688,7 +710,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 105,
@@ -709,7 +731,7 @@
           {
             "source": 1055,
             "target": 76335,
-            "weight": 41.6791,
+            "weight": 41.4256,
             "cooc": 15
           },
           {
@@ -763,7 +785,7 @@
           {
             "source": 1055,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
@@ -779,6 +801,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1055,
+            "title": "Ibrahima Traoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1146,7 +1180,8 @@
           "lng": -3.46075,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1236,7 +1271,8 @@
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1684,6 +1720,100 @@
           }
         },
         "articles_total": 20
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1990,6 +2120,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2822,6 +2970,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

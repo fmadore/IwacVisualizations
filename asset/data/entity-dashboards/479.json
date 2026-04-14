@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:39.588833+00:00",
+  "generated_at": "2026-04-14T06:30:11.881778+00:00",
   "entity": {
     "o_id": 479,
     "title": "Pèrèrè",
@@ -50,36 +50,40 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2017,
           "year_max": 2020
-        },
-        {
-          "name": "La Perche du Nord",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2021,
-          "year_max": 2021
-        },
-        {
-          "name": "La Nation",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 1994,
-          "year_max": 1994
         },
         {
           "name": "Le Matinal",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
+        },
+        {
+          "name": "La Nation",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "La Perche du Nord",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2021,
+          "year_max": 2021
         }
       ]
     }
@@ -213,13 +217,6 @@
           "count": 5
         },
         {
-          "o_id": 60482,
-          "name": "Borgou",
-          "lat": 10.74821385974019,
-          "lng": 0.6196353130056622,
-          "count": 2
-        },
-        {
           "o_id": 299,
           "name": "Cotonou",
           "lat": 6.36536,
@@ -234,38 +231,38 @@
           "count": 2
         },
         {
-          "o_id": 488,
-          "name": "Lagos",
-          "lat": 6.45,
-          "lng": 3.4,
+          "o_id": 60482,
+          "name": "Borgou",
+          "lat": 10.74821385974019,
+          "lng": 0.6196353130056622,
+          "count": 2
+        },
+        {
+          "o_id": 385,
+          "name": "Porto-Novo",
+          "lat": 6.49646,
+          "lng": 2.60359,
           "count": 1
         },
         {
-          "o_id": 14751,
-          "name": "Akpakpa",
-          "lat": 6.36634,
-          "lng": 2.45579,
+          "o_id": 399,
+          "name": "Tchaourou",
+          "lat": 9.0349,
+          "lng": 2.5169,
           "count": 1
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
           "count": 1
         },
         {
-          "o_id": 270,
-          "name": "Abomey",
-          "lat": 7.18286,
-          "lng": 1.99119,
-          "count": 1
-        },
-        {
-          "o_id": 271,
-          "name": "Abomey-Calavi",
-          "lat": 6.44852,
-          "lng": 2.35566,
+          "o_id": 371,
+          "name": "N'Dali",
+          "lat": 9.73027,
+          "lng": 2.45032,
           "count": 1
         },
         {
@@ -318,31 +315,38 @@
           "count": 1
         },
         {
-          "o_id": 385,
-          "name": "Porto-Novo",
-          "lat": 6.49646,
-          "lng": 2.60359,
+          "o_id": 14751,
+          "name": "Akpakpa",
+          "lat": 6.36634,
+          "lng": 2.45579,
           "count": 1
         },
         {
-          "o_id": 399,
-          "name": "Tchaourou",
-          "lat": 9.0349,
-          "lng": 2.5169,
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 1
         },
         {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
+          "o_id": 270,
+          "name": "Abomey",
+          "lat": 7.18286,
+          "lng": 1.99119,
           "count": 1
         },
         {
-          "o_id": 371,
-          "name": "N'Dali",
-          "lat": 9.73027,
-          "lng": 2.45032,
+          "o_id": 271,
+          "name": "Abomey-Calavi",
+          "lat": 6.44852,
+          "lng": 2.35566,
+          "count": 1
+        },
+        {
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
           "count": 1
         }
       ]
@@ -352,15 +356,7 @@
     "by_role": {
       "all": [
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
-          "count": 1
-        },
-        {
-          "label": "président - victime - crise - aucun - responsable - décider",
-          "count": 1
-        },
-        {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
@@ -368,7 +364,15 @@
           "count": 1
         },
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "count": 1
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -611,7 +615,17 @@
         ],
         "cells": [
           [
-            27,
+            25,
+            3,
+            1
+          ],
+          [
+            26,
+            0,
+            1
+          ],
+          [
+            23,
             8,
             1
           ],
@@ -621,18 +635,8 @@
             1
           ],
           [
-            23,
+            27,
             8,
-            1
-          ],
-          [
-            26,
-            0,
-            1
-          ],
-          [
-            25,
-            3,
             1
           ]
         ]
@@ -643,85 +647,51 @@
     "by_role": {
       "all": {
         "names": [
+          "Cotonou",
+          "Élections",
+          "Extrémisme",
+          "Bénin",
           "Terrorisme",
           "Radicalisation",
-          "Extrémisme",
           "Borgou",
-          "Élections",
-          "Cotonou",
-          "Bénin",
-          "Sensibilisation",
-          "Paix",
-          "Sécurité",
-          "Lagos",
-          "Coran",
-          "Conflit",
-          "Imamat",
-          "Mosquée"
+          "Parti du Renouveau Démocratique",
+          "Porto-Novo",
+          "Ibrahim Ousmane",
+          "Union Progressiste",
+          "Sacca Lafia",
+          "Tchaourou",
+          "Parakou",
+          "N'Dali"
         ],
         "matrix": [
           [
             0,
-            2,
-            2,
             1,
             0,
-            0,
-            1,
-            1,
-            1,
             1,
             0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            0,
-            2,
-            1,
             0,
             0,
             1,
             1,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            0,
-            1,
-            0,
-            0,
             1,
             1,
             1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
+            1
           ],
           [
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
-            0,
             1,
-            0,
             1,
-            0,
-            0,
-            0,
             1,
             1,
             1,
@@ -733,25 +703,8 @@
             0,
             0,
             1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
+            2,
+            2,
             1,
             0,
             0,
@@ -764,10 +717,61 @@
           ],
           [
             1,
+            0,
+            1,
+            0,
             1,
             1,
             1,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             0,
@@ -782,58 +786,55 @@
           [
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
             1,
-            0,
-            0,
-            0,
-            0,
             1,
-            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             1,
             0,
-            0,
-            0,
-            0,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
-            0,
-            0,
-            0,
             1,
             1,
             0,
@@ -841,6 +842,9 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
             0,
             1,
             1,
@@ -848,26 +852,6 @@
             1
           ],
           [
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            0,
             1,
             1,
             0,
@@ -877,14 +861,14 @@
             0,
             1,
             1,
+            1,
+            1,
             0,
+            1,
             1,
             1
           ],
           [
-            0,
-            0,
-            0,
             1,
             1,
             0,
@@ -892,6 +876,26 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
             1,
             1,
             1,
@@ -899,9 +903,6 @@
             1
           ],
           [
-            0,
-            0,
-            0,
             1,
             1,
             0,
@@ -909,6 +910,9 @@
             0,
             0,
             0,
+            1,
+            1,
+            1,
             1,
             1,
             1,

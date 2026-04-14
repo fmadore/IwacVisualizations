@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:48.971354+00:00",
+  "generated_at": "2026-04-14T06:30:20.411561+00:00",
   "person": {
     "o_id": 65721,
     "title": "Martial Kokou Kataka",
@@ -35,6 +35,13 @@
         "year_max": 2022,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -138,6 +145,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -149,6 +161,7 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2002,
           "year_max": 2022
@@ -160,6 +173,7 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2002,
           "year_max": 2022
@@ -171,11 +185,13 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2002,
           "year_max": 2022
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -197,7 +213,8 @@
           "name": "Togo",
           "count": 17
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -279,28 +296,28 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.6032
+            "score": 5.5686
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -361,25 +378,25 @@
           {
             "source": 65721,
             "target": 61,
-            "weight": 5.6032,
+            "weight": 5.5686,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -461,28 +478,28 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.6032
+            "score": 5.5686
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -543,25 +560,25 @@
           {
             "source": 65721,
             "target": 61,
-            "weight": 5.6032,
+            "weight": 5.5686,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -643,28 +660,28 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.6032
+            "score": 5.5686
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -725,28 +742,40 @@
           {
             "source": 65721,
             "target": 61,
-            "weight": 5.6032,
+            "weight": 5.5686,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 65721,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 65721,
+            "title": "Martial Kokou Kataka",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1387,7 +1416,8 @@
           "lng": -10.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1481,7 +1511,8 @@
           "label": "cheikh - concours - édition - candidat - santé - imams",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2181,6 +2212,100 @@
           }
         },
         "articles_total": 17
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2548,6 +2673,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3380,6 +3523,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

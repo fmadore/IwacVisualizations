@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.060509+00:00",
+  "generated_at": "2026-04-14T06:30:22.717256+00:00",
   "entity": {
     "o_id": 63427,
     "title": "Sanguié",
@@ -44,28 +44,31 @@
     "by_role": {
       "all": [
         {
-          "name": "Sidwaya",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1986,
-          "year_max": 1999
-        },
-        {
           "name": "L'Observateur Paalga",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2005
+        },
+        {
+          "name": "Sidwaya",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 1986,
+          "year_max": 1999
         },
         {
           "name": "Le Pays",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1999,
           "year_max": 1999
@@ -255,34 +258,6 @@
           "count": 3
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 76314,
-          "name": "Kadiogo",
-          "lat": 12.333333,
-          "lng": -1.5,
-          "count": 1
-        },
-        {
-          "o_id": 76315,
-          "name": "Yatenga",
-          "lat": 13.583333,
-          "lng": -2.416667,
-          "count": 1
-        },
-        {
-          "o_id": 63422,
-          "name": "Passoré",
-          "lat": 12.95,
-          "lng": -2.2666666666667,
-          "count": 1
-        },
-        {
           "o_id": 13955,
           "name": "République centrafricaine",
           "lat": 6.7,
@@ -395,6 +370,41 @@
           "count": 1
         },
         {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 76314,
+          "name": "Kadiogo",
+          "lat": 12.333333,
+          "lng": -1.5,
+          "count": 1
+        },
+        {
+          "o_id": 76315,
+          "name": "Yatenga",
+          "lat": 13.583333,
+          "lng": -2.416667,
+          "count": 1
+        },
+        {
+          "o_id": 63422,
+          "name": "Passoré",
+          "lat": 12.95,
+          "lng": -2.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63423,
+          "name": "Poura",
+          "lat": 11.616666666667,
+          "lng": -2.75,
+          "count": 1
+        },
+        {
           "o_id": 33160,
           "name": "Réo",
           "lat": 12.316666666667,
@@ -406,13 +416,6 @@
           "name": "Léo",
           "lat": 11.10033,
           "lng": -2.10654,
-          "count": 1
-        },
-        {
-          "o_id": 63423,
-          "name": "Poura",
-          "lat": 11.616666666667,
-          "lng": -2.75,
           "count": 1
         }
       ]
@@ -426,11 +429,11 @@
           "count": 5
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
           "count": 1
         },
         {
-          "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         }
       ]
@@ -665,13 +668,23 @@
         ],
         "cells": [
           [
+            19,
+            11,
+            1
+          ],
+          [
+            13,
+            6,
+            1
+          ],
+          [
             0,
             7,
             1
           ],
           [
-            19,
-            11,
+            9,
+            7,
             1
           ],
           [
@@ -688,16 +701,6 @@
             13,
             11,
             1
-          ],
-          [
-            13,
-            6,
-            1
-          ],
-          [
-            9,
-            7,
-            1
           ]
         ]
       }
@@ -710,31 +713,31 @@
           "Ouagadougou",
           "Mosquée",
           "Construction mosquée",
-          "Coopération",
           "Burkina Faso",
+          "Coopération",
           "Prière",
-          "Aïd el-Fitr",
+          "Paix",
           "Mahomet",
           "Agence des Musulmans d'Afrique/Direct-Aid",
-          "Paix",
-          "Banque Islamique de Développement",
-          "Association Ihsane pour le Développement et l'Éducation",
-          "Hadj",
-          "Arabie saoudite",
-          "Kadiogo"
+          "Aïd el-Fitr",
+          "Norbert Zongo",
+          "Mathieu Kérékou",
+          "République centrafricaine",
+          "Rassemblement des républicains de Côte d'Ivoire",
+          "Nicéphore Soglo"
         ],
         "matrix": [
           [
             0,
             3,
             2,
+            1,
             3,
-            1,
-            2,
-            2,
-            2,
             2,
             1,
+            2,
+            2,
+            2,
             1,
             1,
             1,
@@ -748,10 +751,10 @@
             2,
             2,
             3,
+            2,
+            2,
+            2,
             1,
-            2,
-            2,
-            2,
             0,
             0,
             0,
@@ -765,15 +768,32 @@
             2,
             2,
             3,
+            2,
+            2,
+            2,
             1,
-            2,
-            2,
-            2,
             0,
             0,
             0,
             0,
             0
+          ],
+          [
+            1,
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
           ],
           [
             3,
@@ -782,27 +802,10 @@
             0,
             0,
             2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             1,
             2,
             2,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
+            2,
             0,
             0,
             0,
@@ -813,63 +816,12 @@
             2,
             3,
             3,
-            2,
-            1,
-            0,
-            1,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
             1,
             2,
             0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             2,
             2,
             2,
-            2,
-            0,
-            2,
-            1,
-            0,
-            2,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            2,
-            1,
-            2,
-            0,
             1,
             0,
             0,
@@ -895,13 +847,64 @@
             0
           ],
           [
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            0,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             1,
             0,
             0,
             1,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -918,7 +921,7 @@
             1,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -935,7 +938,7 @@
             1,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -952,7 +955,7 @@
             1,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0,
@@ -969,7 +972,7 @@
             1,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0,

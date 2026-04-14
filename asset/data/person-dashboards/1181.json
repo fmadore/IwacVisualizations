@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:33.911743+00:00",
+  "generated_at": "2026-04-14T06:30:06.834971+00:00",
   "person": {
     "o_id": 1181,
     "title": "Sidi Mohamed Maïga",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -118,6 +125,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -129,6 +141,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1984,
           "year_max": 2015
@@ -138,6 +151,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1979,
           "year_max": 1980
@@ -147,6 +161,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2004,
           "year_max": 2007
@@ -156,6 +171,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1992,
           "year_max": 2007
@@ -165,6 +181,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2010,
           "year_max": 2010
@@ -174,6 +191,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1972,
           "year_max": 1972
@@ -183,6 +201,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
@@ -194,6 +213,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1984,
           "year_max": 2015
@@ -203,6 +223,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1979,
           "year_max": 1980
@@ -212,6 +233,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2004,
           "year_max": 2007
@@ -221,6 +243,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1992,
           "year_max": 2007
@@ -230,6 +253,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2010,
           "year_max": 2010
@@ -239,6 +263,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1972,
           "year_max": 1972
@@ -248,12 +273,14 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -270,7 +297,8 @@
           "count": 20
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -359,7 +387,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 52,
@@ -394,7 +422,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 2,
-            "score": 5.0395
+            "score": 4.9961
           },
           {
             "o_id": 105,
@@ -422,14 +450,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 56,
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 13908,
@@ -517,7 +545,7 @@
           {
             "source": 1181,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -547,7 +575,7 @@
           {
             "source": 1181,
             "target": 578,
-            "weight": 5.0395,
+            "weight": 4.9961,
             "cooc": 2
           },
           {
@@ -571,13 +599,13 @@
           {
             "source": 1181,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
             "source": 1181,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -684,7 +712,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 52,
@@ -719,7 +747,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 2,
-            "score": 5.0395
+            "score": 4.9961
           },
           {
             "o_id": 105,
@@ -747,14 +775,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 56,
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 13908,
@@ -842,7 +870,7 @@
           {
             "source": 1181,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -872,7 +900,7 @@
           {
             "source": 1181,
             "target": 578,
-            "weight": 5.0395,
+            "weight": 4.9961,
             "cooc": 2
           },
           {
@@ -896,13 +924,13 @@
           {
             "source": 1181,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
             "source": 1181,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -926,6 +954,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1181,
+            "title": "Sidi Mohamed Maïga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1181,
@@ -1477,7 +1517,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -1566,7 +1607,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2032,6 +2074,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2326,6 +2462,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -2900,6 +3054,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

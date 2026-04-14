@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:54.501830+00:00",
+  "generated_at": "2026-04-14T06:30:26.674301+00:00",
   "entity": {
     "o_id": 661,
     "title": "COPRESS-AEEMB",
@@ -58,33 +58,37 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2001,
           "year_max": 2007
-        },
-        {
-          "name": "Le Pays",
-          "total": 4,
-          "articles": 4,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2004,
-          "year_max": 2012
         },
         {
           "name": "Sidwaya",
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2004,
           "year_max": 2013
+        },
+        {
+          "name": "Le Pays",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2004,
+          "year_max": 2012
         },
         {
           "name": "LeFaso.net",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
@@ -566,6 +570,13 @@
           "count": 4
         },
         {
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
+          "count": 4
+        },
+        {
           "o_id": 376,
           "name": "Ouagadougou",
           "lat": 12.36566,
@@ -573,11 +584,11 @@
           "count": 4
         },
         {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
-          "count": 4
+          "o_id": 76313,
+          "name": "Kaaba",
+          "lat": 21.4225,
+          "lng": 39.826167,
+          "count": 3
         },
         {
           "o_id": 443,
@@ -594,24 +605,10 @@
           "count": 3
         },
         {
-          "o_id": 76313,
-          "name": "Kaaba",
-          "lat": 21.4225,
-          "lng": 39.826167,
-          "count": 3
-        },
-        {
           "o_id": 294,
           "name": "Centre culturel islamique AEEMB",
           "lat": 12.37545088285411,
           "lng": -1.4871601188636745,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
           "count": 1
         },
         {
@@ -626,6 +623,13 @@
           "name": "Gounghin",
           "lat": 12.35641975819987,
           "lng": -1.5480543813205,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
           "count": 1
         }
       ]
@@ -643,7 +647,7 @@
           "count": 3
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 2
         },
         {
@@ -651,8 +655,12 @@
           "count": 2
         },
         {
-          "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 2
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
         },
         {
           "label": "mendicité - zakat - mendiant - association - sokodé - aide",
@@ -663,15 +671,11 @@
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
-          "count": 1
-        },
-        {
           "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -884,19 +888,14 @@
         ],
         "cells": [
           [
-            3,
+            0,
             1,
             1
           ],
           [
-            11,
-            6,
-            1
-          ],
-          [
-            6,
-            8,
-            1
+            3,
+            0,
+            2
           ],
           [
             6,
@@ -904,17 +903,7 @@
             2
           ],
           [
-            13,
-            2,
-            1
-          ],
-          [
-            3,
-            7,
-            1
-          ],
-          [
-            8,
+            12,
             2,
             1
           ],
@@ -925,21 +914,11 @@
           ],
           [
             13,
-            10,
+            1,
             1
           ],
           [
             3,
-            0,
-            2
-          ],
-          [
-            12,
-            2,
-            1
-          ],
-          [
-            0,
             1,
             1
           ],
@@ -955,7 +934,32 @@
           ],
           [
             13,
-            1,
+            2,
+            1
+          ],
+          [
+            8,
+            2,
+            1
+          ],
+          [
+            13,
+            10,
+            1
+          ],
+          [
+            11,
+            6,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            3,
+            7,
             1
           ]
         ]
@@ -969,18 +973,18 @@
           "Association des Élèves et Étudiants Musulmans au Burkina",
           "Burkina Faso",
           "Prière",
-          "Aïd el-Fitr",
-          "Aïd al-Adha (Tabaski)",
           "Mahomet",
-          "Hadj",
+          "Aïd al-Adha (Tabaski)",
+          "Aïd el-Fitr",
           "Abraham",
+          "Hadj",
           "Sacrifice",
-          "Zakat",
           "Jeûne",
           "La Mecque",
-          "Ouagadougou",
           "Mont Arafat",
-          "Ismaël"
+          "Ismaël",
+          "Ouagadougou",
+          "Zakat"
         ],
         "matrix": [
           [
@@ -1007,46 +1011,63 @@
             5,
             5,
             5,
-            4,
             6,
+            4,
             5,
-            3,
             3,
             2,
             3,
+            4,
             3,
-            4
+            3
           ],
           [
             9,
             8,
             0,
-            5,
-            5,
             6,
+            5,
+            5,
+            5,
             4,
             5,
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          [
+            7,
             5,
+            6,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
             3,
             3,
-            3,
-            3,
-            3,
-            4
+            2,
+            2,
+            2,
+            2
           ],
           [
             7,
             5,
             5,
+            2,
             0,
             7,
-            2,
             5,
             5,
             6,
-            3,
             1,
             2,
+            3,
             3,
             3,
             3
@@ -1055,33 +1076,33 @@
             7,
             5,
             5,
+            2,
             7,
             0,
-            2,
             5,
             5,
             6,
-            3,
             1,
             2,
+            3,
             3,
             3,
             3
           ],
           [
-            7,
-            5,
             6,
+            6,
+            5,
             2,
-            2,
+            5,
+            5,
             0,
-            2,
-            2,
-            2,
-            2,
+            4,
+            5,
+            1,
+            1,
             3,
-            3,
-            2,
+            4,
             2,
             2
           ],
@@ -1089,66 +1110,66 @@
             6,
             4,
             4,
-            5,
-            5,
             2,
+            5,
+            5,
+            4,
             0,
             4,
-            4,
-            2,
             2,
             3,
-            3,
             4,
+            2,
+            3,
             2
           ],
           [
             6,
-            6,
-            5,
             5,
             5,
             2,
+            6,
+            6,
+            5,
             4,
             0,
-            5,
-            2,
-            1,
-            1,
-            2,
-            3,
-            4
-          ],
-          [
-            6,
-            5,
-            5,
-            6,
-            6,
-            2,
-            4,
-            5,
-            0,
-            2,
             0,
             1,
             3,
             3,
-            3
+            3,
+            2
           ],
           [
             4,
             3,
             3,
             3,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            3,
+            1,
+            1,
+            0,
+            2
+          ],
+          [
+            4,
+            2,
+            3,
             3,
             2,
             2,
-            2,
-            2,
+            1,
+            3,
+            1,
+            3,
             0,
             2,
-            1,
             1,
             1,
             1
@@ -1157,84 +1178,67 @@
             4,
             3,
             3,
-            1,
-            1,
-            3,
-            2,
-            1,
-            0,
-            2,
-            0,
-            3,
-            0,
-            1,
-            1
-          ],
-          [
-            4,
-            2,
-            3,
-            2,
             2,
             3,
             3,
-            1,
-            1,
-            1,
             3,
-            0,
-            1,
-            2,
-            1
-          ],
-          [
             4,
             3,
-            3,
-            3,
-            3,
-            2,
-            3,
-            2,
-            3,
             1,
+            2,
             0,
             1,
-            0,
             3,
-            0
-          ],
-          [
-            4,
-            3,
-            3,
-            3,
-            3,
-            2,
-            4,
-            3,
-            3,
-            1,
-            1,
-            2,
-            3,
-            0,
             1
           ],
           [
             4,
             4,
             4,
+            2,
             3,
             3,
-            2,
-            2,
             4,
+            2,
             3,
             1,
             1,
             1,
             0,
+            0,
+            1
+          ],
+          [
+            4,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            3,
+            0,
+            1,
+            3,
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
             1,
             0
           ]

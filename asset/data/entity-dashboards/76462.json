@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.329350+00:00",
+  "generated_at": "2026-04-14T06:30:23.787995+00:00",
   "entity": {
     "o_id": 76462,
     "title": "Maison d'Arrêt et de Correction d'Abidjan",
@@ -54,6 +54,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 1995
@@ -63,6 +64,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2017
@@ -72,6 +74,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2018,
           "year_max": 2018
@@ -81,6 +84,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
@@ -90,6 +94,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2005
@@ -99,6 +104,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2009
@@ -328,6 +334,27 @@
           "count": 2
         },
         {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
           "o_id": 48426,
           "name": "Lakota",
           "lat": 5.8475,
@@ -375,27 +402,6 @@
           "lat": 5.25103333,
           "lng": -3.91063889,
           "count": 1
-        },
-        {
-          "o_id": 48427,
-          "name": "Odienné",
-          "lat": 9.5,
-          "lng": -7.566667,
-          "count": 1
-        },
-        {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 1
         }
       ]
     }
@@ -404,19 +410,19 @@
     "by_role": {
       "all": [
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
-          "count": 2
-        },
-        {
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 2
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
-          "count": 1
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 2
         },
         {
           "label": "école - enfant - éducation - formation - islamique - élève",
+          "count": 1
+        },
+        {
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         },
         {
@@ -675,12 +681,17 @@
         ],
         "cells": [
           [
+            23,
+            6,
+            1
+          ],
+          [
             0,
             1,
             1
           ],
           [
-            23,
+            11,
             6,
             1
           ],
@@ -697,11 +708,6 @@
           [
             10,
             9,
-            1
-          ],
-          [
-            11,
-            6,
             1
           ],
           [
@@ -725,18 +731,18 @@
           "Abidjan",
           "Côte d'Ivoire",
           "Ibrahim Brédji",
+          "Abobo",
           "Justice",
           "Dembelé Fousseni",
           "Politique",
           "Arrestation journalistes Plume Libre",
           "Abou Cissé",
           "Ibrahim Doumbia",
-          "Abobo",
           "Charité",
           "Treichville",
+          "Aguib Touré",
           "Conflit",
-          "Reporters sans frontières",
-          "Liberté"
+          "Reporters sans frontières"
         ],
         "matrix": [
           [
@@ -760,6 +766,9 @@
             3,
             0,
             1,
+            0,
+            1,
+            1,
             1,
             1,
             1,
@@ -767,9 +776,6 @@
             1,
             1,
             0,
-            1,
-            1,
-            1,
             1,
             1
           ],
@@ -777,13 +783,13 @@
             3,
             1,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             2,
             2,
             0,
@@ -792,9 +798,27 @@
           ],
           [
             2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
             1,
             0,
             0,
+            0,
             2,
             2,
             2,
@@ -803,7 +827,6 @@
             0,
             0,
             0,
-            1,
             1,
             1
           ],
@@ -811,6 +834,7 @@
             2,
             1,
             0,
+            0,
             2,
             0,
             2,
@@ -820,24 +844,6 @@
             0,
             0,
             0,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            0,
-            2,
-            2,
-            0,
-            2,
-            2,
-            2,
-            0,
-            0,
-            0,
-            1,
             1,
             1
           ],
@@ -845,33 +851,16 @@
             2,
             1,
             0,
-            2,
-            2,
-            2,
             0,
             2,
             2,
             0,
-            0,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            0,
-            2,
             2,
             2,
             2,
             0,
-            2,
             0,
             0,
-            0,
-            1,
             1,
             1
           ],
@@ -879,25 +868,57 @@
             2,
             1,
             0,
+            0,
             2,
             2,
             2,
+            0,
             2,
             2,
             0,
             0,
             0,
-            0,
-            1,
             1,
             1
           ],
           [
             2,
-            0,
             1,
             0,
             0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            2,
             0,
             0,
             0,
@@ -905,6 +926,8 @@
             0,
             0,
             0,
+            0,
+            2,
             0,
             0,
             0
@@ -920,23 +943,6 @@
             0,
             0,
             0,
-            0,
-            2,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             2,
             0,
             0,
@@ -945,7 +951,25 @@
           ],
           [
             1,
+            0,
+            0,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
             0,
             1,
             1,
@@ -957,29 +981,12 @@
             0,
             0,
             0,
-            1,
             1
           ],
           [
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            0,
-            1
-          ],
-          [
-            1,
-            1,
             0,
             1,
             1,
@@ -990,7 +997,6 @@
             0,
             0,
             0,
-            1,
             1,
             0
           ]

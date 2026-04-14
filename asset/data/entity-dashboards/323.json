@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:32.558613+00:00",
+  "generated_at": "2026-04-14T06:30:05.975199+00:00",
   "entity": {
     "o_id": 323,
     "title": "Grande Mosquée de Ouagadougou",
@@ -86,6 +86,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1992,
           "year_max": 2022
@@ -95,6 +96,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1997,
           "year_max": 2020
@@ -104,42 +106,47 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1979,
           "year_max": 1983
-        },
-        {
-          "name": "Le Pays",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 1999,
-          "year_max": 2020
-        },
-        {
-          "name": "FasoZine",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2014,
-          "year_max": 2018
         },
         {
           "name": "L'Evénement",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2003,
           "year_max": 2004
+        },
+        {
+          "name": "FasoZine",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2014,
+          "year_max": 2018
+        },
+        {
+          "name": "Le Pays",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 1999,
+          "year_max": 2020
         },
         {
           "name": "Carrefour africain",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1972,
           "year_max": 1972
@@ -435,16 +442,16 @@
             "score": 3.8098
           },
           {
-            "o_id": 669,
-            "title": "Forces de Défense et de Sécurité",
-            "type": "Organisations",
+            "o_id": 76288,
+            "title": "Police",
+            "type": "Sujets",
             "cooc": 2,
             "score": 3.7417
           },
           {
-            "o_id": 76288,
-            "title": "Police",
-            "type": "Sujets",
+            "o_id": 669,
+            "title": "Forces de Défense et de Sécurité",
+            "type": "Organisations",
             "cooc": 2,
             "score": 3.7417
           },
@@ -750,13 +757,13 @@
           },
           {
             "source": 323,
-            "target": 669,
+            "target": 76288,
             "weight": 3.7417,
             "cooc": 2
           },
           {
             "source": 323,
-            "target": 76288,
+            "target": 669,
             "weight": 3.7417,
             "cooc": 2
           },
@@ -905,27 +912,6 @@
           "count": 2
         },
         {
-          "o_id": 13448,
-          "name": "Le Caire",
-          "lat": 30.044444,
-          "lng": 31.235833,
-          "count": 1
-        },
-        {
-          "o_id": 331,
-          "name": "Iran",
-          "lat": 32.0,
-          "lng": 53.0,
-          "count": 1
-        },
-        {
-          "o_id": 311,
-          "name": "Fada N'Gourma",
-          "lat": 12.06157,
-          "lng": 0.35843,
-          "count": 1
-        },
-        {
           "o_id": 321,
           "name": "Gourcy",
           "lat": 13.20776,
@@ -975,27 +961,6 @@
           "count": 1
         },
         {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
-        },
-        {
           "o_id": 405,
           "name": "Ziniaré",
           "lat": 12.58186,
@@ -1003,17 +968,31 @@
           "count": 1
         },
         {
-          "o_id": 76314,
-          "name": "Kadiogo",
-          "lat": 12.333333,
-          "lng": -1.5,
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
           "count": 1
         },
         {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
+          "o_id": 331,
+          "name": "Iran",
+          "lat": 32.0,
+          "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
+          "count": 1
+        },
+        {
+          "o_id": 311,
+          "name": "Fada N'Gourma",
+          "lat": 12.06157,
+          "lng": 0.35843,
           "count": 1
         },
         {
@@ -1045,13 +1024,6 @@
           "count": 1
         },
         {
-          "o_id": 410,
-          "name": "Tchad",
-          "lat": 15.0,
-          "lng": 19.0,
-          "count": 1
-        },
-        {
           "o_id": 383,
           "name": "Pô",
           "lat": 11.16972,
@@ -1063,6 +1035,41 @@
           "name": "Gounghin",
           "lat": 12.35641975819987,
           "lng": -1.5480543813205,
+          "count": 1
+        },
+        {
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 76314,
+          "name": "Kadiogo",
+          "lat": 12.333333,
+          "lng": -1.5,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
           "count": 1
         }
       ]
@@ -1076,11 +1083,11 @@
           "count": 7
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 6
         },
         {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 6
         },
         {
@@ -1100,15 +1107,11 @@
           "count": 1
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
-          "count": 1
-        },
-        {
           "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         },
         {
-          "label": "ouédraogo - population - village - commune - man - maire",
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 1
         },
         {
@@ -1117,6 +1120,10 @@
         },
         {
           "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         }
       ]
@@ -1394,88 +1401,8 @@
         ],
         "cells": [
           [
-            47,
-            10,
-            1
-          ],
-          [
-            25,
-            8,
-            1
-          ],
-          [
-            39,
-            10,
-            1
-          ],
-          [
-            8,
-            0,
-            1
-          ],
-          [
-            50,
-            3,
-            1
-          ],
-          [
-            20,
-            1,
-            1
-          ],
-          [
-            44,
-            7,
-            1
-          ],
-          [
             0,
             4,
-            1
-          ],
-          [
-            49,
-            2,
-            1
-          ],
-          [
-            46,
-            7,
-            1
-          ],
-          [
-            48,
-            3,
-            1
-          ],
-          [
-            11,
-            8,
-            1
-          ],
-          [
-            46,
-            11,
-            1
-          ],
-          [
-            48,
-            6,
-            1
-          ],
-          [
-            10,
-            6,
-            1
-          ],
-          [
-            22,
-            7,
-            1
-          ],
-          [
-            40,
-            7,
             1
           ],
           [
@@ -1484,23 +1411,8 @@
             2
           ],
           [
-            7,
+            48,
             3,
-            1
-          ],
-          [
-            42,
-            5,
-            1
-          ],
-          [
-            29,
-            6,
-            1
-          ],
-          [
-            28,
-            8,
             1
           ],
           [
@@ -1514,6 +1426,56 @@
             1
           ],
           [
+            40,
+            7,
+            1
+          ],
+          [
+            20,
+            1,
+            1
+          ],
+          [
+            42,
+            5,
+            1
+          ],
+          [
+            10,
+            6,
+            1
+          ],
+          [
+            7,
+            3,
+            1
+          ],
+          [
+            22,
+            7,
+            1
+          ],
+          [
+            29,
+            9,
+            1
+          ],
+          [
+            29,
+            3,
+            1
+          ],
+          [
+            44,
+            7,
+            1
+          ],
+          [
+            46,
+            7,
+            1
+          ],
+          [
             27,
             8,
             1
@@ -1524,9 +1486,9 @@
             1
           ],
           [
-            29,
-            3,
-            1
+            48,
+            8,
+            2
           ],
           [
             49,
@@ -1534,8 +1496,8 @@
             1
           ],
           [
-            29,
-            9,
+            49,
+            2,
             1
           ],
           [
@@ -1545,17 +1507,62 @@
           ],
           [
             48,
+            9,
+            1
+          ],
+          [
+            11,
             8,
-            2
+            1
+          ],
+          [
+            46,
+            11,
+            1
+          ],
+          [
+            8,
+            0,
+            1
+          ],
+          [
+            50,
+            3,
+            1
+          ],
+          [
+            28,
+            8,
+            1
           ],
           [
             48,
-            9,
+            6,
+            1
+          ],
+          [
+            25,
+            8,
             1
           ],
           [
             20,
             3,
+            1
+          ],
+          [
+            29,
+            6,
+            1
+          ],
+          [
+            47,
+            10,
+            1
+          ],
+          [
+            39,
+            10,
             1
           ],
           [
@@ -1576,13 +1583,13 @@
           "Communauté Musulmane du Burkina Faso",
           "Mosquée",
           "Prière",
-          "Paix",
           "Aboubacar Sana",
+          "Paix",
           "Abdou Rasmané Sana",
           "Pluralisme religieux",
           "Crise",
-          "Fédération des Associations Islamiques du Burkina",
           "Ramadan",
+          "Fédération des Associations Islamiques du Burkina",
           "Place de la Révolution",
           "Éducation",
           "Mahamoudou Bandé"
@@ -1611,8 +1618,8 @@
             14,
             13,
             8,
-            11,
             7,
+            11,
             7,
             6,
             6,
@@ -1628,8 +1635,8 @@
             0,
             12,
             6,
-            8,
             10,
+            8,
             9,
             6,
             7,
@@ -1667,28 +1674,11 @@
             2,
             2,
             1,
-            2,
             4,
+            2,
             4,
             1,
             2
-          ],
-          [
-            11,
-            11,
-            8,
-            7,
-            5,
-            0,
-            7,
-            4,
-            4,
-            4,
-            2,
-            3,
-            3,
-            2,
-            3
           ],
           [
             11,
@@ -1696,12 +1686,29 @@
             10,
             7,
             5,
+            0,
+            7,
+            4,
+            4,
+            3,
+            2,
+            0,
+            3,
+            2,
+            3
+          ],
+          [
+            11,
+            11,
+            8,
+            7,
+            5,
             7,
             0,
             4,
             4,
+            4,
             3,
-            0,
             2,
             3,
             2,
@@ -1718,8 +1725,8 @@
             0,
             0,
             7,
-            1,
             0,
+            1,
             0,
             1,
             5
@@ -1735,8 +1742,8 @@
             0,
             0,
             0,
-            0,
             1,
+            0,
             3,
             2,
             0
@@ -1747,13 +1754,13 @@
             7,
             6,
             1,
-            4,
             3,
+            4,
             7,
             0,
             0,
-            1,
             0,
+            1,
             0,
             1,
             4
@@ -1763,34 +1770,34 @@
             4,
             1,
             3,
+            4,
             2,
-            2,
+            3,
             0,
             1,
             0,
-            1,
             0,
             2,
-            0,
-            0,
-            1
+            2,
+            1,
+            0
           ],
           [
             6,
             4,
             1,
             3,
-            4,
-            3,
-            2,
-            0,
-            1,
-            0,
             2,
             0,
             2,
             1,
-            0
+            0,
+            1,
+            2,
+            0,
+            0,
+            0,
+            1
           ],
           [
             5,
@@ -1803,8 +1810,8 @@
             0,
             3,
             0,
-            0,
             2,
+            0,
             0,
             1,
             0
@@ -1820,8 +1827,8 @@
             1,
             2,
             1,
-            0,
             1,
+            0,
             1,
             0,
             0
@@ -1837,8 +1844,8 @@
             5,
             0,
             4,
-            1,
             0,
+            1,
             0,
             0,
             0

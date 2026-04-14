@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:41.552302+00:00",
+  "generated_at": "2026-04-14T06:30:13.554222+00:00",
   "entity": {
     "o_id": 514,
     "title": "Mango",
@@ -94,6 +94,7 @@
           "total": 24,
           "articles": 24,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1973,
           "year_max": 2021
@@ -103,6 +104,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2021,
           "year_max": 2024
@@ -112,6 +114,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1986,
           "year_max": 1989
@@ -121,27 +124,30 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1996,
           "year_max": 1996
-        },
-        {
-          "name": "Le Rendez-Vous",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Togo",
-          "year_min": 2013,
-          "year_max": 2013
         },
         {
           "name": "Courrier du Golfe",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1992,
           "year_max": 1992
+        },
+        {
+          "name": "Le Rendez-Vous",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Togo",
+          "year_min": 2013,
+          "year_max": 2013
         }
       ]
     }
@@ -511,9 +517,9 @@
             "score": 6.007
           },
           {
-            "o_id": 515,
-            "title": "Niamtougou",
-            "type": "Lieux",
+            "o_id": 851,
+            "title": "Église évangélique du Togo",
+            "type": "Organisations",
             "cooc": 2,
             "score": 5.9057
           }
@@ -815,7 +821,7 @@
           },
           {
             "source": 514,
-            "target": 515,
+            "target": 851,
             "weight": 5.9057,
             "cooc": 2
           }
@@ -883,17 +889,17 @@
           "count": 10
         },
         {
-          "o_id": 497,
-          "name": "Atakpamé",
-          "lat": 7.5269444444444,
-          "lng": 1.1266666666667,
-          "count": 9
-        },
-        {
           "o_id": 522,
           "name": "Tchamba",
           "lat": 9.0333333333333,
           "lng": 1.4166666666667,
+          "count": 9
+        },
+        {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
           "count": 9
         },
         {
@@ -902,13 +908,6 @@
           "lat": 9.25,
           "lng": 0.78333333333333,
           "count": 8
-        },
-        {
-          "o_id": 524,
-          "name": "Tsévié",
-          "lat": 6.4333333333333,
-          "lng": 1.2166666666667,
-          "count": 7
         },
         {
           "o_id": 532,
@@ -925,11 +924,11 @@
           "count": 7
         },
         {
-          "o_id": 60566,
-          "name": "Tône",
-          "lat": 10.916667,
-          "lng": 0.166667,
-          "count": 6
+          "o_id": 524,
+          "name": "Tsévié",
+          "lat": 6.4333333333333,
+          "lng": 1.2166666666667,
+          "count": 7
         },
         {
           "o_id": 506,
@@ -939,17 +938,24 @@
           "count": 6
         },
         {
-          "o_id": 60542,
-          "name": "Région des Savanes",
-          "lat": 10.5,
-          "lng": 0.5,
-          "count": 5
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
+          "count": 6
         },
         {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
+          "count": 5
+        },
+        {
+          "o_id": 60542,
+          "name": "Région des Savanes",
+          "lat": 10.5,
+          "lng": 0.5,
           "count": 5
         },
         {
@@ -974,31 +980,10 @@
           "count": 5
         },
         {
-          "o_id": 60548,
-          "name": "Tandjouaré",
-          "lat": 10.655833333333,
-          "lng": 0.195,
-          "count": 4
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 4
-        },
-        {
-          "o_id": 503,
-          "name": "Cinkassé",
-          "lat": 11.096876,
-          "lng": 0.016393,
-          "count": 4
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
+          "o_id": 60481,
+          "name": "Blitta",
+          "lat": 8.316667,
+          "lng": 0.983333,
           "count": 4
         },
         {
@@ -1009,24 +994,17 @@
           "count": 4
         },
         {
-          "o_id": 498,
-          "name": "Badou",
-          "lat": 7.584327,
-          "lng": 0.606651,
-          "count": 4
-        },
-        {
-          "o_id": 60481,
-          "name": "Blitta",
-          "lat": 8.316667,
-          "lng": 0.983333,
-          "count": 4
-        },
-        {
           "o_id": 520,
           "name": "Sotouboua",
           "lat": 8.56667,
           "lng": 0.983333,
+          "count": 4
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 4
         },
         {
@@ -1037,17 +1015,38 @@
           "count": 4
         },
         {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 3
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 4
         },
         {
-          "o_id": 60480,
-          "name": "Binah",
-          "lat": 9.75,
-          "lng": 1.31667,
+          "o_id": 498,
+          "name": "Badou",
+          "lat": 7.584327,
+          "lng": 0.606651,
+          "count": 4
+        },
+        {
+          "o_id": 60548,
+          "name": "Tandjouaré",
+          "lat": 10.655833333333,
+          "lng": 0.195,
+          "count": 4
+        },
+        {
+          "o_id": 503,
+          "name": "Cinkassé",
+          "lat": 11.096876,
+          "lng": 0.016393,
+          "count": 4
+        },
+        {
+          "o_id": 495,
+          "name": "Anié",
+          "lat": 7.76111111,
+          "lng": 1.19166667,
           "count": 3
         },
         {
@@ -1055,6 +1054,20 @@
           "name": "Ghana",
           "lat": 8.1,
           "lng": -1.2,
+          "count": 3
+        },
+        {
+          "o_id": 73288,
+          "name": "Tokoin",
+          "lat": 6.15,
+          "lng": 1.216667,
+          "count": 3
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
           "count": 3
         },
         {
@@ -1072,81 +1085,11 @@
           "count": 3
         },
         {
-          "o_id": 73288,
-          "name": "Tokoin",
-          "lat": 6.15,
-          "lng": 1.216667,
-          "count": 3
-        },
-        {
-          "o_id": 495,
-          "name": "Anié",
-          "lat": 7.76111111,
-          "lng": 1.19166667,
-          "count": 3
-        },
-        {
-          "o_id": 442,
-          "name": "Djeddah",
-          "lat": 21.49012,
-          "lng": 39.18624,
-          "count": 2
-        },
-        {
-          "o_id": 515,
-          "name": "Niamtougou",
-          "lat": 9.7666666666667,
-          "lng": 1.1,
-          "count": 2
-        },
-        {
-          "o_id": 536,
-          "name": "Zio",
-          "lat": 6.433333,
-          "lng": 1.216667,
-          "count": 2
-        },
-        {
-          "o_id": 60536,
-          "name": "Pagouda",
+          "o_id": 60480,
+          "name": "Binah",
           "lat": 9.75,
-          "lng": 1.316667,
-          "count": 2
-        },
-        {
-          "o_id": 510,
-          "name": "Kétao",
-          "lat": 9.6611111111111,
-          "lng": 1.3113888888889,
-          "count": 2
-        },
-        {
-          "o_id": 60559,
-          "name": "Région des plateaux",
-          "lat": 7.5,
-          "lng": 1.1,
-          "count": 2
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 2
-        },
-        {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
-          "count": 2
-        },
-        {
-          "o_id": 537,
-          "name": "Ogou",
-          "lat": 7.516667,
-          "lng": 1.116667,
-          "count": 2
+          "lng": 1.31667,
+          "count": 3
         },
         {
           "o_id": 60464,
@@ -1156,10 +1099,10 @@
           "count": 2
         },
         {
-          "o_id": 493,
-          "name": "Amlamé",
-          "lat": 7.4605555555556,
-          "lng": 0.90305555555556,
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 2
         },
         {
@@ -1184,17 +1127,10 @@
           "count": 2
         },
         {
-          "o_id": 521,
-          "name": "Tabligbo",
-          "lat": 6.5833333333333,
-          "lng": 1.5,
-          "count": 2
-        },
-        {
-          "o_id": 526,
-          "name": "Palais des congrès de Lomé",
-          "lat": 6.13059,
-          "lng": 1.21739,
+          "o_id": 60559,
+          "name": "Région des plateaux",
+          "lat": 7.5,
+          "lng": 1.1,
           "count": 2
         },
         {
@@ -1205,81 +1141,74 @@
           "count": 2
         },
         {
-          "o_id": 531,
-          "name": "Riyad",
-          "lat": 24.65,
-          "lng": 46.71,
-          "count": 1
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
+          "count": 2
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
+          "o_id": 521,
+          "name": "Tabligbo",
+          "lat": 6.5833333333333,
+          "lng": 1.5,
+          "count": 2
         },
         {
-          "o_id": 60491,
-          "name": "Doufelgou",
-          "lat": 9.76666667,
+          "o_id": 515,
+          "name": "Niamtougou",
+          "lat": 9.7666666666667,
           "lng": 1.1,
-          "count": 1
+          "count": 2
         },
         {
-          "o_id": 60500,
-          "name": "Guérin-Kouka",
-          "lat": 9.6905555555556,
-          "lng": 0.61138888888889,
-          "count": 1
+          "o_id": 537,
+          "name": "Ogou",
+          "lat": 7.516667,
+          "lng": 1.116667,
+          "count": 2
         },
         {
-          "o_id": 518,
-          "name": "Sarakawa",
-          "lat": 9.6218425,
-          "lng": 0.9866713,
-          "count": 1
+          "o_id": 60536,
+          "name": "Pagouda",
+          "lat": 9.75,
+          "lng": 1.316667,
+          "count": 2
         },
         {
-          "o_id": 73334,
-          "name": "Région maritime",
-          "lat": 6.5,
-          "lng": 1.3,
-          "count": 1
+          "o_id": 493,
+          "name": "Amlamé",
+          "lat": 7.4605555555556,
+          "lng": 0.90305555555556,
+          "count": 2
         },
         {
-          "o_id": 60553,
-          "name": "Vo",
-          "lat": 6.3333333333333,
-          "lng": 1.5333333333333,
-          "count": 1
+          "o_id": 510,
+          "name": "Kétao",
+          "lat": 9.6611111111111,
+          "lng": 1.3113888888889,
+          "count": 2
         },
         {
-          "o_id": 60567,
-          "name": "Kévé",
-          "lat": 6.427811,
-          "lng": 0.924481,
-          "count": 1
+          "o_id": 442,
+          "name": "Djeddah",
+          "lat": 21.49012,
+          "lng": 39.18624,
+          "count": 2
         },
         {
-          "o_id": 496,
-          "name": "Assoli",
-          "lat": 9.35,
-          "lng": 1.2666666666667,
-          "count": 1
+          "o_id": 536,
+          "name": "Zio",
+          "lat": 6.433333,
+          "lng": 1.216667,
+          "count": 2
         },
         {
-          "o_id": 507,
-          "name": "Kandé",
-          "lat": 9.9563888888889,
-          "lng": 1.0463888888889,
-          "count": 1
-        },
-        {
-          "o_id": 509,
-          "name": "Kéran",
-          "lat": 10.083333333333,
-          "lng": 1.0,
-          "count": 1
+          "o_id": 526,
+          "name": "Palais des congrès de Lomé",
+          "lat": 6.13059,
+          "lng": 1.21739,
+          "count": 2
         },
         {
           "o_id": 553,
@@ -1324,13 +1253,6 @@
           "count": 1
         },
         {
-          "o_id": 73293,
-          "name": "Monument de l'Indépendance",
-          "lat": 6.13,
-          "lng": 1.216,
-          "count": 1
-        },
-        {
           "o_id": 60534,
           "name": "Nyékonakpoé",
           "lat": 6.1305555555555555,
@@ -1338,59 +1260,17 @@
           "count": 1
         },
         {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
+          "o_id": 73334,
+          "name": "Région maritime",
+          "lat": 6.5,
+          "lng": 1.3,
           "count": 1
         },
         {
-          "o_id": 60544,
-          "name": "Soudou",
-          "lat": 9.3166666666667,
-          "lng": 1.4,
-          "count": 1
-        },
-        {
-          "o_id": 60561,
-          "name": "Agou",
-          "lat": 7.466667,
-          "lng": 1.916667,
-          "count": 1
-        },
-        {
-          "o_id": 281,
-          "name": "Bassila",
-          "lat": 9.00814,
-          "lng": 1.6654,
-          "count": 1
-        },
-        {
-          "o_id": 60470,
-          "name": "Assahoun",
-          "lat": 6.4546,
-          "lng": 0.9096,
-          "count": 1
-        },
-        {
-          "o_id": 60487,
-          "name": "Danyi",
-          "lat": 7.25,
-          "lng": 0.95,
-          "count": 1
-        },
-        {
-          "o_id": 60533,
-          "name": "Nyamassila",
-          "lat": 7.9824,
-          "lng": 1.2044,
-          "count": 1
-        },
-        {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
+          "o_id": 534,
+          "name": "Kabou",
+          "lat": 9.45,
+          "lng": 0.816667,
           "count": 1
         },
         {
@@ -1443,10 +1323,129 @@
           "count": 1
         },
         {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
           "o_id": 517,
           "name": "Pya",
           "lat": 9.65194444,
           "lng": 1.13638889,
+          "count": 1
+        },
+        {
+          "o_id": 60553,
+          "name": "Vo",
+          "lat": 6.3333333333333,
+          "lng": 1.5333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 60567,
+          "name": "Kévé",
+          "lat": 6.427811,
+          "lng": 0.924481,
+          "count": 1
+        },
+        {
+          "o_id": 496,
+          "name": "Assoli",
+          "lat": 9.35,
+          "lng": 1.2666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 507,
+          "name": "Kandé",
+          "lat": 9.9563888888889,
+          "lng": 1.0463888888889,
+          "count": 1
+        },
+        {
+          "o_id": 509,
+          "name": "Kéran",
+          "lat": 10.083333333333,
+          "lng": 1.0,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 518,
+          "name": "Sarakawa",
+          "lat": 9.6218425,
+          "lng": 0.9866713,
+          "count": 1
+        },
+        {
+          "o_id": 73293,
+          "name": "Monument de l'Indépendance",
+          "lat": 6.13,
+          "lng": 1.216,
+          "count": 1
+        },
+        {
+          "o_id": 60544,
+          "name": "Soudou",
+          "lat": 9.3166666666667,
+          "lng": 1.4,
+          "count": 1
+        },
+        {
+          "o_id": 60561,
+          "name": "Agou",
+          "lat": 7.466667,
+          "lng": 1.916667,
+          "count": 1
+        },
+        {
+          "o_id": 281,
+          "name": "Bassila",
+          "lat": 9.00814,
+          "lng": 1.6654,
+          "count": 1
+        },
+        {
+          "o_id": 60470,
+          "name": "Assahoun",
+          "lat": 6.4546,
+          "lng": 0.9096,
+          "count": 1
+        },
+        {
+          "o_id": 60487,
+          "name": "Danyi",
+          "lat": 7.25,
+          "lng": 0.95,
+          "count": 1
+        },
+        {
+          "o_id": 60533,
+          "name": "Nyamassila",
+          "lat": 7.9824,
+          "lng": 1.2044,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
           "count": 1
         },
         {
@@ -1457,10 +1456,17 @@
           "count": 1
         },
         {
-          "o_id": 534,
-          "name": "Kabou",
-          "lat": 9.45,
-          "lng": 0.816667,
+          "o_id": 60491,
+          "name": "Doufelgou",
+          "lat": 9.76666667,
+          "lng": 1.1,
+          "count": 1
+        },
+        {
+          "o_id": 60500,
+          "name": "Guérin-Kouka",
+          "lat": 9.6905555555556,
+          "lng": 0.61138888888889,
           "count": 1
         }
       ]
@@ -1482,7 +1488,7 @@
           "count": 4
         },
         {
-          "label": "cheikh - concours - édition - candidat - santé - imams",
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 2
         },
         {
@@ -1490,23 +1496,11 @@
           "count": 2
         },
         {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "label": "cheikh - concours - édition - candidat - santé - imams",
           "count": 2
         },
         {
-          "label": "homme - mort - attendre - maison - enfant - sou",
-          "count": 1
-        },
-        {
-          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
-          "count": 1
-        },
-        {
           "label": "école - enfant - éducation - formation - islamique - élève",
-          "count": 1
-        },
-        {
-          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
@@ -1515,6 +1509,18 @@
         },
         {
           "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "jamais - aucun - raison - homme - propos - état",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -1829,28 +1835,13 @@
         ],
         "cells": [
           [
-            22,
-            10,
-            1
-          ],
-          [
             48,
-            1,
-            1
-          ],
-          [
-            0,
             4,
             1
           ],
           [
-            16,
-            6,
-            1
-          ],
-          [
-            51,
-            2,
+            4,
+            3,
             1
           ],
           [
@@ -1859,108 +1850,18 @@
             2
           ],
           [
-            48,
-            6,
-            1
-          ],
-          [
-            1,
-            2,
-            1
-          ],
-          [
-            20,
-            5,
-            1
-          ],
-          [
-            6,
-            8,
-            1
-          ],
-          [
-            6,
-            7,
-            2
-          ],
-          [
-            33,
-            6,
-            1
-          ],
-          [
-            48,
-            7,
-            1
-          ],
-          [
-            15,
-            3,
-            1
-          ],
-          [
-            4,
-            3,
-            1
-          ],
-          [
             49,
             7,
             1
           ],
           [
-            31,
-            4,
-            1
-          ],
-          [
-            26,
-            0,
-            1
-          ],
-          [
-            3,
-            7,
-            1
-          ],
-          [
-            38,
-            8,
-            2
-          ],
-          [
-            48,
-            4,
-            1
-          ],
-          [
-            14,
-            3,
-            1
-          ],
-          [
-            43,
-            0,
-            1
-          ],
-          [
-            50,
-            3,
-            2
-          ],
-          [
-            13,
-            9,
+            22,
+            10,
             1
           ],
           [
             15,
             9,
-            1
-          ],
-          [
-            28,
-            10,
             1
           ],
           [
@@ -1969,22 +1870,32 @@
             1
           ],
           [
-            50,
-            9,
+            43,
+            10,
             1
           ],
           [
-            28,
-            8,
+            6,
+            7,
+            2
+          ],
+          [
+            20,
+            5,
             1
           ],
           [
-            16,
-            11,
+            48,
+            7,
             1
           ],
           [
-            51,
+            33,
+            6,
+            1
+          ],
+          [
+            19,
             4,
             1
           ],
@@ -1994,8 +1905,33 @@
             1
           ],
           [
+            28,
+            8,
+            1
+          ],
+          [
             34,
             3,
+            1
+          ],
+          [
+            15,
+            3,
+            1
+          ],
+          [
+            51,
+            2,
+            1
+          ],
+          [
+            38,
+            8,
+            2
+          ],
+          [
+            16,
+            11,
             1
           ],
           [
@@ -2004,8 +1940,58 @@
             1
           ],
           [
-            15,
+            0,
             4,
+            1
+          ],
+          [
+            31,
+            4,
+            1
+          ],
+          [
+            43,
+            0,
+            1
+          ],
+          [
+            50,
+            3,
+            2
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            14,
+            3,
+            1
+          ],
+          [
+            50,
+            9,
+            1
+          ],
+          [
+            48,
+            1,
+            1
+          ],
+          [
+            28,
+            10,
+            1
+          ],
+          [
+            26,
+            0,
             1
           ],
           [
@@ -2014,8 +2000,18 @@
             1
           ],
           [
-            43,
-            10,
+            48,
+            6,
+            1
+          ],
+          [
+            15,
+            4,
+            1
+          ],
+          [
+            16,
+            6,
             1
           ],
           [
@@ -2024,7 +2020,17 @@
             1
           ],
           [
-            19,
+            13,
+            9,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            51,
             4,
             1
           ]
@@ -2045,12 +2051,12 @@
           "Dapaong",
           "Kpalimé",
           "Union Musulmane du Togo",
-          "Atakpamé",
           "Tchamba",
-          "Bassar",
+          "Atakpamé",
           "Rassemblement du Peuple Togolais",
-          "Tsévié",
-          "Kloto"
+          "Bassar",
+          "Kloto",
+          "Tchaoudjo"
         ],
         "matrix": [
           [
@@ -2063,11 +2069,11 @@
             6,
             7,
             8,
-            5,
             4,
             5,
             7,
-            6,
+            5,
+            5,
             5
           ],
           [
@@ -2084,7 +2090,7 @@
             2,
             4,
             4,
-            3,
+            4,
             4
           ],
           [
@@ -2099,10 +2105,10 @@
             7,
             8,
             8,
-            6,
             3,
             6,
-            6
+            6,
+            4
           ],
           [
             11,
@@ -2116,10 +2122,10 @@
             5,
             9,
             9,
-            6,
             2,
-            5,
-            4
+            6,
+            4,
+            7
           ],
           [
             14,
@@ -2133,9 +2139,9 @@
             4,
             4,
             4,
-            4,
             7,
-            5,
+            4,
+            4,
             4
           ],
           [
@@ -2148,12 +2154,12 @@
             8,
             7,
             6,
-            7,
             6,
+            7,
+            3,
             4,
             3,
-            5,
-            3
+            4
           ],
           [
             6,
@@ -2165,8 +2171,8 @@
             0,
             6,
             3,
-            5,
             3,
+            5,
             2,
             2,
             3,
@@ -2182,12 +2188,12 @@
             6,
             0,
             2,
+            4,
             6,
-            4,
             2,
             2,
-            4,
-            6
+            6,
+            4
           ],
           [
             8,
@@ -2201,26 +2207,9 @@
             0,
             3,
             3,
+            1,
             2,
             1,
-            4,
-            1
-          ],
-          [
-            5,
-            2,
-            8,
-            9,
-            4,
-            7,
-            5,
-            6,
-            3,
-            0,
-            5,
-            3,
-            2,
-            3,
             2
           ],
           [
@@ -2233,66 +2222,66 @@
             3,
             4,
             3,
-            5,
             0,
             5,
             1,
-            4,
-            3
-          ],
-          [
-            5,
-            4,
-            6,
-            6,
-            4,
-            4,
-            2,
-            2,
-            2,
-            3,
-            5,
-            0,
-            1,
-            3,
-            1
-          ],
-          [
-            7,
-            4,
-            3,
-            2,
-            7,
-            3,
-            2,
-            2,
-            1,
-            2,
-            1,
-            1,
-            0,
-            2,
-            2
-          ],
-          [
-            6,
-            3,
-            6,
-            5,
-            5,
             5,
             3,
-            4,
-            4,
-            3,
-            4,
-            3,
-            2,
-            0,
             4
           ],
           [
             5,
+            2,
+            8,
+            9,
+            4,
+            7,
+            5,
+            6,
+            3,
+            5,
+            0,
+            2,
+            3,
+            2,
+            3
+          ],
+          [
+            7,
+            4,
+            3,
+            2,
+            7,
+            3,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            1,
+            2,
+            2
+          ],
+          [
+            5,
+            4,
+            6,
+            6,
+            4,
+            4,
+            2,
+            2,
+            2,
+            5,
+            3,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            5,
             4,
             6,
             4,
@@ -2301,11 +2290,28 @@
             3,
             6,
             1,
-            2,
             3,
+            2,
+            2,
             1,
+            0,
+            3
+          ],
+          [
+            5,
+            4,
+            4,
+            7,
+            4,
+            4,
+            3,
+            4,
             2,
             4,
+            3,
+            2,
+            1,
+            3,
             0
           ]
         ]

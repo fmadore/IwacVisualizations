@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:34.622159+00:00",
+  "generated_at": "2026-04-14T06:30:07.505005+00:00",
   "person": {
     "o_id": 1380,
     "title": "Albert Tévoédjrè",
@@ -31,6 +31,13 @@
         "countries_count": 2
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -127,6 +134,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -138,6 +150,7 @@
           "total": 19,
           "articles": 19,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2018
@@ -147,6 +160,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2016,
           "year_max": 2017
@@ -156,6 +170,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2006,
           "year_max": 2017
@@ -165,6 +180,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -174,6 +190,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -185,6 +202,7 @@
           "total": 19,
           "articles": 19,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2018
@@ -194,6 +212,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2016,
           "year_max": 2017
@@ -203,6 +222,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2006,
           "year_max": 2017
@@ -212,6 +232,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
           "year_max": 2017
@@ -221,12 +242,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -251,7 +274,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -312,7 +336,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 5,
-            "score": 14.008
+            "score": 13.9215
           },
           {
             "o_id": 81,
@@ -354,7 +378,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 807,
@@ -427,18 +451,18 @@
             "score": 8.9667
           },
           {
-            "o_id": 76335,
-            "title": "Ahmadiyya",
-            "type": "Organisations",
-            "cooc": 3,
-            "score": 8.3358
-          },
-          {
             "o_id": 385,
             "title": "Porto-Novo",
             "type": "Lieux",
             "cooc": 2,
             "score": 8.3298
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.2851
           },
           {
             "o_id": 76297,
@@ -448,18 +472,18 @@
             "score": 8.1862
           },
           {
-            "o_id": 42,
-            "title": "Catholiques",
-            "type": "Sujets",
-            "cooc": 4,
-            "score": 8.0042
-          },
-          {
             "o_id": 583,
             "title": "Organisation de la Coopération Islamique",
             "type": "Organisations",
             "cooc": 3,
             "score": 7.9977
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.973
           },
           {
             "o_id": 76346,
@@ -550,7 +574,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 5,
@@ -656,7 +680,7 @@
           {
             "source": 1380,
             "target": 61,
-            "weight": 14.008,
+            "weight": 13.9215,
             "cooc": 5
           },
           {
@@ -692,7 +716,7 @@
           {
             "source": 1380,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -757,15 +781,15 @@
           },
           {
             "source": 1380,
-            "target": 76335,
-            "weight": 8.3358,
-            "cooc": 3
-          },
-          {
-            "source": 1380,
             "target": 385,
             "weight": 8.3298,
             "cooc": 2
+          },
+          {
+            "source": 1380,
+            "target": 76335,
+            "weight": 8.2851,
+            "cooc": 3
           },
           {
             "source": 1380,
@@ -775,15 +799,15 @@
           },
           {
             "source": 1380,
-            "target": 42,
-            "weight": 8.0042,
-            "cooc": 4
-          },
-          {
-            "source": 1380,
             "target": 583,
             "weight": 7.9977,
             "cooc": 3
+          },
+          {
+            "source": 1380,
+            "target": 42,
+            "weight": 7.973,
+            "cooc": 4
           },
           {
             "source": 1380,
@@ -860,7 +884,7 @@
           {
             "source": 1380,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -975,7 +999,7 @@
             "title": "Protestants",
             "type": "Sujets",
             "cooc": 5,
-            "score": 14.008
+            "score": 13.9215
           },
           {
             "o_id": 81,
@@ -1017,7 +1041,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 807,
@@ -1090,18 +1114,18 @@
             "score": 8.9667
           },
           {
-            "o_id": 76335,
-            "title": "Ahmadiyya",
-            "type": "Organisations",
-            "cooc": 3,
-            "score": 8.3358
-          },
-          {
             "o_id": 385,
             "title": "Porto-Novo",
             "type": "Lieux",
             "cooc": 2,
             "score": 8.3298
+          },
+          {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 8.2851
           },
           {
             "o_id": 76297,
@@ -1111,18 +1135,18 @@
             "score": 8.1862
           },
           {
-            "o_id": 42,
-            "title": "Catholiques",
-            "type": "Sujets",
-            "cooc": 4,
-            "score": 8.0042
-          },
-          {
             "o_id": 583,
             "title": "Organisation de la Coopération Islamique",
             "type": "Organisations",
             "cooc": 3,
             "score": 7.9977
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 7.973
           },
           {
             "o_id": 76346,
@@ -1213,7 +1237,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 5,
@@ -1319,7 +1343,7 @@
           {
             "source": 1380,
             "target": 61,
-            "weight": 14.008,
+            "weight": 13.9215,
             "cooc": 5
           },
           {
@@ -1355,7 +1379,7 @@
           {
             "source": 1380,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -1420,15 +1444,15 @@
           },
           {
             "source": 1380,
-            "target": 76335,
-            "weight": 8.3358,
-            "cooc": 3
-          },
-          {
-            "source": 1380,
             "target": 385,
             "weight": 8.3298,
             "cooc": 2
+          },
+          {
+            "source": 1380,
+            "target": 76335,
+            "weight": 8.2851,
+            "cooc": 3
           },
           {
             "source": 1380,
@@ -1438,15 +1462,15 @@
           },
           {
             "source": 1380,
-            "target": 42,
-            "weight": 8.0042,
-            "cooc": 4
-          },
-          {
-            "source": 1380,
             "target": 583,
             "weight": 7.9977,
             "cooc": 3
+          },
+          {
+            "source": 1380,
+            "target": 42,
+            "weight": 7.973,
+            "cooc": 4
           },
           {
             "source": 1380,
@@ -1523,7 +1547,7 @@
           {
             "source": 1380,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1583,6 +1607,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1380,
+            "title": "Albert Tévoédjrè",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1380,
@@ -2540,7 +2576,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2605,7 +2642,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3111,6 +3149,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3423,6 +3555,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -3997,6 +4147,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

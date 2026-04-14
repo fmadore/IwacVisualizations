@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:39.577447+00:00",
+  "generated_at": "2026-04-14T06:30:12.023603+00:00",
   "person": {
     "o_id": 1485,
     "title": "Claude Urbain Plagbeto",
@@ -35,6 +35,13 @@
         "year_max": 2019,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -110,6 +117,11 @@
             4
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 33,
           "articles": 33,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2010,
           "year_max": 2019
@@ -132,6 +145,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2015,
           "year_max": 2015
@@ -143,11 +157,13 @@
           "total": 33,
           "articles": 33,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2010,
           "year_max": 2019
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -169,7 +185,8 @@
           "name": "Bénin",
           "count": 33
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -216,7 +233,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 7,
-            "score": 19.4503
+            "score": 19.3319
           },
           {
             "o_id": 1992,
@@ -282,13 +299,6 @@
             "score": 11.5037
           },
           {
-            "o_id": 61,
-            "title": "Protestants",
-            "type": "Sujets",
-            "cooc": 4,
-            "score": 11.2064
-          },
-          {
             "o_id": 125,
             "title": "Aïd al-Adha (Tabaski)",
             "type": "Événements",
@@ -303,11 +313,18 @@
             "score": 11.1933
           },
           {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 11.1372
+          },
+          {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 86,
@@ -482,14 +499,14 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.1068
+            "score": 6.0906
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 15086,
@@ -562,7 +579,7 @@
           {
             "source": 1485,
             "target": 76335,
-            "weight": 19.4503,
+            "weight": 19.3319,
             "cooc": 7
           },
           {
@@ -621,12 +638,6 @@
           },
           {
             "source": 1485,
-            "target": 61,
-            "weight": 11.2064,
-            "cooc": 4
-          },
-          {
-            "source": 1485,
             "target": 125,
             "weight": 11.1997,
             "cooc": 7
@@ -639,8 +650,14 @@
           },
           {
             "source": 1485,
+            "target": 61,
+            "weight": 11.1372,
+            "cooc": 4
+          },
+          {
+            "source": 1485,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -790,13 +807,13 @@
           {
             "source": 1485,
             "target": 56,
-            "weight": 6.1068,
+            "weight": 6.0906,
             "cooc": 3
           },
           {
             "source": 1485,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -891,7 +908,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 7,
-            "score": 19.4503
+            "score": 19.3319
           },
           {
             "o_id": 1992,
@@ -957,13 +974,6 @@
             "score": 11.5037
           },
           {
-            "o_id": 61,
-            "title": "Protestants",
-            "type": "Sujets",
-            "cooc": 4,
-            "score": 11.2064
-          },
-          {
             "o_id": 125,
             "title": "Aïd al-Adha (Tabaski)",
             "type": "Événements",
@@ -978,11 +988,18 @@
             "score": 11.1933
           },
           {
+            "o_id": 61,
+            "title": "Protestants",
+            "type": "Sujets",
+            "cooc": 4,
+            "score": 11.1372
+          },
+          {
             "o_id": 44,
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 86,
@@ -1157,14 +1174,14 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.1068
+            "score": 6.0906
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 15086,
@@ -1237,7 +1254,7 @@
           {
             "source": 1485,
             "target": 76335,
-            "weight": 19.4503,
+            "weight": 19.3319,
             "cooc": 7
           },
           {
@@ -1296,12 +1313,6 @@
           },
           {
             "source": 1485,
-            "target": 61,
-            "weight": 11.2064,
-            "cooc": 4
-          },
-          {
-            "source": 1485,
             "target": 125,
             "weight": 11.1997,
             "cooc": 7
@@ -1314,8 +1325,14 @@
           },
           {
             "source": 1485,
+            "target": 61,
+            "weight": 11.1372,
+            "cooc": 4
+          },
+          {
+            "source": 1485,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -1465,13 +1482,13 @@
           {
             "source": 1485,
             "target": 56,
-            "weight": 6.1068,
+            "weight": 6.0906,
             "cooc": 3
           },
           {
             "source": 1485,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -1511,6 +1528,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1485,
+            "title": "Claude Urbain Plagbeto",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2116,7 +2145,8 @@
           "lng": 8.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2226,7 +2256,8 @@
           "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2838,6 +2869,100 @@
           }
         },
         "articles_total": 33
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3148,6 +3273,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3750,6 +3893,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:56.829668+00:00",
+  "generated_at": "2026-04-14T06:30:28.912289+00:00",
   "entity": {
     "o_id": 13024,
     "title": "Parti du Renouveau Démocratique",
@@ -50,37 +50,31 @@
     "by_role": {
       "all": [
         {
-          "name": "Fraternité",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2017,
-          "year_max": 2021
-        },
-        {
           "name": "La Nation",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1998,
           "year_max": 2018
         },
         {
-          "name": "Le Matinal",
-          "total": 2,
-          "articles": 2,
+          "name": "Fraternité",
+          "total": 3,
+          "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
-          "year_min": 2018,
-          "year_max": 2019
+          "year_min": 2017,
+          "year_max": 2021
         },
         {
           "name": "La Nouvelle Tribune",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2018
@@ -90,27 +84,40 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2013,
           "year_max": 2019
         },
         {
-          "name": "Matin Libre",
-          "total": 1,
-          "articles": 1,
+          "name": "Le Matinal",
+          "total": 2,
+          "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
-          "year_min": 2017,
-          "year_max": 2017
+          "year_min": 2018,
+          "year_max": 2019
         },
         {
           "name": "Visages du Bénin",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2022,
           "year_max": 2022
+        },
+        {
+          "name": "Matin Libre",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2017,
+          "year_max": 2017
         }
       ]
     }
@@ -512,17 +519,17 @@
           "count": 4
         },
         {
-          "o_id": 272,
-          "name": "Adjarra",
-          "lat": 6.53445,
-          "lng": 2.66833,
-          "count": 3
-        },
-        {
           "o_id": 312,
           "name": "France",
           "lat": 46.0,
           "lng": 2.0,
+          "count": 3
+        },
+        {
+          "o_id": 272,
+          "name": "Adjarra",
+          "lat": 6.53445,
+          "lng": 2.66833,
           "count": 3
         },
         {
@@ -544,6 +551,34 @@
           "name": "Canada",
           "lat": 60.10867,
           "lng": -113.64258,
+          "count": 1
+        },
+        {
+          "o_id": 393,
+          "name": "Savé",
+          "lat": 8.03424,
+          "lng": 2.4866,
+          "count": 1
+        },
+        {
+          "o_id": 479,
+          "name": "Pèrèrè",
+          "lat": 9.58703,
+          "lng": 2.99607,
+          "count": 1
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 1
+        },
+        {
+          "o_id": 371,
+          "name": "N'Dali",
+          "lat": 9.73027,
+          "lng": 2.45032,
           "count": 1
         },
         {
@@ -573,34 +608,6 @@
           "lat": 50.75,
           "lng": 4.5,
           "count": 1
-        },
-        {
-          "o_id": 479,
-          "name": "Pèrèrè",
-          "lat": 9.58703,
-          "lng": 2.99607,
-          "count": 1
-        },
-        {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 1
-        },
-        {
-          "o_id": 371,
-          "name": "N'Dali",
-          "lat": 9.73027,
-          "lng": 2.45032,
-          "count": 1
-        },
-        {
-          "o_id": 393,
-          "name": "Savé",
-          "lat": 8.03424,
-          "lng": 2.4866,
-          "count": 1
         }
       ]
     }
@@ -613,19 +620,19 @@
           "count": 6
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
-          "count": 3
-        },
-        {
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 3
         },
         {
-          "label": "dieu - homme - islam - foi - religion - coran",
-          "count": 1
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "count": 3
         },
         {
           "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "count": 1
+        },
+        {
+          "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         }
       ]
@@ -913,11 +920,6 @@
         ],
         "cells": [
           [
-            23,
-            2,
-            1
-          ],
-          [
             20,
             11,
             4
@@ -928,6 +930,31 @@
             1
           ],
           [
+            24,
+            9,
+            1
+          ],
+          [
+            21,
+            5,
+            1
+          ],
+          [
+            15,
+            1,
+            1
+          ],
+          [
+            23,
+            2,
+            1
+          ],
+          [
+            21,
+            3,
+            1
+          ],
+          [
             21,
             1,
             1
@@ -938,33 +965,13 @@
             1
           ],
           [
-            24,
-            9,
-            1
-          ],
-          [
             0,
             6,
             1
           ],
           [
-            21,
-            3,
-            1
-          ],
-          [
-            21,
-            5,
-            1
-          ],
-          [
             19,
             3,
-            1
-          ],
-          [
-            15,
-            1,
             1
           ]
         ]
@@ -976,275 +983,275 @@
       "all": {
         "names": [
           "Porto-Novo",
+          "Adrien Houngbédji",
           "Patrice Talon",
           "Politique",
           "Bénin",
-          "Adrien Houngbédji",
           "Élections",
-          "Bloc républicain",
           "Imamat",
-          "Union Islamique du Bénin",
+          "Bloc républicain",
           "Cotonou",
           "Ouémé",
-          "Adjarra",
+          "Union Islamique du Bénin",
           "Houzéifa Amzat",
           "Catholiques",
-          "Démocratie"
+          "Démocratie",
+          "France"
         ],
         "matrix": [
           [
             0,
-            4,
-            6,
-            4,
             7,
+            4,
+            6,
+            4,
             5,
             4,
             4,
-            3,
             2,
             4,
-            1,
             3,
+            3,
+            1,
             1,
             1
           ],
           [
+            7,
+            0,
+            5,
+            5,
+            5,
             4,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
+            5,
             0,
             5,
             6,
             5,
-            5,
             4,
             4,
-            3,
-            2,
             2,
             2,
             3,
+            3,
+            1,
             1,
             1
           ],
           [
             6,
             5,
+            5,
             0,
             3,
-            5,
             4,
             4,
             4,
-            2,
             1,
             3,
-            3,
             2,
+            2,
+            0,
             0,
             0
           ],
           [
             4,
+            5,
             6,
             3,
             0,
-            5,
-            3,
             3,
             2,
             3,
             2,
             2,
-            1,
+            3,
             2,
+            3,
             3,
             3
           ],
           [
-            7,
             5,
+            4,
             5,
+            4,
+            3,
+            0,
+            5,
+            3,
+            3,
+            3,
+            3,
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            4,
+            3,
+            4,
+            4,
+            2,
             5,
             0,
+            2,
+            1,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            3,
+            4,
             4,
             3,
             3,
-            3,
+            2,
+            0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
             2,
             3,
             1,
+            2,
+            0,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1
+          ],
+          [
+            4,
             3,
             2,
+            3,
+            2,
+            3,
+            3,
+            2,
+            1,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            0,
+            3,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            3,
+            2,
+            1,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            1,
+            0,
+            3,
+            1,
+            0,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            3,
             2
           ],
           [
-            5,
-            5,
-            4,
-            3,
-            4,
-            0,
-            3,
-            5,
-            3,
-            3,
-            3,
-            1,
-            3,
-            1,
-            1
-          ],
-          [
-            4,
-            4,
-            4,
-            3,
-            3,
-            3,
-            0,
-            2,
-            2,
-            2,
-            2,
             1,
             2,
-            0,
-            0
-          ],
-          [
-            4,
-            4,
-            4,
-            2,
-            3,
-            5,
-            2,
-            0,
-            3,
-            1,
-            3,
-            1,
-            3,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            2,
-            3,
-            3,
-            3,
-            2,
-            3,
-            0,
-            2,
-            2,
-            0,
-            3,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            1,
-            2,
-            2,
-            3,
-            2,
-            1,
-            2,
-            0,
             1,
             0,
+            3,
             1,
+            0,
+            0,
             2,
+            1,
+            1,
+            0,
+            3,
+            0,
             2
           ],
           [
-            4,
-            2,
-            3,
-            2,
-            3,
-            3,
-            2,
-            3,
-            2,
             1,
-            0,
-            0,
-            2,
-            1,
-            1
-          ],
-          [
-            1,
-            2,
-            3,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            3,
-            3,
-            2,
-            2,
-            3,
-            3,
-            2,
-            3,
-            3,
-            1,
-            2,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
             1,
             0,
             3,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
             2,
-            1,
-            0,
-            0,
-            1,
             2,
-            1,
-            0,
-            0,
-            0,
-            3
-          ],
-          [
-            1,
-            1,
-            0,
-            3,
-            2,
-            1,
-            0,
-            0,
-            1,
-            2,
-            1,
-            0,
-            0,
-            3,
             0
           ]
         ]

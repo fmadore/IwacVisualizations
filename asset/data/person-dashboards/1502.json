@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:44.953613+00:00",
+  "generated_at": "2026-04-14T06:30:16.671033+00:00",
   "person": {
     "o_id": 1502,
     "title": "Hyacinthe A. Koudhorot-Padonou",
@@ -35,6 +35,13 @@
         "year_max": 2012,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -94,6 +101,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -105,6 +117,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2012
@@ -117,11 +130,13 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2012
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -138,7 +153,8 @@
           "name": "Bénin",
           "count": 14
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -297,14 +313,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -431,13 +447,13 @@
           {
             "source": 1502,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 1502,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -608,14 +624,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -742,16 +758,28 @@
           {
             "source": 1502,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 1502,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1502,
+            "title": "Hyacinthe A. Koudhorot-Padonou",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1167,7 +1195,8 @@
           "lng": 1.37962,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1248,7 +1277,8 @@
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1746,6 +1776,100 @@
           }
         },
         "articles_total": 14
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1980,6 +2104,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2540,6 +2682,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

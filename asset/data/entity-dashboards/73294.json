@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.354365+00:00",
+  "generated_at": "2026-04-14T06:30:23.004593+00:00",
   "entity": {
     "o_id": 73294,
     "title": "Hôtel du 2 Février",
@@ -50,6 +50,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1997,
           "year_max": 1999
@@ -59,6 +60,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1982,
           "year_max": 1991
@@ -271,6 +273,13 @@
           "count": 1
         },
         {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
           "o_id": 517,
           "name": "Pya",
           "lat": 9.65194444,
@@ -282,13 +291,6 @@
           "name": "Monument de l'Indépendance",
           "lat": 6.13,
           "lng": 1.216,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
           "count": 1
         }
       ]
@@ -302,11 +304,11 @@
           "count": 2
         },
         {
-          "label": "femme - enfant - mariage - homme - pratique - fille",
+          "label": "chef_etat - président - président_république - ministre - délégation - visite",
           "count": 2
         },
         {
-          "label": "chef_etat - président - président_république - ministre - délégation - visite",
+          "label": "femme - enfant - mariage - homme - pratique - fille",
           "count": 2
         },
         {
@@ -588,13 +590,13 @@
             1
           ],
           [
-            2,
-            6,
+            0,
+            5,
             1
           ],
           [
-            0,
-            5,
+            2,
+            6,
             1
           ]
         ]

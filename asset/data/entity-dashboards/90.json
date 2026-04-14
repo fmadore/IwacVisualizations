@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:12.506088+00:00",
+  "generated_at": "2026-04-14T06:30:44.219299+00:00",
   "entity": {
     "o_id": 90,
     "title": "Taqlid",
@@ -48,24 +48,17 @@
           "total": 3,
           "articles": 0,
           "publications": 3,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2010
-        },
-        {
-          "name": "La Preuve",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2007,
-          "year_max": 2007
         },
         {
           "name": "An-Nasr Vendredi",
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2004,
           "year_max": 2004
@@ -75,6 +68,17 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2007,
+          "year_max": 2007
+        },
+        {
+          "name": "La Preuve",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2007,
           "year_max": 2007
@@ -445,17 +449,17 @@
           "count": 5
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 4
-        },
-        {
           "o_id": 376,
           "name": "Ouagadougou",
           "lat": 12.36566,
           "lng": -1.53388,
+          "count": 4
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
           "count": 4
         },
         {
@@ -466,10 +470,10 @@
           "count": 3
         },
         {
-          "o_id": 407,
-          "name": "Palestine",
-          "lat": 31.92157,
-          "lng": 35.20329,
+          "o_id": 374,
+          "name": "Orodara",
+          "lat": 10.98568,
+          "lng": -4.92612,
           "count": 2
         },
         {
@@ -480,6 +484,13 @@
           "count": 2
         },
         {
+          "o_id": 407,
+          "name": "Palestine",
+          "lat": 31.92157,
+          "lng": 35.20329,
+          "count": 2
+        },
+        {
           "o_id": 408,
           "name": "Israël",
           "lat": 31.5,
@@ -487,11 +498,32 @@
           "count": 2
         },
         {
-          "o_id": 374,
-          "name": "Orodara",
-          "lat": 10.98568,
-          "lng": -4.92612,
-          "count": 2
+          "o_id": 279,
+          "name": "Banfora",
+          "lat": 10.63333,
+          "lng": -4.76667,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
         },
         {
           "o_id": 387,
@@ -519,34 +551,6 @@
           "name": "Ouahigouya",
           "lat": 13.58278,
           "lng": -2.42158,
-          "count": 1
-        },
-        {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
-        },
-        {
-          "o_id": 279,
-          "name": "Banfora",
-          "lat": 10.63333,
-          "lng": -4.76667,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
           "count": 1
         }
       ]
@@ -683,23 +687,8 @@
         ],
         "cells": [
           [
-            3,
-            9,
-            1
-          ],
-          [
-            5,
-            4,
-            1
-          ],
-          [
             0,
             8,
-            1
-          ],
-          [
-            3,
-            6,
             1
           ],
           [
@@ -710,6 +699,21 @@
           [
             6,
             0,
+            1
+          ],
+          [
+            3,
+            6,
+            1
+          ],
+          [
+            5,
+            4,
+            1
+          ],
+          [
+            3,
+            9,
             1
           ]
         ]
@@ -722,19 +726,19 @@
         "names": [
           "Hadith",
           "Médine",
-          "Bobo-Dioulasso",
           "Sunnah",
           "Ouagadougou",
-          "Tariq Ramadan",
-          "Terrorisme",
+          "Bobo-Dioulasso",
           "Pakistan",
-          "Pauvreté",
           "Chiisme",
-          "Palestine",
-          "Salafisme",
-          "Enseignement confessionnel islamique",
-          "Fédération des Associations Islamiques du Burkina",
-          "Ghana"
+          "Terrorisme",
+          "Tariq Ramadan",
+          "Pauvreté",
+          "Association des Élèves et Étudiants Musulmans au Burkina",
+          "Fiqh",
+          "Orodara",
+          "Association pour l'Établissement de l'Unité Islamique",
+          "Ahl ul Bayt"
         ],
         "matrix": [
           [
@@ -758,8 +762,9 @@
             5,
             0,
             4,
-            4,
             3,
+            4,
+            2,
             2,
             2,
             2,
@@ -768,23 +773,39 @@
             2,
             2,
             1,
-            2,
             2
           ],
           [
             4,
             4,
             0,
-            3,
+            2,
             3,
             2,
-            2,
+            1,
+            1,
             2,
             2,
             2,
             2,
             2,
             1,
+            1
+          ],
+          [
+            4,
+            3,
+            2,
+            0,
+            3,
+            2,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
             2,
             2
           ],
@@ -792,61 +813,10 @@
             4,
             4,
             3,
+            3,
             0,
             2,
             2,
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
-            2,
-            1
-          ],
-          [
-            4,
-            3,
-            3,
-            2,
-            0,
-            2,
-            2,
-            2,
-            2,
-            3,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            3,
-            2,
-            2,
-            2,
-            2,
-            0,
-            2,
-            2,
-            3,
-            1,
-            2,
-            2,
-            2,
-            2,
-            1
-          ],
-          [
-            3,
-            2,
-            2,
-            1,
-            2,
-            2,
-            0,
             2,
             2,
             2,
@@ -862,14 +832,48 @@
             2,
             2,
             2,
+            0,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            2,
+            1,
+            3,
+            2,
+            2,
+            0,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            2,
+            1,
+            2,
+            2,
             2,
             2,
             0,
             2,
             2,
-            1,
-            1,
-            2,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -879,78 +883,78 @@
             2,
             2,
             2,
+            2,
+            1,
+            2,
+            0,
+            3,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
             3,
             2,
             2,
-            0,
+            2,
+            2,
+            2,
             1,
             2,
-            2,
-            2,
-            2,
-            1
-          ],
-          [
             3,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
             2,
             2,
             1,
-            3,
-            1,
-            2,
-            2,
             1,
             0,
             0,
             0,
             1,
+            1,
             0,
-            1
+            2,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0
           ],
           [
             2,
             2,
             2,
             2,
-            1,
             2,
             1,
             1,
-            2,
-            0,
-            0,
-            2,
-            1,
-            2,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            1,
-            1,
-            2,
-            0,
-            2,
             0,
             1,
-            2,
-            1
-          ],
-          [
-            2,
-            1,
-            1,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
             1,
             1,
             1,
@@ -960,17 +964,17 @@
           ],
           [
             2,
-            2,
-            2,
-            2,
-            1,
-            2,
             1,
             1,
             2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
             0,
-            2,
-            2,
+            0,
             1,
             0,
             1
@@ -978,16 +982,16 @@
           [
             2,
             2,
-            2,
-            1,
-            1,
             1,
             2,
+            2,
             1,
+            2,
             1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             0

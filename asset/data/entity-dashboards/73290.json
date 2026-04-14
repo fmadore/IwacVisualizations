@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.344877+00:00",
+  "generated_at": "2026-04-14T06:30:22.993835+00:00",
   "entity": {
     "o_id": 73290,
     "title": "Yadé",
@@ -46,6 +46,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1987,
           "year_max": 1990
@@ -292,6 +293,20 @@
     "by_role": {
       "all": [
         {
+          "o_id": 517,
+          "name": "Pya",
+          "lat": 9.65194444,
+          "lng": 1.13638889,
+          "count": 3
+        },
+        {
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
+          "count": 3
+        },
+        {
           "o_id": 544,
           "name": "Togo",
           "lat": 8.66667,
@@ -299,10 +314,10 @@
           "count": 3
         },
         {
-          "o_id": 517,
-          "name": "Pya",
-          "lat": 9.65194444,
-          "lng": 1.13638889,
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
           "count": 3
         },
         {
@@ -317,20 +332,6 @@
           "name": "Yadé",
           "lat": 9.9,
           "lng": 1.05,
-          "count": 3
-        },
-        {
-          "o_id": 533,
-          "name": "Kozah",
-          "lat": 9.583333,
-          "lng": 1.166667,
-          "count": 3
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
           "count": 3
         },
         {
@@ -355,13 +356,6 @@
           "count": 2
         },
         {
-          "o_id": 497,
-          "name": "Atakpamé",
-          "lat": 7.5269444444444,
-          "lng": 1.1266666666667,
-          "count": 1
-        },
-        {
           "o_id": 548,
           "name": "Gabon",
           "lat": -1.0,
@@ -373,6 +367,13 @@
           "name": "Université de Lomé",
           "lat": 6.173669,
           "lng": 1.215866,
+          "count": 1
+        },
+        {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
           "count": 1
         }
       ]
@@ -601,7 +602,7 @@
         ],
         "cells": [
           [
-            0,
+            1,
             5,
             1
           ],
@@ -611,7 +612,7 @@
             1
           ],
           [
-            1,
+            0,
             5,
             1
           ]
@@ -623,19 +624,19 @@
     "by_role": {
       "all": {
         "names": [
-          "Togo",
           "Pya",
+          "Kozah",
+          "Temple œcuménique de Pya",
+          "Togo",
+          "France",
+          "Union Musulmane du Togo",
           "Lomé",
           "Maman N'Danida",
           "Gnassingbé Eyadéma",
           "Église évangélique du Togo",
-          "Kozah",
-          "Temple œcuménique de Pya",
-          "France",
           "Kara",
-          "Union Musulmane du Togo",
           "Niamtougou",
-          "Femmes",
+          "Sokodé",
           "Pasteur Agbi-Awumé",
           "Nassiki Awrufo"
         ],

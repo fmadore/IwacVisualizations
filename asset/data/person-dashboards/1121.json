@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.742402+00:00",
+  "generated_at": "2026-04-14T06:30:11.279275+00:00",
   "person": {
     "o_id": 1121,
     "title": "Mohamadi Tiemtoré",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -70,6 +77,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -81,6 +93,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -90,6 +103,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -99,6 +113,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -110,6 +125,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -119,6 +135,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
@@ -128,12 +145,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -150,7 +169,8 @@
           "count": 3
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -190,7 +210,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 63530,
@@ -211,7 +231,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           }
         ],
         "edges": [
@@ -236,7 +256,7 @@
           {
             "source": 1121,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -254,7 +274,7 @@
           {
             "source": 1121,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           }
         ]
@@ -294,7 +314,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 3,
-            "score": 6.0032
+            "score": 5.9798
           },
           {
             "o_id": 63530,
@@ -315,7 +335,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           }
         ],
         "edges": [
@@ -340,7 +360,7 @@
           {
             "source": 1121,
             "target": 42,
-            "weight": 6.0032,
+            "weight": 5.9798,
             "cooc": 3
           },
           {
@@ -358,12 +378,24 @@
           {
             "source": 1121,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           }
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1121,
+            "title": "Mohamadi Tiemtoré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1121,
@@ -411,7 +443,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -428,7 +461,8 @@
           "count": 3
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -798,6 +832,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -856,6 +984,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -1430,6 +1576,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.482105+00:00",
+  "generated_at": "2026-04-14T06:30:32.377498+00:00",
   "entity": {
     "o_id": 142,
     "title": "Conseil national de la transition",
@@ -58,6 +58,7 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2016
@@ -67,6 +68,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2017
@@ -76,6 +78,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2015
@@ -85,6 +88,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2011,
           "year_max": 2011
@@ -798,13 +802,6 @@
           "count": 7
         },
         {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 3
-        },
-        {
           "o_id": 540,
           "name": "Niger",
           "lat": 18.0,
@@ -812,10 +809,17 @@
           "count": 3
         },
         {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 3
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
           "count": 2
         },
         {
@@ -826,10 +830,10 @@
           "count": 2
         },
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
           "count": 2
         },
         {
@@ -840,31 +844,52 @@
           "count": 2
         },
         {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
+          "o_id": 76320,
+          "name": "Boucle du Mouhoun",
+          "lat": 12.5,
+          "lng": -3.5,
           "count": 1
         },
         {
-          "o_id": 310,
-          "name": "États-Unis",
-          "lat": 39.76,
-          "lng": -98.5,
+          "o_id": 76322,
+          "name": "Dioulassoba",
+          "lat": 11.178,
+          "lng": -4.2961,
           "count": 1
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
+          "o_id": 63401,
+          "name": "Cascades",
+          "lat": 10.25,
+          "lng": -4.5,
           "count": 1
         },
         {
-          "o_id": 73337,
-          "name": "Dubaï",
-          "lat": 25.269722,
-          "lng": 55.309444,
+          "o_id": 76316,
+          "name": "Gounghin",
+          "lat": 12.35641975819987,
+          "lng": -1.5480543813205,
+          "count": 1
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
+          "count": 1
+        },
+        {
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 1
+        },
+        {
+          "o_id": 346,
+          "name": "Kongoussi",
+          "lat": 13.32583,
+          "lng": -1.53472,
           "count": 1
         },
         {
@@ -1008,34 +1033,6 @@
           "count": 1
         },
         {
-          "o_id": 76316,
-          "name": "Gounghin",
-          "lat": 12.35641975819987,
-          "lng": -1.5480543813205,
-          "count": 1
-        },
-        {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 1
-        },
-        {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
-          "count": 1
-        },
-        {
-          "o_id": 346,
-          "name": "Kongoussi",
-          "lat": 13.32583,
-          "lng": -1.53472,
-          "count": 1
-        },
-        {
           "o_id": 373,
           "name": "Nouna",
           "lat": 12.74367,
@@ -1050,24 +1047,31 @@
           "count": 1
         },
         {
-          "o_id": 76320,
-          "name": "Boucle du Mouhoun",
-          "lat": 12.5,
-          "lng": -3.5,
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
           "count": 1
         },
         {
-          "o_id": 76322,
-          "name": "Dioulassoba",
-          "lat": 11.178,
-          "lng": -4.2961,
+          "o_id": 310,
+          "name": "États-Unis",
+          "lat": 39.76,
+          "lng": -98.5,
           "count": 1
         },
         {
-          "o_id": 63401,
-          "name": "Cascades",
-          "lat": 10.25,
-          "lng": -4.5,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 73337,
+          "name": "Dubaï",
+          "lat": 25.269722,
+          "lng": 55.309444,
           "count": 1
         },
         {
@@ -1103,6 +1107,10 @@
           "count": 3
         },
         {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
           "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 2
         },
@@ -1111,15 +1119,11 @@
           "count": 2
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
-          "count": 2
-        },
-        {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         },
         {
-          "label": "dieu - homme - islam - foi - religion - coran",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         },
         {
@@ -1374,17 +1378,17 @@
         "cells": [
           [
             4,
-            7,
+            11,
             1
           ],
           [
             4,
-            6,
-            2
+            8,
+            3
           ],
           [
             4,
-            5,
+            4,
             1
           ],
           [
@@ -1394,23 +1398,33 @@
           ],
           [
             4,
-            9,
+            5,
             1
           ],
           [
             4,
-            3,
-            2
-          ],
-          [
-            6,
-            8,
+            7,
             1
           ],
           [
             5,
             6,
             2
+          ],
+          [
+            4,
+            9,
+            1
+          ],
+          [
+            4,
+            6,
+            2
+          ],
+          [
+            4,
+            0,
+            1
           ],
           [
             5,
@@ -1418,19 +1432,19 @@
             1
           ],
           [
-            4,
-            8,
-            3
-          ],
-          [
             0,
             9,
             1
           ],
           [
-            4,
-            4,
+            3,
+            11,
             1
+          ],
+          [
+            4,
+            3,
+            2
           ],
           [
             4,
@@ -1438,18 +1452,8 @@
             1
           ],
           [
-            4,
-            0,
-            1
-          ],
-          [
-            4,
-            11,
-            1
-          ],
-          [
-            3,
-            11,
+            6,
+            8,
             1
           ]
         ]
@@ -1464,17 +1468,17 @@
           "Ouagadougou",
           "Paix",
           "Bobo-Dioulasso",
+          "Révolution de 2014 au Burkina Faso",
           "Pluralisme religieux",
           "Prière",
           "Réconciliation",
-          "Révolution de 2014 au Burkina Faso",
           "Yacouba Isaac Zida",
           "Élections",
-          "Cohésion sociale",
-          "Hadj",
-          "Mahomet",
+          "Aboubacar Sana",
+          "Adama Sakandé",
           "Blaise Compaoré",
-          "Politique"
+          "Politique",
+          "Gouvernance"
         ],
         "matrix": [
           [
@@ -1483,253 +1487,253 @@
             8,
             6,
             5,
-            6,
-            6,
             5,
+            6,
+            6,
             4,
             4,
+            3,
             4,
             4,
-            4,
-            4,
-            3
+            3,
+            4
           ],
           [
             14,
             0,
             7,
             1,
+            3,
             5,
             6,
             4,
-            3,
             4,
             2,
-            3,
+            4,
+            4,
             2,
             2,
-            2,
-            2
+            1
           ],
           [
             8,
             7,
             0,
             1,
+            1,
             3,
             5,
             4,
-            1,
             2,
             0,
+            2,
             3,
-            1,
-            2,
             0,
-            0
+            0,
+            1
           ],
           [
             6,
             1,
             1,
             0,
+            2,
             1,
             0,
             1,
-            2,
             1,
             3,
+            0,
+            0,
             1,
-            1,
-            1,
-            1,
+            2,
             2
           ],
           [
             5,
-            5,
-            3,
-            1,
-            0,
-            3,
-            1,
-            1,
-            2,
-            0,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          [
-            6,
-            6,
-            5,
-            0,
-            3,
-            0,
-            3,
-            0,
-            2,
-            0,
-            2,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            6,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            2,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            5,
             3,
             1,
             2,
-            1,
-            0,
-            2,
             0,
             1,
-            2,
-            1,
-            1,
             0,
-            1,
-            1
-          ],
-          [
-            4,
-            4,
-            2,
-            1,
-            2,
-            2,
-            1,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            4,
-            2,
-            0,
-            3,
-            0,
-            0,
-            0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            2
-          ],
-          [
-            4,
-            3,
-            3,
-            1,
-            2,
-            2,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1
-          ],
-          [
-            4,
-            2,
-            1,
-            1,
-            2,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            3,
-            1,
-            1
-          ],
-          [
-            4,
-            2,
             2,
             1,
             2,
             1,
             1,
-            0,
-            1,
-            0,
-            0,
-            3,
-            0,
-            1,
-            1
-          ],
-          [
-            4,
-            2,
-            0,
-            1,
-            2,
-            1,
-            0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            0,
             3
           ],
           [
+            5,
+            5,
+            3,
+            1,
+            1,
+            0,
+            3,
+            1,
+            2,
+            0,
+            3,
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            6,
+            6,
+            5,
+            0,
+            0,
+            3,
+            0,
             3,
             2,
+            0,
+            3,
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            6,
+            4,
+            4,
+            1,
+            2,
+            1,
+            3,
+            0,
+            1,
+            0,
+            2,
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            4,
+            4,
+            2,
+            1,
+            1,
+            2,
+            2,
+            1,
+            0,
             0,
             2,
             2,
             1,
+            1,
+            0
+          ],
+          [
+            4,
+            2,
+            0,
+            3,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            3,
+            4,
+            2,
+            0,
+            1,
+            3,
+            3,
+            2,
+            2,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            4,
+            4,
+            3,
+            0,
+            1,
+            0,
+            3,
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            4,
+            2,
             0,
             1,
             1,
             2,
             1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            3,
+            0
+          ],
+          [
+            3,
+            2,
+            0,
+            2,
+            1,
+            2,
+            1,
+            0,
+            1,
+            2,
             1,
             1,
             3,
+            0,
+            0
+          ],
+          [
+            4,
+            1,
+            1,
+            2,
+            3,
+            0,
+            0,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]

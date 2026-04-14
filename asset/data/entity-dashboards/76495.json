@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.592807+00:00",
+  "generated_at": "2026-04-14T06:30:24.026465+00:00",
   "entity": {
     "o_id": 76495,
     "title": "Indénié",
@@ -60,6 +60,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1974,
           "year_max": 1990
@@ -69,45 +70,50 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2014,
           "year_max": 2020
-        },
-        {
-          "name": "Le Patriote",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2011,
-          "year_max": 2011
-        },
-        {
-          "name": "Le Jour Plus",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2013,
-          "year_max": 2013
         },
         {
           "name": "Le Temps",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
         },
         {
           "name": "Notre Voie",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2015,
           "year_max": 2015
+        },
+        {
+          "name": "Le Patriote",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2011,
+          "year_max": 2011
         }
       ]
     }
@@ -532,6 +538,13 @@
           "count": 2
         },
         {
+          "o_id": 76461,
+          "name": "Riviéra 2",
+          "lat": 5.347059329725747,
+          "lng": -3.977945412685864,
+          "count": 1
+        },
+        {
           "o_id": 46245,
           "name": "Adzopé",
           "lat": 6.103517,
@@ -595,20 +608,6 @@
           "count": 1
         },
         {
-          "o_id": 76461,
-          "name": "Riviéra 2",
-          "lat": 5.347059329725747,
-          "lng": -3.977945412685864,
-          "count": 1
-        },
-        {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 1
-        },
-        {
           "o_id": 76470,
           "name": "Issia",
           "lat": 6.4922222222222,
@@ -663,6 +662,13 @@
           "lat": 7.9611111111111,
           "lng": -6.6730555555556,
           "count": 1
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 1
         }
       ]
     }
@@ -683,15 +689,15 @@
           "count": 1
         },
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
-          "count": 1
-        },
-        {
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 1
         },
         {
           "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         }
       ]
@@ -1001,13 +1007,13 @@
         ],
         "cells": [
           [
-            15,
+            36,
             6,
             1
           ],
           [
-            37,
-            0,
+            15,
+            6,
             1
           ],
           [
@@ -1016,28 +1022,13 @@
             1
           ],
           [
-            46,
-            10,
-            1
-          ],
-          [
-            39,
-            1,
-            1
-          ],
-          [
             0,
             2,
             1
           ],
           [
-            36,
-            6,
-            1
-          ],
-          [
-            41,
-            7,
+            46,
+            10,
             1
           ],
           [
@@ -1048,6 +1039,21 @@
           [
             16,
             6,
+            1
+          ],
+          [
+            39,
+            1,
+            1
+          ],
+          [
+            41,
+            7,
+            1
+          ],
+          [
+            37,
+            0,
             1
           ]
         ]
@@ -1065,8 +1071,8 @@
           "Unité",
           "Parti Démocratique de Côte d'Ivoire",
           "Paix",
-          "Développement",
           "Politique",
+          "Développement",
           "Agboville",
           "Katiola",
           "Prière",
@@ -1151,8 +1157,8 @@
             0,
             2,
             2,
-            2,
             1,
+            2,
             1,
             1,
             1,
@@ -1185,8 +1191,8 @@
             2,
             1,
             0,
-            1,
             0,
+            1,
             1,
             2,
             2,
@@ -1199,9 +1205,9 @@
             2,
             1,
             2,
-            2,
-            2,
             1,
+            2,
+            0,
             0,
             2,
             1,
@@ -1216,9 +1222,9 @@
             2,
             1,
             2,
-            1,
             2,
-            0,
+            2,
+            1,
             2,
             0,
             1,

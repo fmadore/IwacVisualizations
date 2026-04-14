@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:26.530083+00:00",
+  "generated_at": "2026-04-14T06:30:00.047137+00:00",
   "person": {
     "o_id": 901,
     "title": "Roch Marc Christian Kaboré",
@@ -35,6 +35,13 @@
         "year_max": 2014,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -126,6 +133,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -137,6 +149,7 @@
           "total": 37,
           "articles": 37,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2021
@@ -146,6 +159,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2021
@@ -155,6 +169,7 @@
           "total": 21,
           "articles": 21,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2008,
           "year_max": 2020
@@ -164,6 +179,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -173,6 +189,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2020
@@ -182,6 +199,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2019
@@ -191,6 +209,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2017
@@ -202,6 +221,7 @@
           "total": 37,
           "articles": 37,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2021
@@ -211,6 +231,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2021
@@ -220,6 +241,7 @@
           "total": 21,
           "articles": 21,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2008,
           "year_max": 2020
@@ -229,6 +251,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2021
@@ -238,6 +261,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2020
@@ -247,6 +271,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2019
@@ -256,6 +281,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2017
@@ -267,11 +293,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -293,7 +321,8 @@
           "name": "Burkina Faso",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -515,7 +544,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 16,
-            "score": 21.7406
+            "score": 21.7187
           },
           {
             "o_id": 128,
@@ -602,18 +631,18 @@
             "score": 16.1524
           },
           {
-            "o_id": 42,
-            "title": "Catholiques",
-            "type": "Sujets",
-            "cooc": 8,
-            "score": 16.0085
-          },
-          {
             "o_id": 583,
             "title": "Organisation de la Coopération Islamique",
             "type": "Organisations",
             "cooc": 6,
             "score": 15.9953
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 8,
+            "score": 15.946
           },
           {
             "o_id": 198,
@@ -637,13 +666,6 @@
             "score": 15.4221
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 6,
-            "score": 15.1185
-          },
-          {
             "o_id": 1172,
             "title": "Samuel Yaméogo",
             "type": "Personnes",
@@ -656,6 +678,13 @@
             "type": "Sujets",
             "cooc": 5,
             "score": 15.0372
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 8,
+            "score": 15.0268
           }
         ],
         "edges": [
@@ -836,7 +865,7 @@
           {
             "source": 901,
             "target": 44,
-            "weight": 21.7406,
+            "weight": 21.7187,
             "cooc": 16
           },
           {
@@ -913,15 +942,15 @@
           },
           {
             "source": 901,
-            "target": 42,
-            "weight": 16.0085,
-            "cooc": 8
-          },
-          {
-            "source": 901,
             "target": 583,
             "weight": 15.9953,
             "cooc": 6
+          },
+          {
+            "source": 901,
+            "target": 42,
+            "weight": 15.946,
+            "cooc": 8
           },
           {
             "source": 901,
@@ -943,12 +972,6 @@
           },
           {
             "source": 901,
-            "target": 578,
-            "weight": 15.1185,
-            "cooc": 6
-          },
-          {
-            "source": 901,
             "target": 1172,
             "weight": 15.0988,
             "cooc": 4
@@ -958,6 +981,12 @@
             "target": 15318,
             "weight": 15.0372,
             "cooc": 5
+          },
+          {
+            "source": 901,
+            "target": 14425,
+            "weight": 15.0268,
+            "cooc": 8
           }
         ]
       },
@@ -1178,7 +1207,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 16,
-            "score": 21.7406
+            "score": 21.7187
           },
           {
             "o_id": 128,
@@ -1265,18 +1294,18 @@
             "score": 16.1524
           },
           {
-            "o_id": 42,
-            "title": "Catholiques",
-            "type": "Sujets",
-            "cooc": 8,
-            "score": 16.0085
-          },
-          {
             "o_id": 583,
             "title": "Organisation de la Coopération Islamique",
             "type": "Organisations",
             "cooc": 6,
             "score": 15.9953
+          },
+          {
+            "o_id": 42,
+            "title": "Catholiques",
+            "type": "Sujets",
+            "cooc": 8,
+            "score": 15.946
           },
           {
             "o_id": 198,
@@ -1300,13 +1329,6 @@
             "score": 15.4221
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 6,
-            "score": 15.1185
-          },
-          {
             "o_id": 1172,
             "title": "Samuel Yaméogo",
             "type": "Personnes",
@@ -1319,6 +1341,13 @@
             "type": "Sujets",
             "cooc": 5,
             "score": 15.0372
+          },
+          {
+            "o_id": 14425,
+            "title": "Économie",
+            "type": "Sujets",
+            "cooc": 8,
+            "score": 15.0268
           }
         ],
         "edges": [
@@ -1499,7 +1528,7 @@
           {
             "source": 901,
             "target": 44,
-            "weight": 21.7406,
+            "weight": 21.7187,
             "cooc": 16
           },
           {
@@ -1576,15 +1605,15 @@
           },
           {
             "source": 901,
-            "target": 42,
-            "weight": 16.0085,
-            "cooc": 8
-          },
-          {
-            "source": 901,
             "target": 583,
             "weight": 15.9953,
             "cooc": 6
+          },
+          {
+            "source": 901,
+            "target": 42,
+            "weight": 15.946,
+            "cooc": 8
           },
           {
             "source": 901,
@@ -1606,12 +1635,6 @@
           },
           {
             "source": 901,
-            "target": 578,
-            "weight": 15.1185,
-            "cooc": 6
-          },
-          {
-            "source": 901,
             "target": 1172,
             "weight": 15.0988,
             "cooc": 4
@@ -1621,10 +1644,28 @@
             "target": 15318,
             "weight": 15.0372,
             "cooc": 5
+          },
+          {
+            "source": 901,
+            "target": 14425,
+            "weight": 15.0268,
+            "cooc": 8
           }
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 901,
+            "title": "Roch Marc Christian Kaboré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 901,
@@ -2988,7 +3029,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -3098,7 +3140,8 @@
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3714,6 +3757,100 @@
           }
         },
         "articles_total": 1
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -4380,6 +4517,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4952,6 +5107,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

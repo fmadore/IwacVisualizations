@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:30.883520+00:00",
+  "generated_at": "2026-04-14T06:30:03.951023+00:00",
   "person": {
     "o_id": 1053,
     "title": "Ibrahim Kouanda",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -122,6 +129,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -133,6 +145,7 @@
           "total": 21,
           "articles": 21,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2006
@@ -142,6 +155,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2007
@@ -151,6 +165,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2008
@@ -162,6 +177,7 @@
           "total": 21,
           "articles": 21,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1995,
           "year_max": 2006
@@ -171,6 +187,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2007
@@ -180,12 +197,14 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2008
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -202,7 +221,8 @@
           "count": 45
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -228,7 +248,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 17,
-            "score": 42.8357
+            "score": 42.4669
           },
           {
             "o_id": 86,
@@ -487,7 +507,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 7,
-            "score": 9.5115
+            "score": 9.5019
           },
           {
             "o_id": 23142,
@@ -543,7 +563,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 76039,
@@ -577,7 +597,7 @@
           {
             "source": 1053,
             "target": 578,
-            "weight": 42.8357,
+            "weight": 42.4669,
             "cooc": 17
           },
           {
@@ -799,7 +819,7 @@
           {
             "source": 1053,
             "target": 44,
-            "weight": 9.5115,
+            "weight": 9.5019,
             "cooc": 7
           },
           {
@@ -847,7 +867,7 @@
           {
             "source": 1053,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -891,7 +911,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 17,
-            "score": 42.8357
+            "score": 42.4669
           },
           {
             "o_id": 86,
@@ -1150,7 +1170,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 7,
-            "score": 9.5115
+            "score": 9.5019
           },
           {
             "o_id": 23142,
@@ -1206,7 +1226,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 76039,
@@ -1240,7 +1260,7 @@
           {
             "source": 1053,
             "target": 578,
-            "weight": 42.8357,
+            "weight": 42.4669,
             "cooc": 17
           },
           {
@@ -1462,7 +1482,7 @@
           {
             "source": 1053,
             "target": 44,
-            "weight": 9.5115,
+            "weight": 9.5019,
             "cooc": 7
           },
           {
@@ -1510,7 +1530,7 @@
           {
             "source": 1053,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -1534,6 +1554,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1053,
+            "title": "Ibrahim Kouanda",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1053,
@@ -2029,7 +2061,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2102,7 +2135,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2452,6 +2486,100 @@
         "articles_total": 45
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -2898,6 +3026,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -3472,6 +3618,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

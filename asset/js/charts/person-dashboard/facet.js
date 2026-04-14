@@ -46,6 +46,9 @@
         if (summary.creator && summary.creator.total_mentions > 0) {
             roles.push({ key: 'creator', label: P.t('As creator') });
         }
+        if (summary.editor && summary.editor.total_mentions > 0) {
+            roles.push({ key: 'editor', label: P.t('As editor') });
+        }
         if (roles.length <= 1) {
             // Only 0 or 1 role available → hide the bar entirely
             return;

@@ -352,6 +352,7 @@
                     var bits = [];
                     if (entry.articles)     bits.push(fmt(entry.articles) + ' ' + t('Articles').toLowerCase());
                     if (entry.publications) bits.push(fmt(entry.publications) + ' ' + t('Publications').toLowerCase());
+                    if (entry.references)   bits.push(fmt(entry.references) + ' ' + t('References').toLowerCase());
                     if (bits.length) lines.push(bits.join(' &middot; '));
                     if (entry.country) lines.push(esc(entry.country));
                     return lines.join('<br>');

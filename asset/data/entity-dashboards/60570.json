@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.078724+00:00",
+  "generated_at": "2026-04-14T06:30:21.457173+00:00",
   "entity": {
     "o_id": 60570,
     "title": "Agbonou",
@@ -46,6 +46,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1987,
           "year_max": 1990
@@ -55,6 +56,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2022,
           "year_max": 2022
@@ -211,17 +213,24 @@
           "count": 3
         },
         {
-          "o_id": 544,
-          "name": "Togo",
-          "lat": 8.66667,
-          "lng": 1.08333,
-          "count": 2
-        },
-        {
           "o_id": 515,
           "name": "Niamtougou",
           "lat": 9.7666666666667,
           "lng": 1.1,
+          "count": 2
+        },
+        {
+          "o_id": 60562,
+          "name": "Wawa",
+          "lat": 7.583333,
+          "lng": 0.6,
+          "count": 2
+        },
+        {
+          "o_id": 544,
+          "name": "Togo",
+          "lat": 8.66667,
+          "lng": 1.08333,
           "count": 2
         },
         {
@@ -239,38 +248,24 @@
           "count": 2
         },
         {
-          "o_id": 60562,
-          "name": "Wawa",
-          "lat": 7.583333,
-          "lng": 0.6,
-          "count": 2
-        },
-        {
-          "o_id": 533,
-          "name": "Kozah",
-          "lat": 9.583333,
-          "lng": 1.166667,
+          "o_id": 428,
+          "name": "Danemark",
+          "lat": 56.0,
+          "lng": 10.0,
           "count": 1
         },
         {
-          "o_id": 60566,
-          "name": "Tône",
-          "lat": 10.916667,
-          "lng": 0.166667,
+          "o_id": 60559,
+          "name": "Région des plateaux",
+          "lat": 7.5,
+          "lng": 1.1,
           "count": 1
         },
         {
-          "o_id": 504,
-          "name": "Dapaong",
-          "lat": 10.866666666667,
-          "lng": 0.2,
-          "count": 1
-        },
-        {
-          "o_id": 508,
-          "name": "Kara",
-          "lat": 9.5488888888889,
-          "lng": 1.1905555555556,
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 1
         },
         {
@@ -351,24 +346,31 @@
           "count": 1
         },
         {
-          "o_id": 428,
-          "name": "Danemark",
-          "lat": 56.0,
-          "lng": 10.0,
+          "o_id": 533,
+          "name": "Kozah",
+          "lat": 9.583333,
+          "lng": 1.166667,
           "count": 1
         },
         {
-          "o_id": 60559,
-          "name": "Région des plateaux",
-          "lat": 7.5,
-          "lng": 1.1,
+          "o_id": 60566,
+          "name": "Tône",
+          "lat": 10.916667,
+          "lng": 0.166667,
           "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
+          "o_id": 504,
+          "name": "Dapaong",
+          "lat": 10.866666666667,
+          "lng": 0.2,
+          "count": 1
+        },
+        {
+          "o_id": 508,
+          "name": "Kara",
+          "lat": 9.5488888888889,
+          "lng": 1.1905555555556,
           "count": 1
         }
       ]
@@ -378,7 +380,7 @@
     "by_role": {
       "all": [
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
         },
         {
@@ -386,7 +388,7 @@
           "count": 1
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
       ]
@@ -685,18 +687,18 @@
         ],
         "cells": [
           [
-            0,
-            7,
-            1
-          ],
-          [
-            3,
-            0,
-            1
-          ],
-          [
             35,
             3,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            0,
+            7,
             1
           ]
         ]
@@ -709,19 +711,19 @@
         "names": [
           "Atakpamé",
           "Ogou",
-          "Togo",
           "Niamtougou",
+          "Wawa",
+          "Togo",
           "Doufelgou",
           "Gnassingbé Eyadéma",
           "Badou",
-          "Wawa",
-          "Kozah",
-          "Tône",
-          "Dapaong",
-          "Kara",
+          "Danemark",
+          "Région des plateaux",
+          "Arabie saoudite",
           "Sarakawa",
           "Tomégbé",
-          "Tchamba"
+          "Tchamba",
+          "Niger"
         ],
         "matrix": [
           [
@@ -767,9 +769,9 @@
             2,
             2,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -784,9 +786,9 @@
             2,
             2,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -801,9 +803,9 @@
             2,
             2,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -818,9 +820,9 @@
             0,
             2,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -835,9 +837,9 @@
             2,
             0,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -852,9 +854,9 @@
             2,
             2,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -863,16 +865,16 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
-            1,
+            0,
             0,
             0,
             0
@@ -880,33 +882,16 @@
           [
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             1,
-            1,
             0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
             0,
             0,
             0
@@ -914,15 +899,15 @@
           [
             1,
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            0,
             0,
             0,
             0,
@@ -941,6 +926,23 @@
             0,
             0,
             0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
             0,
             1,
             1
@@ -957,7 +959,7 @@
             0,
             0,
             0,
-            0,
+            1,
             1,
             0,
             1
@@ -974,7 +976,7 @@
             0,
             0,
             0,
-            0,
+            1,
             1,
             1,
             0

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.991894+00:00",
+  "generated_at": "2026-04-14T06:30:28.069335+00:00",
   "entity": {
     "o_id": 786,
     "title": "Organisation Humanitaire pour l'Entraide Islamique au Bénin",
@@ -50,24 +50,17 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2014,
           "year_max": 2016
-        },
-        {
-          "name": "ASSALAM",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2019
         },
         {
           "name": "Fraternité",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2022,
           "year_max": 2022
@@ -77,9 +70,20 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "ASSALAM",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2019
         }
       ]
     }
@@ -245,6 +249,48 @@
           "lat": 25.0,
           "lng": 45.0,
           "count": 2
+        },
+        {
+          "o_id": 343,
+          "name": "Kétou",
+          "lat": 7.45,
+          "lng": 2.626,
+          "count": 1
+        },
+        {
+          "o_id": 14293,
+          "name": "Ouémé",
+          "lat": 6.5,
+          "lng": 2.6,
+          "count": 1
+        },
+        {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 531,
+          "name": "Riyad",
+          "lat": 24.65,
+          "lng": 46.71,
+          "count": 1
+        },
+        {
+          "o_id": 334,
+          "name": "Karimama",
+          "lat": 11.93816,
+          "lng": 2.75703,
+          "count": 1
         },
         {
           "o_id": 25602,
@@ -420,48 +466,6 @@
           "lat": -12.35,
           "lng": 17.35,
           "count": 1
-        },
-        {
-          "o_id": 334,
-          "name": "Karimama",
-          "lat": 11.93816,
-          "lng": 2.75703,
-          "count": 1
-        },
-        {
-          "o_id": 343,
-          "name": "Kétou",
-          "lat": 7.45,
-          "lng": 2.626,
-          "count": 1
-        },
-        {
-          "o_id": 14293,
-          "name": "Ouémé",
-          "lat": 6.5,
-          "lng": 2.6,
-          "count": 1
-        },
-        {
-          "o_id": 378,
-          "name": "Ouidah",
-          "lat": 6.36307,
-          "lng": 2.08506,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 531,
-          "name": "Riyad",
-          "lat": 24.65,
-          "lng": 46.71,
-          "count": 1
         }
       ]
     }
@@ -469,10 +473,6 @@
   "topics": {
     "by_role": {
       "all": [
-        {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
-          "count": 1
-        },
         {
           "label": "don - offrir - geste - ong - vivre - solidarité",
           "count": 1
@@ -483,6 +483,10 @@
         },
         {
           "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
       ]
@@ -666,16 +670,6 @@
         ],
         "cells": [
           [
-            5,
-            0,
-            1
-          ],
-          [
-            0,
-            1,
-            1
-          ],
-          [
             8,
             3,
             1
@@ -689,6 +683,16 @@
             2,
             7,
             1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            5,
+            0,
+            1
           ]
         ]
       }
@@ -701,18 +705,18 @@
           "Bénin",
           "Porto-Novo",
           "Cotonou",
-          "Éducation",
-          "Mosquée",
+          "Arabie saoudite",
           "Union Islamique du Bénin",
           "Coran",
-          "Arabie saoudite",
-          "Gambie",
-          "Patrice Talon",
-          "Abomey",
-          "Abomey-Calavi",
-          "Santé",
-          "Algérie",
-          "Aziz Atanda Yaya"
+          "Éducation",
+          "Mosquée",
+          "Ramadan",
+          "Solidarité",
+          "Coopération",
+          "Kétou",
+          "Ouémé",
+          "Ouidah",
+          "Famille"
         ],
         "matrix": [
           [
@@ -737,7 +741,6 @@
             0,
             2,
             1,
-            1,
             2,
             0,
             1,
@@ -747,14 +750,14 @@
             1,
             1,
             1,
-            1
+            1,
+            0
           ],
           [
             2,
             2,
             0,
             1,
-            1,
             2,
             0,
             1,
@@ -764,33 +767,17 @@
             1,
             1,
             1,
-            1
+            1,
+            0
           ],
           [
             2,
             1,
             1,
             0,
-            2,
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            1,
-            1,
-            2,
-            0,
-            1,
-            1,
             0,
             1,
             1,
@@ -805,7 +792,6 @@
             2,
             2,
             1,
-            1,
             0,
             0,
             1,
@@ -815,17 +801,35 @@
             1,
             1,
             1,
-            1
+            1,
+            0
           ],
           [
             2,
             0,
             0,
             1,
-            1,
             0,
             0,
             1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            2,
             0,
             0,
             0,
@@ -839,9 +843,9 @@
             1,
             1,
             0,
-            0,
             1,
             1,
+            2,
             0,
             0,
             0,
@@ -857,16 +861,16 @@
             1,
             1,
             1,
-            1,
             0,
             0,
             0,
+            0,
             1,
             1,
             1,
             1,
             1,
-            1
+            0
           ],
           [
             1,
@@ -874,16 +878,16 @@
             1,
             1,
             1,
-            1,
             0,
             0,
+            0,
             1,
             0,
             1,
             1,
             1,
             1,
-            1
+            0
           ],
           [
             1,
@@ -891,16 +895,16 @@
             1,
             1,
             1,
-            1,
             0,
             0,
-            1,
-            1,
             0,
             1,
             1,
+            0,
             1,
-            1
+            1,
+            1,
+            0
           ],
           [
             1,
@@ -908,16 +912,16 @@
             1,
             1,
             1,
-            1,
             0,
             0,
-            1,
-            1,
-            1,
             0,
             1,
             1,
-            1
+            1,
+            0,
+            1,
+            1,
+            0
           ],
           [
             1,
@@ -925,16 +929,16 @@
             1,
             1,
             1,
-            1,
             0,
             0,
+            0,
             1,
             1,
             1,
             1,
             0,
             1,
-            1
+            0
           ],
           [
             1,
@@ -942,32 +946,32 @@
             1,
             1,
             1,
-            1,
             0,
             0,
+            0,
             1,
             1,
             1,
             1,
             1,
             0,
-            1
+            0
           ],
           [
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             1,
+            0,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ]
         ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:53.929126+00:00",
+  "generated_at": "2026-04-14T06:30:26.172641+00:00",
   "person": {
     "o_id": 62195,
     "title": "Youssouf Sylla",
@@ -35,6 +35,13 @@
         "year_max": 1999,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -166,6 +173,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -177,6 +189,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1983,
           "year_max": 1999
@@ -186,6 +199,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2013
@@ -195,6 +209,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2014
@@ -206,6 +221,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2013
@@ -215,6 +231,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1983,
           "year_max": 1998
@@ -224,6 +241,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2014
@@ -235,11 +253,13 @@
           "total": 32,
           "articles": 32,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1983,
           "year_max": 1999
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -261,7 +281,8 @@
           "name": "Côte d'Ivoire",
           "count": 32
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -301,7 +322,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 20,
-            "score": 26.1582
+            "score": 26.054
           },
           {
             "o_id": 46268,
@@ -462,7 +483,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.8703
+            "score": 10.8593
           },
           {
             "o_id": 46238,
@@ -497,7 +518,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 9,
-            "score": 10.0737
+            "score": 10.064
           },
           {
             "o_id": 113,
@@ -648,7 +669,7 @@
           {
             "source": 62195,
             "target": 76268,
-            "weight": 26.1582,
+            "weight": 26.054,
             "cooc": 20
           },
           {
@@ -786,7 +807,7 @@
           {
             "source": 62195,
             "target": 44,
-            "weight": 10.8703,
+            "weight": 10.8593,
             "cooc": 8
           },
           {
@@ -816,7 +837,7 @@
           {
             "source": 62195,
             "target": 29,
-            "weight": 10.0737,
+            "weight": 10.064,
             "cooc": 9
           },
           {
@@ -999,7 +1020,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.5395
+            "score": 6.5135
           },
           {
             "o_id": 1057,
@@ -1118,7 +1139,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 59,
@@ -1139,7 +1160,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 945,
@@ -1236,7 +1257,7 @@
           {
             "source": 62195,
             "target": 76268,
-            "weight": 6.5395,
+            "weight": 6.5135,
             "cooc": 5
           },
           {
@@ -1338,7 +1359,7 @@
           {
             "source": 62195,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -1356,7 +1377,7 @@
           {
             "source": 62195,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
@@ -1439,7 +1460,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 15,
-            "score": 19.6186
+            "score": 19.5405
           },
           {
             "o_id": 43069,
@@ -1663,14 +1684,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 6,
-            "score": 6.7158
+            "score": 6.7093
           },
           {
             "o_id": 58,
@@ -1785,7 +1806,7 @@
           {
             "source": 62195,
             "target": 76268,
-            "weight": 19.6186,
+            "weight": 19.5405,
             "cooc": 15
           },
           {
@@ -1977,13 +1998,13 @@
           {
             "source": 62195,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
             "source": 62195,
             "target": 29,
-            "weight": 6.7158,
+            "weight": 6.7093,
             "cooc": 6
           },
           {
@@ -2059,6 +2080,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 62195,
+            "title": "Youssouf Sylla",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -3112,7 +3145,8 @@
           "lng": -3.48333333,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -3250,7 +3284,8 @@
           "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3842,6 +3877,100 @@
           }
         },
         "articles_total": 32
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -4352,6 +4481,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -5184,6 +5331,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

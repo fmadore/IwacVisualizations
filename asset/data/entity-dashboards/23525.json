@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:57.326970+00:00",
+  "generated_at": "2026-04-14T06:30:29.366785+00:00",
   "entity": {
     "o_id": 23525,
     "title": "Communauté Musulmane du Lycée Technique",
@@ -46,24 +46,27 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
-        },
-        {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1996,
-          "year_max": 1996
         },
         {
           "name": "L'Alternative",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1996,
+          "year_max": 1996
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 1996
@@ -73,6 +76,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2014,
           "year_max": 2014
@@ -588,6 +592,20 @@
           "count": 2
         },
         {
+          "o_id": 25602,
+          "name": "Gambie",
+          "lat": 13.5,
+          "lng": -15.5,
+          "count": 1
+        },
+        {
+          "o_id": 46248,
+          "name": "Yamoussoukro",
+          "lat": 6.816111,
+          "lng": -5.274167,
+          "count": 1
+        },
+        {
           "o_id": 357,
           "name": "Mali",
           "lat": 18.0,
@@ -599,20 +617,6 @@
           "name": "Abidjan",
           "lat": 5.35444,
           "lng": -4.00167,
-          "count": 1
-        },
-        {
-          "o_id": 46248,
-          "name": "Yamoussoukro",
-          "lat": 6.816111,
-          "lng": -5.274167,
-          "count": 1
-        },
-        {
-          "o_id": 25602,
-          "name": "Gambie",
-          "lat": 13.5,
-          "lng": -15.5,
           "count": 1
         }
       ]
@@ -626,11 +630,11 @@
           "count": 2
         },
         {
-          "label": "homme - mort - attendre - maison - enfant - sou",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         }
       ]
@@ -846,19 +850,19 @@
         ],
         "cells": [
           [
-            2,
-            9,
-            1
-          ],
-          [
-            2,
-            2,
-            1
-          ],
-          [
             0,
             0,
             2
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            9,
+            1
           ],
           [
             20,
@@ -873,12 +877,12 @@
     "by_role": {
       "all": {
         "names": [
-          "Côte d'Ivoire",
           "Conseil National Islamique",
+          "Côte d'Ivoire",
           "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Conflit",
           "Laïcité",
           "Ligue Islamique des Prédicateurs de Côte d'Ivoire",
+          "Conflit",
           "Communauté Musulmane de la Riviera",
           "Chine",
           "Corruption",
@@ -896,7 +900,7 @@
             2,
             2,
             2,
-            2,
+            1,
             2,
             2,
             2,
@@ -911,7 +915,7 @@
             2,
             0,
             2,
-            1,
+            2,
             2,
             2,
             2,
@@ -928,9 +932,9 @@
             2,
             2,
             0,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -943,11 +947,45 @@
           ],
           [
             2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            1,
+            2,
+            1,
             1,
             1,
             0,
-            1,
-            1,
             1,
             1,
             1,
@@ -962,43 +1000,9 @@
             2,
             2,
             2,
-            1,
-            0,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          [
-            2,
             2,
             2,
             1,
-            2,
-            0,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2
-          ],
-          [
-            2,
-            2,
-            2,
-            1,
-            2,
-            2,
             0,
             2,
             2,
@@ -1013,9 +1017,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             0,
             2,
@@ -1030,9 +1034,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             0,
@@ -1047,9 +1051,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -1064,9 +1068,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -1081,9 +1085,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -1098,9 +1102,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -1115,9 +1119,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,
@@ -1132,9 +1136,9 @@
             2,
             2,
             2,
+            2,
+            2,
             1,
-            2,
-            2,
             2,
             2,
             2,

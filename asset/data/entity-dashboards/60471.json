@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.109008+00:00",
+  "generated_at": "2026-04-14T06:30:20.524837+00:00",
   "entity": {
     "o_id": 60471,
     "title": "Atalotè",
@@ -40,22 +40,24 @@
     "by_role": {
       "all": [
         {
-          "name": "Agence Togolaise de Presse",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Togo",
-          "year_min": 2024,
-          "year_max": 2024
-        },
-        {
           "name": "Togo-Presse",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2011,
           "year_max": 2011
+        },
+        {
+          "name": "Agence Togolaise de Presse",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Togo",
+          "year_min": 2024,
+          "year_max": 2024
         }
       ]
     }
@@ -111,6 +113,13 @@
           "count": 2
         },
         {
+          "o_id": 507,
+          "name": "Kandé",
+          "lat": 9.9563888888889,
+          "lng": 1.0463888888889,
+          "count": 1
+        },
+        {
           "o_id": 428,
           "name": "Danemark",
           "lat": 56.0,
@@ -130,13 +139,6 @@
           "lat": 25.0,
           "lng": 45.0,
           "count": 1
-        },
-        {
-          "o_id": 507,
-          "name": "Kandé",
-          "lat": 9.9563888888889,
-          "lng": 1.0463888888889,
-          "count": 1
         }
       ]
     }
@@ -145,11 +147,11 @@
     "by_role": {
       "all": [
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -390,13 +392,13 @@
         ],
         "cells": [
           [
-            13,
-            2,
+            0,
+            4,
             1
           ],
           [
-            0,
-            4,
+            13,
+            2,
             1
           ]
         ]
@@ -408,11 +410,11 @@
       "all": {
         "names": [
           "Kéran",
+          "Kandé",
+          "Union Musulmane du Togo",
           "Danemark",
           "Nadoba",
-          "Arabie saoudite",
-          "Kandé",
-          "Union Musulmane du Togo"
+          "Arabie saoudite"
         ],
         "matrix": [
           [
@@ -427,7 +429,7 @@
             1,
             0,
             1,
-            1,
+            0,
             0,
             0
           ],
@@ -435,14 +437,6 @@
             1,
             1,
             0,
-            1,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
             0,
             0,
             0
@@ -452,6 +446,14 @@
             0,
             0,
             0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
             0,
             1
           ],
@@ -459,7 +461,7 @@
             1,
             0,
             0,
-            0,
+            1,
             1,
             0
           ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:42.372693+00:00",
+  "generated_at": "2026-04-14T06:30:14.369214+00:00",
   "person": {
     "o_id": 1462,
     "title": "Madi Kaboré",
@@ -35,6 +35,13 @@
         "year_max": 2001,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -102,6 +109,11 @@
             5
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -113,6 +125,7 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2001
@@ -124,6 +137,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2000,
           "year_max": 2000
@@ -135,11 +149,13 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1994,
           "year_max": 2001
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -161,7 +177,8 @@
           "name": "Burkina Faso",
           "count": 17
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -180,7 +197,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 5,
-            "score": 12.5987
+            "score": 12.4903
           },
           {
             "o_id": 76327,
@@ -278,7 +295,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 109,
@@ -334,14 +351,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
           {
             "source": 1462,
             "target": 578,
-            "weight": 12.5987,
+            "weight": 12.4903,
             "cooc": 5
           },
           {
@@ -425,7 +442,7 @@
           {
             "source": 1462,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -473,7 +490,7 @@
           {
             "source": 1462,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -518,7 +535,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 5,
-            "score": 12.5987
+            "score": 12.4903
           },
           {
             "o_id": 76327,
@@ -616,7 +633,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 109,
@@ -672,14 +689,14 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
           {
             "source": 1462,
             "target": 578,
-            "weight": 12.5987,
+            "weight": 12.4903,
             "cooc": 5
           },
           {
@@ -763,7 +780,7 @@
           {
             "source": 1462,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -811,10 +828,22 @@
           {
             "source": 1462,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1462,
+            "title": "Madi Kaboré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1238,7 +1267,8 @@
           "lng": 39.61417,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1336,7 +1366,8 @@
           "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1812,6 +1843,100 @@
           }
         },
         "articles_total": 17
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2053,6 +2178,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2703,6 +2846,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

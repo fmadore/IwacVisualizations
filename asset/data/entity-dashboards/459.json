@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:39.401823+00:00",
+  "generated_at": "2026-04-14T06:30:11.699519+00:00",
   "entity": {
     "o_id": 459,
     "title": "Mosquée centrale de Porto-Novo",
@@ -76,42 +76,57 @@
           "total": 15,
           "articles": 15,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1993,
           "year_max": 2016
-        },
-        {
-          "name": "24 Heures au Bénin",
-          "total": 4,
-          "articles": 4,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2013,
-          "year_max": 2021
         },
         {
           "name": "Visages du Bénin",
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2022,
           "year_max": 2025
+        },
+        {
+          "name": "24 Heures au Bénin",
+          "total": 4,
+          "articles": 4,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2021
         },
         {
           "name": "Ehuzu",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1983,
           "year_max": 1986
+        },
+        {
+          "name": "Matin Libre",
+          "total": 2,
+          "articles": 2,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2019,
+          "year_max": 2021
         },
         {
           "name": "Boulevard des Infos",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2019,
           "year_max": 2019
@@ -121,54 +136,50 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1970,
           "year_max": 1971
-        },
-        {
-          "name": "Matin Libre",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2019,
-          "year_max": 2021
-        },
-        {
-          "name": "L'Evénement Précis",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2022,
-          "year_max": 2022
         },
         {
           "name": "Agence Bénin Presse",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2018,
           "year_max": 2018
-        },
-        {
-          "name": "Fraternité",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Bénin",
-          "year_min": 2013,
-          "year_max": 2013
         },
         {
           "name": "La Nouvelle Tribune",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2011,
           "year_max": 2011
+        },
+        {
+          "name": "Fraternité",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "L'Evénement Précis",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2022,
+          "year_max": 2022
         }
       ]
     }
@@ -342,16 +353,16 @@
             "score": 8.1784
           },
           {
-            "o_id": 14736,
-            "title": "Révision constitutionnelle (2013)",
-            "type": "Sujets",
+            "o_id": 1402,
+            "title": "Joachim Marie Florès Vignon Apithy",
+            "type": "Personnes",
             "cooc": 2,
             "score": 7.5839
           },
           {
-            "o_id": 1402,
-            "title": "Joachim Marie Florès Vignon Apithy",
-            "type": "Personnes",
+            "o_id": 14736,
+            "title": "Révision constitutionnelle (2013)",
+            "type": "Sujets",
             "cooc": 2,
             "score": 7.5839
           },
@@ -674,13 +685,13 @@
           },
           {
             "source": 459,
-            "target": 14736,
+            "target": 1402,
             "weight": 7.5839,
             "cooc": 2
           },
           {
             "source": 459,
-            "target": 1402,
+            "target": 14736,
             "weight": 7.5839,
             "cooc": 2
           },
@@ -903,6 +914,27 @@
           "count": 3
         },
         {
+          "o_id": 12866,
+          "name": "Brésil",
+          "lat": -14.0,
+          "lng": -53.0,
+          "count": 2
+        },
+        {
+          "o_id": 379,
+          "name": "Parakou",
+          "lat": 9.33716,
+          "lng": 2.63031,
+          "count": 2
+        },
+        {
+          "o_id": 370,
+          "name": "Natitingou",
+          "lat": 10.30416,
+          "lng": 1.37962,
+          "count": 2
+        },
+        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
@@ -917,25 +949,32 @@
           "count": 2
         },
         {
-          "o_id": 370,
-          "name": "Natitingou",
-          "lat": 10.30416,
-          "lng": 1.37962,
-          "count": 2
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
+          "count": 1
         },
         {
-          "o_id": 12866,
-          "name": "Brésil",
-          "lat": -14.0,
-          "lng": -53.0,
-          "count": 2
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
+          "count": 1
         },
         {
-          "o_id": 379,
-          "name": "Parakou",
-          "lat": 9.33716,
-          "lng": 2.63031,
-          "count": 2
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
+          "count": 1
+        },
+        {
+          "o_id": 62019,
+          "name": "Cadjèhoun",
+          "lat": 6.359,
+          "lng": 2.3971,
+          "count": 1
         },
         {
           "o_id": 76032,
@@ -1001,52 +1040,10 @@
           "count": 1
         },
         {
-          "o_id": 62019,
-          "name": "Cadjèhoun",
-          "lat": 6.359,
-          "lng": 2.3971,
-          "count": 1
-        },
-        {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
-          "count": 1
-        },
-        {
-          "o_id": 13448,
-          "name": "Le Caire",
-          "lat": 30.044444,
-          "lng": 31.235833,
-          "count": 1
-        },
-        {
-          "o_id": 488,
-          "name": "Lagos",
-          "lat": 6.45,
-          "lng": 3.4,
-          "count": 1
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
-          "count": 1
-        },
-        {
           "o_id": 310,
           "name": "États-Unis",
           "lat": 39.76,
           "lng": -98.5,
-          "count": 1
-        },
-        {
-          "o_id": 308,
-          "name": "Égypte",
-          "lat": 27.0,
-          "lng": 30.0,
           "count": 1
         },
         {
@@ -1068,6 +1065,20 @@
           "name": "Rwanda",
           "lat": -2.0,
           "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 308,
+          "name": "Égypte",
+          "lat": 27.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
           "count": 1
         }
       ]
@@ -1093,15 +1104,15 @@
           "count": 3
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
-          "count": 2
-        },
-        {
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 2
         },
         {
-          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "label": "projet - développement - population - programme - réaliser - financement",
+          "count": 2
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         },
         {
@@ -1109,11 +1120,7 @@
           "count": 1
         },
         {
-          "label": "paix - peuple - nation - vie - dieu - ensemble",
-          "count": 1
-        },
-        {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
@@ -1121,7 +1128,11 @@
           "count": 1
         },
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        },
+        {
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         }
       ]
@@ -1392,13 +1403,28 @@
         ],
         "cells": [
           [
-            51,
+            27,
+            8,
+            1
+          ],
+          [
+            23,
             3,
             1
           ],
           [
-            46,
-            4,
+            33,
+            6,
+            1
+          ],
+          [
+            55,
+            3,
+            1
+          ],
+          [
+            45,
+            8,
             1
           ],
           [
@@ -1407,22 +1433,77 @@
             1
           ],
           [
+            27,
+            9,
+            1
+          ],
+          [
+            30,
+            8,
+            1
+          ],
+          [
+            51,
+            4,
+            2
+          ],
+          [
+            45,
+            6,
+            1
+          ],
+          [
+            48,
+            5,
+            1
+          ],
+          [
             49,
             3,
             2
           ],
           [
-            27,
-            8,
-            1
-          ],
-          [
-            52,
-            1,
+            46,
+            6,
             1
           ],
           [
             41,
+            2,
+            1
+          ],
+          [
+            49,
+            2,
+            2
+          ],
+          [
+            0,
+            9,
+            1
+          ],
+          [
+            41,
+            1,
+            1
+          ],
+          [
+            54,
+            8,
+            1
+          ],
+          [
+            41,
+            10,
+            1
+          ],
+          [
+            55,
+            2,
+            1
+          ],
+          [
+            33,
             10,
             1
           ],
@@ -1432,73 +1513,13 @@
             2
           ],
           [
-            30,
-            8,
-            1
-          ],
-          [
-            41,
-            1,
-            1
-          ],
-          [
             46,
-            6,
-            1
-          ],
-          [
-            0,
-            9,
-            1
-          ],
-          [
-            27,
-            9,
-            1
-          ],
-          [
-            49,
-            2,
-            2
-          ],
-          [
-            41,
             4,
             1
           ],
           [
             51,
-            4,
-            2
-          ],
-          [
-            45,
-            6,
-            1
-          ],
-          [
-            55,
             3,
-            1
-          ],
-          [
-            54,
-            8,
-            1
-          ],
-          [
-            13,
-            4,
-            1
-          ],
-          [
-            46,
-            5,
-            1
-          ],
-          [
-            48,
-            5,
             1
           ],
           [
@@ -1507,28 +1528,18 @@
             1
           ],
           [
-            33,
-            10,
-            1
-          ],
-          [
             23,
             8,
             1
           ],
           [
-            45,
-            8,
-            1
-          ],
-          [
-            33,
-            6,
+            46,
+            5,
             1
           ],
           [
             41,
-            2,
+            4,
             1
           ],
           [
@@ -1537,13 +1548,13 @@
             1
           ],
           [
-            23,
-            3,
+            13,
+            4,
             1
           ],
           [
-            55,
-            2,
+            52,
+            1,
             1
           ]
         ]
@@ -1559,16 +1570,16 @@
           "Mosquée",
           "Prière",
           "Houzéifa Amzat",
-          "Union Islamique du Bénin",
           "Cotonou",
           "Paix",
+          "Union Islamique du Bénin",
           "Ouémé",
           "Moudjadid Lawal Damala",
           "Karim Urbain da Silva",
           "Ramadan",
           "Imamat",
           "Solidarité",
-          "Bohicon"
+          "Mosquée centrale de Cotonou Jonquet"
         ],
         "matrix": [
           [
@@ -1594,9 +1605,9 @@
             14,
             9,
             11,
-            11,
             10,
             9,
+            11,
             8,
             4,
             6,
@@ -1612,15 +1623,15 @@
             8,
             7,
             6,
-            6,
             4,
+            6,
             9,
             5,
             3,
             5,
             6,
             5,
-            5
+            1
           ],
           [
             15,
@@ -1628,16 +1639,16 @@
             8,
             0,
             7,
-            4,
             3,
             6,
+            4,
             5,
             4,
             4,
             7,
             3,
             5,
-            1
+            2
           ],
           [
             14,
@@ -1645,33 +1656,16 @@
             7,
             7,
             0,
-            9,
             6,
             5,
-            3,
-            1,
-            4,
-            3,
-            4,
-            3,
-            4
-          ],
-          [
-            12,
-            11,
-            6,
-            4,
             9,
-            0,
-            6,
             3,
-            3,
-            2,
-            3,
+            1,
+            4,
             3,
             4,
-            1,
-            5
+            3,
+            3
           ],
           [
             12,
@@ -1679,16 +1673,16 @@
             6,
             3,
             6,
-            6,
             0,
             5,
+            6,
             2,
             4,
             3,
             0,
             2,
             2,
-            3
+            5
           ],
           [
             12,
@@ -1696,16 +1690,33 @@
             4,
             6,
             5,
-            3,
             5,
             0,
+            3,
             4,
             3,
             5,
             4,
             1,
             4,
-            0
+            3
+          ],
+          [
+            12,
+            11,
+            6,
+            4,
+            9,
+            6,
+            3,
+            0,
+            3,
+            2,
+            3,
+            3,
+            4,
+            1,
+            4
           ],
           [
             11,
@@ -1713,9 +1724,9 @@
             9,
             5,
             3,
-            3,
             2,
             4,
+            3,
             0,
             3,
             2,
@@ -1730,16 +1741,16 @@
             5,
             4,
             1,
-            2,
             4,
             3,
+            2,
             3,
             0,
             2,
             1,
             2,
             1,
-            0
+            2
           ],
           [
             9,
@@ -1748,15 +1759,15 @@
             4,
             4,
             3,
-            3,
             5,
+            3,
             2,
             2,
             0,
             2,
             2,
             0,
-            0
+            2
           ],
           [
             8,
@@ -1764,9 +1775,9 @@
             5,
             7,
             3,
-            3,
             0,
             4,
+            3,
             5,
             1,
             2,
@@ -1781,16 +1792,16 @@
             6,
             3,
             4,
-            4,
             2,
             1,
+            4,
             2,
             2,
             2,
             3,
             0,
             0,
-            3
+            0
           ],
           [
             6,
@@ -1798,9 +1809,9 @@
             5,
             5,
             3,
-            1,
             2,
             4,
+            1,
             4,
             1,
             0,
@@ -1812,17 +1823,17 @@
           [
             6,
             6,
-            5,
             1,
-            4,
+            2,
+            3,
             5,
             3,
+            4,
+            0,
+            2,
+            2,
             0,
             0,
-            0,
-            0,
-            0,
-            3,
             0,
             0
           ]

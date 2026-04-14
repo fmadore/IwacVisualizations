@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:54.105650+00:00",
+  "generated_at": "2026-04-14T06:30:26.346189+00:00",
   "person": {
     "o_id": 48480,
     "title": "Anzoumana Cissé",
@@ -35,6 +35,13 @@
         "year_max": 2019,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -140,6 +147,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -151,6 +163,7 @@
           "total": 163,
           "articles": 163,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2019
@@ -160,6 +173,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
@@ -171,6 +185,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2017
@@ -180,6 +195,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
@@ -191,11 +207,13 @@
           "total": 160,
           "articles": 160,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2019
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -217,7 +235,8 @@
           "name": "Côte d'Ivoire",
           "count": 160
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -257,7 +276,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 62,
-            "score": 69.3965
+            "score": 69.3295
           },
           {
             "o_id": 23648,
@@ -369,7 +388,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 23,
-            "score": 30.0819
+            "score": 29.9621
           },
           {
             "o_id": 46193,
@@ -604,7 +623,7 @@
           {
             "source": 48480,
             "target": 29,
-            "weight": 69.3965,
+            "weight": 69.3295,
             "cooc": 62
           },
           {
@@ -700,7 +719,7 @@
           {
             "source": 48480,
             "target": 76268,
-            "weight": 30.0819,
+            "weight": 29.9621,
             "cooc": 23
           },
           {
@@ -998,7 +1017,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 61,
-            "score": 68.2772
+            "score": 68.2113
           },
           {
             "o_id": 23648,
@@ -1103,7 +1122,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 23,
-            "score": 30.0819
+            "score": 29.9621
           },
           {
             "o_id": 46193,
@@ -1345,7 +1364,7 @@
           {
             "source": 48480,
             "target": 29,
-            "weight": 68.2772,
+            "weight": 68.2113,
             "cooc": 61
           },
           {
@@ -1435,7 +1454,7 @@
           {
             "source": 48480,
             "target": 76268,
-            "weight": 30.0819,
+            "weight": 29.9621,
             "cooc": 23
           },
           {
@@ -1625,6 +1644,18 @@
             "cooc": 9
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 48480,
+            "title": "Anzoumana Cissé",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -3028,7 +3059,8 @@
           "lng": -7.6166666666667,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -3146,7 +3178,8 @@
           "label": "école - enfant - éducation - formation - islamique - élève",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3782,6 +3815,100 @@
           }
         },
         "articles_total": 160
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -4659,6 +4786,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -5491,6 +5636,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

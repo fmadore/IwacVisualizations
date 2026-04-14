@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:48.877974+00:00",
+  "generated_at": "2026-04-14T06:30:20.323891+00:00",
   "entity": {
     "o_id": 60454,
     "title": "Abou Dhabi",
@@ -55,6 +55,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1992,
           "year_max": 2010
@@ -64,6 +65,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2023,
           "year_max": 2023
@@ -264,13 +266,6 @@
           "count": 2
         },
         {
-          "o_id": 378,
-          "name": "Ouidah",
-          "lat": 6.36307,
-          "lng": 2.08506,
-          "count": 2
-        },
-        {
           "o_id": 283,
           "name": "Bénin",
           "lat": 9.5,
@@ -278,52 +273,17 @@
           "count": 2
         },
         {
+          "o_id": 378,
+          "name": "Ouidah",
+          "lat": 6.36307,
+          "lng": 2.08506,
+          "count": 2
+        },
+        {
           "o_id": 73289,
           "name": "Préfecture du Golfe",
           "lat": 6.133333,
           "lng": 1.2,
-          "count": 1
-        },
-        {
-          "o_id": 457,
-          "name": "Lomé",
-          "lat": 6.12874,
-          "lng": 1.22154,
-          "count": 1
-        },
-        {
-          "o_id": 488,
-          "name": "Lagos",
-          "lat": 6.45,
-          "lng": 3.4,
-          "count": 1
-        },
-        {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 1
-        },
-        {
-          "o_id": 333,
-          "name": "Kandi",
-          "lat": 11.13417,
-          "lng": 2.93861,
-          "count": 1
-        },
-        {
-          "o_id": 280,
-          "name": "Banikoara",
-          "lat": 11.33966,
-          "lng": 2.45915,
-          "count": 1
-        },
-        {
-          "o_id": 412,
-          "name": "Godomey",
-          "lat": 6.38948,
-          "lng": 2.34581,
           "count": 1
         },
         {
@@ -366,6 +326,48 @@
           "name": "Dubaï",
           "lat": 25.269722,
           "lng": 55.309444,
+          "count": 1
+        },
+        {
+          "o_id": 457,
+          "name": "Lomé",
+          "lat": 6.12874,
+          "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 488,
+          "name": "Lagos",
+          "lat": 6.45,
+          "lng": 3.4,
+          "count": 1
+        },
+        {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 1
+        },
+        {
+          "o_id": 333,
+          "name": "Kandi",
+          "lat": 11.13417,
+          "lng": 2.93861,
+          "count": 1
+        },
+        {
+          "o_id": 280,
+          "name": "Banikoara",
+          "lat": 11.33966,
+          "lng": 2.45915,
+          "count": 1
+        },
+        {
+          "o_id": 412,
+          "name": "Godomey",
+          "lat": 6.38948,
+          "lng": 2.34581,
           "count": 1
         }
       ]
@@ -683,6 +685,11 @@
             1
           ],
           [
+            8,
+            2,
+            1
+          ],
+          [
             31,
             6,
             1
@@ -690,11 +697,6 @@
           [
             18,
             5,
-            1
-          ],
-          [
-            8,
-            2,
             1
           ]
         ]
@@ -713,13 +715,13 @@
           "Koweït",
           "Développement économique",
           "Allada",
-          "Ouidah",
           "Bénin",
+          "Ouidah",
           "Nicéphore Soglo",
           "Préfecture du Golfe",
           "Agence France-Presse",
           "Jaber Al Ahmed Al Sabah",
-          "Lomé"
+          "Mathieu Kérékou"
         ],
         "matrix": [
           [
@@ -754,7 +756,7 @@
             1,
             1,
             1,
-            0
+            1
           ],
           [
             2,
@@ -771,7 +773,7 @@
             1,
             1,
             1,
-            0
+            1
           ],
           [
             1,
@@ -805,7 +807,7 @@
             1,
             1,
             1,
-            0
+            1
           ],
           [
             1,
@@ -839,7 +841,7 @@
             0,
             0,
             0,
-            0
+            1
           ],
           [
             1,
@@ -856,7 +858,7 @@
             0,
             0,
             0,
-            0
+            1
           ],
           [
             1,
@@ -873,7 +875,7 @@
             0,
             0,
             0,
-            0
+            1
           ],
           [
             1,
@@ -890,7 +892,7 @@
             0,
             0,
             0,
-            0
+            1
           ],
           [
             1,
@@ -962,15 +964,15 @@
           ],
           [
             1,
+            1,
+            1,
             0,
+            1,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,

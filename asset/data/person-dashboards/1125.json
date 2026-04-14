@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:34.870836+00:00",
+  "generated_at": "2026-04-14T06:30:07.751918+00:00",
   "person": {
     "o_id": 1125,
     "title": "Mohammed Sawadogo",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -94,6 +101,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -105,6 +117,7 @@
           "total": 6,
           "articles": 0,
           "publications": 6,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2017
@@ -114,6 +127,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2015
@@ -123,6 +137,7 @@
           "total": 2,
           "articles": 0,
           "publications": 2,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
@@ -132,6 +147,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2008,
           "year_max": 2008
@@ -141,6 +157,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
@@ -152,6 +169,7 @@
           "total": 6,
           "articles": 0,
           "publications": 6,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2017
@@ -161,6 +179,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2015
@@ -170,6 +189,7 @@
           "total": 2,
           "articles": 0,
           "publications": 2,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
@@ -179,6 +199,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2008,
           "year_max": 2008
@@ -188,12 +209,14 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -210,7 +233,8 @@
           "count": 12
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -320,7 +344,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 4,
-            "score": 10.079
+            "score": 9.9922
           },
           {
             "o_id": 569,
@@ -397,7 +421,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 4,
-            "score": 8.1424
+            "score": 8.1208
           },
           {
             "o_id": 922,
@@ -418,7 +442,7 @@
             "title": "NTIC et islam",
             "type": "Sujets",
             "cooc": 2,
-            "score": 6.5525
+            "score": 6.5155
           },
           {
             "o_id": 5,
@@ -474,7 +498,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.3579
+            "score": 3.3547
           },
           {
             "o_id": 14391,
@@ -573,7 +597,7 @@
           {
             "source": 1125,
             "target": 578,
-            "weight": 10.079,
+            "weight": 9.9922,
             "cooc": 4
           },
           {
@@ -639,7 +663,7 @@
           {
             "source": 1125,
             "target": 56,
-            "weight": 8.1424,
+            "weight": 8.1208,
             "cooc": 4
           },
           {
@@ -657,7 +681,7 @@
           {
             "source": 1125,
             "target": 60,
-            "weight": 6.5525,
+            "weight": 6.5155,
             "cooc": 2
           },
           {
@@ -705,7 +729,7 @@
           {
             "source": 1125,
             "target": 29,
-            "weight": 3.3579,
+            "weight": 3.3547,
             "cooc": 3
           },
           {
@@ -827,7 +851,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 4,
-            "score": 10.079
+            "score": 9.9922
           },
           {
             "o_id": 569,
@@ -904,7 +928,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 4,
-            "score": 8.1424
+            "score": 8.1208
           },
           {
             "o_id": 922,
@@ -925,7 +949,7 @@
             "title": "NTIC et islam",
             "type": "Sujets",
             "cooc": 2,
-            "score": 6.5525
+            "score": 6.5155
           },
           {
             "o_id": 5,
@@ -981,7 +1005,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.3579
+            "score": 3.3547
           },
           {
             "o_id": 14391,
@@ -1080,7 +1104,7 @@
           {
             "source": 1125,
             "target": 578,
-            "weight": 10.079,
+            "weight": 9.9922,
             "cooc": 4
           },
           {
@@ -1146,7 +1170,7 @@
           {
             "source": 1125,
             "target": 56,
-            "weight": 8.1424,
+            "weight": 8.1208,
             "cooc": 4
           },
           {
@@ -1164,7 +1188,7 @@
           {
             "source": 1125,
             "target": 60,
-            "weight": 6.5525,
+            "weight": 6.5155,
             "cooc": 2
           },
           {
@@ -1212,7 +1236,7 @@
           {
             "source": 1125,
             "target": 29,
-            "weight": 3.3579,
+            "weight": 3.3547,
             "cooc": 3
           },
           {
@@ -1230,6 +1254,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1125,
+            "title": "Mohammed Sawadogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1125,
@@ -1767,7 +1803,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -1800,7 +1837,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2218,6 +2256,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2394,6 +2526,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -2968,6 +3118,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

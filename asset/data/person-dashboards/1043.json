@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:33.891233+00:00",
+  "generated_at": "2026-04-14T06:30:06.820470+00:00",
   "person": {
     "o_id": 1043,
     "title": "Hamed Nabalma",
@@ -35,6 +35,13 @@
         "year_max": 2013,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -82,6 +89,11 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -93,6 +105,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2010,
           "year_max": 2013
@@ -105,11 +118,13 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2010,
           "year_max": 2013
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -126,7 +141,8 @@
           "name": "Burkina Faso",
           "count": 12
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -197,13 +213,6 @@
             "score": 5.7265
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 5.0395
-          },
-          {
             "o_id": 109,
             "title": "Paix",
             "type": "Sujets",
@@ -211,11 +220,18 @@
             "score": 5.0202
           },
           {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.9961
+          },
+          {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 76325,
@@ -236,7 +252,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 124,
@@ -264,7 +280,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 32,
@@ -332,20 +348,20 @@
           },
           {
             "source": 1043,
-            "target": 578,
-            "weight": 5.0395,
-            "cooc": 2
-          },
-          {
-            "source": 1043,
             "target": 109,
             "weight": 5.0202,
             "cooc": 5
           },
           {
             "source": 1043,
+            "target": 578,
+            "weight": 4.9961,
+            "cooc": 2
+          },
+          {
+            "source": 1043,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -363,7 +379,7 @@
           {
             "source": 1043,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -387,7 +403,7 @@
           {
             "source": 1043,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -482,13 +498,6 @@
             "score": 5.7265
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 5.0395
-          },
-          {
             "o_id": 109,
             "title": "Paix",
             "type": "Sujets",
@@ -496,11 +505,18 @@
             "score": 5.0202
           },
           {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 4.9961
+          },
+          {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 4,
-            "score": 4.4772
+            "score": 4.4729
           },
           {
             "o_id": 76325,
@@ -521,7 +537,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 124,
@@ -549,7 +565,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 32,
@@ -617,20 +633,20 @@
           },
           {
             "source": 1043,
-            "target": 578,
-            "weight": 5.0395,
-            "cooc": 2
-          },
-          {
-            "source": 1043,
             "target": 109,
             "weight": 5.0202,
             "cooc": 5
           },
           {
             "source": 1043,
+            "target": 578,
+            "weight": 4.9961,
+            "cooc": 2
+          },
+          {
+            "source": 1043,
             "target": 29,
-            "weight": 4.4772,
+            "weight": 4.4729,
             "cooc": 4
           },
           {
@@ -648,7 +664,7 @@
           {
             "source": 1043,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -672,7 +688,7 @@
           {
             "source": 1043,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -688,6 +704,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1043,
+            "title": "Hamed Nabalma",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1005,7 +1033,8 @@
           "lng": -10.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1062,7 +1091,8 @@
           "label": "dieu - homme - islam - foi - religion - coran",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1480,6 +1510,100 @@
           }
         },
         "articles_total": 12
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1650,6 +1774,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2210,6 +2352,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:45.252621+00:00",
+  "generated_at": "2026-04-14T06:30:16.950870+00:00",
   "person": {
     "o_id": 1613,
     "title": "Zakari Baba Body",
@@ -35,6 +35,13 @@
         "year_max": 1998,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -90,6 +97,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -101,6 +113,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1998,
           "year_max": 2010
@@ -112,6 +125,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1998,
           "year_max": 2010
@@ -123,11 +137,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1998,
           "year_max": 1998
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -149,7 +165,8 @@
           "name": "Bénin",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -217,7 +234,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 10,
@@ -364,7 +381,7 @@
           {
             "source": 1613,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -502,7 +519,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 10,
@@ -602,7 +619,7 @@
           {
             "source": 1613,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -662,6 +679,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1613,
+            "title": "Zakari Baba Body",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1613,
@@ -969,7 +998,8 @@
           "lng": -1.2,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1011,7 +1041,8 @@
           "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1583,6 +1614,100 @@
           }
         },
         "articles_total": 1
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1749,6 +1874,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2581,6 +2724,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

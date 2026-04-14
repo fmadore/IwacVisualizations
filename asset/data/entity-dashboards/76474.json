@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.432614+00:00",
+  "generated_at": "2026-04-14T06:30:23.880350+00:00",
   "entity": {
     "o_id": 76474,
     "title": "Kabadougou",
@@ -64,42 +64,37 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1983,
           "year_max": 1997
-        },
-        {
-          "name": "La Voie",
-          "total": 2,
-          "articles": 2,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1992,
-          "year_max": 1994
         },
         {
           "name": "APA News",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2019,
           "year_max": 2021
         },
         {
-          "name": "Le Jour Plus",
-          "total": 1,
-          "articles": 1,
+          "name": "La Voie",
+          "total": 2,
+          "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
-          "year_min": 2013,
-          "year_max": 2013
+          "year_min": 1992,
+          "year_max": 1994
         },
         {
           "name": "Le Jour",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 1995
@@ -109,9 +104,20 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2017,
           "year_max": 2017
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2013,
+          "year_max": 2013
         }
       ]
     }
@@ -292,16 +298,16 @@
             "score": 4.1822
           },
           {
-            "o_id": 63382,
-            "title": "Touba",
-            "type": "Lieux",
+            "o_id": 7,
+            "title": "Excision",
+            "type": "Sujets",
             "cooc": 2,
             "score": 4.0584
           },
           {
-            "o_id": 7,
-            "title": "Excision",
-            "type": "Sujets",
+            "o_id": 63382,
+            "title": "Touba",
+            "type": "Lieux",
             "cooc": 2,
             "score": 4.0584
           },
@@ -616,13 +622,13 @@
           },
           {
             "source": 76474,
-            "target": 63382,
+            "target": 7,
             "weight": 4.0584,
             "cooc": 2
           },
           {
             "source": 76474,
-            "target": 7,
+            "target": 63382,
             "weight": 4.0584,
             "cooc": 2
           },
@@ -819,13 +825,6 @@
           "count": 5
         },
         {
-          "o_id": 46256,
-          "name": "Treichville",
-          "lat": 5.3,
-          "lng": -4.0,
-          "count": 3
-        },
-        {
           "o_id": 46316,
           "name": "Adjamé",
           "lat": 5.3648,
@@ -833,17 +832,17 @@
           "count": 3
         },
         {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
+          "count": 3
+        },
+        {
           "o_id": 277,
           "name": "Arabie saoudite",
           "lat": 25.0,
           "lng": 45.0,
-          "count": 2
-        },
-        {
-          "o_id": 76447,
-          "name": "Worodougou",
-          "lat": 8.5,
-          "lng": -6.333333,
           "count": 2
         },
         {
@@ -868,10 +867,10 @@
           "count": 2
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
+          "o_id": 76447,
+          "name": "Worodougou",
+          "lat": 8.5,
+          "lng": -6.333333,
           "count": 2
         },
         {
@@ -889,10 +888,52 @@
           "count": 2
         },
         {
-          "o_id": 76443,
-          "name": "Williamsville",
-          "lat": 5.372656157414483,
-          "lng": -4.0202704387950305,
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 2
+        },
+        {
+          "o_id": 60557,
+          "name": "Kenya",
+          "lat": 1.0,
+          "lng": 38.0,
+          "count": 1
+        },
+        {
+          "o_id": 76480,
+          "name": "Sinématiali",
+          "lat": 9.5833333333333,
+          "lng": -5.3833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 62020,
+          "name": "Bamako",
+          "lat": 12.645833,
+          "lng": -7.992222,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 63379,
+          "name": "Port-Bouët",
+          "lat": 5.266667,
+          "lng": -3.9,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
           "count": 1
         },
         {
@@ -952,17 +993,66 @@
           "count": 1
         },
         {
-          "o_id": 76480,
-          "name": "Sinématiali",
-          "lat": 9.5833333333333,
-          "lng": -5.3833333333333,
+          "o_id": 46263,
+          "name": "Daoukro",
+          "lat": 7.057778,
+          "lng": -3.966111,
           "count": 1
         },
         {
-          "o_id": 62020,
-          "name": "Bamako",
-          "lat": 12.645833,
-          "lng": -7.992222,
+          "o_id": 76503,
+          "name": "Bocanda",
+          "lat": 7.0666666666667,
+          "lng": -4.5,
+          "count": 1
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
+          "count": 1
+        },
+        {
+          "o_id": 76484,
+          "name": "Danané",
+          "lat": 7.26666667,
+          "lng": -8.16666667,
+          "count": 1
+        },
+        {
+          "o_id": 13448,
+          "name": "Le Caire",
+          "lat": 30.044444,
+          "lng": 31.235833,
+          "count": 1
+        },
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 46196,
+          "name": "Man",
+          "lat": 7.4125,
+          "lng": -7.553611,
+          "count": 1
+        },
+        {
+          "o_id": 76501,
+          "name": "Biankouma",
+          "lat": 7.7333333333333,
+          "lng": -7.6166666666667,
+          "count": 1
+        },
+        {
+          "o_id": 76505,
+          "name": "Guiglo",
+          "lat": 6.5436111111111,
+          "lng": -7.4933333333333,
           "count": 1
         },
         {
@@ -1013,90 +1103,6 @@
           "lat": 7.9611111111111,
           "lng": -6.6730555555556,
           "count": 1
-        },
-        {
-          "o_id": 46263,
-          "name": "Daoukro",
-          "lat": 7.057778,
-          "lng": -3.966111,
-          "count": 1
-        },
-        {
-          "o_id": 76503,
-          "name": "Bocanda",
-          "lat": 7.0666666666667,
-          "lng": -4.5,
-          "count": 1
-        },
-        {
-          "o_id": 60557,
-          "name": "Kenya",
-          "lat": 1.0,
-          "lng": 38.0,
-          "count": 1
-        },
-        {
-          "o_id": 76484,
-          "name": "Danané",
-          "lat": 7.26666667,
-          "lng": -8.16666667,
-          "count": 1
-        },
-        {
-          "o_id": 13448,
-          "name": "Le Caire",
-          "lat": 30.044444,
-          "lng": 31.235833,
-          "count": 1
-        },
-        {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
-          "count": 1
-        },
-        {
-          "o_id": 46196,
-          "name": "Man",
-          "lat": 7.4125,
-          "lng": -7.553611,
-          "count": 1
-        },
-        {
-          "o_id": 76501,
-          "name": "Biankouma",
-          "lat": 7.7333333333333,
-          "lng": -7.6166666666667,
-          "count": 1
-        },
-        {
-          "o_id": 76505,
-          "name": "Guiglo",
-          "lat": 6.5436111111111,
-          "lng": -7.4933333333333,
-          "count": 1
-        },
-        {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
-        },
-        {
-          "o_id": 63379,
-          "name": "Port-Bouët",
-          "lat": 5.266667,
-          "lng": -3.9,
-          "count": 1
-        },
-        {
-          "o_id": 63417,
-          "name": "Marcory",
-          "lat": 5.3,
-          "lng": -3.9833333333333,
-          "count": 1
         }
       ]
     }
@@ -1117,15 +1123,15 @@
           "count": 2
         },
         {
-          "label": "paix - peuple - nation - vie - dieu - ensemble",
-          "count": 1
-        },
-        {
           "label": "jamais - aucun - raison - homme - propos - état",
           "count": 1
         },
         {
           "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         }
       ]
@@ -1427,43 +1433,13 @@
         ],
         "cells": [
           [
-            14,
-            3,
-            1
-          ],
-          [
-            9,
-            11,
-            1
-          ],
-          [
             12,
-            11,
-            1
-          ],
-          [
-            30,
-            0,
-            1
-          ],
-          [
-            12,
-            10,
-            1
-          ],
-          [
-            3,
-            7,
-            1
-          ],
-          [
-            0,
             6,
             1
           ],
           [
+            12,
             11,
-            10,
             1
           ],
           [
@@ -1472,28 +1448,18 @@
             1
           ],
           [
-            10,
-            11,
-            1
-          ],
-          [
-            11,
-            0,
-            1
-          ],
-          [
-            12,
-            6,
-            1
-          ],
-          [
-            38,
-            0,
-            1
-          ],
-          [
             2,
             10,
+            1
+          ],
+          [
+            9,
+            11,
+            1
+          ],
+          [
+            10,
+            11,
             1
           ],
           [
@@ -1502,8 +1468,48 @@
             1
           ],
           [
+            14,
+            3,
+            1
+          ],
+          [
+            38,
+            0,
+            1
+          ],
+          [
+            30,
+            0,
+            1
+          ],
+          [
+            3,
+            7,
+            1
+          ],
+          [
+            11,
+            10,
+            1
+          ],
+          [
+            12,
+            10,
+            1
+          ],
+          [
             11,
             11,
+            1
+          ],
+          [
+            0,
+            6,
+            1
+          ],
+          [
+            11,
+            0,
             1
           ]
         ]
@@ -1522,9 +1528,9 @@
           "Henri Konan Bédié",
           "Félix Houphouët-Boigny",
           "Parti Démocratique de Côte d'Ivoire",
-          "Inhumation",
           "Samatiguila",
           "Abidjan",
+          "Inhumation",
           "Imamat",
           "Paix",
           "Unité",
@@ -1540,9 +1546,9 @@
             5,
             6,
             6,
+            4,
+            4,
             5,
-            4,
-            4,
             4,
             3,
             3,
@@ -1557,8 +1563,8 @@
             5,
             5,
             4,
-            3,
             4,
+            3,
             3,
             4,
             4,
@@ -1575,8 +1581,8 @@
             5,
             6,
             5,
-            5,
             2,
+            5,
             4,
             3,
             3,
@@ -1591,9 +1597,9 @@
             4,
             3,
             2,
+            2,
+            2,
             3,
-            2,
-            2,
             2,
             2,
             2,
@@ -1608,9 +1614,9 @@
             3,
             5,
             4,
+            2,
+            2,
             4,
-            2,
-            2,
             3,
             2,
             3,
@@ -1626,8 +1632,8 @@
             3,
             3,
             4,
-            4,
             1,
+            4,
             3,
             1,
             2,
@@ -1643,8 +1649,8 @@
             0,
             5,
             3,
-            3,
             2,
+            3,
             3,
             3,
             3,
@@ -1659,28 +1665,11 @@
             3,
             5,
             0,
-            3,
             4,
             2,
             3,
+            3,
             2,
-            3,
-            2
-          ],
-          [
-            5,
-            3,
-            5,
-            3,
-            4,
-            4,
-            3,
-            3,
-            0,
-            2,
-            2,
-            2,
-            0,
             3,
             2
           ],
@@ -1693,9 +1682,9 @@
             4,
             3,
             4,
-            2,
             0,
             1,
+            2,
             2,
             1,
             2,
@@ -1710,12 +1699,29 @@
             1,
             2,
             2,
-            2,
             1,
             0,
+            2,
             0,
             0,
             2,
+            2
+          ],
+          [
+            5,
+            3,
+            5,
+            3,
+            4,
+            4,
+            3,
+            3,
+            2,
+            2,
+            0,
+            2,
+            0,
+            3,
             2
           ],
           [
@@ -1728,8 +1734,8 @@
             3,
             3,
             2,
-            2,
             0,
+            2,
             0,
             2,
             1,
@@ -1744,8 +1750,8 @@
             1,
             3,
             2,
-            0,
             1,
+            0,
             0,
             2,
             0,
@@ -1761,9 +1767,9 @@
             2,
             3,
             3,
+            2,
+            2,
             3,
-            2,
-            2,
             1,
             0,
             0,

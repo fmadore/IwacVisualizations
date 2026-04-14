@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:37.609592+00:00",
+  "generated_at": "2026-04-14T06:30:10.206460+00:00",
   "person": {
     "o_id": 921,
     "title": "Abdel Aziz Nabaloum",
@@ -35,6 +35,13 @@
         "year_max": 2023,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -118,6 +125,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -129,6 +141,7 @@
           "total": 63,
           "articles": 63,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2023
@@ -141,11 +154,13 @@
           "total": 63,
           "articles": 63,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2023
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -162,7 +177,8 @@
           "name": "Burkina Faso",
           "count": 63
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -188,7 +204,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 13,
-            "score": 32.7567
+            "score": 32.4747
           },
           {
             "o_id": 124,
@@ -307,7 +323,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 16,
-            "score": 17.9088
+            "score": 17.8915
           },
           {
             "o_id": 571,
@@ -377,7 +393,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 10,
-            "score": 13.5879
+            "score": 13.5742
           },
           {
             "o_id": 669,
@@ -419,7 +435,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 6,
-            "score": 12.0063
+            "score": 11.9595
           },
           {
             "o_id": 61328,
@@ -485,13 +501,6 @@
             "score": 10.2495
           },
           {
-            "o_id": 1266,
-            "title": "Yacouba Ouédraogo",
-            "type": "Personnes",
-            "cooc": 2,
-            "score": 10.1174
-          },
-          {
             "o_id": 113,
             "title": "Réconciliation",
             "type": "Sujets",
@@ -525,6 +534,13 @@
             "type": "Sujets",
             "cooc": 3,
             "score": 9.5352
+          },
+          {
+            "o_id": 1266,
+            "title": "Yacouba Ouédraogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.2338
           }
         ],
         "edges": [
@@ -537,7 +553,7 @@
           {
             "source": 921,
             "target": 578,
-            "weight": 32.7567,
+            "weight": 32.4747,
             "cooc": 13
           },
           {
@@ -639,7 +655,7 @@
           {
             "source": 921,
             "target": 29,
-            "weight": 17.9088,
+            "weight": 17.8915,
             "cooc": 16
           },
           {
@@ -699,7 +715,7 @@
           {
             "source": 921,
             "target": 44,
-            "weight": 13.5879,
+            "weight": 13.5742,
             "cooc": 10
           },
           {
@@ -735,7 +751,7 @@
           {
             "source": 921,
             "target": 42,
-            "weight": 12.0063,
+            "weight": 11.9595,
             "cooc": 6
           },
           {
@@ -794,12 +810,6 @@
           },
           {
             "source": 921,
-            "target": 1266,
-            "weight": 10.1174,
-            "cooc": 2
-          },
-          {
-            "source": 921,
             "target": 113,
             "weight": 10.0234,
             "cooc": 6
@@ -827,6 +837,12 @@
             "target": 49,
             "weight": 9.5352,
             "cooc": 3
+          },
+          {
+            "source": 921,
+            "target": 1266,
+            "weight": 9.2338,
+            "cooc": 2
           }
         ]
       },
@@ -863,7 +879,7 @@
             "title": "Communauté Musulmane du Burkina Faso",
             "type": "Organisations",
             "cooc": 13,
-            "score": 32.7567
+            "score": 32.4747
           },
           {
             "o_id": 124,
@@ -982,7 +998,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 16,
-            "score": 17.9088
+            "score": 17.8915
           },
           {
             "o_id": 571,
@@ -1052,7 +1068,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 10,
-            "score": 13.5879
+            "score": 13.5742
           },
           {
             "o_id": 669,
@@ -1094,7 +1110,7 @@
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 6,
-            "score": 12.0063
+            "score": 11.9595
           },
           {
             "o_id": 61328,
@@ -1160,13 +1176,6 @@
             "score": 10.2495
           },
           {
-            "o_id": 1266,
-            "title": "Yacouba Ouédraogo",
-            "type": "Personnes",
-            "cooc": 2,
-            "score": 10.1174
-          },
-          {
             "o_id": 113,
             "title": "Réconciliation",
             "type": "Sujets",
@@ -1200,6 +1209,13 @@
             "type": "Sujets",
             "cooc": 3,
             "score": 9.5352
+          },
+          {
+            "o_id": 1266,
+            "title": "Yacouba Ouédraogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.2338
           }
         ],
         "edges": [
@@ -1212,7 +1228,7 @@
           {
             "source": 921,
             "target": 578,
-            "weight": 32.7567,
+            "weight": 32.4747,
             "cooc": 13
           },
           {
@@ -1314,7 +1330,7 @@
           {
             "source": 921,
             "target": 29,
-            "weight": 17.9088,
+            "weight": 17.8915,
             "cooc": 16
           },
           {
@@ -1374,7 +1390,7 @@
           {
             "source": 921,
             "target": 44,
-            "weight": 13.5879,
+            "weight": 13.5742,
             "cooc": 10
           },
           {
@@ -1410,7 +1426,7 @@
           {
             "source": 921,
             "target": 42,
-            "weight": 12.0063,
+            "weight": 11.9595,
             "cooc": 6
           },
           {
@@ -1469,12 +1485,6 @@
           },
           {
             "source": 921,
-            "target": 1266,
-            "weight": 10.1174,
-            "cooc": 2
-          },
-          {
-            "source": 921,
             "target": 113,
             "weight": 10.0234,
             "cooc": 6
@@ -1502,8 +1512,26 @@
             "target": 49,
             "weight": 9.5352,
             "cooc": 3
+          },
+          {
+            "source": 921,
+            "target": 1266,
+            "weight": 9.2338,
+            "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 921,
+            "title": "Abdel Aziz Nabaloum",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2199,7 +2227,8 @@
           "lng": 32.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2304,7 +2333,8 @@
           "label": "école - enfant - éducation - formation - islamique - élève",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2738,6 +2768,100 @@
           }
         },
         "articles_total": 63
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3216,6 +3340,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3776,6 +3918,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

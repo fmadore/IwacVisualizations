@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.047474+00:00",
+  "generated_at": "2026-04-14T06:30:22.708538+00:00",
   "person": {
     "o_id": 46282,
     "title": "Gomon Edmond",
@@ -35,6 +35,13 @@
         "year_max": 2020,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -86,6 +93,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -97,6 +109,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2002,
           "year_max": 2020
@@ -109,11 +122,13 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2002,
           "year_max": 2020
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -130,7 +145,8 @@
           "name": "Côte d'Ivoire",
           "count": 7
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -240,7 +256,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 2013,
@@ -254,7 +270,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           },
           {
             "o_id": 109,
@@ -346,7 +362,7 @@
           {
             "source": 46282,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -358,7 +374,7 @@
           {
             "source": 46282,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           },
           {
@@ -486,7 +502,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 2013,
@@ -500,7 +516,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           },
           {
             "o_id": 109,
@@ -592,7 +608,7 @@
           {
             "source": 46282,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
@@ -604,7 +620,7 @@
           {
             "source": 46282,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           },
           {
@@ -614,6 +630,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 46282,
+            "title": "Gomon Edmond",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -721,7 +749,8 @@
           "lng": -4.033333,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -770,7 +799,8 @@
           "label": "islam - religion - chrétien - histoire - communauté - catholique",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1156,6 +1186,100 @@
           }
         },
         "articles_total": 7
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -1326,6 +1450,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -1886,6 +2028,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

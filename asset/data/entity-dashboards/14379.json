@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:46.381899+00:00",
+  "generated_at": "2026-04-14T06:30:17.992572+00:00",
   "entity": {
     "o_id": 14379,
     "title": "Houndé",
@@ -46,8 +46,19 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
+          "year_max": 2012
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2012,
           "year_max": 2012
         },
         {
@@ -55,18 +66,10 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2019,
           "year_max": 2019
-        },
-        {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2012,
-          "year_max": 2012
         }
       ]
     }
@@ -181,13 +184,6 @@
           "count": 3
         },
         {
-          "o_id": 376,
-          "name": "Ouagadougou",
-          "lat": 12.36566,
-          "lng": -1.53388,
-          "count": 2
-        },
-        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -195,17 +191,24 @@
           "count": 2
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
+          "o_id": 376,
+          "name": "Ouagadougou",
+          "lat": 12.36566,
+          "lng": -1.53388,
+          "count": 2
         },
         {
           "o_id": 374,
           "name": "Orodara",
           "lat": 10.98568,
           "lng": -4.92612,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 1
         }
       ]
@@ -215,11 +218,7 @@
     "by_role": {
       "all": [
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
-          "count": 1
-        },
-        {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "label": "école - enfant - éducation - formation - islamique - élève",
           "count": 1
         },
         {
@@ -227,7 +226,11 @@
           "count": 1
         },
         {
-          "label": "école - enfant - éducation - formation - islamique - élève",
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "count": 1
+        },
+        {
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         }
       ]
@@ -423,13 +426,8 @@
         ],
         "cells": [
           [
-            8,
-            4,
-            1
-          ],
-          [
-            0,
-            10,
+            1,
+            5,
             1
           ],
           [
@@ -438,8 +436,13 @@
             1
           ],
           [
-            1,
-            5,
+            8,
+            4,
+            1
+          ],
+          [
+            0,
+            10,
             1
           ]
         ]
@@ -451,24 +454,25 @@
       "all": {
         "names": [
           "Bobo-Dioulasso",
-          "Ouagadougou",
           "Burkina Faso",
+          "Ouagadougou",
           "Paix",
           "Prière",
-          "Pluralisme religieux",
-          "Cercle d'Études, de Recherches et de Formation Islamiques",
-          "Sidi Mohamed Koné",
-          "Fédération des Associations Islamiques du Burkina",
-          "Police",
-          "Solidarité",
-          "Abraham",
-          "Sécurité",
-          "Aïd el-Fitr",
-          "Aïd al-Adha (Tabaski)"
+          "Jeunesse",
+          "Alphabétisation",
+          "Pauvreté",
+          "Éducation",
+          "Orodara",
+          "Enseignement confessionnel islamique",
+          "Hauts-Bassins",
+          "Organisation Islamique Internationale de Secours",
+          "Coopération",
+          "Mosquée"
         ],
         "matrix": [
           [
             0,
+            1,
             2,
             1,
             1,
@@ -477,9 +481,25 @@
             1,
             1,
             1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
             0,
             0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -490,30 +510,13 @@
             0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
             0,
             0,
             0,
             0,
             0,
-            0
-          ],
-          [
-            1,
             0,
             0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
             1,
             1,
             1
@@ -523,31 +526,31 @@
             1,
             1,
             0,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
             2,
             0,
             0,
             0,
             0,
             0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
             1,
             1,
             1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1
@@ -562,9 +565,9 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -579,9 +582,9 @@
             0,
             1,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -596,9 +599,9 @@
             1,
             0,
             1,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             0,
             0,
             0
@@ -613,32 +616,66 @@
             1,
             1,
             0,
+            1,
+            1,
+            1,
             0,
             0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
             0
           ],
           [
-            0,
-            0,
             1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
             0,
             1,
             1,
@@ -647,49 +684,15 @@
             0,
             0,
             0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            1,
             0,
             0,
             0,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1
-          ],
-          [
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
             0,
             1,
             1
           ],
           [
-            0,
+            1,
             0,
             1,
             1,
@@ -698,15 +701,15 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             0,
             1
           ],
           [
-            0,
+            1,
             0,
             1,
             1,
@@ -715,9 +718,9 @@
             0,
             0,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1,
             0

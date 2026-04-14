@@ -312,7 +312,13 @@ class EntityDashboardGenerator:
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
             country_col = find_column(df, ["country", "countries"])
-            newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
+            # References are books/edited volumes — the per-item "outlet"
+            # lives in ``publisher``, not ``newspaper``. Other subsets keep
+            # the newspaper-first fallback chain.
+            if subset == "references":
+                newspaper_col = find_column(df, ["publisher", "dcterms:publisher"])
+            else:
+                newspaper_col = find_column(df, ["newspaper", "dcterms:publisher", "source"])
 
             # Sentiment + LDA columns only exist on the articles subset.
             lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
@@ -462,6 +468,7 @@ class EntityDashboardGenerator:
                 "total": 0,
                 "articles": 0,
                 "publications": 0,
+                "references": 0,
                 "country": meta.get("country") or "",
                 "year_min": None,
                 "year_max": None,
@@ -471,6 +478,8 @@ class EntityDashboardGenerator:
                 s["articles"] += 1
             elif meta.get("subset") == "publications":
                 s["publications"] += 1
+            elif meta.get("subset") == "references":
+                s["references"] += 1
             y = extract_year(meta.get("pub_date"))
             if y is not None:
                 s["year_min"] = y if s["year_min"] is None else min(s["year_min"], y)

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:43.987684+00:00",
+  "generated_at": "2026-04-14T06:30:15.803543+00:00",
   "person": {
     "o_id": 15799,
     "title": "Olivier Carré",
@@ -18,11 +18,11 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 2,
-        "year_min": 1986,
+        "total_mentions": 3,
+        "year_min": 1982,
         "year_max": 1994,
-        "newspapers_count": 2,
-        "countries_count": 2
+        "newspapers_count": 3,
+        "countries_count": 3
       },
       "subject": {
         "total_mentions": 2,
@@ -37,6 +37,13 @@
         "year_max": null,
         "newspapers_count": 0,
         "countries_count": 0
+      },
+      "editor": {
+        "total_mentions": 1,
+        "year_min": 1982,
+        "year_max": 1982,
+        "newspapers_count": 1,
+        "countries_count": 1
       }
     }
   },
@@ -44,21 +51,30 @@
     "by_role": {
       "all": {
         "years": [
+          1982,
           1986,
           1994
         ],
         "countries": [
           "Burkina Faso",
-          "Côte d'Ivoire"
+          "Côte d'Ivoire",
+          "Niger"
         ],
         "series": {
           "Burkina Faso": [
+            0,
             1,
             0
           ],
           "Côte d'Ivoire": [
             0,
+            0,
             1
+          ],
+          "Niger": [
+            1,
+            0,
+            0
           ]
         }
       },
@@ -86,6 +102,19 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [
+          1982
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1
+          ]
+        }
       }
     }
   },
@@ -97,6 +126,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -106,9 +136,20 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1986,
           "year_max": 1986
+        },
+        {
+          "name": "Presses universitaires de France",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 1982,
+          "year_max": 1982
         }
       ],
       "subject": [
@@ -117,6 +158,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -126,12 +168,25 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1986,
           "year_max": 1986
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": [
+        {
+          "name": "Presses universitaires de France",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 1982,
+          "year_max": 1982
+        }
+      ]
     }
   },
   "countries": {
@@ -144,6 +199,10 @@
         {
           "name": "Burkina Faso",
           "count": 1
+        },
+        {
+          "name": "Niger",
+          "count": 1
         }
       ],
       "subject": [
@@ -156,7 +215,13 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": [
+        {
+          "name": "Niger",
+          "count": 1
+        }
+      ]
     }
   },
   "network": {
@@ -224,12 +289,31 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 15799,
+            "title": "Olivier Carré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
   "locations": {
     "by_role": {
       "all": [
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 2
+        },
         {
           "o_id": 544,
           "name": "Togo",
@@ -277,13 +361,6 @@
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
-          "count": 1
-        },
-        {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
           "count": 1
         },
         {
@@ -513,7 +590,16 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": [
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        }
+      ]
     }
   },
   "topics": {
@@ -538,7 +624,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -956,6 +1043,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -963,6 +1144,10 @@
     "by_role": {
       "all": {
         "years": [
+          1982,
+          1983,
+          1984,
+          1985,
           1986,
           1987,
           1988,
@@ -989,12 +1174,12 @@
         ],
         "cells": [
           [
-            8,
+            12,
             8,
             1
           ],
           [
-            0,
+            4,
             9,
             1
           ]
@@ -1041,6 +1226,26 @@
       },
       "creator": {
         "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
+        "years": [
+          1982
+        ],
         "months": [
           1,
           2,
@@ -1616,6 +1821,16 @@
       "creator": {
         "names": [],
         "matrix": []
+      },
+      "editor": {
+        "names": [
+          "Jean-Louis Triaud"
+        ],
+        "matrix": [
+          [
+            0
+          ]
+        ]
       }
     }
   }

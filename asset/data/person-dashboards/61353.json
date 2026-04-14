@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:52.937400+00:00",
+  "generated_at": "2026-04-14T06:30:25.231045+00:00",
   "person": {
     "o_id": 61353,
     "title": "Léon Konan Koffi",
@@ -30,6 +30,13 @@
         "countries_count": 1
       },
       "creator": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
+      },
+      "editor": {
         "total_mentions": 0,
         "year_min": null,
         "year_max": null,
@@ -110,6 +117,11 @@
         "years": [],
         "countries": [],
         "series": {}
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1999
@@ -130,6 +143,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 1998
@@ -139,6 +153,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1994
@@ -148,6 +163,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 1999
@@ -157,6 +173,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
@@ -166,6 +183,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 1996
@@ -177,6 +195,7 @@
           "total": 35,
           "articles": 35,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1999
@@ -186,6 +205,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 1998
@@ -195,6 +215,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1994
@@ -204,6 +225,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 1999
@@ -213,6 +235,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
@@ -222,12 +245,14 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 1996
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "countries": {
@@ -244,7 +269,8 @@
           "count": 47
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "network": {
@@ -375,7 +401,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 21,
-            "score": 23.5053
+            "score": 23.4826
           },
           {
             "o_id": 43069,
@@ -469,18 +495,18 @@
             "score": 17.1421
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 13,
-            "score": 17.0028
-          },
-          {
             "o_id": 13908,
             "title": "Éducation",
             "type": "Sujets",
             "cooc": 15,
             "score": 16.9853
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 13,
+            "score": 16.9351
           },
           {
             "o_id": 86,
@@ -529,7 +555,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 11,
-            "score": 14.9467
+            "score": 14.9316
           },
           {
             "o_id": 44465,
@@ -709,7 +735,7 @@
           {
             "source": 61353,
             "target": 29,
-            "weight": 23.5053,
+            "weight": 23.4826,
             "cooc": 21
           },
           {
@@ -792,15 +818,15 @@
           },
           {
             "source": 61353,
-            "target": 76268,
-            "weight": 17.0028,
-            "cooc": 13
-          },
-          {
-            "source": 61353,
             "target": 13908,
             "weight": 16.9853,
             "cooc": 15
+          },
+          {
+            "source": 61353,
+            "target": 76268,
+            "weight": 16.9351,
+            "cooc": 13
           },
           {
             "source": 61353,
@@ -841,7 +867,7 @@
           {
             "source": 61353,
             "target": 44,
-            "weight": 14.9467,
+            "weight": 14.9316,
             "cooc": 11
           },
           {
@@ -1038,7 +1064,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 21,
-            "score": 23.5053
+            "score": 23.4826
           },
           {
             "o_id": 43069,
@@ -1132,18 +1158,18 @@
             "score": 17.1421
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 13,
-            "score": 17.0028
-          },
-          {
             "o_id": 13908,
             "title": "Éducation",
             "type": "Sujets",
             "cooc": 15,
             "score": 16.9853
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 13,
+            "score": 16.9351
           },
           {
             "o_id": 86,
@@ -1192,7 +1218,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 11,
-            "score": 14.9467
+            "score": 14.9316
           },
           {
             "o_id": 44465,
@@ -1372,7 +1398,7 @@
           {
             "source": 61353,
             "target": 29,
-            "weight": 23.5053,
+            "weight": 23.4826,
             "cooc": 21
           },
           {
@@ -1455,15 +1481,15 @@
           },
           {
             "source": 61353,
-            "target": 76268,
-            "weight": 17.0028,
-            "cooc": 13
-          },
-          {
-            "source": 61353,
             "target": 13908,
             "weight": 16.9853,
             "cooc": 15
+          },
+          {
+            "source": 61353,
+            "target": 76268,
+            "weight": 16.9351,
+            "cooc": 13
           },
           {
             "source": 61353,
@@ -1504,7 +1530,7 @@
           {
             "source": 61353,
             "target": 44,
-            "weight": 14.9467,
+            "weight": 14.9316,
             "cooc": 11
           },
           {
@@ -1576,6 +1602,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 61353,
+            "title": "Léon Konan Koffi",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 61353,
@@ -2533,7 +2571,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "topics": {
@@ -2638,7 +2677,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3020,6 +3060,100 @@
         "articles_total": 47
       },
       "creator": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
+      },
+      "editor": {
         "models": [
           "gemini",
           "chatgpt",
@@ -3518,6 +3652,24 @@
         ]
       },
       "creator": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
+      },
+      "editor": {
         "years": [],
         "months": [
           1,
@@ -4092,6 +4244,10 @@
         ]
       },
       "creator": {
+        "names": [],
+        "matrix": []
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:07.416447+00:00",
+  "generated_at": "2026-04-14T06:30:38.993946+00:00",
   "entity": {
     "o_id": 39,
     "title": "Wahhabisme",
@@ -70,6 +70,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1992,
           "year_max": 1995
@@ -79,42 +80,47 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1977,
           "year_max": 1997
-        },
-        {
-          "name": "Le Jour Plus",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2009,
-          "year_max": 2009
-        },
-        {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2013,
-          "year_max": 2013
         },
         {
           "name": "Fraternité Hebdo",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1987,
           "year_max": 1987
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2013,
+          "year_max": 2013
+        },
+        {
+          "name": "Le Jour Plus",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2009,
+          "year_max": 2009
         },
         {
           "name": "L'Observateur",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1982,
           "year_max": 1982
@@ -528,13 +534,6 @@
           "count": 4
         },
         {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 3
-        },
-        {
           "o_id": 376,
           "name": "Ouagadougou",
           "lat": 12.36566,
@@ -556,17 +555,31 @@
           "count": 3
         },
         {
-          "o_id": 284,
-          "name": "Bobo-Dioulasso",
-          "lat": 11.17715,
-          "lng": -4.2979,
-          "count": 2
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 3
         },
         {
           "o_id": 46316,
           "name": "Adjamé",
           "lat": 5.3648,
           "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 2
+        },
+        {
+          "o_id": 284,
+          "name": "Bobo-Dioulasso",
+          "lat": 11.17715,
+          "lng": -4.2979,
           "count": 2
         },
         {
@@ -591,80 +604,10 @@
           "count": 2
         },
         {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 2
-        },
-        {
-          "o_id": 414,
-          "name": "Soudan",
-          "lat": 16.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
-        },
-        {
           "o_id": 327,
           "name": "Grande Mosquée Sunnite de Ouagadougou",
           "lat": 12.360522000171635,
           "lng": -1.5185420989673841,
-          "count": 1
-        },
-        {
-          "o_id": 46770,
-          "name": "Aboisso",
-          "lat": 5.466667,
-          "lng": -3.2,
-          "count": 1
-        },
-        {
-          "o_id": 76467,
-          "name": "Koffikro-Afféma",
-          "lat": 5.583031388533375,
-          "lng": -2.978311728764035,
-          "count": 1
-        },
-        {
-          "o_id": 76508,
-          "name": "Sud Comoé",
-          "lat": 5.5,
-          "lng": -3.25,
-          "count": 1
-        },
-        {
-          "o_id": 542,
-          "name": "Qatar",
-          "lat": 25.5,
-          "lng": 51.25,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 1
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
           "count": 1
         },
         {
@@ -703,6 +646,20 @@
           "count": 1
         },
         {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
+        },
+        {
           "o_id": 408,
           "name": "Israël",
           "lat": 31.5,
@@ -714,6 +671,55 @@
           "name": "Iran",
           "lat": 32.0,
           "lng": 53.0,
+          "count": 1
+        },
+        {
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "count": 1
+        },
+        {
+          "o_id": 76467,
+          "name": "Koffikro-Afféma",
+          "lat": 5.583031388533375,
+          "lng": -2.978311728764035,
+          "count": 1
+        },
+        {
+          "o_id": 76508,
+          "name": "Sud Comoé",
+          "lat": 5.5,
+          "lng": -3.25,
           "count": 1
         },
         {
@@ -982,32 +988,17 @@
         ],
         "cells": [
           [
-            16,
-            4,
-            1
-          ],
-          [
             18,
             3,
             1
           ],
           [
-            0,
+            10,
             7,
             1
           ],
           [
-            32,
-            9,
-            1
-          ],
-          [
-            36,
             0,
-            1
-          ],
-          [
-            10,
             7,
             1
           ],
@@ -1017,8 +1008,23 @@
             1
           ],
           [
+            16,
+            4,
+            1
+          ],
+          [
             15,
             2,
+            1
+          ],
+          [
+            36,
+            0,
+            1
+          ],
+          [
+            32,
+            9,
             1
           ],
           [
@@ -1035,33 +1041,33 @@
       "all": {
         "names": [
           "Mosquée",
-          "Burkina Faso",
           "Mahomet",
-          "La Mecque",
+          "Burkina Faso",
           "Ouagadougou",
           "Côte d'Ivoire",
           "Abidjan",
+          "La Mecque",
           "Prière",
           "Éducation",
-          "Bobo-Dioulasso",
+          "Conflit",
+          "Association des musulmans orthodoxes de Côte d'Ivoire",
+          "Construction mosquée",
           "Imamat",
-          "Aïd el-Fitr",
-          "Aïd al-Adha (Tabaski)",
           "Ramadan",
           "Zakat"
         ],
         "matrix": [
           [
             0,
+            2,
             3,
             2,
             1,
             2,
             1,
-            2,
             1,
             1,
-            2,
+            1,
             2,
             2,
             2,
@@ -1069,42 +1075,26 @@
             0
           ],
           [
-            3,
-            0,
-            2,
-            1,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            1,
-            2,
-            2,
-            0,
-            0
-          ],
-          [
-            2,
             2,
             0,
             2,
             0,
             1,
+            2,
             2,
             3,
             1,
-            1,
             0,
             1,
             1,
+            0,
             2,
             2
           ],
           [
-            1,
-            1,
+            3,
+            2,
+            0,
             2,
             0,
             1,
@@ -1112,24 +1102,6 @@
             1,
             2,
             0,
-            1,
-            1,
-            1,
-            1,
-            2,
-            2
-          ],
-          [
-            2,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
             1,
             1,
             1,
@@ -1137,102 +1109,119 @@
             0
           ],
           [
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
             1,
             0,
             1,
+            0,
+            0,
+            0,
             1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
             0,
             0,
             2,
             1,
             1,
-            0,
             1,
-            0,
-            0,
+            2,
+            1,
+            1,
+            1,
             1,
             1
           ],
           [
             2,
-            1,
             2,
             1,
             0,
             2,
             0,
+            1,
             2,
             1,
-            0,
             1,
-            0,
-            0,
+            2,
+            2,
+            1,
             1,
             1
           ],
           [
             1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2
+          ],
+          [
             1,
             3,
-            2,
+            1,
             0,
             1,
             2,
+            2,
             0,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
             0,
             2,
             2
           ],
           [
             1,
+            1,
             2,
             1,
+            1,
+            1,
+            0,
+            1,
             0,
             1,
             1,
             1,
-            1,
-            0,
-            0,
-            0,
-            0,
             0,
             0,
             0
           ],
           [
-            2,
-            2,
-            1,
-            1,
             1,
             0,
             0,
             0,
-            0,
-            0,
-            1,
-            2,
-            2,
-            0,
-            0
-          ],
-          [
             2,
             1,
             0,
-            1,
-            1,
-            1,
-            1,
-            0,
             0,
             1,
             0,
+            1,
             1,
             1,
             0,
@@ -1240,46 +1229,63 @@
           ],
           [
             2,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            0,
             2,
             1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            2,
-            1,
-            0,
-            2,
             0,
             0
           ],
           [
             2,
-            2,
             1,
             1,
-            1,
             0,
-            0,
-            0,
-            0,
-            2,
             1,
             2,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
             0,
             0,
             0
           ],
           [
             0,
+            2,
             0,
-            2,
-            2,
             0,
             1,
             1,
+            2,
             2,
             0,
             0,
@@ -1291,12 +1297,12 @@
           ],
           [
             0,
+            2,
             0,
-            2,
-            2,
             0,
             1,
             1,
+            2,
             2,
             0,
             0,

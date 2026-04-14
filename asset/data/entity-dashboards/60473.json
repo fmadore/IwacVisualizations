@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.113171+00:00",
+  "generated_at": "2026-04-14T06:30:20.527521+00:00",
   "entity": {
     "o_id": 60473,
     "title": "Aéroport International Gnassingbé Eyadéma",
@@ -46,6 +46,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1982,
           "year_max": 1982
@@ -55,6 +56,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2022,
           "year_max": 2022
@@ -64,6 +66,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1999,
           "year_max": 1999
@@ -232,17 +235,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 60473,
-          "name": "Aéroport International Gnassingbé Eyadéma",
-          "lat": 6.1658333333333,
-          "lng": 1.2541666666667,
-          "count": 4
-        },
-        {
           "o_id": 457,
           "name": "Lomé",
           "lat": 6.12874,
           "lng": 1.22154,
+          "count": 4
+        },
+        {
+          "o_id": 60473,
+          "name": "Aéroport International Gnassingbé Eyadéma",
+          "lat": 6.1658333333333,
+          "lng": 1.2541666666667,
           "count": 4
         },
         {
@@ -265,6 +268,41 @@
           "lat": 9.5488888888889,
           "lng": 1.1905555555556,
           "count": 2
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 443,
+          "name": "Médine",
+          "lat": 24.46861,
+          "lng": 39.61417,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
         },
         {
           "o_id": 534,
@@ -334,41 +372,6 @@
           "name": "Kétao",
           "lat": 9.6611111111111,
           "lng": 1.3113888888889,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 443,
-          "name": "Médine",
-          "lat": 24.46861,
-          "lng": 39.61417,
-          "count": 1
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
           "count": 1
         },
         {
@@ -666,11 +669,6 @@
         ],
         "cells": [
           [
-            0,
-            0,
-            1
-          ],
-          [
             40,
             5,
             1
@@ -678,6 +676,11 @@
           [
             0,
             11,
+            1
+          ],
+          [
+            0,
+            0,
             1
           ],
           [
@@ -695,19 +698,19 @@
         "names": [
           "Lomé",
           "Togo",
+          "Gbégnon Amégboh",
+          "Gnassingbé Eyadéma",
+          "Kpotivi Têvi-Djidjogbé Théodore Laclé",
           "Coopération",
           "Rassemblement du Peuple Togolais",
-          "Gnassingbé Eyadéma",
-          "Koweït",
-          "Gbégnon Amégboh",
-          "Kpotivi Têvi-Djidjogbé Théodore Laclé",
-          "Kara",
           "Union Musulmane du Togo",
-          "Anani Kuma Samuel Akakpo-Ahianyo",
-          "Kabou",
-          "Palestine",
-          "Israël",
-          "Bénin"
+          "Koweït",
+          "Kara",
+          "La Mecque",
+          "Arabie saoudite",
+          "Médine",
+          "Côte d'Ivoire",
+          "Boukari Bassabi Bonfoh"
         ],
         "matrix": [
           [
@@ -738,9 +741,9 @@
             2,
             2,
             2,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -750,14 +753,14 @@
             0,
             2,
             2,
-            1,
             2,
             2,
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -767,14 +770,14 @@
             2,
             0,
             2,
-            1,
             2,
             2,
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -784,31 +787,14 @@
             2,
             2,
             0,
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
             2,
             2,
             1,
             1,
             1,
             0,
-            1,
-            1,
-            2,
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             1
           ],
@@ -818,14 +804,14 @@
             2,
             2,
             2,
-            1,
             0,
             2,
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -835,14 +821,14 @@
             2,
             2,
             2,
-            1,
             2,
             0,
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -852,14 +838,14 @@
             1,
             1,
             1,
-            2,
             1,
             1,
             0,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
+            0,
             1,
             1
           ],
@@ -872,10 +858,78 @@
             1,
             1,
             1,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             1,
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             0,
             0,
             0
@@ -889,62 +943,11 @@
             1,
             1,
             1,
-            1,
             0,
             0,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
             0,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
             0,
             1
           ],
@@ -957,11 +960,11 @@
             1,
             1,
             1,
-            1,
             0,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
             1,
             0
           ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:49.030676+00:00",
+  "generated_at": "2026-04-14T06:30:21.813562+00:00",
   "entity": {
     "o_id": 62240,
     "title": "Palais des Sports de Treichville",
@@ -72,6 +72,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 2017
@@ -81,6 +82,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1999
@@ -90,33 +92,37 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2016,
           "year_max": 2021
-        },
-        {
-          "name": "L'Alternative",
-          "total": 3,
-          "articles": 3,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1996,
-          "year_max": 1996
         },
         {
           "name": "Le Jour",
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1995,
           "year_max": 2003
+        },
+        {
+          "name": "L'Alternative",
+          "total": 3,
+          "articles": 3,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1996,
+          "year_max": 1996
         },
         {
           "name": "Notre Voie",
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2017
@@ -126,27 +132,30 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2011
-        },
-        {
-          "name": "La Voie",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1994,
-          "year_max": 1994
         },
         {
           "name": "Nord-Sud",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2014,
           "year_max": 2014
+        },
+        {
+          "name": "La Voie",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
         }
       ]
     }
@@ -916,13 +925,6 @@
           "count": 2
         },
         {
-          "o_id": 63402,
-          "name": "Cocody",
-          "lat": 5.35,
-          "lng": -3.9666666666667,
-          "count": 2
-        },
-        {
           "o_id": 23600,
           "name": "Grande mosquée des II-Plateaux Aghien",
           "lat": 5.382535557731071,
@@ -937,17 +939,17 @@
           "count": 2
         },
         {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 2
-        },
-        {
           "o_id": 63379,
           "name": "Port-Bouët",
           "lat": 5.266667,
           "lng": -3.9,
+          "count": 2
+        },
+        {
+          "o_id": 63402,
+          "name": "Cocody",
+          "lat": 5.35,
+          "lng": -3.9666666666667,
           "count": 2
         },
         {
@@ -958,46 +960,11 @@
           "count": 2
         },
         {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
-          "count": 1
-        },
-        {
-          "o_id": 23532,
-          "name": "Mosquée Salam du Plateau",
-          "lat": 5.319408854484132,
-          "lng": -4.015756299712146,
-          "count": 1
-        },
-        {
-          "o_id": 76445,
-          "name": "Grande Mosquée de Koumassi",
-          "lat": 5.291817878819392,
-          "lng": -3.96656169628797,
-          "count": 1
-        },
-        {
-          "o_id": 48419,
-          "name": "Koumassi",
-          "lat": 5.3,
-          "lng": -3.95,
-          "count": 1
-        },
-        {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 1
-        },
-        {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 2
         },
         {
           "o_id": 273,
@@ -1021,10 +988,17 @@
           "count": 1
         },
         {
-          "o_id": 62236,
-          "name": "Hôtel Ivoire",
-          "lat": 5.3269,
-          "lng": -4.00547,
+          "o_id": 76445,
+          "name": "Grande Mosquée de Koumassi",
+          "lat": 5.291817878819392,
+          "lng": -3.96656169628797,
+          "count": 1
+        },
+        {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
           "count": 1
         },
         {
@@ -1077,6 +1051,41 @@
           "count": 1
         },
         {
+          "o_id": 61325,
+          "name": "Mosquée Bilal",
+          "lat": 5.249081568964093,
+          "lng": -3.9182779270167036,
+          "count": 1
+        },
+        {
+          "o_id": 76443,
+          "name": "Williamsville",
+          "lat": 5.372656157414483,
+          "lng": -4.0202704387950305,
+          "count": 1
+        },
+        {
+          "o_id": 76448,
+          "name": "Grande Mosquée de Williamsville",
+          "lat": 5.364913926999096,
+          "lng": -4.020681656463771,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 1
+        },
+        {
           "o_id": 319,
           "name": "Ghana",
           "lat": 8.1,
@@ -1112,24 +1121,24 @@
           "count": 1
         },
         {
-          "o_id": 61325,
-          "name": "Mosquée Bilal",
-          "lat": 5.249081568964093,
-          "lng": -3.9182779270167036,
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
           "count": 1
         },
         {
-          "o_id": 76443,
-          "name": "Williamsville",
-          "lat": 5.372656157414483,
-          "lng": -4.0202704387950305,
+          "o_id": 62236,
+          "name": "Hôtel Ivoire",
+          "lat": 5.3269,
+          "lng": -4.00547,
           "count": 1
         },
         {
-          "o_id": 76448,
-          "name": "Grande Mosquée de Williamsville",
-          "lat": 5.364913926999096,
-          "lng": -4.020681656463771,
+          "o_id": 23532,
+          "name": "Mosquée Salam du Plateau",
+          "lat": 5.319408854484132,
+          "lng": -4.015756299712146,
           "count": 1
         }
       ]
@@ -1159,19 +1168,19 @@
           "count": 2
         },
         {
-          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
-          "count": 1
-        },
-        {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
-          "count": 1
-        },
-        {
           "label": "président - victime - crise - aucun - responsable - décider",
           "count": 1
         },
         {
           "label": "mendicité - zakat - mendiant - association - sokodé - aide",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
+          "count": 1
+        },
+        {
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
@@ -1412,33 +1421,13 @@
         ],
         "cells": [
           [
-            24,
-            2,
-            1
-          ],
-          [
-            4,
-            1,
-            5
-          ],
-          [
             9,
             11,
             1
           ],
           [
-            11,
-            0,
-            2
-          ],
-          [
-            0,
-            2,
-            1
-          ],
-          [
-            8,
-            0,
+            3,
+            1,
             2
           ],
           [
@@ -1448,7 +1437,32 @@
           ],
           [
             8,
-            7,
+            0,
+            2
+          ],
+          [
+            4,
+            1,
+            5
+          ],
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            29,
+            1,
+            2
+          ],
+          [
+            11,
+            0,
+            2
+          ],
+          [
+            8,
+            11,
             1
           ],
           [
@@ -1457,28 +1471,8 @@
             3
           ],
           [
-            3,
-            1,
-            2
-          ],
-          [
-            13,
-            3,
-            1
-          ],
-          [
-            1,
-            2,
-            3
-          ],
-          [
-            8,
-            11,
-            1
-          ],
-          [
-            2,
-            2,
+            25,
+            9,
             1
           ],
           [
@@ -1487,14 +1481,29 @@
             1
           ],
           [
-            25,
-            9,
+            0,
+            2,
             1
           ],
           [
-            29,
+            24,
+            2,
+            1
+          ],
+          [
             1,
-            2
+            7,
+            1
+          ],
+          [
+            13,
+            3,
+            1
+          ],
+          [
+            8,
+            7,
+            1
           ],
           [
             24,
@@ -1502,7 +1511,7 @@
             1
           ],
           [
-            1,
+            19,
             7,
             1
           ],
@@ -1512,8 +1521,8 @@
             1
           ],
           [
-            19,
-            7,
+            2,
+            2,
             1
           ]
         ]
@@ -1533,8 +1542,8 @@
           "Idriss Koudouss Koné",
           "Nuit du Destin",
           "Unité",
-          "Coran",
           "Mahomet",
+          "Coran",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Paix",
           "Méga Kadr",
@@ -1568,8 +1577,8 @@
             11,
             11,
             10,
-            10,
             11,
+            10,
             10,
             11,
             7,
@@ -1585,8 +1594,8 @@
             12,
             13,
             11,
-            12,
             11,
+            12,
             10,
             9,
             9,
@@ -1602,8 +1611,8 @@
             7,
             9,
             6,
-            10,
             8,
+            10,
             6,
             5,
             5,
@@ -1636,8 +1645,8 @@
             7,
             10,
             8,
-            11,
             9,
+            11,
             6,
             5,
             8,
@@ -1670,8 +1679,8 @@
             7,
             0,
             8,
-            11,
             8,
+            11,
             6,
             3,
             7,
@@ -1696,6 +1705,23 @@
           ],
           [
             11,
+            11,
+            11,
+            8,
+            11,
+            9,
+            6,
+            8,
+            6,
+            0,
+            9,
+            6,
+            7,
+            5,
+            6
+          ],
+          [
+            11,
             10,
             12,
             10,
@@ -1704,31 +1730,14 @@
             6,
             11,
             6,
-            0,
             9,
+            0,
             5,
             4,
             7,
             6
           ],
           [
-            11,
-            11,
-            11,
-            8,
-            11,
-            9,
-            6,
-            8,
-            6,
-            9,
-            0,
-            6,
-            7,
-            5,
-            6
-          ],
-          [
             8,
             10,
             10,
@@ -1738,8 +1747,8 @@
             6,
             6,
             7,
-            5,
             6,
+            5,
             0,
             5,
             5,
@@ -1755,8 +1764,8 @@
             7,
             3,
             6,
-            4,
             7,
+            4,
             5,
             0,
             4,
@@ -1772,8 +1781,8 @@
             5,
             7,
             7,
-            7,
             5,
+            7,
             5,
             4,
             0,

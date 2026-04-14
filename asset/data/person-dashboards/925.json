@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:32.193853+00:00",
+  "generated_at": "2026-04-14T06:30:05.224631+00:00",
   "person": {
     "o_id": 925,
     "title": "Abdoul Aziz Ouédraogo",
@@ -36,6 +36,13 @@
         "year_max": 1996,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -144,6 +151,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -155,6 +167,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2000,
           "year_max": 2017
@@ -164,6 +177,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2005,
           "year_max": 2013
@@ -173,6 +187,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 2008
@@ -182,6 +197,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
@@ -191,6 +207,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
@@ -202,6 +219,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2000,
           "year_max": 2017
@@ -211,6 +229,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2005,
           "year_max": 2013
@@ -220,6 +239,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2008,
           "year_max": 2008
@@ -229,6 +249,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2010,
           "year_max": 2010
@@ -238,6 +259,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2009,
           "year_max": 2009
@@ -249,11 +271,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1996,
           "year_max": 1996
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -283,7 +307,8 @@
           "name": "Burkina Faso",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -421,7 +446,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 63372,
@@ -522,18 +547,18 @@
             "score": 4.6144
           },
           {
-            "o_id": 56,
-            "title": "Enseignement confessionnel islamique",
-            "type": "Sujets",
-            "cooc": 2,
-            "score": 4.0712
-          },
-          {
             "o_id": 75967,
             "title": "Développement",
             "type": "Sujets",
             "cooc": 3,
             "score": 4.0681
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0604
           },
           {
             "o_id": 115,
@@ -670,7 +695,7 @@
           {
             "source": 925,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -759,15 +784,15 @@
           },
           {
             "source": 925,
-            "target": 56,
-            "weight": 4.0712,
-            "cooc": 2
-          },
-          {
-            "source": 925,
             "target": 75967,
             "weight": 4.0681,
             "cooc": 3
+          },
+          {
+            "source": 925,
+            "target": 56,
+            "weight": 4.0604,
+            "cooc": 2
           },
           {
             "source": 925,
@@ -928,7 +953,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 5,
-            "score": 6.794
+            "score": 6.7871
           },
           {
             "o_id": 63372,
@@ -1029,18 +1054,18 @@
             "score": 4.6144
           },
           {
-            "o_id": 56,
-            "title": "Enseignement confessionnel islamique",
-            "type": "Sujets",
-            "cooc": 2,
-            "score": 4.0712
-          },
-          {
             "o_id": 75967,
             "title": "Développement",
             "type": "Sujets",
             "cooc": 3,
             "score": 4.0681
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0604
           },
           {
             "o_id": 115,
@@ -1177,7 +1202,7 @@
           {
             "source": 925,
             "target": 44,
-            "weight": 6.794,
+            "weight": 6.7871,
             "cooc": 5
           },
           {
@@ -1266,15 +1291,15 @@
           },
           {
             "source": 925,
-            "target": 56,
-            "weight": 4.0712,
-            "cooc": 2
-          },
-          {
-            "source": 925,
             "target": 75967,
             "weight": 4.0681,
             "cooc": 3
+          },
+          {
+            "source": 925,
+            "target": 56,
+            "weight": 4.0604,
+            "cooc": 2
           },
           {
             "source": 925,
@@ -1303,6 +1328,18 @@
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 925,
+            "title": "Abdoul Aziz Ouédraogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 925,
@@ -1750,7 +1787,8 @@
           "lng": -1.53388,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1816,7 +1854,8 @@
           "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2360,6 +2399,100 @@
           }
         },
         "articles_total": 1
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2665,6 +2798,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3245,6 +3396,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

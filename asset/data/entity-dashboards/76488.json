@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.556394+00:00",
+  "generated_at": "2026-04-14T06:30:23.979944+00:00",
   "entity": {
     "o_id": 76488,
     "title": "Sakassou",
@@ -54,6 +54,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1981,
           "year_max": 2002
@@ -63,6 +64,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
@@ -72,6 +74,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
@@ -81,6 +84,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2017,
           "year_max": 2017
@@ -405,17 +409,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 76488,
-          "name": "Sakassou",
-          "lat": 7.447222,
-          "lng": -5.294444,
-          "count": 7
-        },
-        {
           "o_id": 298,
           "name": "Côte d'Ivoire",
           "lat": 8.0,
           "lng": -5.5,
+          "count": 7
+        },
+        {
+          "o_id": 76488,
+          "name": "Sakassou",
+          "lat": 7.447222,
+          "lng": -5.294444,
           "count": 7
         },
         {
@@ -431,13 +435,6 @@
           "lat": 7.666667,
           "lng": -5.583333,
           "count": 5
-        },
-        {
-          "o_id": 46218,
-          "name": "Agboville",
-          "lat": 5.933333,
-          "lng": -4.216667,
-          "count": 3
         },
         {
           "o_id": 269,
@@ -461,11 +458,11 @@
           "count": 3
         },
         {
-          "o_id": 46170,
-          "name": "Daloa",
-          "lat": 6.866667,
-          "lng": -6.45,
-          "count": 2
+          "o_id": 46218,
+          "name": "Agboville",
+          "lat": 5.933333,
+          "lng": -4.216667,
+          "count": 3
         },
         {
           "o_id": 76472,
@@ -475,10 +472,10 @@
           "count": 2
         },
         {
-          "o_id": 46271,
-          "name": "Gagnoa",
-          "lat": 6.13333,
-          "lng": -5.93333,
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
           "count": 2
         },
         {
@@ -489,18 +486,18 @@
           "count": 2
         },
         {
+          "o_id": 46271,
+          "name": "Gagnoa",
+          "lat": 6.13333,
+          "lng": -5.93333,
+          "count": 2
+        },
+        {
           "o_id": 76482,
           "name": "Tiébissou",
           "lat": 7.15,
           "lng": -5.2333333333333,
           "count": 2
-        },
-        {
-          "o_id": 76477,
-          "name": "Agnéby",
-          "lat": 6.0,
-          "lng": -4.0,
-          "count": 1
         },
         {
           "o_id": 443,
@@ -517,45 +514,10 @@
           "count": 1
         },
         {
-          "o_id": 63375,
-          "name": "Bosnie-Herzégovine",
-          "lat": 44.0,
-          "lng": 18.0,
-          "count": 1
-        },
-        {
-          "o_id": 273,
-          "name": "Algérie",
-          "lat": 28.0,
-          "lng": 3.0,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 1
-        },
-        {
-          "o_id": 414,
-          "name": "Soudan",
-          "lat": 16.0,
-          "lng": 30.0,
-          "count": 1
-        },
-        {
-          "o_id": 60457,
-          "name": "Afghanistan",
-          "lat": 33.0,
-          "lng": 66.0,
-          "count": 1
-        },
-        {
-          "o_id": 558,
-          "name": "Université Félix Houphouët-Boigny",
-          "lat": 5.345556,
-          "lng": -3.986111,
+          "o_id": 76477,
+          "name": "Agnéby",
+          "lat": 6.0,
+          "lng": -4.0,
           "count": 1
         },
         {
@@ -762,6 +724,48 @@
           "count": 1
         },
         {
+          "o_id": 63375,
+          "name": "Bosnie-Herzégovine",
+          "lat": 44.0,
+          "lng": 18.0,
+          "count": 1
+        },
+        {
+          "o_id": 273,
+          "name": "Algérie",
+          "lat": 28.0,
+          "lng": 3.0,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 1
+        },
+        {
+          "o_id": 60457,
+          "name": "Afghanistan",
+          "lat": 33.0,
+          "lng": 66.0,
+          "count": 1
+        },
+        {
+          "o_id": 558,
+          "name": "Université Félix Houphouët-Boigny",
+          "lat": 5.345556,
+          "lng": -3.986111,
+          "count": 1
+        },
+        {
           "o_id": 63402,
           "name": "Cocody",
           "lat": 5.35,
@@ -804,11 +808,11 @@
           "count": 2
         },
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
       ]
@@ -1064,23 +1068,28 @@
         ],
         "cells": [
           [
-            7,
-            6,
-            1
-          ],
-          [
             13,
             7,
             1
           ],
           [
-            30,
-            9,
+            7,
+            6,
+            1
+          ],
+          [
+            21,
+            1,
             1
           ],
           [
             0,
             3,
+            1
+          ],
+          [
+            30,
+            9,
             1
           ],
           [
@@ -1091,11 +1100,6 @@
           [
             36,
             6,
-            1
-          ],
-          [
-            21,
-            1,
             1
           ]
         ]
@@ -1109,18 +1113,18 @@
           "Côte d'Ivoire",
           "Bouaké",
           "Béoumi",
-          "Agboville",
-          "Paix",
-          "Prière",
-          "Gouvernement",
           "Abidjan",
           "Yamoussoukro",
           "Dabakala",
-          "Développement",
+          "Prière",
+          "Gouvernement",
+          "Agboville",
+          "Paix",
+          "Imamat",
+          "Katiola",
           "Unité",
-          "Daloa",
-          "Félix Houphouët-Boigny",
-          "Imamat"
+          "Mosquée",
+          "Développement"
         ],
         "matrix": [
           [
@@ -1144,18 +1148,18 @@
             5,
             0,
             4,
-            2,
-            2,
-            3,
-            2,
             1,
             2,
             3,
-            1,
+            3,
             2,
             2,
-            1,
-            2
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
           ],
           [
             5,
@@ -1163,147 +1167,147 @@
             0,
             2,
             2,
-            2,
-            1,
-            2,
-            2,
             3,
+            2,
+            1,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            3,
+            1,
+            2,
+            0,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            2,
+            2,
+            0,
+            2,
+            1,
+            2,
+            1,
             0,
             1,
             1,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            2,
             0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            0,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1
+          ],
+          [
+            3,
+            2,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
             2
           ],
           [
             3,
             2,
             2,
-            0,
-            2,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            2,
-            1,
-            0
-          ],
-          [
-            3,
-            2,
-            2,
-            2,
-            0,
-            2,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
-            2,
-            1,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1,
-            2,
-            1,
-            1,
-            2
-          ],
-          [
-            3,
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
-            2,
-            1
-          ],
-          [
-            3,
-            1,
-            2,
-            1,
-            1,
-            1,
-            2,
-            0,
-            2,
             1,
             1,
             1,
             0,
-            1,
-            1
-          ],
-          [
-            3,
-            2,
-            2,
-            1,
-            0,
-            1,
-            2,
-            2,
-            0,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
-            3,
-            1,
-            0,
-            1,
-            1,
-            1,
             2,
             0,
             0,
-            1,
             1,
             0,
             1
           ],
           [
+            3,
             2,
+            2,
+            1,
+            0,
+            0,
+            2,
+            1,
+            2,
+            0,
             1,
             0,
             1,
             1,
-            1,
+            1
+          ],
+          [
+            2,
+            2,
             2,
             1,
             1,
+            1,
+            2,
+            1,
             0,
+            1,
             0,
             1,
             1,
@@ -1313,6 +1317,24 @@
           [
             2,
             2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
             1,
             1,
             1,
@@ -1323,38 +1345,20 @@
             1,
             1,
             0,
-            1,
             1,
             1
           ],
           [
             2,
             2,
-            1,
             2,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0
-          ],
-          [
-            2,
-            1,
-            0,
             1,
             1,
             1,
             2,
             1,
-            1,
             0,
+            1,
             2,
             1,
             1,
@@ -1363,18 +1367,18 @@
           ],
           [
             2,
-            2,
-            2,
+            1,
+            0,
+            1,
+            1,
             0,
             1,
             2,
             1,
             1,
-            1,
-            1,
+            0,
             0,
             1,
-            0,
             0,
             0
           ]

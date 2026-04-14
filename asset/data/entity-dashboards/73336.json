@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:50.501144+00:00",
+  "generated_at": "2026-04-14T06:30:23.113554+00:00",
   "entity": {
     "o_id": 73336,
     "title": "Agoè-Zongo",
@@ -48,6 +48,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 2001,
           "year_max": 2009
@@ -276,6 +277,41 @@
           "count": 8
         },
         {
+          "o_id": 60550,
+          "name": "Togblékopé",
+          "lat": 6.2738571,
+          "lng": 1.209831,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 73298,
+          "name": "Baguida",
+          "lat": 6.166667,
+          "lng": 1.316667,
+          "count": 1
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
+        },
+        {
           "o_id": 546,
           "name": "Burkina Faso",
           "lat": 12.5,
@@ -325,45 +361,10 @@
           "count": 1
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 73298,
-          "name": "Baguida",
-          "lat": 6.166667,
-          "lng": 1.316667,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 1
-        },
-        {
           "o_id": 559,
           "name": "Université de Lomé",
           "lat": 6.173669,
           "lng": 1.215866,
-          "count": 1
-        },
-        {
-          "o_id": 60550,
-          "name": "Togblékopé",
-          "lat": 6.2738571,
-          "lng": 1.209831,
           "count": 1
         },
         {
@@ -387,11 +388,11 @@
     "by_role": {
       "all": [
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 2
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 2
         },
         {
@@ -403,15 +404,15 @@
           "count": 1
         },
         {
-          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
-          "count": 1
-        },
-        {
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         },
         {
           "label": "don - offrir - geste - ong - vivre - solidarité",
+          "count": 1
+        },
+        {
+          "label": "mendicité - zakat - mendiant - association - sokodé - aide",
           "count": 1
         }
       ]
@@ -620,7 +621,7 @@
         "cells": [
           [
             7,
-            7,
+            1,
             1
           ],
           [
@@ -634,12 +635,7 @@
             1
           ],
           [
-            0,
-            10,
-            1
-          ],
-          [
-            4,
+            7,
             7,
             1
           ],
@@ -649,8 +645,13 @@
             1
           ],
           [
-            7,
-            1,
+            8,
+            8,
+            1
+          ],
+          [
+            0,
+            10,
             1
           ],
           [
@@ -659,8 +660,8 @@
             1
           ],
           [
-            8,
-            8,
+            4,
+            7,
             1
           ]
         ]
@@ -674,18 +675,18 @@
           "Togo",
           "Lomé",
           "Union Musulmane du Togo",
-          "Agence des Musulmans d'Afrique/Direct-Aid",
           "Youssif Guimba",
-          "Inoussa Bouraïma",
+          "Agence des Musulmans d'Afrique/Direct-Aid",
           "Patouani Batchamla",
-          "Ahmed Têtou",
-          "Louise Kudzu-Akutsa",
           "Gnassingbé Eyadéma",
           "Abass Bonfoh",
           "Faure Gnassingbé",
+          "Louise Kudzu-Akutsa",
+          "Inoussa Bouraïma",
           "Grande mosquée de Lomé",
-          "Burkina Faso",
-          "Mali"
+          "Ahmed Têtou",
+          "Togblékopé",
+          "Forces Armées Togolaises"
         ],
         "matrix": [
           [
@@ -697,11 +698,11 @@
             2,
             2,
             2,
-            2,
+            1,
             2,
             2,
             1,
-            1,
+            2,
             1,
             1
           ],
@@ -709,8 +710,8 @@
             7,
             0,
             5,
-            2,
             3,
+            2,
             2,
             2,
             2,
@@ -726,15 +727,32 @@
             5,
             5,
             0,
-            1,
-            2,
             2,
             1,
-            2,
             1,
             1,
             1,
             0,
+            1,
+            2,
+            1,
+            2,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            0,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
             1,
             1,
             1
@@ -745,46 +763,29 @@
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1
-          ],
-          [
-            3,
-            3,
-            2,
-            0,
-            0,
-            1,
-            2,
-            1,
-            1,
-            2,
-            2,
-            1,
-            1,
             0,
             0
           ],
           [
             2,
             2,
+            1,
             2,
+            0,
+            0,
             1,
             1,
-            0,
             1,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
             0,
             0,
             1,
@@ -794,101 +795,84 @@
             2,
             2,
             1,
-            0,
-            2,
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
             2,
             0,
             1,
             0,
-            0,
-            0,
-            1,
+            2,
             1,
             1,
             0,
             1,
-            0,
-            0
+            1,
+            1,
+            1
           ],
           [
             2,
             2,
             1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
             2,
             0,
-            1,
-            1,
-            1,
-            0,
-            2,
-            1,
-            1,
-            0,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
-            2,
-            0,
-            1,
-            1,
             1,
             2,
             0,
             1,
             1,
             0,
-            0
+            1,
+            1,
+            1,
+            1
           ],
           [
             1,
             2,
             0,
+            1,
+            0,
+            1,
+            1,
+            1,
             0,
             1,
             0,
             1,
             0,
             1,
+            1
+          ],
+          [
+            2,
+            2,
             1,
             1,
             0,
             1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0
           ],
@@ -896,14 +880,31 @@
             1,
             2,
             1,
-            0,
             1,
             0,
             0,
             1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            1,
+            0,
             0,
             1,
             1,
+            0,
+            1,
+            0,
             1,
             0,
             0,
@@ -912,14 +913,14 @@
           [
             1,
             1,
-            1,
-            1,
             0,
             1,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,
@@ -929,14 +930,14 @@
           [
             1,
             1,
-            1,
-            1,
             0,
             1,
             0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0,

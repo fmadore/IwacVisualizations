@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:01.259094+00:00",
+  "generated_at": "2026-04-14T06:30:33.098138+00:00",
   "entity": {
     "o_id": 46292,
     "title": "Charnier de Yopougon",
@@ -40,28 +40,31 @@
     "by_role": {
       "all": [
         {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2001,
-          "year_max": 2001
-        },
-        {
           "name": "Le Patriote",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2004
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2001,
+          "year_max": 2001
         },
         {
           "name": "Notre Voie",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
@@ -270,13 +273,6 @@
           "count": 3
         },
         {
-          "o_id": 63386,
-          "name": "Abidjan-Plateau",
-          "lat": 5.32549,
-          "lng": -4.02014,
-          "count": 1
-        },
-        {
           "o_id": 63374,
           "name": "Benghazi",
           "lat": 32.116667,
@@ -326,6 +322,13 @@
           "count": 1
         },
         {
+          "o_id": 63386,
+          "name": "Abidjan-Plateau",
+          "lat": 5.32549,
+          "lng": -4.02014,
+          "count": 1
+        },
+        {
           "o_id": 23691,
           "name": "Abobo",
           "lat": 5.418889,
@@ -339,11 +342,11 @@
     "by_role": {
       "all": [
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
+          "label": "politique - président - parti - candidat - élection - gbagbo",
           "count": 1
         },
         {
-          "label": "politique - président - parti - candidat - élection - gbagbo",
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         },
         {
@@ -546,14 +549,14 @@
         ],
         "cells": [
           [
-            0,
-            5,
-            2
-          ],
-          [
             3,
             4,
             1
+          ],
+          [
+            0,
+            5,
+            2
           ]
         ]
       }
@@ -568,16 +571,16 @@
           "Yopougon",
           "Politique",
           "Laurent Gbagbo",
-          "Conflit",
-          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Hadj",
+          "Aboubacar Fofana",
           "Crise",
           "Réconciliation",
+          "Conflit",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Djiguiba Cissé",
-          "Aboubacar Fofana",
-          "Rassemblement des républicains de Côte d'Ivoire",
-          "Conseil National Islamique",
-          "Abidjan-Plateau"
+          "Guerre",
+          "Benghazi",
+          "Tripoli"
         ],
         "matrix": [
           [
@@ -672,11 +675,11 @@
             2,
             2,
             0,
+            1,
+            2,
             2,
             1,
             1,
-            1,
-            2,
             1,
             1,
             1,
@@ -688,28 +691,11 @@
             2,
             2,
             2,
-            2,
+            1,
             0,
             1,
             1,
             1,
-            2,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            1,
-            0,
-            2,
-            2,
             1,
             1,
             1,
@@ -722,15 +708,15 @@
             2,
             2,
             2,
-            1,
-            1,
             2,
+            1,
             0,
             2,
             1,
             1,
             1,
             1,
+            1,
             1
           ],
           [
@@ -739,15 +725,15 @@
             2,
             2,
             2,
-            1,
-            1,
             2,
+            1,
             2,
             0,
             1,
             1,
             1,
             1,
+            1,
             1
           ],
           [
@@ -756,16 +742,16 @@
             2,
             2,
             2,
-            2,
-            2,
+            1,
             1,
             1,
             1,
             0,
-            1,
-            1,
-            1,
-            1
+            2,
+            2,
+            0,
+            0,
+            0
           ],
           [
             2,
@@ -777,8 +763,25 @@
             1,
             1,
             1,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
             1,
             1,
+            1,
+            1,
+            2,
+            2,
             0,
             0,
             0,
@@ -794,8 +797,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             0,
             0,
             1,
@@ -811,8 +814,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             0,
             1,
             0,
@@ -828,8 +831,8 @@
             1,
             1,
             1,
-            1,
-            1,
+            0,
+            0,
             0,
             1,
             1,

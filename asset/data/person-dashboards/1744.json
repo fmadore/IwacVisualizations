@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.689506+00:00",
+  "generated_at": "2026-04-14T06:30:33.098956+00:00",
   "person": {
     "o_id": 1744,
     "title": "William F.S. Miles",
@@ -18,10 +18,10 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 1,
+        "total_mentions": 2,
         "year_min": 2003,
-        "year_max": 2003,
-        "newspapers_count": 0,
+        "year_max": 2007,
+        "newspapers_count": 2,
         "countries_count": 1
       },
       "subject": {
@@ -35,7 +35,14 @@
         "total_mentions": 1,
         "year_min": 2003,
         "year_max": 2003,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 1,
+        "year_min": 2007,
+        "year_max": 2007,
+        "newspapers_count": 1,
         "countries_count": 1
       }
     }
@@ -44,13 +51,15 @@
     "by_role": {
       "all": {
         "years": [
-          2003
+          2003,
+          2007
         ],
         "countries": [
           "Niger"
         ],
         "series": {
           "Niger": [
+            1,
             1
           ]
         }
@@ -72,14 +81,71 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2007
+        ],
+        "countries": [
+          "Niger"
+        ],
+        "series": {
+          "Niger": [
+            1
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Africa Today",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2003,
+          "year_max": 2003
+        },
+        {
+          "name": "Lynne Rienner Publishers",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Africa Today",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2003,
+          "year_max": 2003
+        }
+      ],
+      "editor": [
+        {
+          "name": "Lynne Rienner Publishers",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Niger",
+          "year_min": 2007,
+          "year_max": 2007
+        }
+      ]
     }
   },
   "countries": {
@@ -87,11 +153,17 @@
       "all": [
         {
           "name": "Niger",
-          "count": 1
+          "count": 2
         }
       ],
       "subject": [],
       "creator": [
+        {
+          "name": "Niger",
+          "count": 1
+        }
+      ],
+      "editor": [
         {
           "name": "Niger",
           "count": 1
@@ -136,6 +208,18 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1744,
+            "title": "William F.S. Miles",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -147,7 +231,7 @@
           "name": "Niger",
           "lat": 18.0,
           "lng": 9.0,
-          "count": 1
+          "count": 2
         },
         {
           "o_id": 541,
@@ -187,6 +271,15 @@
           "lng": 8.9833333333333,
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        }
       ]
     }
   },
@@ -194,7 +287,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -480,6 +574,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -487,7 +675,11 @@
     "by_role": {
       "all": {
         "years": [
-          2003
+          2003,
+          2004,
+          2005,
+          2006,
+          2007
         ],
         "months": [
           1,
@@ -542,6 +734,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2007
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -549,10 +761,16 @@
     "by_role": {
       "all": {
         "names": [
-          "Zinder"
+          "Zinder",
+          "Robert B. Charlick"
         ],
         "matrix": [
           [
+            0,
+            0
+          ],
+          [
+            0,
             0
           ]
         ]
@@ -564,6 +782,16 @@
       "creator": {
         "names": [
           "Zinder"
+        ],
+        "matrix": [
+          [
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Robert B. Charlick"
         ],
         "matrix": [
           [

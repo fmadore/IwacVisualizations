@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:10.307094+00:00",
+  "generated_at": "2026-04-14T06:30:41.912499+00:00",
   "entity": {
     "o_id": 68,
     "title": "Sénat et article 37",
@@ -54,6 +54,7 @@
           "total": 24,
           "articles": 24,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2018
@@ -63,6 +64,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2014
@@ -72,6 +74,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2011,
           "year_max": 2014
@@ -81,6 +84,7 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2014
@@ -90,6 +94,7 @@
           "total": 6,
           "articles": 6,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2014
@@ -99,6 +104,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2014
@@ -108,6 +114,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2014
@@ -117,6 +124,7 @@
           "total": 2,
           "articles": 0,
           "publications": 2,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2014
@@ -126,36 +134,40 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
-        },
-        {
-          "name": "La Preuve",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2010,
-          "year_max": 2010
-        },
-        {
-          "name": "Le CERFIste",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Burkina Faso",
-          "year_min": 2010,
-          "year_max": 2010
         },
         {
           "name": "An-Nasr Trimestriel",
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2015
+        },
+        {
+          "name": "Le CERFIste",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
+        },
+        {
+          "name": "La Preuve",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2010,
+          "year_max": 2010
         }
       ]
     }
@@ -420,13 +432,6 @@
             "score": 9.2155
           },
           {
-            "o_id": 871,
-            "title": "Bénéwendé Stanislas Sankara",
-            "type": "Personnes",
-            "cooc": 3,
-            "score": 9.2119
-          },
-          {
             "o_id": 891,
             "title": "Mamadou Philippe Karambiri",
             "type": "Personnes",
@@ -434,16 +439,23 @@
             "score": 9.2119
           },
           {
-            "o_id": 307,
-            "title": "Dori",
-            "type": "Lieux",
-            "cooc": 5,
-            "score": 8.8948
+            "o_id": 871,
+            "title": "Bénéwendé Stanislas Sankara",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 9.2119
           },
           {
             "o_id": 61,
             "title": "Protestants",
             "type": "Sujets",
+            "cooc": 5,
+            "score": 8.8948
+          },
+          {
+            "o_id": 307,
+            "title": "Dori",
+            "type": "Lieux",
             "cooc": 5,
             "score": 8.8948
           },
@@ -739,25 +751,25 @@
           },
           {
             "source": 68,
-            "target": 871,
-            "weight": 9.2119,
-            "cooc": 3
-          },
-          {
-            "source": 68,
             "target": 891,
             "weight": 9.2119,
             "cooc": 3
           },
           {
             "source": 68,
-            "target": 307,
+            "target": 871,
+            "weight": 9.2119,
+            "cooc": 3
+          },
+          {
+            "source": 68,
+            "target": 61,
             "weight": 8.8948,
             "cooc": 5
           },
           {
             "source": 68,
-            "target": 61,
+            "target": 307,
             "weight": 8.8948,
             "cooc": 5
           },
@@ -862,13 +874,6 @@
           "count": 21
         },
         {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
-          "count": 5
-        },
-        {
           "o_id": 377,
           "name": "Ouahigouya",
           "lat": 13.58278,
@@ -876,11 +881,11 @@
           "count": 5
         },
         {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 4
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
+          "count": 5
         },
         {
           "o_id": 76323,
@@ -890,11 +895,11 @@
           "count": 4
         },
         {
-          "o_id": 405,
-          "name": "Ziniaré",
-          "lat": 12.58186,
-          "lng": -1.2971,
-          "count": 3
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 4
         },
         {
           "o_id": 312,
@@ -911,17 +916,31 @@
           "count": 3
         },
         {
-          "o_id": 14637,
-          "name": "Rwanda",
-          "lat": -2.0,
-          "lng": 30.0,
+          "o_id": 405,
+          "name": "Ziniaré",
+          "lat": 12.58186,
+          "lng": -1.2971,
+          "count": 3
+        },
+        {
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
           "count": 2
         },
         {
-          "o_id": 400,
-          "name": "Tenkodogo",
-          "lat": 11.78,
-          "lng": -0.36972,
+          "o_id": 279,
+          "name": "Banfora",
+          "lat": 10.63333,
+          "lng": -4.76667,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
           "count": 2
         },
         {
@@ -932,10 +951,24 @@
           "count": 2
         },
         {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
+          "o_id": 414,
+          "name": "Soudan",
+          "lat": 16.0,
+          "lng": 30.0,
+          "count": 2
+        },
+        {
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 2
+        },
+        {
+          "o_id": 550,
+          "name": "Pakistan",
+          "lat": 30.0,
+          "lng": 70.0,
           "count": 2
         },
         {
@@ -953,10 +986,17 @@
           "count": 2
         },
         {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
+          "o_id": 14637,
+          "name": "Rwanda",
+          "lat": -2.0,
+          "lng": 30.0,
+          "count": 2
+        },
+        {
+          "o_id": 400,
+          "name": "Tenkodogo",
+          "lat": 11.78,
+          "lng": -0.36972,
           "count": 2
         },
         {
@@ -967,108 +1007,10 @@
           "count": 2
         },
         {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
-        },
-        {
-          "o_id": 279,
-          "name": "Banfora",
-          "lat": 10.63333,
-          "lng": -4.76667,
-          "count": 2
-        },
-        {
-          "o_id": 414,
-          "name": "Soudan",
-          "lat": 16.0,
-          "lng": 30.0,
-          "count": 2
-        },
-        {
-          "o_id": 550,
-          "name": "Pakistan",
-          "lat": 30.0,
-          "lng": 70.0,
-          "count": 2
-        },
-        {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
-          "count": 1
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 1
-        },
-        {
-          "o_id": 397,
-          "name": "Soum",
-          "lat": 14.1,
-          "lng": -1.633333,
-          "count": 1
-        },
-        {
-          "o_id": 327,
-          "name": "Grande Mosquée Sunnite de Ouagadougou",
-          "lat": 12.360522000171635,
-          "lng": -1.5185420989673841,
-          "count": 1
-        },
-        {
-          "o_id": 350,
-          "name": "Koupéla",
-          "lat": 12.17864,
-          "lng": -0.35103,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
-          "count": 1
-        },
-        {
-          "o_id": 387,
-          "name": "Ramatoulaye",
-          "lat": 13.633333,
-          "lng": -2.316667,
-          "count": 1
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
-          "count": 1
-        },
-        {
-          "o_id": 456,
-          "name": "Paris",
-          "lat": 48.85341,
-          "lng": 2.3488,
-          "count": 1
-        },
-        {
-          "o_id": 444,
-          "name": "Université de Ouagadougou",
-          "lat": 12.37735,
-          "lng": -1.5009,
-          "count": 1
-        },
-        {
-          "o_id": 13955,
-          "name": "République centrafricaine",
-          "lat": 6.7,
-          "lng": 20.9,
+          "o_id": 554,
+          "name": "Italie",
+          "lat": 42.5,
+          "lng": 12.5,
           "count": 1
         },
         {
@@ -1093,17 +1035,31 @@
           "count": 1
         },
         {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
           "count": 1
         },
         {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 1
+        },
+        {
+          "o_id": 294,
+          "name": "Centre culturel islamique AEEMB",
+          "lat": 12.37545088285411,
+          "lng": -1.4871601188636745,
+          "count": 1
+        },
+        {
+          "o_id": 387,
+          "name": "Ramatoulaye",
+          "lat": 13.633333,
+          "lng": -2.316667,
           "count": 1
         },
         {
@@ -1114,17 +1070,73 @@
           "count": 1
         },
         {
-          "o_id": 554,
-          "name": "Italie",
-          "lat": 42.5,
-          "lng": 12.5,
+          "o_id": 13955,
+          "name": "République centrafricaine",
+          "lat": 6.7,
+          "lng": 20.9,
           "count": 1
         },
         {
-          "o_id": 294,
-          "name": "Centre culturel islamique AEEMB",
-          "lat": 12.37545088285411,
-          "lng": -1.4871601188636745,
+          "o_id": 397,
+          "name": "Soum",
+          "lat": 14.1,
+          "lng": -1.633333,
+          "count": 1
+        },
+        {
+          "o_id": 327,
+          "name": "Grande Mosquée Sunnite de Ouagadougou",
+          "lat": 12.360522000171635,
+          "lng": -1.5185420989673841,
+          "count": 1
+        },
+        {
+          "o_id": 350,
+          "name": "Koupéla",
+          "lat": 12.17864,
+          "lng": -0.35103,
+          "count": 1
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
+          "o_id": 456,
+          "name": "Paris",
+          "lat": 48.85341,
+          "lng": 2.3488,
+          "count": 1
+        },
+        {
+          "o_id": 444,
+          "name": "Université de Ouagadougou",
+          "lat": 12.37735,
+          "lng": -1.5009,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
           "count": 1
         }
       ]
@@ -1146,7 +1158,7 @@
           "count": 5
         },
         {
-          "label": "président - victime - crise - aucun - responsable - décider",
+          "label": "coulibaly - amadou - ali - directeur - union_islamique - issa",
           "count": 1
         },
         {
@@ -1154,15 +1166,15 @@
           "count": 1
         },
         {
-          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
-          "count": 1
-        },
-        {
-          "label": "coulibaly - amadou - ali - directeur - union_islamique - issa",
-          "count": 1
-        },
-        {
           "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "terrorisme - population - militaire - sahel - terroriste - radio",
           "count": 1
         }
       ]
@@ -1434,44 +1446,9 @@
         ],
         "cells": [
           [
-            4,
-            0,
-            2
-          ],
-          [
-            3,
-            8,
-            25
-          ],
-          [
-            4,
-            1,
-            2
-          ],
-          [
-            4,
-            11,
-            2
-          ],
-          [
-            3,
-            9,
-            3
-          ],
-          [
             3,
             7,
             8
-          ],
-          [
-            4,
-            6,
-            5
-          ],
-          [
-            5,
-            5,
-            1
           ],
           [
             4,
@@ -1479,13 +1456,23 @@
             6
           ],
           [
-            1,
-            6,
+            3,
+            8,
+            25
+          ],
+          [
+            5,
+            5,
             1
           ],
           [
-            6,
+            4,
             0,
+            2
+          ],
+          [
+            4,
+            8,
             1
           ],
           [
@@ -1494,8 +1481,23 @@
             2
           ],
           [
+            6,
             0,
+            1
+          ],
+          [
             1,
+            5,
+            1
+          ],
+          [
+            3,
+            9,
+            3
+          ],
+          [
+            4,
+            4,
             1
           ],
           [
@@ -1505,7 +1507,12 @@
           ],
           [
             3,
-            11,
+            10,
+            1
+          ],
+          [
+            5,
+            0,
             1
           ],
           [
@@ -1514,17 +1521,32 @@
             1
           ],
           [
-            3,
-            10,
-            1
+            4,
+            6,
+            5
           ],
           [
             4,
+            11,
+            2
+          ],
+          [
             4,
+            1,
+            2
+          ],
+          [
+            0,
+            11,
             1
           ],
           [
             3,
+            6,
+            1
+          ],
+          [
+            5,
             6,
             1
           ],
@@ -1535,32 +1557,22 @@
           ],
           [
             1,
-            5,
-            1
-          ],
-          [
             6,
-            5,
             1
           ],
           [
-            0,
+            3,
             11,
             1
           ],
           [
-            5,
-            6,
-            1
-          ],
-          [
-            4,
-            8,
-            1
-          ],
-          [
-            5,
             0,
+            1,
+            1
+          ],
+          [
+            6,
+            5,
             1
           ]
         ]
@@ -1574,14 +1586,14 @@
           "Ouagadougou",
           "Fédération des Associations Islamiques du Burkina",
           "Blaise Compaoré",
-          "Burkina Faso",
           "Association des Élèves et Étudiants Musulmans au Burkina",
           "Cercle d'Études, de Recherches et de Formation Islamiques",
+          "Burkina Faso",
           "Souleymane Compaoré",
           "Bobo-Dioulasso",
           "Catholiques",
-          "Hadj",
           "Conseil Consultatif sur les Réformes Politiques",
+          "Hadj",
           "Congrès pour la Démocratie et le Progrès",
           "Paix",
           "Politique",
@@ -1592,14 +1604,14 @@
             0,
             18,
             19,
+            15,
+            15,
             17,
-            15,
-            15,
             12,
             15,
             9,
-            10,
             7,
+            10,
             12,
             10,
             8,
@@ -1609,14 +1621,14 @@
             18,
             0,
             13,
-            12,
             16,
             17,
+            12,
             20,
             9,
             12,
-            8,
             11,
+            8,
             6,
             6,
             7,
@@ -1626,82 +1638,82 @@
             19,
             13,
             0,
-            11,
             10,
             9,
+            11,
             15,
             14,
             10,
-            6,
             10,
+            6,
             11,
             5,
             7,
             7
           ],
           [
+            15,
+            16,
+            10,
+            0,
+            24,
+            7,
+            12,
+            6,
+            7,
+            8,
+            11,
+            8,
+            4,
+            3,
+            4
+          ],
+          [
+            15,
+            17,
+            9,
+            24,
+            0,
+            7,
+            11,
+            7,
+            8,
+            7,
+            10,
+            8,
+            4,
+            3,
+            4
+          ],
+          [
             17,
             12,
             11,
+            7,
+            7,
             0,
-            7,
-            7,
             7,
             9,
             7,
-            6,
             3,
+            6,
             6,
             13,
             11,
             4
           ],
           [
-            15,
-            16,
-            10,
-            7,
-            0,
-            24,
-            12,
-            6,
-            7,
-            11,
-            8,
-            8,
-            4,
-            3,
-            4
-          ],
-          [
-            15,
-            17,
-            9,
-            7,
-            24,
-            0,
-            11,
-            7,
-            8,
-            10,
-            7,
-            8,
-            4,
-            3,
-            4
-          ],
-          [
             12,
             20,
             15,
-            7,
             12,
             11,
+            7,
             0,
             8,
             12,
-            7,
             14,
+            7,
             8,
             2,
             6,
@@ -1711,14 +1723,14 @@
             15,
             9,
             14,
-            9,
             6,
             7,
+            9,
             8,
             0,
             10,
-            3,
             7,
+            3,
             6,
             4,
             5,
@@ -1729,64 +1741,64 @@
             12,
             10,
             7,
-            7,
             8,
+            7,
             12,
             10,
             0,
-            4,
             10,
+            4,
             4,
             3,
             3,
             3
           ],
           [
-            10,
-            8,
-            6,
-            6,
-            11,
-            10,
-            7,
-            3,
-            4,
-            0,
-            4,
-            4,
-            2,
-            5,
-            1
-          ],
-          [
             7,
             11,
             10,
-            3,
             8,
             7,
+            3,
             14,
             7,
             10,
-            4,
             0,
+            4,
             6,
             1,
             2,
             3
           ],
           [
+            10,
+            8,
+            6,
+            11,
+            10,
+            6,
+            7,
+            3,
+            4,
+            4,
+            0,
+            4,
+            2,
+            5,
+            1
+          ],
+          [
             12,
             6,
             11,
+            8,
+            8,
             6,
-            8,
-            8,
             8,
             6,
             4,
-            4,
             6,
+            4,
             0,
             3,
             5,
@@ -1796,14 +1808,14 @@
             10,
             6,
             5,
+            4,
+            4,
             13,
-            4,
-            4,
             2,
             4,
             3,
-            2,
             1,
+            2,
             3,
             0,
             4,
@@ -1813,14 +1825,14 @@
             8,
             7,
             7,
+            3,
+            3,
             11,
-            3,
-            3,
             6,
             5,
             3,
-            5,
             2,
+            5,
             5,
             4,
             0,
@@ -1836,8 +1848,8 @@
             4,
             4,
             3,
-            1,
             3,
+            1,
             6,
             3,
             2,

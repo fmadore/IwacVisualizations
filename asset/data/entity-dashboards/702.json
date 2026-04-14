@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:55.340802+00:00",
+  "generated_at": "2026-04-14T06:30:27.460931+00:00",
   "entity": {
     "o_id": 702,
     "title": "Mouvement du Peuple pour le Progrès",
@@ -54,6 +54,7 @@
           "total": 13,
           "articles": 13,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2021
@@ -63,6 +64,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2015,
           "year_max": 2021
@@ -72,8 +74,19 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2017,
+          "year_max": 2019
+        },
+        {
+          "name": "Sidwaya",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Burkina Faso",
+          "year_min": 2019,
           "year_max": 2019
         },
         {
@@ -81,6 +94,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2016,
           "year_max": 2016
@@ -90,24 +104,17 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
-        },
-        {
-          "name": "Sidwaya",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Burkina Faso",
-          "year_min": 2019,
-          "year_max": 2019
         },
         {
           "name": "L'Observateur Paalga",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2014,
           "year_max": 2014
@@ -603,10 +610,10 @@
           "count": 3
         },
         {
-          "o_id": 307,
-          "name": "Dori",
-          "lat": 14.0341,
-          "lng": -0.03261,
+          "o_id": 279,
+          "name": "Banfora",
+          "lat": 10.63333,
+          "lng": -4.76667,
           "count": 2
         },
         {
@@ -617,80 +624,17 @@
           "count": 2
         },
         {
-          "o_id": 279,
-          "name": "Banfora",
-          "lat": 10.63333,
-          "lng": -4.76667,
+          "o_id": 307,
+          "name": "Dori",
+          "lat": 14.0341,
+          "lng": -0.03261,
           "count": 2
-        },
-        {
-          "o_id": 303,
-          "name": "Dédougou",
-          "lat": 12.46338,
-          "lng": -3.46075,
-          "count": 1
-        },
-        {
-          "o_id": 304,
-          "name": "Djibo",
-          "lat": 14.12526,
-          "lng": -1.6249,
-          "count": 1
-        },
-        {
-          "o_id": 336,
-          "name": "Kaya",
-          "lat": 13.09167,
-          "lng": -1.08444,
-          "count": 1
-        },
-        {
-          "o_id": 377,
-          "name": "Ouahigouya",
-          "lat": 13.58278,
-          "lng": -2.42158,
-          "count": 1
-        },
-        {
-          "o_id": 540,
-          "name": "Niger",
-          "lat": 18.0,
-          "lng": 9.0,
-          "count": 1
         },
         {
           "o_id": 396,
           "name": "Solenzo",
           "lat": 12.17423,
           "lng": -4.08477,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 349,
-          "name": "Koudougou",
-          "lat": 12.25263,
-          "lng": -2.36272,
-          "count": 1
-        },
-        {
-          "o_id": 351,
-          "name": "Koweït",
-          "lat": 29.5,
-          "lng": 47.75,
-          "count": 1
-        },
-        {
-          "o_id": 354,
-          "name": "Libye",
-          "lat": 28.0,
-          "lng": 17.0,
           "count": 1
         },
         {
@@ -748,6 +692,69 @@
           "lat": 4.4230555555556,
           "lng": -7.3527777777778,
           "count": 1
+        },
+        {
+          "o_id": 303,
+          "name": "Dédougou",
+          "lat": 12.46338,
+          "lng": -3.46075,
+          "count": 1
+        },
+        {
+          "o_id": 304,
+          "name": "Djibo",
+          "lat": 14.12526,
+          "lng": -1.6249,
+          "count": 1
+        },
+        {
+          "o_id": 336,
+          "name": "Kaya",
+          "lat": 13.09167,
+          "lng": -1.08444,
+          "count": 1
+        },
+        {
+          "o_id": 377,
+          "name": "Ouahigouya",
+          "lat": 13.58278,
+          "lng": -2.42158,
+          "count": 1
+        },
+        {
+          "o_id": 540,
+          "name": "Niger",
+          "lat": 18.0,
+          "lng": 9.0,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 349,
+          "name": "Koudougou",
+          "lat": 12.25263,
+          "lng": -2.36272,
+          "count": 1
+        },
+        {
+          "o_id": 351,
+          "name": "Koweït",
+          "lat": 29.5,
+          "lng": 47.75,
+          "count": 1
+        },
+        {
+          "o_id": 354,
+          "name": "Libye",
+          "lat": 28.0,
+          "lng": 17.0,
+          "count": 1
         }
       ]
     }
@@ -772,19 +779,19 @@
           "count": 2
         },
         {
-          "label": "paix - peuple - nation - vie - dieu - ensemble",
-          "count": 2
-        },
-        {
           "label": "ministre - gouvernement - etat - affaire - commission - concerner",
           "count": 2
         },
         {
-          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
-          "count": 1
+          "label": "paix - peuple - nation - vie - dieu - ensemble",
+          "count": 2
         },
         {
           "label": "président - victime - crise - aucun - responsable - décider",
+          "count": 1
+        },
+        {
+          "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
       ]
@@ -1055,43 +1062,18 @@
         ],
         "cells": [
           [
+            5,
+            5,
+            1
+          ],
+          [
             3,
             2,
             3
           ],
           [
-            0,
-            11,
-            1
-          ],
-          [
-            4,
-            7,
-            1
-          ],
-          [
-            3,
-            7,
-            1
-          ],
-          [
-            0,
-            7,
-            1
-          ],
-          [
+            5,
             2,
-            1,
-            1
-          ],
-          [
-            7,
-            4,
-            1
-          ],
-          [
-            1,
-            3,
             1
           ],
           [
@@ -1100,8 +1082,33 @@
             1
           ],
           [
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            0,
+            7,
+            1
+          ],
+          [
             0,
             1,
+            1
+          ],
+          [
+            0,
+            11,
             1
           ],
           [
@@ -1110,48 +1117,33 @@
             1
           ],
           [
-            1,
-            5,
-            1
-          ],
-          [
-            5,
-            5,
-            1
-          ],
-          [
-            1,
-            9,
-            1
-          ],
-          [
-            5,
-            7,
-            1
-          ],
-          [
-            3,
-            0,
-            1
-          ],
-          [
-            1,
-            7,
-            1
-          ],
-          [
             0,
             6,
             1
           ],
           [
-            2,
-            5,
+            3,
+            7,
+            1
+          ],
+          [
+            1,
+            7,
             1
           ],
           [
             5,
-            2,
+            7,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            0,
+            9,
             1
           ],
           [
@@ -1160,8 +1152,23 @@
             1
           ],
           [
-            0,
+            2,
+            5,
+            1
+          ],
+          [
+            1,
             9,
+            1
+          ],
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            1,
+            5,
             1
           ]
         ]
@@ -1177,16 +1184,16 @@
           "Terrorisme",
           "Radicalisation",
           "Simon Compaoré",
-          "Salif Diallo",
           "Blaise Compaoré",
-          "Zéphirin Diabré",
+          "Salif Diallo",
           "Bobo-Dioulasso",
+          "Zéphirin Diabré",
           "Sénat et article 37",
           "Chef de File de l'Opposition Politique",
           "Burkina Faso",
           "Union pour le Progrès et le Changement",
-          "Congrès pour la Démocratie et le Progrès",
-          "Fédération des Associations Islamiques du Burkina"
+          "Fédération des Associations Islamiques du Burkina",
+          "Congrès pour la Démocratie et le Progrès"
         ],
         "matrix": [
           [
@@ -1195,16 +1202,16 @@
             6,
             6,
             2,
-            2,
             5,
-            3,
+            2,
             4,
             3,
             3,
+            3,
             4,
             3,
-            3,
-            0
+            0,
+            3
           ],
           [
             6,
@@ -1212,16 +1219,16 @@
             3,
             3,
             3,
-            2,
             5,
-            1,
+            2,
             4,
+            1,
             3,
             1,
             2,
             2,
-            3,
-            0
+            0,
+            3
           ],
           [
             6,
@@ -1231,8 +1238,8 @@
             3,
             2,
             2,
-            3,
             1,
+            3,
             1,
             2,
             3,
@@ -1248,8 +1255,8 @@
             3,
             2,
             2,
-            3,
             1,
+            3,
             1,
             2,
             3,
@@ -1263,15 +1270,32 @@
             3,
             3,
             0,
+            2,
             3,
-            2,
-            2,
             1,
+            2,
             2,
             1,
             0,
             1,
+            2,
+            1
+          ],
+          [
+            5,
+            5,
+            2,
+            2,
+            2,
+            0,
+            3,
+            4,
             1,
+            3,
+            1,
+            2,
+            1,
+            0,
             2
           ],
           [
@@ -1280,49 +1304,15 @@
             2,
             2,
             3,
-            0,
-            3,
-            1,
-            2,
-            2,
-            1,
-            1,
-            1,
-            1,
-            2
-          ],
-          [
-            5,
-            5,
-            2,
-            2,
-            2,
             3,
             0,
-            1,
-            4,
-            3,
-            1,
             2,
             1,
             2,
-            0
-          ],
-          [
-            3,
-            1,
-            3,
-            3,
-            2,
             1,
             1,
-            0,
             1,
             2,
-            4,
-            1,
-            2,
-            1,
             1
           ],
           [
@@ -1331,16 +1321,33 @@
             1,
             1,
             1,
+            4,
+            2,
+            0,
+            1,
+            3,
+            1,
+            2,
+            1,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1,
+            0,
             2,
             4,
             1,
-            0,
-            3,
-            1,
             2,
             1,
-            2,
-            0
+            1
           ],
           [
             3,
@@ -1348,33 +1355,33 @@
             1,
             1,
             2,
-            2,
             3,
             2,
             3,
+            2,
             0,
             2,
             1,
             2,
-            2,
-            0
+            0,
+            2
           ],
           [
             3,
             1,
             2,
             2,
+            1,
             1,
             1,
             1,
             4,
-            1,
             2,
             0,
             1,
             2,
-            1,
-            0
+            0,
+            1
           ],
           [
             4,
@@ -1382,16 +1389,16 @@
             3,
             3,
             0,
-            1,
             2,
             1,
             2,
+            1,
             1,
             1,
             0,
             1,
-            1,
-            0
+            0,
+            1
           ],
           [
             3,
@@ -1401,13 +1408,30 @@
             1,
             1,
             1,
-            2,
             1,
+            2,
             2,
             2,
             1,
             0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
             2,
+            0,
+            2,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
@@ -1416,31 +1440,14 @@
             1,
             1,
             1,
-            1,
             2,
             1,
             2,
-            2,
-            1,
             1,
             2,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
             1,
             1,
             2,
-            2,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0
           ]

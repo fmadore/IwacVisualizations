@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.550159+00:00",
+  "generated_at": "2026-04-14T06:30:23.974721+00:00",
   "entity": {
     "o_id": 76487,
     "title": "Tiassalé",
@@ -54,6 +54,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1981,
           "year_max": 1997
@@ -63,27 +64,30 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2009,
           "year_max": 2013
-        },
-        {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2003,
-          "year_max": 2003
         },
         {
           "name": "Notre Voie",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2008
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2003,
+          "year_max": 2003
         }
       ]
     }
@@ -445,6 +449,13 @@
           "count": 6
         },
         {
+          "o_id": 46216,
+          "name": "Bondoukou",
+          "lat": 8.04,
+          "lng": -2.8,
+          "count": 3
+        },
+        {
           "o_id": 46248,
           "name": "Yamoussoukro",
           "lat": 6.816111,
@@ -466,11 +477,32 @@
           "count": 3
         },
         {
-          "o_id": 46216,
-          "name": "Bondoukou",
-          "lat": 8.04,
-          "lng": -2.8,
-          "count": 3
+          "o_id": 46311,
+          "name": "Abengourou",
+          "lat": 6.729722,
+          "lng": -3.496389,
+          "count": 2
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
+          "count": 2
+        },
+        {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 2
+        },
+        {
+          "o_id": 46245,
+          "name": "Adzopé",
+          "lat": 6.103517,
+          "lng": -3.864814,
+          "count": 2
         },
         {
           "o_id": 48426,
@@ -480,17 +512,17 @@
           "count": 2
         },
         {
-          "o_id": 76471,
-          "name": "Sinfra",
-          "lat": 6.62103,
-          "lng": -5.91144,
-          "count": 2
-        },
-        {
           "o_id": 46263,
           "name": "Daoukro",
           "lat": 7.057778,
           "lng": -3.966111,
+          "count": 2
+        },
+        {
+          "o_id": 76471,
+          "name": "Sinfra",
+          "lat": 6.62103,
+          "lng": -5.91144,
           "count": 2
         },
         {
@@ -522,87 +554,10 @@
           "count": 2
         },
         {
-          "o_id": 23465,
-          "name": "Korhogo",
-          "lat": 9.457778,
-          "lng": -5.629444,
-          "count": 2
-        },
-        {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 2
-        },
-        {
-          "o_id": 46245,
-          "name": "Adzopé",
-          "lat": 6.103517,
-          "lng": -3.864814,
-          "count": 2
-        },
-        {
-          "o_id": 46311,
-          "name": "Abengourou",
-          "lat": 6.729722,
-          "lng": -3.496389,
-          "count": 2
-        },
-        {
-          "o_id": 46770,
-          "name": "Aboisso",
-          "lat": 5.466667,
-          "lng": -3.2,
-          "count": 1
-        },
-        {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
-          "count": 1
-        },
-        {
-          "o_id": 76486,
-          "name": "M'Bahiakro",
-          "lat": 7.4666666666667,
-          "lng": -4.3333333333333,
-          "count": 1
-        },
-        {
-          "o_id": 76490,
-          "name": "Bonoua",
-          "lat": 5.2666666666667,
-          "lng": -3.6,
-          "count": 1
-        },
-        {
-          "o_id": 76508,
-          "name": "Sud Comoé",
-          "lat": 5.5,
-          "lng": -3.25,
-          "count": 1
-        },
-        {
-          "o_id": 357,
-          "name": "Mali",
-          "lat": 18.0,
-          "lng": -2.0,
-          "count": 1
-        },
-        {
-          "o_id": 312,
-          "name": "France",
-          "lat": 46.0,
-          "lng": 2.0,
-          "count": 1
-        },
-        {
-          "o_id": 410,
-          "name": "Tchad",
-          "lat": 15.0,
-          "lng": 19.0,
+          "o_id": 60523,
+          "name": "Londres",
+          "lat": 51.507222222222,
+          "lng": -0.1275,
           "count": 1
         },
         {
@@ -624,6 +579,27 @@
           "name": "Marcory",
           "lat": 5.3,
           "lng": -3.9833333333333,
+          "count": 1
+        },
+        {
+          "o_id": 357,
+          "name": "Mali",
+          "lat": 18.0,
+          "lng": -2.0,
+          "count": 1
+        },
+        {
+          "o_id": 312,
+          "name": "France",
+          "lat": 46.0,
+          "lng": 2.0,
+          "count": 1
+        },
+        {
+          "o_id": 410,
+          "name": "Tchad",
+          "lat": 15.0,
+          "lng": 19.0,
           "count": 1
         },
         {
@@ -788,10 +764,38 @@
           "count": 1
         },
         {
-          "o_id": 60523,
-          "name": "Londres",
-          "lat": 51.507222222222,
-          "lng": -0.1275,
+          "o_id": 46770,
+          "name": "Aboisso",
+          "lat": 5.466667,
+          "lng": -3.2,
+          "count": 1
+        },
+        {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 76486,
+          "name": "M'Bahiakro",
+          "lat": 7.4666666666667,
+          "lng": -4.3333333333333,
+          "count": 1
+        },
+        {
+          "o_id": 76490,
+          "name": "Bonoua",
+          "lat": 5.2666666666667,
+          "lng": -3.6,
+          "count": 1
+        },
+        {
+          "o_id": 76508,
+          "name": "Sud Comoé",
+          "lat": 5.5,
+          "lng": -3.25,
           "count": 1
         },
         {
@@ -816,11 +820,11 @@
           "count": 2
         },
         {
-          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
+          "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         },
         {
-          "label": "projet - développement - population - programme - réaliser - financement",
+          "label": "pèlerin - hadj - etat - pèlerinage - organisation_hadj - organisation",
           "count": 1
         }
       ]
@@ -1052,13 +1056,13 @@
         ],
         "cells": [
           [
-            28,
-            8,
+            27,
+            0,
             1
           ],
           [
-            32,
-            3,
+            16,
+            7,
             1
           ],
           [
@@ -1067,23 +1071,23 @@
             1
           ],
           [
+            32,
+            3,
+            1
+          ],
+          [
             0,
             3,
             1
           ],
           [
-            27,
-            0,
+            28,
+            8,
             1
           ],
           [
             9,
             3,
-            1
-          ],
-          [
-            16,
-            7,
             1
           ]
         ]
@@ -1095,19 +1099,19 @@
       "all": {
         "names": [
           "Côte d'Ivoire",
+          "Bondoukou",
           "Yamoussoukro",
+          "Division",
           "Divo",
           "Gagnoa",
-          "Division",
-          "Bondoukou",
+          "Abengourou",
+          "Développement",
+          "Mosquée",
+          "Hadj",
+          "Korhogo",
+          "Éducation",
+          "Prière",
           "Conflit",
-          "Lakota",
-          "Sinfra",
-          "Daoukro",
-          "Oumé",
-          "Dimbokro",
-          "Tiébissou",
-          "Daloa",
           "Politique"
         ],
         "matrix": [
@@ -1115,12 +1119,12 @@
             0,
             3,
             3,
-            3,
             2,
             3,
+            3,
             2,
-            2,
-            2,
+            1,
+            1,
             2,
             2,
             2,
@@ -1132,51 +1136,34 @@
             3,
             0,
             2,
-            2,
             0,
             2,
+            2,
+            2,
             1,
+            0,
             2,
             2,
-            2,
-            2,
-            2,
-            2,
-            2,
+            1,
+            1,
+            0,
             0
           ],
           [
             3,
             2,
             0,
-            3,
             0,
+            2,
+            2,
             2,
             1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            3,
-            2,
-            3,
             0,
-            0,
-            2,
             1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
+            1,
+            0,
+            0,
+            1,
             0
           ],
           [
@@ -1186,28 +1173,45 @@
             0,
             0,
             0,
+            0,
             1,
+            2,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
             2
           ],
           [
             3,
             2,
             2,
+            0,
+            0,
+            3,
+            1,
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            3,
+            2,
             2,
             0,
+            3,
+            0,
+            1,
             0,
             0,
-            1,
-            1,
-            1,
-            1,
+            2,
+            2,
             1,
             1,
             1,
@@ -1215,6 +1219,22 @@
           ],
           [
             2,
+            2,
+            2,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
             1,
             1,
             1,
@@ -1222,140 +1242,106 @@
             0,
             0,
             1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
+            0,
             1
           ],
           [
             2,
             2,
-            2,
-            2,
-            0,
-            1,
             1,
             0,
             2,
             2,
+            1,
+            0,
+            0,
+            0,
             2,
-            2,
-            2,
-            2,
+            1,
+            1,
+            0,
             0
           ],
           [
             2,
             2,
+            1,
+            0,
             2,
+            2,
+            1,
+            0,
+            0,
             2,
             0,
             1,
             1,
-            2,
-            0,
-            2,
-            2,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            0,
-            2,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            2,
-            0,
-            2,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
-            0,
-            2,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            0,
-            2,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
             0,
             0
           ],
           [
             2,
+            1,
+            0,
+            1,
+            1,
+            1,
             0,
             0,
+            1,
+            1,
+            1,
             0,
             2,
             0,
+            1
+          ],
+          [
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            1,
+            1,
+            1,
             1,
             0,
             0,
@@ -1364,6 +1350,24 @@
             0,
             0,
             0,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
             0
           ]
         ]

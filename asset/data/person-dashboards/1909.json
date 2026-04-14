@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:48.014254+00:00",
+  "generated_at": "2026-04-14T06:30:19.507521+00:00",
   "person": {
     "o_id": 1909,
     "title": "Robert Cornevin",
@@ -19,7 +19,7 @@
         "total_mentions": 4,
         "year_min": 1984,
         "year_max": 2012,
-        "newspapers_count": 1,
+        "newspapers_count": 2,
         "countries_count": 1
       },
       "subject": {
@@ -33,8 +33,15 @@
         "total_mentions": 3,
         "year_min": 2010,
         "year_max": 2012,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -84,6 +91,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -91,10 +103,21 @@
     "by_role": {
       "all": [
         {
+          "name": "Brill",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Togo",
+          "year_min": 2010,
+          "year_max": 2012
+        },
+        {
           "name": "La Nouvelle Marche",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1984,
           "year_max": 1984
@@ -106,12 +129,25 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1984,
           "year_max": 1984
         }
       ],
-      "creator": []
+      "creator": [
+        {
+          "name": "Brill",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Togo",
+          "year_min": 2010,
+          "year_max": 2012
+        }
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -133,7 +169,8 @@
           "name": "Togo",
           "count": 3
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -146,9 +183,75 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1929,
+            "title": "Peri J. Bearman",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1930,
+            "title": "Thierry Bianquis",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1932,
+            "title": "Clifford Edmund Bosworth",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1931,
+            "title": "Emeri J. van Donzel",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1933,
+            "title": "Wolfhart Heinrichs",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1909,
+            "target": 1929,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1930,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1932,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1931,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1933,
+            "weight": 12.3147,
+            "cooc": 2
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -163,6 +266,84 @@
         "edges": []
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 1909,
+            "title": "Robert Cornevin",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1929,
+            "title": "Peri J. Bearman",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1930,
+            "title": "Thierry Bianquis",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1932,
+            "title": "Clifford Edmund Bosworth",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1931,
+            "title": "Emeri J. van Donzel",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          },
+          {
+            "o_id": 1933,
+            "title": "Wolfhart Heinrichs",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 12.3147
+          }
+        ],
+        "edges": [
+          {
+            "source": 1909,
+            "target": 1929,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1930,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1932,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1931,
+            "weight": 12.3147,
+            "cooc": 2
+          },
+          {
+            "source": 1909,
+            "target": 1933,
+            "weight": 12.3147,
+            "cooc": 2
+          }
+        ]
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 1909,
@@ -288,7 +469,8 @@
           "lng": 1.08333,
           "count": 3
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -305,7 +487,8 @@
           "count": 1
         }
       ],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -707,6 +890,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -813,6 +1090,24 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -820,6 +1115,11 @@
     "by_role": {
       "all": {
         "names": [
+          "Peri J. Bearman",
+          "Thierry Bianquis",
+          "Clifford Edmund Bosworth",
+          "Emeri J. van Donzel",
+          "Wolfhart Heinrichs",
           "Allemagne",
           "Union Musulmane du Togo",
           "Alassane Anem",
@@ -829,31 +1129,100 @@
           "Tchatikpi Ouro Bang'na",
           "Boukari Bassabi Bonfoh",
           "Kpotivi Têvi-Djidjogbé Théodore Laclé",
-          "Anani Gassou",
-          "Yao Kunalé Eklo",
-          "Barry Moussa Barqué",
-          "Hodabalo Bodjona",
-          "Aïssah Agbétra"
+          "Anani Gassou"
         ],
         "matrix": [
           [
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           [
-            1,
+            2,
+            0,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             1,
@@ -863,64 +1232,14 @@
             1,
             1,
             1,
-            1,
-            1,
-            1,
             1
           ],
           [
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
             0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ],
-          [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             0,
             1,
@@ -933,10 +1252,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             0,
@@ -949,10 +1269,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -965,10 +1286,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -981,10 +1303,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -997,10 +1320,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -1013,10 +1337,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -1029,10 +1354,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -1045,10 +1371,11 @@
             1
           ],
           [
-            1,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             1,
             1,
@@ -1307,6 +1634,52 @@
         ]
       },
       "creator": {
+        "names": [
+          "Peri J. Bearman",
+          "Thierry Bianquis",
+          "Clifford Edmund Bosworth",
+          "Emeri J. van Donzel",
+          "Wolfhart Heinrichs"
+        ],
+        "matrix": [
+          [
+            0,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            0,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            0,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            0
+          ]
+        ]
+      },
+      "editor": {
         "names": [],
         "matrix": []
       }

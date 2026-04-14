@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.455940+00:00",
+  "generated_at": "2026-04-14T06:30:23.898755+00:00",
   "entity": {
     "o_id": 76476,
     "title": "Toumodi",
@@ -62,6 +62,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1971,
           "year_max": 1994
@@ -71,6 +72,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1999,
           "year_max": 2017
@@ -80,27 +82,30 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2007
-        },
-        {
-          "name": "Le Jour",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 1996,
-          "year_max": 1996
         },
         {
           "name": "Fraternité Hebdo",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1985,
           "year_max": 1985
+        },
+        {
+          "name": "Le Jour",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1996,
+          "year_max": 1996
         }
       ]
     }
@@ -683,6 +688,13 @@
           "count": 8
         },
         {
+          "o_id": 46238,
+          "name": "Bouaké",
+          "lat": 7.68333,
+          "lng": -5.03306,
+          "count": 5
+        },
+        {
           "o_id": 46248,
           "name": "Yamoussoukro",
           "lat": 6.816111,
@@ -690,11 +702,11 @@
           "count": 5
         },
         {
-          "o_id": 46238,
-          "name": "Bouaké",
-          "lat": 7.68333,
-          "lng": -5.03306,
-          "count": 5
+          "o_id": 46170,
+          "name": "Daloa",
+          "lat": 6.866667,
+          "lng": -6.45,
+          "count": 4
         },
         {
           "o_id": 269,
@@ -711,20 +723,6 @@
           "count": 4
         },
         {
-          "o_id": 46170,
-          "name": "Daloa",
-          "lat": 6.866667,
-          "lng": -6.45,
-          "count": 4
-        },
-        {
-          "o_id": 489,
-          "name": "La Mecque",
-          "lat": 21.4225,
-          "lng": 39.826111,
-          "count": 3
-        },
-        {
           "o_id": 76471,
           "name": "Sinfra",
           "lat": 6.62103,
@@ -739,24 +737,38 @@
           "count": 3
         },
         {
+          "o_id": 489,
+          "name": "La Mecque",
+          "lat": 21.4225,
+          "lng": 39.826111,
+          "count": 3
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
+          "count": 2
+        },
+        {
+          "o_id": 63432,
+          "name": "Séguéla",
+          "lat": 7.9611111111111,
+          "lng": -6.6730555555556,
+          "count": 2
+        },
+        {
+          "o_id": 46311,
+          "name": "Abengourou",
+          "lat": 6.729722,
+          "lng": -3.496389,
+          "count": 2
+        },
+        {
           "o_id": 76502,
           "name": "Akoupé",
           "lat": 6.3811111111111,
           "lng": -3.8872222222222,
-          "count": 2
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 2
-        },
-        {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
           "count": 2
         },
         {
@@ -788,6 +800,20 @@
           "count": 2
         },
         {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 2
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 2
+        },
+        {
           "o_id": 46245,
           "name": "Adzopé",
           "lat": 6.103517,
@@ -795,52 +821,24 @@
           "count": 2
         },
         {
-          "o_id": 63432,
-          "name": "Séguéla",
-          "lat": 7.9611111111111,
-          "lng": -6.6730555555556,
-          "count": 2
+          "o_id": 541,
+          "name": "Nigéria",
+          "lat": 10.0,
+          "lng": 8.0,
+          "count": 1
         },
         {
-          "o_id": 46311,
-          "name": "Abengourou",
-          "lat": 6.729722,
-          "lng": -3.496389,
-          "count": 2
-        },
-        {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 2
+          "o_id": 76494,
+          "name": "Agnibilékrou",
+          "lat": 7.1311111111111,
+          "lng": -3.2038888888889,
+          "count": 1
         },
         {
           "o_id": 46770,
           "name": "Aboisso",
           "lat": 5.466667,
           "lng": -3.2,
-          "count": 1
-        },
-        {
-          "o_id": 23691,
-          "name": "Abobo",
-          "lat": 5.418889,
-          "lng": -4.020556,
-          "count": 1
-        },
-        {
-          "o_id": 61324,
-          "name": "Grande Mosquée d'Adjamé",
-          "lat": 5.353286615241792,
-          "lng": -4.026326534959187,
-          "count": 1
-        },
-        {
-          "o_id": 46316,
-          "name": "Adjamé",
-          "lat": 5.3648,
-          "lng": -4.02366,
           "count": 1
         },
         {
@@ -862,6 +860,13 @@
           "name": "Tabou",
           "lat": 4.4230555555556,
           "lng": -7.3527777777778,
+          "count": 1
+        },
+        {
+          "o_id": 76447,
+          "name": "Worodougou",
+          "lat": 8.5,
+          "lng": -6.333333,
           "count": 1
         },
         {
@@ -1033,6 +1038,34 @@
           "count": 1
         },
         {
+          "o_id": 441,
+          "name": "Grand-Bassam",
+          "lat": 5.2118,
+          "lng": -3.73884,
+          "count": 1
+        },
+        {
+          "o_id": 23691,
+          "name": "Abobo",
+          "lat": 5.418889,
+          "lng": -4.020556,
+          "count": 1
+        },
+        {
+          "o_id": 61324,
+          "name": "Grande Mosquée d'Adjamé",
+          "lat": 5.353286615241792,
+          "lng": -4.026326534959187,
+          "count": 1
+        },
+        {
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 1
+        },
+        {
           "o_id": 76453,
           "name": "Palais de la Culture de Treichville",
           "lat": 5.311792930011962,
@@ -1044,34 +1077,6 @@
           "name": "Treichville",
           "lat": 5.3,
           "lng": -4.0,
-          "count": 1
-        },
-        {
-          "o_id": 76447,
-          "name": "Worodougou",
-          "lat": 8.5,
-          "lng": -6.333333,
-          "count": 1
-        },
-        {
-          "o_id": 441,
-          "name": "Grand-Bassam",
-          "lat": 5.2118,
-          "lng": -3.73884,
-          "count": 1
-        },
-        {
-          "o_id": 541,
-          "name": "Nigéria",
-          "lat": 10.0,
-          "lng": 8.0,
-          "count": 1
-        },
-        {
-          "o_id": 76494,
-          "name": "Agnibilékrou",
-          "lat": 7.1311111111111,
-          "lng": -3.2038888888889,
           "count": 1
         }
       ]
@@ -1089,10 +1094,6 @@
           "count": 1
         },
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
-          "count": 1
-        },
-        {
           "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         },
@@ -1101,15 +1102,19 @@
           "count": 1
         },
         {
+          "label": "homme - mort - attendre - maison - enfant - sou",
+          "count": 1
+        },
+        {
+          "label": "religieux - politique - etat - question - communauté - religion",
+          "count": 1
+        },
+        {
           "label": "association - cosim - islam - islamique - président - organisation",
           "count": 1
         },
         {
           "label": "nuit - allah - prophète - dieu - islam - nuit_destin",
-          "count": 1
-        },
-        {
-          "label": "homme - mort - attendre - maison - enfant - sou",
           "count": 1
         }
       ]
@@ -1403,8 +1408,8 @@
         ],
         "cells": [
           [
-            46,
-            8,
+            0,
+            10,
             1
           ],
           [
@@ -1413,23 +1418,33 @@
             1
           ],
           [
-            25,
-            11,
-            1
-          ],
-          [
             14,
             6,
             1
           ],
           [
-            23,
-            7,
+            45,
+            6,
             1
           ],
           [
             10,
             3,
+            1
+          ],
+          [
+            17,
+            7,
+            1
+          ],
+          [
+            46,
+            8,
+            1
+          ],
+          [
+            25,
+            11,
             1
           ],
           [
@@ -1443,18 +1458,8 @@
             1
           ],
           [
-            45,
-            6,
-            1
-          ],
-          [
-            17,
+            23,
             7,
-            1
-          ],
-          [
-            0,
-            10,
             1
           ]
         ]
@@ -1466,20 +1471,20 @@
       "all": {
         "names": [
           "Côte d'Ivoire",
+          "Développement",
           "Politique",
           "Paix",
-          "Développement",
-          "Yamoussoukro",
           "Bouaké",
+          "Yamoussoukro",
           "Unité",
-          "Abidjan",
-          "Gagnoa",
           "Parti Démocratique de Côte d'Ivoire",
           "Daloa",
-          "La Mecque",
+          "Abidjan",
+          "Gagnoa",
+          "Félix Houphouët-Boigny",
           "Prière",
-          "Gouvernement",
-          "Hadj"
+          "Mosquée",
+          "Gouvernement"
         ],
         "matrix": [
           [
@@ -1490,79 +1495,28 @@
             5,
             5,
             3,
-            3,
             4,
-            4,
-            4,
-            2,
-            2,
-            2,
-            2
-          ],
-          [
-            5,
-            0,
-            5,
-            3,
             4,
             3,
             4,
             3,
-            2,
-            3,
-            3,
-            2,
-            3,
-            3,
-            2
-          ],
-          [
-            5,
-            5,
-            0,
-            4,
-            3,
-            2,
-            4,
-            2,
-            3,
-            3,
-            3,
-            2,
             2,
             3,
             2
           ],
           [
             5,
-            3,
-            4,
             0,
-            2,
-            3,
-            3,
-            3,
             3,
             4,
             3,
-            0,
-            1,
             2,
-            0
-          ],
-          [
-            5,
+            3,
             4,
             3,
-            2,
-            0,
-            3,
-            2,
             3,
             3,
-            2,
             3,
-            2,
             1,
             1,
             2
@@ -1570,170 +1524,221 @@
           [
             5,
             3,
+            0,
+            5,
+            3,
+            4,
+            4,
+            3,
+            3,
+            3,
             2,
             3,
             3,
+            3,
+            3
+          ],
+          [
+            5,
+            4,
+            5,
             0,
             2,
-            2,
+            3,
+            4,
+            3,
+            3,
             2,
             3,
             3,
-            1,
             2,
-            1,
+            2,
+            3
+          ],
+          [
+            5,
+            3,
+            3,
+            2,
+            0,
+            3,
+            2,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
             1
           ],
           [
-            3,
-            4,
-            4,
-            3,
+            5,
             2,
-            2,
-            0,
-            2,
-            2,
-            3,
-            3,
-            1,
-            2,
-            3,
-            1
-          ],
-          [
-            3,
-            3,
-            2,
-            3,
-            3,
-            2,
-            2,
-            0,
-            2,
-            2,
-            2,
-            0,
-            1,
-            1,
-            0
-          ],
-          [
-            4,
-            2,
-            3,
-            3,
-            3,
-            2,
-            2,
-            2,
-            0,
-            2,
-            3,
-            1,
-            0,
-            1,
-            1
-          ],
-          [
             4,
             3,
             3,
-            4,
-            2,
-            3,
-            3,
-            2,
-            2,
             0,
-            3,
-            0,
-            1,
             2,
-            0
-          ],
-          [
-            4,
-            3,
-            3,
-            3,
+            2,
             3,
             3,
             3,
             2,
-            3,
-            3,
-            0,
-            1,
             1,
             2,
             1
           ],
           [
-            2,
+            3,
+            3,
+            4,
+            4,
             2,
             2,
             0,
+            3,
+            3,
             2,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
+            2,
+            3,
+            2,
             1,
             3
           ],
           [
+            4,
+            4,
+            3,
+            3,
+            3,
+            2,
+            3,
+            0,
+            3,
+            2,
+            2,
+            3,
+            1,
+            1,
+            2
+          ],
+          [
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            2,
+            3,
+            3,
+            1,
+            1,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            2,
             2,
             3,
             2,
-            1,
-            1,
+            2,
+            2,
+            0,
             2,
             2,
             1,
+            1,
+            1
+          ],
+          [
+            4,
+            3,
+            2,
+            3,
+            2,
+            3,
+            2,
+            2,
+            3,
+            2,
+            0,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
+            3,
+            3,
+            3,
+            2,
+            2,
             0,
             1,
             1,
+            2
+          ],
+          [
+            2,
+            1,
+            3,
+            2,
+            2,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
             1,
             0,
             2,
+            2
+          ],
+          [
+            3,
+            1,
+            3,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0,
             1
           ],
           [
             2,
+            2,
             3,
             3,
-            2,
             1,
             1,
             3,
+            2,
+            2,
             1,
             1,
             2,
             2,
-            1,
-            2,
-            0,
-            1
-          ],
-          [
-            2,
-            2,
-            2,
-            0,
-            2,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            3,
-            1,
             1,
             0
           ]

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:54.567132+00:00",
+  "generated_at": "2026-04-14T06:30:26.781111+00:00",
   "person": {
     "o_id": 60948,
     "title": "Akpédjé Ayosso",
@@ -35,6 +35,13 @@
         "year_max": 2024,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -94,6 +101,11 @@
             4
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -105,6 +117,7 @@
           "total": 42,
           "articles": 42,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2018,
           "year_max": 2024
@@ -117,11 +130,13 @@
           "total": 42,
           "articles": 42,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 2018,
           "year_max": 2024
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -138,7 +153,8 @@
           "name": "Bénin",
           "count": 42
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -248,7 +264,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 15831,
@@ -416,7 +432,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 14536,
@@ -550,7 +566,7 @@
           {
             "source": 60948,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -694,7 +710,7 @@
           {
             "source": 60948,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
@@ -858,7 +874,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 11,
-            "score": 12.3123
+            "score": 12.3004
           },
           {
             "o_id": 15831,
@@ -1026,7 +1042,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 3,
-            "score": 4.0764
+            "score": 4.0723
           },
           {
             "o_id": 14536,
@@ -1160,7 +1176,7 @@
           {
             "source": 60948,
             "target": 29,
-            "weight": 12.3123,
+            "weight": 12.3004,
             "cooc": 11
           },
           {
@@ -1304,7 +1320,7 @@
           {
             "source": 60948,
             "target": 44,
-            "weight": 4.0764,
+            "weight": 4.0723,
             "cooc": 3
           },
           {
@@ -1350,6 +1366,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 60948,
+            "title": "Akpédjé Ayosso",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1933,7 +1961,8 @@
           "lng": 30.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2038,7 +2067,8 @@
           "label": "pèlerin - mecque - pèlerinage - hadj - médine - jeddah",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2520,6 +2550,100 @@
           }
         },
         "articles_total": 42
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2886,6 +3010,24 @@
             2
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3446,6 +3588,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

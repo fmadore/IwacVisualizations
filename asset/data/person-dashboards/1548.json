@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:45.207762+00:00",
+  "generated_at": "2026-04-14T06:30:16.915075+00:00",
   "person": {
     "o_id": 1548,
     "title": "Sabin E. Loumedjinon",
@@ -35,6 +35,13 @@
         "year_max": 2017,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -102,6 +109,11 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -113,6 +125,7 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2017
@@ -125,11 +138,13 @@
           "total": 14,
           "articles": 14,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1997,
           "year_max": 2017
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -146,7 +161,8 @@
           "name": "Bénin",
           "count": 14
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -214,7 +230,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 3,
-            "score": 8.3358
+            "score": 8.2851
           },
           {
             "o_id": 76346,
@@ -291,21 +307,21 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.4352
+            "score": 5.4297
           },
           {
             "o_id": 12906,
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 83,
@@ -326,7 +342,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.3579
+            "score": 3.3547
           },
           {
             "o_id": 61328,
@@ -424,7 +440,7 @@
           {
             "source": 1548,
             "target": 76335,
-            "weight": 8.3358,
+            "weight": 8.2851,
             "cooc": 3
           },
           {
@@ -490,19 +506,19 @@
           {
             "source": 1548,
             "target": 44,
-            "weight": 5.4352,
+            "weight": 5.4297,
             "cooc": 4
           },
           {
             "source": 1548,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
             "source": 1548,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -520,7 +536,7 @@
           {
             "source": 1548,
             "target": 29,
-            "weight": 3.3579,
+            "weight": 3.3547,
             "cooc": 3
           },
           {
@@ -642,7 +658,7 @@
             "title": "Ahmadiyya",
             "type": "Organisations",
             "cooc": 3,
-            "score": 8.3358
+            "score": 8.2851
           },
           {
             "o_id": 76346,
@@ -719,21 +735,21 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.4352
+            "score": 5.4297
           },
           {
             "o_id": 12906,
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 42,
             "title": "Catholiques",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0021
+            "score": 3.9865
           },
           {
             "o_id": 83,
@@ -754,7 +770,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.3579
+            "score": 3.3547
           },
           {
             "o_id": 61328,
@@ -852,7 +868,7 @@
           {
             "source": 1548,
             "target": 76335,
-            "weight": 8.3358,
+            "weight": 8.2851,
             "cooc": 3
           },
           {
@@ -918,19 +934,19 @@
           {
             "source": 1548,
             "target": 44,
-            "weight": 5.4352,
+            "weight": 5.4297,
             "cooc": 4
           },
           {
             "source": 1548,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
             "source": 1548,
             "target": 42,
-            "weight": 4.0021,
+            "weight": 3.9865,
             "cooc": 2
           },
           {
@@ -948,7 +964,7 @@
           {
             "source": 1548,
             "target": 29,
-            "weight": 3.3579,
+            "weight": 3.3547,
             "cooc": 3
           },
           {
@@ -994,6 +1010,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1548,
+            "title": "Sabin E. Loumedjinon",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1437,7 +1465,8 @@
           "lng": 19.0,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1502,7 +1531,8 @@
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2040,6 +2070,100 @@
           }
         },
         "articles_total": 14
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2254,6 +2378,24 @@
             2
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2814,6 +2956,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

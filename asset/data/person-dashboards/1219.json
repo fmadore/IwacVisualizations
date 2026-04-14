@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.313447+00:00",
+  "generated_at": "2026-04-14T06:30:32.575176+00:00",
   "person": {
     "o_id": 1219,
     "title": "Alice Degorce",
@@ -18,10 +18,10 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 6,
+        "total_mentions": 15,
         "year_min": 2011,
         "year_max": 2021,
-        "newspapers_count": 0,
+        "newspapers_count": 7,
         "countries_count": 1
       },
       "subject": {
@@ -35,7 +35,14 @@
         "total_mentions": 6,
         "year_min": 2011,
         "year_max": 2021,
-        "newspapers_count": 0,
+        "newspapers_count": 6,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 10,
+        "year_min": 2019,
+        "year_max": 2019,
+        "newspapers_count": 2,
         "countries_count": 1
       }
     }
@@ -57,7 +64,7 @@
           "Burkina Faso": [
             1,
             2,
-            1,
+            10,
             1,
             1
           ]
@@ -88,14 +95,181 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "countries": [
+          "Burkina Faso"
+        ],
+        "series": {
+          "Burkina Faso": [
+            10
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "Amalion",
+          "total": 9,
+          "articles": 0,
+          "publications": 0,
+          "references": 9,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Presses de l'Université Laval",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Les Cahiers d'Outre-Mer",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Recherches féministes",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Journal des africanistes",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Migrations Société",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "Presses de l'Université Laval",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2011,
+          "year_max": 2011
+        },
+        {
+          "name": "Amalion",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "Les Cahiers d'Outre-Mer",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Recherches féministes",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2016,
+          "year_max": 2016
+        },
+        {
+          "name": "Journal des africanistes",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2020,
+          "year_max": 2020
+        },
+        {
+          "name": "Migrations Société",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2021,
+          "year_max": 2021
+        }
+      ],
+      "editor": [
+        {
+          "name": "Amalion",
+          "total": 9,
+          "articles": 0,
+          "publications": 0,
+          "references": 9,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        },
+        {
+          "name": "L'Harmattan",
+          "total": 1,
+          "articles": 0,
+          "publications": 0,
+          "references": 1,
+          "country": "Burkina Faso",
+          "year_min": 2019,
+          "year_max": 2019
+        }
+      ]
     }
   },
   "countries": {
@@ -103,7 +277,7 @@
       "all": [
         {
           "name": "Burkina Faso",
-          "count": 6
+          "count": 15
         }
       ],
       "subject": [],
@@ -111,6 +285,12 @@
         {
           "name": "Burkina Faso",
           "count": 6
+        }
+      ],
+      "editor": [
+        {
+          "name": "Burkina Faso",
+          "count": 10
         }
       ]
     }
@@ -125,9 +305,75 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 1304,
+            "title": "Ludovic O. Kibora",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 49.1777
+          },
+          {
+            "o_id": 1248,
+            "title": "Katrin Langewiesche",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 46.0429
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 1266,
+            "title": "Yacouba Ouédraogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 887,
+            "title": "Issa Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.7875
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 1219,
+            "target": 1304,
+            "weight": 49.1777,
+            "cooc": 9
+          },
+          {
+            "source": 1219,
+            "target": 1248,
+            "weight": 46.0429,
+            "cooc": 9
+          },
+          {
+            "source": 1219,
+            "target": 859,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1219,
+            "target": 1266,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 1219,
+            "target": 887,
+            "weight": 8.7875,
+            "cooc": 2
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -152,6 +398,84 @@
           }
         ],
         "edges": []
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1219,
+            "title": "Alice Degorce",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 1304,
+            "title": "Ludovic O. Kibora",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 49.1777
+          },
+          {
+            "o_id": 1248,
+            "title": "Katrin Langewiesche",
+            "type": "Personnes",
+            "cooc": 9,
+            "score": 46.0429
+          },
+          {
+            "o_id": 859,
+            "title": "Louis Audet Gosselin",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 10.1174
+          },
+          {
+            "o_id": 1266,
+            "title": "Yacouba Ouédraogo",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 9.2338
+          },
+          {
+            "o_id": 887,
+            "title": "Issa Cissé",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 8.7875
+          }
+        ],
+        "edges": [
+          {
+            "source": 1219,
+            "target": 1304,
+            "weight": 49.1777,
+            "cooc": 9
+          },
+          {
+            "source": 1219,
+            "target": 1248,
+            "weight": 46.0429,
+            "cooc": 9
+          },
+          {
+            "source": 1219,
+            "target": 859,
+            "weight": 10.1174,
+            "cooc": 2
+          },
+          {
+            "source": 1219,
+            "target": 1266,
+            "weight": 9.2338,
+            "cooc": 2
+          },
+          {
+            "source": 1219,
+            "target": 887,
+            "weight": 8.7875,
+            "cooc": 2
+          }
+        ]
       }
     }
   },
@@ -163,7 +487,7 @@
           "name": "Burkina Faso",
           "lat": 12.5,
           "lng": -1.66667,
-          "count": 6
+          "count": 15
         },
         {
           "o_id": 298,
@@ -189,6 +513,15 @@
           "lng": -5.5,
           "count": 1
         }
+      ],
+      "editor": [
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
+          "count": 10
+        }
       ]
     }
   },
@@ -196,7 +529,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -482,6 +816,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -564,6 +992,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2019
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -571,15 +1019,239 @@
     "by_role": {
       "all": {
         "names": [
-          "Djihad",
-          "Hamidou Diallo",
-          "Aude Nikiema",
-          "Honorine Sawadogo",
-          "Jeunesse"
+          "Ludovic O. Kibora",
+          "Katrin Langewiesche",
+          "Louis Audet Gosselin",
+          "Issa Cissé",
+          "Yacouba Ouédraogo",
+          "Ahmadiyya",
+          "Catholiques",
+          "NTIC et islam",
+          "Protestants",
+          "Salafisme",
+          "Frédérick Madore",
+          "Khadiyatoulah Fall",
+          "Mamadou Ndongo Dimé",
+          "Mara Vitale",
+          "Maud Saint-Lary"
         ],
         "matrix": [
           [
             0,
+            9,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            9,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             0,
@@ -587,26 +1259,32 @@
           ],
           [
             1,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            0,
-            0,
             1,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -621,8 +1299,12 @@
       },
       "creator": {
         "names": [
+          "Khadiyatoulah Fall",
+          "Mamadou Ndongo Dimé",
           "Djihad",
           "Hamidou Diallo",
+          "Ludovic O. Kibora",
+          "Katrin Langewiesche",
           "Aude Nikiema",
           "Honorine Sawadogo",
           "Jeunesse"
@@ -633,9 +1315,61 @@
             1,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
             0
           ],
           [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
             1,
             0,
             0,
@@ -646,12 +1380,20 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
             1,
             0
           ],
           [
             0,
             0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             0
@@ -661,6 +1403,286 @@
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Ludovic O. Kibora",
+          "Katrin Langewiesche",
+          "Louis Audet Gosselin",
+          "Issa Cissé",
+          "Yacouba Ouédraogo",
+          "Ahmadiyya",
+          "Catholiques",
+          "NTIC et islam",
+          "Protestants",
+          "Salafisme",
+          "Frédérick Madore",
+          "Mara Vitale",
+          "Maud Saint-Lary",
+          "Maxime Compaoré",
+          "Marc Pilon"
+        ],
+        "matrix": [
+          [
+            0,
+            9,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            9,
+            0,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             0
           ]
         ]

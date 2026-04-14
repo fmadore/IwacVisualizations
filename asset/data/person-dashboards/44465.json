@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:51.706157+00:00",
+  "generated_at": "2026-04-14T06:30:24.121200+00:00",
   "person": {
     "o_id": 44465,
     "title": "Affou Sanogo",
@@ -35,6 +35,13 @@
         "year_max": 2000,
         "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -128,6 +135,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -139,6 +151,7 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1974,
           "year_max": 1999
@@ -148,6 +161,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1995
@@ -157,6 +171,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2005
@@ -166,6 +181,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 2000
@@ -175,6 +191,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2008
@@ -184,6 +201,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2007
@@ -193,6 +211,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
@@ -204,6 +223,7 @@
           "total": 17,
           "articles": 17,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1974,
           "year_max": 1999
@@ -213,6 +233,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1995
@@ -222,6 +243,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2005
@@ -231,6 +253,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1996,
           "year_max": 2000
@@ -240,6 +263,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2008
@@ -249,6 +273,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2007
@@ -258,6 +283,7 @@
           "total": 1,
           "articles": 0,
           "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1993,
           "year_max": 1993
@@ -269,6 +295,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1998,
           "year_max": 1998
@@ -278,11 +305,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2000
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -304,7 +333,8 @@
           "name": "Côte d'Ivoire",
           "count": 2
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -554,7 +584,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.4633
+            "score": 10.4216
           },
           {
             "o_id": 62153,
@@ -645,7 +675,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 1023,
@@ -871,7 +901,7 @@
           {
             "source": 44465,
             "target": 76268,
-            "weight": 10.4633,
+            "weight": 10.4216,
             "cooc": 8
           },
           {
@@ -949,7 +979,7 @@
           {
             "source": 44465,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -1217,7 +1247,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 8,
-            "score": 10.4633
+            "score": 10.4216
           },
           {
             "o_id": 62153,
@@ -1308,7 +1338,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 1023,
@@ -1534,7 +1564,7 @@
           {
             "source": 44465,
             "target": 76268,
-            "weight": 10.4633,
+            "weight": 10.4216,
             "cooc": 8
           },
           {
@@ -1612,7 +1642,7 @@
           {
             "source": 44465,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -1686,6 +1716,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 44465,
+            "title": "Affou Sanogo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2522,7 +2564,8 @@
           "lng": -5.5,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2612,7 +2655,8 @@
           "label": "paix - peuple - nation - vie - dieu - ensemble",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3072,6 +3116,100 @@
           }
         },
         "articles_total": 2
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3499,6 +3637,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4269,6 +4425,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

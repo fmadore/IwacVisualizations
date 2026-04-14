@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:56.816578+00:00",
+  "generated_at": "2026-04-14T06:30:28.901329+00:00",
   "entity": {
     "o_id": 852,
     "title": "Église Méthodiste du Togo",
@@ -70,6 +70,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1992,
           "year_max": 2018
@@ -79,6 +80,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1988,
           "year_max": 1990
@@ -88,6 +90,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Bénin",
           "year_min": 1993,
           "year_max": 1993
@@ -219,16 +222,16 @@
             "score": 7.6419
           },
           {
-            "o_id": 2124,
-            "title": "Tètè Attikossie",
-            "type": "Personnes",
+            "o_id": 843,
+            "title": "Haut Conseil de la République",
+            "type": "Organisations",
             "cooc": 2,
             "score": 7.0813
           },
           {
-            "o_id": 843,
-            "title": "Haut Conseil de la République",
-            "type": "Organisations",
+            "o_id": 2124,
+            "title": "Tètè Attikossie",
+            "type": "Personnes",
             "cooc": 2,
             "score": 7.0813
           },
@@ -397,13 +400,13 @@
           },
           {
             "source": 852,
-            "target": 2124,
+            "target": 843,
             "weight": 7.0813,
             "cooc": 2
           },
           {
             "source": 852,
-            "target": 843,
+            "target": 2124,
             "weight": 7.0813,
             "cooc": 2
           },
@@ -516,6 +519,55 @@
           "count": 2
         },
         {
+          "o_id": 497,
+          "name": "Atakpamé",
+          "lat": 7.5269444444444,
+          "lng": 1.1266666666667,
+          "count": 1
+        },
+        {
+          "o_id": 73298,
+          "name": "Baguida",
+          "lat": 6.166667,
+          "lng": 1.316667,
+          "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
+        },
+        {
+          "o_id": 15273,
+          "name": "Liberia",
+          "lat": 6.533333,
+          "lng": -9.75,
+          "count": 1
+        },
+        {
+          "o_id": 73289,
+          "name": "Préfecture du Golfe",
+          "lat": 6.133333,
+          "lng": 1.2,
+          "count": 1
+        },
+        {
+          "o_id": 60501,
+          "name": "Haho",
+          "lat": 6.95,
+          "lng": 1.16666667,
+          "count": 1
+        },
+        {
+          "o_id": 60514,
+          "name": "Kpendjal",
+          "lat": 10.8475,
+          "lng": 0.81666666666667,
+          "count": 1
+        },
+        {
           "o_id": 275,
           "name": "Allemagne",
           "lat": 51.5,
@@ -579,20 +631,6 @@
           "count": 1
         },
         {
-          "o_id": 497,
-          "name": "Atakpamé",
-          "lat": 7.5269444444444,
-          "lng": 1.1266666666667,
-          "count": 1
-        },
-        {
-          "o_id": 73298,
-          "name": "Baguida",
-          "lat": 6.166667,
-          "lng": 1.316667,
-          "count": 1
-        },
-        {
           "o_id": 60467,
           "name": "Apégamé",
           "lat": 6.85,
@@ -611,41 +649,6 @@
           "name": "Bruxelles",
           "lat": 50.846667,
           "lng": 4.351667,
-          "count": 1
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
-        },
-        {
-          "o_id": 15273,
-          "name": "Liberia",
-          "lat": 6.533333,
-          "lng": -9.75,
-          "count": 1
-        },
-        {
-          "o_id": 73289,
-          "name": "Préfecture du Golfe",
-          "lat": 6.133333,
-          "lng": 1.2,
-          "count": 1
-        },
-        {
-          "o_id": 60501,
-          "name": "Haho",
-          "lat": 6.95,
-          "lng": 1.16666667,
-          "count": 1
-        },
-        {
-          "o_id": 60514,
-          "name": "Kpendjal",
-          "lat": 10.8475,
-          "lng": 0.81666666666667,
           "count": 1
         }
       ]
@@ -945,23 +948,8 @@
         ],
         "cells": [
           [
-            5,
-            2,
-            1
-          ],
-          [
-            30,
-            7,
-            1
-          ],
-          [
-            0,
-            0,
-            1
-          ],
-          [
-            2,
-            0,
+            17,
+            3,
             1
           ],
           [
@@ -970,8 +958,13 @@
             1
           ],
           [
-            17,
-            3,
+            2,
+            0,
+            1
+          ],
+          [
+            30,
+            7,
             1
           ],
           [
@@ -985,8 +978,13 @@
             1
           ],
           [
-            16,
+            0,
+            8,
+            1
+          ],
+          [
             5,
+            2,
             1
           ],
           [
@@ -996,7 +994,12 @@
           ],
           [
             0,
-            8,
+            0,
+            1
+          ],
+          [
+            16,
+            5,
             1
           ]
         ]
@@ -1010,18 +1013,18 @@
           "Togo",
           "Lomé",
           "Union Musulmane du Togo",
-          "Palais des congrès de Lomé",
-          "Yaovi Mensah",
           "Gnassingbé Eyadéma",
+          "Palais des congrès de Lomé",
           "Église évangélique du Togo",
           "Robert-Casimir Dosseh-Anyron",
-          "Forces Armées Togolaises",
+          "Yaovi Mensah",
           "Samon Kortho",
-          "Protestants",
-          "Grande mosquée de Lomé",
+          "Forces Armées Togolaises",
           "Cathédrale du Sacré-Cœur de Lomé",
-          "Pluralisme religieux",
-          "Sierra Leone"
+          "Grande mosquée de Lomé",
+          "Protestants",
+          "Haut Conseil de la République",
+          "Église Évangélique Presbytérienne du Togo"
         ],
         "matrix": [
           [
@@ -1052,11 +1055,11 @@
             5,
             4,
             4,
+            3,
+            3,
             2,
-            3,
-            3,
-            1,
-            1
+            2,
+            2
           ],
           [
             8,
@@ -1069,163 +1072,129 @@
             5,
             4,
             4,
-            2,
-            2,
-            3,
-            1,
-            1
-          ],
-          [
-            5,
-            5,
-            5,
-            0,
-            5,
-            5,
-            5,
-            5,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            5,
-            5,
-            5,
-            5,
-            0,
-            5,
-            5,
-            5,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            5,
-            5,
-            5,
-            5,
-            5,
-            0,
-            5,
-            5,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            5,
-            5,
-            5,
-            5,
-            5,
-            5,
-            0,
-            5,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            5,
-            5,
-            5,
-            5,
-            5,
-            5,
-            5,
-            0,
-            4,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            0,
-            4,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            4,
-            0,
-            1,
-            1,
-            3,
-            0,
-            1
-          ],
-          [
             3,
             2,
             2,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            2,
-            1,
-            2,
-            1
+            2
           ],
           [
-            3,
-            3,
-            2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            2,
+            5,
+            5,
+            5,
             0,
+            5,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3,
             1,
             1,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            0,
+            5,
+            5,
+            5,
+            4,
+            4,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            0,
+            5,
+            5,
+            4,
+            4,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            0,
+            5,
+            4,
+            4,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            0,
+            4,
+            4,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            4,
+            3,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            0,
+            3,
+            1,
+            1,
+            0,
             0
           ],
           [
@@ -1239,24 +1208,58 @@
             3,
             3,
             3,
-            1,
-            1,
             0,
+            1,
+            1,
             0,
             0
           ],
           [
+            3,
+            3,
             2,
             1,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             0,
             2,
+            1,
+            1
+          ],
+          [
+            3,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
             0,
@@ -1264,18 +1267,18 @@
           ],
           [
             2,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
+            2,
+            2,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
             1,
             0
           ]

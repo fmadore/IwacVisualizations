@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.506180+00:00",
+  "generated_at": "2026-04-14T06:30:11.049513+00:00",
   "person": {
     "o_id": 48475,
     "title": "Moussa Coulibaly",
@@ -36,6 +36,13 @@
         "year_max": 2007,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -116,6 +123,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -127,6 +139,7 @@
           "total": 16,
           "articles": 16,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2007
@@ -136,6 +149,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
@@ -147,6 +161,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2013,
           "year_max": 2013
@@ -158,11 +173,13 @@
           "total": 16,
           "articles": 16,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2000,
           "year_max": 2007
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -188,7 +205,8 @@
           "name": "Côte d'Ivoire",
           "count": 16
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -242,7 +260,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 23540,
@@ -312,7 +330,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.9237
+            "score": 3.9081
           },
           {
             "o_id": 14425,
@@ -398,7 +416,7 @@
           {
             "source": 48475,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -458,7 +476,7 @@
           {
             "source": 48475,
             "target": 76268,
-            "weight": 3.9237,
+            "weight": 3.9081,
             "cooc": 3
           },
           {
@@ -566,7 +584,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 23540,
@@ -629,7 +647,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.9237
+            "score": 3.9081
           },
           {
             "o_id": 14425,
@@ -715,7 +733,7 @@
           {
             "source": 48475,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -769,7 +787,7 @@
           {
             "source": 48475,
             "target": 76268,
-            "weight": 3.9237,
+            "weight": 3.9081,
             "cooc": 3
           },
           {
@@ -815,6 +833,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 48475,
+            "title": "Moussa Coulibaly",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -1161,7 +1191,8 @@
           "lng": -14.25,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1251,7 +1282,8 @@
           "label": "école - enfant - éducation - formation - islamique - élève",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -1823,6 +1855,100 @@
           }
         },
         "articles_total": 16
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2050,6 +2176,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -2682,6 +2826,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

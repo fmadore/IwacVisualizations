@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.822424+00:00",
+  "generated_at": "2026-04-14T06:30:33.601205+00:00",
   "person": {
     "o_id": 2070,
     "title": "Thierry S. Bidouzo",
@@ -16,10 +16,10 @@
   "summary": {
     "by_role": {
       "all": {
-        "total_mentions": 3,
+        "total_mentions": 11,
         "year_min": 2023,
         "year_max": 2023,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
         "countries_count": 1
       },
       "subject": {
@@ -33,7 +33,14 @@
         "total_mentions": 3,
         "year_min": 2023,
         "year_max": 2023,
-        "newspapers_count": 0,
+        "newspapers_count": 1,
+        "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 11,
+        "year_min": 2023,
+        "year_max": 2023,
+        "newspapers_count": 1,
         "countries_count": 1
       }
     }
@@ -49,7 +56,7 @@
         ],
         "series": {
           "Bénin": [
-            3
+            11
           ]
         }
       },
@@ -70,14 +77,61 @@
             3
           ]
         }
+      },
+      "editor": {
+        "years": [
+          2023
+        ],
+        "countries": [
+          "Bénin"
+        ],
+        "series": {
+          "Bénin": [
+            11
+          ]
+        }
       }
     }
   },
   "newspapers": {
     "by_role": {
-      "all": [],
+      "all": [
+        {
+          "name": "CHRISTON éditions|Friedrich Ebert Foundation",
+          "total": 11,
+          "articles": 0,
+          "publications": 0,
+          "references": 11,
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ],
       "subject": [],
-      "creator": []
+      "creator": [
+        {
+          "name": "CHRISTON éditions|Friedrich Ebert Foundation",
+          "total": 3,
+          "articles": 0,
+          "publications": 0,
+          "references": 3,
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ],
+      "editor": [
+        {
+          "name": "CHRISTON éditions|Friedrich Ebert Foundation",
+          "total": 11,
+          "articles": 0,
+          "publications": 0,
+          "references": 11,
+          "country": "Bénin",
+          "year_min": 2023,
+          "year_max": 2023
+        }
+      ]
     }
   },
   "countries": {
@@ -85,7 +139,7 @@
       "all": [
         {
           "name": "Bénin",
-          "count": 3
+          "count": 11
         }
       ],
       "subject": [],
@@ -93,6 +147,12 @@
         {
           "name": "Bénin",
           "count": 3
+        }
+      ],
+      "editor": [
+        {
+          "name": "Bénin",
+          "count": 11
         }
       ]
     }
@@ -107,9 +167,49 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 2071,
+            "title": "Expédit B. Ologou",
+            "type": "Personnes",
+            "cooc": 11,
+            "score": 72.1908
+          },
+          {
+            "o_id": 2073,
+            "title": "Emmanuel Odilon Koukoubou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 29.0238
+          },
+          {
+            "o_id": 2074,
+            "title": "Estelle K. Djanato",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 2070,
+            "target": 2071,
+            "weight": 72.1908,
+            "cooc": 11
+          },
+          {
+            "source": 2070,
+            "target": 2073,
+            "weight": 29.0238,
+            "cooc": 4
+          },
+          {
+            "source": 2070,
+            "target": 2074,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
       },
       "subject": {
         "nodes": [
@@ -131,9 +231,75 @@
             "type": "center",
             "cooc": null,
             "score": null
+          },
+          {
+            "o_id": 2071,
+            "title": "Expédit B. Ologou",
+            "type": "Personnes",
+            "cooc": 3,
+            "score": 19.6884
           }
         ],
-        "edges": []
+        "edges": [
+          {
+            "source": 2070,
+            "target": 2071,
+            "weight": 19.6884,
+            "cooc": 3
+          }
+        ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 2070,
+            "title": "Thierry S. Bidouzo",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          },
+          {
+            "o_id": 2071,
+            "title": "Expédit B. Ologou",
+            "type": "Personnes",
+            "cooc": 11,
+            "score": 72.1908
+          },
+          {
+            "o_id": 2073,
+            "title": "Emmanuel Odilon Koukoubou",
+            "type": "Personnes",
+            "cooc": 4,
+            "score": 29.0238
+          },
+          {
+            "o_id": 2074,
+            "title": "Estelle K. Djanato",
+            "type": "Personnes",
+            "cooc": 2,
+            "score": 14.5119
+          }
+        ],
+        "edges": [
+          {
+            "source": 2070,
+            "target": 2071,
+            "weight": 72.1908,
+            "cooc": 11
+          },
+          {
+            "source": 2070,
+            "target": 2073,
+            "weight": 29.0238,
+            "cooc": 4
+          },
+          {
+            "source": 2070,
+            "target": 2074,
+            "weight": 14.5119,
+            "cooc": 2
+          }
+        ]
       }
     }
   },
@@ -145,7 +311,7 @@
           "name": "Bénin",
           "lat": 9.5,
           "lng": 2.25,
-          "count": 3
+          "count": 11
         }
       ],
       "subject": [],
@@ -157,6 +323,15 @@
           "lng": 2.25,
           "count": 3
         }
+      ],
+      "editor": [
+        {
+          "o_id": 283,
+          "name": "Bénin",
+          "lat": 9.5,
+          "lng": 2.25,
+          "count": 11
+        }
       ]
     }
   },
@@ -164,7 +339,8 @@
     "by_role": {
       "all": [],
       "subject": [],
-      "creator": []
+      "creator": [],
+      "editor": []
     }
   },
   "sentiment": {
@@ -450,6 +626,100 @@
           }
         },
         "articles_total": 0
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -512,6 +782,26 @@
           12
         ],
         "cells": []
+      },
+      "editor": {
+        "years": [
+          2023
+        ],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -519,10 +809,34 @@
     "by_role": {
       "all": {
         "names": [
-          "Emmanuel Odilon Koukoubou"
+          "Expédit B. Ologou",
+          "Emmanuel Odilon Koukoubou",
+          "Estelle K. Djanato",
+          "Afouda Vincent Agué"
         ],
         "matrix": [
           [
+            0,
+            4,
+            2,
+            1
+          ],
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
             0
           ]
         ]
@@ -533,10 +847,50 @@
       },
       "creator": {
         "names": [
+          "Expédit B. Ologou",
           "Emmanuel Odilon Koukoubou"
         ],
         "matrix": [
           [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "editor": {
+        "names": [
+          "Expédit B. Ologou",
+          "Emmanuel Odilon Koukoubou",
+          "Estelle K. Djanato",
+          "Afouda Vincent Agué"
+        ],
+        "matrix": [
+          [
+            0,
+            4,
+            2,
+            1
+          ],
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
             0
           ]
         ]

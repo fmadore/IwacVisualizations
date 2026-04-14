@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.690853+00:00",
+  "generated_at": "2026-04-14T06:30:30.674373+00:00",
   "entity": {
     "o_id": 46193,
     "title": "Direction Générale des Cultes",
@@ -76,6 +76,7 @@
           "total": 12,
           "articles": 12,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2017
@@ -85,6 +86,7 @@
           "total": 9,
           "articles": 9,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2013
@@ -94,45 +96,50 @@
           "total": 8,
           "articles": 8,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2017
-        },
-        {
-          "name": "Nord-Sud",
-          "total": 1,
-          "articles": 1,
-          "publications": 0,
-          "country": "Côte d'Ivoire",
-          "year_min": 2007,
-          "year_max": 2007
         },
         {
           "name": "Le Temps",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2011,
           "year_max": 2011
         },
         {
-          "name": "Bénin Intelligent",
+          "name": "Nord-Sud",
           "total": 1,
           "articles": 1,
           "publications": 0,
-          "country": "Bénin",
-          "year_min": 2020,
-          "year_max": 2020
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 2007,
+          "year_max": 2007
         },
         {
           "name": "L'Inter",
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
+        },
+        {
+          "name": "Bénin Intelligent",
+          "total": 1,
+          "articles": 1,
+          "publications": 0,
+          "references": 0,
+          "country": "Bénin",
+          "year_min": 2020,
+          "year_max": 2020
         }
       ]
     }
@@ -727,13 +734,6 @@
           "count": 10
         },
         {
-          "o_id": 46256,
-          "name": "Treichville",
-          "lat": 5.3,
-          "lng": -4.0,
-          "count": 6
-        },
-        {
           "o_id": 76446,
           "name": "Aéroport International Félix Houphouët-Boigny",
           "lat": 5.261417,
@@ -745,6 +745,13 @@
           "name": "Djeddah",
           "lat": 21.49012,
           "lng": 39.18624,
+          "count": 6
+        },
+        {
+          "o_id": 46256,
+          "name": "Treichville",
+          "lat": 5.3,
+          "lng": -4.0,
           "count": 6
         },
         {
@@ -776,17 +783,17 @@
           "count": 3
         },
         {
-          "o_id": 60469,
-          "name": "Mont Arafat",
-          "lat": 21.354831,
-          "lng": 39.983886,
-          "count": 2
-        },
-        {
           "o_id": 46316,
           "name": "Adjamé",
           "lat": 5.3648,
           "lng": -4.02366,
+          "count": 2
+        },
+        {
+          "o_id": 60469,
+          "name": "Mont Arafat",
+          "lat": 21.354831,
+          "lng": 39.983886,
           "count": 2
         },
         {
@@ -797,31 +804,38 @@
           "count": 2
         },
         {
-          "o_id": 76460,
-          "name": "Chu de Treichville",
-          "lat": 5.293477682375166,
-          "lng": -4.003772668120945,
+          "o_id": 76457,
+          "name": "Cocody Angré",
+          "lat": 5.386217444874156,
+          "lng": -3.9826822579490044,
           "count": 1
         },
         {
-          "o_id": 76456,
-          "name": "Riviera Palmeraie",
-          "lat": 5.36992,
-          "lng": -3.95658,
+          "o_id": 63383,
+          "name": "Aghien",
+          "lat": 5.388123,
+          "lng": -3.999984,
           "count": 1
         },
         {
-          "o_id": 46175,
-          "name": "Attécoubé",
-          "lat": 5.333333,
-          "lng": -4.033333,
+          "o_id": 328,
+          "name": "Guinée",
+          "lat": 10.83333,
+          "lng": -10.66667,
           "count": 1
         },
         {
-          "o_id": 23465,
-          "name": "Korhogo",
-          "lat": 9.457778,
-          "lng": -5.629444,
+          "o_id": 15273,
+          "name": "Liberia",
+          "lat": 6.533333,
+          "lng": -9.75,
+          "count": 1
+        },
+        {
+          "o_id": 60543,
+          "name": "Sierra Leone",
+          "lat": 8.5,
+          "lng": -12.1,
           "count": 1
         },
         {
@@ -951,38 +965,17 @@
           "count": 1
         },
         {
-          "o_id": 328,
-          "name": "Guinée",
-          "lat": 10.83333,
-          "lng": -10.66667,
+          "o_id": 542,
+          "name": "Qatar",
+          "lat": 25.5,
+          "lng": 51.25,
           "count": 1
         },
         {
-          "o_id": 15273,
-          "name": "Liberia",
-          "lat": 6.533333,
-          "lng": -9.75,
-          "count": 1
-        },
-        {
-          "o_id": 60543,
-          "name": "Sierra Leone",
-          "lat": 8.5,
-          "lng": -12.1,
-          "count": 1
-        },
-        {
-          "o_id": 76457,
-          "name": "Cocody Angré",
-          "lat": 5.386217444874156,
-          "lng": -3.9826822579490044,
-          "count": 1
-        },
-        {
-          "o_id": 63383,
-          "name": "Aghien",
-          "lat": 5.388123,
-          "lng": -3.999984,
+          "o_id": 76460,
+          "name": "Chu de Treichville",
+          "lat": 5.293477682375166,
+          "lng": -4.003772668120945,
           "count": 1
         },
         {
@@ -1049,10 +1042,24 @@
           "count": 1
         },
         {
-          "o_id": 542,
-          "name": "Qatar",
-          "lat": 25.5,
-          "lng": 51.25,
+          "o_id": 76456,
+          "name": "Riviera Palmeraie",
+          "lat": 5.36992,
+          "lng": -3.95658,
+          "count": 1
+        },
+        {
+          "o_id": 46175,
+          "name": "Attécoubé",
+          "lat": 5.333333,
+          "lng": -4.033333,
+          "count": 1
+        },
+        {
+          "o_id": 23465,
+          "name": "Korhogo",
+          "lat": 9.457778,
+          "lng": -5.629444,
           "count": 1
         }
       ]
@@ -1295,19 +1302,34 @@
         ],
         "cells": [
           [
-            8,
-            9,
-            1
-          ],
-          [
-            8,
-            11,
-            1
-          ],
-          [
             1,
-            11,
-            2
+            10,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            6,
+            6,
+            1
+          ],
+          [
+            6,
+            8,
+            1
+          ],
+          [
+            7,
+            3,
+            1
+          ],
+          [
+            5,
+            6,
+            1
           ],
           [
             10,
@@ -1320,67 +1342,42 @@
             2
           ],
           [
+            4,
             9,
-            8,
-            1
-          ],
-          [
-            6,
-            6,
-            1
-          ],
-          [
-            0,
-            6,
-            2
-          ],
-          [
-            10,
-            2,
             1
           ],
           [
             0,
             9,
-            1
-          ],
-          [
-            6,
-            10,
-            1
-          ],
-          [
-            7,
-            3,
-            1
-          ],
-          [
-            8,
-            8,
-            1
-          ],
-          [
-            3,
-            10,
             1
           ],
           [
             5,
-            6,
+            8,
             1
           ],
           [
-            4,
+            8,
+            8,
+            1
+          ],
+          [
+            3,
+            5,
+            1
+          ],
+          [
+            8,
             9,
             1
           ],
           [
             1,
-            10,
-            1
+            11,
+            2
           ],
           [
-            4,
+            3,
             7,
             1
           ],
@@ -1390,23 +1387,28 @@
             1
           ],
           [
-            6,
-            8,
-            1
-          ],
-          [
             8,
             5,
             2
           ],
           [
-            3,
-            5,
+            10,
+            2,
+            1
+          ],
+          [
+            0,
+            6,
+            2
+          ],
+          [
+            6,
+            10,
             1
           ],
           [
             3,
-            7,
+            10,
             1
           ],
           [
@@ -1415,7 +1417,12 @@
             1
           ],
           [
-            5,
+            8,
+            11,
+            1
+          ],
+          [
+            9,
             8,
             1
           ]
@@ -1436,12 +1443,12 @@
           "Bamba Messamba",
           "Médine",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
-          "Treichville",
           "Aéroport International Félix Houphouët-Boigny",
           "Djeddah",
+          "Treichville",
           "Cocody",
-          "Mosquée de la Riviéra Golf",
-          "Alassane Ouattara"
+          "Conseil National Islamique",
+          "Cocody-Deux Plateaux"
         ],
         "matrix": [
           [
@@ -1471,12 +1478,12 @@
             9,
             9,
             6,
-            6,
             5,
+            6,
             6,
             4,
             3,
-            3
+            2
           ],
           [
             24,
@@ -1488,11 +1495,11 @@
             8,
             8,
             3,
-            4,
             5,
             6,
+            4,
             2,
-            3,
+            2,
             2
           ],
           [
@@ -1506,11 +1513,11 @@
             9,
             4,
             4,
-            4,
             6,
+            4,
             3,
             2,
-            2
+            3
           ],
           [
             16,
@@ -1523,11 +1530,11 @@
             6,
             2,
             3,
-            3,
             5,
+            3,
             4,
-            2,
-            2
+            1,
+            3
           ],
           [
             14,
@@ -1539,12 +1546,12 @@
             5,
             5,
             3,
-            1,
             4,
             3,
+            1,
             0,
-            2,
-            2
+            1,
+            1
           ],
           [
             11,
@@ -1556,12 +1563,12 @@
             0,
             3,
             1,
-            2,
             3,
             2,
             2,
-            1,
-            1
+            2,
+            0,
+            3
           ],
           [
             10,
@@ -1573,12 +1580,12 @@
             3,
             0,
             3,
-            1,
             2,
             3,
-            2,
             1,
-            0
+            2,
+            2,
+            1
           ],
           [
             7,
@@ -1590,28 +1597,11 @@
             1,
             3,
             0,
+            0,
+            0,
             1,
-            0,
-            0,
             2,
-            1,
-            2
-          ],
-          [
-            6,
-            6,
-            4,
-            4,
             3,
-            1,
-            2,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            2,
             2
           ],
           [
@@ -1624,12 +1614,12 @@
             3,
             2,
             0,
-            1,
             0,
             3,
             1,
-            2,
-            1
+            1,
+            0,
+            0
           ],
           [
             6,
@@ -1641,8 +1631,25 @@
             2,
             3,
             0,
-            0,
             3,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            6,
+            6,
+            4,
+            4,
+            3,
+            1,
+            2,
+            1,
+            1,
+            1,
+            0,
             0,
             1,
             1,
@@ -1662,40 +1669,40 @@
             1,
             1,
             0,
-            0,
-            1
-          ],
-          [
-            4,
-            3,
-            3,
-            2,
-            2,
-            2,
             1,
-            1,
-            1,
-            2,
-            2,
-            1,
-            0,
-            0,
-            1
+            2
           ],
           [
             4,
             3,
             2,
             2,
-            2,
-            2,
+            1,
             1,
             0,
             2,
-            2,
-            1,
+            3,
+            0,
             0,
             1,
+            1,
+            0,
+            1
+          ],
+          [
+            4,
+            2,
+            2,
+            3,
+            3,
+            1,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0,
+            2,
             1,
             0
           ]

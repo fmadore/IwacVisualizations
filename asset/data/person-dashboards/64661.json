@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:53.806668+00:00",
+  "generated_at": "2026-04-14T06:30:26.045251+00:00",
   "person": {
     "o_id": 64661,
     "title": "Siaka Bamba",
@@ -35,6 +35,13 @@
         "year_max": 1997,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -106,6 +113,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -117,6 +129,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1997
@@ -126,6 +139,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
@@ -137,6 +151,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1979,
           "year_max": 1997
@@ -146,6 +161,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2001,
           "year_max": 2001
@@ -157,11 +173,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1997,
           "year_max": 1997
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -183,7 +201,8 @@
           "name": "Côte d'Ivoire",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -433,7 +452,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.2316
+            "score": 5.2108
           },
           {
             "o_id": 46274,
@@ -503,7 +522,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -708,7 +727,7 @@
           {
             "source": 64661,
             "target": 76268,
-            "weight": 5.2316,
+            "weight": 5.2108,
             "cooc": 4
           },
           {
@@ -768,7 +787,7 @@
           {
             "source": 64661,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
@@ -1018,7 +1037,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 4,
-            "score": 5.2316
+            "score": 5.2108
           },
           {
             "o_id": 46274,
@@ -1088,7 +1107,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -1293,7 +1312,7 @@
           {
             "source": 64661,
             "target": 76268,
-            "weight": 5.2316,
+            "weight": 5.2108,
             "cooc": 4
           },
           {
@@ -1353,12 +1372,24 @@
           {
             "source": 64661,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
       },
       "creator": {
+        "nodes": [
+          {
+            "o_id": 64661,
+            "title": "Siaka Bamba",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
+      },
+      "editor": {
         "nodes": [
           {
             "o_id": 64661,
@@ -1946,7 +1977,8 @@
           "lng": -5.03306,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -1976,7 +2008,8 @@
           "label": "imam - mosquée - communauté_musulman - prière - fidèle - hadj",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2416,6 +2449,100 @@
           }
         },
         "articles_total": 1
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -2622,6 +2749,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3392,6 +3537,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

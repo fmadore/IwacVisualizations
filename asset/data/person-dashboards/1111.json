@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:42.400492+00:00",
+  "generated_at": "2026-04-14T06:30:14.389475+00:00",
   "person": {
     "o_id": 1111,
     "title": "Mamadou Koné",
@@ -36,6 +36,13 @@
         "year_max": 2001,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -203,6 +210,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -214,6 +226,7 @@
           "total": 18,
           "articles": 18,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2001
@@ -223,6 +236,7 @@
           "total": 12,
           "articles": 0,
           "publications": 12,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2015,
           "year_max": 2016
@@ -232,6 +246,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1981
@@ -241,6 +256,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2014,
           "year_max": 2017
@@ -250,6 +266,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2010
@@ -259,6 +276,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2016
@@ -268,6 +286,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2008
@@ -279,6 +298,7 @@
           "total": 12,
           "articles": 0,
           "publications": 12,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2015,
           "year_max": 2016
@@ -288,6 +308,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1981
@@ -297,6 +318,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2014,
           "year_max": 2017
@@ -306,6 +328,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2010
@@ -315,6 +338,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2006,
           "year_max": 2016
@@ -324,6 +348,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1999,
           "year_max": 2000
@@ -333,6 +358,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2008
@@ -344,11 +370,13 @@
           "total": 18,
           "articles": 18,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 2001
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -378,7 +406,8 @@
           "name": "Burkina Faso",
           "count": 18
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -712,7 +741,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 7,
-            "score": 7.8351
+            "score": 7.8275
           },
           {
             "o_id": 46214,
@@ -1017,7 +1046,7 @@
           {
             "source": 1111,
             "target": 29,
-            "weight": 7.8351,
+            "weight": 7.8275,
             "cooc": 7
           },
           {
@@ -1347,7 +1376,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 5,
-            "score": 5.5965
+            "score": 5.5911
           },
           {
             "o_id": 75967,
@@ -1389,7 +1418,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 113,
@@ -1656,7 +1685,7 @@
           {
             "source": 1111,
             "target": 29,
-            "weight": 5.5965,
+            "weight": 5.5911,
             "cooc": 5
           },
           {
@@ -1692,7 +1721,7 @@
           {
             "source": 1111,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1877,7 +1906,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 571,
@@ -1901,18 +1930,18 @@
             "score": 4.1539
           },
           {
-            "o_id": 56,
-            "title": "Enseignement confessionnel islamique",
-            "type": "Sujets",
-            "cooc": 2,
-            "score": 4.0712
-          },
-          {
             "o_id": 75967,
             "title": "Développement",
             "type": "Sujets",
             "cooc": 3,
             "score": 4.0681
+          },
+          {
+            "o_id": 56,
+            "title": "Enseignement confessionnel islamique",
+            "type": "Sujets",
+            "cooc": 2,
+            "score": 4.0604
           },
           {
             "o_id": 2013,
@@ -1996,14 +2025,14 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.7176
+            "score": 2.7148
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           }
         ],
         "edges": [
@@ -2142,7 +2171,7 @@
           {
             "source": 1111,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -2165,15 +2194,15 @@
           },
           {
             "source": 1111,
-            "target": 56,
-            "weight": 4.0712,
-            "cooc": 2
-          },
-          {
-            "source": 1111,
             "target": 75967,
             "weight": 4.0681,
             "cooc": 3
+          },
+          {
+            "source": 1111,
+            "target": 56,
+            "weight": 4.0604,
+            "cooc": 2
           },
           {
             "source": 1111,
@@ -2244,16 +2273,28 @@
           {
             "source": 1111,
             "target": 44,
-            "weight": 2.7176,
+            "weight": 2.7148,
             "cooc": 2
           },
           {
             "source": 1111,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1111,
+            "title": "Mamadou Koné",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -3048,7 +3089,8 @@
           "lng": -2.2666666666667,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -3182,7 +3224,8 @@
           "label": "afrique - africain - islamique - coopération - arabe - conférence",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3698,6 +3741,100 @@
           }
         },
         "articles_total": 18
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -4287,6 +4424,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -5119,6 +5274,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

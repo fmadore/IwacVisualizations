@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.041946+00:00",
+  "generated_at": "2026-04-14T06:30:10.601971+00:00",
   "person": {
     "o_id": 1009,
     "title": "Boureima Sanga",
@@ -35,6 +35,13 @@
         "year_max": 2024,
         "newspapers_count": 1,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -110,6 +117,11 @@
             2
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -121,6 +133,7 @@
           "total": 34,
           "articles": 34,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2005,
           "year_max": 2024
@@ -133,11 +146,13 @@
           "total": 34,
           "articles": 34,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2005,
           "year_max": 2024
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -154,7 +169,8 @@
           "name": "Burkina Faso",
           "count": 34
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -222,7 +238,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 13,
-            "score": 14.5509
+            "score": 14.5368
           },
           {
             "o_id": 572,
@@ -250,7 +266,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 9,
-            "score": 12.2291
+            "score": 12.2168
           },
           {
             "o_id": 13908,
@@ -330,18 +346,18 @@
             "score": 7.7359
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 3,
-            "score": 7.5592
-          },
-          {
             "o_id": 609,
             "title": "Communauté islamique Ahmadiyya Burkina Faso",
             "type": "Organisations",
             "cooc": 2,
             "score": 7.5189
+          },
+          {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.4942
           },
           {
             "o_id": 31,
@@ -407,13 +423,6 @@
             "score": 5.5686
           },
           {
-            "o_id": 76335,
-            "title": "Ahmadiyya",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 5.5572
-          },
-          {
             "o_id": 85,
             "title": "Hadith",
             "type": "Sujets",
@@ -428,11 +437,18 @@
             "score": 5.5329
           },
           {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5234
+          },
+          {
             "o_id": 12906,
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 36,
@@ -509,7 +525,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 81,
@@ -565,7 +581,7 @@
           {
             "source": 1009,
             "target": 29,
-            "weight": 14.5509,
+            "weight": 14.5368,
             "cooc": 13
           },
           {
@@ -589,7 +605,7 @@
           {
             "source": 1009,
             "target": 44,
-            "weight": 12.2291,
+            "weight": 12.2168,
             "cooc": 9
           },
           {
@@ -660,15 +676,15 @@
           },
           {
             "source": 1009,
-            "target": 578,
-            "weight": 7.5592,
-            "cooc": 3
-          },
-          {
-            "source": 1009,
             "target": 609,
             "weight": 7.5189,
             "cooc": 2
+          },
+          {
+            "source": 1009,
+            "target": 578,
+            "weight": 7.4942,
+            "cooc": 3
           },
           {
             "source": 1009,
@@ -726,12 +742,6 @@
           },
           {
             "source": 1009,
-            "target": 76335,
-            "weight": 5.5572,
-            "cooc": 2
-          },
-          {
-            "source": 1009,
             "target": 85,
             "weight": 5.5572,
             "cooc": 2
@@ -744,8 +754,14 @@
           },
           {
             "source": 1009,
+            "target": 76335,
+            "weight": 5.5234,
+            "cooc": 2
+          },
+          {
+            "source": 1009,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -811,7 +827,7 @@
           {
             "source": 1009,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -897,7 +913,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 13,
-            "score": 14.5509
+            "score": 14.5368
           },
           {
             "o_id": 572,
@@ -925,7 +941,7 @@
             "title": "Pluralisme religieux",
             "type": "Sujets",
             "cooc": 9,
-            "score": 12.2291
+            "score": 12.2168
           },
           {
             "o_id": 13908,
@@ -1005,18 +1021,18 @@
             "score": 7.7359
           },
           {
-            "o_id": 578,
-            "title": "Communauté Musulmane du Burkina Faso",
-            "type": "Organisations",
-            "cooc": 3,
-            "score": 7.5592
-          },
-          {
             "o_id": 609,
             "title": "Communauté islamique Ahmadiyya Burkina Faso",
             "type": "Organisations",
             "cooc": 2,
             "score": 7.5189
+          },
+          {
+            "o_id": 578,
+            "title": "Communauté Musulmane du Burkina Faso",
+            "type": "Organisations",
+            "cooc": 3,
+            "score": 7.4942
           },
           {
             "o_id": 31,
@@ -1082,13 +1098,6 @@
             "score": 5.5686
           },
           {
-            "o_id": 76335,
-            "title": "Ahmadiyya",
-            "type": "Organisations",
-            "cooc": 2,
-            "score": 5.5572
-          },
-          {
             "o_id": 85,
             "title": "Hadith",
             "type": "Sujets",
@@ -1103,11 +1112,18 @@
             "score": 5.5329
           },
           {
+            "o_id": 76335,
+            "title": "Ahmadiyya",
+            "type": "Organisations",
+            "cooc": 2,
+            "score": 5.5234
+          },
+          {
             "o_id": 12906,
             "title": "Culture",
             "type": "Sujets",
             "cooc": 2,
-            "score": 5.0307
+            "score": 5.022
           },
           {
             "o_id": 36,
@@ -1184,7 +1200,7 @@
             "title": "Enseignement confessionnel islamique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 4.0712
+            "score": 4.0604
           },
           {
             "o_id": 81,
@@ -1240,7 +1256,7 @@
           {
             "source": 1009,
             "target": 29,
-            "weight": 14.5509,
+            "weight": 14.5368,
             "cooc": 13
           },
           {
@@ -1264,7 +1280,7 @@
           {
             "source": 1009,
             "target": 44,
-            "weight": 12.2291,
+            "weight": 12.2168,
             "cooc": 9
           },
           {
@@ -1335,15 +1351,15 @@
           },
           {
             "source": 1009,
-            "target": 578,
-            "weight": 7.5592,
-            "cooc": 3
-          },
-          {
-            "source": 1009,
             "target": 609,
             "weight": 7.5189,
             "cooc": 2
+          },
+          {
+            "source": 1009,
+            "target": 578,
+            "weight": 7.4942,
+            "cooc": 3
           },
           {
             "source": 1009,
@@ -1401,12 +1417,6 @@
           },
           {
             "source": 1009,
-            "target": 76335,
-            "weight": 5.5572,
-            "cooc": 2
-          },
-          {
-            "source": 1009,
             "target": 85,
             "weight": 5.5572,
             "cooc": 2
@@ -1419,8 +1429,14 @@
           },
           {
             "source": 1009,
+            "target": 76335,
+            "weight": 5.5234,
+            "cooc": 2
+          },
+          {
+            "source": 1009,
             "target": 12906,
-            "weight": 5.0307,
+            "weight": 5.022,
             "cooc": 2
           },
           {
@@ -1486,7 +1502,7 @@
           {
             "source": 1009,
             "target": 56,
-            "weight": 4.0712,
+            "weight": 4.0604,
             "cooc": 2
           },
           {
@@ -1496,6 +1512,18 @@
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 1009,
+            "title": "Boureima Sanga",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2135,7 +2163,8 @@
           "lng": -1.50888,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2240,7 +2269,8 @@
           "label": "religieux - politique - etat - question - communauté - religion",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -2698,6 +2728,100 @@
           }
         },
         "articles_total": 34
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3070,6 +3194,24 @@
             2
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -3630,6 +3772,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

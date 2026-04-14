@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:58.475616+00:00",
+  "generated_at": "2026-04-14T06:30:30.685459+00:00",
   "person": {
     "o_id": 71446,
     "title": "Coulibaly Zoumana",
@@ -35,6 +35,13 @@
         "year_max": 2012,
         "newspapers_count": 2,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -102,6 +109,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -113,6 +125,7 @@
           "total": 132,
           "articles": 132,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2011
@@ -122,6 +135,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
@@ -134,6 +148,7 @@
           "total": 132,
           "articles": 132,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2004,
           "year_max": 2011
@@ -143,11 +158,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2012,
           "year_max": 2012
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -164,7 +181,8 @@
           "name": "Côte d'Ivoire",
           "count": 133
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -326,18 +344,18 @@
             "score": 20.0468
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 15,
-            "score": 19.6186
-          },
-          {
             "o_id": 26,
             "title": "Mawlid",
             "type": "Sujets",
             "cooc": 8,
             "score": 19.5827
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 15,
+            "score": 19.5405
           },
           {
             "o_id": 76041,
@@ -351,14 +369,14 @@
             "title": "Tidjaniya",
             "type": "Sujets",
             "cooc": 4,
-            "score": 18.9209
+            "score": 18.764
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 16,
-            "score": 17.9088
+            "score": 17.8915
           },
           {
             "o_id": 76039,
@@ -470,7 +488,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 5,
-            "score": 12.5768
+            "score": 12.5551
           },
           {
             "o_id": 76329,
@@ -658,15 +676,15 @@
           },
           {
             "source": 71446,
-            "target": 76268,
-            "weight": 19.6186,
-            "cooc": 15
-          },
-          {
-            "source": 71446,
             "target": 26,
             "weight": 19.5827,
             "cooc": 8
+          },
+          {
+            "source": 71446,
+            "target": 76268,
+            "weight": 19.5405,
+            "cooc": 15
           },
           {
             "source": 71446,
@@ -677,13 +695,13 @@
           {
             "source": 71446,
             "target": 76528,
-            "weight": 18.9209,
+            "weight": 18.764,
             "cooc": 4
           },
           {
             "source": 71446,
             "target": 29,
-            "weight": 17.9088,
+            "weight": 17.8915,
             "cooc": 16
           },
           {
@@ -779,7 +797,7 @@
           {
             "source": 71446,
             "target": 12906,
-            "weight": 12.5768,
+            "weight": 12.5551,
             "cooc": 5
           },
           {
@@ -1001,18 +1019,18 @@
             "score": 20.0468
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 15,
-            "score": 19.6186
-          },
-          {
             "o_id": 26,
             "title": "Mawlid",
             "type": "Sujets",
             "cooc": 8,
             "score": 19.5827
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 15,
+            "score": 19.5405
           },
           {
             "o_id": 76041,
@@ -1026,14 +1044,14 @@
             "title": "Tidjaniya",
             "type": "Sujets",
             "cooc": 4,
-            "score": 18.9209
+            "score": 18.764
           },
           {
             "o_id": 29,
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 16,
-            "score": 17.9088
+            "score": 17.8915
           },
           {
             "o_id": 76039,
@@ -1145,7 +1163,7 @@
             "title": "Culture",
             "type": "Sujets",
             "cooc": 5,
-            "score": 12.5768
+            "score": 12.5551
           },
           {
             "o_id": 76329,
@@ -1333,15 +1351,15 @@
           },
           {
             "source": 71446,
-            "target": 76268,
-            "weight": 19.6186,
-            "cooc": 15
-          },
-          {
-            "source": 71446,
             "target": 26,
             "weight": 19.5827,
             "cooc": 8
+          },
+          {
+            "source": 71446,
+            "target": 76268,
+            "weight": 19.5405,
+            "cooc": 15
           },
           {
             "source": 71446,
@@ -1352,13 +1370,13 @@
           {
             "source": 71446,
             "target": 76528,
-            "weight": 18.9209,
+            "weight": 18.764,
             "cooc": 4
           },
           {
             "source": 71446,
             "target": 29,
-            "weight": 17.9088,
+            "weight": 17.8915,
             "cooc": 16
           },
           {
@@ -1454,7 +1472,7 @@
           {
             "source": 71446,
             "target": 12906,
-            "weight": 12.5768,
+            "weight": 12.5551,
             "cooc": 5
           },
           {
@@ -1506,6 +1524,18 @@
             "cooc": 5
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 71446,
+            "title": "Coulibaly Zoumana",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2635,7 +2665,8 @@
           "lng": -3.496389,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2740,7 +2771,8 @@
           "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 3
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3238,6 +3270,100 @@
           }
         },
         "articles_total": 133
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3888,6 +4014,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4448,6 +4592,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }

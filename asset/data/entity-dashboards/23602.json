@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:57.760906+00:00",
+  "generated_at": "2026-04-14T06:30:29.754687+00:00",
   "entity": {
     "o_id": 23602,
     "title": "Fondation Tidjanie de Bienfaisance",
@@ -48,6 +48,7 @@
           "total": 6,
           "articles": 0,
           "publications": 6,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2010
@@ -57,6 +58,7 @@
           "total": 5,
           "articles": 5,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2008
@@ -66,6 +68,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2007,
           "year_max": 2007
@@ -416,20 +419,6 @@
     "by_role": {
       "all": [
         {
-          "o_id": 269,
-          "name": "Abidjan",
-          "lat": 5.35444,
-          "lng": -4.00167,
-          "count": 2
-        },
-        {
-          "o_id": 298,
-          "name": "Côte d'Ivoire",
-          "lat": 8.0,
-          "lng": -5.5,
-          "count": 2
-        },
-        {
           "o_id": 359,
           "name": "Maroc",
           "lat": 28.5,
@@ -437,10 +426,24 @@
           "count": 2
         },
         {
+          "o_id": 269,
+          "name": "Abidjan",
+          "lat": 5.35444,
+          "lng": -4.00167,
+          "count": 2
+        },
+        {
           "o_id": 76463,
           "name": "Fès",
           "lat": 34.043333,
           "lng": -5.003333,
+          "count": 2
+        },
+        {
+          "o_id": 298,
+          "name": "Côte d'Ivoire",
+          "lat": 8.0,
+          "lng": -5.5,
           "count": 2
         },
         {
@@ -464,15 +467,15 @@
     "by_role": {
       "all": [
         {
+          "label": "association - cosim - islam - islamique - président - organisation",
+          "count": 2
+        },
+        {
           "label": "projet - développement - population - programme - réaliser - financement",
           "count": 2
         },
         {
           "label": "don - offrir - geste - ong - vivre - solidarité",
-          "count": 2
-        },
-        {
-          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 2
         }
       ]
@@ -680,9 +683,9 @@
             3
           ],
           [
-            1,
-            9,
-            2
+            2,
+            7,
+            1
           ],
           [
             2,
@@ -690,8 +693,8 @@
             1
           ],
           [
-            2,
-            7,
+            1,
+            3,
             1
           ],
           [
@@ -700,9 +703,14 @@
             1
           ],
           [
-            1,
             3,
+            1,
             1
+          ],
+          [
+            1,
+            9,
+            2
           ],
           [
             2,
@@ -712,11 +720,6 @@
           [
             2,
             5,
-            1
-          ],
-          [
-            3,
-            1,
             1
           ]
         ]
@@ -730,18 +733,18 @@
           "Solidarité",
           "Charité",
           "Nuit du Destin",
+          "Aboubacar Fofana",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Idriss Koudouss Koné",
-          "Aboubacar Fofana",
           "Conseil National Islamique",
-          "Pauvreté",
-          "Union des Cadres Musulmans de Côte d'Ivoire",
-          "Fondamentalisme islamique",
-          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Ramadan",
+          "Maroc",
           "Abidjan",
+          "Fès",
+          "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
+          "Fondamentalisme islamique",
           "Moustapha Sonta",
-          "Coran"
+          "Coran",
+          "Côte d'Ivoire"
         ],
         "matrix": [
           [
@@ -749,14 +752,14 @@
             3,
             0,
             2,
-            1,
             2,
             1,
             1,
-            0,
-            0,
-            0,
             1,
+            1,
+            1,
+            0,
+            0,
             1,
             1,
             1
@@ -770,11 +773,11 @@
             1,
             1,
             1,
-            0,
-            0,
-            0,
             2,
-            2,
+            1,
+            0,
+            0,
+            0,
             0,
             0
           ],
@@ -782,15 +785,15 @@
             0,
             0,
             0,
+            0,
             1,
             1,
+            0,
             0,
             0,
             0,
             1,
             2,
-            1,
-            0,
             0,
             0,
             0
@@ -798,16 +801,33 @@
           [
             2,
             1,
+            0,
+            0,
+            2,
+            1,
+            1,
+            1,
+            1,
             1,
             0,
             0,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
             2,
             0,
             0,
             0,
             1,
             1,
-            0,
+            1,
+            1,
+            1,
             1,
             1,
             1
@@ -816,30 +836,47 @@
             1,
             1,
             1,
-            0,
-            0,
             1,
+            0,
+            0,
             2,
             0,
             0,
             0,
             0,
-            1,
+            0,
             0,
             0,
             0
           ],
           [
+            1,
+            1,
+            0,
+            1,
+            0,
             2,
+            0,
+            0,
+            0,
+            0,
             1,
             0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
             2,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
             0,
             0,
             1,
@@ -848,17 +885,17 @@
           ],
           [
             1,
-            1,
-            0,
-            0,
             2,
+            0,
+            1,
             1,
             0,
             0,
             1,
             0,
             1,
-            1,
+            0,
+            0,
             0,
             0,
             0
@@ -867,16 +904,16 @@
             1,
             1,
             0,
+            1,
+            1,
+            0,
+            0,
+            2,
+            1,
             0,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
             1,
             1
           ],
@@ -885,14 +922,14 @@
             0,
             1,
             0,
-            0,
+            1,
             0,
             1,
             0,
             0,
-            1,
-            1,
             0,
+            0,
+            1,
             0,
             0,
             0
@@ -901,12 +938,12 @@
             0,
             0,
             2,
-            1,
-            0,
-            0,
-            0,
             0,
             1,
+            0,
+            0,
+            0,
+            0,
             0,
             1,
             0,
@@ -915,70 +952,36 @@
             0
           ],
           [
-            0,
-            0,
-            1,
             1,
             0,
-            0,
-            1,
             0,
             1,
             1,
             0,
             0,
-            0,
-            0,
-            0
-          ],
-          [
             1,
+            0,
+            1,
+            0,
+            0,
+            0,
             2,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0
+            2
           ],
           [
             1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
             2,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             2
           ],
@@ -987,15 +990,15 @@
             0,
             0,
             1,
+            1,
+            0,
             0,
             1,
             0,
             1,
             0,
             0,
-            0,
-            0,
-            0,
+            2,
             2,
             0
           ]

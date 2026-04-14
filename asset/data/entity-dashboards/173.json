@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:41:00.603839+00:00",
+  "generated_at": "2026-04-14T06:30:32.488464+00:00",
   "entity": {
     "o_id": 173,
     "title": "Congrès CMBF (1993)",
@@ -42,6 +42,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
@@ -51,6 +52,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
@@ -60,6 +62,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 1993,
           "year_max": 1993
@@ -280,17 +283,17 @@
     "by_role": {
       "all": [
         {
-          "o_id": 546,
-          "name": "Burkina Faso",
-          "lat": 12.5,
-          "lng": -1.66667,
-          "count": 5
-        },
-        {
           "o_id": 404,
           "name": "Yako",
           "lat": 12.9591,
           "lng": -2.26075,
+          "count": 5
+        },
+        {
+          "o_id": 546,
+          "name": "Burkina Faso",
+          "lat": 12.5,
+          "lng": -1.66667,
           "count": 5
         },
         {
@@ -299,13 +302,6 @@
           "lat": 12.36566,
           "lng": -1.53388,
           "count": 2
-        },
-        {
-          "o_id": 277,
-          "name": "Arabie saoudite",
-          "lat": 25.0,
-          "lng": 45.0,
-          "count": 1
         },
         {
           "o_id": 63422,
@@ -334,6 +330,13 @@
           "lat": 11.17715,
           "lng": -4.2979,
           "count": 1
+        },
+        {
+          "o_id": 277,
+          "name": "Arabie saoudite",
+          "lat": 25.0,
+          "lng": 45.0,
+          "count": 1
         }
       ]
     }
@@ -342,11 +345,11 @@
     "by_role": {
       "all": [
         {
-          "label": "religieux - politique - etat - question - communauté - religion",
+          "label": "association - cosim - islam - islamique - président - organisation",
           "count": 2
         },
         {
-          "label": "association - cosim - islam - islamique - président - organisation",
+          "label": "religieux - politique - etat - question - communauté - religion",
           "count": 2
         },
         {
@@ -531,17 +534,17 @@
         "cells": [
           [
             0,
-            2,
-            1
-          ],
-          [
-            0,
             1,
             3
           ],
           [
             0,
             0,
+            1
+          ],
+          [
+            0,
+            2,
             1
           ]
         ]
@@ -552,21 +555,21 @@
     "by_role": {
       "all": {
         "names": [
-          "Communauté Musulmane du Burkina Faso",
-          "Burkina Faso",
           "Toumani Triandé",
           "Yako",
+          "Burkina Faso",
+          "Communauté Musulmane du Burkina Faso",
           "Éducation",
-          "CMHV/CMBF (Crises internes)",
-          "Mosquée",
           "Mendicité",
           "Femmes",
+          "CMHV/CMBF (Crises internes)",
+          "Mosquée",
           "Oumarou Kanazoé",
-          "Ouagadougou",
           "Enseignement confessionnel islamique",
           "Aboubacar Sangoulé Lamizana",
           "Médersas",
-          "Ramadan"
+          "Ouagadougou",
+          "Pluralisme religieux"
         ],
         "matrix": [
           [
@@ -643,28 +646,45 @@
             4,
             4,
             0,
-            2,
-            2,
             3,
             3,
+            2,
+            2,
             1,
+            2,
+            2,
+            2,
             1,
-            2,
-            2,
-            2,
-            0
+            1
           ],
           [
             3,
             3,
             3,
             3,
-            2,
+            3,
             0,
+            3,
+            1,
             2,
             1,
             1,
             2,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            1,
+            2,
+            1,
             1,
             2,
             1,
@@ -677,15 +697,15 @@
             3,
             3,
             2,
-            2,
+            1,
+            1,
             0,
-            2,
             2,
             2,
             2,
             1,
-            2,
-            0,
+            1,
+            1,
             1
           ],
           [
@@ -693,50 +713,16 @@
             3,
             3,
             3,
-            3,
+            2,
+            2,
+            2,
+            2,
+            0,
+            2,
             1,
             2,
             0,
-            3,
-            1,
-            1,
-            1,
             2,
-            1,
-            0
-          ],
-          [
-            3,
-            3,
-            3,
-            3,
-            3,
-            1,
-            2,
-            3,
-            0,
-            1,
-            1,
-            1,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            2,
-            1,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
             1
           ],
           [
@@ -746,12 +732,29 @@
             2,
             1,
             1,
+            1,
+            2,
+            2,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
             2,
             1,
             1,
+            2,
+            1,
             1,
             0,
-            0,
+            1,
             1,
             0,
             1
@@ -763,15 +766,15 @@
             2,
             2,
             2,
+            2,
             1,
-            1,
+            2,
             1,
             1,
             0,
             0,
             1,
-            1,
-            0
+            1
           ],
           [
             2,
@@ -780,46 +783,46 @@
             2,
             2,
             1,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
             2,
             2,
             2,
             1,
             1,
+            1,
+            1,
+            2,
+            1,
+            0,
             1,
             0,
             0,
             0
           ],
           [
-            2,
-            2,
-            2,
-            2,
-            2,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
             1,
             1,
             1,
             1,
-            0,
             1,
             1,
-            0,
-            0,
             1,
             1,
-            0,
+            1,
+            1,
+            1,
+            1,
             0,
             0,
             0

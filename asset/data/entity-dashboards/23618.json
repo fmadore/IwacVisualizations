@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:57.808575+00:00",
+  "generated_at": "2026-04-14T06:30:29.806860+00:00",
   "entity": {
     "o_id": 23618,
     "title": "Communauté Musulmane des Deux plateaux Aghien",
@@ -62,6 +62,7 @@
           "total": 17,
           "articles": 0,
           "publications": 17,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2005,
           "year_max": 2020
@@ -71,6 +72,17 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
+          "country": "Côte d'Ivoire",
+          "year_min": 1994,
+          "year_max": 1994
+        },
+        {
+          "name": "Plume Libre",
+          "total": 1,
+          "articles": 0,
+          "publications": 1,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1994,
           "year_max": 1994
@@ -80,18 +92,10 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2008,
           "year_max": 2008
-        },
-        {
-          "name": "Plume Libre",
-          "total": 1,
-          "articles": 0,
-          "publications": 1,
-          "country": "Côte d'Ivoire",
-          "year_min": 1994,
-          "year_max": 1994
         }
       ]
     }
@@ -777,13 +781,6 @@
     "by_role": {
       "all": [
         {
-          "o_id": 23600,
-          "name": "Grande mosquée des II-Plateaux Aghien",
-          "lat": 5.382535557731071,
-          "lng": -3.993870062858185,
-          "count": 2
-        },
-        {
           "o_id": 13837,
           "name": "Chine",
           "lat": 35.844722,
@@ -819,6 +816,41 @@
           "count": 2
         },
         {
+          "o_id": 23600,
+          "name": "Grande mosquée des II-Plateaux Aghien",
+          "lat": 5.382535557731071,
+          "lng": -3.993870062858185,
+          "count": 2
+        },
+        {
+          "o_id": 25602,
+          "name": "Gambie",
+          "lat": 13.5,
+          "lng": -15.5,
+          "count": 1
+        },
+        {
+          "o_id": 23568,
+          "name": "Université Musulmane Africaine",
+          "lat": 5.371117023113153,
+          "lng": -3.9657553615550776,
+          "count": 1
+        },
+        {
+          "o_id": 23648,
+          "name": "Mosquée de la Riviéra Golf",
+          "lat": 5.33757653748572,
+          "lng": -3.9788409923568815,
+          "count": 1
+        },
+        {
+          "o_id": 359,
+          "name": "Maroc",
+          "lat": 28.5,
+          "lng": -10.0,
+          "count": 1
+        },
+        {
           "o_id": 331,
           "name": "Iran",
           "lat": 32.0,
@@ -833,38 +865,10 @@
           "count": 1
         },
         {
-          "o_id": 25602,
-          "name": "Gambie",
-          "lat": 13.5,
-          "lng": -15.5,
-          "count": 1
-        },
-        {
           "o_id": 23532,
           "name": "Mosquée Salam du Plateau",
           "lat": 5.319408854484132,
           "lng": -4.015756299712146,
-          "count": 1
-        },
-        {
-          "o_id": 23568,
-          "name": "Université Musulmane Africaine",
-          "lat": 5.371117023113153,
-          "lng": -3.9657553615550776,
-          "count": 1
-        },
-        {
-          "o_id": 359,
-          "name": "Maroc",
-          "lat": 28.5,
-          "lng": -10.0,
-          "count": 1
-        },
-        {
-          "o_id": 23648,
-          "name": "Mosquée de la Riviéra Golf",
-          "lat": 5.33757653748572,
-          "lng": -3.9788409923568815,
           "count": 1
         }
       ]
@@ -1096,18 +1100,18 @@
         ],
         "cells": [
           [
-            14,
-            4,
-            1
-          ],
-          [
             0,
             0,
             2
           ],
           [
-            21,
-            3,
+            25,
+            10,
+            1
+          ],
+          [
+            20,
+            1,
             1
           ],
           [
@@ -1116,33 +1120,8 @@
             1
           ],
           [
-            19,
-            4,
-            1
-          ],
-          [
-            15,
-            9,
-            1
-          ],
-          [
-            14,
-            9,
-            1
-          ],
-          [
-            25,
-            11,
-            1
-          ],
-          [
-            25,
-            10,
-            1
-          ],
-          [
-            19,
-            0,
+            21,
+            3,
             1
           ],
           [
@@ -1152,16 +1131,26 @@
           ],
           [
             25,
+            5,
+            1
+          ],
+          [
+            25,
             6,
             1
           ],
           [
-            20,
-            7,
+            14,
+            9,
             1
           ],
           [
             20,
+            11,
+            1
+          ],
+          [
+            25,
             11,
             1
           ],
@@ -1171,13 +1160,8 @@
             1
           ],
           [
-            11,
-            9,
-            1
-          ],
-          [
-            26,
-            0,
+            19,
+            4,
             1
           ],
           [
@@ -1186,13 +1170,33 @@
             1
           ],
           [
-            25,
-            5,
+            26,
+            0,
             1
           ],
           [
             20,
-            1,
+            7,
+            1
+          ],
+          [
+            14,
+            4,
+            1
+          ],
+          [
+            19,
+            0,
+            1
+          ],
+          [
+            15,
+            9,
+            1
+          ],
+          [
+            11,
+            9,
             1
           ]
         ]
@@ -1206,171 +1210,103 @@
           "Association des Jeunes Musulmans de Côte d'Ivoire",
           "Laïcité",
           "Hadj",
-          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Conseil National Islamique",
           "Association des Élèves et Étudiants Musulmans de Côte d'Ivoire",
-          "Cheikh Malick Soufi Konaté",
-          "Nuit du Destin",
           "Terrorisme",
           "Extrémisme",
-          "Mahomet",
+          "Nuit du Destin",
+          "Cheikh Malick Soufi Konaté",
+          "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
           "Cercle d'études et de recherches islamiques en Côte d'Ivoire",
           "Intégrisme",
-          "Aboubacar Fofana",
-          "Nurudine Oyewolé"
+          "Mahomet",
+          "Idriss Koudouss Koné",
+          "Aboubacar Fofana"
         ],
         "matrix": [
           [
             0,
             5,
             3,
-            0,
             3,
             3,
-            2,
-            1,
             0,
             0,
-            2,
-            2,
-            2,
             1,
+            2,
+            0,
+            2,
+            2,
+            2,
+            2,
             1
           ],
           [
             5,
             0,
             3,
-            1,
-            3,
-            3,
-            2,
-            1,
-            0,
-            0,
-            2,
-            3,
-            3,
-            1,
-            2
-          ],
-          [
             3,
             3,
             0,
-            1,
-            2,
-            2,
-            1,
-            1,
             0,
-            0,
-            2,
-            2,
+            1,
             2,
             1,
+            3,
+            3,
+            2,
+            2,
             1
           ],
           [
+            3,
+            3,
             0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
+            2,
+            2,
             0,
             0,
             1,
-            0,
-            0,
             1,
+            1,
+            2,
+            2,
+            2,
+            0,
             1
           ],
           [
             3,
             3,
             2,
+            0,
+            2,
+            0,
+            0,
             1,
-            0,
-            2,
             1,
             1,
-            0,
-            0,
             2,
             2,
             2,
-            0,
+            2,
             0
           ],
           [
             3,
             3,
             2,
-            0,
             2,
             0,
             0,
             0,
             0,
             0,
-            2,
-            2,
-            2,
-            1,
-            0
-          ],
-          [
-            2,
-            2,
-            1,
-            0,
-            1,
-            0,
             0,
             2,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
+            2,
             2,
             0,
-            1,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            3,
-            0,
-            0,
-            0,
-            1,
             1
           ],
           [
@@ -1380,21 +1316,88 @@
             0,
             0,
             0,
+            3,
             1,
-            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
             3,
             0,
+            2,
+            1,
             0,
             0,
             0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            1,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
             1,
             1
           ],
           [
             2,
+            3,
             2,
-            2,
-            1,
             2,
             2,
             0,
@@ -1402,7 +1405,8 @@
             0,
             0,
             0,
-            2,
+            0,
+            3,
             2,
             0,
             0
@@ -1411,32 +1415,49 @@
             2,
             3,
             2,
-            0,
             2,
             2,
             0,
             0,
             0,
             0,
-            2,
             0,
             3,
+            0,
+            2,
             0,
             0
           ],
           [
             2,
-            3,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
             2,
             0,
             2,
-            2,
             0,
             0,
             0,
+            1,
+            1,
+            1,
             0,
-            2,
-            3,
+            0,
             0,
             0,
             0
@@ -1445,34 +1466,17 @@
             1,
             1,
             1,
-            1,
             0,
             1,
-            0,
-            0,
             1,
             1,
             0,
             0,
-            0,
-            0,
-            2
-          ],
-          [
-            1,
-            2,
-            1,
             1,
             0,
             0,
             0,
             0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            2,
             0
           ]
         ]

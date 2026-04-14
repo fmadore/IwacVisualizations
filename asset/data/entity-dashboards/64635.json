@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:59.098304+00:00",
+  "generated_at": "2026-04-14T06:30:31.081617+00:00",
   "entity": {
     "o_id": 64635,
     "title": "Conseil Suprême Islamique",
@@ -58,6 +58,7 @@
           "total": 7,
           "articles": 7,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1997,
           "year_max": 1999
@@ -67,6 +68,7 @@
           "total": 4,
           "articles": 4,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1997,
           "year_max": 1999
@@ -76,6 +78,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1981,
           "year_max": 1981
@@ -85,6 +88,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Togo",
           "year_min": 1992,
           "year_max": 1992
@@ -356,16 +360,16 @@
             "score": 1.733
           },
           {
-            "o_id": 44,
-            "title": "Pluralisme religieux",
-            "type": "Sujets",
+            "o_id": 544,
+            "title": "Togo",
+            "type": "Lieux",
             "cooc": 2,
             "score": 1.5417
           },
           {
-            "o_id": 544,
-            "title": "Togo",
-            "type": "Lieux",
+            "o_id": 44,
+            "title": "Pluralisme religieux",
+            "type": "Sujets",
             "cooc": 2,
             "score": 1.5417
           },
@@ -584,13 +588,13 @@
           },
           {
             "source": 64635,
-            "target": 44,
+            "target": 544,
             "weight": 1.5417,
             "cooc": 2
           },
           {
             "source": 64635,
-            "target": 544,
+            "target": 44,
             "weight": 1.5417,
             "cooc": 2
           },
@@ -636,24 +640,17 @@
           "count": 3
         },
         {
-          "o_id": 395,
-          "name": "Sénégal",
-          "lat": 14.5,
-          "lng": -14.25,
-          "count": 2
-        },
-        {
-          "o_id": 46316,
-          "name": "Adjamé",
-          "lat": 5.3648,
-          "lng": -4.02366,
-          "count": 2
-        },
-        {
           "o_id": 23532,
           "name": "Mosquée Salam du Plateau",
           "lat": 5.319408854484132,
           "lng": -4.015756299712146,
+          "count": 2
+        },
+        {
+          "o_id": 395,
+          "name": "Sénégal",
+          "lat": 14.5,
+          "lng": -14.25,
           "count": 2
         },
         {
@@ -664,46 +661,11 @@
           "count": 2
         },
         {
-          "o_id": 48419,
-          "name": "Koumassi",
-          "lat": 5.3,
-          "lng": -3.95,
-          "count": 1
-        },
-        {
-          "o_id": 76445,
-          "name": "Grande Mosquée de Koumassi",
-          "lat": 5.291817878819392,
-          "lng": -3.96656169628797,
-          "count": 1
-        },
-        {
-          "o_id": 63391,
-          "name": "Anyama",
-          "lat": 5.4944444444444,
-          "lng": -4.0516666666667,
-          "count": 1
-        },
-        {
-          "o_id": 63417,
-          "name": "Marcory",
-          "lat": 5.3,
-          "lng": -3.9833333333333,
-          "count": 1
-        },
-        {
-          "o_id": 48427,
-          "name": "Odienné",
-          "lat": 9.5,
-          "lng": -7.566667,
-          "count": 1
-        },
-        {
-          "o_id": 62240,
-          "name": "Palais des Sports de Treichville",
-          "lat": 5.298056,
-          "lng": -4.005278,
-          "count": 1
+          "o_id": 46316,
+          "name": "Adjamé",
+          "lat": 5.3648,
+          "lng": -4.02366,
+          "count": 2
         },
         {
           "o_id": 277,
@@ -734,10 +696,52 @@
           "count": 1
         },
         {
+          "o_id": 48419,
+          "name": "Koumassi",
+          "lat": 5.3,
+          "lng": -3.95,
+          "count": 1
+        },
+        {
+          "o_id": 76445,
+          "name": "Grande Mosquée de Koumassi",
+          "lat": 5.291817878819392,
+          "lng": -3.96656169628797,
+          "count": 1
+        },
+        {
+          "o_id": 63391,
+          "name": "Anyama",
+          "lat": 5.4944444444444,
+          "lng": -4.0516666666667,
+          "count": 1
+        },
+        {
+          "o_id": 63417,
+          "name": "Marcory",
+          "lat": 5.3,
+          "lng": -3.9833333333333,
+          "count": 1
+        },
+        {
           "o_id": 457,
           "name": "Lomé",
           "lat": 6.12874,
           "lng": 1.22154,
+          "count": 1
+        },
+        {
+          "o_id": 48427,
+          "name": "Odienné",
+          "lat": 9.5,
+          "lng": -7.566667,
+          "count": 1
+        },
+        {
+          "o_id": 62240,
+          "name": "Palais des Sports de Treichville",
+          "lat": 5.298056,
+          "lng": -4.005278,
           "count": 1
         }
       ]
@@ -759,7 +763,7 @@
           "count": 2
         },
         {
-          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
+          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
           "count": 1
         },
         {
@@ -771,7 +775,7 @@
           "count": 1
         },
         {
-          "label": "fête - prière - tabaski - sacrifice - dieu - fidèle",
+          "label": "jeûne - ramadan - prière - jeûner - carême - jeûne_ramadan",
           "count": 1
         }
       ]
@@ -977,39 +981,19 @@
         ],
         "cells": [
           [
-            17,
-            2,
-            2
-          ],
-          [
-            17,
-            1,
-            1
-          ],
-          [
-            16,
-            11,
-            2
-          ],
-          [
-            17,
-            0,
-            3
-          ],
-          [
-            18,
-            0,
-            1
-          ],
-          [
             18,
             5,
             1
           ],
           [
-            16,
-            10,
+            18,
+            0,
             1
+          ],
+          [
+            17,
+            2,
+            2
           ],
           [
             0,
@@ -1017,9 +1001,29 @@
             1
           ],
           [
+            17,
+            1,
+            1
+          ],
+          [
             11,
             7,
             1
+          ],
+          [
+            17,
+            0,
+            3
+          ],
+          [
+            16,
+            10,
+            1
+          ],
+          [
+            16,
+            11,
+            2
           ]
         ]
       }
@@ -1035,15 +1039,15 @@
           "Côte d'Ivoire",
           "Diaby Moustapha",
           "Front de la Oumat Islamique",
+          "Abidjan",
+          "Ramadan",
+          "La Mecque",
           "Paix",
           "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
-          "Abidjan",
-          "La Mecque",
-          "Ramadan",
-          "Mosquée",
           "Idriss Koudouss Koné",
-          "Prière",
-          "Mahomet"
+          "Mosquée",
+          "Mahomet",
+          "Prière"
         ],
         "matrix": [
           [
@@ -1070,11 +1074,11 @@
             6,
             6,
             6,
+            5,
+            5,
+            5,
             4,
             4,
-            5,
-            5,
-            5,
             4,
             4,
             4,
@@ -1087,13 +1091,13 @@
             6,
             7,
             5,
+            4,
+            4,
+            4,
             5,
             4,
-            4,
-            4,
-            4,
-            4,
             3,
+            4,
             3,
             3
           ],
@@ -1105,10 +1109,10 @@
             6,
             4,
             4,
+            4,
+            4,
+            4,
             5,
-            4,
-            4,
-            4,
             3,
             3,
             3,
@@ -1126,8 +1130,8 @@
             4,
             4,
             4,
-            4,
             3,
+            4,
             3,
             3
           ],
@@ -1138,48 +1142,14 @@
             4,
             4,
             0,
+            2,
+            2,
+            2,
             4,
             3,
-            2,
-            2,
-            2,
-            2,
-            1,
-            2,
-            1
-          ],
-          [
-            5,
-            4,
-            5,
-            4,
-            4,
-            4,
-            0,
-            3,
-            1,
             1,
             2,
             1,
-            1,
-            2,
-            1
-          ],
-          [
-            5,
-            4,
-            4,
-            5,
-            4,
-            3,
-            3,
-            0,
-            3,
-            3,
-            3,
-            2,
-            2,
-            3,
             2
           ],
           [
@@ -1189,14 +1159,31 @@
             4,
             4,
             2,
-            1,
-            3,
             0,
             4,
             4,
+            1,
+            3,
+            3,
+            4,
+            4,
+            3
+          ],
+          [
+            5,
+            5,
+            4,
+            4,
+            4,
+            2,
+            4,
+            0,
+            4,
+            2,
+            3,
             4,
             3,
-            3,
+            4,
             4
           ],
           [
@@ -1206,46 +1193,46 @@
             4,
             4,
             2,
+            4,
+            4,
+            0,
             1,
             3,
             4,
-            0,
-            4,
             3,
-            4,
             3,
             3
           ],
           [
             5,
+            4,
             5,
             4,
             4,
             4,
-            2,
-            2,
-            3,
-            4,
-            4,
-            0,
-            3,
-            4,
-            4,
-            4
-          ],
-          [
-            4,
-            4,
-            4,
-            3,
-            4,
-            2,
             1,
             2,
+            1,
+            0,
+            3,
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            5,
+            4,
+            4,
+            5,
             4,
             3,
             3,
+            3,
+            3,
+            3,
             0,
+            2,
             2,
             2,
             3
@@ -1257,14 +1244,48 @@
             3,
             3,
             1,
-            1,
-            2,
             3,
             4,
             4,
+            1,
+            2,
+            0,
+            2,
+            3,
+            3
+          ],
+          [
+            4,
+            4,
+            4,
+            3,
+            4,
+            2,
+            4,
+            3,
+            3,
+            1,
+            2,
             2,
             0,
             3,
+            2
+          ],
+          [
+            4,
+            4,
+            3,
+            3,
+            3,
+            1,
+            4,
+            4,
+            3,
+            1,
+            2,
+            3,
+            3,
+            0,
             3
           ],
           [
@@ -1274,30 +1295,13 @@
             3,
             3,
             2,
+            3,
+            4,
+            3,
             2,
             3,
             3,
-            3,
-            4,
             2,
-            3,
-            0,
-            3
-          ],
-          [
-            4,
-            4,
-            3,
-            3,
-            3,
-            1,
-            1,
-            2,
-            4,
-            3,
-            4,
-            3,
-            3,
             3,
             0
           ]

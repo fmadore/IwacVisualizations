@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-04-13T12:40:38.019320+00:00",
+  "generated_at": "2026-04-14T06:30:10.579074+00:00",
   "person": {
     "o_id": 61294,
     "title": "Yacouba Touré",
@@ -36,6 +36,13 @@
         "year_max": 2003,
         "newspapers_count": 4,
         "countries_count": 1
+      },
+      "editor": {
+        "total_mentions": 0,
+        "year_min": null,
+        "year_max": null,
+        "newspapers_count": 0,
+        "countries_count": 0
       }
     }
   },
@@ -133,6 +140,11 @@
             1
           ]
         }
+      },
+      "editor": {
+        "years": [],
+        "countries": [],
+        "series": {}
       }
     }
   },
@@ -144,6 +156,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1999
@@ -153,6 +166,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1993
@@ -162,6 +176,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2000,
           "year_max": 2001
@@ -171,6 +186,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1992
@@ -180,6 +196,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2003
@@ -189,6 +206,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1985,
           "year_max": 1985
@@ -200,6 +218,7 @@
           "total": 3,
           "articles": 3,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1993
@@ -209,6 +228,7 @@
           "total": 2,
           "articles": 2,
           "publications": 0,
+          "references": 0,
           "country": "Burkina Faso",
           "year_min": 2000,
           "year_max": 2001
@@ -218,6 +238,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2003
@@ -229,6 +250,7 @@
           "total": 10,
           "articles": 10,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1975,
           "year_max": 1999
@@ -238,6 +260,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1992,
           "year_max": 1992
@@ -247,6 +270,7 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 2003,
           "year_max": 2003
@@ -256,11 +280,13 @@
           "total": 1,
           "articles": 1,
           "publications": 0,
+          "references": 0,
           "country": "Côte d'Ivoire",
           "year_min": 1985,
           "year_max": 1985
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "countries": {
@@ -290,7 +316,8 @@
           "name": "Côte d'Ivoire",
           "count": 13
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "network": {
@@ -393,7 +420,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 9,
-            "score": 10.0737
+            "score": 10.064
           },
           {
             "o_id": 653,
@@ -466,18 +493,18 @@
             "score": 6.6785
           },
           {
-            "o_id": 76268,
-            "title": "Politique",
-            "type": "Sujets",
-            "cooc": 5,
-            "score": 6.5395
-          },
-          {
             "o_id": 75965,
             "title": "Liberté",
             "type": "Sujets",
             "cooc": 2,
             "score": 6.5155
+          },
+          {
+            "o_id": 76268,
+            "title": "Politique",
+            "type": "Sujets",
+            "cooc": 5,
+            "score": 6.5135
           },
           {
             "o_id": 76041,
@@ -689,7 +716,7 @@
           {
             "source": 61294,
             "target": 29,
-            "weight": 10.0737,
+            "weight": 10.064,
             "cooc": 9
           },
           {
@@ -754,15 +781,15 @@
           },
           {
             "source": 61294,
-            "target": 76268,
-            "weight": 6.5395,
-            "cooc": 5
-          },
-          {
-            "source": 61294,
             "target": 75965,
             "weight": 6.5155,
             "cooc": 2
+          },
+          {
+            "source": 61294,
+            "target": 76268,
+            "weight": 6.5135,
+            "cooc": 5
           },
           {
             "source": 61294,
@@ -971,7 +998,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 3,
-            "score": 3.9237
+            "score": 3.9081
           },
           {
             "o_id": 653,
@@ -999,7 +1026,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.2386
+            "score": 2.2364
           },
           {
             "o_id": 86,
@@ -1079,7 +1106,7 @@
           {
             "source": 61294,
             "target": 76268,
-            "weight": 3.9237,
+            "weight": 3.9081,
             "cooc": 3
           },
           {
@@ -1103,7 +1130,7 @@
           {
             "source": 61294,
             "target": 29,
-            "weight": 2.2386,
+            "weight": 2.2364,
             "cooc": 2
           },
           {
@@ -1163,7 +1190,7 @@
             "title": "Hadj",
             "type": "Sujets",
             "cooc": 8,
-            "score": 8.9544
+            "score": 8.9457
           },
           {
             "o_id": 46268,
@@ -1359,7 +1386,7 @@
             "title": "Politique",
             "type": "Sujets",
             "cooc": 2,
-            "score": 2.6158
+            "score": 2.6054
           }
         ],
         "edges": [
@@ -1396,7 +1423,7 @@
           {
             "source": 61294,
             "target": 29,
-            "weight": 8.9544,
+            "weight": 8.9457,
             "cooc": 8
           },
           {
@@ -1564,10 +1591,22 @@
           {
             "source": 61294,
             "target": 76268,
-            "weight": 2.6158,
+            "weight": 2.6054,
             "cooc": 2
           }
         ]
+      },
+      "editor": {
+        "nodes": [
+          {
+            "o_id": 61294,
+            "title": "Yacouba Touré",
+            "type": "center",
+            "cooc": null,
+            "score": null
+          }
+        ],
+        "edges": []
       }
     }
   },
@@ -2502,7 +2541,8 @@
           "lng": -5.93333,
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "topics": {
@@ -2604,7 +2644,8 @@
           "label": "marabout - jeune - étudiant - page - maraboutage - jeunesse",
           "count": 1
         }
-      ]
+      ],
+      "editor": []
     }
   },
   "sentiment": {
@@ -3112,6 +3153,100 @@
           }
         },
         "articles_total": 13
+      },
+      "editor": {
+        "models": [
+          "gemini",
+          "chatgpt",
+          "mistral"
+        ],
+        "by_model": {
+          "gemini": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "chatgpt": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          },
+          "mistral": {
+            "polarite": [],
+            "centralite": [],
+            "subjectivite": [
+              {
+                "name": "1",
+                "count": 0
+              },
+              {
+                "name": "2",
+                "count": 0
+              },
+              {
+                "name": "3",
+                "count": 0
+              },
+              {
+                "name": "4",
+                "count": 0
+              },
+              {
+                "name": "5",
+                "count": 0
+              }
+            ],
+            "subjectivite_avg": null,
+            "rated_articles": 0
+          }
+        },
+        "articles_total": 0
       }
     }
   },
@@ -3401,6 +3536,24 @@
             1
           ]
         ]
+      },
+      "editor": {
+        "years": [],
+        "months": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "cells": []
       }
     }
   },
@@ -4233,6 +4386,10 @@
             0
           ]
         ]
+      },
+      "editor": {
+        "names": [],
+        "matrix": []
       }
     }
   }
