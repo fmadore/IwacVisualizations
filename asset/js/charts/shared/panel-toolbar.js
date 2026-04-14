@@ -2,13 +2,16 @@
  * IWAC Visualizations — Shared panel toolbar
  *
  * Adds a small floating toolbar to any `.iwac-vis-panel` with:
- *   - a Download button that saves the chart as a PNG via
- *     chart.getDataURL() (ECharts) or canvas.toDataURL() (MapLibre)
+ *   - a Download button that saves the visualization as a PNG via
+ *     `chart.getDataURL()` (ECharts) or `map.getCanvas().toDataURL()`
+ *     (MapLibre — requires `preserveDrawingBuffer: true` in the map
+ *     options, which `createIwacMap` sets by default)
  *   - an optional Fullscreen toggle that uses the Fullscreen API on
  *     the panel element itself
  *
- * The toolbar is auto-attached from `dashboard-core.registerChart` the
- * first time a chart registers under a panel; subsequent registrations
+ * The toolbar is auto-attached from both `dashboard-core.registerChart`
+ * (ECharts) and `dashboard-core.registerMap` (MapLibre) the first time
+ * a chart or map registers under a panel; subsequent registrations
  * (e.g. sentiment's three segmented bars) re-use the same toolbar and
  * silently skip. Panels that ship their own toolbar (the network panel
  * has a graph-toolbar with zoom/legend/fullscreen) mark the chart host
@@ -54,6 +57,41 @@
             console.error('IWACVis.panel-toolbar: getDataURL failed', e);
             return null;
         }
+    }
+
+    /**
+     * Return the PNG data URL for a MapLibre GL instance. Relies on
+     * `preserveDrawingBuffer: true` being set in `createIwacMap` — the
+     * WebGL canvas is otherwise cleared after compositing and toDataURL
+     * returns a blank image. We trigger a synchronous repaint before
+     * reading the canvas so any in-flight tile fetch or pending render
+     * is flushed into the drawing buffer first.
+     */
+    function maplibreDataUrl(el) {
+        var live = ns.getLiveMap ? ns.getLiveMap(el) : null;
+        if (!live || !live.getCanvas) return null;
+        try {
+            if (typeof live.redraw === 'function') {
+                live.redraw();
+            } else if (typeof live.triggerRepaint === 'function') {
+                live.triggerRepaint();
+            }
+            var canvas = live.getCanvas();
+            if (!canvas || !canvas.toDataURL) return null;
+            return canvas.toDataURL('image/png');
+        } catch (e) {
+            console.error('IWACVis.panel-toolbar: map toDataURL failed', e);
+            return null;
+        }
+    }
+
+    /**
+     * Resolve the download data URL for a chart element, trying the
+     * ECharts path first and falling back to MapLibre. Returns null if
+     * neither is registered for the element.
+     */
+    function resolveDataUrl(el) {
+        return echartsDataUrl(el) || maplibreDataUrl(el);
     }
 
     /**
@@ -130,7 +168,7 @@
         var bar = ensureToolbar(panelEl);
         if (bar.querySelector('.iwac-vis-panel-toolbar__btn--download')) return bar;
         var btn = buildBtn('\u2B73', P.t('Download chart'), function () {
-            var dataUrl = echartsDataUrl(chartEl);
+            var dataUrl = resolveDataUrl(chartEl);
             if (dataUrl) triggerDownload(dataUrl, filenameFromPanel(panelEl) + '.png');
         });
         btn.classList.add('iwac-vis-panel-toolbar__btn--download');

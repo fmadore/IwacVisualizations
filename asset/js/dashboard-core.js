@@ -121,6 +121,31 @@
     ns.registerMap = function (map, el) {
         if (!map) return;
         ns._charts.push({ el: el || null, instance: map, kind: 'maplibre' });
+
+        // Auto-attach the shared panel toolbar (download button) to map
+        // panels too, using the same closest-panel lookup as ECharts.
+        // Silent no-op when panel-toolbar.js didn't load or the map
+        // container isn't inside a `.iwac-vis-panel`.
+        if (el && ns.panels && typeof ns.panels.autoAttachPanelToolbar === 'function') {
+            try { ns.panels.autoAttachPanelToolbar(el); }
+            catch (e) { console.error('IWACVis: panel toolbar attach failed', e); }
+        }
+    };
+
+    /**
+     * Return the currently-live MapLibre instance for a given container,
+     * or null if the map is not tracked or has been removed. Used by
+     * the panel-toolbar download button to capture the current canvas
+     * without closing over a stale reference.
+     */
+    ns.getLiveMap = function (el) {
+        for (var i = 0; i < ns._charts.length; i++) {
+            var entry = ns._charts[i];
+            if (entry.el !== el || entry.kind !== 'maplibre') continue;
+            if (entry.instance && !entry.instance._removed) return entry.instance;
+            return null;
+        }
+        return null;
     };
 
     /** Remove disposed/detached charts from the tracking array. */

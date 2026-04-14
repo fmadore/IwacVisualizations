@@ -81,7 +81,13 @@
             style: defaultStyle,
             center: config.center || [0, 0],
             zoom: config.zoom != null ? config.zoom : 2,
-            attributionControl: { compact: true }
+            attributionControl: { compact: true },
+            // Required for `canvas.toDataURL()` to return the rendered
+            // pixels instead of a blank buffer. Without this flag the
+            // WebGL context clears the drawing buffer after compositing,
+            // so the panel-toolbar's Download button would produce an
+            // empty PNG. The perf hit is negligible for our panel sizes.
+            preserveDrawingBuffer: true
         };
         // Shallow-merge caller-provided mapOptions last so they win
         if (config.mapOptions) {
