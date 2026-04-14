@@ -223,22 +223,26 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Resolve a CSS custom property to a concrete color string
-     * (e.g. 'rgb(230, 122, 20)').
+     * Resolve a CSS custom property to a concrete color string that
+     * ECharts' color parser can understand (`rgb(...)` / `rgba(...)`).
      *
      * Why this exists: our theme ramps under iwac-visualizations.css
      * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
      * are defined as `color-mix(in srgb, var(--primary), var(--surface))`
      * expressions so they track the IWAC theme's --primary / --surface
-     * tokens. A plain getPropertyValue() read returns the unresolved
-     * `color-mix(...)` source — ECharts' color parser does not understand
-     * color-mix() and falls back to grayscale, which is what the heatmap
-     * was showing. Routing the read through an offscreen probe forces
-     * the browser to compute the expression into a concrete `rgb(...)`
-     * that ECharts can parse.
+     * tokens. Two things conspire against ECharts here:
+     *   1. `getPropertyValue('--x')` returns the raw source — ECharts has
+     *      no idea what `color-mix(...)` means and falls back to grayscale.
+     *   2. `getComputedStyle(probe).color` DOES compute the expression,
+     *      but modern Chromium serializes the result as
+     *      `color(srgb 0.98 0.93 0.92)` (CSS Color Module Level 4).
+     *      ECharts' parser doesn't understand `color()` either.
+     * So we force the browser to compute the expression via an offscreen
+     * probe, then if the result comes back as `color(srgb ...)`, parse it
+     * ourselves and emit legacy `rgb()` / `rgba()`.
      *
      * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
-     * @returns {string} computed color, or '' if undefined / unresolvable
+     * @returns {string} legacy-rgb color, or '' if undefined / unresolvable
      */
     ns.resolveCssVar = function (varName) {
         if (typeof document === 'undefined' || !document.body) return '';
@@ -249,7 +253,22 @@
         document.body.appendChild(probe);
         var resolved = getComputedStyle(probe).color;
         document.body.removeChild(probe);
-        return resolved === 'rgba(0, 0, 0, 0)' ? '' : resolved;
+        if (!resolved || resolved === 'rgba(0, 0, 0, 0)') return '';
+
+        var cm = /^color\(\s*srgb\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)(?:\s*\/\s*([\d.eE+\-]+))?\s*\)$/.exec(resolved);
+        if (cm) {
+            var toByte = function (s) {
+                return Math.max(0, Math.min(255, Math.round(parseFloat(s) * 255)));
+            };
+            var r = toByte(cm[1]);
+            var g = toByte(cm[2]);
+            var b = toByte(cm[3]);
+            if (cm[4] != null && parseFloat(cm[4]) < 1) {
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + parseFloat(cm[4]) + ')';
+            }
+            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        }
+        return resolved;
     };
 
     /** Truncate a string with ellipsis if it exceeds maxLen. */
