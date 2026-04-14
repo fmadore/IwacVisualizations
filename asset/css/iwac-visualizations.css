@@ -1216,62 +1216,127 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     font-variant-numeric: tabular-nums;
 }
 
-/* Year slider */
+/* Year slider — filled progress track, ringed thumb.
+   The fill portion is driven by --iwac-vis-scary-fill, which the JS
+   writes on every slider input / playback tick as a 0–100% value. */
 
 .iwac-vis-scary-slider-row {
     display: flex;
     align-items: center;
     gap: var(--space-3, 0.75rem);
+    padding: var(--space-2, 0.5rem) var(--space-1, 0.25rem) var(--space-1, 0.25rem);
 }
 
 .iwac-vis-scary-slider-edge {
     font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
     color: var(--muted, #6e7a82);
     font-variant-numeric: tabular-nums;
-    min-width: 3ch;
+    min-width: 3.5ch;
 }
 
 .iwac-vis-scary-slider {
+    --iwac-vis-scary-fill: 0%;
+    --iwac-vis-scary-track: color-mix(in srgb, var(--primary, #e67a14) 14%, var(--border-light, #ebe7df));
     flex: 1;
     -webkit-appearance: none;
     appearance: none;
-    height: 6px;
-    background: var(--border-light, #ebe7df);
-    border-radius: 3px;
+    height: 10px;
+    border-radius: 999px;
     outline: none;
     cursor: pointer;
+    background: linear-gradient(
+        to right,
+        var(--primary, #e67a14) 0%,
+        var(--primary, #e67a14) var(--iwac-vis-scary-fill),
+        var(--iwac-vis-scary-track) var(--iwac-vis-scary-fill),
+        var(--iwac-vis-scary-track) 100%
+    );
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.08),
+        0 0 0 1px var(--border-light, #ebe7df);
+    transition: box-shadow 150ms ease;
 }
+
+.iwac-vis-scary-slider:hover {
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.1),
+        0 0 0 1px color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+/* WebKit thumb */
 
 .iwac-vis-scary-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 18px;
-    height: 18px;
-    background: var(--primary, #e67a14);
-    border: 2px solid var(--surface, #fdfdfc);
+    width: 22px;
+    height: 22px;
+    background: var(--surface, #fdfdfc);
+    border: 3px solid var(--primary, #e67a14);
     border-radius: 50%;
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.15));
-    cursor: pointer;
-    transition: transform 120ms ease;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+    cursor: grab;
+    transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
 .iwac-vis-scary-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
+    transform: scale(1.12);
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
 }
+
+.iwac-vis-scary-slider:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    transform: scale(1.08);
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.25),
+        0 0 0 8px color-mix(in srgb, var(--primary, #e67a14) 25%, transparent);
+}
+
+.iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+}
+
+/* Firefox thumb (Gecko uses a different pseudo-element name, so every
+   rule has to be duplicated — combining selectors with comma drops the
+   entire rule in Chrome if one selector is unknown) */
 
 .iwac-vis-scary-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    background: var(--primary, #e67a14);
-    border: 2px solid var(--surface, #fdfdfc);
+    width: 22px;
+    height: 22px;
+    background: var(--surface, #fdfdfc);
+    border: 3px solid var(--primary, #e67a14);
     border-radius: 50%;
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.15));
-    cursor: pointer;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+    cursor: grab;
+    transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
-.iwac-vis-scary-slider:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
-    outline-offset: 4px;
+.iwac-vis-scary-slider::-moz-range-thumb:hover {
+    transform: scale(1.12);
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
+}
+
+.iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.2),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+}
+
+/* Firefox also uses a dedicated track element — keep it transparent so
+   the gradient we applied to the <input> element shows through. */
+.iwac-vis-scary-slider::-moz-range-track {
+    background: transparent;
+    border: none;
 }
 
 /* ------------------------------------------------------------------- */

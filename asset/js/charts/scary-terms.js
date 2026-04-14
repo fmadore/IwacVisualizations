@@ -203,8 +203,12 @@
         // 5. Term definitions
         root.appendChild(buildTermDefinitions(metadata));
 
-        // Fixed x-axis maximum for the race so bars are comparable across years.
-        var raceMax = computeRaceMax(temporal);
+        // Pre-compute one cumulative snapshot per year. The bar chart race
+        // shows running totals (matching the iwac-dashboard semantics), so
+        // bars grow monotonically as the race advances — they never shrink.
+        var cumulativeByYearIdx = buildCumulativeSnapshots(temporal, years);
+        var finalSnapshot = cumulativeByYearIdx[cumulativeByYearIdx.length - 1] || [];
+        var raceMax = finalSnapshot.length ? finalSnapshot[0][1] : null;
 
         var state = {
             view: 'race',
@@ -214,14 +218,24 @@
             timer: null
         };
 
-        var chart = ns.registerChart(chartEl, function () { draw(); });
+        // Holds the CURRENT ECharts instance. dashboard-core re-runs this
+        // render callback with a fresh instance on every theme swap
+        // (dispose + reinit), so we must capture the new instance here
+        // rather than closing over the initial return value — otherwise
+        // draw() keeps calling setOption on a disposed chart after the
+        // first light/dark toggle and the chart goes blank.
+        var currentInstance = null;
+        ns.registerChart(chartEl, function (el, instance) {
+            currentInstance = instance;
+            draw();
+        });
 
         function draw() {
-            if (!chart || chart.isDisposed()) return;
+            if (!currentInstance || currentInstance.isDisposed()) return;
             var option = null;
             if (state.view === 'race') {
                 var year = years[state.yearIdx];
-                var yearData = ((temporal[String(year)] || {}).data || []).slice(0, TOP_N);
+                var yearData = (cumulativeByYearIdx[state.yearIdx] || []).slice(0, TOP_N);
                 option = C.scaryTerms({
                     entries: yearData,
                     termColors: termColors,
@@ -253,7 +267,7 @@
                     ? P.t('scary.top_term') + ': ' + gData[0][0]
                     : '';
             }
-            if (option) chart.setOption(option, { notMerge: false, lazyUpdate: true });
+            if (option) currentInstance.setOption(option, { notMerge: false, lazyUpdate: true });
         }
 
         // -----------------------------------------------------------------
@@ -364,10 +378,12 @@
             slider.value = String(state.yearIdx);
             slider.step = '1';
             slider.setAttribute('aria-label', P.t('Year'));
+            syncSliderFill(slider);
             slider.addEventListener('input', function () {
                 pauseTimer();
                 state.isPlaying = false;
                 state.yearIdx = parseInt(slider.value, 10) || 0;
+                syncSliderFill(slider);
                 // Reach into the sibling year label without re-rendering
                 // the whole controls block (cheaper; avoids slider focus loss).
                 var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
@@ -378,6 +394,19 @@
             sliderRow.appendChild(P.el('span', 'iwac-vis-scary-slider-edge',
                                        String(years[years.length - 1])));
             return sliderRow;
+        }
+
+        /**
+         * Paint the left-side progress fill of a range input by writing
+         * the ``--iwac-vis-scary-fill`` CSS variable. Called on slider
+         * build, on user input, and on every playback tick so the
+         * gradient stops match the current yearIdx.
+         */
+        function syncSliderFill(slider) {
+            var max = parseFloat(slider.max) || 1;
+            var val = parseFloat(slider.value) || 0;
+            var pct = max > 0 ? (val / max) * 100 : 0;
+            slider.style.setProperty('--iwac-vis-scary-fill', pct + '%');
         }
 
         function ctrlButton(glyph, title, handler) {
@@ -450,7 +479,10 @@
 
         function syncSliderPosition() {
             var slider = controlsEl.querySelector('.iwac-vis-scary-slider');
-            if (slider) slider.value = String(state.yearIdx);
+            if (slider) {
+                slider.value = String(state.yearIdx);
+                syncSliderFill(slider);
+            }
             var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
             if (yearLabel) yearLabel.textContent = String(years[state.yearIdx]);
         }
@@ -520,19 +552,26 @@
     }
 
     /**
-     * Maximum count across all years / all families — pins the x-axis
-     * during the race so bars are visually comparable across years.
-     * Without this the scale snaps to the current year's max and early
-     * years (which have small absolute counts) render as huge bars.
+     * Pre-compute one sorted ``[[term, count], ...]`` snapshot per year.
+     * Snapshot ``i`` is the **cumulative** sum of counts from
+     * ``years[0]`` through ``years[i]`` — matching the iwac-dashboard
+     * bar chart race semantics where bars grow monotonically over time
+     * (running totals, not year-over-year counts).
      */
-    function computeRaceMax(temporal) {
-        var max = 0;
-        Object.keys(temporal).forEach(function (year) {
-            var data = (temporal[year] || {}).data || [];
-            for (var i = 0; i < data.length && i < TOP_N; i++) {
-                if (data[i][1] > max) max = data[i][1];
+    function buildCumulativeSnapshots(temporal, years) {
+        var snapshots = [];
+        var running = {};
+        for (var i = 0; i < years.length; i++) {
+            var pairs = (temporal[String(years[i])] || {}).data || [];
+            for (var j = 0; j < pairs.length; j++) {
+                var term = pairs[j][0];
+                running[term] = (running[term] || 0) + pairs[j][1];
             }
-        });
-        return max || null;
+            var snapshot = Object.keys(running).map(function (k) {
+                return [k, running[k]];
+            }).sort(function (a, b) { return b[1] - a[1]; });
+            snapshots.push(snapshot);
+        }
+        return snapshots;
     }
 })();
