@@ -168,15 +168,11 @@
                 paint(subChart, m.subjectivite, palettes.subjectivite, P.t('Subjectivity'));
             }
 
-            // Caption: rated articles + average subjectivity score as a
-            // single glanceable number. The distribution is visible in
-            // the bar below, this line just summarizes it.
+            // Caption: rated articles only. The subjectivity distribution
+            // is now visible in the dedicated bar below, so the glanceable
+            // summary would just duplicate what the viewer can already see.
             var rated = m.rated_articles || 0;
-            var bits = [P.t('articles_count', { count: rated })];
-            if (m.subjectivite_avg != null) {
-                bits.push(P.t('Subjectivity') + ' \u2300 ' + m.subjectivite_avg.toFixed(1) + ' / 5');
-            }
-            caption.textContent = bits.join(' \u2022 ');
+            caption.textContent = P.t('articles_count', { count: rated });
         }
 
         var picker = P.buildFacetButtons({

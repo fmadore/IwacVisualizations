@@ -70,6 +70,27 @@
     };
 
     /**
+     * Build a label config object for outside-bar value labels whose
+     * color stays stable through the emphasis (hover) state. ECharts'
+     * default `emphasis.label` inherits from the series `itemStyle`,
+     * which means bar charts colored with the IWAC primary token
+     * render hover labels in the same orange as the bar, disappearing
+     * against any orange-tinted background. Forcing both label.color
+     * and emphasis.label.color to an ink token decouples the label
+     * text color from the bar fill color.
+     *
+     * @param {string} [position='right']
+     * @returns {{color:string, emphasis:{color:string}}}
+     *   (emphasis here is not a valid ECharts label child — callers
+     *   splat the returned shape into `label` and separately into
+     *   `emphasis.label`.)
+     */
+    C._stableLabelColor = function () {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        return tokens.ink || '#18202a';
+    };
+
+    /**
      * Returns primitive values (numbers, not objects) so callers can compose
      * them into fresh option literals each call. Sharing object references
      * across series caused hover-state bugs where ECharts mutated the shared
@@ -210,6 +231,7 @@
         var names = list.map(function (e) { return e[nameKey]; });
         var values = list.map(function (e) { return e[valueKey]; });
         var barDef = C._barDefaults('horizontal');
+        var labelInk = C._stableLabelColor();
 
         var base = {
             grid: C._grid({ left: 8, top: 8, bottom: 8 }),
@@ -229,7 +251,11 @@
                 label: {
                     show: true,
                     position: 'right',
+                    color: labelInk,
                     formatter: function (p) { return fmt(p.value); }
+                },
+                emphasis: {
+                    label: { color: labelInk }
                 }
             }],
             animationDuration: 600,
@@ -338,6 +364,7 @@
         var names = list.map(function (e) { return e.name; });
         var values = list.map(function (e) { return e.total; });
         var barDef = C._barDefaults('horizontal');
+        var labelInk = C._stableLabelColor();
 
         var base = {
             grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
@@ -373,7 +400,11 @@
                 label: {
                     show: true,
                     position: 'right',
+                    color: labelInk,
                     formatter: function (p) { return fmt(p.value); }
+                },
+                emphasis: {
+                    label: { color: labelInk }
                 }
             }],
             animationDuration: 600,
@@ -407,6 +438,7 @@
             return { value: e.frequency, o_id: e.o_id };
         });
         var barDef = C._barDefaults('horizontal');
+        var labelInk = C._stableLabelColor();
 
         var base = {
             grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
@@ -449,7 +481,11 @@
                 label: {
                     show: true,
                     position: 'right',
+                    color: labelInk,
                     formatter: function (p) { return fmt(p.value); }
+                },
+                emphasis: {
+                    label: { color: labelInk }
                 },
                 cursor: 'pointer'
             }],
@@ -1646,6 +1682,7 @@
         });
 
         var barDef = C._barDefaults('horizontal');
+        var labelInk = C._stableLabelColor();
         var xAxis = { type: 'value', axisLabel: { formatter: function (v) { return fmt(v); } } };
         if (cfg.fixedMax != null) {
             xAxis.max = cfg.fixedMax;
@@ -1680,6 +1717,7 @@
                 label: {
                     show: true,
                     position: 'right',
+                    color: labelInk,
                     formatter: function (p) { return fmt(p.value); }
                 },
                 emphasis: { disabled: true },

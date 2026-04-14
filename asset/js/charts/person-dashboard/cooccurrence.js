@@ -33,6 +33,12 @@
             return d && d.names && d.names.length > 1;
         }
 
+        // Tall chart host so the chord ring has room to breathe and the
+        // labels on the outer circle aren't clipped. Matches the graph
+        // host height used by the associated-entities network so the
+        // two panels feel balanced side by side.
+        panelEl.chart.classList.add('iwac-vis-chord-host');
+
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {
             if (hasData()) {
                 instance.setOption(C.chord(currentData()), true);
@@ -43,6 +49,19 @@
 
         if (!hasData() && !chart) {
             panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+        }
+
+        // Fullscreen toggle sits in the shared panel-toolbar alongside
+        // the auto-attached Download button. The onResize callback
+        // tells ECharts to rescale once the browser has applied the
+        // new viewport.
+        if (chart && P.addFullscreenButton) {
+            P.addFullscreenButton(panelEl.panel, {
+                onResize: function () {
+                    var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
+                    if (live) live.resize();
+                }
+            });
         }
 
         facet.subscribe(function () {

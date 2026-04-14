@@ -84,7 +84,32 @@
 
         ns._charts.push(entry);
         try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
+
+        // Auto-attach the shared panel toolbar (download button) if the
+        // panel-toolbar module is loaded and the chart lives inside a
+        // `.iwac-vis-panel` wrapper. Silently no-ops if either is absent.
+        if (ns.panels && typeof ns.panels.autoAttachPanelToolbar === 'function') {
+            try { ns.panels.autoAttachPanelToolbar(el); }
+            catch (e) { console.error('IWACVis: panel toolbar attach failed', e); }
+        }
         return instance;
+    };
+
+    /**
+     * Return the currently-live ECharts instance for a given container,
+     * or null if the chart is not tracked or has been disposed. Theme
+     * swaps dispose + re-init the instance, so any caller that needs to
+     * read data from the chart after registration time must go through
+     * this lookup rather than closing over the original return value.
+     */
+    ns.getLiveChart = function (el) {
+        for (var i = 0; i < ns._charts.length; i++) {
+            var entry = ns._charts[i];
+            if (entry.el !== el || entry.kind !== 'echarts') continue;
+            if (entry.instance && !entry.instance.isDisposed()) return entry.instance;
+            return null;
+        }
+        return null;
     };
 
     /**

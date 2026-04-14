@@ -60,7 +60,7 @@
      *   new style gets rebuilt automatically.
      * @param {boolean} [config.globe=true]  Show the GlobeControl toggle
      * @param {boolean} [config.navigation=true]  Show the NavigationControl
-     * @param {boolean} [config.fullscreen=false]
+     * @param {boolean} [config.fullscreen=true]  Show MapLibre's native FullscreenControl
      * @param {Object} [config.mapOptions]  Extra options passed straight
      *   to `new maplibregl.Map` (overrides any defaults here)
      * @returns {maplibregl.Map|null}
@@ -101,7 +101,12 @@
         if (config.globe !== false && typeof maplibregl.GlobeControl === 'function') {
             map.addControl(new maplibregl.GlobeControl(), 'top-right');
         }
-        if (config.fullscreen) {
+        // Native MapLibre fullscreen — applies to the `.iwac-vis-map`
+        // container, not the surrounding panel. That's intentional:
+        // maps have their own zoom / pan controls and users want to
+        // expand the basemap itself, not the chrome around it. Opt-out
+        // by passing `fullscreen: false`.
+        if (config.fullscreen !== false && typeof maplibregl.FullscreenControl === 'function') {
             map.addControl(new maplibregl.FullscreenControl(), 'top-right');
         }
 

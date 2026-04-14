@@ -3,16 +3,28 @@
  *
  * Force-directed graph of TF-IDF ranked associated entities, colored
  * by index.Type. Reuses C.network. Click a node to navigate to the
- * corresponding Omeka item. The panel exposes four toolbar buttons:
+ * corresponding Omeka item. The panel ships its own toolbar with:
  *
  *   +   zoom in  (graphRoam dispatch with centre origin)
  *   −   zoom out
  *   ↺   reset view (restore)
  *   ▣   toggle legend
+ *   ⬇   download chart as PNG
  *   ⛶   toggle fullscreen (Fullscreen API on the panel element)
  *
  * All buttons compose `.iwac-vis-btn` so they inherit the shared
  * border/background/focus/transition tokens. No hex literals.
+ *
+ * The panel opts out of the shared `.iwac-vis-panel-toolbar` via
+ * `data-iwac-no-panel-toolbar="1"` (and its chart host carries the
+ * `.iwac-vis-graph-host` marker class) so the two toolbars don't
+ * stack on top of each other in the same corner.
+ *
+ * Click-vs-drag disambiguation: the node click handler navigates to
+ * the Omeka item, but dragging a node also fires a `click` event at
+ * mouseup if the drag distance is small. We watch Zr mousedown /
+ * mouseup to set a `suppressClick` flag whenever the pointer moved
+ * more than 4 pixels, so drags never accidentally navigate away.
  */
 (function () {
     'use strict';
@@ -62,6 +74,11 @@
         function hasData(g) { return g && g.nodes && g.nodes.length > 1; }
 
         panelEl.chart.classList.add('iwac-vis-graph-host');
+        // Tell the shared panel-toolbar auto-wire to leave this panel
+        // alone — we ship our own toolbar with a download button below.
+        if (panelEl.panel && panelEl.panel.setAttribute) {
+            panelEl.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+        }
 
         // Build the full option only when the graph itself changes
         // (facet switch, role flip). Legend + fullscreen toggles use
@@ -112,6 +129,28 @@
             });
             bar.appendChild(legendBtn);
 
+            // Download chart as PNG. The live instance is looked up
+            // through ns.getLiveChart so we never call getDataURL on a
+            // disposed instance after a theme swap.
+            bar.appendChild(buildButton('\u2B73', P.t('Download chart'), function () {
+                var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
+                if (!live) return;
+                var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+                var dataUrl = live.getDataURL({
+                    type: 'png',
+                    pixelRatio: 2,
+                    backgroundColor: tokens.surface || '#ffffff'
+                });
+                if (!dataUrl) return;
+                var a = document.createElement('a');
+                a.download = 'iwac-associated-entities.png';
+                a.href = dataUrl;
+                a.rel = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }));
+
             // Fullscreen — Fullscreen API on the panel wrapper. The
             // panel gets `.iwac-vis-panel--fullscreen` for layout and
             // ECharts is re-sized via chart.resize() on the change event.
@@ -143,8 +182,32 @@
         }
 
         // ---------------- Click-through ----------------
+        //
+        // ECharts fires a synthetic `click` on mouseup even when the
+        // user was dragging a node — if the drag distance is small,
+        // the click handler below would navigate away before the user
+        // finishes positioning. We watch the underlying zrender
+        // mousedown / mouseup events to compute the pointer travel and
+        // set `suppressClick` when it exceeds a small threshold, so
+        // dragging a node (or dragging an edge's endpoint) never
+        // accidentally triggers navigation. Pure clicks still fire.
         if (chart) {
+            var pressX = 0, pressY = 0, suppressClick = false;
+            var zr = chart.getZr && chart.getZr();
+            if (zr) {
+                zr.on('mousedown', function (e) {
+                    pressX = e.offsetX;
+                    pressY = e.offsetY;
+                    suppressClick = false;
+                });
+                zr.on('mouseup', function (e) {
+                    var dx = Math.abs(e.offsetX - pressX);
+                    var dy = Math.abs(e.offsetY - pressY);
+                    if (dx > 4 || dy > 4) suppressClick = true;
+                });
+            }
             chart.on('click', function (params) {
+                if (suppressClick) return;
                 if (params.dataType !== 'node') return;
                 var node = params.data || {};
                 if (node.entityType === 'center') return;

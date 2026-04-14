@@ -139,6 +139,7 @@
 /* ------------------------------------------------------------------- */
 
 .iwac-vis-panel {
+    position: relative;
     background: var(--panel-bg, var(--surface, #fdfdfc));
     border: var(--panel-border, 1px solid var(--border, #dcd7ce));
     border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
@@ -146,6 +147,46 @@
     padding: var(--space-4, 1rem);
     /* Prevent ECharts canvas from forcing grid overflow */
     min-width: 0;
+}
+
+/* -------------------------------------------------------------------
+ * Panel toolbar — top-right floating icon bar
+ *
+ * Hosts the shared Download + Fullscreen buttons auto-attached by
+ * `panels.autoAttachPanelToolbar`. Absolute-positioned so it never
+ * displaces the panel title / description / chart. Buttons compose the
+ * shared `.iwac-vis-btn` class so they inherit every theme-token hover,
+ * focus, and transition — only geometry is overridden here.
+ *
+ * The network panel ships its own `.iwac-vis-graph-toolbar` with zoom /
+ * legend / fullscreen controls AND a download button added to the same
+ * toolbar. Its chart host opts out of this panel toolbar via the
+ * `.iwac-vis-graph-host` marker class.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-panel-toolbar {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 5;
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-panel-toolbar__btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: var(--text-base, 1rem);
+    line-height: 1;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
+}
+
+.iwac-vis-panel-toolbar__btn--pressed {
+    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+    color: var(--primary, #e67a14);
 }
 
 .iwac-vis-panel > .iwac-vis-chart {
@@ -946,12 +987,26 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 
 .iwac-vis-graph-host {
     position: relative;
-    min-height: 520px;
+    min-height: 640px;
 }
 
 @media (max-width: 640px) { /* sm */
     .iwac-vis-graph-host {
-        min-height: 440px;
+        min-height: 520px;
+    }
+}
+
+/* Co-occurrence chord panel needs the same breathing room as the
+ * associated-entities graph so labels on the ring don't clip. Lives
+ * alongside the panel toolbar (download + fullscreen) in top-right. */
+.iwac-vis-chord-host {
+    position: relative;
+    min-height: 640px;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-chord-host {
+        min-height: 520px;
     }
 }
 
@@ -1004,9 +1059,27 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 }
 
 .iwac-vis-panel--fullscreen > .iwac-vis-graph-host,
-.iwac-vis-panel:fullscreen > .iwac-vis-graph-host {
+.iwac-vis-panel:fullscreen > .iwac-vis-graph-host,
+.iwac-vis-panel--fullscreen > .iwac-vis-chord-host,
+.iwac-vis-panel:fullscreen > .iwac-vis-chord-host {
     min-height: calc(100vh - 120px);
     height: calc(100vh - 120px);
+}
+
+/* Any ECharts panel's chart container stretches to fill native
+ * fullscreen, not just graph / chord hosts. Covers the horizontal
+ * bar / heatmap / treemap charts the user expands. */
+.iwac-vis-panel--fullscreen > .iwac-vis-chart,
+.iwac-vis-panel:fullscreen > .iwac-vis-chart {
+    min-height: calc(100vh - 160px);
+    height: calc(100vh - 160px);
+}
+
+/* Same treatment for MapLibre map panels: the container is inside
+ * `.iwac-vis-chart` but has its own fixed height, so we stretch both. */
+.iwac-vis-panel--fullscreen > .iwac-vis-chart > .iwac-vis-map,
+.iwac-vis-panel:fullscreen > .iwac-vis-chart > .iwac-vis-map {
+    height: 100%;
 }
 
 /* =================================================================== */
