@@ -1,0 +1,538 @@
+/**
+ * IWAC Visualizations — Scary Terms block (orchestrator)
+ *
+ * Self-contained controller for the Scary Terms page block. Fetches the
+ * four precomputed JSON files in `asset/data/`, builds the DOM (metric
+ * cards + controls + chart + term definitions), and drives a horizontal
+ * bar chart with three view modes:
+ *
+ *   - race    animated year-by-year "bar chart race" (1961–2025)
+ *   - country top families for a single selected country
+ *   - global  top families across the whole collection
+ *
+ * Term family colors come from the registered IWAC ECharts palette so
+ * dark / light modes + admin-configured primary colors flow through.
+ *
+ * Dependencies (in load order before this file):
+ *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js →
+ *   panels.js → responsive.js → chart-options.js
+ */
+(function () {
+    'use strict';
+
+    var ns = window.IWACVis;
+    if (!ns || !ns.panels || !ns.chartOptions) {
+        console.warn('IWACVis.scaryTerms: missing panels or chartOptions — check script load order');
+        return;
+    }
+    var P = ns.panels;
+    var C = ns.chartOptions;
+
+    var DATA_FILES = {
+        metadata:  'scary-terms-metadata.json',
+        temporal:  'scary-terms-temporal.json',
+        countries: 'scary-terms-countries.json',
+        global:    'scary-terms-global.json'
+    };
+
+    var TOP_N = 10;
+    var RACE_TICK_MS = 1000;
+
+    // ---------------------------------------------------------------------
+    //  i18n — register block-specific strings at parse time so callers can
+    //  just use P.t('scary.xxx'). Keys are stable identifiers, not English
+    //  source strings, so we register English explicitly.
+    // ---------------------------------------------------------------------
+
+    if (ns.addTranslations) {
+        ns.addTranslations('en', {
+            'Loading scary terms':              'Loading scary terms',
+            'scary.title':                      'Scary terms in the IWAC collection',
+            'scary.description':                'Frequency of radical / extremism-related term families across West African Islamic periodicals and newspapers, 1961–2025.',
+            'scary.view_mode':                  'View',
+            'scary.bar_race':                   'Bar chart race',
+            'scary.by_country':                 'By country',
+            'scary.global_view':                'Global',
+            'scary.country':                    'Country',
+            'scary.chart_title':                'Scary terms',
+            'scary.country_chart_title':        'Scary terms in {country}',
+            'scary.global_chart_title':         'Scary terms — global',
+            'scary.total_articles':             'Total articles',
+            'scary.term_families':              'Term families',
+            'scary.term_variants':              'Term variants',
+            'scary.total_occurrences':          'Total occurrences',
+            'scary.term_definitions':           'Term definitions',
+            'scary.top_term':                   'Top term',
+            'scary.play':                       'Play',
+            'scary.pause':                      'Pause',
+            'scary.previous':                   'Previous',
+            'scary.next':                       'Next',
+            'scary.reset':                      'Reset'
+        });
+        ns.addTranslations('fr', {
+            'Loading scary terms':              'Chargement des termes \u00ab inqui\u00e9tants \u00bb',
+            'scary.title':                      'Termes \u00ab inqui\u00e9tants \u00bb dans la collection IWAC',
+            'scary.description':                'Fr\u00e9quence des familles de termes li\u00e9es \u00e0 la radicalisation et \u00e0 l\u2019extr\u00e9misme dans les journaux et p\u00e9riodiques ouest-africains, 1961-2025.',
+            'scary.view_mode':                  'Vue',
+            'scary.bar_race':                   'Course de barres',
+            'scary.by_country':                 'Par pays',
+            'scary.global_view':                'Global',
+            'scary.country':                    'Pays',
+            'scary.chart_title':                'Termes \u00ab inqui\u00e9tants \u00bb',
+            'scary.country_chart_title':        'Termes \u00ab inqui\u00e9tants \u00bb \u2014 {country}',
+            'scary.global_chart_title':         'Termes \u00ab inqui\u00e9tants \u00bb \u2014 global',
+            'scary.total_articles':             'Articles totaux',
+            'scary.term_families':              'Familles de termes',
+            'scary.term_variants':              'Variantes',
+            'scary.total_occurrences':          'Occurrences totales',
+            'scary.term_definitions':           'D\u00e9finitions des termes',
+            'scary.top_term':                   'Terme principal',
+            'scary.play':                       'Lecture',
+            'scary.pause':                      'Pause',
+            'scary.previous':                   'Pr\u00e9c\u00e9dent',
+            'scary.next':                       'Suivant',
+            'scary.reset':                      'R\u00e9initialiser'
+        });
+    }
+
+    // ---------------------------------------------------------------------
+    //  Boot
+    // ---------------------------------------------------------------------
+
+    function init() {
+        if (typeof echarts === 'undefined') {
+            console.warn('IWACVis.scaryTerms: ECharts not loaded');
+            return;
+        }
+        var containers = document.querySelectorAll('.iwac-vis-scary');
+        for (var i = 0; i < containers.length; i++) {
+            initBlock(containers[i]);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // ---------------------------------------------------------------------
+    //  Per-block initialization
+    // ---------------------------------------------------------------------
+
+    function initBlock(container) {
+        var basePath = container.dataset.basePath || '';
+        var dataBase = basePath + '/modules/IwacVisualizations/asset/data/';
+
+        Promise.all([
+            fetchJSON(dataBase + DATA_FILES.metadata),
+            fetchJSON(dataBase + DATA_FILES.temporal),
+            fetchJSON(dataBase + DATA_FILES.countries),
+            fetchJSON(dataBase + DATA_FILES.global)
+        ]).then(function (results) {
+            render(container, {
+                metadata:  results[0],
+                temporal:  results[1],
+                countries: results[2],
+                global:    results[3]
+            });
+        }).catch(function (err) {
+            console.error('IWACVis.scaryTerms:', err);
+            container.innerHTML = '';
+            container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+        });
+    }
+
+    function fetchJSON(url) {
+        return fetch(url, { credentials: 'same-origin' }).then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + url);
+            return r.json();
+        });
+    }
+
+    // ---------------------------------------------------------------------
+    //  Layout
+    // ---------------------------------------------------------------------
+
+    function render(container, bundle) {
+        var metadata   = bundle.metadata   || {};
+        var temporal   = bundle.temporal   || {};
+        var countries  = bundle.countries  || {};
+        var globalData = bundle.global     || {};
+
+        var families = metadata.term_families || [];
+        var termColors = buildTermColorMap(families);
+
+        var years = [];
+        if (metadata.year_range && metadata.year_range.length === 2) {
+            for (var y = metadata.year_range[0]; y <= metadata.year_range[1]; y++) {
+                years.push(y);
+            }
+        }
+        var availableCountries = (metadata.countries || []).slice();
+
+        container.innerHTML = '';
+        var root = P.el('div', 'iwac-vis-scary-root');
+        container.appendChild(root);
+
+        // 1. Header
+        var header = P.el('div', 'iwac-vis-scary-header');
+        header.appendChild(P.el('h3', 'iwac-vis-scary-title', P.t('scary.title')));
+        header.appendChild(P.el('p', 'iwac-vis-scary-desc', P.t('scary.description')));
+        root.appendChild(header);
+
+        // 2. Metric cards
+        root.appendChild(buildMetricCards(metadata, globalData));
+
+        // 3. Controls
+        var controlsEl = P.el('div', 'iwac-vis-scary-controls');
+        root.appendChild(controlsEl);
+
+        // 4. Chart panel
+        var panel = P.el('div', 'iwac-vis-panel iwac-vis-scary-panel');
+        var chartHeader = P.el('div', 'iwac-vis-scary-chart-header');
+        var chartTitle = P.el('h4', 'iwac-vis-scary-chart-title');
+        var topBadge   = P.el('span', 'iwac-vis-scary-badge');
+        chartHeader.appendChild(chartTitle);
+        chartHeader.appendChild(topBadge);
+        panel.appendChild(chartHeader);
+        var chartEl = P.el('div', 'iwac-vis-chart iwac-vis-scary-chart');
+        panel.appendChild(chartEl);
+        root.appendChild(panel);
+
+        // 5. Term definitions
+        root.appendChild(buildTermDefinitions(metadata));
+
+        // Fixed x-axis maximum for the race so bars are comparable across years.
+        var raceMax = computeRaceMax(temporal);
+
+        var state = {
+            view: 'race',
+            country: availableCountries[0] || null,
+            yearIdx: 0,
+            isPlaying: false,
+            timer: null
+        };
+
+        var chart = ns.registerChart(chartEl, function () { draw(); });
+
+        function draw() {
+            if (!chart || chart.isDisposed()) return;
+            var option = null;
+            if (state.view === 'race') {
+                var year = years[state.yearIdx];
+                var yearData = ((temporal[String(year)] || {}).data || []).slice(0, TOP_N);
+                option = C.scaryTerms({
+                    entries: yearData,
+                    termColors: termColors,
+                    fixedMax: raceMax
+                });
+                chartTitle.textContent = P.t('scary.chart_title') + ' \u2014 ' + year;
+                topBadge.textContent = yearData[0]
+                    ? P.t('scary.top_term') + ': ' + yearData[0][0]
+                    : '';
+            } else if (state.view === 'country') {
+                var c = state.country;
+                var cData = ((countries[c] || {}).data || []);
+                option = C.scaryTerms({
+                    entries: cData,
+                    termColors: termColors
+                });
+                chartTitle.textContent = P.t('scary.country_chart_title', { country: c || '' });
+                topBadge.textContent = cData[0]
+                    ? P.t('scary.top_term') + ': ' + cData[0][0]
+                    : '';
+            } else {
+                var gData = globalData.data || [];
+                option = C.scaryTerms({
+                    entries: gData,
+                    termColors: termColors
+                });
+                chartTitle.textContent = P.t('scary.global_chart_title');
+                topBadge.textContent = gData[0]
+                    ? P.t('scary.top_term') + ': ' + gData[0][0]
+                    : '';
+            }
+            if (option) chart.setOption(option, { notMerge: false, lazyUpdate: true });
+        }
+
+        // -----------------------------------------------------------------
+        //  Controls rendering
+        //
+        //  Re-renders the controls row whenever the view mode changes so
+        //  the country dropdown / playback bar / slider appear only for
+        //  the relevant view. The chart itself is not reinitialized.
+        // -----------------------------------------------------------------
+
+        function renderControls() {
+            controlsEl.innerHTML = '';
+            var row = P.el('div', 'iwac-vis-scary-controls-row');
+            controlsEl.appendChild(row);
+
+            row.appendChild(buildViewToggle());
+
+            if (state.view === 'country' && availableCountries.length) {
+                row.appendChild(buildCountrySelect());
+            }
+            if (state.view === 'race' && years.length) {
+                row.appendChild(buildPlaybackGroup());
+                controlsEl.appendChild(buildSliderRow());
+            }
+        }
+
+        function buildViewToggle() {
+            var group = P.el('div', 'iwac-vis-scary-view-toggle');
+            group.appendChild(P.el('span', 'iwac-vis-scary-label', P.t('scary.view_mode') + ':'));
+            var views = [
+                { key: 'race',    label: P.t('scary.bar_race') },
+                { key: 'country', label: P.t('scary.by_country') },
+                { key: 'global',  label: P.t('scary.global_view') }
+            ];
+            views.forEach(function (v) {
+                var btn = P.el('button', 'iwac-vis-scary-view-btn', v.label);
+                btn.type = 'button';
+                if (state.view === v.key) {
+                    btn.classList.add('iwac-vis-scary-view-btn--active');
+                }
+                btn.addEventListener('click', function () {
+                    if (state.view === v.key) return;
+                    pauseTimer();
+                    state.view = v.key;
+                    if (v.key === 'country' && !state.country && availableCountries.length) {
+                        state.country = availableCountries[0];
+                    }
+                    renderControls();
+                    draw();
+                });
+                group.appendChild(btn);
+            });
+            return group;
+        }
+
+        function buildCountrySelect() {
+            var group = P.el('div', 'iwac-vis-scary-country-group');
+            var label = P.el('label', 'iwac-vis-scary-label', P.t('scary.country') + ':');
+            var select = P.el('select', 'iwac-vis-scary-select');
+            var selectId = 'iwac-vis-scary-country-' + Math.random().toString(36).slice(2, 8);
+            select.id = selectId;
+            label.htmlFor = selectId;
+            availableCountries.forEach(function (c) {
+                var opt = P.el('option', null, c);
+                opt.value = c;
+                if (c === state.country) opt.selected = true;
+                select.appendChild(opt);
+            });
+            select.addEventListener('change', function () {
+                state.country = select.value;
+                draw();
+            });
+            group.appendChild(label);
+            group.appendChild(select);
+            return group;
+        }
+
+        function buildPlaybackGroup() {
+            var group = P.el('div', 'iwac-vis-scary-playback');
+            group.appendChild(ctrlButton('\u25C0', P.t('scary.previous'), stepBackward));
+            var isAtEnd = state.yearIdx >= years.length - 1;
+            var playBtn = ctrlButton(
+                state.isPlaying ? '\u23F8' : '\u25B6',
+                state.isPlaying ? P.t('scary.pause') : P.t('scary.play'),
+                state.isPlaying ? pause : play
+            );
+            playBtn.classList.add('iwac-vis-scary-play-btn');
+            if (isAtEnd && !state.isPlaying) {
+                // Allow pressing play at the end — it will rewind.
+            }
+            group.appendChild(playBtn);
+            group.appendChild(ctrlButton('\u25B6', P.t('scary.next'), stepForward));
+            group.appendChild(ctrlButton('\u21BA', P.t('scary.reset'), reset));
+            var yearLabel = P.el('span', 'iwac-vis-scary-year-label',
+                                 String(years[state.yearIdx] || ''));
+            group.appendChild(yearLabel);
+            return group;
+        }
+
+        function buildSliderRow() {
+            var sliderRow = P.el('div', 'iwac-vis-scary-slider-row');
+            sliderRow.appendChild(P.el('span', 'iwac-vis-scary-slider-edge',
+                                       String(years[0])));
+            var slider = P.el('input', 'iwac-vis-scary-slider');
+            slider.type = 'range';
+            slider.min = '0';
+            slider.max = String(years.length - 1);
+            slider.value = String(state.yearIdx);
+            slider.step = '1';
+            slider.setAttribute('aria-label', P.t('Year'));
+            slider.addEventListener('input', function () {
+                pauseTimer();
+                state.isPlaying = false;
+                state.yearIdx = parseInt(slider.value, 10) || 0;
+                // Reach into the sibling year label without re-rendering
+                // the whole controls block (cheaper; avoids slider focus loss).
+                var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
+                if (yearLabel) yearLabel.textContent = String(years[state.yearIdx]);
+                draw();
+            });
+            sliderRow.appendChild(slider);
+            sliderRow.appendChild(P.el('span', 'iwac-vis-scary-slider-edge',
+                                       String(years[years.length - 1])));
+            return sliderRow;
+        }
+
+        function ctrlButton(glyph, title, handler) {
+            var btn = P.el('button', 'iwac-vis-scary-ctrl-btn', glyph);
+            btn.type = 'button';
+            btn.title = title;
+            btn.setAttribute('aria-label', title);
+            btn.addEventListener('click', handler);
+            return btn;
+        }
+
+        // -----------------------------------------------------------------
+        //  Playback
+        // -----------------------------------------------------------------
+
+        function pauseTimer() {
+            if (state.timer) {
+                window.clearInterval(state.timer);
+                state.timer = null;
+            }
+        }
+
+        function play() {
+            if (state.view !== 'race' || !years.length) return;
+            if (state.yearIdx >= years.length - 1) state.yearIdx = 0;
+            state.isPlaying = true;
+            pauseTimer();
+            state.timer = window.setInterval(function () {
+                if (state.yearIdx >= years.length - 1) {
+                    pause();
+                    return;
+                }
+                state.yearIdx++;
+                syncSliderPosition();
+                draw();
+            }, RACE_TICK_MS);
+            renderControls();
+            draw();
+        }
+
+        function pause() {
+            pauseTimer();
+            state.isPlaying = false;
+            renderControls();
+        }
+
+        function stepBackward() {
+            pauseTimer();
+            state.isPlaying = false;
+            if (state.yearIdx > 0) state.yearIdx--;
+            renderControls();
+            draw();
+        }
+
+        function stepForward() {
+            pauseTimer();
+            state.isPlaying = false;
+            if (state.yearIdx < years.length - 1) state.yearIdx++;
+            renderControls();
+            draw();
+        }
+
+        function reset() {
+            pauseTimer();
+            state.isPlaying = false;
+            state.yearIdx = 0;
+            renderControls();
+            draw();
+        }
+
+        function syncSliderPosition() {
+            var slider = controlsEl.querySelector('.iwac-vis-scary-slider');
+            if (slider) slider.value = String(state.yearIdx);
+            var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
+            if (yearLabel) yearLabel.textContent = String(years[state.yearIdx]);
+        }
+
+        // Initial paint
+        renderControls();
+        draw();
+    }
+
+    // ---------------------------------------------------------------------
+    //  Helpers
+    // ---------------------------------------------------------------------
+
+    /**
+     * Build a stable ``{term_family: color}`` map from the registered IWAC
+     * ECharts palette. The palette is theme-aware (dark / light) and starts
+     * with --primary in slot 0, so every term family inherits colors from
+     * the active theme without any hardcoded hex.
+     */
+    function buildTermColorMap(families) {
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        var tokens = ns.getChartTokens && ns.getChartTokens();
+        var fallback = (tokens && tokens.primary) || '';
+        var map = {};
+        families.forEach(function (family, idx) {
+            map[family] = palette[idx % palette.length] || fallback;
+        });
+        return map;
+    }
+
+    function buildMetricCards(metadata, globalData) {
+        var grid = P.el('div', 'iwac-vis-scary-metrics');
+        function card(labelKey, value) {
+            var cardEl = P.el('div', 'iwac-vis-summary-card');
+            cardEl.appendChild(P.el('span', 'iwac-vis-summary-card__value',
+                                    P.formatNumber(value || 0)));
+            cardEl.appendChild(P.el('span', 'iwac-vis-summary-card__label',
+                                    P.t(labelKey)));
+            return cardEl;
+        }
+        var families = metadata.term_families || [];
+        grid.appendChild(card('scary.total_articles',    metadata.total_articles));
+        grid.appendChild(card('scary.term_families',     metadata.term_families_count || families.length));
+        grid.appendChild(card('scary.term_variants',     metadata.total_variants));
+        grid.appendChild(card('scary.total_occurrences', (globalData && globalData.total_occurrences) || 0));
+        return grid;
+    }
+
+    function buildTermDefinitions(metadata) {
+        var wrap = P.el('div', 'iwac-vis-scary-defs');
+        wrap.appendChild(P.el('h4', 'iwac-vis-scary-defs-title',
+                              P.t('scary.term_definitions')));
+        var grid = P.el('div', 'iwac-vis-scary-defs-grid');
+        var defs = metadata.term_definitions || {};
+        Object.keys(defs).forEach(function (family) {
+            var cardEl = P.el('div', 'iwac-vis-scary-def-card');
+            cardEl.appendChild(P.el('h5', 'iwac-vis-scary-def-title', family));
+            var tags = P.el('div', 'iwac-vis-scary-def-tags');
+            (defs[family] || []).forEach(function (variant) {
+                tags.appendChild(P.el('span', 'iwac-vis-scary-def-tag', variant));
+            });
+            cardEl.appendChild(tags);
+            grid.appendChild(cardEl);
+        });
+        wrap.appendChild(grid);
+        return wrap;
+    }
+
+    /**
+     * Maximum count across all years / all families — pins the x-axis
+     * during the race so bars are visually comparable across years.
+     * Without this the scale snaps to the current year's max and early
+     * years (which have small absolute counts) render as huge bars.
+     */
+    function computeRaceMax(temporal) {
+        var max = 0;
+        Object.keys(temporal).forEach(function (year) {
+            var data = (temporal[year] || {}).data || [];
+            for (var i = 0; i < data.length && i < TOP_N; i++) {
+                if (data[i][1] > max) max = data[i][1];
+            }
+        });
+        return max || null;
+    }
+})();

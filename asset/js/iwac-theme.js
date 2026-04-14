@@ -243,6 +243,18 @@
         return ns._currentTokens || readTokens();
     };
 
+    /**
+     * Return the full qualitative series palette (with --primary in slot 0)
+     * for callers that need to assign stable per-item colors outside of
+     * ECharts' built-in per-series cycling. Used by charts that render a
+     * single series with individually-colored data points (e.g. the Scary
+     * Terms block's 12 term families).
+     */
+    ns.getPalette = function () {
+        var tokens = ns._currentTokens || readTokens();
+        return buildPalette(tokens);
+    };
+
     /** CartoCDN basemap URL matching the current theme. */
     ns.getBasemapStyle = function () {
         return ns.getCurrentTheme() === 'dark'

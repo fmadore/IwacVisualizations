@@ -1008,3 +1008,386 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     min-height: calc(100vh - 120px);
     height: calc(100vh - 120px);
 }
+
+/* =================================================================== */
+/*  Scary terms block                                                   */
+/* =================================================================== */
+/*                                                                       */
+/*  Top-level layout: header → metric cards → controls → chart panel    */
+/*  → term definitions grid. All colors, spacing, and shadows resolve   */
+/*  through the IWAC theme tokens (--primary, --ink, --ink-light,       */
+/*  --muted, --surface, --surface-raised, --border, --border-light).    */
+/* =================================================================== */
+
+.iwac-vis-scary {
+    min-height: 420px;
+}
+
+.iwac-vis-scary-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1.25rem);
+}
+
+.iwac-vis-scary-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-scary-title {
+    margin: 0;
+    font-size: var(--text-xl, 1.5rem);
+    font-weight: 700;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-desc {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+    max-width: 72ch;
+}
+
+/* ------------------------------------------------------------------- */
+/*  Metric cards                                                        */
+/* ------------------------------------------------------------------- */
+
+.iwac-vis-scary-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 768px) { /* md */
+    .iwac-vis-scary-metrics { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ------------------------------------------------------------------- */
+/*  Controls bar                                                        */
+/* ------------------------------------------------------------------- */
+
+.iwac-vis-scary-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.05));
+}
+
+.iwac-vis-scary-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4, 1rem);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.iwac-vis-scary-label {
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 600;
+    color: var(--muted, #6e7a82);
+    margin-right: var(--space-2, 0.5rem);
+}
+
+/* View mode toggle (segmented buttons) */
+
+.iwac-vis-scary-view-toggle {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-view-btn {
+    padding: var(--space-1, 0.35rem) var(--space-3, 0.85rem);
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink-light, #4a5766);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.iwac-vis-scary-view-btn:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 8%, var(--surface-raised, #f9f7f3));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--border, #dcd7ce));
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-view-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-scary-view-btn--active,
+.iwac-vis-scary-view-btn--active:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
+    color: var(--ink, #18202a);
+    border-color: var(--primary, #e67a14);
+}
+
+/* Country selector */
+
+.iwac-vis-scary-country-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-scary-select {
+    padding: var(--space-1, 0.35rem) var(--space-3, 0.75rem);
+    background: var(--surface, #fdfdfc);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 12ch;
+}
+
+.iwac-vis-scary-select:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+    border-color: var(--primary, #e67a14);
+}
+
+/* Playback controls */
+
+.iwac-vis-scary-playback {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-ctrl-btn {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink-light, #4a5766);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.iwac-vis-scary-ctrl-btn:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 10%, var(--surface-raised, #f9f7f3));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-ctrl-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-scary-play-btn {
+    background: var(--primary, #e67a14);
+    color: var(--surface, #fdfdfc);
+    border-color: var(--primary, #e67a14);
+}
+
+.iwac-vis-scary-play-btn:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
+    color: var(--surface, #fdfdfc);
+}
+
+.iwac-vis-scary-year-label {
+    min-width: 4ch;
+    margin-left: var(--space-2, 0.5rem);
+    padding: 0 var(--space-2, 0.5rem);
+    font-size: var(--text-base, 1rem);
+    font-weight: 700;
+    color: var(--primary, #e67a14);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Year slider */
+
+.iwac-vis-scary-slider-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-scary-slider-edge {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    font-variant-numeric: tabular-nums;
+    min-width: 3ch;
+}
+
+.iwac-vis-scary-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--border-light, #ebe7df);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.iwac-vis-scary-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--primary, #e67a14);
+    border: 2px solid var(--surface, #fdfdfc);
+    border-radius: 50%;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.15));
+    cursor: pointer;
+    transition: transform 120ms ease;
+}
+
+.iwac-vis-scary-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.iwac-vis-scary-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--primary, #e67a14);
+    border: 2px solid var(--surface, #fdfdfc);
+    border-radius: 50%;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(0,0,0,0.15));
+    cursor: pointer;
+}
+
+.iwac-vis-scary-slider:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 4px;
+}
+
+/* ------------------------------------------------------------------- */
+/*  Chart panel                                                         */
+/* ------------------------------------------------------------------- */
+
+.iwac-vis-scary-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-scary-chart-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-scary-chart-title {
+    margin: 0;
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border: 1px solid color-mix(in srgb, var(--primary, #e67a14) 30%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-scary-badge:empty {
+    display: none;
+}
+
+.iwac-vis-scary-chart {
+    width: 100%;
+    min-height: 460px;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-scary-chart { min-height: 380px; }
+}
+
+/* ------------------------------------------------------------------- */
+/*  Term definitions grid                                               */
+/* ------------------------------------------------------------------- */
+
+.iwac-vis-scary-defs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-scary-defs-title {
+    margin: 0;
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-defs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 640px) { /* sm */
+    .iwac-vis-scary-defs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-scary-defs-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.iwac-vis-scary-def-card {
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.iwac-vis-scary-def-card:hover {
+    background: var(--surface-raised, #f9f7f3);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-scary-def-title {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 700;
+    color: var(--primary, #e67a14);
+    text-transform: capitalize;
+}
+
+.iwac-vis-scary-def-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.3rem);
+}
+
+.iwac-vis-scary-def-tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 500;
+    color: var(--ink-light, #4a5766);
+    background: var(--surface-raised, #f9f7f3);
+    border: 1px solid var(--border-light, #ebe7df);
+}

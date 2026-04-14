@@ -1612,4 +1612,86 @@
             }]
         };
     };
+
+    /* ----------------------------------------------------------------- */
+    /*  Scary terms — horizontal bar with per-term colors                 */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Horizontal top-N bar chart for the Scary Terms block. Unlike
+     * ``C.horizontalBar``, this builder takes ``[[term, count], ...]``
+     * pairs (the raw shape produced by generate_scary_terms.py), applies a
+     * stable per-term color from the caller-supplied map, and optionally
+     * pins the x-axis to a fixed max so the bar chart race is visually
+     * comparable across years.
+     *
+     * @param {Object} cfg
+     * @param {Array<Array>}        cfg.entries     [[term, count], ...] sorted desc
+     * @param {Object<string,string>} cfg.termColors Stable term → color map
+     * @param {number}              [cfg.fixedMax]  Pin x-axis to this max
+     * @param {number}              [cfg.maxLabelLength=28]
+     */
+    C.scaryTerms = function (cfg) {
+        cfg = cfg || {};
+        var entries = cfg.entries || [];
+        var termColors = cfg.termColors || {};
+        var maxLen = cfg.maxLabelLength || 28;
+
+        var terms = entries.map(function (e) { return e[0]; });
+        var values = entries.map(function (e) {
+            return {
+                value: e[1],
+                itemStyle: { color: termColors[e[0]] || undefined }
+            };
+        });
+
+        var barDef = C._barDefaults('horizontal');
+        var xAxis = { type: 'value', axisLabel: { formatter: function (v) { return fmt(v); } } };
+        if (cfg.fixedMax != null) {
+            xAxis.max = cfg.fixedMax;
+        }
+
+        var base = {
+            grid: C._grid({ left: 8, right: 56, top: 8, bottom: 8 }),
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    return '<strong>' + esc(terms[p.dataIndex] || '') + '</strong><br>' +
+                           t('mentions_count', { count: fmt(p.value || 0) });
+                }
+            },
+            xAxis: xAxis,
+            yAxis: {
+                type: 'category',
+                data: terms,
+                inverse: true,
+                axisTick: { show: false },
+                axisLabel: {
+                    width: 160,
+                    overflow: 'truncate',
+                    formatter: function (v) { return C._truncate(v, maxLen); }
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: values,
+                barMaxWidth: barDef.barMaxWidth + 4,
+                itemStyle: { borderRadius: barDef.borderRadius.slice() },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function (p) { return fmt(p.value); }
+                },
+                emphasis: { disabled: true },
+                animationDurationUpdate: 800,
+                animationEasingUpdate: 'cubicOut'
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
+        };
+
+        return R && R.withMedia
+            ? R.withMedia(base, R.labelMedia({ smWidth: 120, smFontSize: 11 }), R.gridMedia)
+            : base;
+    };
 })();
