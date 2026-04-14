@@ -1536,24 +1536,21 @@
         var max = 1;
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
-        // Theme-aware color ramp: read the dedicated semantic palette
-        // defined in iwac-visualizations.css (--iwac-vis-heatmap-0..4).
-        // These stops use the same --primary → --surface ramp as the
-        // subjectivité bar so every sequential chart in the module
-        // lands on the same visual language. Reading them via
-        // getComputedStyle means a theme/palette override flows
-        // through without touching JS.
-        function readVar(name) {
-            if (typeof getComputedStyle === 'undefined' || !document.body) return '';
-            return getComputedStyle(document.body).getPropertyValue(name).trim();
-        }
+        // Theme-aware color ramp: the dedicated semantic palette is
+        // defined in iwac-visualizations.css (--iwac-vis-heatmap-0..4)
+        // as `color-mix(in srgb, var(--primary), var(--surface))` stops
+        // so it tracks the IWAC theme's --primary and --surface tokens.
+        // We MUST resolve through ns.resolveCssVar (an offscreen probe)
+        // rather than getPropertyValue: ECharts' color parser does not
+        // understand CSS color-mix() and would fall back to grayscale.
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var resolve = ns.resolveCssVar || function () { return ''; };
         var heatStops = [
-            readVar('--iwac-vis-heatmap-0'),
-            readVar('--iwac-vis-heatmap-1'),
-            readVar('--iwac-vis-heatmap-2'),
-            readVar('--iwac-vis-heatmap-3'),
-            readVar('--iwac-vis-heatmap-4')
+            resolve('--iwac-vis-heatmap-0'),
+            resolve('--iwac-vis-heatmap-1'),
+            resolve('--iwac-vis-heatmap-2'),
+            resolve('--iwac-vis-heatmap-3'),
+            resolve('--iwac-vis-heatmap-4')
         ].filter(Boolean);
         // Fallback ramp if CSS vars aren't resolvable (theme not loaded):
         // still routed through the base tokens so no hex literals ever

@@ -222,6 +222,36 @@
     /*  Shared helpers                                                    */
     /* ----------------------------------------------------------------- */
 
+    /**
+     * Resolve a CSS custom property to a concrete color string
+     * (e.g. 'rgb(230, 122, 20)').
+     *
+     * Why this exists: our theme ramps under iwac-visualizations.css
+     * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
+     * are defined as `color-mix(in srgb, var(--primary), var(--surface))`
+     * expressions so they track the IWAC theme's --primary / --surface
+     * tokens. A plain getPropertyValue() read returns the unresolved
+     * `color-mix(...)` source — ECharts' color parser does not understand
+     * color-mix() and falls back to grayscale, which is what the heatmap
+     * was showing. Routing the read through an offscreen probe forces
+     * the browser to compute the expression into a concrete `rgb(...)`
+     * that ECharts can parse.
+     *
+     * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
+     * @returns {string} computed color, or '' if undefined / unresolvable
+     */
+    ns.resolveCssVar = function (varName) {
+        if (typeof document === 'undefined' || !document.body) return '';
+        var probe = document.createElement('span');
+        probe.style.cssText =
+            'position:absolute;visibility:hidden;width:0;height:0;' +
+            'color:var(' + varName + ',transparent)';
+        document.body.appendChild(probe);
+        var resolved = getComputedStyle(probe).color;
+        document.body.removeChild(probe);
+        return resolved === 'rgba(0, 0, 0, 0)' ? '' : resolved;
+    };
+
     /** Truncate a string with ellipsis if it exceeds maxLen. */
     ns.truncateLabel = function (str, maxLen) {
         if (!str) return '';
