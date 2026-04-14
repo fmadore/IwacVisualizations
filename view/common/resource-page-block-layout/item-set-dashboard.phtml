@@ -18,15 +18,15 @@ $this->headLink()->appendStylesheet(
 );
 
 // CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js');
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js');
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js');
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js', 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
 $this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
 
 // IWAC infrastructure
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'));
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'));
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 $siteSlug = $this->currentSite()->slug();
 ?>
