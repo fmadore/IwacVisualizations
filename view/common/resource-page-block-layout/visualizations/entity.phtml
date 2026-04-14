@@ -29,36 +29,36 @@ $this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist
 $this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
 
 // IWAC infrastructure — order matters: i18n → theme → core
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Shared primitives
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Reuse the person panel modules: the entity precompute wraps every
 // section in `by_role.all` precisely so these modules work unchanged
 // with a no-op facet provided by entity-dashboard.js. Same source
 // files load on person and entity pages — zero forked panel JS.
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Orchestrator — must load LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/entity-dashboard.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/entity-dashboard.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 $siteSlug = $this->currentSite()->slug();
 $escapeAttr = $this->plugin('escapeHtmlAttr');

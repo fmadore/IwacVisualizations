@@ -31,31 +31,31 @@ $this->headScript()->appendFile('https://unpkg.com/maplibre-gl@5/dist/maplibre-g
 $this->headLink()->appendStylesheet('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css');
 
 // IWAC infrastructure — order matters: i18n → theme → core → shared primitives → panels → orchestrator
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Shared primitives (panels.js first, then primitives that depend on it)
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Collection Overview panels (self-registering IIFE modules)
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/recent-additions.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/entities.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/languages.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/growth.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/types-over-time.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/gantt.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/wordcloud.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/map.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/recent-additions.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/entities.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/languages.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/growth.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/types-over-time.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/gantt.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/wordcloud.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 // Orchestrator — LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
 
 $siteSlug = $this->currentSite()->slug();
 ?>

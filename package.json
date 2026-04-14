@@ -1,0 +1,12 @@
+{
+  "name": "iwac-visualizations",
+  "version": "0.6.3",
+  "private": true,
+  "description": "Build scripts for IWAC Visualizations module static assets.",
+  "scripts": {
+    "build:js": "node scripts/build-js.js"
+  },
+  "devDependencies": {
+    "terser": "^5.36.0"
+  }
+}
