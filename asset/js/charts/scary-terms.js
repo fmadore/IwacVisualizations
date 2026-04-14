@@ -206,9 +206,10 @@
         // Pre-compute one cumulative snapshot per year. The bar chart race
         // shows running totals (matching the iwac-dashboard semantics), so
         // bars grow monotonically as the race advances — they never shrink.
+        // The x-axis intentionally adapts per frame: pinning it to the final
+        // total made every early year render as a sliver against a ~4500-
+        // wide scale, which was the user's top complaint.
         var cumulativeByYearIdx = buildCumulativeSnapshots(temporal, years);
-        var finalSnapshot = cumulativeByYearIdx[cumulativeByYearIdx.length - 1] || [];
-        var raceMax = finalSnapshot.length ? finalSnapshot[0][1] : null;
 
         var state = {
             view: 'race',
@@ -238,8 +239,7 @@
                 var yearData = (cumulativeByYearIdx[state.yearIdx] || []).slice(0, TOP_N);
                 option = C.scaryTerms({
                     entries: yearData,
-                    termColors: termColors,
-                    fixedMax: raceMax
+                    termColors: termColors
                 });
                 chartTitle.textContent = P.t('scary.chart_title') + ' \u2014 ' + year;
                 topBadge.textContent = yearData[0]
