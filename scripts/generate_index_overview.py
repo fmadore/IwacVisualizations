@@ -308,9 +308,12 @@ def compute_places(
             "lng": lng,
             "frequency": int(freq_val) if pd.notna(freq_val) else 0,
         }
-        countries = parse_pipe_separated(row.get("countries"))
-        if countries:
-            entry["country"] = countries[0]
+        # Deliberately no `country` field: the `countries` column on a
+        # Lieu authority lists the IWAC newspaper countries that mention
+        # it, not where the place is located. Picking countries[0] made
+        # every popup read "Bénin" because Beninese papers are the most
+        # numerous source. The popup builder shows place name + mention
+        # count instead.
         rows.append(entry)
     # Sort by frequency desc so the map builds largest-on-top
     rows.sort(key=lambda r: -r["frequency"])

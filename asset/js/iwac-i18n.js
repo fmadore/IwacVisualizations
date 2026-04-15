@@ -115,6 +115,7 @@
             'ref_type_Article de revue':    'Journal article',
             'ref_type_Chapitre':            'Book chapter',
             'ref_type_Livre':               'Book',
+            'ref_type_Ouvrage collectif':   'Edited volume',
             'ref_type_Th\u00e8se':          'Thesis',
             'ref_type_M\u00e9moire':        'Master\u2019s thesis',
             'ref_type_Communication':       'Conference paper',
@@ -123,9 +124,28 @@
             'ref_type_Compte rendu':        'Review',
             'ref_type_Article de journal':  'Newspaper article',
             'ref_type_Billet de blog':      'Blog post',
+            'ref_type_Article de blog':     'Blog post',
             'ref_type_Page web':            'Web page',
             'ref_type_Document':            'Document',
             'ref_type_Unknown':             'Unknown',
+
+            // Language labels (values come from `language` in the dataset, in French)
+            'lang_Anglais':   'English',
+            'lang_Fran\u00e7ais': 'French',
+            'lang_Allemand':  'German',
+            'lang_Italien':   'Italian',
+            'lang_Espagnol':  'Spanish',
+            'lang_Slov\u00e8ne': 'Slovenian',
+            'lang_Arabe':     'Arabic',
+            'lang_Portugais': 'Portuguese',
+            'lang_N\u00e9erlandais': 'Dutch',
+
+            // Author collaboration network (References Overview)
+            'Author collaborations': 'Author collaborations',
+            'Co-author':             'Co-author',
+            'Author / editor':       'Author / editor',
+            'Mixed':                 'Mixed',
+            'Shared references':     'Shared references',
 
             // Plural-ish
             'items_count': '{count} items',
@@ -400,6 +420,7 @@
             'ref_type_Article de revue':    'Article de revue',
             'ref_type_Chapitre':            'Chapitre',
             'ref_type_Livre':               'Livre',
+            'ref_type_Ouvrage collectif':   'Ouvrage collectif',
             'ref_type_Th\u00e8se':          'Th\u00e8se',
             'ref_type_M\u00e9moire':        'M\u00e9moire',
             'ref_type_Communication':       'Communication',
@@ -408,9 +429,28 @@
             'ref_type_Compte rendu':        'Compte rendu',
             'ref_type_Article de journal':  'Article de journal',
             'ref_type_Billet de blog':      'Billet de blog',
+            'ref_type_Article de blog':     'Article de blog',
             'ref_type_Page web':            'Page web',
             'ref_type_Document':            'Document',
             'ref_type_Unknown':             'Inconnu',
+
+            // Language labels — French source, pass-through
+            'lang_Anglais':   'Anglais',
+            'lang_Fran\u00e7ais': 'Fran\u00e7ais',
+            'lang_Allemand':  'Allemand',
+            'lang_Italien':   'Italien',
+            'lang_Espagnol':  'Espagnol',
+            'lang_Slov\u00e8ne': 'Slov\u00e8ne',
+            'lang_Arabe':     'Arabe',
+            'lang_Portugais': 'Portugais',
+            'lang_N\u00e9erlandais': 'N\u00e9erlandais',
+
+            // Author collaboration network (References Overview)
+            'Author collaborations': 'Collaborations entre auteurs',
+            'Co-author':             'Co-auteur',
+            'Author / editor':       'Auteur / \u00e9diteur',
+            'Mixed':                 'Mixte',
+            'Shared references':     'R\u00e9f\u00e9rences communes',
 
             'items_count': '{count} \u00e9l\u00e9ments',
             'articles_count': '{count} articles',

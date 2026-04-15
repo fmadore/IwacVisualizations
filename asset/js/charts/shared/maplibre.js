@@ -143,6 +143,22 @@
      * our CSS can target the close button, tip, and content without
      * fighting with MapLibre's built-in rules.
      *
+     * Two MapLibre PopupOptions defaults that fix a recurring "popup
+     * spills outside the map" complaint:
+     *
+     *   - `maxWidth: '320px'` — matches the inner `.iwac-vis-map-popup`
+     *     CSS cap so MapLibre's auto-anchor calculation reflects the
+     *     real popup width. The MapLibre default is 240px, which made
+     *     the auto-anchor pick "top" or "bottom" even when the popup
+     *     would actually overflow the side of the map container.
+     *   - `padding: 16` — uniform pixel padding from the map container
+     *     edges that MapLibre keeps free when picking an anchor. With
+     *     this set, a click on a marker near the edge anchors away
+     *     from that edge, keeping the entire popup in the viewport.
+     *     PaddingOptions on Popup is supported in MapLibre 5+.
+     *
+     * Callers can override either by passing the same key in `options`.
+     *
      * @param {Object} [options]  Same shape as maplibregl.Popup options
      * @returns {maplibregl.Popup}
      */
@@ -154,7 +170,10 @@
         var opts = options || {};
         var className = 'iwac-vis-maplibre-popup';
         if (opts.className) className += ' ' + opts.className;
-        var merged = {};
+        var merged = {
+            maxWidth: '320px',
+            padding: { top: 16, right: 16, bottom: 16, left: 16 }
+        };
         for (var k in opts) {
             if (Object.prototype.hasOwnProperty.call(opts, k)) merged[k] = opts[k];
         }

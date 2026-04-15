@@ -174,9 +174,14 @@
 .iwac-vis-panel {
     position: relative;
     background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: var(--panel-border, 1px solid var(--border, #dcd7ce));
+    /* Bypass the IWAC theme's near-transparent --panel-border shorthand
+     * (which resolves to ~6% alpha on the active site theme — barely
+     * visible against the wide chart panels). Use --border directly so
+     * every chart panel reads as a distinct card. Matches the visual
+     * weight of the Keyword Explorer sidebar and summary cards. */
+    border: 1px solid var(--border, #dcd7ce);
     border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-4, 1rem);
     /* Prevent ECharts canvas from forcing grid overflow. */
     min-width: 0;
@@ -375,13 +380,34 @@
  *  --panel-bg, --shadow-xs, --radius-md, accent left border, primary-
  *  tinted labels. See IWAC-theme _metadata.scss + _tokens.scss. */
 
+/*  Shared grid wrapper used by every block that renders a summary-cards
+ *  row via P.buildSummaryCards (collection / index / person / entity /
+ *  references). Lives in core so that blocks which don't load
+ *  collection-overview.css (index, person, entity dashboards) still get
+ *  the grid layout — without it, summary cards stack as block elements
+ *  at full width. Mobile-first: 2 columns by default, 3 on sm, 6 on lg. */
+
+.iwac-vis-overview-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 640px) { /* sm */
+    .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
+}
+
 .iwac-vis-summary-card {
     background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border: 1px solid var(--border, #dcd7ce);
     border-left: var(--accent-line-md, 3px) solid
         color-mix(in srgb, var(--primary, #e67a14) var(--accent-mix-medium, 40%), var(--border, #dcd7ce));
     border-radius: var(--radius-md, 0.75rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
     display: flex;
     flex-direction: column;

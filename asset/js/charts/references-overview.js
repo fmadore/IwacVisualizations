@@ -1,9 +1,13 @@
 /**
  * IWAC Visualizations — References Overview block (controller)
  *
- * Pure client-side. Paginates the Hugging Face datasets-server `/rows`
- * endpoint (~9 parallel requests for 864 rows), aggregates in the
- * browser, and renders using IWACVis.panels + IWACVis.chartOptions.
+ * Loads a single precomputed JSON bundle from
+ * `asset/data/references-overview.json` (built by
+ * `scripts/generate_references_overview.py`) and renders all panels
+ * from it. Replaces the old client-side path that paged through the
+ * Hugging Face datasets-server `/rows` endpoint at runtime — every
+ * visit triggered ~9 parallel HTTP fetches and a full client-side
+ * aggregation pass over 864 rows.
  *
  * Panels (in render order):
  *   1. Summary cards row
@@ -15,6 +19,7 @@
  *   7. Top authors — horizontal bar (wide)
  *   8. Top subjects — horizontal bar (wide)
  *   9. References breakdown — treemap country → type (wide)
+ *  10. Author collaborations — force-directed network (wide)
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
  */
@@ -30,234 +35,37 @@
     var C = ns.chartOptions;
 
     /* ----------------------------------------------------------------- */
-    /*  HF API configuration                                              */
+    /*  Translation helpers — type + language names                       */
     /* ----------------------------------------------------------------- */
 
-    var DATASET_ID = 'fmadore/islam-west-africa-collection';
-    var SUBSET = 'references';
-    var SPLIT = 'train';
-    var PAGE_SIZE = 100;
-    var API_BASE = 'https://datasets-server.huggingface.co/rows';
-
-    var TOP_N_AUTHORS  = 15;
-    var TOP_N_SUBJECTS = 15;
-    var TOP_N_TYPES    = 10;
-
-    /* ----------------------------------------------------------------- */
-    /*  HF datasets-server fetching                                       */
-    /* ----------------------------------------------------------------- */
-
-    function buildRowsUrl(offset, length) {
-        var params = new URLSearchParams({
-            dataset: DATASET_ID,
-            config: SUBSET,
-            split: SPLIT,
-            offset: String(offset),
-            length: String(length)
-        });
-        return API_BASE + '?' + params.toString();
-    }
-
-    function fetchPage(offset, length) {
-        return fetch(buildRowsUrl(offset, length), {
-            headers: { Accept: 'application/json' }
-        }).then(function (r) {
-            if (!r.ok) throw new Error('HF rows HTTP ' + r.status);
-            return r.json();
-        }).then(function (payload) {
-            var rows = (payload.rows || []).map(function (entry) { return entry.row || {}; });
-            return { rows: rows, total: payload.num_rows_total };
-        });
-    }
-
-    function fetchAllReferences() {
-        return fetchPage(0, PAGE_SIZE).then(function (first) {
-            var total = first.total;
-            if (!total || total <= first.rows.length) return first.rows;
-            var pagesNeeded = Math.ceil(total / PAGE_SIZE);
-            var promises = [];
-            for (var i = 1; i < pagesNeeded; i++) {
-                promises.push(fetchPage(i * PAGE_SIZE, PAGE_SIZE));
-            }
-            return Promise.all(promises).then(function (pages) {
-                var all = first.rows.slice();
-                pages.forEach(function (p) { all = all.concat(p.rows); });
-                return all;
-            });
-        });
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Field helpers + reference-type translation                        */
-    /* ----------------------------------------------------------------- */
-
-    function parsePipe(value) {
-        if (value == null) return [];
-        if (Array.isArray(value)) return value.map(function (v) { return String(v).trim(); }).filter(Boolean);
-        var str = String(value).trim();
-        if (!str) return [];
-        return str.split('|').map(function (v) { return v.trim(); }).filter(Boolean);
-    }
-
-    function extractYear(value) {
-        if (value == null) return null;
-        var str = String(value).trim();
-        if (!str) return null;
-        var match = str.match(/\b(19|20)\d{2}\b/);
-        if (!match) return null;
-        var year = parseInt(match[0], 10);
-        if (year >= 1900 && year <= 2100) return year;
-        return null;
-    }
-
-    function getRefType(row) {
-        var raw = row['o:resource_class'] || row.type || '';
-        raw = String(raw).trim();
-        return raw || 'Unknown';
-    }
-
+    /**
+     * Translate a French-source reference type (e.g. "Article de revue")
+     * to the active locale via the `ref_type_<name>` i18n key. Falls
+     * back to the raw name when no translation exists so unknown types
+     * still render gracefully.
+     */
     function translateType(type) {
         var key = 'ref_type_' + type;
         var translated = P.t(key);
         return translated === key ? type : translated;
     }
 
-    /* ----------------------------------------------------------------- */
-    /*  Client-side aggregations                                          */
-    /* ----------------------------------------------------------------- */
-
-    function summarize(rows) {
-        var authors = new Set();
-        var publishers = new Set();
-        var languages = new Set();
-        var countries = new Set();
-        var types = new Set();
-        var yearMin = null, yearMax = null;
-
-        rows.forEach(function (row) {
-            parsePipe(row.author).forEach(function (a) { if (a) authors.add(a); });
-            parsePipe(row.publisher).forEach(function (p) { if (p) publishers.add(p); });
-            parsePipe(row.language).forEach(function (l) { if (l) languages.add(l); });
-            parsePipe(row.country).forEach(function (c) { if (c && !P.isUnknown(c)) countries.add(c); });
-            types.add(getRefType(row));
-            var year = extractYear(row.pub_date);
-            if (year != null) {
-                if (yearMin == null || year < yearMin) yearMin = year;
-                if (yearMax == null || year > yearMax) yearMax = year;
-            }
-        });
-
-        return {
-            total: rows.length,
-            authors: authors.size,
-            publishers: publishers.size,
-            languages: languages.size,
-            countries: countries.size,
-            types: types.size,
-            year_min: yearMin,
-            year_max: yearMax
-        };
-    }
-
-    /** Build a timeline object shaped like the generator's output. */
-    function timelineByType(rows) {
-        var byYearType = {};
-        var typeTotals = {};
-        var seenYears = new Set();
-
-        rows.forEach(function (row) {
-            var year = extractYear(row.pub_date);
-            if (year == null) return;
-            var type = getRefType(row);
-            seenYears.add(year);
-            if (!byYearType[year]) byYearType[year] = {};
-            byYearType[year][type] = (byYearType[year][type] || 0) + 1;
-            typeTotals[type] = (typeTotals[type] || 0) + 1;
-        });
-
-        var years = Array.from(seenYears).sort(function (a, b) { return a - b; });
-        var types = Object.keys(typeTotals).sort(function (a, b) {
-            return typeTotals[b] - typeTotals[a];
-        });
-
-        var series = {};
-        types.forEach(function (type) {
-            series[type] = years.map(function (y) {
-                return (byYearType[y] && byYearType[y][type]) || 0;
-            });
-        });
-
-        // `countries` key is just the stack-series categories — repurposing
-        // the same field name so C.timeline can consume this shape directly.
-        return {
-            years: years,
-            countries: types.map(translateType),
-            series: (function () {
-                var translated = {};
-                types.forEach(function (type) { translated[translateType(type)] = series[type]; });
-                return translated;
-            })()
-        };
-    }
-
-    function countByPipe(rows, field) {
-        var counter = {};
-        rows.forEach(function (row) {
-            parsePipe(row[field]).forEach(function (v) {
-                if (!v || P.isUnknown(v)) return;
-                counter[v] = (counter[v] || 0) + 1;
-            });
-        });
-        return counter;
-    }
-
-    function topN(counter, n) {
-        return Object.keys(counter)
-            .map(function (k) { return { name: k, count: counter[k] }; })
-            .sort(function (a, b) { return b.count - a.count; })
-            .slice(0, n);
-    }
-
-    function typeDistribution(rows, n) {
-        var counter = {};
-        rows.forEach(function (row) {
-            var type = getRefType(row);
-            counter[type] = (counter[type] || 0) + 1;
-        });
-        return topN(counter, n).map(function (e) {
-            return { name: translateType(e.name), count: e.count };
-        });
-    }
-
     /**
-     * Build a treemap tree (country → reference type). Structure matches
-     * what C.treemap expects.
+     * Same idea for language names: precomputed JSON ships the raw
+     * French label ("Anglais"), the JS calls `lang_<name>` so the panel
+     * shows "English" on the English site and "Anglais" on the French
+     * one.
      */
-    function buildTreemap(rows) {
-        var byCountry = {};
-        rows.forEach(function (row) {
-            var type = translateType(getRefType(row));
-            var countries = parsePipe(row.country);
-            if (countries.length === 0) return;
-            countries.forEach(function (country) {
-                if (P.isUnknown(country)) return;
-                if (!byCountry[country]) byCountry[country] = {};
-                byCountry[country][type] = (byCountry[country][type] || 0) + 1;
-            });
+    function translateLang(name) {
+        var key = 'lang_' + name;
+        var translated = P.t(key);
+        return translated === key ? name : translated;
+    }
+
+    function translateEntries(entries, fn) {
+        return (entries || []).map(function (e) {
+            return { name: fn(e.name), count: e.count };
         });
-
-        var children = Object.keys(byCountry)
-            .map(function (country) {
-                var types = byCountry[country];
-                var typeChildren = Object.keys(types)
-                    .map(function (t) { return { name: t, value: types[t] }; })
-                    .sort(function (a, b) { return b.value - a.value; });
-                var total = typeChildren.reduce(function (s, c) { return s + c.value; }, 0);
-                return { name: country, value: total, children: typeChildren };
-            })
-            .sort(function (a, b) { return b.value - a.value; });
-
-        return { name: 'References', children: children };
     }
 
     /* ----------------------------------------------------------------- */
@@ -291,6 +99,11 @@
         var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'));
         var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'));
         var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
+        var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'));
+        // The collaboration network needs the same breathing room as
+        // the entity-dashboard graph host so labels on the outer ring
+        // don't clip and the force layout has somewhere to expand to.
+        networkPanel.chart.classList.add('iwac-vis-graph-host');
 
         grid.appendChild(timelinePanel.panel);
         grid.appendChild(typesPanel.panel);
@@ -299,6 +112,7 @@
         grid.appendChild(authorsPanel.panel);
         grid.appendChild(subjectsPanel.panel);
         grid.appendChild(treemapPanel.panel);
+        grid.appendChild(networkPanel.panel);
 
         return {
             timeline:  timelinePanel.chart,
@@ -307,7 +121,64 @@
             countries: countriesPanel.chart,
             authors:   authorsPanel.chart,
             subjects:  subjectsPanel.chart,
-            treemap:   treemapPanel.chart
+            treemap:   treemapPanel.chart,
+            network:   networkPanel,
+            networkChart: networkPanel.chart
+        };
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Translation pass over the precomputed data                        */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * The generator ships type names as raw French because i18n is the
+     * front-end's job, not the build's. This wraps the affected fields
+     * with `translateType` / `translateLang` calls so every label that
+     * lands in the DOM has been routed through the active locale.
+     */
+    function localizeData(data) {
+        // Timeline: the `countries` array is actually the stack
+        // categories (reference types). Both `countries` and `series`
+        // keys need the same rename so C.timeline finds matching keys.
+        var timeline = data.timeline || { years: [], countries: [], series: {} };
+        var translatedTypes = (timeline.countries || []).map(translateType);
+        var translatedSeries = {};
+        (timeline.countries || []).forEach(function (rawType, i) {
+            translatedSeries[translatedTypes[i]] = timeline.series[rawType] || [];
+        });
+        var localizedTimeline = {
+            years:     timeline.years || [],
+            countries: translatedTypes,
+            series:    translatedSeries
+        };
+
+        // Treemap: keep country labels as-is (they're language-neutral
+        // proper nouns), but translate the inner type children.
+        var treemap = data.treemap || { children: [] };
+        var localizedTreemap = {
+            name: treemap.name,
+            children: (treemap.children || []).map(function (c) {
+                return {
+                    name: c.name,
+                    value: c.value,
+                    children: (c.children || []).map(function (t) {
+                        return { name: translateType(t.name), value: t.value };
+                    })
+                };
+            })
+        };
+
+        return {
+            summary:                data.summary || {},
+            timeline:               localizedTimeline,
+            types:                  translateEntries(data.types, translateType),
+            languages:              translateEntries(data.languages, translateLang),
+            countries:              data.countries || [],
+            authors:                data.authors || [],
+            subjects:               data.subjects || [],
+            treemap:                localizedTreemap,
+            author_collaborations:  data.author_collaborations || { nodes: [], edges: [] }
         };
     }
 
@@ -317,73 +188,93 @@
 
     function initReferencesOverview(container) {
         var loadingLabel = container.querySelector('.iwac-vis-loading span');
-        if (loadingLabel) loadingLabel.textContent = P.t('Fetching references…');
+        if (loadingLabel) loadingLabel.textContent = P.t('Loading references overview') + '\u2026';
 
-        fetchAllReferences()
-            .then(function (rows) {
-                if (!rows || rows.length === 0) {
+        var basePath = container.getAttribute('data-base-path') || '';
+        var url = basePath + '/modules/IwacVisualizations/asset/data/references-overview.json';
+
+        fetch(url, { headers: { Accept: 'application/json' }})
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function (raw) {
+                if (!raw || !raw.summary || raw.summary.total === 0) {
                     container.innerHTML = '';
                     container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
                     return;
                 }
 
-                var summary = summarize(rows);
-                var h = buildLayout(container, summary);
+                var data = localizeData(raw);
+                var h = buildLayout(container, data.summary);
 
                 // 1. Timeline
-                var timeline = timelineByType(rows);
-                if (timeline.years.length > 0) {
+                if (data.timeline.years && data.timeline.years.length > 0) {
                     ns.registerChart(h.timeline, function (el, chart) {
-                        chart.setOption(C.timeline(timeline));
+                        chart.setOption(C.timeline(data.timeline));
                     });
                 }
 
-                // 2. Reference types (horizontal bar)
-                var types = typeDistribution(rows, TOP_N_TYPES);
-                if (types.length > 0) {
+                // 2. Reference types
+                if (data.types.length > 0) {
                     ns.registerChart(h.types, function (el, chart) {
-                        chart.setOption(C.horizontalBar(types));
+                        chart.setOption(C.horizontalBar(data.types));
                     });
                 }
 
-                // 3. Languages (pie)
-                var languages = topN(countByPipe(rows, 'language'), 10);
-                if (languages.length > 0) {
+                // 3. Languages
+                if (data.languages.length > 0) {
                     ns.registerChart(h.languages, function (el, chart) {
-                        chart.setOption(C.pie(languages));
+                        chart.setOption(C.pie(data.languages));
                     });
                 }
 
-                // 4. Countries (horizontal bar)
-                var countries = topN(countByPipe(rows, 'country'), 10);
-                if (countries.length > 0) {
+                // 4. Countries
+                if (data.countries.length > 0) {
                     ns.registerChart(h.countries, function (el, chart) {
-                        chart.setOption(C.horizontalBar(countries));
+                        chart.setOption(C.horizontalBar(data.countries));
                     });
                 }
 
                 // 5. Top authors
-                var authors = topN(countByPipe(rows, 'author'), TOP_N_AUTHORS);
-                if (authors.length > 0) {
+                if (data.authors.length > 0) {
                     ns.registerChart(h.authors, function (el, chart) {
-                        chart.setOption(C.horizontalBar(authors));
+                        chart.setOption(C.horizontalBar(data.authors));
                     });
                 }
 
                 // 6. Top subjects
-                var subjects = topN(countByPipe(rows, 'subject'), TOP_N_SUBJECTS);
-                if (subjects.length > 0) {
+                if (data.subjects.length > 0) {
                     ns.registerChart(h.subjects, function (el, chart) {
-                        chart.setOption(C.horizontalBar(subjects));
+                        chart.setOption(C.horizontalBar(data.subjects));
                     });
                 }
 
                 // 7. Treemap country → type
-                var treemap = buildTreemap(rows);
-                if (treemap.children && treemap.children.length > 0) {
+                if (data.treemap.children && data.treemap.children.length > 0) {
                     ns.registerChart(h.treemap, function (el, chart) {
-                        chart.setOption(C.treemap(treemap));
+                        chart.setOption(C.treemap(data.treemap));
                     });
+                }
+
+                // 8. Author collaboration network
+                var graph = data.author_collaborations;
+                if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
+                    var chart = ns.registerChart(h.networkChart, function (el, instance) {
+                        instance.setOption(C.collaborationNetwork(graph), true);
+                    });
+                    // Wire a fullscreen toggle so the network panel can
+                    // expand into the viewport for closer inspection,
+                    // matching the cooccurrence chord and entity network
+                    // panels on the person dashboard.
+                    if (chart && P.addFullscreenButton) {
+                        P.addFullscreenButton(h.network.panel, {
+                            onResize: function () {
+                                var live = ns.getLiveChart && ns.getLiveChart(h.networkChart);
+                                if (live) live.resize();
+                            }
+                        });
+                    }
                 }
             })
             .catch(function (err) {

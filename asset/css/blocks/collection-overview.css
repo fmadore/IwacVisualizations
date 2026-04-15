@@ -25,23 +25,9 @@
 }
 
 
-/* =================================================================== */
-/*  Summary cards row                                                    */
-/* =================================================================== */
-
-.iwac-vis-overview-summary {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3, 0.75rem);
-}
-
-@media (min-width: 640px) { /* sm */
-    .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (min-width: 1024px) { /* lg */
-    .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
-}
+/* Summary cards row uses the shared .iwac-vis-overview-summary grid
+ * defined in iwac-core.css — kept there so blocks that don't load
+ * this stylesheet still pick up the grid layout. */
 
 
 /* =================================================================== */

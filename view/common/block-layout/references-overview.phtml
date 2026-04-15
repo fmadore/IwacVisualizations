@@ -2,11 +2,16 @@
 /**
  * References Overview page block.
  *
- * Fetches the full `references` subset (~864 rows) live from the
- * Hugging Face datasets-server API and renders a 5-panel dashboard.
- * No precompute step — the chart JS paginates through the /rows
- * endpoint (9 parallel requests of 100 rows each) and aggregates
- * everything in the browser.
+ * Loads a single precomputed JSON bundle from
+ * `asset/data/references-overview.json` (built by
+ * `scripts/generate_references_overview.py`) and renders a multi-panel
+ * dashboard. Replaces the old client-side path that paged through the
+ * Hugging Face datasets-server `/rows` endpoint at runtime.
+ *
+ * Panels: summary cards, period subtitle, references-by-type timeline,
+ * reference types bar, languages pie, countries bar, top authors,
+ * top subjects, country/type treemap, and the author collaboration
+ * force-directed network (with a fullscreen toggle).
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block

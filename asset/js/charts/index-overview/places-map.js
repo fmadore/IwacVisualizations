@@ -264,8 +264,12 @@
             var isAuth = feat.layer && feat.layer.id === 'place-authority-pins';
             var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
 
+            // No country subtitle line — the index dataset stores the
+            // *newspaper-source* countries on each Lieu authority, not
+            // the place's actual country, which led to every popup
+            // showing "Bénin" (the country with the most articles).
+            // The place name itself is the relevant identifier.
             var subtitle = [];
-            if (isAuth && props.country) subtitle.push(props.country);
             if (isAuth && props.frequency != null) {
                 subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.frequency)) }));
             } else if (!isAuth && props.count != null) {
