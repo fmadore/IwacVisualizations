@@ -556,20 +556,42 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
     color: var(--ink, #18202a);
 }
 
-.iwac-vis-pagination__btn {
-    padding: 0.35rem 0.9rem;
-    background: var(--surface-raised, #f9f7f3);
-    color: var(--ink, #18202a);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-sm, 4px);
-    cursor: pointer;
+/*
+ * Pagination, facet, and tab buttons share a common "chip" aesthetic —
+ * subtle inactive state, surface-raised on hover, primary-tinted on
+ * active. Originally introduced for the Keyword Explorer tabs and
+ * extended here so every chip-style control in the module looks and
+ * feels identical. The canonical implementation lives on
+ * `.iwac-vis-tab` (see §Entity tabs above). Keep that rule and these
+ * in sync when adjusting.
+ */
+.iwac-vis-pagination__btn,
+.iwac-vis-facets__btn,
+.iwac-vis-facets__sub-btn {
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    background: transparent;
+    color: var(--muted, #6e7a82);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md, 8px);
+    font-family: inherit;
     font-size: var(--text-sm, 0.9rem);
-    transition: background 0.12s ease, border-color 0.12s ease;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
 
-.iwac-vis-pagination__btn:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--primary, #e67a14) 8%, var(--surface-raised, #f9f7f3));
-    border-color: var(--primary, #e67a14);
+.iwac-vis-pagination__btn:hover:not(:disabled),
+.iwac-vis-facets__btn:hover,
+.iwac-vis-facets__sub-btn:hover {
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-pagination__btn:focus-visible,
+.iwac-vis-facets__btn:focus-visible,
+.iwac-vis-facets__sub-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
 }
 
 .iwac-vis-pagination__btn:disabled {
@@ -577,69 +599,75 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
     cursor: not-allowed;
 }
 
-.iwac-vis-pagination__btn:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
-    outline-offset: 2px;
+.iwac-vis-facets__btn--active,
+.iwac-vis-facets__sub-btn--active {
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
 }
 
 .iwac-vis-pagination__indicator {
     font-size: var(--text-sm, 0.9rem);
-    color: var(--ink-muted, #5a6472);
+    color: var(--muted, #6e7a82);
     min-width: 8ch;
     text-align: center;
 }
 
 /* =================================================================== */
-/*  Facet buttons                                                       */
+/*  Facet group layout                                                  */
 /* =================================================================== */
 
 .iwac-vis-facets {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    gap: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-3, 0.75rem);
 }
 
 .iwac-vis-facets__main,
 .iwac-vis-facets__sub {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1, 0.25rem);
     align-items: center;
 }
 
-.iwac-vis-facets__btn,
-.iwac-vis-facets__sub-btn {
-    padding: 0.3rem 0.8rem;
-    background: var(--surface-raised, #f9f7f3);
+/*
+ * All selects in the module (facet switcher, keyword explorer
+ * sidebar, any future dropdown) share a common form-control style.
+ * Aligns radius-md + surface-raised + primary focus ring with the
+ * chip buttons and text inputs so the UI reads as one family.
+ */
+.iwac-vis-facets__select,
+.iwac-vis-keywords-filters__select,
+.iwac-vis-index-table-search,
+.iwac-vis-keywords-compare__search {
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    background: var(--surface, #fdfdfc);
     color: var(--ink, #18202a);
     border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-sm, 4px);
-    cursor: pointer;
-    font-size: var(--text-sm, 0.85rem);
-    transition: background 0.12s ease, border-color 0.12s ease;
-}
-
-.iwac-vis-facets__btn:hover,
-.iwac-vis-facets__sub-btn:hover {
-    border-color: var(--primary, #e67a14);
-}
-
-.iwac-vis-facets__btn--active,
-.iwac-vis-facets__sub-btn--active {
-    background: var(--primary, #e67a14);
-    color: #fff;
-    border-color: var(--primary, #e67a14);
+    border-radius: var(--radius-md, 8px);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9rem);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .iwac-vis-facets__select {
-    padding: 0.3rem 0.6rem;
-    background: var(--surface-raised, #f9f7f3);
-    color: var(--ink, #18202a);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-sm, 4px);
-    font-size: var(--text-sm, 0.85rem);
     max-width: 18rem;
+}
+
+.iwac-vis-facets__select:hover,
+.iwac-vis-keywords-filters__select:hover {
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-facets__select:focus-visible,
+.iwac-vis-keywords-filters__select:focus-visible,
+.iwac-vis-index-table-search:focus-visible,
+.iwac-vis-keywords-compare__search:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
 }
 
 /* =================================================================== */
@@ -1591,7 +1619,9 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     font-size: var(--text-sm, 0.9rem);
 }
 
-/* Index table — search + facets header row */
+/* Index table — search + facets header row.
+ * Base text-input styling comes from the unified form-control rule
+ * above; only layout (flex / min-width) lives here. */
 
 .iwac-vis-index-table-controls {
     display: flex;
@@ -1604,19 +1634,6 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 .iwac-vis-index-table-search {
     flex: 1 1 220px;
     min-width: 180px;
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
-    background: var(--surface, #fdfdfc);
-    color: var(--ink, #18202a);
-    font-family: inherit;
-    font-size: var(--text-sm, 0.9rem);
-}
-
-.iwac-vis-index-table-search:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
-    outline-offset: 2px;
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
 }
 
 /* =================================================================== */
@@ -1674,20 +1691,10 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     letter-spacing: 0.03em;
 }
 
+/* Base form-control styling lives in the shared rule above; only the
+ * full-width sidebar override remains here. */
 .iwac-vis-keywords-filters__select {
     width: 100%;
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
-    background: var(--surface, #fdfdfc);
-    color: var(--ink, #18202a);
-    font-family: inherit;
-    font-size: var(--text-sm, 0.9rem);
-}
-
-.iwac-vis-keywords-filters__select:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
-    outline-offset: 2px;
 }
 
 /* Compare-mode picker */
@@ -1727,20 +1734,8 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
 }
 
-.iwac-vis-keywords-compare__search {
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
-    background: var(--surface, #fdfdfc);
-    color: var(--ink, #18202a);
-    font-family: inherit;
-    font-size: var(--text-sm, 0.9rem);
-}
-
-.iwac-vis-keywords-compare__search:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
-    outline-offset: 2px;
-}
+/* .iwac-vis-keywords-compare__search styling is provided by the
+ * shared form-control rule above — no per-panel overrides needed. */
 
 .iwac-vis-keywords-compare__list {
     max-height: 14rem;
