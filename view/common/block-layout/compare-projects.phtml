@@ -10,9 +10,13 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheet
+// Stylesheets — placeholder block; enqueues core + maplibre so the
+// future orchestrator can hit the ground running.
 $this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
 );
 
 // CDN libraries

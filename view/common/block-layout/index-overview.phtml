@@ -25,9 +25,15 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheet
+// Stylesheets — shared core first, then map chrome, then block-specific
 $this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/blocks/index-overview.css', 'IwacVisualizations')
 );
 
 // CDN libraries

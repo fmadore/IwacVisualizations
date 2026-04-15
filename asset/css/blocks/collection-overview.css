@@ -1,0 +1,220 @@
+/* =================================================================== */
+/*  Collection Overview — block-specific styles                          */
+/* =================================================================== */
+/*                                                                       */
+/*  Top-level layout (wrapper → summary cards row → charts grid) plus    */
+/*  the wide "Recent additions" table and the word-cloud panel's        */
+/*  taller min-height. Depends on iwac-core.css for tokens, panel,       */
+/*  summary card, table, pagination, and chip controls.                  */
+/* =================================================================== */
+
+.iwac-vis-overview {
+    min-height: 420px;
+}
+
+.iwac-vis-overview-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1.25rem);
+}
+
+.iwac-vis-overview-subtitle {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+}
+
+
+/* =================================================================== */
+/*  Summary cards row                                                    */
+/* =================================================================== */
+
+.iwac-vis-overview-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 640px) { /* sm */
+    .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
+}
+
+
+/* =================================================================== */
+/*  Charts grid                                                          */
+/* =================================================================== */
+
+.iwac-vis-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 768px) { /* md */
+    .iwac-vis-overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .iwac-vis-overview-grid .iwac-vis-panel--wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    /* Prevent ECharts canvas from bloating the column. */
+    min-width: 0;
+    overflow: hidden;
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel h4 {
+    margin: 0;
+}
+
+.iwac-vis-overview-grid .iwac-vis-chart {
+    min-height: 280px;
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel--wide .iwac-vis-chart {
+    min-height: clamp(280px, 40vh, 360px);
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-overview-grid {
+        gap: var(--space-3, 0.75rem);
+    }
+    .iwac-vis-overview-grid .iwac-vis-chart {
+        min-height: 240px;
+    }
+}
+
+
+/* =================================================================== */
+/*  Word cloud — taller chart so the layout engine has room to work      */
+/* =================================================================== */
+
+.iwac-vis-panel--wordcloud .iwac-vis-chart {
+    min-height: clamp(320px, 50vh, 520px);
+}
+
+.iwac-vis-wordcloud-meta {
+    margin-top: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.85rem);
+    color: var(--muted, #6e7a82);
+    text-align: center;
+}
+
+
+/* =================================================================== */
+/*  Recent additions — wide panel, rich table cells                      */
+/* =================================================================== */
+
+.iwac-vis-recent-additions {
+    grid-column: 1 / -1;
+}
+
+.iwac-vis-recent-additions > h4 {
+    margin: 0 0 var(--space-3, 0.75rem);
+}
+
+/* Let the table grow to whatever height the current page needs —
+ * pagination already caps each page at 20 rows, so there's no risk
+ * of an unbounded list. No max-height → no scrollbar. */
+.iwac-vis-recent-additions .iwac-vis-table-wrapper {
+    padding: 0.25rem 0.5rem 0.5rem;
+    border-radius: var(--radius-sm, 4px);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table {
+    /* Slightly larger cells so rows don't feel compressed. */
+    font-size: var(--text-sm, 0.92rem);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__header {
+    padding: 0.75rem 1rem;
+    background: var(--surface-raised, #f9f7f3);
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__cell {
+    padding: 0.85rem 1rem;
+    line-height: 1.4;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+    width: 72px;
+    padding: 0.6rem 0.5rem 0.6rem 1rem;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__thumb,
+.iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+    width: 56px;
+    height: 56px;
+}
+
+.iwac-vis-recent-additions .iwac-vis-table__link {
+    /* Clamp long titles to 2 lines on desktop. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+.iwac-vis-recent-additions .iwac-vis-pagination {
+    padding: 0.75rem 1rem 0.25rem;
+}
+
+/* Tablet: reduce padding, shrink thumbnail, hide source column */
+@media (max-width: 768px) { /* md */
+    .iwac-vis-recent-additions .iwac-vis-table {
+        font-size: var(--text-xs, 0.85rem);
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__header,
+    .iwac-vis-recent-additions .iwac-vis-table__cell {
+        padding: 0.6rem 0.75rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+        width: 60px;
+        padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__thumb,
+    .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+        width: 48px;
+        height: 48px;
+    }
+    /* Hide the Source column (3rd visible column after thumb + title). */
+    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(3),
+    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Mobile: also hide the Added date column so only thumb + title remain */
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-recent-additions .iwac-vis-table__header,
+    .iwac-vis-recent-additions .iwac-vis-table__cell {
+        padding: 0.5rem 0.6rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
+        width: 52px;
+        padding: 0.4rem 0.2rem 0.4rem 0.6rem;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__thumb,
+    .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
+        width: 40px;
+        height: 40px;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(4),
+    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(4) {
+        display: none;
+    }
+    .iwac-vis-recent-additions .iwac-vis-table__link {
+        -webkit-line-clamp: 3;
+    }
+}

@@ -18,9 +18,13 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheet
+// Stylesheets — shared core first, then block-specific. No maps here
+// so iwac-maplibre.css is intentionally skipped.
 $this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/blocks/scary-terms.css', 'IwacVisualizations')
 );
 
 // ECharts (no MapLibre / WordCloud — this block only needs the core)

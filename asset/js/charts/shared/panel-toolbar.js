@@ -144,7 +144,7 @@
     /**
      * Find (or lazily create) the toolbar container inside a panel. The
      * toolbar is an absolutely-positioned flex box in the panel's top-
-     * right corner; CSS in iwac-visualizations.css handles the layout.
+     * right corner; CSS in iwac-core.css handles the layout.
      */
     function ensureToolbar(panelEl) {
         if (!panelEl) return null;
@@ -180,7 +180,7 @@
      * Public helper: add a Fullscreen toggle to the toolbar. The panel
      * element itself enters native fullscreen via the Fullscreen API;
      * the `.iwac-vis-panel--fullscreen` class is toggled for the layout
-     * adjustments already defined in iwac-visualizations.css.
+     * adjustments already defined in iwac-core.css.
      *
      * Optional `onResize` fires after the browser has applied the new
      * viewport so callers (ECharts / MapLibre panels) can rescale.

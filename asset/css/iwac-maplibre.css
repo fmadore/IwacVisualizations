@@ -1,0 +1,284 @@
+/* =================================================================== */
+/*  IWAC Visualizations — MapLibre chrome + shared popup                 */
+/* =================================================================== */
+/*                                                                       */
+/*  Everything that styles the MapLibre GL JS map itself or its UI       */
+/*  chrome (controls, popup wrapper, tip wedges) lives here, plus the    */
+/*  reusable P.buildMapPopup body layout. Enqueued only by blocks that   */
+/*  actually render a map — references-overview and scary-terms skip    */
+/*  this file.                                                           */
+/*                                                                       */
+/*  Load order: after iwac-core.css (needs the shared chip-button rules  */
+/*  for popup pagination) and before the block-specific sheet.           */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/*  Map container                                                        */
+/* =================================================================== */
+
+.iwac-vis-map {
+    width: 100%;
+    height: clamp(320px, 60vh, 520px);
+    border-radius: var(--radius-sm, 4px);
+    overflow: hidden;
+    position: relative;
+}
+
+
+/* =================================================================== */
+/*  MapLibre popup — themed content + close button                       */
+/* =================================================================== */
+
+.iwac-vis-maplibre-popup .maplibregl-popup-content {
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    box-shadow: 0 6px 18px
+        var(--iwac-vis-shadow-soft, color-mix(in srgb, var(--ink, #18202a) 14%, transparent));
+    padding: 0.85rem 2.5rem 0.85rem 1.1rem;
+    font-size: var(--text-sm, 0.9rem);
+    line-height: 1.45;
+    font-family: inherit;
+    /* Let the inner .iwac-vis-map-popup cap its own height with
+     * internal scroll; the wrapper just needs to not clip it. */
+    max-height: min(75vh, 460px);
+    overflow: hidden;
+}
+
+.iwac-vis-maplibre-popup .maplibregl-popup-content strong {
+    color: var(--ink, #18202a);
+    font-weight: 600;
+}
+
+/* Fix the stock close button — originally rendered as a huge × glyph
+ * in light grey with no padding. Now a properly sized hit target with
+ * theme-aware color and hover state. */
+.iwac-vis-maplibre-popup .maplibregl-popup-close-button {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.35rem;
+    width: 28px;
+    height: 28px;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--ink-light, #4a5766);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm, 4px);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.12s ease,
+        color      0.12s ease,
+        border-color 0.12s ease;
+}
+
+.iwac-vis-maplibre-popup .maplibregl-popup-close-button:hover,
+.iwac-vis-maplibre-popup .maplibregl-popup-close-button:focus-visible {
+    background: color-mix(in srgb, var(--primary, #e67a14) 14%, transparent);
+    color: var(--ink, #18202a);
+    border-color: var(--border, #dcd7ce);
+    outline: none;
+}
+
+/* Popup tip — colour the wedge to match the themed surface */
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+    border-bottom-color: var(--surface-raised, #f9f7f3);
+}
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+    border-top-color: var(--surface-raised, #f9f7f3);
+}
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: var(--surface-raised, #f9f7f3);
+}
+.iwac-vis-maplibre-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: var(--surface-raised, #f9f7f3);
+}
+
+
+/* =================================================================== */
+/*  Shared map popup body — P.buildMapPopup                              */
+/* =================================================================== */
+
+/*  Header + optional article list + optional pagination, rendered as
+ *  a DOM node and handed to maplibregl.Popup.setDOMContent so event
+ *  listeners survive. Used by every map panel in the module via the
+ *  shared shared/map-popup.js component. */
+
+.iwac-vis-map-popup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    min-width: 220px;
+    max-width: 320px;
+    /* Cap the popup height so long article lists scroll internally
+     * instead of overflowing past the map container. Tracks the
+     * viewport on mobile and pins at ~420px on desktop so the
+     * visible content doesn't dwarf the map itself. */
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
+}
+
+.iwac-vis-map-popup__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: var(--space-1, 0.25rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map-popup__title {
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    font-size: var(--text-base, 1rem);
+    line-height: 1.3;
+}
+
+a.iwac-vis-map-popup__title {
+    text-decoration: none;
+}
+
+a.iwac-vis-map-popup__title:hover {
+    color: var(--primary, #e67a14);
+    text-decoration: underline;
+}
+
+.iwac-vis-map-popup__subtitle {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+}
+
+.iwac-vis-map-popup__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-map-popup__item {
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map-popup__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.iwac-vis-map-popup__item-title {
+    /* Clamp to two lines with an ellipsis — the full title is
+     * available in the `title` attribute so hover reveals it.
+     * Keeps the popup narrow even when titles are 80+ characters. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 500;
+    color: var(--ink, #18202a);
+    line-height: 1.35;
+}
+
+a.iwac-vis-map-popup__item-title {
+    text-decoration: none;
+}
+
+a.iwac-vis-map-popup__item-title:hover {
+    color: var(--primary, #e67a14);
+    text-decoration: underline;
+}
+
+.iwac-vis-map-popup__meta {
+    margin-top: 0.15rem;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+}
+
+.iwac-vis-map-popup__empty {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    font-style: italic;
+}
+
+.iwac-vis-map-popup__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1, 0.25rem);
+    padding-top: var(--space-1, 0.25rem);
+    border-top: 1px solid var(--border-light, #ebe7df);
+}
+
+/* Shrink the shared .iwac-vis-pagination__btn chip when it lives
+ * inside a popup — at the default size three buttons + indicator
+ * wrap to two rows inside the 320px popup body. */
+.iwac-vis-map-popup__pagination .iwac-vis-pagination__btn {
+    padding: 0.2rem 0.55rem;
+    font-size: var(--text-xs, 0.75rem);
+}
+
+.iwac-vis-map-popup__pagination .iwac-vis-pagination__indicator {
+    font-size: var(--text-xs, 0.75rem);
+    min-width: auto;
+}
+
+
+/* =================================================================== */
+/*  MapLibre controls (zoom, compass, globe, fullscreen)                 */
+/* =================================================================== */
+
+.iwac-vis-map .maplibregl-ctrl-group {
+    background: var(--surface-raised, #f9f7f3);
+    border: 1px solid var(--border, #dcd7ce);
+    box-shadow: 0 2px 8px
+        var(--iwac-vis-shadow-soft, color-mix(in srgb, var(--ink, #18202a) 14%, transparent));
+}
+
+.iwac-vis-map .maplibregl-ctrl-group button {
+    background: var(--surface-raised, #f9f7f3);
+    border-color: var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map .maplibregl-ctrl-group button:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+}
+
+.iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+/* MapLibre ships its control icons as a monochrome sprite whose paths
+ * are dark grey. In dark mode we invert them so they stay legible. */
+body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+    filter: invert(0.9);
+}
+
+/* Attribution control — subtle, matches theme */
+.iwac-vis-map .maplibregl-ctrl-attrib {
+    background: color-mix(in srgb, var(--surface, #fdfdfc) 92%, transparent);
+    color: var(--ink-light, #4a5766);
+    font-size: 0.72rem;
+}
+
+.iwac-vis-map .maplibregl-ctrl-attrib a {
+    color: var(--primary, #e67a14);
+}
+
+body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
+    background: color-mix(in srgb, var(--surface, #191d24) 90%, transparent);
+    color: var(--ink-light, #aab4bf);
+}

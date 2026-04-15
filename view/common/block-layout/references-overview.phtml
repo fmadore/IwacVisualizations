@@ -15,9 +15,10 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheet
+// Stylesheet — references overview uses only the shared core (no
+// maps, no block-specific chrome beyond the generic panel + table).
 $this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
 );
 
 // CDN libraries

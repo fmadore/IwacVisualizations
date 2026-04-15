@@ -1612,7 +1612,7 @@
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
         // Theme-aware color ramp: the dedicated semantic palette is
-        // defined in iwac-visualizations.css (--iwac-vis-heatmap-0..4)
+        // defined in iwac-core.css (--iwac-vis-heatmap-0..4)
         // as `color-mix(in srgb, var(--primary), var(--surface))` stops
         // so it tracks the IWAC theme's --primary and --surface tokens.
         // We MUST resolve through ns.resolveCssVar (an offscreen probe)

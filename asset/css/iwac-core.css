@@ -1,0 +1,731 @@
+/* =================================================================== */
+/*  IWAC Visualizations — core stylesheet                                */
+/* =================================================================== */
+/*                                                                       */
+/*  Shared primitives loaded by every block: design tokens, the block    */
+/*  wrapper, panel + toolbar + fullscreen, loading / empty / error       */
+/*  states, buttons, summary cards, tabs, tables, pagination, facet      */
+/*  chips, the shared form-control rule, badges.                         */
+/*                                                                       */
+/*  Block-specific layouts live under `asset/css/blocks/<block>.css`,    */
+/*  map chrome lives in `asset/css/iwac-maplibre.css`. Each template     */
+/*  enqueues this file first, then the map sheet (if it uses a map),    */
+/*  then its own block sheet.                                            */
+/*                                                                       */
+/*  All colors / spacing / typography resolve through the IWAC theme's   */
+/*  CSS custom properties — fallbacks on the right kick in only when    */
+/*  the theme isn't installed. Never hardcode hex in panel JS: resolve   */
+/*  via getComputedStyle / ns.resolveCssVar so dark mode flows through.  */
+/*                                                                       */
+/*  Class prefix: `.iwac-vis-` for everything owned by this module.      */
+/*                                                                       */
+/*  Breakpoints (cannot use var() in @media — values documented here):   */
+/*     sm: 640px   (large phones)                                        */
+/*     md: 768px   (tablets)                                             */
+/*     lg: 1024px  (small laptops)                                       */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/*  Semantic palettes                                                    */
+/*                                                                       */
+/*  Module-scoped tokens for charts that need a divergent or sequential  */
+/*  scale the IWAC theme doesn't already define. Each token references   */
+/*  an IWAC theme variable (so dark mode + admin overrides flow through  */
+/*  automatically) with an inline fallback for when the theme isn't     */
+/*  installed. Read at runtime by chart panels via getComputedStyle.    */
+/* =================================================================== */
+
+:root {
+    /* Sentiment polarité — divergent (positive → neutral → negative).
+     * Maps to the IWAC theme's success/warning/error tokens when
+     * available, otherwise to the colorblind-safe fallbacks the IWAC
+     * palette uses elsewhere. */
+    --iwac-vis-sent-pos-strong: var(--success-strong, #15803d);
+    --iwac-vis-sent-pos:        var(--success,        #65a30d);
+    --iwac-vis-sent-neutral:    var(--muted,          #6e7a82);
+    --iwac-vis-sent-neg:        var(--warning,        #ea580c);
+    --iwac-vis-sent-neg-strong: var(--error,          #b91c1c);
+    --iwac-vis-sent-na:         var(--border-light,   var(--border, #dcd7ce));
+
+    /* Centralité — sequential (single hue, fading toward background).
+     * Built from --primary so the centralité palette tracks whichever
+     * accent color the IWAC theme is currently configured with. */
+    --iwac-vis-cent-1:  var(--primary, #e67a14);
+    --iwac-vis-cent-2:  color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-3:  color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-4:  color-mix(in srgb, var(--primary, #e67a14) 30%, var(--surface, #fdfdfc));
+    --iwac-vis-cent-na: var(--border-light, var(--border, #dcd7ce));
+
+    /* Subjectivité — sequential 1..5 (objective → subjective), built
+     * from --primary the same way centralité is. 1 = factual/objective
+     * is the lightest tint, 5 = highly subjective is the accent itself. */
+    --iwac-vis-subj-1: color-mix(in srgb, var(--primary, #e67a14) 15%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-2: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-subj-5: var(--primary, #e67a14);
+
+    /* Heatmap — sequential 0..4, same --primary → --surface ramp as
+     * subjectivité so every sequential chart in the module lands on
+     * the same palette. Read by C.heatmap via getComputedStyle. */
+    --iwac-vis-heatmap-0: color-mix(in srgb, var(--primary, #e67a14)  8%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-1: color-mix(in srgb, var(--primary, #e67a14) 28%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-2: color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-3: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
+    --iwac-vis-heatmap-4: var(--primary, #e67a14);
+
+    /* Shared decorative shadow colors derived from --ink. Used by
+     * custom shadows (slider glow, map controls) so every layered
+     * effect tracks light/dark without hardcoded rgba. */
+    --iwac-vis-shadow-subtle: color-mix(in srgb, var(--ink, #18202a)  8%, transparent);
+    --iwac-vis-shadow-soft:   color-mix(in srgb, var(--ink, #18202a) 14%, transparent);
+    --iwac-vis-shadow-strong: color-mix(in srgb, var(--ink, #18202a) 22%, transparent);
+}
+
+
+/* =================================================================== */
+/*  Block wrapper                                                        */
+/* =================================================================== */
+
+.iwac-vis-block {
+    margin: var(--space-8, 2rem) 0;
+    color: var(--ink, #18202a);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.iwac-vis-block h3 {
+    font-size: var(--text-lg, 1.25rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    margin: 0 0 var(--space-3, 0.75rem);
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.iwac-vis-block h4 {
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    margin: 0 0 var(--space-2, 0.5rem);
+}
+
+
+/* =================================================================== */
+/*  Loading / empty / error states                                       */
+/* =================================================================== */
+
+.iwac-vis-loading,
+.iwac-vis-empty,
+.iwac-vis-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3, 0.75rem);
+    min-height: 180px;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+}
+
+.iwac-vis-error {
+    color: var(--error, #c5504d);
+}
+
+.iwac-vis-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border, #dcd7ce);
+    border-top-color: var(--primary, #e67a14);
+    border-radius: 50%;
+    animation: iwac-vis-spin 0.8s linear infinite;
+}
+
+@keyframes iwac-vis-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .iwac-vis-spinner { animation-duration: 2s; }
+}
+
+
+/* =================================================================== */
+/*  Chart panel — container for a single ECharts instance                */
+/* =================================================================== */
+
+.iwac-vis-panel {
+    position: relative;
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: var(--panel-border, 1px solid var(--border, #dcd7ce));
+    border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    padding: var(--space-4, 1rem);
+    /* Prevent ECharts canvas from forcing grid overflow. */
+    min-width: 0;
+}
+
+.iwac-vis-panel > .iwac-vis-chart {
+    width: 100%;
+    min-width: 0;
+    min-height: 320px;
+}
+
+.iwac-vis-panel-desc {
+    margin: 0 0 var(--space-3, 0.75rem);
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+    line-height: 1.5;
+    /* Deliberately no max-width: the description should span the full
+     * panel width so --wide panels don't look awkwardly half-filled.
+     * Readability is fine at card widths because body text naturally
+     * wraps on the chart-grid 1fr / 1fr 1fr columns. */
+}
+
+/* -------------------------------------------------------------------
+ *  Panel toolbar — top-right floating icon bar
+ *
+ *  Hosts the shared Download + Fullscreen buttons auto-attached by
+ *  `panels.autoAttachPanelToolbar`. Absolute-positioned so it never
+ *  displaces the panel title / description / chart. Buttons compose
+ *  the shared `.iwac-vis-btn` class so they inherit every theme-token
+ *  hover, focus, and transition — only geometry is overridden here.
+ *
+ *  The network / chord panels ship their own `.iwac-vis-graph-toolbar`
+ *  (zoom / legend / fullscreen) in blocks/person-dashboard.css and
+ *  opt out of auto-attach via the `.iwac-vis-graph-host` marker class.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-panel-toolbar {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 5;
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-panel-toolbar__btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: var(--text-base, 1rem);
+    line-height: 1;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+}
+
+.iwac-vis-panel-toolbar__btn--pressed {
+    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+    color: var(--primary, #e67a14);
+}
+
+/* -------------------------------------------------------------------
+ *  Panel fullscreen overlay
+ *
+ *  Applied when the user toggles fullscreen via the panel toolbar's
+ *  button. The panel wrapper escapes its parent grid and covers the
+ *  viewport; the chart / graph / chord host fills the remaining
+ *  space after padding and toolbar. Also applied by the browser
+ *  automatically via the :fullscreen pseudo-class so native Esc / F11
+ *  transitions stay in sync without JS having to intervene.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-panel--fullscreen,
+.iwac-vis-panel:fullscreen {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    z-index: 1000;
+    padding: var(--space-5, 1.25rem);
+    background: var(--surface, #fdfdfc);
+    overflow: auto;
+    border-radius: 0;
+}
+
+.iwac-vis-panel--fullscreen > .iwac-vis-graph-host,
+.iwac-vis-panel:fullscreen > .iwac-vis-graph-host,
+.iwac-vis-panel--fullscreen > .iwac-vis-chord-host,
+.iwac-vis-panel:fullscreen > .iwac-vis-chord-host {
+    min-height: calc(100vh - 120px);
+    height: calc(100vh - 120px);
+}
+
+/* Any ECharts panel's chart container stretches to fill native
+ * fullscreen, not just graph / chord hosts. Covers the horizontal
+ * bar / heatmap / treemap charts the user expands. */
+.iwac-vis-panel--fullscreen > .iwac-vis-chart,
+.iwac-vis-panel:fullscreen > .iwac-vis-chart {
+    min-height: calc(100vh - 160px);
+    height: calc(100vh - 160px);
+}
+
+/* Same treatment for MapLibre map panels: the container is inside
+ * `.iwac-vis-chart` but has its own fixed height, so we stretch both. */
+.iwac-vis-panel--fullscreen > .iwac-vis-chart > .iwac-vis-map,
+.iwac-vis-panel:fullscreen > .iwac-vis-chart > .iwac-vis-map {
+    height: 100%;
+}
+
+
+/* =================================================================== */
+/*  Dashboard layout — generic 2-column grid used by most blocks         */
+/* =================================================================== */
+
+.iwac-vis-block .dashboard-async-container {
+    min-height: 240px;
+}
+
+.iwac-vis-block .dashboard-charts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 768px) {
+    .iwac-vis-block .dashboard-charts {
+        grid-template-columns: 1fr 1fr;
+    }
+    .iwac-vis-block .dashboard-charts .iwac-vis-panel--wide {
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* =================================================================== */
+/*  Buttons                                                              */
+/* =================================================================== */
+
+/*  The canonical "solid action button" — used by panel toolbars, the
+ *  network panel zoom controls, and one-off actions like the Keyword
+ *  Explorer's "Clear selection". Chip-style controls (tabs, facets,
+ *  pagination) live further down and have a deliberately different
+ *  aesthetic (transparent → hover → primary-tinted active). */
+
+.iwac-vis-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    background: var(--surface, #fdfdfc);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.iwac-vis-btn:hover {
+    background: var(--surface-raised, #f9f7f3);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.iwac-vis-btn:disabled:hover {
+    background: transparent;
+    border-color: var(--border, #dcd7ce);
+}
+
+/* Size / tone variants composed on top of .iwac-vis-btn */
+
+.iwac-vis-btn--sm {
+    padding: 0.25rem 0.55rem;
+    font-size: var(--text-xs, 0.75rem);
+}
+
+.iwac-vis-btn--ghost {
+    background: transparent;
+}
+
+
+/* =================================================================== */
+/*  Summary cards (metadata-property card pattern)                       */
+/* =================================================================== */
+
+/*  Follows the IWAC theme's metadata-property card pattern —
+ *  --panel-bg, --shadow-xs, --radius-md, accent left border, primary-
+ *  tinted labels. See IWAC-theme _metadata.scss + _tokens.scss. */
+
+.iwac-vis-summary-card {
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-left: var(--accent-line-md, 3px) solid
+        color-mix(in srgb, var(--primary, #e67a14) var(--accent-mix-medium, 40%), var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+    transition:
+        box-shadow     var(--transition-fast, 150ms ease),
+        background-color var(--transition-fast, 150ms ease),
+        border-color   var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-summary-card:hover {
+    border-left-color: var(--primary, #e67a14);
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
+}
+
+.iwac-vis-summary-card__value {
+    font-size: var(--text-2xl, clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem));
+    font-weight: 700;
+    color: var(--ink, #18202a);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-summary-card__label {
+    font-size: var(--text-sm, 0.9375rem);
+    color: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--muted, #6e7a82));
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    font-weight: 600;
+}
+
+
+/* =================================================================== */
+/*  Chip-style controls — tabs, facet buttons, pagination                */
+/* =================================================================== */
+
+/*  These three control families share a common "chip" aesthetic:
+ *  transparent inactive → surface-raised on hover → primary-tinted
+ *  background + 40% primary border on active. The canonical token
+ *  implementation is here; individual block stylesheets should not
+ *  redefine these rules. Every selection control in the module reads
+ *  as one family by design. */
+
+.iwac-vis-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-tab,
+.iwac-vis-pagination__btn,
+.iwac-vis-facets__btn,
+.iwac-vis-facets__sub-btn {
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    background: transparent;
+    color: var(--muted, #6e7a82);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md, 8px);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background-color 150ms ease,
+        color            150ms ease,
+        border-color     150ms ease;
+}
+
+.iwac-vis-tab:hover,
+.iwac-vis-pagination__btn:hover:not(:disabled),
+.iwac-vis-facets__btn:hover,
+.iwac-vis-facets__sub-btn:hover {
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-tab:focus-visible,
+.iwac-vis-pagination__btn:focus-visible,
+.iwac-vis-facets__btn:focus-visible,
+.iwac-vis-facets__sub-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-tab--active,
+.iwac-vis-facets__btn--active,
+.iwac-vis-facets__sub-btn--active {
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-pagination__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.iwac-vis-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-3, 0.75rem) 0;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-pagination__indicator {
+    font-size: var(--text-sm, 0.9rem);
+    color: var(--muted, #6e7a82);
+    min-width: 8ch;
+    text-align: center;
+}
+
+.iwac-vis-facets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-facets__main,
+.iwac-vis-facets__sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+    align-items: center;
+}
+
+
+/* =================================================================== */
+/*  Dismissable selection chip (Keyword Explorer)                        */
+/* =================================================================== */
+
+/*  Smaller, fully-rounded sibling to the tab/facet chips — used for
+ *  the Keyword Explorer's compare-mode "selected keywords" pills. Each
+ *  instance is a removable selection indicator, so it lives in an
+ *  active-like state at rest and deepens on hover. */
+
+.iwac-vis-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full, 999px);
+    border: 1px solid color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface, #fdfdfc));
+    color: var(--ink, #18202a);
+    font-size: var(--text-xs, 0.75rem);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.iwac-vis-chip:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 22%, var(--surface, #fdfdfc));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+}
+
+
+/* =================================================================== */
+/*  Shared form controls (selects + text inputs)                         */
+/* =================================================================== */
+
+/*  Every <select> and text-<input> in the module should match this
+ *  shape: radius-md, surface background, primary focus ring. Per-panel
+ *  overrides are layout-only (widths / flex). Add new selectors to the
+ *  list below when a new form control is introduced. */
+
+.iwac-vis-facets__select,
+.iwac-vis-keywords-filters__select,
+.iwac-vis-index-table-search,
+.iwac-vis-keywords-compare__search,
+.iwac-vis-scary-select {
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    background: var(--surface, #fdfdfc);
+    color: var(--ink, #18202a);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 8px);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9rem);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.iwac-vis-facets__select:hover,
+.iwac-vis-keywords-filters__select:hover,
+.iwac-vis-scary-select:hover {
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-facets__select:focus-visible,
+.iwac-vis-keywords-filters__select:focus-visible,
+.iwac-vis-index-table-search:focus-visible,
+.iwac-vis-keywords-compare__search:focus-visible,
+.iwac-vis-scary-select:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-facets__select {
+    max-width: 18rem;
+}
+
+
+/* =================================================================== */
+/*  Reusable table                                                       */
+/* =================================================================== */
+
+.iwac-vis-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.iwac-vis-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm, 0.9rem);
+}
+
+.iwac-vis-table__header {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    background: var(--surface-raised, #f9f7f3);
+    border-bottom: 2px solid var(--border, #dcd7ce);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    position: sticky;
+    top: 0;
+}
+
+.iwac-vis-table__row {
+    border-bottom: 1px solid var(--border, #dcd7ce);
+    transition: background 0.12s ease;
+}
+
+.iwac-vis-table__row:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 4%, transparent);
+}
+
+.iwac-vis-table__cell {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-table__cell--thumbnail {
+    width: 56px;
+    padding: 0.25rem 0.5rem;
+}
+
+.iwac-vis-table__thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--radius-sm, 4px);
+    display: block;
+}
+
+.iwac-vis-thumb-placeholder {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface, #f4f2ed);
+    border: 1px dashed var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    color: var(--border, #a9a49a);
+}
+
+.iwac-vis-table__link {
+    color: var(--primary, #e67a14);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.iwac-vis-table__link:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================================================== */
+/*  Badges (item-type pills used inside tables)                          */
+/* =================================================================== */
+
+.iwac-vis-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-full, 999px);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--badge-bg, var(--surface-raised, #f9f7f3));
+    color:      var(--badge-fg, var(--ink, #18202a));
+    border: 1px solid var(--badge-border, var(--border, #dcd7ce));
+}
+
+.iwac-vis-badge--article     { --badge-bg: #fef3c7; --badge-fg: #92400e; --badge-border: #fde68a; }
+.iwac-vis-badge--publication { --badge-bg: #dbeafe; --badge-fg: #1e40af; --badge-border: #bfdbfe; }
+.iwac-vis-badge--document    { --badge-bg: #ede9fe; --badge-fg: #5b21b6; --badge-border: #ddd6fe; }
+.iwac-vis-badge--audiovisual { --badge-bg: #fce7f3; --badge-fg: #9d174d; --badge-border: #fbcfe8; }
+.iwac-vis-badge--reference   { --badge-bg: #d1fae5; --badge-fg: #065f46; --badge-border: #a7f3d0; }
+
+body[data-theme="dark"] .iwac-vis-badge--article     { --badge-bg: #78350f; --badge-fg: #fef3c7; --badge-border: #92400e; }
+body[data-theme="dark"] .iwac-vis-badge--publication { --badge-bg: #1e3a8a; --badge-fg: #dbeafe; --badge-border: #1e40af; }
+body[data-theme="dark"] .iwac-vis-badge--document    { --badge-bg: #4c1d95; --badge-fg: #ede9fe; --badge-border: #5b21b6; }
+body[data-theme="dark"] .iwac-vis-badge--audiovisual { --badge-bg: #831843; --badge-fg: #fce7f3; --badge-border: #9d174d; }
+body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --badge-fg: #d1fae5; --badge-border: #065f46; }
+
+
+/* =================================================================== */
+/*  Section headings (Index Overview sub-sections + future blocks)       */
+/* =================================================================== */
+
+.iwac-vis-section-heading {
+    margin: 0;
+    font-size: var(--text-xl, 1.25rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-section-desc {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+}
+
+
+/* =================================================================== */
+/*  Utility                                                              */
+/* =================================================================== */
+
+.iwac-vis-muted {
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+}
+
+
+/* =================================================================== */
+/*  Responsive — mobile spacing collapse                                 */
+/* =================================================================== */
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-panel {
+        padding: var(--space-3, 0.75rem);
+    }
+    .iwac-vis-panel > .iwac-vis-chart {
+        min-height: 280px;
+    }
+    .iwac-vis-block .dashboard-charts {
+        gap: var(--space-3, 0.75rem);
+    }
+    .iwac-vis-summary-card {
+        padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    }
+    .iwac-vis-summary-card__value {
+        font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    }
+}

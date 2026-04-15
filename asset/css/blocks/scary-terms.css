@@ -1,0 +1,500 @@
+/* =================================================================== */
+/*  Scary Terms — block-specific styles                                  */
+/* =================================================================== */
+/*                                                                       */
+/*  Top-level layout: header → metric cards → controls bar (view        */
+/*  toggle + country select + playback) → chart panel → term            */
+/*  definitions grid. Adds a co-occurrence matrix view on top of the    */
+/*  existing bar-chart race / country / global views.                   */
+/*                                                                       */
+/*  Depends on iwac-core.css for tokens, panel, summary cards, chip     */
+/*  controls (view toggle reuses the shared tab aesthetic), and form    */
+/*  controls (select).                                                   */
+/* =================================================================== */
+
+.iwac-vis-scary {
+    min-height: 420px;
+}
+
+.iwac-vis-scary-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1.25rem);
+}
+
+
+/* =================================================================== */
+/*  Header                                                               */
+/* =================================================================== */
+
+.iwac-vis-scary-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-scary-title {
+    margin: 0;
+    font-size: var(--text-xl, 1.5rem);
+    font-weight: 700;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-desc {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-sm, 0.9rem);
+    max-width: 72ch;
+}
+
+
+/* =================================================================== */
+/*  Metric cards                                                         */
+/* =================================================================== */
+
+.iwac-vis-scary-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 768px) { /* md */
+    .iwac-vis-scary-metrics { grid-template-columns: repeat(4, 1fr); }
+}
+
+
+/* =================================================================== */
+/*  Controls bar                                                         */
+/* =================================================================== */
+
+.iwac-vis-scary-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+}
+
+.iwac-vis-scary-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4, 1rem);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.iwac-vis-scary-label {
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 600;
+    color: var(--muted, #6e7a82);
+    margin-right: var(--space-2, 0.5rem);
+}
+
+/* Matrix-view subheader — tucked under the controls bar, explains
+ * what the heatmap encodes so readers don't have to guess. */
+.iwac-vis-scary-matrix-desc {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    font-size: var(--text-xs, 0.75rem);
+    line-height: 1.5;
+    max-width: 72ch;
+    padding-top: var(--space-1, 0.25rem);
+    border-top: 1px solid var(--border-light, #ebe7df);
+}
+
+
+/* =================================================================== */
+/*  View mode toggle                                                     */
+/* =================================================================== */
+
+/*  View buttons share the chip aesthetic from .iwac-vis-tab in
+ *  iwac-core.css (transparent → surface-raised on hover → primary-
+ *  tinted active). Consolidates the scary block with the rest of the
+ *  module's selection controls — no more "solid orange vs subtle tab"
+ *  inconsistency. */
+
+.iwac-vis-scary-view-toggle {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-view-btn {
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    background: transparent;
+    color: var(--muted, #6e7a82);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background-color 150ms ease,
+        color            150ms ease,
+        border-color     150ms ease;
+}
+
+.iwac-vis-scary-view-btn:hover {
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-view-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-scary-view-btn--active,
+.iwac-vis-scary-view-btn--active:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+
+/* =================================================================== */
+/*  Country selector                                                     */
+/* =================================================================== */
+
+.iwac-vis-scary-country-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+/*  .iwac-vis-scary-select inherits the shared form-control rule from
+ *  iwac-core.css (surface background, primary focus ring, radius-md).
+ *  Only layout overrides remain here. */
+.iwac-vis-scary-select {
+    min-width: 12ch;
+    cursor: pointer;
+}
+
+
+/* =================================================================== */
+/*  Playback controls (bar-chart race)                                   */
+/* =================================================================== */
+
+.iwac-vis-scary-playback {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-ctrl-btn {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-raised, #f9f7f3);
+    color: var(--ink-light, #4a5766);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-sm, 0.9rem);
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        background-color 150ms ease,
+        border-color     150ms ease,
+        color            150ms ease;
+}
+
+.iwac-vis-scary-ctrl-btn:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 10%, var(--surface-raised, #f9f7f3));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-ctrl-btn:focus-visible {
+    outline: 2px solid var(--primary, #e67a14);
+    outline-offset: 2px;
+}
+
+.iwac-vis-scary-play-btn {
+    background: var(--primary, #e67a14);
+    color: var(--surface, #fdfdfc);
+    border-color: var(--primary, #e67a14);
+}
+
+.iwac-vis-scary-play-btn:hover {
+    background: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
+    color: var(--surface, #fdfdfc);
+}
+
+.iwac-vis-scary-year-label {
+    min-width: 4ch;
+    margin-left: var(--space-2, 0.5rem);
+    padding: 0 var(--space-2, 0.5rem);
+    font-size: var(--text-base, 1rem);
+    font-weight: 700;
+    color: var(--primary, #e67a14);
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =================================================================== */
+/*  Year slider — filled progress track, ringed thumb                    */
+/* =================================================================== */
+
+/*  The fill portion is driven by --iwac-vis-scary-fill, which the JS
+ *  writes on every slider input / playback tick as a 0–100% value. */
+
+.iwac-vis-scary-slider-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-2, 0.5rem) var(--space-1, 0.25rem) var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-slider-edge {
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    color: var(--muted, #6e7a82);
+    font-variant-numeric: tabular-nums;
+    min-width: 3.5ch;
+}
+
+.iwac-vis-scary-slider {
+    --iwac-vis-scary-fill: 0%;
+    --iwac-vis-scary-track: color-mix(in srgb, var(--primary, #e67a14) 14%, var(--border-light, #ebe7df));
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: var(--radius-full, 999px);
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(
+        to right,
+        var(--primary, #e67a14)           0%,
+        var(--primary, #e67a14)           var(--iwac-vis-scary-fill),
+        var(--iwac-vis-scary-track)       var(--iwac-vis-scary-fill),
+        var(--iwac-vis-scary-track)       100%
+    );
+    box-shadow:
+        inset 0 1px 2px var(--iwac-vis-shadow-subtle),
+        0 0 0 1px var(--border-light, #ebe7df);
+    transition: box-shadow 150ms ease;
+}
+
+.iwac-vis-scary-slider:hover {
+    box-shadow:
+        inset 0 1px 2px var(--iwac-vis-shadow-soft),
+        0 0 0 1px color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+}
+
+/* WebKit thumb */
+
+.iwac-vis-scary-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    background: var(--surface, #fdfdfc);
+    border: 3px solid var(--primary, #e67a14);
+    border-radius: 50%;
+    box-shadow:
+        0 2px 6px var(--iwac-vis-shadow-soft),
+        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+    cursor: grab;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.iwac-vis-scary-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.12);
+    box-shadow:
+        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
+}
+
+.iwac-vis-scary-slider:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    transform: scale(1.08);
+    box-shadow:
+        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 0 0 8px color-mix(in srgb, var(--primary, #e67a14) 25%, transparent);
+}
+
+.iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+}
+
+/* Firefox thumb (Gecko uses a different pseudo-element name, so every
+ * rule has to be duplicated — combining selectors with comma drops the
+ * entire rule in Chrome if one selector is unknown). */
+
+.iwac-vis-scary-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    background: var(--surface, #fdfdfc);
+    border: 3px solid var(--primary, #e67a14);
+    border-radius: 50%;
+    box-shadow:
+        0 2px 6px var(--iwac-vis-shadow-soft),
+        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+    cursor: grab;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.iwac-vis-scary-slider::-moz-range-thumb:hover {
+    transform: scale(1.12);
+    box-shadow:
+        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
+}
+
+.iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
+    box-shadow:
+        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+}
+
+/* Firefox also uses a dedicated track element — keep it transparent so
+ * the gradient we applied to the <input> element shows through. */
+.iwac-vis-scary-slider::-moz-range-track {
+    background: transparent;
+    border: none;
+}
+
+
+/* =================================================================== */
+/*  Chart panel                                                          */
+/* =================================================================== */
+
+.iwac-vis-scary-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-scary-chart-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2, 0.5rem);
+    /* Reserve space on the right so the panel toolbar (download +
+     * fullscreen) never collides with the badge. Two 32px buttons +
+     * gap ≈ 72px; 96px gives a little breathing room. */
+    padding-right: 96px;
+}
+
+.iwac-vis-scary-chart-title {
+    margin: 0;
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: var(--radius-full, 999px);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
+    color: var(--ink, #18202a);
+    border: 1px solid color-mix(in srgb, var(--primary, #e67a14) 30%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-scary-badge:empty {
+    display: none;
+}
+
+.iwac-vis-scary-chart {
+    width: 100%;
+    min-height: 460px;
+}
+
+/*  Co-occurrence matrix needs a taller canvas: 12 × 12 cells plus
+ *  rotated x-axis labels, a visualMap slider at the bottom, and
+ *  padding for the tooltip. 600px keeps every cell big enough to be
+ *  legible without forcing horizontal scroll. */
+.iwac-vis-scary-panel--matrix .iwac-vis-scary-chart {
+    min-height: 600px;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-scary-chart { min-height: 380px; }
+    .iwac-vis-scary-panel--matrix .iwac-vis-scary-chart { min-height: 480px; }
+    .iwac-vis-scary-chart-header { padding-right: 0; }
+}
+
+
+/* =================================================================== */
+/*  Term definitions grid                                                */
+/* =================================================================== */
+
+.iwac-vis-scary-defs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-scary-defs-title {
+    margin: 0;
+    font-size: var(--text-base, 1rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-scary-defs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 640px) { /* sm */
+    .iwac-vis-scary-defs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-scary-defs-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.iwac-vis-scary-def-card {
+    background: var(--panel-bg, var(--surface, #fdfdfc));
+    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.iwac-vis-scary-def-card:hover {
+    background: var(--surface-raised, #f9f7f3);
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--border, #dcd7ce));
+}
+
+.iwac-vis-scary-def-title {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 700;
+    color: var(--primary, #e67a14);
+    text-transform: capitalize;
+}
+
+.iwac-vis-scary-def-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.3rem);
+}
+
+.iwac-vis-scary-def-tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-full, 999px);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 500;
+    color: var(--ink-light, #4a5766);
+    background: var(--surface-raised, #f9f7f3);
+    border: 1px solid var(--border-light, #ebe7df);
+}

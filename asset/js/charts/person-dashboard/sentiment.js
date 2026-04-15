@@ -11,7 +11,7 @@
  *
  * Reuses C.segmentedBar from chart-options.js — no inline ECharts
  * configuration here. Colors come from the --iwac-vis-sent-* and
- * --iwac-vis-cent-* CSS variables defined in iwac-visualizations.css,
+ * --iwac-vis-cent-* CSS variables defined in iwac-core.css,
  * which themselves reference IWAC theme tokens. NEVER hardcode hex.
  */
 (function () {
@@ -33,7 +33,7 @@
 
     /**
      * Build the segment-name → CSS color maps by reading the semantic
-     * tokens in iwac-visualizations.css. Recomputed every render so a
+     * tokens in iwac-core.css. Recomputed every render so a
      * theme/palette swap propagates without remounting the panel.
      */
     function readPalettes() {

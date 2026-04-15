@@ -142,8 +142,21 @@ IwacVisualizations/
 │       │   └── entity.phtml                # Live — dispatched for templates 2/3/6/7
 │       └── item-set-dashboard.phtml        # Placeholder
 ├── asset/
-│   ├── css/
-│   │   └── iwac-visualizations.css         # Consumes IWAC theme tokens
+│   ├── css/                                # Per-block split; every template
+│   │   │                                   #   enqueues iwac-core.css first,
+│   │   │                                   #   then iwac-maplibre.css (if it
+│   │   │                                   #   uses a map), then its block
+│   │   │                                   #   sheet.
+│   │   ├── iwac-core.css                   # Tokens, panel, btn, chip
+│   │   │                                   #   controls, table, summary card,
+│   │   │                                   #   form controls, section heading
+│   │   ├── iwac-maplibre.css               # MapLibre chrome + shared
+│   │   │                                   #   P.buildMapPopup body styles
+│   │   └── blocks/                         # Block-specific layouts
+│   │       ├── collection-overview.css     #   overview grid, wordcloud, recent additions
+│   │       ├── index-overview.css          #   section layout, keyword explorer sidebar
+│   │       ├── scary-terms.css             #   metrics, view toggle, slider, matrix
+│   │       └── person-dashboard.css        #   body/stats, sentiment, graph/chord host
 │   ├── js/                                 # Every .js has a .min.js sibling (terser, committed)
 │   │   ├── iwac-i18n.js                    # Locale detection + en/fr dictionary + t()
 │   │   ├── iwac-theme.js                   # ECharts theme built from live CSS vars
@@ -357,7 +370,31 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 Current minification results across 47 files: **≈ 390 KB → 150 KB (−61.7%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 69 KB → 22 KB).
 
-There is no build step for CSS — `asset/css/iwac-visualizations.css` is hand-authored and loaded as-is.
+There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
+
+```
+asset/css/
+├── iwac-core.css          # Shared by every block — tokens, panel, chip
+│                          #   controls (tabs / facets / pagination), btn,
+│                          #   summary card, table, form controls, section
+│                          #   headings, badges. ~600 lines.
+├── iwac-maplibre.css      # MapLibre chrome + shared P.buildMapPopup body
+│                          #   styles. Enqueued only by map-using blocks.
+└── blocks/                # One file per live block, block-specific
+    │                      #   layouts and modifiers only.
+    ├── collection-overview.css
+    ├── index-overview.css
+    ├── scary-terms.css
+    └── person-dashboard.css   # Used by the person + entity resource-page blocks
+```
+
+Each block template enqueues `iwac-core.css` first, then `iwac-maplibre.css` if it uses a map, then its own block sheet (if any). **References Overview** uses `iwac-core.css` alone — it has no block-specific chrome beyond the generic panel + table. HTTP/2 makes the extra requests free, and splitting keeps each file under ~600 lines so conflicts stay localised to the block that touches them.
+
+**Conventions for adding a new block:**
+
+1. Add block-specific selectors to `asset/css/blocks/<block>.css`. If the block shares a pattern with an existing one (e.g. "chip controls", "form controls"), add your selector to the canonical rule in `iwac-core.css` — never redefine base chip/button styles per block.
+2. Enqueue `iwac-core.css` first in the block template, then maplibre (if needed), then the block sheet.
+3. Colors and spacing must resolve through IWAC theme tokens (`--primary`, `--ink`, `--surface`, `--space-*`, `--radius-*`). **Never hardcode hex in JS** — shared chart code reads these via `getComputedStyle` / `ns.resolveCssVar`.
 
 ## Related projects
 

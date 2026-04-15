@@ -276,7 +276,7 @@
      * Resolve a CSS custom property to a concrete color string that
      * ECharts' color parser can understand (`rgb(...)` / `rgba(...)`).
      *
-     * Why this exists: our theme ramps under iwac-visualizations.css
+     * Why this exists: our theme ramps under iwac-core.css
      * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
      * are defined as `color-mix(in srgb, var(--primary), var(--surface))`
      * expressions so they track the IWAC theme's --primary / --surface

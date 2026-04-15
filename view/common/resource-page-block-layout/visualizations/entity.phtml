@@ -18,7 +18,13 @@
 
 // Stylesheet
 $this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-visualizations.css', 'IwacVisualizations')
+    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
+);
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/blocks/person-dashboard.css', 'IwacVisualizations')
 );
 
 // CDN libraries — ECharts for charts/network, MapLibre for the locations map.
