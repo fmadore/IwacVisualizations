@@ -20,7 +20,7 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
-    if (!P || !P.createIwacMap || !P.buildFacetButtons) {
+    if (!P || !P.createIwacMap || !P.buildFacetButtons || !P.buildMapPopup) {
         console.warn('IWACVis.index-overview/places-map: missing dependencies');
         return;
     }
@@ -244,30 +244,27 @@
             if (!feat) feat = features[0];
 
             var props = feat.properties || {};
-            var name = P.escapeHtml(props.name || '');
             var isAuth = feat.layer && feat.layer.id === 'place-authority-pins';
             var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
-            var href = isAuth && props.o_id && siteBase
-                ? siteBase + '/item/' + props.o_id
-                : null;
 
-            var titleHtml = href
-                ? '<a href="' + P.escapeHtml(href) + '">' + name + '</a>'
-                : name;
-
-            var html = '<strong>' + titleHtml + '</strong>';
-            if (isAuth && props.country) {
-                html += '<br>' + P.escapeHtml(props.country);
-            }
+            var subtitle = [];
+            if (isAuth && props.country) subtitle.push(props.country);
             if (isAuth && props.frequency != null) {
-                html += '<br>' + P.t('mentions_count', { count: P.formatNumber(Number(props.frequency)) });
+                subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.frequency)) }));
             } else if (!isAuth && props.count != null) {
-                html += '<br>' + P.t('mentions_count', { count: P.formatNumber(Number(props.count)) });
+                subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.count)) }));
             }
+
+            var popupNode = P.buildMapPopup({
+                title: props.name || '',
+                titleHref: isAuth && props.o_id && siteBase ? siteBase + '/item/' + props.o_id : null,
+                subtitleLines: subtitle,
+                siteBase: siteBase
+            });
 
             P.createIwacPopup({ closeButton: true, closeOnClick: true })
                 .setLngLat(feat.geometry.coordinates.slice())
-                .setHTML(html)
+                .setDOMContent(popupNode)
                 .addTo(mapInstance);
         }
 

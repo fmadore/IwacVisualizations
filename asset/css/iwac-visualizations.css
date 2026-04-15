@@ -828,6 +828,112 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
     font-weight: 600;
 }
 
+/* ----- Shared map popup body (P.buildMapPopup) ----- */
+
+.iwac-vis-map-popup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    min-width: 220px;
+    max-width: 320px;
+}
+
+.iwac-vis-map-popup__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: var(--space-1, 0.25rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map-popup__title {
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    font-size: var(--text-base, 1rem);
+    line-height: 1.3;
+}
+
+a.iwac-vis-map-popup__title {
+    text-decoration: none;
+}
+
+a.iwac-vis-map-popup__title:hover {
+    color: var(--primary, #e67a14);
+    text-decoration: underline;
+}
+
+.iwac-vis-map-popup__subtitle {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+}
+
+.iwac-vis-map-popup__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-map-popup__item {
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map-popup__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.iwac-vis-map-popup__item-title {
+    display: block;
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 500;
+    color: var(--ink, #18202a);
+    line-height: 1.35;
+}
+
+a.iwac-vis-map-popup__item-title {
+    text-decoration: none;
+}
+
+a.iwac-vis-map-popup__item-title:hover {
+    color: var(--primary, #e67a14);
+    text-decoration: underline;
+}
+
+.iwac-vis-map-popup__meta {
+    margin-top: 0.15rem;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+}
+
+.iwac-vis-map-popup__empty {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    font-style: italic;
+}
+
+.iwac-vis-map-popup__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1, 0.25rem);
+    padding-top: var(--space-1, 0.25rem);
+    border-top: 1px solid var(--border-light, #ebe7df);
+}
+
+.iwac-vis-map-popup__pagination .iwac-vis-pagination__btn {
+    padding: 0.2rem 0.55rem;
+    font-size: var(--text-xs, 0.75rem);
+}
+
+.iwac-vis-map-popup__pagination .iwac-vis-pagination__indicator {
+    font-size: var(--text-xs, 0.75rem);
+    min-width: auto;
+}
+
 /* Fix the stock close button — originally rendered as a huge ×
  * glyph in light grey with no padding. Now a properly sized hit
  * target with theme-aware color and hover state. */

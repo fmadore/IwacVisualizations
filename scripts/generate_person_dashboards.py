@@ -133,6 +133,11 @@ MIN_COOCCURRENCE = 2
 # Top cap per person, per role slice.
 TOP_N_NEIGHBORS = 50
 
+# Max articles attached to each location in the map popup. Bounded
+# because popular persons in large cities accumulate hundreds of
+# mentions, and the popup only paginates a few per page anyway.
+LOCATION_ARTICLES_CAP = 30
+
 # Omeka resource template id for ``Personnes`` on islam.zmo.de.
 PERSON_TEMPLATE_TYPE = "Personnes"
 
@@ -351,6 +356,10 @@ class PersonDashboardGenerator:
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
             country_col = find_column(df, ["country", "countries"])
+            # Title column — the locations map popup (map.js) needs it
+            # to render an article list per location. Fall through the
+            # usual IWAC alias ladder.
+            title_col = find_column(df, ["Titre", "dcterms:title", "title"])
             # References are books/edited volumes — the per-item "outlet"
             # lives in ``publisher``, not ``newspaper``. Other subsets keep
             # the newspaper-first fallback chain.
@@ -381,6 +390,7 @@ class PersonDashboardGenerator:
                 meta: Dict[str, Any] = {
                     "o_id": item_o_id,
                     "subset": subset,
+                    "title": str(row.get(title_col) or "").strip() if title_col else "",
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
@@ -596,13 +606,17 @@ class PersonDashboardGenerator:
           3. Any ``creator`` entity that happens to be a Lieux record
 
         Each place is counted once per item, regardless of how many of
-        the three sources surfaced it. ``self.lieux_rows`` is precomputed
+        the three sources surfaced it. For every location we also emit
+        an ``articles`` list (title / publisher / date / o_id) capped
+        at ``LOCATION_ARTICLES_CAP`` so the front-end popup can render a
+        paginated article browser. ``self.lieux_rows`` is precomputed
         in ``build_entity_lookup`` (o_id → (lat, lng, country)).
         """
         by_role: Dict[str, Any] = {}
         for role in ROLES:
             item_keys = self._items_for_role(person_o_id, role)
             loc_counter: Counter = Counter()
+            loc_items: Dict[int, List[str]] = {}
             for key in item_keys:
                 roles = self.item_entities.get(key, {})
                 seen_here: Set[int] = set(self.item_spatial.get(key, set()))
@@ -611,19 +625,48 @@ class PersonDashboardGenerator:
                         seen_here.add(entity_o_id)
                 for entity_o_id in seen_here:
                     loc_counter[entity_o_id] += 1
+                    loc_items.setdefault(entity_o_id, []).append(key)
             entries = []
             for entity_o_id, count in loc_counter.most_common():
                 lat, lng = self.lieux_rows[entity_o_id]
                 info = self.id_to_entity.get(entity_o_id, {})
+                articles = self._build_location_articles(loc_items.get(entity_o_id, []))
                 entries.append({
                     "o_id": entity_o_id,
                     "name": info.get("title", f"#{entity_o_id}"),
                     "lat": lat,
                     "lng": lng,
                     "count": count,
+                    "articles": articles,
                 })
             by_role[role] = entries
         return {"by_role": by_role}
+
+    def _build_location_articles(self, item_keys: List[str]) -> List[Dict[str, Any]]:
+        """Build the per-location article list for the map popup.
+
+        Newest items first (string sort on ``pub_date`` works for the
+        ``YYYY-MM-DD`` format used across every content subset), capped
+        at ``LOCATION_ARTICLES_CAP``. Articles without a title are
+        silently dropped — they'd render as empty rows in the popup.
+        """
+        snippets: List[Dict[str, Any]] = []
+        for key in item_keys:
+            meta = self.items_meta.get(key)
+            if not meta:
+                continue
+            title = (meta.get("title") or "").strip()
+            if not title:
+                continue
+            snippets.append({
+                "o_id": meta.get("o_id"),
+                "subset": meta.get("subset"),
+                "title": title,
+                "publisher": (meta.get("newspaper") or "").strip(),
+                "date": (meta.get("pub_date") or "").strip(),
+            })
+        snippets.sort(key=lambda s: s.get("date") or "", reverse=True)
+        return snippets[:LOCATION_ARTICLES_CAP]
 
     # ------------------------------------------------------------------
     # Topic mix (LDA) — articles only
@@ -968,7 +1011,7 @@ class PersonDashboardGenerator:
                 continue
             data = self.build_person_json(person_o_id)
             out_path = self.output_dir / f"{person_o_id}.json"
-            save_json(data, out_path)
+            save_json(data, out_path, minify=True, log=False)
             written += 1
             if written % 100 == 0:
                 logger.info(f"  {written} person JSONs written")

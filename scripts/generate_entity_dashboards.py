@@ -125,6 +125,12 @@ MIN_COOCCURRENCE = 2
 # Top cap per entity for the neighbor network panel.
 TOP_N_NEIGHBORS = 50
 
+# Max articles attached to each location in the map popup. Matches
+# ``generate_person_dashboards.LOCATION_ARTICLES_CAP`` so the front-end
+# popup behaves identically whether the center is a person or any
+# other entity type.
+LOCATION_ARTICLES_CAP = 30
+
 logger: Optional[logging.Logger] = None
 
 
@@ -312,6 +318,9 @@ class EntityDashboardGenerator:
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
             country_col = find_column(df, ["country", "countries"])
+            # Title column — consumed by the locations map popup to
+            # render a per-location article list.
+            title_col = find_column(df, ["Titre", "dcterms:title", "title"])
             # References are books/edited volumes — the per-item "outlet"
             # lives in ``publisher``, not ``newspaper``. Other subsets keep
             # the newspaper-first fallback chain.
@@ -340,6 +349,7 @@ class EntityDashboardGenerator:
                 meta: Dict[str, Any] = {
                     "o_id": item_o_id,
                     "subset": subset,
+                    "title": str(row.get(title_col) or "").strip() if title_col else "",
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
@@ -504,26 +514,58 @@ class EntityDashboardGenerator:
         in subject or spatial fields. We do NOT exclude the center
         entity — readers typically expect "where this place is mentioned"
         to include the place itself when the dataset uses both subject
-        and spatial columns inconsistently.
+        and spatial columns inconsistently. For every location we also
+        emit an ``articles`` list (title / publisher / date / o_id)
+        capped at ``LOCATION_ARTICLES_CAP`` so the front-end popup can
+        render a paginated article browser.
         """
         item_keys = self.entity_items.get(entity_o_id, set())
         loc_counter: Counter = Counter()
+        loc_items: Dict[int, List[str]] = {}
         for key in item_keys:
             for o_id in self.item_entities.get(key, set()):
                 if o_id in self.lieux_rows:
                     loc_counter[o_id] += 1
+                    loc_items.setdefault(o_id, []).append(key)
         entries = []
         for o_id, count in loc_counter.most_common():
             lat, lng = self.lieux_rows[o_id]
             info = self.id_to_entity.get(o_id, {})
+            articles = self._build_location_articles(loc_items.get(o_id, []))
             entries.append({
                 "o_id": o_id,
                 "name": info.get("title", f"#{o_id}"),
                 "lat": lat,
                 "lng": lng,
                 "count": count,
+                "articles": articles,
             })
         return self._wrap(entries)
+
+    def _build_location_articles(self, item_keys: List[str]) -> List[Dict[str, Any]]:
+        """Build the per-location article list for the map popup.
+
+        Newest items first, capped at ``LOCATION_ARTICLES_CAP``.
+        Items without a title are silently dropped to avoid empty
+        rows in the popup UI.
+        """
+        snippets: List[Dict[str, Any]] = []
+        for key in item_keys:
+            meta = self.items_meta.get(key)
+            if not meta:
+                continue
+            title = (meta.get("title") or "").strip()
+            if not title:
+                continue
+            snippets.append({
+                "o_id": meta.get("o_id"),
+                "subset": meta.get("subset"),
+                "title": title,
+                "publisher": (meta.get("newspaper") or "").strip(),
+                "date": (meta.get("pub_date") or "").strip(),
+            })
+        snippets.sort(key=lambda s: s.get("date") or "", reverse=True)
+        return snippets[:LOCATION_ARTICLES_CAP]
 
     # ------------------------------------------------------------------
     # Topic mix (LDA) — articles only
@@ -797,7 +839,7 @@ class EntityDashboardGenerator:
                 empty += 1
             data = self.build_entity_json(entity_o_id)
             out_path = self.output_dir / f"{entity_o_id}.json"
-            save_json(data, out_path)
+            save_json(data, out_path, minify=True, log=False)
             written += 1
             if written % 200 == 0:
                 logger.info(f"  {written} entity JSONs written")

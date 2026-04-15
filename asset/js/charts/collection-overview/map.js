@@ -13,7 +13,7 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
-    if (!P || !P.buildFacetButtons) {
+    if (!P || !P.buildFacetButtons || !P.buildMapPopup) {
         console.warn('IWACVis.collection-overview/map: missing dependencies');
         return;
     }
@@ -157,13 +157,17 @@
             map.on('click', 'location-circles', function (e) {
                 var f = e.features && e.features[0];
                 if (!f) return;
+                var subtitle = [];
+                if (f.properties.country) subtitle.push(f.properties.country);
+                subtitle.push(P.t('mentions_count', {
+                    count: P.formatNumber(Number(f.properties.count))
+                }));
                 P.createIwacPopup({ closeButton: true, closeOnClick: true })
                     .setLngLat(f.geometry.coordinates)
-                    .setHTML(
-                        '<strong>' + P.escapeHtml(f.properties.name) + '</strong><br>' +
-                        (f.properties.country ? P.escapeHtml(f.properties.country) + '<br>' : '') +
-                        P.formatNumber(Number(f.properties.count)) + ' mentions'
-                    )
+                    .setDOMContent(P.buildMapPopup({
+                        title: f.properties.name,
+                        subtitleLines: subtitle
+                    }))
                     .addTo(map);
             });
             map.on('mouseenter', 'location-circles', function () { map.getCanvas().style.cursor = 'pointer'; });
