@@ -271,6 +271,123 @@ class ScaryTermsGenerator:
         }
 
     # ---------------------------------------------------------------------
+    #  Co-occurrence matrix — article-level
+    # ---------------------------------------------------------------------
+
+    def build_cooccurrence(self) -> Dict[str, Any]:
+        """Build the term × term co-occurrence matrix.
+
+        Definition: two term families co-occur if both appear in the
+        same article body, regardless of how many times each variant
+        surfaces. Each article contributes +1 to every pair formed by
+        the set of families it matches (including the pair {f, f}
+        which is tracked separately as ``term_counts``).
+
+        Returns a dict with a ``global`` slice and a ``countries``
+        map so the front-end can flip between "All countries" and a
+        per-country view without refetching:
+
+            {
+              "terms":      [family, ...],                     # canonical order
+              "global":     { matrix, term_counts, max_cooccurrence,
+                              total_articles },
+              "countries":  { country: { matrix, term_counts,
+                                         max_cooccurrence, total_articles } }
+            }
+
+        ``matrix`` is a 2-D list indexed ``matrix[i][j]`` where
+        ``i`` and ``j`` index into ``terms``. The diagonal is zeroed
+        (self-co-occurrence is meaningless) — use ``term_counts`` for
+        the per-family totals. ``max_cooccurrence`` excludes the
+        diagonal so the heatmap's color ramp can be scaled to actual
+        pair counts.
+        """
+        self.logger.info("Building co-occurrence matrix…")
+        terms = list(SCARY_TERMS.keys())
+        n = len(terms)
+        term_idx = {t: i for i, t in enumerate(terms)}
+
+        def blank_slice() -> Dict[str, Any]:
+            return {
+                "matrix": [[0] * n for _ in range(n)],
+                "term_counts": {t: 0 for t in terms},
+                "articles": 0,
+            }
+
+        global_slice = blank_slice()
+        country_slices: Dict[str, Dict[str, Any]] = {}
+
+        assert self.df is not None
+        for _, row in self.df.iterrows():
+            text = row.get("lemma_text")
+            if not isinstance(text, str) or not text:
+                continue
+
+            # Which families appear in this article?
+            families_present: List[str] = []
+            for family, pattern in self.patterns.items():
+                if pattern.search(text) is not None:
+                    families_present.append(family)
+            if not families_present:
+                continue
+
+            country = row.get("country")
+            country_key = None
+            if isinstance(country, str) and country and country != "Unknown":
+                country_key = country
+                if country_key not in country_slices:
+                    country_slices[country_key] = blank_slice()
+
+            def accumulate(slice_: Dict[str, Any]) -> None:
+                slice_["articles"] += 1
+                # Diagonal: one article containing the family
+                # contributes +1 to its own count.
+                for f in families_present:
+                    slice_["term_counts"][f] += 1
+                # Off-diagonal: symmetric pair increments.
+                for a_idx in range(len(families_present)):
+                    for b_idx in range(a_idx + 1, len(families_present)):
+                        fa = term_idx[families_present[a_idx]]
+                        fb = term_idx[families_present[b_idx]]
+                        slice_["matrix"][fa][fb] += 1
+                        slice_["matrix"][fb][fa] += 1
+
+            accumulate(global_slice)
+            if country_key is not None:
+                accumulate(country_slices[country_key])
+
+        def finalize(slice_: Dict[str, Any]) -> Dict[str, Any]:
+            mat = slice_["matrix"]
+            max_val = 0
+            for i in range(n):
+                for j in range(n):
+                    if i == j:
+                        continue
+                    if mat[i][j] > max_val:
+                        max_val = mat[i][j]
+            return {
+                "matrix": mat,
+                "term_counts": slice_["term_counts"],
+                "max_cooccurrence": max_val,
+                "total_articles": slice_["articles"],
+            }
+
+        # Drop countries under the min_country_articles threshold so
+        # the per-country view only ever lists slices with enough data
+        # to be meaningful — matches the behaviour of build_countries.
+        finalized_countries: Dict[str, Any] = {}
+        for country, slice_ in country_slices.items():
+            if slice_["articles"] < self.min_country_articles:
+                continue
+            finalized_countries[country] = finalize(slice_)
+
+        return {
+            "terms": terms,
+            "global": finalize(global_slice),
+            "countries": finalized_countries,
+        }
+
+    # ---------------------------------------------------------------------
     #  Output
     # ---------------------------------------------------------------------
 
@@ -286,6 +403,9 @@ class ScaryTermsGenerator:
         global_data = self.build_global()
         save_json(global_data, self.output_dir / "scary-terms-global.json")
 
+        cooccurrence = self.build_cooccurrence()
+        save_json(cooccurrence, self.output_dir / "scary-terms-cooccurrence.json")
+
         years = [int(y) for y in temporal.keys()] if temporal else []
         metadata = {
             "generated_at": generate_timestamp(),
@@ -296,9 +416,10 @@ class ScaryTermsGenerator:
             "countries": sorted(countries.keys()),
             "year_range": [min(years), max(years)] if years else [],
             "data_structure": {
-                "temporal":  "Scary term occurrences by year for bar chart race",
-                "countries": "Scary term occurrences grouped by country",
-                "global":    "Overall scary term occurrences across all articles",
+                "temporal":     "Scary term occurrences by year for bar chart race",
+                "countries":    "Scary term occurrences grouped by country",
+                "global":       "Overall scary term occurrences across all articles",
+                "cooccurrence": "Term \u00d7 term co-occurrence matrix (global + per-country)",
             },
             "term_definitions": {k: list(v) for k, v in SCARY_TERMS.items()},
         }

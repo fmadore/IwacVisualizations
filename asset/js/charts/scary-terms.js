@@ -29,10 +29,11 @@
     var C = ns.chartOptions;
 
     var DATA_FILES = {
-        metadata:  'scary-terms-metadata.json',
-        temporal:  'scary-terms-temporal.json',
-        countries: 'scary-terms-countries.json',
-        global:    'scary-terms-global.json'
+        metadata:     'scary-terms-metadata.json',
+        temporal:     'scary-terms-temporal.json',
+        countries:    'scary-terms-countries.json',
+        global:       'scary-terms-global.json',
+        cooccurrence: 'scary-terms-cooccurrence.json'
     };
 
     var TOP_N = 10;
@@ -53,10 +54,18 @@
             'scary.bar_race':                   'Bar chart race',
             'scary.by_country':                 'By country',
             'scary.global_view':                'Global',
+            'scary.matrix':                     'Co-occurrence matrix',
             'scary.country':                    'Country',
+            'scary.all_countries':              'All countries',
             'scary.chart_title':                'Scary terms',
             'scary.country_chart_title':        'Scary terms in {country}',
             'scary.global_chart_title':         'Scary terms — global',
+            'scary.matrix_chart_title':         'Co-occurrence matrix — global',
+            'scary.matrix_country_chart_title': 'Co-occurrence matrix — {country}',
+            'scary.matrix_description':         'How often pairs of scary-term families appear together in the same article. Darker cells = more shared articles. The diagonal is hidden because self-co-occurrence is meaningless — hover a term label for its overall article count.',
+            'scary.matrix_empty':               'No co-occurrences recorded for this slice.',
+            'scary.matrix_pair_tooltip':        '{a} × {b}<br>{count} shared articles',
+            'scary.matrix_articles':            '{count} articles',
             'scary.total_articles':             'Total articles',
             'scary.term_families':              'Term families',
             'scary.term_variants':              'Term variants',
@@ -77,10 +86,18 @@
             'scary.bar_race':                   'Course de barres',
             'scary.by_country':                 'Par pays',
             'scary.global_view':                'Global',
+            'scary.matrix':                     'Matrice de co-occurrence',
             'scary.country':                    'Pays',
+            'scary.all_countries':              'Tous les pays',
             'scary.chart_title':                'Termes \u00ab inqui\u00e9tants \u00bb',
             'scary.country_chart_title':        'Termes \u00ab inqui\u00e9tants \u00bb \u2014 {country}',
             'scary.global_chart_title':         'Termes \u00ab inqui\u00e9tants \u00bb \u2014 global',
+            'scary.matrix_chart_title':         'Matrice de co-occurrence \u2014 global',
+            'scary.matrix_country_chart_title': 'Matrice de co-occurrence \u2014 {country}',
+            'scary.matrix_description':         'Fr\u00e9quence \u00e0 laquelle les paires de familles de termes apparaissent ensemble dans un m\u00eame article. Plus la cellule est sombre, plus les articles sont partag\u00e9s. La diagonale est masqu\u00e9e (la co-occurrence d\u2019un terme avec lui-m\u00eame n\u2019a pas de sens) \u2014 survolez une \u00e9tiquette pour voir le total d\u2019articles.',
+            'scary.matrix_empty':               'Aucune co-occurrence enregistr\u00e9e pour cette s\u00e9lection.',
+            'scary.matrix_pair_tooltip':        '{a} \u00d7 {b}<br>{count} articles partag\u00e9s',
+            'scary.matrix_articles':            '{count} articles',
             'scary.total_articles':             'Articles totaux',
             'scary.term_families':              'Familles de termes',
             'scary.term_variants':              'Variantes',
@@ -128,13 +145,18 @@
             fetchJSON(dataBase + DATA_FILES.metadata),
             fetchJSON(dataBase + DATA_FILES.temporal),
             fetchJSON(dataBase + DATA_FILES.countries),
-            fetchJSON(dataBase + DATA_FILES.global)
+            fetchJSON(dataBase + DATA_FILES.global),
+            // Co-occurrence is optional — older deploys may not have it
+            // yet. Fall back to null so the orchestrator can hide the
+            // matrix view button when the bundle is missing.
+            fetchJSON(dataBase + DATA_FILES.cooccurrence).catch(function () { return null; })
         ]).then(function (results) {
             render(container, {
-                metadata:  results[0],
-                temporal:  results[1],
-                countries: results[2],
-                global:    results[3]
+                metadata:     results[0],
+                temporal:     results[1],
+                countries:    results[2],
+                global:       results[3],
+                cooccurrence: results[4]
             });
         }).catch(function (err) {
             console.error('IWACVis.scaryTerms:', err);
@@ -155,10 +177,11 @@
     // ---------------------------------------------------------------------
 
     function render(container, bundle) {
-        var metadata   = bundle.metadata   || {};
-        var temporal   = bundle.temporal   || {};
-        var countries  = bundle.countries  || {};
-        var globalData = bundle.global     || {};
+        var metadata     = bundle.metadata     || {};
+        var temporal     = bundle.temporal     || {};
+        var countries    = bundle.countries    || {};
+        var globalData   = bundle.global       || {};
+        var cooccurrence = bundle.cooccurrence || null;
 
         var families = metadata.term_families || [];
         var termColors = buildTermColorMap(families);
@@ -211,9 +234,14 @@
         // wide scale, which was the user's top complaint.
         var cumulativeByYearIdx = buildCumulativeSnapshots(temporal, years);
 
+        var matrixCountries = cooccurrence && cooccurrence.countries
+            ? Object.keys(cooccurrence.countries).sort()
+            : [];
+
         var state = {
             view: 'race',
             country: availableCountries[0] || null,
+            matrixCountry: null,  // null = global; otherwise one of matrixCountries
             yearIdx: 0,
             isPlaying: false,
             timer: null
@@ -256,6 +284,16 @@
                 topBadge.textContent = cData[0]
                     ? P.t('scary.top_term') + ': ' + cData[0][0]
                     : '';
+            } else if (state.view === 'matrix') {
+                var slice = resolveMatrixSlice();
+                option = buildMatrixOption(slice);
+                var matrixCountry = state.matrixCountry;
+                chartTitle.textContent = matrixCountry
+                    ? P.t('scary.matrix_country_chart_title', { country: matrixCountry })
+                    : P.t('scary.matrix_chart_title');
+                topBadge.textContent = slice && slice.total_articles
+                    ? P.t('scary.matrix_articles', { count: P.formatNumber(slice.total_articles) })
+                    : '';
             } else {
                 var gData = globalData.data || [];
                 option = C.scaryTerms({
@@ -267,7 +305,156 @@
                     ? P.t('scary.top_term') + ': ' + gData[0][0]
                     : '';
             }
-            if (option) currentInstance.setOption(option, { notMerge: false, lazyUpdate: true });
+            if (option) currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
+        }
+
+        // -----------------------------------------------------------------
+        //  Co-occurrence matrix
+        //
+        //  ECharts heatmap with category × category axes. Data is the
+        //  precomputed term × term matrix keyed by the canonical term
+        //  order from metadata.term_families. Uses the IWAC palette
+        //  primary + surface tokens for the color ramp so light / dark
+        //  theme swaps track automatically via dashboard-core's
+        //  dispose+reinit path (the registerChart callback wraps draw()).
+        // -----------------------------------------------------------------
+
+        function resolveMatrixSlice() {
+            if (!cooccurrence) return null;
+            if (state.matrixCountry && cooccurrence.countries
+                && cooccurrence.countries[state.matrixCountry]) {
+                return cooccurrence.countries[state.matrixCountry];
+            }
+            return cooccurrence.global || null;
+        }
+
+        function buildMatrixOption(slice) {
+            // Resolve every color through CSS custom properties so the
+            // matrix tracks the IWAC theme's --primary / --surface /
+            // --ink / --muted tokens on light/dark swap. Fallbacks are
+            // only consulted when the theme isn't installed. Never
+            // hardcode hex values in chart code.
+            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+            var primaryResolved = (ns.resolveCssVar && ns.resolveCssVar('--primary'))
+                || tokens.primary || '#e67a14';
+            var surfaceResolved = (ns.resolveCssVar && ns.resolveCssVar('--surface-raised'))
+                || tokens.surfaceRaised || tokens.surface || '#f9f7f3';
+            var inkResolved = (ns.resolveCssVar && ns.resolveCssVar('--ink'))
+                || tokens.ink || '#18202a';
+            var mutedResolved = (ns.resolveCssVar && ns.resolveCssVar('--muted'))
+                || tokens.muted || '#6e7a82';
+            var borderResolved = (ns.resolveCssVar && ns.resolveCssVar('--border'))
+                || tokens.border || '#dcd7ce';
+
+            if (!cooccurrence || !slice) {
+                return {
+                    graphic: [{
+                        type: 'text',
+                        left: 'center',
+                        top: 'middle',
+                        style: {
+                            text: P.t('scary.matrix_empty'),
+                            fill: mutedResolved,
+                            font: '14px Inter, -apple-system, sans-serif'
+                        }
+                    }]
+                };
+            }
+            var terms = (cooccurrence.terms || []).slice();
+            var matrix = slice.matrix || [];
+            var maxVal = Math.max(1, slice.max_cooccurrence || 1);
+
+            // Flatten to [xIdx, yIdx, value] triples. The diagonal is
+            // left as 0 because self-co-occurrence is meaningless —
+            // the tooltip covers the per-term totals via term_counts.
+            var data = [];
+            for (var i = 0; i < terms.length; i++) {
+                for (var j = 0; j < terms.length; j++) {
+                    if (i === j) continue;
+                    var v = (matrix[i] && matrix[i][j]) || 0;
+                    data.push([i, j, v]);
+                }
+            }
+
+            return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (p) {
+                        var x = terms[p.value[0]];
+                        var y = terms[p.value[1]];
+                        var count = p.value[2];
+                        return P.t('scary.matrix_pair_tooltip', {
+                            a: x,
+                            b: y,
+                            count: P.formatNumber(count || 0)
+                        });
+                    }
+                },
+                grid: {
+                    left: 120,
+                    right: 24,
+                    top: 30,
+                    bottom: 70,
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: terms,
+                    axisLabel: {
+                        rotate: 45,
+                        interval: 0,
+                        color: mutedResolved
+                    },
+                    axisLine:  { lineStyle: { color: borderResolved } },
+                    splitArea: { show: false },
+                    axisTick:  { show: false }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: terms.slice(),
+                    inverse: true,
+                    axisLabel: { interval: 0, color: mutedResolved },
+                    axisLine:  { lineStyle: { color: borderResolved } },
+                    splitArea: { show: false },
+                    axisTick:  { show: false }
+                },
+                visualMap: {
+                    min: 0,
+                    max: maxVal,
+                    calculable: true,
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: 4,
+                    itemWidth: 14,
+                    itemHeight: 140,
+                    textStyle: { color: mutedResolved },
+                    inRange: {
+                        color: [surfaceResolved, primaryResolved]
+                    }
+                },
+                series: [{
+                    type: 'heatmap',
+                    data: data,
+                    label: {
+                        show: true,
+                        formatter: function (p) {
+                            var v = p.value[2];
+                            return v > 0 ? v : '';
+                        },
+                        color: inkResolved,
+                        fontSize: 11
+                    },
+                    itemStyle: { borderColor: surfaceResolved, borderWidth: 1 },
+                    emphasis: {
+                        itemStyle: {
+                            borderColor: primaryResolved,
+                            borderWidth: 2
+                        }
+                    },
+                    progressive: 0,
+                    animation: false
+                }]
+            };
         }
 
         // -----------------------------------------------------------------
@@ -288,6 +475,14 @@
             if (state.view === 'country' && availableCountries.length) {
                 row.appendChild(buildCountrySelect());
             }
+            if (state.view === 'matrix' && matrixCountries.length) {
+                row.appendChild(buildMatrixCountrySelect());
+            }
+            if (state.view === 'matrix') {
+                var desc = P.el('p', 'iwac-vis-scary-matrix-desc',
+                    P.t('scary.matrix_description'));
+                controlsEl.appendChild(desc);
+            }
             if (state.view === 'race' && years.length) {
                 row.appendChild(buildPlaybackGroup());
                 controlsEl.appendChild(buildSliderRow());
@@ -302,6 +497,11 @@
                 { key: 'country', label: P.t('scary.by_country') },
                 { key: 'global',  label: P.t('scary.global_view') }
             ];
+            // The matrix view is only offered when the cooccurrence
+            // bundle is present — older deploys won't have it yet.
+            if (cooccurrence) {
+                views.push({ key: 'matrix', label: P.t('scary.matrix') });
+            }
             views.forEach(function (v) {
                 var btn = P.el('button', 'iwac-vis-scary-view-btn', v.label);
                 btn.type = 'button';
@@ -338,6 +538,38 @@
             });
             select.addEventListener('change', function () {
                 state.country = select.value;
+                draw();
+            });
+            group.appendChild(label);
+            group.appendChild(select);
+            return group;
+        }
+
+        function buildMatrixCountrySelect() {
+            // Separate from buildCountrySelect so the two views keep
+            // independent selections (the matrix has an "All countries"
+            // choice and a different available-country list — only
+            // slices with enough data are emitted).
+            var group = P.el('div', 'iwac-vis-scary-country-group');
+            var label = P.el('label', 'iwac-vis-scary-label', P.t('scary.country') + ':');
+            var select = P.el('select', 'iwac-vis-scary-select');
+            var selectId = 'iwac-vis-scary-matrix-country-' + Math.random().toString(36).slice(2, 8);
+            select.id = selectId;
+            label.htmlFor = selectId;
+
+            var allOpt = P.el('option', null, P.t('scary.all_countries'));
+            allOpt.value = '';
+            if (!state.matrixCountry) allOpt.selected = true;
+            select.appendChild(allOpt);
+
+            matrixCountries.forEach(function (c) {
+                var opt = P.el('option', null, c);
+                opt.value = c;
+                if (c === state.matrixCountry) opt.selected = true;
+                select.appendChild(opt);
+            });
+            select.addEventListener('change', function () {
+                state.matrixCountry = select.value || null;
                 draw();
             });
             group.appendChild(label);

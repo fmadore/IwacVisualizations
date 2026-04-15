@@ -129,6 +129,10 @@
                 } else {
                     titleNode = P.el('span', 'iwac-vis-map-popup__item-title', a.title || '');
                 }
+                // Full title on hover — the CSS clamps the visible
+                // text to one line with an ellipsis so the popup
+                // stays compact enough to fit the viewport.
+                if (a.title) titleNode.title = a.title;
                 li.appendChild(titleNode);
 
                 var metaBits = [];

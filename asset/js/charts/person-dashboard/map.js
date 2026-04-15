@@ -96,8 +96,23 @@
                 siteBase: siteBase
             });
 
+            // Pan so the clicked point sits in the upper half of the
+            // viewport, giving the popup body room to expand downward
+            // without getting clipped by the map container. Mirrors
+            // the common MapLibre pattern — the default auto-anchor
+            // already flips top/bottom, but without panning, dense
+            // popups at the top edge still get their bottom cut off.
+            var coords = f.geometry.coordinates.slice();
+            try {
+                mapInstance.easeTo({
+                    center: coords,
+                    offset: [0, 80],
+                    duration: 300
+                });
+            } catch (e) { /* map may not be ready yet */ }
+
             P.createIwacPopup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
-                .setLngLat(f.geometry.coordinates.slice())
+                .setLngLat(coords)
                 .setDOMContent(popupNode)
                 .addTo(mapInstance);
         }
