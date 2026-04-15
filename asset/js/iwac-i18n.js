@@ -279,13 +279,16 @@
 
             // Index overview — Section A panel titles
             'Entities by type':          'Entities by type',
-            'Top entities':              'Top entities',
+            'Top entities':              'Most frequent entities in Dublin Core Subject and Spatial Coverage',
             'Lifespan \u00d7 frequency': 'Lifespan \u00d7 frequency',
-            'Persons by gender':         'Persons by gender',
             'Places map':                'Places map',
-            'Entity activity':           'Entity activity',
-            'Recently added entities':   'Recently added entities',
+            'Temporal extent':           'Temporal extent',
             'Index table':               'Index table',
+
+            // Index overview — Section A panel descriptions
+            'desc_top_entities':   'Authority records that appear most often in item-level Dublin Core Subject (dcterms:subject) and Spatial Coverage (dcterms:spatial) fields. Click a bar to open the entity\u2019s page.',
+            'desc_lifespan':       'Each point is one entity: horizontal axis is the span in years between its first and last occurrence, vertical axis is its total mention count, color encodes entity type. Click a point to open the entity.',
+            'desc_temporal_extent': 'First and last year each top entity appears in the corpus (up to 30 per type, ranked by frequency). Each bar spans from earliest to latest mention.',
 
             // Index overview — summary cards + scatter axes
             'Total entities':            'Total entities',
@@ -293,9 +296,7 @@
             'Span (years)':              'Span (years)',
             'Frequency':                 'Frequency',
 
-            // Index overview — gender + map layer facets + index table search
-            'Male':                      'Male',
-            'Female':                    'Female',
+            // Index overview — map layer facets + index table search
             'Both layers':               'Both layers',
             'Authority pins':            'Authority pins',
             'Layer':                     'Layer',
@@ -559,13 +560,16 @@
 
             // Index overview — Section A panel titles
             'Entities by type':          'Entit\u00e9s par type',
-            'Top entities':              'Entit\u00e9s les plus cit\u00e9es',
+            'Top entities':              'Entit\u00e9s les plus fr\u00e9quentes dans les champs Sujet et Couverture spatiale (Dublin Core)',
             'Lifespan \u00d7 frequency': 'Dur\u00e9e de vie \u00d7 fr\u00e9quence',
-            'Persons by gender':         'Personnes par genre',
             'Places map':                'Carte des lieux',
-            'Entity activity':           'Activit\u00e9 des entit\u00e9s',
-            'Recently added entities':   'Entit\u00e9s ajout\u00e9es r\u00e9cemment',
+            'Temporal extent':           '\u00c9tendue temporelle',
             'Index table':               'Table de l\u2019index',
+
+            // Index overview — Section A panel descriptions
+            'desc_top_entities':   'Notices d\u2019autorit\u00e9 apparaissant le plus souvent dans les champs Dublin Core Sujet (dcterms:subject) et Couverture spatiale (dcterms:spatial) des notices de la collection. Cliquez sur une barre pour ouvrir la fiche de l\u2019entit\u00e9.',
+            'desc_lifespan':       'Chaque point est une entit\u00e9 : l\u2019axe horizontal donne l\u2019\u00e9tendue en ann\u00e9es entre sa premi\u00e8re et sa derni\u00e8re mention, l\u2019axe vertical son nombre total de mentions, la couleur le type. Cliquez sur un point pour ouvrir la fiche.',
+            'desc_temporal_extent': 'Premi\u00e8re et derni\u00e8re ann\u00e9e d\u2019apparition de chaque entit\u00e9 dans le corpus (jusqu\u2019\u00e0 30 par type, class\u00e9es par fr\u00e9quence). Chaque barre va de la mention la plus ancienne \u00e0 la plus r\u00e9cente.',
 
             // Index overview — summary cards + scatter axes
             'Total entities':            'Entit\u00e9s au total',
@@ -573,9 +577,7 @@
             'Span (years)':              'Dur\u00e9e (ann\u00e9es)',
             'Frequency':                 'Fr\u00e9quence',
 
-            // Index overview — gender + map layer facets + index table search
-            'Male':                      'Homme',
-            'Female':                    'Femme',
+            // Index overview — map layer facets + index table search
             'Both layers':               'Les deux couches',
             'Authority pins':            'Points d\u2019autorit\u00e9',
             'Layer':                     'Couche',

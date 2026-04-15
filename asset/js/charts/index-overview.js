@@ -53,21 +53,30 @@
         sectionA.appendChild(gridA);
 
         var typePanel       = P.buildPanel('iwac-vis-panel', P.t('Entities by type'));
-        var topEntitiesPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top entities'));
+        var topEntitiesPanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Top entities'),
+            P.t('desc_top_entities')
+        );
         topEntitiesPanel.panel.classList.add('iwac-vis-entities-panel');
-        var lifespanPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Lifespan × frequency'));
-        var genderPanel     = P.buildPanel('iwac-vis-panel', P.t('Persons by gender'));
+        var lifespanPanel   = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Lifespan × frequency'),
+            P.t('desc_lifespan')
+        );
         var mapPanel        = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Places map'));
-        var ganttPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Entity activity'));
-        var recentPanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
-                                           P.t('Recently added entities'));
+        var ganttPanel      = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Temporal extent'),
+            P.t('desc_temporal_extent')
+        );
         var indexPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Index table'));
 
         [
             typePanel, topEntitiesPanel,
-            lifespanPanel, genderPanel,
+            lifespanPanel,
             mapPanel, ganttPanel,
-            recentPanel, indexPanel
+            indexPanel
         ].forEach(function (p) { gridA.appendChild(p.panel); });
 
         root.appendChild(sectionA);
@@ -104,10 +113,8 @@
             typePanel:      typePanel,
             topEntitiesPanel: topEntitiesPanel,
             lifespanPanel:  lifespanPanel,
-            genderPanel:    genderPanel,
             mapPanel:       mapPanel,
             ganttPanel:     ganttPanel,
-            recentPanel:    recentPanel,
             indexPanel:     indexPanel,
             filtersHost:    filtersHost,
             chartPanel:     chartPanel,
@@ -121,10 +128,8 @@
         if (io.typeDistribution) io.typeDistribution.render(h.typePanel, dataA);
         if (io.topEntities)      io.topEntities.render(h.topEntitiesPanel, dataA, ctx);
         if (io.lifespan)         io.lifespan.render(h.lifespanPanel, dataA, ctx);
-        if (io.gender)           io.gender.render(h.genderPanel, dataA);
         if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA);
         if (io.activityGantt)    io.activityGantt.render(h.ganttPanel, dataA, ctx);
-        if (io.recentAdditions)  io.recentAdditions.render(h.recentPanel, dataA, ctx);
         if (io.indexTable)       io.indexTable.render(h.indexPanel, dataA, ctx);
     }
 
@@ -136,7 +141,10 @@
         }
         var state = io.keywordsState.create(datasets);
         io.keywordsFilters.render(h.filtersHost, state, datasets);
-        io.keywordsChart.render(h.chartPanel.chart, state);
+        // Chart panel receives the panel object so it can inject its
+        // subtitle ABOVE panel.chart as a sibling (nesting inside
+        // panel.chart collapses the ECharts canvas to 0px height).
+        io.keywordsChart.render(h.chartPanel, state);
         io.keywordsTable.render(h.tablePanel.chart, state);
     }
 

@@ -11,9 +11,17 @@
  *   - Adaptive x-axis tick density based on the number of years
  *     (≤10 show every year, ≤20 every 2nd, ≤40 every 5th, else every 10th)
  *   - Label rotation kicks in at >30 years of data
+ *   - Years passed as strings to suppress ECharts' thousand-separator
+ *     formatting ("1,970" instead of "1970")
  *   - Colors come from the IWAC palette (built from CSS tokens by
  *     iwac-theme.js) — no hex literals here. Empty selection renders
  *     a gentle "select keywords" empty state instead of a broken chart.
+ *
+ * Takes the full panel object (panel + chart) so the subtitle can be
+ * injected as a sibling above the chart div — inserting the subtitle
+ * INSIDE the chart div collapses the ECharts canvas to 0px height
+ * because the nested `.iwac-vis-chart` wouldn't match the
+ * `.iwac-vis-panel > .iwac-vis-chart` CSS height selector.
  */
 (function () {
     'use strict';
@@ -56,6 +64,7 @@
 
         var rotate = years.length > 30 ? 45 : 0;
         var interval = tickIntervalFor(years);
+        var yearsStr = years.map(String);
 
         return {
             grid: C._grid({ left: 48, right: 24, top: 40, bottom: rotate ? 64 : 48 }),
@@ -72,13 +81,14 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: years,
+                data: yearsStr,
                 name: P.t('Year'),
                 nameLocation: 'middle',
                 nameGap: rotate ? 44 : 28,
                 axisLabel: {
                     interval: interval,
-                    rotate: rotate
+                    rotate: rotate,
+                    formatter: function (v) { return String(v); }
                 }
             },
             yAxis: {
@@ -92,20 +102,19 @@
         };
     }
 
-    function render(host, state) {
-        host.innerHTML = '';
-
+    function render(panelEl, state) {
+        // Subtitle + empty-state notice sit ABOVE the chart as siblings
+        // of panelEl.chart — never wrapped inside it. Wrapping collapses
+        // the chart to 0px because the inner div no longer matches the
+        // `.iwac-vis-panel > .iwac-vis-chart` height rule.
         var subtitle = P.el('div', 'iwac-vis-keywords-chart__subtitle');
-        host.appendChild(subtitle);
+        panelEl.panel.insertBefore(subtitle, panelEl.chart);
 
-        var chartEl = P.el('div', 'iwac-vis-chart');
-        host.appendChild(chartEl);
-
-        var emptyEl = P.el('div', 'iwac-vis-empty');
+        var emptyEl = P.el('div', 'iwac-vis-empty iwac-vis-keywords-chart__empty');
         emptyEl.style.display = 'none';
-        host.appendChild(emptyEl);
+        panelEl.panel.insertBefore(emptyEl, panelEl.chart);
 
-        var chart = ns.registerChart(chartEl, function (el, instance) {
+        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
             instance.setOption({ series: [] });
         });
 
@@ -131,7 +140,7 @@
             subtitle.textContent = parts.join(' \u2014 ');
 
             if (keywords.length === 0) {
-                chartEl.style.display = 'none';
+                panelEl.chart.style.display = 'none';
                 emptyEl.style.display = '';
                 emptyEl.textContent = snap.view === 'compare'
                     ? P.t('Select keywords to compare')
@@ -139,11 +148,12 @@
                 return;
             }
 
-            chartEl.style.display = '';
+            panelEl.chart.style.display = '';
             emptyEl.style.display = 'none';
 
-            if (chart && !chart.isDisposed()) {
-                chart.setOption(buildOption(derived.years, keywords, derived.series), true);
+            var liveChart = (ns.getLiveChart && ns.getLiveChart(panelEl.chart)) || chart;
+            if (liveChart && !liveChart.isDisposed()) {
+                liveChart.setOption(buildOption(derived.years, keywords, derived.series), true);
             }
         }
 

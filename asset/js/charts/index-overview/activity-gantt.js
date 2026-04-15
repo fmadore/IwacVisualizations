@@ -31,6 +31,20 @@
         '\u00c9v\u00e9nements': 'Events'
     };
 
+    // Plain year formatter — C.gantt renders an integer value axis
+    // for years which ECharts auto-formats with locale thousand
+    // separators ("1,970" instead of "1970"). Override on every
+    // build so the chart survives theme swaps.
+    function withYearFormatter(opt) {
+        if (opt && opt.xAxis) {
+            opt.xAxis.axisLabel = opt.xAxis.axisLabel || {};
+            opt.xAxis.axisLabel.formatter = function (v) {
+                return String(Math.round(v));
+            };
+        }
+        return opt;
+    }
+
     function render(panelEl, data, ctx) {
         var activity = (data && data.activity) || {};
         var availableTypes = TYPE_ORDER.filter(function (t) {
@@ -57,14 +71,14 @@
                 if (!evt.subFacet) return;
                 state.activeType = evt.subFacet;
                 if (chart && !chart.isDisposed()) {
-                    chart.setOption(C.gantt(activity[state.activeType] || []), true);
+                    chart.setOption(withYearFormatter(C.gantt(activity[state.activeType] || [])), true);
                 }
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            instance.setOption(C.gantt(activity[state.activeType] || []), true);
+            instance.setOption(withYearFormatter(C.gantt(activity[state.activeType] || [])), true);
         });
 
         if (chart) {

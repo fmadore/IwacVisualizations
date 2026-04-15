@@ -138,15 +138,20 @@
         var maxMentions = 1;
         mentions.forEach(function (m) { if ((m.count || 0) > maxMentions) maxMentions = m.count; });
 
-        // Read theme tokens for stroke/fill so the map stays on-brand.
-        // Falls back to the pre-resolved --primary via iwac-theme.
+        // Resolve theme tokens to legacy rgb() form for MapLibre —
+        // MapLibre's style parser rejects `hsl(..., calc(...), ...)`
+        // and `color-mix()`, which is what getChartTokens() returns
+        // when the theme's --primary is defined as a calc-based hsl
+        // expression. ns.resolveCssVar uses an offscreen probe to
+        // compute the expression into a plain rgb() value that
+        // MapLibre understands.
         function primaryColor() {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            return tokens.primary || '#e67a14';
+            var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
+            return resolved || '#e67a14';
         }
         function inkColor() {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            return tokens.ink || '#18202a';
+            var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
+            return resolved || '#18202a';
         }
 
         var mapInstance = null;
