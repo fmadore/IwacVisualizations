@@ -15,49 +15,19 @@ from __future__ import annotations
 
 import argparse
 import logging
-import re
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import pandas as pd
+from typing import Any, Dict, List
 
 from iwac_utils import (
     DATASET_ID,
     configure_logging,
     load_dataset_safe,
+    parse_coordinates,
     parse_pipe_separated,
     save_json,
 )
-
-COORD_RE = re.compile(r"(-?\d+(?:\.\d+)?)[\s,]+(-?\d+(?:\.\d+)?)")
-
-
-def parse_coordinates(raw: Any) -> Optional[Tuple[float, float]]:
-    """Parse a "lat,lng" or "lat lng" string into (lat, lng). Returns
-    None if the value is missing or malformed."""
-    if raw is None or (isinstance(raw, float) and pd.isna(raw)):
-        return None
-    if isinstance(raw, (tuple, list)) and len(raw) == 2:
-        try:
-            return float(raw[0]), float(raw[1])
-        except (TypeError, ValueError):
-            return None
-    s = str(raw).strip()
-    if not s:
-        return None
-    m = COORD_RE.search(s)
-    if not m:
-        return None
-    try:
-        lat = float(m.group(1))
-        lng = float(m.group(2))
-    except ValueError:
-        return None
-    if not (-90 <= lat <= 90) or not (-180 <= lng <= 180):
-        return None
-    return lat, lng
 
 
 def build_map(repo_id: str) -> Dict[str, Any]:
@@ -143,11 +113,13 @@ def build_map(repo_id: str) -> Dict[str, Any]:
 
 
 def main() -> None:
-    configure_logging()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=DATASET_ID)
     parser.add_argument("--output", default="asset/data/collection-map.json")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Set log level to DEBUG")
     args = parser.parse_args()
+
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
 
     result = build_map(repo_id=args.repo)
     save_json(result, Path(args.output), minify=False)

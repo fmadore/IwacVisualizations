@@ -383,9 +383,8 @@
     justify-content: space-between;
     gap: var(--space-2, 0.5rem);
     /* Reserve space on the right so the panel toolbar (download +
-     * fullscreen) never collides with the badge. Two 32px buttons +
-     * gap ≈ 72px; 96px gives a little breathing room. */
-    padding-right: 96px;
+     * fullscreen) never collides with the badge. Token lives in core. */
+    padding-right: var(--iwac-vis-panel-toolbar-reserve, 96px);
 }
 
 .iwac-vis-scary-chart-title {

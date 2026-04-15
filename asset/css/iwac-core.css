@@ -81,6 +81,23 @@
     --iwac-vis-shadow-subtle: color-mix(in srgb, var(--ink, #18202a)  8%, transparent);
     --iwac-vis-shadow-soft:   color-mix(in srgb, var(--ink, #18202a) 14%, transparent);
     --iwac-vis-shadow-strong: color-mix(in srgb, var(--ink, #18202a) 22%, transparent);
+
+    /* Recent-additions thumbnail sizing — exposed as tokens so block
+     * CSS and future panels stay aligned on the same responsive ramp.
+     * The `-col-` variant is the table cell's total width (slightly
+     * larger than the thumb to accommodate padding). */
+    --iwac-vis-thumb-lg: 56px;
+    --iwac-vis-thumb-md: 48px;
+    --iwac-vis-thumb-sm: 40px;
+    --iwac-vis-thumb-col-lg: 72px;
+    --iwac-vis-thumb-col-md: 60px;
+    --iwac-vis-thumb-col-sm: 52px;
+
+    /* Panel-toolbar reservation — chart headers that render a trailing
+     * badge or toolbar slot (e.g. scary-terms) use this to avoid
+     * collision with the download + fullscreen buttons injected by
+     * panel-toolbar.js. Two 32px buttons + gap ≈ 72px; 96px breathes. */
+    --iwac-vis-panel-toolbar-reserve: 96px;
 }
 
 

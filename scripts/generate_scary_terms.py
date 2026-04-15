@@ -45,6 +45,7 @@ from typing import Any, Dict, List
 import pandas as pd
 
 from iwac_utils import (
+    DATASET_ID,
     configure_logging,
     extract_year,
     generate_timestamp,
@@ -140,10 +141,16 @@ def count_family_occurrences(text: str, pattern: re.Pattern) -> int:
 class ScaryTermsGenerator:
     """Build the four scary-terms JSON files from the IWAC articles subset."""
 
-    def __init__(self, output_dir: Path, min_country_articles: int = 5):
+    def __init__(
+        self,
+        output_dir: Path,
+        min_country_articles: int = 5,
+        repo_id: str = DATASET_ID,
+    ):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.min_country_articles = min_country_articles
+        self.repo_id = repo_id
         self.patterns = _compile_patterns(SCARY_TERMS)
         self.df: pd.DataFrame | None = None
         self.logger = logging.getLogger(__name__)
@@ -153,8 +160,8 @@ class ScaryTermsGenerator:
     # ---------------------------------------------------------------------
 
     def load(self) -> None:
-        self.logger.info("Loading 'articles' subset from Hugging Face…")
-        df = load_dataset_safe("articles")
+        self.logger.info(f"Loading 'articles' subset from {self.repo_id}…")
+        df = load_dataset_safe("articles", repo_id=self.repo_id)
         if df is None:
             raise RuntimeError("Failed to load 'articles' subset")
 
@@ -444,6 +451,11 @@ def main() -> None:
         description="Generate scary terms JSON data for the IwacVisualizations block."
     )
     parser.add_argument(
+        "--repo",
+        default=DATASET_ID,
+        help="Hugging Face dataset repository ID (default: %(default)s)",
+    )
+    parser.add_argument(
         "--output-dir",
         default="asset/data",
         help="Where to write the four JSON files (default: asset/data).",
@@ -454,12 +466,18 @@ def main() -> None:
         default=5,
         help="Drop countries with fewer than this many articles (default: 5).",
     )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
     args = parser.parse_args()
 
-    configure_logging()
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
     ScaryTermsGenerator(
         output_dir=Path(args.output_dir),
         min_country_articles=args.min_country_articles,
+        repo_id=args.repo,
     ).run()
 
 

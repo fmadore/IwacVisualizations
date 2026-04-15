@@ -18,36 +18,13 @@
 
     function render(panelEl, data, facet) {
         var byRole = (data && data.heatmap && data.heatmap.by_role) || {};
-
-        function currentData() {
-            return byRole[facet.role] || { years: [], months: [], cells: [] };
-        }
-
-        function hasData() {
-            var d = currentData();
-            return d && d.cells && d.cells.length > 0;
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            if (hasData()) {
-                instance.setOption(C.heatmap(currentData()), true);
-            } else {
-                instance.clear();
-            }
-        });
-
-        if (!hasData() && !chart) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
-        }
-
-        facet.subscribe(function () {
-            if (chart && !chart.isDisposed()) {
-                if (hasData()) {
-                    chart.setOption(C.heatmap(currentData()), true);
-                } else {
-                    chart.clear();
-                }
-            }
+        P.buildFacetedChart(panelEl, {
+            facet: facet,
+            getData: function () {
+                return byRole[facet.role] || { years: [], months: [], cells: [] };
+            },
+            hasData: function (d) { return d && d.cells && d.cells.length > 0; },
+            buildOption: function (d) { return C.heatmap(d); }
         });
     }
 

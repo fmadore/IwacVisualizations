@@ -50,7 +50,8 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
-    _canonical_country,
+    canonical_country,
+    canonicalize_country_field,
     configure_logging,
     extract_year,
     load_dataset_safe,
@@ -87,19 +88,6 @@ def _str_or_none(value: Any) -> Optional[str]:
     return s or None
 
 
-def _canonicalize_country_field(value: Any) -> Any:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return value
-    s = str(value)
-    if not s.strip():
-        return value
-    if "|" in s:
-        return "|".join(
-            _canonical_country(p) for p in s.split("|") if p.strip()
-        )
-    return _canonical_country(s)
-
-
 def _pick_countries(value: Any) -> List[str]:
     """Return a list of canonical country names for a row, splitting
     multi-country cells so each country bucket gets its own count.
@@ -112,7 +100,7 @@ def _pick_countries(value: Any) -> List[str]:
         s = p.strip()
         if not s or s.lower() == "unknown":
             continue
-        out.append(_canonical_country(s))
+        out.append(canonical_country(s))
     return out
 
 
@@ -365,9 +353,6 @@ def build_metadata(
 
 
 def main() -> None:
-    configure_logging()
-    logger = logging.getLogger(__name__)
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--repo",
@@ -383,7 +368,15 @@ def main() -> None:
         "--minify", action="store_true",
         help="Produce compact JSON (no indentation)",
     )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
     args = parser.parse_args()
+
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None
     if token is None:
@@ -396,7 +389,7 @@ def main() -> None:
         if df is None:
             continue
         if "country" in df.columns:
-            df["country"] = df["country"].apply(_canonicalize_country_field)
+            df["country"] = df["country"].apply(canonicalize_country_field)
         dataframes[subset] = df
 
     if not dataframes:

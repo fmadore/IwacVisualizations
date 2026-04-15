@@ -23,33 +23,21 @@
         return;
     }
 
+    // `idx` lets the click handler find the richer source record
+    // (including the articles list) from the current `locations`
+    // array — feature properties are string-coerced by MapLibre,
+    // so we can't stash the array there directly.
     function featuresFrom(locations) {
-        return {
-            type: 'FeatureCollection',
-            features: (locations || [])
-                .filter(function (l) { return l.count > 0; })
-                .map(function (l, idx) {
-                    return {
-                        type: 'Feature',
-                        // `idx` lets the click handler find the richer
-                        // source record (including the articles list)
-                        // from the current `locations` array — feature
-                        // properties are string-coerced by MapLibre,
-                        // so we can't stash the array there directly.
-                        geometry: { type: 'Point', coordinates: [l.lng, l.lat] },
-                        properties: {
-                            idx: idx,
-                            name: l.name,
-                            count: l.count
-                        }
-                    };
-                })
-        };
+        return P.buildCountFeatures(locations, {
+            toProps: function (l, idx) {
+                return { idx: idx, name: l.name, count: l.count };
+            }
+        }).collection;
     }
 
     function render(panelEl, data, facet, ctx) {
         if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-error', P.t('Map library unavailable')));
+            panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
             return;
         }
 
@@ -117,15 +105,6 @@
                 .addTo(mapInstance);
         }
 
-        function handleMouseMove(e) {
-            if (!mapInstance) return;
-            if (!mapInstance.getLayer('person-location-circles')) return;
-            var features = mapInstance.queryRenderedFeatures(e.point, {
-                layers: ['person-location-circles']
-            });
-            mapInstance.getCanvas().style.cursor = features.length ? 'pointer' : '';
-        }
-
         function resolvePrimary() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
             return resolved || '#e67a14';
@@ -140,10 +119,13 @@
             zoom: 3.2,
             onStyleReady: function (m) {
                 mapInstance = m;
+                // `generateId: true` gives MapLibre a stable feature
+                // identity so feature-state hover can key on it.
                 if (!m.getSource('person-locations')) {
                     m.addSource('person-locations', {
                         type: 'geojson',
-                        data: featuresFrom(currentLocations)
+                        data: featuresFrom(currentLocations),
+                        generateId: true
                     });
                 }
                 if (!m.getLayer('person-location-circles')) {
@@ -158,8 +140,21 @@
                                 maxCount, 24
                             ],
                             'circle-color': resolvePrimary(),
-                            'circle-opacity': 0.75,
-                            'circle-stroke-width': 1.5,
+                            // Hover lift — see collection-overview/map.js
+                            // for the rationale behind driving this via
+                            // feature-state instead of a JS cursor swap.
+                            'circle-opacity': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                1.0,
+                                0.75
+                            ],
+                            'circle-stroke-width': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                3,
+                                1.5
+                            ],
                             'circle-stroke-color': resolveInk()
                         }
                     });
@@ -167,14 +162,17 @@
             }
         });
 
-        // Attach click/hover handlers ONCE per map instance. MapLibre
+        // Attach click + hover handlers ONCE per map instance. MapLibre
         // persists map-level (not layer-filtered) handlers across
         // setStyle calls, so they survive theme swaps without
         // re-attachment and don't stack up on every style.load.
         if (createdMap) {
             mapInstance = createdMap;
             createdMap.on('click', handleClick);
-            createdMap.on('mousemove', handleMouseMove);
+            P.attachFeatureStateHover(createdMap, {
+                layer: 'person-location-circles',
+                source: 'person-locations'
+            });
         }
 
         facet.subscribe(function () {

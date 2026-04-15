@@ -18,62 +18,36 @@
  *     asset/data/keyword-explorer-spatial.json     (Section B — spatial)
  *     asset/data/keyword-explorer-metadata.json    (Section B — filters)
  *
- * Page blocks are not served by the Item/ItemSet controllers, so this
- * template has to enqueue the module's assets itself.
- *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheets — shared core first, then map chrome, then block-specific
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/blocks/index-overview.css', 'IwacVisualizations')
-);
-
-// CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css');
-
-// IWAC infrastructure — order matters: i18n → theme → core → shared primitives → panels → orchestrator
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Shared primitives (panels.js first, then primitives that depend on it)
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Section A — Entity Index Explorer panels (self-registering IIFE modules)
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/stats.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/type-distribution.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/top-entities.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/lifespan.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/places-map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/activity-gantt.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/index-table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Section B — Keyword Explorer panels
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/keywords-state.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/keywords-filters.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/keywords-chart.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview/keywords-table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Orchestrator — LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/index-overview.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'index-overview',
+    'needs' => [
+        'maplibre'     => true,
+        'chartOptions' => true,
+        'facetButtons' => true,
+        'table'        => true,
+        'pagination'   => true,
+    ],
+    'panels' => [
+        // Section A — Entity Index Explorer
+        'index-overview/stats',
+        'index-overview/type-distribution',
+        'index-overview/top-entities',
+        'index-overview/lifespan',
+        'index-overview/places-map',
+        'index-overview/activity-gantt',
+        'index-overview/index-table',
+        // Section B — Keyword Explorer
+        'index-overview/keywords-state',
+        'index-overview/keywords-filters',
+        'index-overview/keywords-chart',
+        'index-overview/keywords-table',
+    ],
+    'orchestrator' => 'index-overview',
+]);
 
 $siteSlug = $this->currentSite()->slug();
 ?>

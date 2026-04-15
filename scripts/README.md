@@ -125,26 +125,57 @@ python3 scripts/generate_collection_overview.py --minify     # compact JSON
 
 ## Shared helpers — `iwac_utils.py`
 
-Functions to use instead of rewriting:
+Functions to use instead of rewriting. The **v0.9.0 refactor** promoted
+`clean_str`, `clean_float`, `extract_month_num`, `canonical_country`,
+and `canonicalize_country_field` out of individual generators into
+this shared module, and upgraded `parse_coordinates` to accept
+tuples/lists and whitespace-separated strings in addition to the
+classic `"lat, lng"` form.
 
 | Function | What it does |
 |---|---|
-| `load_dataset_safe(config_name, ...)` | Fetch a HF subset as a pandas DataFrame. Logs and returns `None` on error. |
+| `load_dataset_safe(config_name, repo_id, token)` | Fetch a HF subset as a pandas DataFrame. Logs and returns `None` on error. |
+| `canonical_country(name)` | Apply IWAC display overrides on top of `str.title()` — handles apostrophes ("Côte d'Ivoire") and accents. Re-exported as `_canonical_country` for backwards compatibility. |
+| `canonicalize_country_field(value)` | `pandas.Series.apply()`-ready helper: maps a `country` cell to its canonical form, handling None/NaN, plain strings, and pipe-separated strings. Promoted from duplicates in 3 generators. |
 | `normalize_country(value, ...)` | Strip, title-case, handle `\|,;/` separators, `None` → `"Unknown"`. |
 | `normalize_location_name(name)` | Unicode NFC + lowercase + strip — used for matching against the `index` `Titre` column. |
 | `extract_year(value, min_year, max_year)` | Pulls a 4-digit year from strings / datetimes / numbers with validation. |
 | `extract_month(value)` | `YYYY-MM` string. |
-| `parse_coordinates(coord_str)` | `"lat, lng"` → `(float, float)` with range validation. |
+| `extract_month_num(date_str)` | Pull a 1–12 month number out of an ISO-ish `YYYY-MM[-DD]` date. `None` for bare years or unparseable input. |
+| `parse_coordinates(value)` | `"lat, lng"` / `"lat lng"` / `(lat, lng)` tuple / `[lat, lng]` list → `(float, float)` with range validation. |
 | `parse_pipe_separated(value)` | Trimmed list from pipe-separated string or list. |
 | `parse_multi_value(value, separators)` | Like above but tries `\|;,/` in order. |
+| `clean_str(value)` | Strip-and-cast a DataFrame cell, treating NaN/None as `""`. |
+| `clean_float(value)` | Cast a DataFrame cell to float, or `None` for NaN / missing / garbage. |
 | `find_column(df, candidates, required)` | Return the first matching column name, optionally raise. |
 | `save_json(data, path, minify, log)` | Write JSON with auto-mkdir, size-logged. |
 | `create_metadata_block(total_records, data_source, **extra)` | Standard metadata dict for output files. |
 | `generate_timestamp()` | ISO UTC timestamp with `Z` suffix. |
-| `configure_logging(level)` | Standard `%(asctime)s [%(levelname)s] %(message)s` format. |
+| `configure_logging(level)` | Standard `%(asctime)s [%(levelname)s] %(message)s` format. Pass `logging.DEBUG` when `--verbose` is set. |
 
 Constants: `DATASET_ID = "fmadore/islam-west-africa-collection"` and
 `SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]`.
+
+## CLI conventions
+
+Every generator supports the same baseline flags (v0.9.0+):
+
+| Flag | Purpose |
+|---|---|
+| `--repo` | Hugging Face dataset repo id. Defaults to `DATASET_ID`. Override to point at a fork or a dev mirror. |
+| `-v`, `--verbose` | Set log level to `DEBUG` (normally `INFO`). Prints per-subset load sizes and aggregation details. |
+
+Block-specific extras (partial list):
+
+| Flag | Scripts | Purpose |
+|---|---|---|
+| `--output` / `--output-dir` | all | Override the default asset/data target path. |
+| `--minify` | `collection-overview`, `index-overview`, `keyword-explorer` | Produce compact JSON (no indentation). Typically halves file size. |
+| `--top-n` | `collection-overview`, `index-overview` | Cap top-N entity lists. |
+| `--limit` | `entity-dashboards`, `person-dashboards` | Only process the first N entities (smoke testing). |
+| `--type` | `entity-dashboards` | Restrict to one entity type (`Lieux` / `Organisations` / `Sujets` / `Événements`). |
+| `--min-cooccurrence` | `entity-dashboards`, `person-dashboards` | Threshold for the TF-IDF neighbor network. Default 2. Bump to 3–5 to prune noise. |
+| `--min-country-articles` | `scary-terms` | Drop countries with fewer than N articles from the country view. Default 5. |
 
 ## Adding a new generator
 
@@ -185,16 +216,39 @@ Produces one JSON per Person in the `index` subset, consumed by the
 `asset/data/person-dashboards/{o_id}.json`.
 
 ```bash
-python3 scripts/generate_person_dashboards.py              # all persons (~2,600 files)
-python3 scripts/generate_person_dashboards.py --limit 5    # smoke test
-python3 scripts/generate_person_dashboards.py -v           # debug logging
+python3 scripts/generate_person_dashboards.py                     # all persons (~2,600 files)
+python3 scripts/generate_person_dashboards.py --limit 5           # smoke test
+python3 scripts/generate_person_dashboards.py -v                  # debug logging
+python3 scripts/generate_person_dashboards.py --min-cooccurrence 3  # tighter network
+python3 scripts/generate_person_dashboards.py --repo myuser/fork  # alternate dataset
 ```
 
 Neighbor ranking is TF-IDF (`score = cooc × log(N_persons / df)`) with
-a minimum co-occurrence floor of 2 and a top-50 cap per role slice,
-so distinctive relationships outrank globally-common entities.
+a minimum co-occurrence floor of 2 (override via `--min-cooccurrence`)
+and a top-50 cap per role slice, so distinctive relationships outrank
+globally-common entities.
 
 The generator joins back into content subsets via string-match on
 `subject` (role: `subject`) and `author` (role: `creator`) fields
 using the same Unicode normalization as
 `iwac-dashboard/scripts/generate_entity_spatial.py`.
+
+## generate_entity_dashboards.py
+
+Produces one JSON per non-person entity (Lieux / Organisations /
+Sujets / Événements) in the `index` subset, consumed by the
+`Visualizations` resource-page block via the `entity.phtml` partial.
+Output goes to `asset/data/entity-dashboards/{o_id}.json`.
+
+```bash
+python3 scripts/generate_entity_dashboards.py                     # all entities (~1,550 files)
+python3 scripts/generate_entity_dashboards.py --type Lieux        # one type only
+python3 scripts/generate_entity_dashboards.py --limit 5           # smoke test
+python3 scripts/generate_entity_dashboards.py --min-cooccurrence 3
+```
+
+Entities with zero mentions still get a placeholder JSON so the
+resource page block renders "no data available" states instead of 404-ing.
+The output shape mirrors `person-dashboards` exactly but wraps every
+section in a `by_role.all` envelope so the person panel JS modules can
+be reused unchanged with a no-op facet.

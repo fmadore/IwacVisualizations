@@ -45,6 +45,7 @@
             return acc;
         }, {});
 
+        var ctrl = null;
         var facetBar = P.buildFacetButtons({
             facets: [
                 { key: 'global',     label: P.t('Global') },
@@ -65,7 +66,7 @@
             onChange: function (evt) {
                 state.facet = evt.facet;
                 state.subFacet = evt.subFacet || null;
-                rerender();
+                if (ctrl) ctrl.rerender();
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
@@ -77,25 +78,13 @@
             return [];
         }
 
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            var entries = currentEntries();
-            if (entries.length === 0) {
-                instance.clear();
-                return;
+        ctrl = P.buildFacetedChart(panelEl, {
+            getData: currentEntries,
+            hasData: function (entries) { return entries.length > 0; },
+            buildOption: function (entries) {
+                return C.pie(entries, { nameKey: 'name', valueKey: 'count' });
             }
-            instance.setOption(C.pie(entries, { nameKey: 'name', valueKey: 'count' }), true);
         });
-
-        function rerender() {
-            if (chart && !chart.isDisposed()) {
-                var entries = currentEntries();
-                if (entries.length === 0) {
-                    chart.clear();
-                } else {
-                    chart.setOption(C.pie(entries, { nameKey: 'name', valueKey: 'count' }), true);
-                }
-            }
-        }
     }
 
     ns.collectionOverview = ns.collectionOverview || {};

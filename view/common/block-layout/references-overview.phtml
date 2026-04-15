@@ -8,31 +8,16 @@
  * endpoint (9 parallel requests of 100 rows each) and aggregates
  * everything in the browser.
  *
- * Page blocks are not served by the Item/ItemSet controllers, so this
- * template has to enqueue the module's assets itself.
- *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheet — references overview uses only the shared core (no
-// maps, no block-specific chrome beyond the generic panel + table).
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-
-// CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-
-// IWAC infrastructure — order matters: i18n → theme → core → shared → chart
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/references-overview.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'needs' => [
+        'chartOptions' => true,
+    ],
+    'orchestrator' => 'references-overview',
+]);
 
 $siteSlug = $this->currentSite()->slug();
 ?>

@@ -21,6 +21,19 @@ Five page blocks and one resource-page block layout are fully wired end-to-end w
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.9.0 — refactor pass
+
+Major consolidation without behavior changes:
+
+- **Shared asset-loader partial** (`view/common/iwac-assets.phtml`) replaces the 70-line `headLink`/`headScript` blocks that used to live in every template. Templates now declare *what* they need (maplibre, wordcloud, table, facet-buttons, panel list, orchestrator) and the partial handles the rest. CDN versions and load order live in one place.
+- **`AbstractIwacBlockLayout`** base class collapses 5 near-identical `Site\BlockLayout` classes to ~15 lines each.
+- **New JS helpers** in `asset/js/charts/shared/`: `P.buildFacetedChart()`, `P.buildCountFeatures()`, `P.buildLoadingState()` / `buildEmptyState()` / `buildErrorState()`, `P.formatDate()`, `P.attachFeatureStateHover()`. Migrated 8 panel modules to use them.
+- **MapLibre `feature-state` hover** on every map: bubbles brighten and thicken their stroke on hover/tap via the modern GPU-driven pattern instead of JS cursor swapping. `generateId: true` on every GeoJSON source.
+- **Python helpers** promoted into `iwac_utils.py`: `canonical_country`, `canonicalize_country_field`, `clean_str`, `clean_float`, `extract_month_num`, and an upgraded `parse_coordinates` that accepts tuples/lists and whitespace separators. 8 generators migrated, ~180 lines of dupe removed.
+- **CLI consistency** across all 9 generators: `--repo`, `-v/--verbose`, and `--min-cooccurrence` (for the TF-IDF network threshold) are now standard.
+- **CSS tokens**: `--iwac-vis-thumb-{lg,md,sm}`, `--iwac-vis-thumb-col-{lg,md,sm}`, `--iwac-vis-panel-toolbar-reserve`. Zero hardcoded colors remain in block CSS.
+- **Security**: fixed one unescaped `$resource->id()` in `item-set-dashboard.phtml`; fixed a latent MapLibre listener-leak bug in `collection-overview/map.js` where theme swaps stacked duplicate layer-bound handlers.
+
 ## Features
 
 ### Collection Overview (page block)
@@ -121,15 +134,17 @@ IwacVisualizations/
 │   └── module.config.php                   # Block + resource-page-block registration
 ├── src/Site/
 │   ├── BlockLayout/
-│   │   ├── CollectionOverview.php          # Live
-│   │   ├── IndexOverview.php               # Live
-│   │   ├── ReferencesOverview.php          # Live
-│   │   ├── ScaryTerms.php                  # Live
-│   │   └── CompareProjects.php             # Placeholder
+│   │   ├── AbstractIwacBlockLayout.php     # Shared base: label/description/template
+│   │   ├── CollectionOverview.php          # Live — extends AbstractIwacBlockLayout
+│   │   ├── IndexOverview.php               # Live — extends AbstractIwacBlockLayout
+│   │   ├── ReferencesOverview.php          # Live — extends AbstractIwacBlockLayout
+│   │   ├── ScaryTerms.php                  # Live — extends AbstractIwacBlockLayout
+│   │   └── CompareProjects.php             # Placeholder — extends AbstractIwacBlockLayout
 │   └── ResourcePageBlockLayout/
 │       ├── Visualizations.php              # Template-ID dispatch (person vs entity)
 │       └── ItemSetDashboard.php            # Placeholder
 ├── view/common/
+│   ├── iwac-assets.phtml                   # Shared asset-loader partial (v0.9.0+)
 │   ├── block-layout/
 │   │   ├── collection-overview.phtml       # Live — precompute path
 │   │   ├── index-overview.phtml            # Live — precompute path
@@ -162,9 +177,14 @@ IwacVisualizations/
 │   │   ├── iwac-theme.js                   # ECharts theme built from live CSS vars
 │   │   ├── dashboard-core.js               # IWACVis namespace, chart tracking, theme observer
 │   │   └── charts/
-│   │       ├── shared/                     # Reusable primitives (panels, pagination,
-│   │       │                               #   table, facet-buttons, chart-options,
-│   │       │                               #   maplibre, panel-toolbar, responsive)
+│   │       ├── shared/                     # Reusable primitives:
+│   │       │                               #   panels (DOM + formatters + count-features
+│   │       │                               #     + loading/empty/error states
+│   │       │                               #     + attachFeatureStateHover),
+│   │       │                               #   faceted-chart (buildFacetedChart helper),
+│   │       │                               #   pagination, table, facet-buttons,
+│   │       │                               #   chart-options, maplibre, map-popup,
+│   │       │                               #   panel-toolbar, responsive
 │   │       ├── collection-overview.js      # Collection Overview orchestrator
 │   │       ├── collection-overview/        # Panel modules (growth, gantt, wordcloud, map, …)
 │   │       ├── index-overview.js           # Index Overview orchestrator
@@ -214,36 +234,74 @@ IwacVisualizations/
 └── README.md
 ```
 
-### Asset loading — per-partial, no module listeners
+### Asset loading — shared partial
 
 `Module.php` is intentionally minimal and only wires `getConfig()`. Per the top-of-file docblock:
 
-> Every block partial in this module enqueues its own stylesheet, CDN libraries, and JS dependencies via `$this->headLink` / `headScript`. We deliberately do NOT attach a controller listener that blanket-loads ECharts/MapLibre on every Item and ItemSet view — doing so cost ~600 KB of unused JavaScript on every Article page, even when no Visualizations block was configured.
+> Every block partial in this module enqueues its own stylesheet, CDN libraries, and JS dependencies. We deliberately do NOT attach a controller listener that blanket-loads ECharts/MapLibre on every Item and ItemSet view — doing so cost ~600 KB of unused JavaScript on every Article page, even when no Visualizations block was configured.
+
+**As of v0.9.0, enqueueing is centralized in a single shared partial** (`view/common/iwac-assets.phtml`) that owns the stylesheet + CDN + JS stack. Templates only declare *what* they need and the partial handles the rest:
+
+```php
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'collection-overview',        // optional: loads css/blocks/<name>.css
+    'needs' => [
+        'maplibre'     => true,                 // MapLibre CDN + iwac-maplibre.css + shared/maplibre + shared/map-popup
+        'wordcloud'    => true,                 // echarts-wordcloud CDN
+        'chartOptions' => true,                 // shared/chart-options
+        'facetButtons' => true,                 // shared/facet-buttons + shared/faceted-chart
+        'table'        => true,                 // shared/table (implicitly loads pagination)
+        'pagination'   => true,                 // shared/pagination
+    ],
+    'panels' => [                               // block-specific panel modules, in order
+        'collection-overview/recent-additions',
+        'collection-overview/growth',
+        'collection-overview/map',
+        // ...
+    ],
+    'orchestrator' => 'collection-overview',    // orchestrator loads LAST
+]);
+```
+
+The partial:
+
+- always loads `iwac-core.css`, ECharts CDN, i18n, theme, dashboard-core, panels, panel-toolbar, responsive
+- loads optional primitives per `needs` (each is tiny and opt-in — `panels.js` alone is enough for blocks that don't render charts yet)
+- loads each panel module in the order given, then the orchestrator **last**
+- pins CDN versions at the top of the partial so bumping `@6` → `@7` is a one-line change
+- emits every URL through `$this->assetUrl($path, 'IwacVisualizations')` so Omeka's `?v=` cache-bust tracks `config/module.ini`
+- deduplicates via `headScript()` / `headLink()` — if two blocks appear on the same page, each asset is still enqueued only once
 
 Consequences for contributors:
 
-- When adding a new block, mirror the enqueueing pattern from `view/common/resource-page-block-layout/visualizations/person.phtml` or `view/common/block-layout/collection-overview.phtml`.
-- Assets must be attributed as `'IwacVisualizations'` in `$this->assetUrl($path, 'IwacVisualizations')`.
-- **Reference `.min.js`, not `.js`** — the templates load minified bundles (see [Build](#build--development) below).
-- **Pass `['defer' => 'defer']`** as the third argument to `headScript()->appendFile()` so the browser can keep parsing HTML while scripts download in parallel. Example:
-
-  ```php
-  $this->headScript()->appendFile(
-      $this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'),
-      'text/javascript',
-      ['defer' => 'defer']
-  );
-  ```
+- **When adding a new block**, write the template body (markup + data attributes) and call `$this->partial('common/iwac-assets', [...])` at the top. Don't write raw `$this->headScript()` calls — that's what the partial is for.
+- **Reference `.min.js`, not `.js`** — the partial already appends `.min.js`; pass panel paths without any extension.
+- Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.
+- If you need a truly new shared primitive, add it to `panels.js` (small additions) or a new `shared/<name>.js` file, add it as an opt-in flag in the partial, and document it in this README.
 
 ### Load order (runtime)
 
-A live block partial enqueues scripts in the following order. All are deferred, so they download in parallel during HTML parse and execute in document order after parsing completes — the orchestrator always runs last, with its dependencies populated.
+The shared partial enqueues scripts in this fixed order. All are deferred, so they download in parallel during HTML parse and execute in document order after parsing completes — the orchestrator always runs last, with its dependencies populated.
 
-1. CDN libraries — `echarts.min.js`, optionally `echarts-wordcloud.min.js`, `maplibre-gl.js` + CSS (not deferred for CSS)
+1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js`, `maplibre-gl.js` + CSS (not deferred for CSS)
 2. **IWAC infrastructure** — order matters: `iwac-i18n.min.js` → `iwac-theme.min.js` → `dashboard-core.min.js`
-3. **Shared primitives** — `panels`, `responsive`, `chart-options`, `pagination`, `table`, `facet-buttons`, `maplibre` (only the ones the block uses)
+3. **Shared primitives** — `panels` + `panel-toolbar` + `responsive` always load; `chart-options`, `pagination`, `table`, `facet-buttons` + `faceted-chart`, `maplibre` + `map-popup` load only when the block opts in via `needs`
 4. **Panel modules** — self-registering IIFEs under `charts/<block>/` that attach to `IWACVis.<block>Dashboard.<panel>`
 5. **Orchestrator** — `charts/<block>.js` — waits for `DOMContentLoaded`, fetches JSON (or live HF data), builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel
+
+### Shared JS helpers (`asset/js/charts/shared/panels.js`)
+
+Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as `P`). Beyond the DOM primitives (`P.el`, `P.escapeHtml`, `P.buildPanel`, `P.buildSummaryCards`) there are a handful of helpers panel modules should reach for before rolling their own:
+
+| Helper | What it does |
+|---|---|
+| `P.t(key, params)` / `P.formatNumber(n)` / `P.formatDate(iso, opts)` | i18n shortcuts. `formatDate` is locale-aware (fr-FR / en-US) and gracefully falls back to the ISO date slice on parse failure. |
+| `P.buildLoadingState(key)` / `P.buildEmptyState(key)` / `P.buildErrorState(key)` | Consistent spinner / "No data available" / "Failed to load" banners. Default keys translate to the obvious messages. |
+| `P.buildCountFeatures(items, { countKey, minCount, toProps })` | Turns a list of `{lng, lat, count, …}` records into a GeoJSON `FeatureCollection` for MapLibre bubble maps, plus the max count for the radius interpolation. Used by every map panel in the module. |
+| `P.buildFacetedChart(panelEl, { facet, getData, hasData, buildOption, emptyKey })` | Collapses the 30-line "register chart → subscribe to facet → re-setOption on change → show empty state" pattern into one call. Works with both external facet observers (person/entity dashboards) and locally-held state (collection-overview facet bars — use `ctrl.rerender()` from the button `onChange` handler). |
+| `P.attachFeatureStateHover(map, layers)` | Wires `feature-state`-driven hover highlights to one or more MapLibre layers. Pair with `'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], <hover>, <normal>]` in the paint spec. Prerequisite: each source must be created with `generateId: true` so MapLibre has a stable feature identity. |
+| `P.createIwacMap(container, config)` / `P.createIwacPopup(options)` / `P.buildMapPopup(config)` | The MapLibre stack: theme-aware basemap, auto-restyle on theme swap, shared popup CSS hooks, paginated article-list popup body. |
+| `P.buildFacetButtons(config)` / `P.buildTable(config)` / `P.buildPagination(config)` | Facet bar (buttons / select / subcategories), accessible HTML table with column renderers, and a reusable pagination widget. |
 
 ### Data strategy — hybrid
 
@@ -311,6 +369,25 @@ Language switching in IWAC is a full page navigation (the Internationalisation m
 - On change, it calls `IWACVis.refreshThemes()` (rebuild + re-register the ECharts theme from the live CSS vars) then iterates `IWACVis._charts` to dispose every tracked ECharts instance and re-run its render function.
 - ECharts 6 removed `chart.setTheme()`, which is why we use dispose + reinit. MapLibre instances get `setStyle()` pointed at the Carto positron / dark-matter URL.
 
+## Mobile & touch UX
+
+Every block is responsive and works on mobile/touch without extra configuration:
+
+- **Maps** — MapLibre handles pinch-zoom, single-finger pan, two-finger rotate, pitch natively. Tapping a bubble fires `map.on('click', ...)` the same way a desktop click does, so popups open identically. The `feature-state`-driven hover highlight (brighter fill + thicker stroke) fires as visual confirmation on tap, then clears on the next interaction — a nice side-effect of the modern idiom.
+- **Popups** — sized via `min-width: min(200px, calc(100vw - 3rem))` and `max-width: min(320px, calc(100vw - 1.5rem))` so they breathe even on 320-px-wide phones without clipping off-screen. Internal height caps at `min(70vh, 420px)` so long article lists scroll inside the popup instead of overflowing the map. iOS Safari gets `-webkit-overflow-scrolling: touch` for momentum scrolling.
+- **Charts** — ECharts handles tap-to-select, tap-to-dismiss-tooltip, pinch-zoom on brush-selectable charts, and touch-driven dataZoom sliders out of the box.
+- **Tables** — `P.buildTable` wraps every table in a horizontally scrollable container. The `recent-additions` table progressively hides columns at 768px and 640px breakpoints (source → added-date → …) and shrinks thumbnails via the `--iwac-vis-thumb-{lg,md,sm}` token ramp.
+- **Facet bars + pagination + toolbar buttons** — rendered as real `<button>` elements, tap targets ≥ 32px.
+- **Layouts** — every block is mobile-first CSS. `index-overview`'s keyword sidebar collapses from a two-column grid to single-column below 1024px. `scary-terms` shifts from a 4-column metrics grid on tablets+ to 2-column on phones. `person-dashboard` reflows stats and graph panels at 640px.
+- **Text + line clamps** — article titles in popups and table cells use `-webkit-line-clamp: 2` with a `title` attribute fallback, so long French headlines never break the layout.
+
+Known trade-offs (same on every web map, not IWAC-specific):
+
+- **Small bubble markers** (radius ~3 px at minimum count) are hard to tap precisely on a phone. Users zoom in to hit them, which is standard map UX.
+- **Page scroll vs. map pan** — we use MapLibre defaults (`dragPan: true`), so a single-finger drag that starts inside the map captures the drag for panning, and a drag that starts above/below the map scrolls the page. If a block is embedded in a long scrollable page and you'd rather force two-finger pan, pass `mapOptions: { cooperativeGestures: true }` via `P.createIwacMap()`. We don't force it by default because the built-in hint dialog is English-only and many users find the two-finger requirement annoying.
+
+### Registering a theme-aware chart
+
 To register a new chart so it auto-updates on toggle:
 
 ```js
@@ -368,7 +445,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across 47 files: **≈ 390 KB → 150 KB (−61.7%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 69 KB → 22 KB).
+Current minification results across **49 files: ≈ 408 KB → 153 KB (−62.4%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 69 KB → 22 KB). The tiny `faceted-chart.js` helper minifies to under 1 KB.
 
 There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
 

@@ -3,15 +3,21 @@
 IWAC Shared Utilities
 
 Common functions used across IWAC data generation scripts.
-This module centralizes duplicated code from the 17 generator scripts.
+This module centralizes duplicated code from the generator scripts.
 
 Functions:
+- canonical_country: Canonical display form for a country name
+- canonicalize_country_field: Apply canonical_country to a (possibly
+  pipe-separated) DataFrame cell, preserving the original for None/NaN
 - normalize_country: Normalize country values (handles |, ,, ; separators)
 - extract_year: Extract year from various date formats
 - extract_month: Extract YYYY-MM from date values
-- parse_coordinates: Parse "lat, lng" strings
+- extract_month_num: Pull the 1–12 month number out of a "YYYY-MM[-DD]" date
+- parse_coordinates: Parse "lat, lng" or "lat lng" strings (or tuple/list)
 - normalize_location_name: Unicode NFC normalization for matching
 - parse_pipe_separated: Parse multivalue fields
+- clean_str: Strip-and-cast a DataFrame cell, treating NaN/None as ""
+- clean_float: Cast a DataFrame cell to float, or None for garbage
 - load_dataset_safe: Load HuggingFace dataset with error handling
 - find_column: Find first matching column in DataFrame
 - save_json: Save JSON with mkdir and optional minification
@@ -91,7 +97,7 @@ COUNTRY_DISPLAY_OVERRIDES: Dict[str, str] = {
 }
 
 
-def _canonical_country(name: str) -> str:
+def canonical_country(name: str) -> str:
     """Apply IWAC display overrides on top of ``str.title()``.
 
     ``str.title()`` re-capitalizes after every non-letter, so
@@ -106,6 +112,35 @@ def _canonical_country(name: str) -> str:
     if key in COUNTRY_DISPLAY_OVERRIDES:
         return COUNTRY_DISPLAY_OVERRIDES[key]
     return s.title()
+
+
+# Backwards-compatible alias — several generators still import the
+# underscored name. New code should use ``canonical_country``.
+_canonical_country = canonical_country
+
+
+def canonicalize_country_field(value: Any) -> Any:
+    """Map a DataFrame country cell to its canonical form.
+
+    Handles the three shapes the cell can take:
+      - None / NaN / empty → returned unchanged (so pandas apply() keeps
+        the column dtype sane)
+      - Pipe-separated string → canonicalized per segment and rejoined
+      - Plain string → canonicalized
+
+    Used by every generator that reads the ``country`` / ``countries``
+    columns and wants a stable display form before aggregating.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return value
+    s = str(value)
+    if not s.strip():
+        return value
+    if "|" in s:
+        return "|".join(
+            canonical_country(p) for p in s.split("|") if p.strip()
+        )
+    return canonical_country(s)
 
 
 def normalize_country(
@@ -273,6 +308,33 @@ def extract_year(
     return None
 
 
+_MONTH_NUM_PATTERN = re.compile(r"^\d{4}-(\d{2})")
+
+
+def extract_month_num(date_str: Any) -> Optional[int]:
+    """Pull a 1–12 month number out of an ISO-ish ``YYYY-MM[-DD]`` date.
+
+    Returns ``None`` for bare year strings (``"1995"``), empty / NaN
+    inputs, or anything where the month segment is not a valid 1–12
+    integer.
+    """
+    if date_str is None or (isinstance(date_str, float) and pd.isna(date_str)):
+        return None
+    s = str(date_str)
+    if not s:
+        return None
+    m = _MONTH_NUM_PATTERN.match(s)
+    if not m:
+        return None
+    try:
+        n = int(m.group(1))
+    except (TypeError, ValueError):
+        return None
+    if 1 <= n <= 12:
+        return n
+    return None
+
+
 def extract_month(value: Any) -> Optional[str]:
     """
     Extract year-month (YYYY-MM) from various date formats.
@@ -323,45 +385,59 @@ def extract_month(value: Any) -> Optional[str]:
 # Coordinate Parsing
 # =============================================================================
 
-def parse_coordinates(coord_str: str) -> Optional[Tuple[float, float]]:
+_COORD_PATTERN = re.compile(r'(-?\d+(?:\.\d+)?)[\s,]+(-?\d+(?:\.\d+)?)')
+
+
+def parse_coordinates(value: Any) -> Optional[Tuple[float, float]]:
     """
-    Parse coordinates from a string.
+    Parse coordinates into a (lat, lng) tuple.
 
-    Expected formats: "lat, lng" or "lat,lng"
+    Accepted input shapes:
+      - ``"lat, lng"``  — comma-separated string (with or without space)
+      - ``"lat lng"``   — whitespace-separated string
+      - ``(lat, lng)`` / ``[lat, lng]`` — 2-element tuple or list
 
-    Args:
-        coord_str: Coordinate string to parse
-
-    Returns:
-        Tuple of (latitude, longitude) or None if parsing fails
+    Returns ``None`` for anything that doesn't parse cleanly, or for
+    coordinates outside the valid geographic range (|lat| > 90 or
+    |lng| > 180).
 
     Examples:
         >>> parse_coordinates("12.34, -56.78")
         (12.34, -56.78)
-        >>> parse_coordinates("12.34,-56.78")
+        >>> parse_coordinates("12.34 -56.78")
+        (12.34, -56.78)
+        >>> parse_coordinates((12.34, -56.78))
         (12.34, -56.78)
         >>> parse_coordinates("invalid")
         None
     """
-    if not coord_str or pd.isna(coord_str):
+    if value is None or (isinstance(value, float) and pd.isna(value)):
         return None
 
-    coord_str = str(coord_str).strip()
-    if not coord_str:
-        return None
-
-    # Try common formats: "lat, lng" or "lat,lng"
-    match = re.match(r'^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$', coord_str)
-    if match:
+    if isinstance(value, (tuple, list)) and len(value) == 2:
         try:
-            lat = float(match.group(1))
-            lng = float(match.group(2))
-            # Validate coordinate ranges
-            if -90 <= lat <= 90 and -180 <= lng <= 180:
-                return (lat, lng)
-        except ValueError:
-            pass
+            lat = float(value[0])
+            lng = float(value[1])
+        except (TypeError, ValueError):
+            return None
+        if -90 <= lat <= 90 and -180 <= lng <= 180:
+            return (lat, lng)
+        return None
 
+    s = str(value).strip()
+    if not s:
+        return None
+
+    match = _COORD_PATTERN.search(s)
+    if not match:
+        return None
+    try:
+        lat = float(match.group(1))
+        lng = float(match.group(2))
+    except ValueError:
+        return None
+    if -90 <= lat <= 90 and -180 <= lng <= 180:
+        return (lat, lng)
     return None
 
 
@@ -399,6 +475,28 @@ def parse_pipe_separated(value: Any) -> List[str]:
 
     # Split by pipe and clean
     return [v.strip() for v in value_str.split('|') if v.strip()]
+
+
+def clean_str(value: Any) -> str:
+    """Strip-and-cast a DataFrame cell, treating NaN/None as empty.
+
+    Centralised so every generator agrees on the "empty" rules —
+    pandas cells that come back as ``float('nan')`` are common and
+    each generator used to reimplement this guard locally.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    return str(value).strip()
+
+
+def clean_float(value: Any) -> Optional[float]:
+    """Cast a DataFrame cell to float, or None for NaN / missing / garbage."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:

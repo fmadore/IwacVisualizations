@@ -13,57 +13,35 @@
  * README for the precompute workflow.
  *
  * Page blocks are not served by the Item/ItemSet controllers, so this
- * template has to enqueue the module's assets itself.
+ * template delegates asset enqueueing to the shared `common/iwac-assets`
+ * partial.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheets — shared core first, then map chrome, then block-specific
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/blocks/collection-overview.css', 'IwacVisualizations')
-);
-
-// CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css');
-
-// IWAC infrastructure — order matters: i18n → theme → core → shared primitives → panels → orchestrator
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Shared primitives (panels.js first, then primitives that depend on it)
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Collection Overview panels (self-registering IIFE modules)
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/recent-additions.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/entities.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/languages.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/growth.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/types-over-time.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/gantt.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/wordcloud.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview/map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Orchestrator — LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/collection-overview.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'collection-overview',
+    'needs' => [
+        'maplibre'     => true,
+        'wordcloud'    => true,
+        'chartOptions' => true,
+        'facetButtons' => true,
+        'table'        => true,
+        'pagination'   => true,
+    ],
+    'panels' => [
+        'collection-overview/recent-additions',
+        'collection-overview/entities',
+        'collection-overview/languages',
+        'collection-overview/growth',
+        'collection-overview/types-over-time',
+        'collection-overview/gantt',
+        'collection-overview/wordcloud',
+        'collection-overview/map',
+    ],
+    'orchestrator' => 'collection-overview',
+]);
 
 $siteSlug = $this->currentSite()->slug();
 ?>

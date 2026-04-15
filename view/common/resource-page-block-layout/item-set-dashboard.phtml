@@ -5,39 +5,27 @@
  * Async container. Aggregated visualizations for an item set are expected
  * to load from a precomputed JSON file (pipeline TBD).
  *
- * Asset loading is self-contained — Module.php no longer blanket-injects
- * ECharts/MapLibre on every Item/ItemSet view.
+ * Assets are pre-loaded via the shared `common/iwac-assets` partial so
+ * the future orchestrator can render charts + maps + word clouds
+ * without re-touching this file.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemSetRepresentation $resource
  */
 
-// Stylesheets — placeholder block; enqueues core + maplibre so the
-// future orchestrator can hit the ground running.
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-
-// CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
-
-// IWAC infrastructure
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'needs' => [
+        'maplibre'  => true,
+        'wordcloud' => true,
+    ],
+]);
 
 $siteSlug = $this->currentSite()->slug();
 ?>
 
 <div class="iwac-vis-block dashboard-block">
     <div class="dashboard-async-container"
-         data-item-set-id="<?= $resource->id() ?>"
+         data-item-set-id="<?= $this->escapeHtmlAttr($resource->id()) ?>"
          data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
          data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
         <div class="iwac-vis-loading">

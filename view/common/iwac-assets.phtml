@@ -1,0 +1,133 @@
+<?php
+/**
+ * IWAC Visualizations — shared asset loader partial.
+ *
+ * Every IWAC block enqueues the same set of stylesheets, CDN libraries,
+ * and IWAC JS modules with only small differences — whether the block
+ * needs maps, tables, facet buttons, etc. This partial centralizes all
+ * of that so individual templates only declare *what* they need.
+ *
+ * CDN versions are pinned at the top of the file: single source of
+ * truth for every IWAC block. Bump the three constants when upgrading.
+ *
+ * Usage:
+ *
+ *     <?php echo $this->partial('common/iwac-assets', [
+ *         'blockCss'     => 'collection-overview',
+ *         'needs'        => [
+ *             'maplibre'     => true,
+ *             'wordcloud'    => true,
+ *             'chartOptions' => true,
+ *             'facetButtons' => true,
+ *             'table'        => true,
+ *             'pagination'   => true,
+ *         ],
+ *         'panels'       => [
+ *             'collection-overview/recent-additions',
+ *             'collection-overview/languages',
+ *             // ...
+ *         ],
+ *         'orchestrator' => 'collection-overview',
+ *     ]); ?>
+ *
+ * Load order is fixed: stylesheets → CDN libs → IWAC i18n/theme/core →
+ * shared primitives → block panels → orchestrator. headScript/headLink
+ * de-dupe by URL, so if two partial calls ever clash on a page, each
+ * asset is still emitted only once.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var string|null $blockCss
+ * @var array|null  $needs
+ * @var array|null  $panels
+ * @var string|null $orchestrator
+ */
+
+// -- CDN versions -------------------------------------------------------
+// Single source of truth. `@6` / `@5` / `@2` hold the major version and
+// let patch releases through. Pin tighter (e.g. `@6.0.4`) if a specific
+// upstream release causes regressions.
+$cdnEcharts     = 'https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js';
+$cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js';
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css';
+
+// -- Defaults -----------------------------------------------------------
+$blockCss     = isset($blockCss)     ? $blockCss     : null;
+$needs        = isset($needs)        ? (array) $needs : [];
+$panels       = isset($panels)       ? (array) $panels : [];
+$orchestrator = isset($orchestrator) ? $orchestrator : null;
+
+$needMaplibre   = !empty($needs['maplibre']);
+$needWordcloud  = !empty($needs['wordcloud']);
+$needChartOpts  = !empty($needs['chartOptions']);
+// `table` implicitly needs pagination — pagination.js is table.js's dep.
+$needPagination = !empty($needs['pagination']) || !empty($needs['table']);
+$needTable      = !empty($needs['table']);
+$needFacets     = !empty($needs['facetButtons']);
+
+$module = 'IwacVisualizations';
+$defer  = ['defer' => 'defer'];
+
+$headLink   = $this->headLink();
+$headScript = $this->headScript();
+
+// -- Stylesheets --------------------------------------------------------
+$headLink->appendStylesheet($this->assetUrl('css/iwac-core.css', $module));
+if ($needMaplibre) {
+    $headLink->appendStylesheet($this->assetUrl('css/iwac-maplibre.css', $module));
+}
+if ($blockCss) {
+    $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $blockCss . '.css', $module));
+}
+
+// -- CDN JS libraries ---------------------------------------------------
+$headScript->appendFile($cdnEcharts, 'text/javascript', $defer);
+if ($needWordcloud) {
+    $headScript->appendFile($cdnWordcloud, 'text/javascript', $defer);
+}
+if ($needMaplibre) {
+    $headScript->appendFile($cdnMaplibreJs, 'text/javascript', $defer);
+    $headLink->appendStylesheet($cdnMaplibreCss);
+}
+
+// -- IWAC infrastructure (i18n → theme → dashboard-core) ---------------
+$headScript->appendFile($this->assetUrl('js/iwac-i18n.min.js', $module), 'text/javascript', $defer);
+$headScript->appendFile($this->assetUrl('js/iwac-theme.min.js', $module), 'text/javascript', $defer);
+$headScript->appendFile($this->assetUrl('js/dashboard-core.min.js', $module), 'text/javascript', $defer);
+
+// -- Shared primitives --------------------------------------------------
+// panels.js is the base for every other primitive and is always loaded.
+// panel-toolbar + responsive are tiny and universally useful, so they
+// load unconditionally too. Heavier or feature-specific primitives
+// (chart-options, table, pagination, facet-buttons+faceted-chart,
+// maplibre, map-popup) are opt-in via $needs.
+$headScript->appendFile($this->assetUrl('js/charts/shared/panels.min.js',        $module), 'text/javascript', $defer);
+$headScript->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module), 'text/javascript', $defer);
+$headScript->appendFile($this->assetUrl('js/charts/shared/responsive.min.js',    $module), 'text/javascript', $defer);
+if ($needChartOpts) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', $module), 'text/javascript', $defer);
+}
+if ($needPagination) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', $module), 'text/javascript', $defer);
+}
+if ($needTable) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/table.min.js', $module), 'text/javascript', $defer);
+}
+if ($needFacets) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js',  $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/faceted-chart.min.js',  $module), 'text/javascript', $defer);
+}
+if ($needMaplibre) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js',  $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', $module), 'text/javascript', $defer);
+}
+
+// -- Block-specific panel modules --------------------------------------
+foreach ($panels as $panel) {
+    $headScript->appendFile($this->assetUrl('js/charts/' . $panel . '.min.js', $module), 'text/javascript', $defer);
+}
+
+// -- Orchestrator (LAST) -----------------------------------------------
+if ($orchestrator) {
+    $headScript->appendFile($this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module), 'text/javascript', $defer);
+}

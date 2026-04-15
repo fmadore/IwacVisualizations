@@ -24,40 +24,16 @@
 
     function render(panelEl, data, facet) {
         var byRole = (data && data.topics && data.topics.by_role) || {};
-
-        function currentEntries() {
-            return (byRole[facet.role] || []).slice(0, 12);
-        }
-
-        function hasData() { return currentEntries().length > 0; }
-
-        function buildOption() {
-            return C.horizontalBar(currentEntries(), {
-                nameKey: 'label',
-                valueKey: 'count',
-                maxLabelLength: 60
-            });
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            if (hasData()) {
-                instance.setOption(buildOption(), true);
-            } else {
-                instance.clear();
-            }
-        });
-
-        if (!hasData() && !chart) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
-        }
-
-        facet.subscribe(function () {
-            if (chart && !chart.isDisposed()) {
-                if (hasData()) {
-                    chart.setOption(buildOption(), true);
-                } else {
-                    chart.clear();
-                }
+        P.buildFacetedChart(panelEl, {
+            facet: facet,
+            getData: function () { return (byRole[facet.role] || []).slice(0, 12); },
+            hasData: function (entries) { return entries.length > 0; },
+            buildOption: function (entries) {
+                return C.horizontalBar(entries, {
+                    nameKey: 'label',
+                    valueKey: 'count',
+                    maxLabelLength: 60
+                });
             }
         });
     }

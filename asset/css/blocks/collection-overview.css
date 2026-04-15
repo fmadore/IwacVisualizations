@@ -146,14 +146,14 @@
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
-    width: 72px;
-    padding: 0.6rem 0.5rem 0.6rem 1rem;
+    width: var(--iwac-vis-thumb-col-lg, 72px);
+    padding: var(--space-2, 0.6rem) var(--space-2, 0.5rem) var(--space-2, 0.6rem) var(--space-4, 1rem);
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__thumb,
 .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
-    width: 56px;
-    height: 56px;
+    width: var(--iwac-vis-thumb-lg, 56px);
+    height: var(--iwac-vis-thumb-lg, 56px);
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__link {
@@ -180,13 +180,13 @@
         padding: 0.6rem 0.75rem;
     }
     .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
-        width: 60px;
-        padding: 0.5rem 0.25rem 0.5rem 0.75rem;
+        width: var(--iwac-vis-thumb-col-md, 60px);
+        padding: var(--space-2, 0.5rem) var(--space-1, 0.25rem) var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     }
     .iwac-vis-recent-additions .iwac-vis-table__thumb,
     .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
-        width: 48px;
-        height: 48px;
+        width: var(--iwac-vis-thumb-md, 48px);
+        height: var(--iwac-vis-thumb-md, 48px);
     }
     /* Hide the Source column (3rd visible column after thumb + title). */
     .iwac-vis-recent-additions .iwac-vis-table th:nth-child(3),
@@ -202,13 +202,13 @@
         padding: 0.5rem 0.6rem;
     }
     .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
-        width: 52px;
-        padding: 0.4rem 0.2rem 0.4rem 0.6rem;
+        width: var(--iwac-vis-thumb-col-sm, 52px);
+        padding: var(--space-2, 0.4rem) var(--space-1, 0.2rem) var(--space-2, 0.4rem) var(--space-2, 0.6rem);
     }
     .iwac-vis-recent-additions .iwac-vis-table__thumb,
     .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
-        width: 40px;
-        height: 40px;
+        width: var(--iwac-vis-thumb-sm, 40px);
+        height: var(--iwac-vis-thumb-sm, 40px);
     }
     .iwac-vis-recent-additions .iwac-vis-table th:nth-child(4),
     .iwac-vis-recent-additions .iwac-vis-table td:nth-child(4) {

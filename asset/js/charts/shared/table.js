@@ -27,20 +27,6 @@
         return;
     }
 
-    function formatDate(value) {
-        if (!value) return '';
-        var d = new Date(value);
-        if (isNaN(d.getTime())) return String(value);
-        try {
-            return d.toLocaleDateString(
-                ns.locale === 'fr' ? 'fr-FR' : 'en-US',
-                { year: 'numeric', month: 'short', day: 'numeric' }
-            );
-        } catch (e) {
-            return d.toISOString().slice(0, 10);
-        }
-    }
-
     function buildThumbPlaceholder() {
         var div = P.el('div', 'iwac-vis-thumb-placeholder');
         div.setAttribute('aria-hidden', 'true');
@@ -96,7 +82,7 @@
         }
 
         if (mode === 'date') {
-            td.textContent = formatDate(value);
+            td.textContent = P.formatDate(value);
             return td;
         }
 

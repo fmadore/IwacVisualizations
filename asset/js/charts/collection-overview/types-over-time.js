@@ -32,6 +32,7 @@
         subFacets[ALL_KEY] = P.t('All countries');
         countries.forEach(function (c) { subFacets[c] = c; });
 
+        var ctrl = null;
         var facetBar = P.buildFacetButtons({
             facets: [
                 {
@@ -44,7 +45,7 @@
             activeKey: 'country',
             onChange: function (evt) {
                 state.country = evt.subFacet || ALL_KEY;
-                rerender();
+                if (ctrl) ctrl.rerender();
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
@@ -54,27 +55,21 @@
             return (tot.series_by_country || {})[state.country] || {};
         }
 
-        function buildOption() {
-            return C.stackedBar({
-                categories: tot.years,
-                stackKeys: tot.types || [],
-                series: currentSeries()
-            }, {
-                categoryName: P.t('Year'),
-                valueName: P.t('Count'),
-                labelFor: function (k) { return P.t('item_type_' + k); }
-            });
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            instance.setOption(buildOption(), true);
-        });
-
-        function rerender() {
-            if (chart && !chart.isDisposed()) {
-                chart.setOption(buildOption(), true);
+        ctrl = P.buildFacetedChart(panelEl, {
+            getData: currentSeries,
+            hasData: function () { return tot.years && tot.years.length > 0; },
+            buildOption: function (series) {
+                return C.stackedBar({
+                    categories: tot.years,
+                    stackKeys: tot.types || [],
+                    series: series
+                }, {
+                    categoryName: P.t('Year'),
+                    valueName: P.t('Count'),
+                    labelFor: function (k) { return P.t('item_type_' + k); }
+                });
             }
-        }
+        });
     }
 
     ns.collectionOverview = ns.collectionOverview || {};

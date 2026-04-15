@@ -118,14 +118,20 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
-    min-width: 220px;
-    max-width: 320px;
+    /* Min-width drops on narrow screens so the popup breathes even on
+     * 320px-wide phones. Max-width shrinks to fit the viewport with a
+     * small gutter so the popup never clips off-screen when a marker
+     * near the map edge is tapped. */
+    min-width: min(200px, calc(100vw - 3rem));
+    max-width: min(320px, calc(100vw - 1.5rem));
     /* Cap the popup height so long article lists scroll internally
      * instead of overflowing past the map container. Tracks the
      * viewport on mobile and pins at ~420px on desktop so the
      * visible content doesn't dwarf the map itself. */
     max-height: min(70vh, 420px);
     overflow-y: auto;
+    /* Touch momentum scrolling inside the article list on iOS Safari. */
+    -webkit-overflow-scrolling: touch;
 }
 
 .iwac-vis-map-popup__header {

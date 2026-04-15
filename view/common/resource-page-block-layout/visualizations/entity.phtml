@@ -9,64 +9,39 @@
  * panel set as the person dashboard MINUS the role facet bar (subject
  * vs creator only makes sense for persons).
  *
- * Asset loading is self-contained — Module.php deliberately does NOT
- * blanket-inject ECharts/MapLibre on every Item view.
- *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-// Stylesheet
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/blocks/person-dashboard.css', 'IwacVisualizations')
-);
-
-// CDN libraries — ECharts for charts/network, MapLibre for the locations map.
-// echarts-wordcloud is intentionally NOT loaded; entity dashboards have no
-// word cloud panel.
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
-
-// IWAC infrastructure — order matters: i18n → theme → core
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Shared primitives
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Reuse the person panel modules: the entity precompute wraps every
-// section in `by_role.all` precisely so these modules work unchanged
-// with a no-op facet provided by entity-dashboard.js. Same source
-// files load on person and entity pages — zero forked panel JS.
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Orchestrator — must load LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/entity-dashboard.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'person-dashboard',
+    'needs' => [
+        'maplibre'     => true,
+        'chartOptions' => true,
+        'facetButtons' => true,
+        'table'        => true,
+        'pagination'   => true,
+    ],
+    // Reuse the person panel modules: the entity precompute wraps every
+    // section in `by_role.all` precisely so these modules work unchanged
+    // with a no-op facet provided by entity-dashboard.js. Same source
+    // files load on person and entity pages — zero forked panel JS.
+    // `facet.js` is omitted here because entities don't have a role
+    // facet bar.
+    'panels' => [
+        'person-dashboard/stats',
+        'person-dashboard/timeline',
+        'person-dashboard/heatmap',
+        'person-dashboard/newspapers',
+        'person-dashboard/countries',
+        'person-dashboard/topics',
+        'person-dashboard/sentiment',
+        'person-dashboard/network',
+        'person-dashboard/cooccurrence',
+        'person-dashboard/map',
+    ],
+    'orchestrator' => 'entity-dashboard',
+]);
 
 $siteSlug = $this->currentSite()->slug();
 $escapeAttr = $this->plugin('escapeHtmlAttr');

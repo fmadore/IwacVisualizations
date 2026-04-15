@@ -1,32 +1,20 @@
 <?php
 namespace IwacVisualizations\Site\BlockLayout;
 
-use Laminas\View\Renderer\PhpRenderer;
-use Omeka\Api\Representation\SitePageBlockRepresentation;
-use Omeka\Api\Representation\SitePageRepresentation;
-use Omeka\Api\Representation\SiteRepresentation;
-use Omeka\Site\BlockLayout\AbstractBlockLayout;
-
-class ScaryTerms extends AbstractBlockLayout
+class ScaryTerms extends AbstractIwacBlockLayout
 {
-    public function getLabel()
+    protected function label(): string
     {
         return 'Scary Terms'; // @translate
     }
 
-    public function form(PhpRenderer $view, SiteRepresentation $site,
-        SitePageRepresentation $page = null, SitePageBlockRepresentation $block = null)
+    protected function description(): string
     {
-        return '<p>' . $view->translate(
-            'Bar chart of radical / extremism-related terms across the IWAC collection, with bar chart race, by-country, and global views. No configuration needed.'
-        ) . '</p>';
+        return 'Bar chart of radical / extremism-related terms across the IWAC collection, with bar chart race, by-country, and global views. No configuration needed.'; // @translate
     }
 
-    public function render(PhpRenderer $view, SitePageBlockRepresentation $block,
-        $templateViewScript = 'common/block-layout/scary-terms')
+    protected function templateViewScript(): string
     {
-        return $view->partial($templateViewScript, [
-            'block' => $block,
-        ]);
+        return 'common/block-layout/scary-terms';
     }
 }

@@ -53,7 +53,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
-    _canonical_country,
+    canonicalize_country_field,
     configure_logging,
     create_metadata_block,
     extract_year,
@@ -94,23 +94,6 @@ def _str_or_none(value: Any) -> Optional[str]:
         return None
     s = str(value).strip()
     return s or None
-
-
-def _canonicalize_country_field(value: Any) -> Any:
-    """Map a dataframe country cell to its canonical form, handling the
-    three shapes it can take (None/NaN, plain string, pipe-separated).
-    Mirrors the helper used in ``generate_collection_overview.py``.
-    """
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return value
-    s = str(value)
-    if not s.strip():
-        return value
-    if "|" in s:
-        return "|".join(
-            _canonical_country(p) for p in s.split("|") if p.strip()
-        )
-    return _canonical_country(s)
 
 
 def _entity_type_label(raw: Any) -> Optional[str]:
@@ -503,9 +486,9 @@ def build_index_overview(
 
     # Normalize country columns once
     if "country" in index_df.columns:
-        index_df["country"] = index_df["country"].apply(_canonicalize_country_field)
+        index_df["country"] = index_df["country"].apply(canonicalize_country_field)
     if "countries" in index_df.columns:
-        index_df["countries"] = index_df["countries"].apply(_canonicalize_country_field)
+        index_df["countries"] = index_df["countries"].apply(canonicalize_country_field)
 
     # Only need content subsets for the place-mentions layer
     dataframes: Dict[str, pd.DataFrame] = {"index": index_df}
@@ -571,9 +554,6 @@ def build_index_overview(
 
 
 def main() -> None:
-    configure_logging()
-    logger = logging.getLogger(__name__)
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--repo",
@@ -605,7 +585,15 @@ def main() -> None:
         "--minify", action="store_true",
         help="Produce compact JSON (no indentation)",
     )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
     args = parser.parse_args()
+
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    logger = logging.getLogger(__name__)
 
     token = os.getenv("HF_TOKEN") or None
     if token is None:

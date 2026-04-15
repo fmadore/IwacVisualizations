@@ -3,72 +3,44 @@
  * Visualizations: person template partial.
  *
  * Renders an async container that the JS orchestrator (person-dashboard.js)
- * fills with 7 dynamic panels by fetching
+ * fills with dynamic panels by fetching
  * asset/data/person-dashboards/{o_id}.json. The header card has been
  * removed since the same metadata is already shown by Omeka above the
  * resource page block.
- *
- * Asset loading is self-contained: this partial enqueues every CSS/JS
- * dependency it needs. Module.php deliberately does NOT inject ECharts
- * et al. on every Item view — this partial pulls them in only when an
- * actual person dashboard is being rendered.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-// Stylesheet
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/blocks/person-dashboard.css', 'IwacVisualizations')
-);
-
-// CDN libraries — ECharts for charts/network, MapLibre for the locations map.
-// echarts-wordcloud is intentionally NOT loaded; the person dashboard has
-// no word cloud panel.
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
-
-// IWAC infrastructure — order matters: i18n → theme → core
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Shared primitives
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panels.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/responsive.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/table.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Person panel modules (self-registering IIFEs). Each file is a tiny
-// IIFE that registers itself on IWACVis.personDashboard — the entity
-// dashboard reuses these same modules with a no-op facet, which is
-// why they live under person-dashboard/ rather than per-template.
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/stats.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/facet.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/timeline.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/heatmap.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/newspapers.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/countries.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/topics.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/sentiment.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/network.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/cooccurrence.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard/map.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-
-// Orchestrator — must load LAST
-$this->headScript()->appendFile($this->assetUrl('js/charts/person-dashboard.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'person-dashboard',
+    'needs' => [
+        'maplibre'     => true,
+        'chartOptions' => true,
+        'facetButtons' => true,
+        'table'        => true,
+        'pagination'   => true,
+    ],
+    // Self-registering IIFE panels. Each file hangs a render function off
+    // IWACVis.personDashboard — the entity dashboard reuses these same
+    // modules with a no-op facet, which is why they live under
+    // person-dashboard/ rather than per-template. `facet.js` is the role
+    // picker UI (subject vs creator vs editor) and is person-only.
+    'panels' => [
+        'person-dashboard/stats',
+        'person-dashboard/facet',
+        'person-dashboard/timeline',
+        'person-dashboard/heatmap',
+        'person-dashboard/newspapers',
+        'person-dashboard/countries',
+        'person-dashboard/topics',
+        'person-dashboard/sentiment',
+        'person-dashboard/network',
+        'person-dashboard/cooccurrence',
+        'person-dashboard/map',
+    ],
+    'orchestrator' => 'person-dashboard',
+]);
 
 $siteSlug = $this->currentSite()->slug();
 $escapeAttr = $this->plugin('escapeHtmlAttr');

@@ -1,30 +1,20 @@
 <?php
 namespace IwacVisualizations\Site\BlockLayout;
 
-use Laminas\View\Renderer\PhpRenderer;
-use Omeka\Api\Representation\SitePageBlockRepresentation;
-use Omeka\Api\Representation\SitePageRepresentation;
-use Omeka\Api\Representation\SiteRepresentation;
-use Omeka\Site\BlockLayout\AbstractBlockLayout;
-
-class CollectionOverview extends AbstractBlockLayout
+class CollectionOverview extends AbstractIwacBlockLayout
 {
-    public function getLabel()
+    protected function label(): string
     {
         return 'Collection Overview'; // @translate
     }
 
-    public function form(PhpRenderer $view, SiteRepresentation $site,
-        SitePageRepresentation $page = null, SitePageBlockRepresentation $block = null)
+    protected function description(): string
     {
-        return '<p>' . $view->translate('Aggregate visualizations across the entire collection. No configuration needed.') . '</p>';
+        return 'Aggregate visualizations across the entire collection. No configuration needed.'; // @translate
     }
 
-    public function render(PhpRenderer $view, SitePageBlockRepresentation $block,
-        $templateViewScript = 'common/block-layout/collection-overview')
+    protected function templateViewScript(): string
     {
-        return $view->partial($templateViewScript, [
-            'block' => $block,
-        ]);
+        return 'common/block-layout/collection-overview';
     }
 }

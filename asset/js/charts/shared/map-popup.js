@@ -32,21 +32,6 @@
 
     var DEFAULT_PAGE_SIZE = 5;
 
-    function formatDate(value) {
-        if (!value) return '';
-        var s = String(value).slice(0, 10);
-        var d = new Date(s);
-        if (isNaN(d.getTime())) return s;
-        try {
-            return d.toLocaleDateString(
-                ns.locale === 'fr' ? 'fr-FR' : 'en-US',
-                { year: 'numeric', month: 'short', day: 'numeric' }
-            );
-        } catch (e) {
-            return s;
-        }
-    }
-
     /**
      * Build a popup DOM node.
      *
@@ -137,7 +122,7 @@
 
                 var metaBits = [];
                 if (a.publisher) metaBits.push(a.publisher);
-                if (a.date)      metaBits.push(formatDate(a.date));
+                if (a.date)      metaBits.push(P.formatDate(a.date));
                 if (metaBits.length) {
                     li.appendChild(P.el('div', 'iwac-vis-map-popup__meta',
                         metaBits.join(' \u00b7 ')));

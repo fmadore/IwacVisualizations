@@ -33,20 +33,18 @@
 
     function render(panelEl, data, ctx) {
         if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-error', P.t('Map library unavailable')));
+            panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
             return;
         }
 
         var places = (data && data.places) || [];
         var mentions = (data && data.place_mentions) || [];
         if (places.length === 0 && mentions.length === 0) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
             return;
         }
 
-        var loading = P.el('div', 'iwac-vis-loading');
-        loading.appendChild(P.el('div', 'iwac-vis-spinner'));
-        loading.appendChild(P.el('span', null, P.t('Loading')));
+        var loading = P.buildLoadingState();
         panelEl.chart.appendChild(loading);
 
         var built = false;
@@ -98,45 +96,32 @@
         var mapContainer = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(mapContainer);
 
-        function authorityFeatures() {
-            return {
-                type: 'FeatureCollection',
-                features: places.map(function (p) {
-                    return {
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
-                        properties: {
-                            name: p.title,
-                            country: p.country || '',
-                            frequency: p.frequency || 0,
-                            o_id: p.o_id || null
-                        }
-                    };
-                })
-            };
-        }
-
-        function mentionFeatures() {
-            return {
-                type: 'FeatureCollection',
-                features: mentions.map(function (m) {
-                    return {
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [m.lng, m.lat] },
-                        properties: {
-                            name: m.name,
-                            count: m.count || 0
-                        }
-                    };
-                })
-            };
-        }
-
-        // Pre-compute max counts so size interpolation is stable
-        var maxFreq = 1;
-        places.forEach(function (p) { if ((p.frequency || 0) > maxFreq) maxFreq = p.frequency; });
-        var maxMentions = 1;
-        mentions.forEach(function (m) { if ((m.count || 0) > maxMentions) maxMentions = m.count; });
+        // Pre-compute features + max counts once so the radius
+        // interpolation is stable across theme swaps (onStyleReady runs
+        // multiple times). minCount: 0 preserves the original
+        // "include every place, even with zero frequency" behavior.
+        var authResult = P.buildCountFeatures(places, {
+            countKey: 'frequency',
+            minCount: 0,
+            toProps: function (p) {
+                return {
+                    name: p.title,
+                    country: p.country || '',
+                    frequency: p.frequency || 0,
+                    o_id: p.o_id || null
+                };
+            }
+        });
+        var mentionResult = P.buildCountFeatures(mentions, {
+            minCount: 0,
+            toProps: function (m) {
+                return { name: m.name, count: m.count || 0 };
+            }
+        });
+        var maxFreq = authResult.max;
+        var maxMentions = mentionResult.max;
+        function authorityFeatures() { return authResult.collection; }
+        function mentionFeatures() { return mentionResult.collection; }
 
         // Resolve theme tokens to legacy rgb() form for MapLibre —
         // MapLibre's style parser rejects `hsl(..., calc(...), ...)`
@@ -159,17 +144,29 @@
         function onStyleReady(map) {
             mapInstance = map;
 
+            // `generateId: true` on both sources so MapLibre has a
+            // stable feature identity to key feature-state hover on.
             if (!map.getSource('places-authority')) {
-                map.addSource('places-authority', { type: 'geojson', data: authorityFeatures() });
+                map.addSource('places-authority', {
+                    type: 'geojson',
+                    data: authorityFeatures(),
+                    generateId: true
+                });
             }
             if (!map.getSource('places-mentions')) {
-                map.addSource('places-mentions', { type: 'geojson', data: mentionFeatures() });
+                map.addSource('places-mentions', {
+                    type: 'geojson',
+                    data: mentionFeatures(),
+                    generateId: true
+                });
             }
 
             var primary = primaryColor();
             var stroke = inkColor();
 
-            // Mentions layer drawn first so authority pins sit on top
+            // Mentions layer drawn first so authority pins sit on top.
+            // Both layers ship feature-state-driven hover highlights —
+            // see collection-overview/map.js for the rationale.
             if (!map.getLayer('place-mentions-bubbles')) {
                 map.addLayer({
                     id: 'place-mentions-bubbles',
@@ -182,8 +179,18 @@
                             maxMentions, 24
                         ],
                         'circle-color': primary,
-                        'circle-opacity': 0.35,
-                        'circle-stroke-width': 1,
+                        'circle-opacity': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            0.6,
+                            0.35
+                        ],
+                        'circle-stroke-width': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            2.5,
+                            1
+                        ],
                         'circle-stroke-color': primary
                     }
                 });
@@ -201,8 +208,18 @@
                             maxFreq, 18
                         ],
                         'circle-color': primary,
-                        'circle-opacity': 0.9,
-                        'circle-stroke-width': 1.5,
+                        'circle-opacity': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            1.0,
+                            0.9
+                        ],
+                        'circle-stroke-width': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            3,
+                            1.5
+                        ],
                         'circle-stroke-color': stroke
                     }
                 });
@@ -268,16 +285,6 @@
                 .addTo(mapInstance);
         }
 
-        function handleMouseMove(e) {
-            if (!mapInstance) return;
-            var layerIds = [];
-            if (mapInstance.getLayer('place-authority-pins'))   layerIds.push('place-authority-pins');
-            if (mapInstance.getLayer('place-mentions-bubbles')) layerIds.push('place-mentions-bubbles');
-            if (layerIds.length === 0) return;
-            var features = mapInstance.queryRenderedFeatures(e.point, { layers: layerIds });
-            mapInstance.getCanvas().style.cursor = features.length ? 'pointer' : '';
-        }
-
         function applyVisibility() {
             if (!mapInstance) return;
             var showAuth = state.layer !== LAYERS.MENTIONS;
@@ -303,10 +310,15 @@
         // Click + hover handlers attached ONCE per map instance, not
         // per style.load — see the comment above handleMapClick for
         // why re-attaching inside onStyleReady would double-fire
-        // popups after a theme swap.
+        // popups after a theme swap. Hover is driven by MapLibre
+        // feature-state so the visual lift (opacity + stroke) happens
+        // on the GPU without per-frame JS work.
         if (createdMap) {
             createdMap.on('click', handleMapClick);
-            createdMap.on('mousemove', handleMouseMove);
+            P.attachFeatureStateHover(createdMap, [
+                { layer: 'place-authority-pins',   source: 'places-authority' },
+                { layer: 'place-mentions-bubbles', source: 'places-mentions'  }
+            ]);
         }
     }
 

@@ -17,37 +17,13 @@
 
     function render(panelEl, data, facet) {
         var byRole = (data && data.timeline && data.timeline.by_role) || {};
-
-        function currentSlice() {
-            return byRole[facet.role] || { years: [], countries: [], series: {} };
-        }
-
-        function hasData(slice) {
-            return slice.years && slice.years.length > 0;
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            var slice = currentSlice();
-            if (hasData(slice)) {
-                instance.setOption(C.timeline(slice), true);
-            } else {
-                instance.clear();
-            }
-        });
-
-        if (!hasData(currentSlice()) && !chart) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
-        }
-
-        facet.subscribe(function () {
-            if (chart && !chart.isDisposed()) {
-                var slice = currentSlice();
-                if (hasData(slice)) {
-                    chart.setOption(C.timeline(slice), true);
-                } else {
-                    chart.clear();
-                }
-            }
+        P.buildFacetedChart(panelEl, {
+            facet: facet,
+            getData: function () {
+                return byRole[facet.role] || { years: [], countries: [], series: {} };
+            },
+            hasData: function (slice) { return slice.years && slice.years.length > 0; },
+            buildOption: function (slice) { return C.timeline(slice); }
         });
     }
 

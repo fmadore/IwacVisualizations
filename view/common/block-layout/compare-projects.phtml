@@ -2,33 +2,21 @@
 /**
  * Compare Projects page block.
  *
- * Async container for side-by-side project comparison. Page blocks are
- * not served by the Item/ItemSet controllers, so this template has to
- * enqueue the module's assets itself.
+ * Async container for side-by-side project comparison. Placeholder —
+ * the orchestrator and panels are TBD. Assets are enqueued via the
+ * shared `common/iwac-assets` partial; maplibre + wordcloud are
+ * pre-loaded so the future orchestrator can hit the ground running.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-// Stylesheets — placeholder block; enqueues core + maplibre so the
-// future orchestrator can hit the ground running.
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-core.css', 'IwacVisualizations')
-);
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/iwac-maplibre.css', 'IwacVisualizations')
-);
-
-// CDN libraries
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js', 'text/javascript', ['defer' => 'defer']);
-$this->headLink()->appendStylesheet('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css');
-$this->headScript()->appendFile('https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js', 'text/javascript', ['defer' => 'defer']);
-
-// IWAC infrastructure — order matters: i18n → theme → core
-$this->headScript()->appendFile($this->assetUrl('js/iwac-i18n.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/iwac-theme.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
-$this->headScript()->appendFile($this->assetUrl('js/dashboard-core.min.js', 'IwacVisualizations'), 'text/javascript', ['defer' => 'defer']);
+echo $this->partial('common/iwac-assets', [
+    'needs' => [
+        'maplibre'  => true,
+        'wordcloud' => true,
+    ],
+]);
 
 $siteSlug = $this->currentSite()->slug();
 ?>

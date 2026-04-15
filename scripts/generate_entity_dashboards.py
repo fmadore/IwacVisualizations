@@ -42,7 +42,10 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    clean_float,
+    clean_str,
     configure_logging,
+    extract_month_num,
     extract_year,
     find_column,
     load_dataset_safe,
@@ -120,7 +123,9 @@ ENTITY_TYPES: Dict[str, int] = {
 PERSON_TYPE = "Personnes"
 
 # Minimum co-occurrence before a neighbor qualifies for the network.
-MIN_COOCCURRENCE = 2
+# Overridable via --min-cooccurrence on the CLI. Singletons produce
+# noisy TF-IDF scores, so the default floor is 2.
+DEFAULT_MIN_COOCCURRENCE = 2
 
 # Top cap per entity for the neighbor network panel.
 TOP_N_NEIGHBORS = 50
@@ -134,39 +139,6 @@ LOCATION_ARTICLES_CAP = 30
 logger: Optional[logging.Logger] = None
 
 
-def _clean_str(value: Any) -> str:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return ""
-    return str(value).strip()
-
-
-def _clean_float(value: Any) -> Optional[float]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-_MONTH_PATTERN = __import__("re").compile(r"^\d{4}-(\d{2})")
-
-
-def _extract_month_num(date_str: str) -> Optional[int]:
-    if not date_str:
-        return None
-    m = _MONTH_PATTERN.match(date_str)
-    if not m:
-        return None
-    try:
-        n = int(m.group(1))
-    except (TypeError, ValueError):
-        return None
-    if 1 <= n <= 12:
-        return n
-    return None
-
-
 class EntityDashboardGenerator:
     """Builds one JSON per non-person entity in the index subset."""
 
@@ -175,10 +147,14 @@ class EntityDashboardGenerator:
         output_dir: Path,
         limit: Optional[int] = None,
         only_type: Optional[str] = None,
+        repo_id: str = DATASET_ID,
+        min_cooccurrence: int = DEFAULT_MIN_COOCCURRENCE,
     ) -> None:
         self.output_dir = output_dir
         self.limit = limit
         self.only_type = only_type  # If set, restrict to one entity type
+        self.repo_id = repo_id
+        self.min_cooccurrence = min_cooccurrence
 
         self.index_df: Optional[pd.DataFrame] = None
         self.content_dfs: Dict[str, pd.DataFrame] = {}
@@ -202,7 +178,7 @@ class EntityDashboardGenerator:
 
     def load_index(self) -> None:
         logger.info("Loading index subset...")
-        self.index_df = load_dataset_safe("index", repo_id=DATASET_ID)
+        self.index_df = load_dataset_safe("index", repo_id=self.repo_id)
         if self.index_df is None or self.index_df.empty:
             raise RuntimeError("index subset returned empty — aborting")
         logger.info(f"  {len(self.index_df)} index entries")
@@ -210,7 +186,7 @@ class EntityDashboardGenerator:
     def load_content(self) -> None:
         for subset in CONTENT_SUBSETS:
             logger.info(f"Loading content subset: {subset}")
-            df = load_dataset_safe(subset, repo_id=DATASET_ID)
+            df = load_dataset_safe(subset, repo_id=self.repo_id)
             if df is None or df.empty:
                 logger.warning(f"  {subset} returned empty — continuing")
                 continue
@@ -353,13 +329,13 @@ class EntityDashboardGenerator:
                     "pub_date": str(row.get(date_col) or "").strip() if date_col else "",
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
-                    "lda_label": _clean_str(row.get(lda_label_col)) if lda_label_col else "",
+                    "lda_label": clean_str(row.get(lda_label_col)) if lda_label_col else "",
                 }
                 for model in SENTIMENT_MODELS:
                     cols = sentiment_cols[model]
-                    meta[f"{model}_polarite"]     = _clean_str(row.get(cols["polarite"]))     if cols["polarite"]     else ""
-                    meta[f"{model}_centralite"]   = _clean_str(row.get(cols["centralite"]))   if cols["centralite"]   else ""
-                    meta[f"{model}_subjectivite"] = _clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
+                    meta[f"{model}_polarite"]     = clean_str(row.get(cols["polarite"]))     if cols["polarite"]     else ""
+                    meta[f"{model}_centralite"]   = clean_str(row.get(cols["centralite"]))   if cols["centralite"]   else ""
+                    meta[f"{model}_subjectivite"] = clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
                 self.items_meta[item_key] = meta
 
                 refs: Set[int] = set()
@@ -661,7 +637,7 @@ class EntityDashboardGenerator:
             if year is None:
                 continue
             all_years.add(year)
-            month = _extract_month_num(date)
+            month = extract_month_num(date)
             if month is None:
                 continue
             buckets[(year, month)] += 1
@@ -752,7 +728,7 @@ class EntityDashboardGenerator:
 
         scored: List[Dict[str, Any]] = []
         for o_id, count in cooc.items():
-            if count < MIN_COOCCURRENCE:
+            if count < self.min_cooccurrence:
                 continue
             df_x = max(self.df.get(o_id, 1), 1)
             if df_x >= self.n_entities:
@@ -859,6 +835,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Where to write per-entity JSON files (default: %(default)s)",
     )
     parser.add_argument(
+        "--repo",
+        default=DATASET_ID,
+        help="Hugging Face dataset repo id (default: %(default)s)",
+    )
+    parser.add_argument(
         "--limit",
         type=int,
         default=None,
@@ -869,6 +850,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         choices=list(ENTITY_TYPES.keys()),
         default=None,
         help="Restrict generation to a single entity type (Lieux/Organisations/Sujets/Événements).",
+    )
+    parser.add_argument(
+        "--min-cooccurrence",
+        type=int,
+        default=DEFAULT_MIN_COOCCURRENCE,
+        help="Minimum co-occurrence count for a neighbor to qualify for the network panel (default: %(default)s)",
     )
     parser.add_argument(
         "-v", "--verbose",
@@ -887,6 +874,8 @@ def main() -> int:
         output_dir=args.output_dir,
         limit=args.limit if args.limit and args.limit > 0 else None,
         only_type=args.type,
+        repo_id=args.repo,
+        min_cooccurrence=args.min_cooccurrence,
     )
 
     gen.load_index()

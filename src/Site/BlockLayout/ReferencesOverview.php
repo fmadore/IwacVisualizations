@@ -1,30 +1,20 @@
 <?php
 namespace IwacVisualizations\Site\BlockLayout;
 
-use Laminas\View\Renderer\PhpRenderer;
-use Omeka\Api\Representation\SitePageBlockRepresentation;
-use Omeka\Api\Representation\SitePageRepresentation;
-use Omeka\Api\Representation\SiteRepresentation;
-use Omeka\Site\BlockLayout\AbstractBlockLayout;
-
-class ReferencesOverview extends AbstractBlockLayout
+class ReferencesOverview extends AbstractIwacBlockLayout
 {
-    public function getLabel()
+    protected function label(): string
     {
         return 'References Overview'; // @translate
     }
 
-    public function form(PhpRenderer $view, SiteRepresentation $site,
-        SitePageRepresentation $page = null, SitePageBlockRepresentation $block = null)
+    protected function description(): string
     {
-        return '<p>' . $view->translate('Bibliographic references overview: timeline, types, top authors, and top subjects. Data is fetched live from Hugging Face. No configuration needed.') . '</p>';
+        return 'Bibliographic references overview: timeline, types, top authors, and top subjects. Data is fetched live from Hugging Face. No configuration needed.'; // @translate
     }
 
-    public function render(PhpRenderer $view, SitePageBlockRepresentation $block,
-        $templateViewScript = 'common/block-layout/references-overview')
+    protected function templateViewScript(): string
     {
-        return $view->partial($templateViewScript, [
-            'block' => $block,
-        ]);
+        return 'common/block-layout/references-overview';
     }
 }

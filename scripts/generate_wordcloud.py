@@ -201,7 +201,6 @@ def _empty_result(year_min: int, year_max: int) -> Dict[str, Any]:
 
 
 def main() -> None:
-    configure_logging()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=DATASET_ID)
     parser.add_argument("--output", default="asset/data/collection-wordcloud.json")
@@ -209,7 +208,14 @@ def main() -> None:
     parser.add_argument("--max-words", type=int, default=150)
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
     args = parser.parse_args()
+
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
 
     result = build_wordcloud(
         repo_id=args.repo,
