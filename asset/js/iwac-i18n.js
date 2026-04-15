@@ -269,6 +269,68 @@
             'entity_type_Lieux': 'Places',
             'entity_type_Sujets': 'Subjects',
             'entity_type_\u00c9v\u00e9nements': 'Events',
+
+            // Index overview — block + section labels
+            'Loading index overview':    'Loading index overview',
+            'Entity Index Explorer':     'Entity Index Explorer',
+            'Keyword Explorer':          'Keyword Explorer',
+            'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
+                'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.',
+
+            // Index overview — Section A panel titles
+            'Entities by type':          'Entities by type',
+            'Top entities':              'Top entities',
+            'Lifespan \u00d7 frequency': 'Lifespan \u00d7 frequency',
+            'Persons by gender':         'Persons by gender',
+            'Places map':                'Places map',
+            'Entity activity':           'Entity activity',
+            'Recently added entities':   'Recently added entities',
+            'Index table':               'Index table',
+
+            // Index overview — summary cards + scatter axes
+            'Total entities':            'Total entities',
+            'With coordinates':          'With coordinates',
+            'Span (years)':              'Span (years)',
+            'Frequency':                 'Frequency',
+
+            // Index overview — gender + map layer facets + index table search
+            'Male':                      'Male',
+            'Female':                    'Female',
+            'Both layers':               'Both layers',
+            'Authority pins':            'Authority pins',
+            'Layer':                     'Layer',
+            'Search entities':           'Search entities',
+
+            // Keyword Explorer — filters + tabs
+            'Spatial Coverage':          'Spatial Coverage',
+            'Field':                     'Field',
+            'Facet by':                  'Facet by',
+            'By newspaper':              'By newspaper',
+            'Newspaper':                 'Newspaper',
+            'All newspapers':            'All newspapers',
+            'View mode':                 'View mode',
+            'Top frequent':              'Top frequent',
+            'Compare':                   'Compare',
+            'top_n_keywords':            '{count} keywords',
+            'Number to show':            'Number to show',
+            'select_up_to_n':            'Select up to {count} keywords',
+            'Search keywords':           'Search keywords',
+            'No keywords selected':      'No keywords selected',
+            'Clear selection':           'Clear selection',
+
+            // Keyword Explorer — chart + table
+            'Keywords over time':        'Keywords over time',
+            'All keywords':              'All keywords',
+            'Keyword':                   'Keyword',
+            'Occurrences':               'Occurrences',
+            'Add':                       'Add',
+            'Remove':                    'Remove',
+            'top_n_over_time':           'Top {count} keywords over time',
+            'Keyword comparison':        'Keyword comparison',
+            'Filtered by country: {country}':     'Filtered by country: {country}',
+            'Filtered by newspaper: {newspaper}': 'Filtered by newspaper: {newspaper}',
+            'All data (global)':         'All data (global)',
+            'Select keywords to compare': 'Select keywords to compare',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -487,6 +549,68 @@
             'entity_type_Lieux': 'Lieux',
             'entity_type_Sujets': 'Sujets',
             'entity_type_\u00c9v\u00e9nements': '\u00c9v\u00e9nements',
+
+            // Index overview — block + section labels
+            'Loading index overview':    'Chargement de la vue d\u2019ensemble de l\u2019index',
+            'Entity Index Explorer':     'Explorateur d\u2019entit\u00e9s',
+            'Keyword Explorer':          'Explorateur de mots-cl\u00e9s',
+            'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
+                'Explorez l\u2019\u00e9volution des champs Dublin Core Sujet et Couverture spatiale dans le temps.',
+
+            // Index overview — Section A panel titles
+            'Entities by type':          'Entit\u00e9s par type',
+            'Top entities':              'Entit\u00e9s les plus cit\u00e9es',
+            'Lifespan \u00d7 frequency': 'Dur\u00e9e de vie \u00d7 fr\u00e9quence',
+            'Persons by gender':         'Personnes par genre',
+            'Places map':                'Carte des lieux',
+            'Entity activity':           'Activit\u00e9 des entit\u00e9s',
+            'Recently added entities':   'Entit\u00e9s ajout\u00e9es r\u00e9cemment',
+            'Index table':               'Table de l\u2019index',
+
+            // Index overview — summary cards + scatter axes
+            'Total entities':            'Entit\u00e9s au total',
+            'With coordinates':          'Avec coordonn\u00e9es',
+            'Span (years)':              'Dur\u00e9e (ann\u00e9es)',
+            'Frequency':                 'Fr\u00e9quence',
+
+            // Index overview — gender + map layer facets + index table search
+            'Male':                      'Homme',
+            'Female':                    'Femme',
+            'Both layers':               'Les deux couches',
+            'Authority pins':            'Points d\u2019autorit\u00e9',
+            'Layer':                     'Couche',
+            'Search entities':           'Rechercher des entit\u00e9s',
+
+            // Keyword Explorer — filters + tabs
+            'Spatial Coverage':          'Couverture spatiale',
+            'Field':                     'Champ',
+            'Facet by':                  'Filtrer par',
+            'By newspaper':              'Par journal',
+            'Newspaper':                 'Journal',
+            'All newspapers':            'Tous les journaux',
+            'View mode':                 'Mode d\u2019affichage',
+            'Top frequent':              'Plus fr\u00e9quents',
+            'Compare':                   'Comparer',
+            'top_n_keywords':            '{count} mots-cl\u00e9s',
+            'Number to show':            'Nombre \u00e0 afficher',
+            'select_up_to_n':            'S\u00e9lectionnez jusqu\u2019\u00e0 {count} mots-cl\u00e9s',
+            'Search keywords':           'Rechercher des mots-cl\u00e9s',
+            'No keywords selected':      'Aucun mot-cl\u00e9 s\u00e9lectionn\u00e9',
+            'Clear selection':           'Effacer la s\u00e9lection',
+
+            // Keyword Explorer — chart + table
+            'Keywords over time':        'Mots-cl\u00e9s dans le temps',
+            'All keywords':              'Tous les mots-cl\u00e9s',
+            'Keyword':                   'Mot-cl\u00e9',
+            'Occurrences':               'Occurrences',
+            'Add':                       'Ajouter',
+            'Remove':                    'Retirer',
+            'top_n_over_time':           'Top {count} mots-cl\u00e9s dans le temps',
+            'Keyword comparison':        'Comparaison de mots-cl\u00e9s',
+            'Filtered by country: {country}':     'Filtr\u00e9 par pays : {country}',
+            'Filtered by newspaper: {newspaper}': 'Filtr\u00e9 par journal : {newspaper}',
+            'All data (global)':         'Toutes les donn\u00e9es (global)',
+            'Select keywords to compare': 'S\u00e9lectionnez des mots-cl\u00e9s \u00e0 comparer',
         }
     };
 
