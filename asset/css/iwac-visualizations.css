@@ -1594,6 +1594,10 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     align-items: center;
     justify-content: space-between;
     gap: var(--space-2, 0.5rem);
+    /* Reserve space on the right so the panel toolbar (download +
+     * fullscreen) never collides with the badge. Two 36px buttons +
+     * gap ≈ 88px; 96px gives a little breathing room. */
+    padding-right: 96px;
 }
 
 .iwac-vis-scary-chart-title {
@@ -1623,8 +1627,18 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     min-height: 460px;
 }
 
+/* Co-occurrence matrix needs a taller canvas: 12 × 12 cells plus
+ * rotated x-axis labels, a legend at the bottom, and padding for
+ * the visualMap slider. 600px keeps every cell big enough to be
+ * legible without forcing horizontal scroll. */
+.iwac-vis-scary-panel--matrix .iwac-vis-scary-chart {
+    min-height: 600px;
+}
+
 @media (max-width: 640px) { /* sm */
     .iwac-vis-scary-chart { min-height: 380px; }
+    .iwac-vis-scary-panel--matrix .iwac-vis-scary-chart { min-height: 480px; }
+    .iwac-vis-scary-chart-header { padding-right: 0; }
 }
 
 /* ------------------------------------------------------------------- */
