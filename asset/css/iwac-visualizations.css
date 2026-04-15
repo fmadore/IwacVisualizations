@@ -697,11 +697,11 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
     margin: 0 0 0.75rem;
 }
 
-/* Give the table its own breathing room inside the panel and let it
-   scroll vertically if the list ever grows. */
+/* Let the table grow to whatever height the current page needs —
+ * pagination already caps each page at 20 rows, so there's no risk
+ * of an unbounded list. Removing the max-height kills the vertical
+ * scrollbar and lets the panel expand naturally in the grid. */
 .iwac-vis-recent-additions .iwac-vis-table-wrapper {
-    max-height: 560px;
-    overflow-y: auto;
     padding: 0.25rem 0.5rem 0.5rem;
     border-radius: var(--radius-sm, 4px);
 }
