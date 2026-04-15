@@ -91,6 +91,24 @@
     };
 
     /**
+     * A surface-colored halo around bar-value labels. On hover,
+     * ECharts paints the emphasized bar over the adjacent area where
+     * the label sits, and when both the bar fill and the text color
+     * land on similar luminance (e.g. dark ink on orange), the label
+     * can visually disappear. Adding a 2px text stroke in the
+     * surface color guarantees a readable gap between glyph and
+     * background regardless of what paints under it. Applied to
+     * both normal and emphasis label states for consistency.
+     */
+    C._labelHalo = function () {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        return {
+            textBorderColor: tokens.surface || '#fdfdfc',
+            textBorderWidth: 2
+        };
+    };
+
+    /**
      * Returns primitive values (numbers, not objects) so callers can compose
      * them into fresh option literals each call. Sharing object references
      * across series caused hover-state bugs where ECharts mutated the shared
@@ -232,6 +250,7 @@
         var values = list.map(function (e) { return e[valueKey]; });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
+        var halo = C._labelHalo();
 
         var base = {
             grid: C._grid({ left: 8, top: 8, bottom: 8 }),
@@ -252,10 +271,16 @@
                     show: true,
                     position: 'right',
                     color: labelInk,
+                    textBorderColor: halo.textBorderColor,
+                    textBorderWidth: halo.textBorderWidth,
                     formatter: function (p) { return fmt(p.value); }
                 },
                 emphasis: {
-                    label: { color: labelInk }
+                    label: {
+                        color: labelInk,
+                        textBorderColor: halo.textBorderColor,
+                        textBorderWidth: halo.textBorderWidth
+                    }
                 }
             }],
             animationDuration: 600,
@@ -365,6 +390,7 @@
         var values = list.map(function (e) { return e.total; });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
+        var halo = C._labelHalo();
 
         var base = {
             grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
@@ -401,10 +427,16 @@
                     show: true,
                     position: 'right',
                     color: labelInk,
+                    textBorderColor: halo.textBorderColor,
+                    textBorderWidth: halo.textBorderWidth,
                     formatter: function (p) { return fmt(p.value); }
                 },
                 emphasis: {
-                    label: { color: labelInk }
+                    label: {
+                        color: labelInk,
+                        textBorderColor: halo.textBorderColor,
+                        textBorderWidth: halo.textBorderWidth
+                    }
                 }
             }],
             animationDuration: 600,
@@ -439,6 +471,7 @@
         });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
+        var halo = C._labelHalo();
 
         var base = {
             grid: C._grid({ left: 8, right: 48, top: 8, bottom: 8 }),
@@ -482,10 +515,16 @@
                     show: true,
                     position: 'right',
                     color: labelInk,
+                    textBorderColor: halo.textBorderColor,
+                    textBorderWidth: halo.textBorderWidth,
                     formatter: function (p) { return fmt(p.value); }
                 },
                 emphasis: {
-                    label: { color: labelInk }
+                    label: {
+                        color: labelInk,
+                        textBorderColor: halo.textBorderColor,
+                        textBorderWidth: halo.textBorderWidth
+                    }
                 },
                 cursor: 'pointer'
             }],

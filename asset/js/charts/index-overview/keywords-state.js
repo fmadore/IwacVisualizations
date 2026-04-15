@@ -105,23 +105,32 @@
                 if (!d) return { years: [], keywords: [], series: {} };
                 var years = d.years || [];
 
-                // Pick the right source: global / per-country / per-newspaper
-                var availablePool = [];
-                var sourceSeries = d.global_series || {};
+                // Pick the right source: global / per-country / per-newspaper.
+                // If a facet is active but the requested country or newspaper
+                // has no precomputed series (e.g. a dropdown entry carried
+                // over from stale data), fall through to the global pool
+                // instead of silently showing an empty chart.
+                var availablePool;
+                var sourceSeries;
+                var resolved = false;
                 if (state.facet === 'country' && state.country) {
                     var c = (d.by_country || {})[state.country];
-                    if (c) {
-                        availablePool = (c.top_keywords || []).slice();
+                    if (c && c.top_keywords && c.top_keywords.length) {
+                        availablePool = c.top_keywords.slice();
                         sourceSeries = c.series || {};
+                        resolved = true;
                     }
                 } else if (state.facet === 'newspaper' && state.newspaper) {
                     var n = (d.by_newspaper || {})[state.newspaper];
-                    if (n) {
-                        availablePool = (n.top_keywords || []).slice();
+                    if (n && n.top_keywords && n.top_keywords.length) {
+                        availablePool = n.top_keywords.slice();
                         sourceSeries = n.series || {};
+                        resolved = true;
                     }
-                } else {
+                }
+                if (!resolved) {
                     availablePool = (d.top_keywords || []).slice();
+                    sourceSeries = d.global_series || {};
                 }
 
                 var pick;

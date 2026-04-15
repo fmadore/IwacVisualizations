@@ -44,7 +44,7 @@ import os
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 
 import pandas as pd
 
@@ -71,7 +71,13 @@ CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "refe
 GLOBAL_TOP_POOL = 100      # global_series size (chart uses top 20 by default)
 DEFAULT_TOP_DISPLAY = 20   # surfaced as `top_keywords`
 PER_FACET_TOP = 30         # per-country / per-newspaper top keywords
-NEWSPAPER_FACET_LIMIT = 40 # emit per-newspaper series only for the top-N newspapers by mention volume
+# Emit per-newspaper series for every newspaper that has any keyword
+# data. Previously capped at 40 for payload size, but the UI listed
+# all ~79 newspapers in the filter dropdown and picking one outside
+# the top 40 showed "No data available" — confusing. The extra
+# ~40 series × 30 keywords × 67 years ≈ a few hundred KB, which the
+# minified payload absorbs fine.
+NEWSPAPER_FACET_LIMIT = None
 
 
 def _str_or_none(value: Any) -> Optional[str]:
@@ -248,24 +254,26 @@ def process_keywords(
             "total_keywords": len(country_totals),
         }
 
-    # Newspaper facet — same shape, but only emitted for the top-N
-    # newspapers by total mention volume. Smaller newspapers still
-    # appear in metadata.newspapers so the filter dropdown is
-    # complete, but picking one that falls below the cutoff will
-    # fall through to the global view — documented in the README.
-    newspaper_volume: Counter = Counter()
-    for newspaper, y_map in newspaper_year_keyword.items():
-        total = 0
-        for kw_map in y_map.values():
-            total += sum(kw_map.values())
-        newspaper_volume[newspaper] = total
-    top_newspapers = set(
-        n for n, _ in newspaper_volume.most_common(NEWSPAPER_FACET_LIMIT)
-    )
+    # Newspaper facet — emitted for every newspaper that has any
+    # keyword data. If ``NEWSPAPER_FACET_LIMIT`` is set, only the
+    # top-N by total mention volume are kept (legacy cap); current
+    # default is None which means "all newspapers" so the filter
+    # dropdown in the UI never lists a newspaper without data.
+    top_newspapers: Optional[Set[str]] = None
+    if NEWSPAPER_FACET_LIMIT is not None:
+        newspaper_volume: Counter = Counter()
+        for newspaper, y_map in newspaper_year_keyword.items():
+            total = 0
+            for kw_map in y_map.values():
+                total += sum(kw_map.values())
+            newspaper_volume[newspaper] = total
+        top_newspapers = set(
+            n for n, _ in newspaper_volume.most_common(NEWSPAPER_FACET_LIMIT)
+        )
 
     by_newspaper: Dict[str, Dict[str, Any]] = {}
     for newspaper in sorted(newspapers_set):
-        if newspaper not in top_newspapers:
+        if top_newspapers is not None and newspaper not in top_newspapers:
             continue
         n_totals: Counter = Counter()
         for y_map in newspaper_year_keyword[newspaper].values():
