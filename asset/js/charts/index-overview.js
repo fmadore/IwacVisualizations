@@ -64,7 +64,11 @@
             P.t('Lifespan × frequency'),
             P.t('desc_lifespan')
         );
-        var mapPanel        = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Places map'));
+        var mapPanel        = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Places map'),
+            P.t('desc_places_map')
+        );
         var ganttPanel      = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('Temporal extent'),
@@ -128,7 +132,7 @@
         if (io.typeDistribution) io.typeDistribution.render(h.typePanel, dataA);
         if (io.topEntities)      io.topEntities.render(h.topEntitiesPanel, dataA, ctx);
         if (io.lifespan)         io.lifespan.render(h.lifespanPanel, dataA, ctx);
-        if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA);
+        if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA, ctx);
         if (io.activityGantt)    io.activityGantt.render(h.ganttPanel, dataA, ctx);
         if (io.indexTable)       io.indexTable.render(h.indexPanel, dataA, ctx);
     }

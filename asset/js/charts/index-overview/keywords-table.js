@@ -22,7 +22,7 @@
         return;
     }
 
-    var PAGE_SIZE = 50;
+    var PAGE_SIZE = 20;
 
     function render(host, state) {
         host.innerHTML = '';

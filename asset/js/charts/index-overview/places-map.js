@@ -31,7 +31,7 @@
         MENTIONS:   'mentions'
     };
 
-    function render(panelEl, data) {
+    function render(panelEl, data, ctx) {
         if (typeof maplibregl === 'undefined') {
             panelEl.chart.appendChild(P.el('div', 'iwac-vis-error', P.t('Map library unavailable')));
             return;
@@ -54,7 +54,7 @@
             if (built) return;
             built = true;
             panelEl.chart.removeChild(loading);
-            build(panelEl, places, mentions);
+            build(panelEl, places, mentions, ctx);
         }
 
         if (typeof IntersectionObserver !== 'undefined') {
@@ -72,7 +72,7 @@
         }
     }
 
-    function build(panelEl, places, mentions) {
+    function build(panelEl, places, mentions, ctx) {
         var state = { layer: LAYERS.BOTH };
 
         // Facet bar — "Both / Authority / Mentions"
@@ -208,35 +208,77 @@
                 });
             }
 
-            map.on('click', 'place-authority-pins', function (e) {
-                var f = e.features && e.features[0];
-                if (!f) return;
-                P.createIwacPopup({ closeButton: true, closeOnClick: true })
-                    .setLngLat(f.geometry.coordinates)
-                    .setHTML(
-                        '<strong>' + P.escapeHtml(f.properties.name) + '</strong><br>' +
-                        (f.properties.country ? P.escapeHtml(f.properties.country) + '<br>' : '') +
-                        P.t('mentions_count', { count: P.formatNumber(Number(f.properties.frequency)) })
-                    )
-                    .addTo(map);
-            });
-            map.on('click', 'place-mentions-bubbles', function (e) {
-                var f = e.features && e.features[0];
-                if (!f) return;
-                P.createIwacPopup({ closeButton: true, closeOnClick: true })
-                    .setLngLat(f.geometry.coordinates)
-                    .setHTML(
-                        '<strong>' + P.escapeHtml(f.properties.name) + '</strong><br>' +
-                        P.t('mentions_count', { count: P.formatNumber(Number(f.properties.count)) })
-                    )
-                    .addTo(map);
-            });
-            ['place-authority-pins', 'place-mentions-bubbles'].forEach(function (layerId) {
-                map.on('mouseenter', layerId, function () { map.getCanvas().style.cursor = 'pointer'; });
-                map.on('mouseleave', layerId, function () { map.getCanvas().style.cursor = ''; });
-            });
-
             applyVisibility();
+        }
+
+        // Click + hover handlers attached ONCE per map (outside
+        // onStyleReady). Two reasons:
+        //   1. Separate per-layer handlers fire twice when the two
+        //      layers overlap at the same coordinates (which they
+        //      usually do — mention bubbles sit on top of the
+        //      authority pin for the same place). A single handler
+        //      queryRenderedFeatures-ing both layers yields a single
+        //      popup regardless of how many layers reported a hit.
+        //   2. Attaching inside onStyleReady would stack additional
+        //      handlers on every theme swap since MapLibre's filtered
+        //      event handlers persist across setStyle calls.
+        function handleMapClick(e) {
+            if (!mapInstance) return;
+            var layerIds = [];
+            if (mapInstance.getLayer('place-authority-pins'))   layerIds.push('place-authority-pins');
+            if (mapInstance.getLayer('place-mentions-bubbles')) layerIds.push('place-mentions-bubbles');
+            if (layerIds.length === 0) return;
+
+            var features = mapInstance.queryRenderedFeatures(e.point, { layers: layerIds });
+            if (!features.length) return;
+
+            // Prefer the authority pin (has o_id → linkable) when both
+            // layers reported a hit at the click point.
+            var feat = null;
+            for (var i = 0; i < features.length; i++) {
+                if (features[i].layer && features[i].layer.id === 'place-authority-pins') {
+                    feat = features[i];
+                    break;
+                }
+            }
+            if (!feat) feat = features[0];
+
+            var props = feat.properties || {};
+            var name = P.escapeHtml(props.name || '');
+            var isAuth = feat.layer && feat.layer.id === 'place-authority-pins';
+            var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
+            var href = isAuth && props.o_id && siteBase
+                ? siteBase + '/item/' + props.o_id
+                : null;
+
+            var titleHtml = href
+                ? '<a href="' + P.escapeHtml(href) + '">' + name + '</a>'
+                : name;
+
+            var html = '<strong>' + titleHtml + '</strong>';
+            if (isAuth && props.country) {
+                html += '<br>' + P.escapeHtml(props.country);
+            }
+            if (isAuth && props.frequency != null) {
+                html += '<br>' + P.t('mentions_count', { count: P.formatNumber(Number(props.frequency)) });
+            } else if (!isAuth && props.count != null) {
+                html += '<br>' + P.t('mentions_count', { count: P.formatNumber(Number(props.count)) });
+            }
+
+            P.createIwacPopup({ closeButton: true, closeOnClick: true })
+                .setLngLat(feat.geometry.coordinates.slice())
+                .setHTML(html)
+                .addTo(mapInstance);
+        }
+
+        function handleMouseMove(e) {
+            if (!mapInstance) return;
+            var layerIds = [];
+            if (mapInstance.getLayer('place-authority-pins'))   layerIds.push('place-authority-pins');
+            if (mapInstance.getLayer('place-mentions-bubbles')) layerIds.push('place-mentions-bubbles');
+            if (layerIds.length === 0) return;
+            var features = mapInstance.queryRenderedFeatures(e.point, { layers: layerIds });
+            mapInstance.getCanvas().style.cursor = features.length ? 'pointer' : '';
         }
 
         function applyVisibility() {
@@ -253,13 +295,22 @@
             }
         }
 
-        P.createIwacMap(mapContainer, {
+        var createdMap = P.createIwacMap(mapContainer, {
             center: [2, 10],
             zoom: 3.2,
             globe: true,
             navigation: true,
             onStyleReady: onStyleReady
         });
+
+        // Click + hover handlers attached ONCE per map instance, not
+        // per style.load — see the comment above handleMapClick for
+        // why re-attaching inside onStyleReady would double-fire
+        // popups after a theme swap.
+        if (createdMap) {
+            createdMap.on('click', handleMapClick);
+            createdMap.on('mousemove', handleMouseMove);
+        }
     }
 
     ns.indexOverview = ns.indexOverview || {};

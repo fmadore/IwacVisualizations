@@ -114,11 +114,7 @@
         emptyEl.style.display = 'none';
         panelEl.panel.insertBefore(emptyEl, panelEl.chart);
 
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            instance.setOption({ series: [] });
-        });
-
-        function update() {
+        function applyFromState(instance) {
             var snap = state.get();
             var derived = state.derivedSeries();
             var keywords = derived.keywords;
@@ -151,14 +147,25 @@
             panelEl.chart.style.display = '';
             emptyEl.style.display = 'none';
 
-            var liveChart = (ns.getLiveChart && ns.getLiveChart(panelEl.chart)) || chart;
-            if (liveChart && !liveChart.isDisposed()) {
-                liveChart.setOption(buildOption(derived.years, keywords, derived.series), true);
+            if (instance && !instance.isDisposed()) {
+                instance.setOption(buildOption(derived.years, keywords, derived.series), true);
             }
         }
 
-        state.subscribe(update);
-        update();
+        // The registerChart render callback doubles as the
+        // post-theme-swap re-render path: dashboard-core disposes the
+        // ECharts instance on theme change, re-inits it with the new
+        // theme, then calls this callback with the fresh instance.
+        // Applying from current state (instead of setting empty
+        // series) keeps the chart visible across theme toggles.
+        ns.registerChart(panelEl.chart, function (el, instance) {
+            applyFromState(instance);
+        });
+
+        state.subscribe(function () {
+            var liveChart = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
+            applyFromState(liveChart);
+        });
     }
 
     ns.indexOverview = ns.indexOverview || {};
