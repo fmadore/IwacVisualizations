@@ -16,32 +16,21 @@
 /*  `--iwac-vis-model-*`). No hex literals.                             */
 /* =================================================================== */
 
+/* `.iwac-vis-article` is the top-level resource-page wrapper. It
+ * holds (in order): the server-rendered sentiment section and, after
+ * JSON load, the dynamic body. The wrapper is a vertical flex
+ * container so the gap between its direct children is uniform and
+ * consistent with the rest of the dashboard. */
 .iwac-vis-article {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
 }
 
 .iwac-vis-article__body {
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 1rem);
-}
-
-.iwac-vis-article__stats {
-    margin-bottom: var(--space-3, 0.75rem);
-}
-
-/* --------------------------------------------------------------------
- * Stats card `--wide` modifier for the LDA topic label.
- * The topic label is a long French phrase that wraps awkwardly in a
- * single-column summary card; let it span two columns on desktop.
- * ------------------------------------------------------------------ */
-.iwac-vis-summary-card--wide {
-    grid-column: span 2;
-}
-@media (max-width: 640px) { /* sm */
-    .iwac-vis-summary-card--wide {
-        grid-column: auto;
-    }
 }
 
 /* --------------------------------------------------------------------
@@ -175,6 +164,12 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: var(--space-3, 0.75rem);
+    /* Don't stretch cards vertically. When one card has its
+     * justification drawer open the others used to grow to match, which
+     * left large empty gaps between metrics and card bottom. Letting
+     * each card keep its natural height is the ugly-but-honest default
+     * the reader expects. */
+    align-items: start;
 }
 
 .iwac-vis-sent-card {
@@ -204,11 +199,22 @@
     flex-shrink: 0;
     object-fit: contain;
 }
+.iwac-vis-sent-card__names {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
 .iwac-vis-sent-card__name {
     margin: 0;
     font-size: var(--text-sm, 0.9rem);
     font-weight: 600;
     color: var(--ink, #18202a);
+    line-height: 1.2;
+}
+.iwac-vis-sent-card__org {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    line-height: 1.2;
 }
 
 .iwac-vis-sent-card__metrics {
@@ -414,4 +420,33 @@
     color: var(--muted, #6e7a82);
     text-align: center;
     line-height: 1.5;
+}
+
+
+/* =================================================================== */
+/*  Further reading — toggle between "shared tags" and "similar content" */
+/* =================================================================== */
+/*                                                                       */
+/*  A single panel replacing the old separate Related + Similar cards.   */
+/*  The tabs reuse `.iwac-vis-facets` chrome from iwac-core.css, so      */
+/*  we only need to lay out the controls row and tune the caption.      */
+
+.iwac-vis-further__controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-3, 0.75rem);
+}
+.iwac-vis-further__tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+.iwac-vis-further__caption {
+    margin: 0;
+    font-size: var(--text-sm, 0.9rem);
+    color: var(--muted, #6e7a82);
+    line-height: 1.5;
+}
+.iwac-vis-further__grid {
+    /* Inherits .iwac-vis-article-cards */
 }

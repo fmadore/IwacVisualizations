@@ -293,42 +293,32 @@
 
             // Article dashboard — panel titles
             'Context network':         'Context network',
-            'Semantic neighbors':      'Similar articles',
-            'Related articles':        'Related articles',
-            'Spatial coverage':        'Spatial coverage',
-            'Article metrics':         'Article metrics',
+            'Further reading':         'Further reading',
 
-            // Article dashboard — panel descriptions
+            // Article dashboard — panel descriptions (written for a
+            // general audience; no jargon like "cosine similarity" or
+            // "thematic siblings").
             'desc_article_context_network':
-                'This article at the centre, its persons / organisations / places / subjects in the inner ring, and a sample of articles that share the most entities with it in the outer ring. Click an entity to open its page, or an outer-ring article to jump there. For the full sortable list see "Related articles" below.',
-            'desc_article_related':
-                'Articles that share the most index entities (persons, organisations, places, subjects) with this one. The badge shows the number of overlapping entities; hover for the list.',
-            'desc_article_semantic_neighbors':
-                'Articles closest to this one by cosine similarity of the Gemini OCR embeddings. Surfaces thematic siblings that may not share any tagged entity.',
-            'desc_article_spatial':
-                'Places named in this article\u2019s Dublin Core Spatial Coverage, joined to the IWAC authority index for coordinates.',
-            'desc_article_metrics':
-                'Lexical and readability metrics computed from the OCR text: word count, Flesch readability score, type\u2013token ratio, page count, and assigned LDA-30 topic.',
-            'desc_article_sentiment':
-                'How each of the three AI raters (Gemini, ChatGPT, Mistral) scored this article on polarity, centrality to Islam/Muslim communities, and subjectivity. Read directly from the Omeka item metadata.',
-
-            // Article dashboard — stats card labels
-            'Word count':              'Word count',
-            'Readability':             'Readability',
-            'Lexical richness':        'Lexical richness',
-            'Pages':                   'Pages',
-            'Language':                'Language',
-            'Topic':                   'Topic',
+                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Click any node to open its page.',
+            'desc_article_further_reading':
+                'Other articles from the collection that connect to this one. Switch between two ways of finding them.',
+            'desc_further_reading_tags':
+                'Articles tagged with the same people, places, organisations or subjects as this one. The badge shows how many tags they share.',
+            'desc_further_reading_content':
+                'Articles whose full text reads similarly to this one, even when they don\u2019t share any tags. The match is computed by an AI language model that turns each article into a numeric fingerprint (a \u201csemantic embedding\u201d) and compares them. The badge shows how close the match is.',
 
             // Article dashboard — card labels + tooltips
             'Similarity':              'Similarity',
-            'Shared entities':         'Shared entities',
             'Shares':                  'Shares',
-            'Date':                    'Date',
-            'shares_n_entities':       'Shares {count} entities',
-            'No similar articles':     'No similar articles available',
-            'No related articles':     'No related articles found',
+            'shares_n_entities':       '{count} shared tags',
+            'No similar articles':     'No articles with similar content',
+            'No related articles':     'No articles with shared tags',
+            'No further reading found':'No further reading found',
             'No entities tagged':      'No entities tagged on this article',
+
+            // Further reading — toggle labels
+            'By shared tags':          'By shared tags',
+            'By similar content':      'By similar content',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
@@ -664,42 +654,30 @@
 
             // Article dashboard — panel titles
             'Context network':         'R\u00e9seau contextuel',
-            'Semantic neighbors':      'Articles similaires',
-            'Related articles':        'Articles connexes',
-            'Spatial coverage':        'Couverture spatiale',
-            'Article metrics':         'M\u00e9triques de l\u2019article',
+            'Further reading':         'Pour aller plus loin',
 
-            // Article dashboard — panel descriptions
+            // Article dashboard — panel descriptions (langage accessible)
             'desc_article_context_network':
-                'Cet article au centre, ses personnes / organisations / lieux / sujets dans l\u2019anneau int\u00e9rieur, et un \u00e9chantillon d\u2019articles qui partagent le plus d\u2019entit\u00e9s avec lui dans l\u2019anneau ext\u00e9rieur. Cliquez sur une entit\u00e9 pour ouvrir sa fiche, ou sur un article ext\u00e9rieur pour y naviguer. Pour la liste compl\u00e8te et triable, voir \u00ab Articles connexes \u00bb ci-dessous.',
-            'desc_article_related':
-                'Articles qui partagent le plus d\u2019entit\u00e9s (personnes, organisations, lieux, sujets) avec celui-ci. Le badge indique le nombre d\u2019entit\u00e9s en commun\u00A0; survolez pour voir la liste.',
-            'desc_article_semantic_neighbors':
-                'Articles les plus proches de celui-ci selon la similarit\u00e9 cosinus des plongements OCR Gemini. R\u00e9v\u00e8le des fr\u00e8res th\u00e9matiques m\u00eame sans entit\u00e9 balis\u00e9e commune.',
-            'desc_article_spatial':
-                'Lieux nomm\u00e9s dans la Couverture spatiale Dublin Core de cet article, g\u00e9oloc\u00e9s via l\u2019index d\u2019autorit\u00e9 IWAC.',
-            'desc_article_metrics':
-                'M\u00e9triques lexicales et de lisibilit\u00e9 calcul\u00e9es sur le texte OCR : nombre de mots, score de lisibilit\u00e9 Flesch, ratio type/occurrence, nombre de pages et th\u00e8me LDA-30 attribu\u00e9.',
-            'desc_article_sentiment':
-                'Polarit\u00e9, centralit\u00e9 \u00e0 l\u2019islam / aux musulmans et subjectivit\u00e9 attribu\u00e9es \u00e0 cet article par les trois \u00e9valuateurs IA (Gemini, ChatGPT, Mistral). Lues directement depuis les m\u00e9tadonn\u00e9es de la notice Omeka.',
-
-            // Article dashboard — stats card labels
-            'Word count':              'Nombre de mots',
-            'Readability':             'Lisibilit\u00e9',
-            'Lexical richness':        'Richesse lexicale',
-            'Pages':                   'Pages',
-            'Language':                'Langue',
-            'Topic':                   'Th\u00e8me',
+                'Cet article est au centre, entour\u00e9 des personnes, lieux, organisations et sujets qui y sont balis\u00e9s. Les articles qui partagent plusieurs de ces balises apparaissent en p\u00e9riph\u00e9rie. Cliquez sur un n\u0153ud pour ouvrir sa fiche.',
+            'desc_article_further_reading':
+                'D\u2019autres articles de la collection qui se rattachent \u00e0 celui-ci. Choisissez l\u2019une des deux mani\u00e8res de les trouver.',
+            'desc_further_reading_tags':
+                'Articles balis\u00e9s avec les m\u00eames personnes, lieux, organisations ou sujets que celui-ci. Le badge indique combien de balises ils ont en commun.',
+            'desc_further_reading_content':
+                'Articles dont le texte int\u00e9gral se lit de mani\u00e8re similaire \u00e0 celui-ci, m\u00eame sans balise en commun. La comparaison est faite par un mod\u00e8le d\u2019IA qui transforme chaque article en une \u00ab empreinte num\u00e9rique \u00bb (un \u00ab plongement s\u00e9mantique \u00bb) puis les rapproche. Le badge indique la proximit\u00e9.',
 
             // Article dashboard — card labels + tooltips
             'Similarity':              'Similarit\u00e9',
-            'Shared entities':         'Entit\u00e9s partag\u00e9es',
             'Shares':                  'Partage',
-            'Date':                    'Date',
-            'shares_n_entities':       'Partage {count} entit\u00e9s',
-            'No similar articles':     'Aucun article similaire disponible',
-            'No related articles':     'Aucun article connexe trouv\u00e9',
+            'shares_n_entities':       '{count} balises partag\u00e9es',
+            'No similar articles':     'Aucun article au contenu similaire',
+            'No related articles':     'Aucun article avec des balises communes',
+            'No further reading found':'Aucun autre article \u00e0 sugg\u00e9rer',
             'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
+
+            // Further reading — toggle labels
+            'By shared tags':          'Par balises communes',
+            'By similar content':      'Par contenu similaire',
 
             // Sentiment panel (server-rendered) \u2014 French translations
             // keyed on the IwacSentiment English source labels.

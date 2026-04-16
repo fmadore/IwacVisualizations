@@ -93,11 +93,15 @@
                     trigger: 'item',
                     confine: true,
                     appendTo: function (hostEl) { return hostEl; },
+                    // For radar charts ECharts exposes each dataset as
+                    // one item; `p.name` is the dataset label (= model
+                    // name, e.g. "Gemini 3 Flash"). We deliberately do
+                    // NOT use `p.seriesName` because the series itself
+                    // is unnamed and would fall back to "series0".
                     formatter: function (p) {
-                        // `p.data` here is the series item we built above;
-                        // `p.value` is its full [pol, cen, sub] array.
                         var d = p.data || {};
-                        var lines = ['<strong>' + (p.seriesName || '') + '</strong>'];
+                        var modelName = p.name || (d && d.name) || '';
+                        var lines = ['<strong>' + modelName + '</strong>'];
                         for (var i = 0; i < labels.length; i++) {
                             var v = (p.value || [])[i];
                             var wordLabel = d.textLabels && d.textLabels[i];

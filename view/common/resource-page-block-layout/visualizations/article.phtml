@@ -10,14 +10,11 @@
  *                           metadata (iwac:<model><Axis>) via
  *                           SentimentExtractor. Rendered directly into
  *                           PHP cards here; a small ECharts radar
- *                           below compares the three models. Source
- *                           data never goes through the precompute,
- *                           so editorial changes on islam.zmo.de land
- *                           immediately.
+ *                           below compares the three models.
  *
  *   2. Everything else    — fetched client-side from the precomputed
  *                           asset/data/article-dashboards/{o_id}.json
- *                           (stats, context network, related articles,
+ *                           (context network, related articles,
  *                           similar articles, spatial coverage).
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
@@ -27,10 +24,10 @@
 use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
 
 echo $this->partial('common/iwac-assets', [
-    // Base dashboard sheet (sentiment, network toolbar, chord, map
-    // styling shared with person + entity views). Article-specific
-    // additions (card grids, sentiment cards) live in
-    // css/blocks/article-dashboard.css which we enqueue below.
+    // Base dashboard sheet (network toolbar, chord, map styling shared
+    // with person + entity views). Article-specific layout (card
+    // grids, sentiment cards) lives in css/blocks/article-dashboard.css
+    // which we enqueue below.
     'blockCss' => 'person-dashboard',
     'needs' => [
         'maplibre'     => true,
@@ -41,21 +38,17 @@ echo $this->partial('common/iwac-assets', [
     ],
     // Self-registering IIFEs for the client-side panels. The sentiment
     // panel is rendered server-side and is NOT included here — see
-    // the <section> further down for its static markup.
+    // the <section> further down for its static markup. The radar
+    // panel self-initialises from the inline JSON script we emit
+    // below (article-dashboard/radar.js scans for it).
     'panels' => [
-        'article-dashboard/stats',
         'article-dashboard/network',
-        'article-dashboard/related',
-        'article-dashboard/semantic',
-        'article-dashboard/spatial-map',
+        'article-dashboard/further-reading',
         'article-dashboard/radar',
     ],
     'orchestrator' => 'article-dashboard',
 ]);
 
-// Article-specific stylesheet: card grids, sentiment card layout,
-// model chip colours. Loaded last so it can override base tokens if
-// needed.
 $this->headLink()->appendStylesheet(
     $this->assetUrl('css/blocks/article-dashboard.css', 'IwacVisualizations')
 );
@@ -70,22 +63,26 @@ $assetUrl   = $this->plugin('assetUrl');
 $sentiment    = SentimentExtractor::fromItem($resource);
 $hasSentiment = SentimentExtractor::hasAny($sentiment);
 
-// Per-model chrome — logos + display names. Kept here rather than in
-// the extractor because it's presentation metadata, not data.
+// Per-model chrome: precise model names (with release / parameter
+// detail the user wants to see) + logos. Kept here, not in the
+// extractor, because it's presentation metadata not data.
 $modelInfo = [
     'gemini' => [
-        'name'  => 'Google Gemini',
+        'name'  => 'Gemini 3 Flash',
+        'org'   => 'Google',
         'short' => 'Gemini',
         'logo'  => 'Gemini_logo.svg',
     ],
     'chatgpt' => [
-        'name'  => 'OpenAI ChatGPT',
-        'short' => 'ChatGPT',
+        'name'  => 'GPT-5 mini',
+        'org'   => 'OpenAI',
+        'short' => 'GPT-5 mini',
         'logo'  => 'ChatGPT_logo.svg',
     ],
     'mistral' => [
-        'name'  => 'Mistral AI',
-        'short' => 'Mistral',
+        'name'  => 'Ministral 14B',
+        'org'   => 'Mistral AI',
+        'short' => 'Ministral 14B',
         'logo'  => 'Mistral_AI_logo.svg',
     ],
 ];
@@ -123,13 +120,13 @@ $radarData = [
 foreach (SentimentExtractor::MODELS as $m) {
     $s = $sentiment[$m];
     $radarData['models'][] = [
-        'key'            => $m,
-        'label'          => $modelInfo[$m]['short'],
-        'polarite'       => $s['polarite_numeric'] ?? 0,
-        'centralite'     => $s['centralite_numeric'] ?? 0,
-        'subjectivite'   => $s['subjectivite_score'] ?? 0,
-        'polariteLabel'  => $s['polarite']           ? $translate($s['polarite'])           : '',
-        'centraliteLabel'=> $s['centralite']         ? $translate($s['centralite'])         : '',
+        'key'               => $m,
+        'label'             => $modelInfo[$m]['short'],
+        'polarite'          => $s['polarite_numeric'] ?? 0,
+        'centralite'        => $s['centralite_numeric'] ?? 0,
+        'subjectivite'      => $s['subjectivite_score'] ?? 0,
+        'polariteLabel'     => $s['polarite']           ? $translate($s['polarite'])           : '',
+        'centraliteLabel'   => $s['centralite']         ? $translate($s['centralite'])         : '',
         'subjectiviteLabel' => $s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '',
     ];
 }
@@ -151,7 +148,9 @@ foreach (SentimentExtractor::MODELS as $m) {
     <section class="iwac-vis-panel iwac-vis-panel--wide iwac-vis-article__sentiment"
              data-iwac-no-panel-toolbar="1">
         <h4><?= $translate('AI sentiment') ?></h4>
-        <p class="iwac-vis-panel-desc"><?= $translate('desc_article_sentiment') ?></p>
+        <p class="iwac-vis-panel-desc">
+            <?= $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (Gemini 3 Flash, GPT-5 mini, Ministral 14B). Read directly from the Omeka item metadata.') ?>
+        </p>
 
         <div class="iwac-vis-sent-cards">
             <?php foreach ($sentiment as $model => $s):
@@ -162,9 +161,12 @@ foreach (SentimentExtractor::MODELS as $m) {
                 <header class="iwac-vis-sent-card__header">
                     <img class="iwac-vis-sent-card__logo"
                          src="<?= $escapeAttr($assetUrl('img/ai-logos/' . $info['logo'], 'IwacVisualizations')) ?>"
-                         alt="<?= $escapeAttr($info['short']) ?>"
+                         alt=""
                          width="22" height="22" loading="lazy">
-                    <h5 class="iwac-vis-sent-card__name"><?= $escapeHtml($info['name']) ?></h5>
+                    <div class="iwac-vis-sent-card__names">
+                        <h5 class="iwac-vis-sent-card__name"><?= $escapeHtml($info['name']) ?></h5>
+                        <span class="iwac-vis-sent-card__org"><?= $escapeHtml($info['org']) ?></span>
+                    </div>
                 </header>
 
                 <dl class="iwac-vis-sent-card__metrics">
@@ -193,18 +195,9 @@ foreach (SentimentExtractor::MODELS as $m) {
                     <div class="iwac-vis-sent-row">
                         <dt class="iwac-vis-sent-row__label"><?= $translate('Subjectivity') ?></dt>
                         <dd class="iwac-vis-sent-row__value">
-                            <?php
-                                // Reuse the existing IWAC Vis subjectivité
-                                // tokens — --iwac-vis-subj-1..5 are defined
-                                // in iwac-core.css. Chip colour class
-                                // is keyed on the score.
-                                $subSlug = 'iwac-vis-chip--subjectivity-' . (int) $s['subjectivite_score'];
-                            ?>
+                            <?php $subSlug = 'iwac-vis-chip--subjectivity-' . (int) $s['subjectivite_score']; ?>
                             <span class="iwac-vis-chip iwac-vis-chip--subjectivity <?= $escapeAttr($subSlug) ?>">
-                                <?php
-                                    $subLabel = $s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '';
-                                ?>
-                                <?= $escapeHtml($subLabel) ?>
+                                <?= $escapeHtml($s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '') ?>
                             </span>
                         </dd>
                     </div>
@@ -247,9 +240,8 @@ foreach (SentimentExtractor::MODELS as $m) {
 
         <!-- Radar chart — picked up by articleDashboard.radar (ECharts).
              Data is serialised below as JSON; the panel JS reads this
-             script element by id (scoped to this block's item id to
-             keep the attach / detach logic simple if the block ever
-             appears twice on one page). -->
+             script element by class and renders into the sibling
+             `.iwac-vis-sent-radar__chart` div. -->
         <div class="iwac-vis-sent-radar">
             <h5 class="iwac-vis-sent-radar__title"><?= $translate('Model comparison') ?></h5>
             <div class="iwac-vis-sent-radar__chart" data-item-id="<?= $escapeAttr($resource->id()) ?>"></div>
@@ -257,7 +249,7 @@ foreach (SentimentExtractor::MODELS as $m) {
                 <?= json_encode($radarData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?>
             </script>
             <p class="iwac-vis-sent-radar__scale">
-                <?= $translate('Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)') ?>
+                <?= $translate('Scales: polarity 1 (very negative) – 5 (very positive) · centrality 1 (not addressed) – 5 (very central) · subjectivity 1 (objective) – 5 (subjective)') ?>
             </p>
         </div>
     </section>
