@@ -289,6 +289,44 @@
             'entity_type_Lieux': 'Places',
             'entity_type_Sujets': 'Subjects',
             'entity_type_\u00c9v\u00e9nements': 'Events',
+            'entity_type_article': 'Newspaper article',
+
+            // Article dashboard — panel titles
+            'Context network':         'Context network',
+            'Semantic neighbors':      'Similar articles',
+            'Related articles':        'Related articles',
+            'Spatial coverage':        'Spatial coverage',
+            'Article metrics':         'Article metrics',
+
+            // Article dashboard — panel descriptions
+            'desc_article_context_network':
+                'This article at the centre, its persons / organisations / places / subjects in the inner ring, and the top articles that share the most entities with it in the outer ring. Click an entity to open its page, or an outer-ring article to jump there.',
+            'desc_article_semantic_neighbors':
+                'Articles closest to this one by cosine similarity of the Gemini OCR embeddings. Surfaces thematic siblings that may not share any tagged entity.',
+            'desc_article_spatial':
+                'Places named in this article\u2019s Dublin Core Spatial Coverage, joined to the IWAC authority index for coordinates.',
+            'desc_article_metrics':
+                'Lexical and readability metrics computed from the OCR text: word count, Flesch readability score, type\u2013token ratio, page count, and assigned LDA-30 topic.',
+            'desc_article_sentiment':
+                'How each of the three AI raters (Gemini, ChatGPT, Mistral) scored this article on polarity, centrality to Islam/Muslim communities, and subjectivity.',
+
+            // Article dashboard — stats card labels
+            'Word count':              'Word count',
+            'Readability':             'Readability',
+            'Lexical richness':        'Lexical richness',
+            'Pages':                   'Pages',
+            'Language':                'Language',
+            'Topic':                   'Topic',
+
+            // Article dashboard — tables + tooltips
+            'Similarity':              'Similarity',
+            'Shared entities':         'Shared entities',
+            'Shares':                  'Shares',
+            'Date':                    'Date',
+            'shares_n_entities':       'Shares {count} entities',
+            'No similar articles':     'No similar articles available',
+            'No related articles':     'No related articles found',
+            'No entities tagged':      'No entities tagged on this article',
 
             // Index overview — block + section labels
             'Loading index overview':    'Loading index overview',
@@ -591,6 +629,44 @@
             'entity_type_Lieux': 'Lieux',
             'entity_type_Sujets': 'Sujets',
             'entity_type_\u00c9v\u00e9nements': '\u00c9v\u00e9nements',
+            'entity_type_article': 'Article de presse',
+
+            // Article dashboard — panel titles
+            'Context network':         'R\u00e9seau contextuel',
+            'Semantic neighbors':      'Articles similaires',
+            'Related articles':        'Articles connexes',
+            'Spatial coverage':        'Couverture spatiale',
+            'Article metrics':         'M\u00e9triques de l\u2019article',
+
+            // Article dashboard — panel descriptions
+            'desc_article_context_network':
+                'Cet article au centre, ses personnes / organisations / lieux / sujets dans l\u2019anneau int\u00e9rieur, et les articles qui partagent le plus d\u2019entit\u00e9s avec lui dans l\u2019anneau ext\u00e9rieur. Cliquez sur une entit\u00e9 pour ouvrir sa fiche, ou sur un article ext\u00e9rieur pour y naviguer.',
+            'desc_article_semantic_neighbors':
+                'Articles les plus proches de celui-ci selon la similarit\u00e9 cosinus des plongements OCR Gemini. R\u00e9v\u00e8le des fr\u00e8res th\u00e9matiques m\u00eame sans entit\u00e9 balis\u00e9e commune.',
+            'desc_article_spatial':
+                'Lieux nomm\u00e9s dans la Couverture spatiale Dublin Core de cet article, g\u00e9oloc\u00e9s via l\u2019index d\u2019autorit\u00e9 IWAC.',
+            'desc_article_metrics':
+                'M\u00e9triques lexicales et de lisibilit\u00e9 calcul\u00e9es sur le texte OCR : nombre de mots, score de lisibilit\u00e9 Flesch, ratio type/occurrence, nombre de pages et th\u00e8me LDA-30 attribu\u00e9.',
+            'desc_article_sentiment':
+                'Polarit\u00e9, centralit\u00e9 \u00e0 l\u2019islam / aux musulmans et subjectivit\u00e9 attribu\u00e9es \u00e0 cet article par les trois \u00e9valuateurs IA (Gemini, ChatGPT, Mistral).',
+
+            // Article dashboard — stats card labels
+            'Word count':              'Nombre de mots',
+            'Readability':             'Lisibilit\u00e9',
+            'Lexical richness':        'Richesse lexicale',
+            'Pages':                   'Pages',
+            'Language':                'Langue',
+            'Topic':                   'Th\u00e8me',
+
+            // Article dashboard — tables + tooltips
+            'Similarity':              'Similarit\u00e9',
+            'Shared entities':         'Entit\u00e9s partag\u00e9es',
+            'Shares':                  'Partage',
+            'Date':                    'Date',
+            'shares_n_entities':       'Partage {count} entit\u00e9s',
+            'No similar articles':     'Aucun article similaire disponible',
+            'No related articles':     'Aucun article connexe trouv\u00e9',
+            'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
 
             // Index overview — block + section labels
             'Loading index overview':    'Chargement de la vue d\u2019ensemble de l\u2019index',

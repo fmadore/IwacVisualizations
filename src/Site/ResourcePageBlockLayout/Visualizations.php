@@ -29,11 +29,12 @@ class Visualizations implements ResourcePageBlockLayoutInterface
      * shape that generate_entity_dashboards.py emits.
      */
     const TEMPLATE_PARTIALS = [
-        5 => 'person', // Personnes
-        6 => 'entity', // Lieux
-        7 => 'entity', // Organisations
-        3 => 'entity', // Sujets
-        2 => 'entity', // Événements
+        5 => 'person',  // Personnes
+        6 => 'entity',  // Lieux
+        7 => 'entity',  // Organisations
+        3 => 'entity',  // Sujets
+        2 => 'entity',  // Événements
+        8 => 'article', // bibo:Article (Article de presse)
     ];
 
     public function getLabel(): string

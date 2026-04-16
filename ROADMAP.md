@@ -122,16 +122,22 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
       into an Omeka volume at deploy time. Only relevant if the
       per-entity block ends up using precompute (e.g. for
       co-occurrence joins against articles).
-- [ ] **Per-article page** (resource-page block attached to the
-      "article de presse" template): 3-model AI sentiment comparison
-      panel (centrality, polarity, subjectivity), LDA topic badge,
-      readability + word count, entities mentioned (linked back to the
-      authority pages).
+- [x] **Per-article page** (2026-04-16) — resource-page block attached
+      to the `bibo:Article` template (id 8): 3-model AI sentiment,
+      compact metrics card (word count / readability / TTR / pages /
+      language / LDA topic), a unified 3-layer context network
+      (article + entities + top related articles via shared-entity
+      overlap), top-10 semantic neighbours, spatial coverage map. See
+      `scripts/generate_article_dashboards.py`,
+      `view/common/resource-page-block-layout/visualizations/article.phtml`,
+      `asset/js/charts/article-dashboard.js`.
+- [x] **Semantic-neighbour "related articles"** (2026-04-16) — folded
+      into the per-article block above. `generate_article_dashboards.py`
+      L2-normalizes the 12,287×768 `embedding_OCR` matrix and
+      batches an `argpartition` top-K pass at ~4 seconds total.
 
 ## Later
 
-- [ ] Semantic-neighbor "related articles" using `embedding_OCR` cosine
-      similarity (precomputed kNN offline)
 - [ ] Knowledge graph per entity — model on
       `iwac-dashboard/scripts/generate_knowledge_graph.py`
 - [ ] World map page block — polygon choropleth of the 6 countries +

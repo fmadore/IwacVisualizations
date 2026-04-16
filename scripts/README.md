@@ -123,6 +123,44 @@ python3 scripts/generate_collection_overview.py --minify     # compact JSON
   precomputed by the dataset curator (aggregated against articles +
   publications + references), so no join is needed.
 
+### `generate_article_dashboards.py`
+
+Writes one JSON per newspaper article under
+`asset/data/article-dashboards/{o_id}.json` (~12,287 files, ~120 MB
+total). Drives the per-article resource-page block that attaches to
+`bibo:Article` items (Omeka template id 8).
+
+```bash
+python3 scripts/generate_article_dashboards.py
+python3 scripts/generate_article_dashboards.py --limit 5              # smoke test
+python3 scripts/generate_article_dashboards.py --top-k-semantic 10    # default
+python3 scripts/generate_article_dashboards.py --top-k-related 20     # default
+```
+
+**Workflow:**
+
+1. Load `articles` + `index` (articles carries the 768-dim `embedding_OCR` column)
+2. Build a normalized-name → entity lookup over `index` (same rules
+   as `generate_entity_dashboards.py` — NFC + lowercase, with
+   `Titre alternatif` aliases)
+3. For each article, resolve `subject` + `spatial` names to index
+   entity o_ids; record the inverted `entity → articles` map as a side-product
+4. **Semantic kNN**: stack embeddings into an `(N, 768)` float32 matrix,
+   L2-normalize, batched `X[i:i+500] @ X.T` with `argpartition` for
+   top-K per row (~4 s total on 12k articles)
+5. **Related-by-entities**: for each article, counter-union its
+   entities' article sets, take `most_common(top_k_related)`; record
+   up to 3 shared-entity ids inline so the UI tooltip can name them
+6. Reshape the 3-model sentiment (Gemini / ChatGPT / Mistral) into
+   the same bucket-histogram contract the aggregate sentiment panel
+   reads — `count=1` in the bucket the model picked, 0 elsewhere
+7. Write one JSON per article (minified)
+
+**Output shape:** `{article, entities, spatial, sentiment, related_by_entities, semantic_neighbors}`.
+The client (`network.js`) builds the 3-layer force graph at render time
+from `entities` + `related_by_entities` — keeping the graph out of the
+precomputed JSON saves ~3 KB per file.
+
 ## Shared helpers — `iwac_utils.py`
 
 Functions to use instead of rewriting. The **v0.9.0 refactor** promoted
@@ -172,9 +210,11 @@ Block-specific extras (partial list):
 | `--output` / `--output-dir` | all | Override the default asset/data target path. |
 | `--minify` | `collection-overview`, `index-overview`, `keyword-explorer` | Produce compact JSON (no indentation). Typically halves file size. |
 | `--top-n` | `collection-overview`, `index-overview` | Cap top-N entity lists. |
-| `--limit` | `entity-dashboards`, `person-dashboards` | Only process the first N entities (smoke testing). |
+| `--limit` | `entity-dashboards`, `person-dashboards`, `article-dashboards` | Only process the first N items (smoke testing). |
 | `--type` | `entity-dashboards` | Restrict to one entity type (`Lieux` / `Organisations` / `Sujets` / `Événements`). |
 | `--min-cooccurrence` | `entity-dashboards`, `person-dashboards` | Threshold for the TF-IDF neighbor network. Default 2. Bump to 3–5 to prune noise. |
+| `--top-k-semantic` | `article-dashboards` | Semantic-neighbour cap per article. Default 10. |
+| `--top-k-related` | `article-dashboards` | Related-by-entities cap per article. Default 20. |
 | `--min-country-articles` | `scary-terms` | Drop countries with fewer than N articles from the country view. Default 5. |
 
 ## Adding a new generator

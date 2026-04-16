@@ -1,0 +1,73 @@
+<?php
+/**
+ * Visualizations: per-article partial.
+ *
+ * Renders when attached to an item whose resource template is
+ * bibo:Article (template id 8 on islam.zmo.de). Dispatched here by
+ * Visualizations::TEMPLATE_PARTIALS. The orchestrator JS fetches
+ * asset/data/article-dashboards/{o_id}.json and builds five panels:
+ *
+ *   1. Meta stats row          — stats.js
+ *   2. AI sentiment (3 models) — sentiment.js
+ *   3. Context network         — network.js  (article + entities + related articles)
+ *   4. Semantic neighbours     — semantic.js
+ *   5. Spatial coverage map    — spatial-map.js
+ *
+ * The container carries data-item-id so the orchestrator can construct
+ * the JSON URL, and data-base-path / data-site-base so click-throughs
+ * know where to route.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ */
+
+// We load person-dashboard.css as the base block sheet because the
+// article view reuses its sentiment panel styles (model picker, caption,
+// chart stack) and its network graph toolbar rules verbatim — both
+// unchanged from the person / entity dashboards. A second, tiny
+// article-dashboard.css layers article-specific grid rules on top.
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'person-dashboard',
+    'needs' => [
+        'maplibre'     => true,
+        'chartOptions' => true,
+        'facetButtons' => true,
+        'table'        => true,
+        'pagination'   => true,
+    ],
+    // Self-registering IIFE panels. Each file hangs a render function
+    // off IWACVis.articleDashboard. Order here matches the runtime
+    // rendering order — the orchestrator dispatches them one by one.
+    'panels' => [
+        'article-dashboard/stats',
+        'article-dashboard/sentiment',
+        'article-dashboard/network',
+        'article-dashboard/semantic',
+        'article-dashboard/spatial-map',
+    ],
+    'orchestrator' => 'article-dashboard',
+]);
+
+// Add the article-specific grid / empty-state overrides on top of the
+// person-dashboard base sheet. Tiny file — article grid + stats card
+// --wide modifier only.
+$this->headLink()->appendStylesheet(
+    $this->assetUrl('css/blocks/article-dashboard.css', 'IwacVisualizations')
+);
+
+$siteSlug = $this->currentSite()->slug();
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+?>
+
+<div class="iwac-vis-block iwac-vis-article"
+     data-item-id="<?= $escapeAttr($resource->id()) ?>"
+     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
+     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+
+    <h3><?= $this->translate('Visualizations') ?></h3>
+
+    <div class="iwac-vis-loading iwac-vis-article__loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
+    </div>
+</div>
