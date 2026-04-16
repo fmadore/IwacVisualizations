@@ -20,14 +20,6 @@ without any further network calls:
                                 fields (o_id / title / type)
     * ``spatial``             — subset of entities with parseable
                                 coordinates, for the mini MapLibre map
-    * ``sentiment``           — 3-model (Gemini / ChatGPT / Mistral)
-                                sentiment reshaped to the same
-                                ``{polarite, centralite, subjectivite}``
-                                bucket-histogram contract the person /
-                                entity sentiment panel already reads.
-                                For a single article this is ``count=1``
-                                in the bucket that model picked, 0
-                                elsewhere.
     * ``related_by_entities`` — top-K articles that share the most
                                 entities with this one (shared-entity
                                 count; up to 3 shared-entity o_ids
@@ -78,32 +70,13 @@ from iwac_utils import (
 # about the NEWSPAPER article as a unit.
 ARTICLES_SUBSET = "articles"
 
-# Sentiment axes that exist on the articles subset. Mirrors the person
-# + entity dashboard generators so the shared sentiment.js panel reads
-# the same shape unchanged.
-SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")
-SENTIMENT_FIELDS = {
-    "polarite":     "{model}_polarite",
-    "centralite":   "{model}_centralite_islam_musulmans",
-    "subjectivite": "{model}_subjectivite_score",
-}
-
-POLARITE_ORDER = [
-    "Très positif",
-    "Positif",
-    "Neutre",
-    "Négatif",
-    "Très négatif",
-    "Non applicable",
-]
-CENTRALITE_ORDER = [
-    "Très central",
-    "Central",
-    "Secondaire",
-    "Marginal",
-    "Non abordé",
-]
-SUBJECTIVITE_BUCKETS = ["1", "2", "3", "4", "5"]
+# Sentiment intentionally NOT precomputed here. v0.11.0+ the article
+# dashboard renders its sentiment panel server-side from Omeka item
+# metadata (iwac:<model><Axis>) via
+# `IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor`.
+# Reading at render-time keeps the dashboard in sync with editorial
+# changes on islam.zmo.de without waiting for a regenerator pass, so
+# there's no value in duplicating the data in the JSON.
 
 # Defaults for the related-articles and semantic-neighbour caps. Both
 # are CLI-overridable. Twenty related-by-entities articles is plenty
@@ -275,19 +248,10 @@ class ArticleDashboardGenerator:
         lisibilite_col= find_column(df, ["Lisibilite_OCR", "readability"])
         nb_pages_col  = find_column(df, ["nb_pages", "pages"])
         lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
+        thumbnail_col = find_column(df, ["thumbnail"])
 
         if not id_col:
             raise RuntimeError("articles subset has no o:id column")
-
-        # Resolve sentiment column names ONCE; re-resolving per row would
-        # be wasteful and makes missing columns silently degrade to empty
-        # buckets with no retry cost at row time.
-        sentiment_cols: Dict[str, Dict[str, Optional[str]]] = {}
-        for model in SENTIMENT_MODELS:
-            sentiment_cols[model] = {}
-            for axis, template in SENTIMENT_FIELDS.items():
-                col = template.format(model=model)
-                sentiment_cols[model][axis] = col if col in df.columns else None
 
         for row_idx, row in df.iterrows():
             raw_id = row.get(id_col)
@@ -310,8 +274,9 @@ class ArticleDashboardGenerator:
                 "readability":       self._coerce_float(row.get(lisibilite_col)) if lisibilite_col else None,
                 "nb_pages":          self._coerce_int(row.get(nb_pages_col)) if nb_pages_col else None,
                 "lda_label":         clean_str(row.get(lda_label_col)) if lda_label_col else "",
-                # Sentiment captured raw per model — reshape later.
-                "_sentiment_raw":    self._pick_sentiment(row, sentiment_cols),
+                # Medium-size thumbnail URL (public on islam.zmo.de) —
+                # used by the related + semantic cards on the front-end.
+                "thumbnail":         clean_str(row.get(thumbnail_col)) if thumbnail_col else "",
             }
 
             refs: Set[int] = set()
@@ -356,36 +321,6 @@ class ArticleDashboardGenerator:
         f = clean_float(value)
         return round(f, 4) if f is not None else None
 
-    @staticmethod
-    def _pick_sentiment(
-        row: pd.Series,
-        sentiment_cols: Dict[str, Dict[str, Optional[str]]],
-    ) -> Dict[str, Dict[str, Any]]:
-        """Capture the 3-model sentiment tuple for one article.
-
-        Returns::
-
-            {
-                "gemini":  {"polarite": "Positif", "centralite": "Très central",
-                            "subjectivite": 3.0},
-                "chatgpt": {...},
-                "mistral": {...},
-            }
-
-        Missing columns collapse to empty strings / None so the reshape
-        step can tell "not rated" apart from "rated but with no value".
-        """
-        out: Dict[str, Dict[str, Any]] = {}
-        for model, cols in sentiment_cols.items():
-            polarite     = clean_str(row.get(cols["polarite"]))      if cols["polarite"]     else ""
-            centralite   = clean_str(row.get(cols["centralite"]))    if cols["centralite"]   else ""
-            subjectivite = clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
-            out[model] = {
-                "polarite":     polarite,
-                "centralite":   centralite,
-                "subjectivite": subjectivite,
-            }
-        return out
 
     # ------------------------------------------------------------------
     # Semantic kNN (embedding_OCR cosine similarity)
@@ -556,7 +491,9 @@ class ArticleDashboardGenerator:
                         "o_id":       neigh_id,
                         "title":      meta.get("title", ""),
                         "newspaper":  meta.get("newspaper", ""),
+                        "country":    meta.get("country", ""),
                         "date":       meta.get("pub_date", ""),
+                        "thumbnail":  meta.get("thumbnail", ""),
                         "similarity": round(sim, 4),
                     })
                 result[article_id] = neighbours
@@ -612,73 +549,13 @@ class ArticleDashboardGenerator:
                 "o_id":         other_id,
                 "title":        meta.get("title", ""),
                 "newspaper":    meta.get("newspaper", ""),
+                "country":      meta.get("country", ""),
                 "date":         meta.get("pub_date", ""),
+                "thumbnail":    meta.get("thumbnail", ""),
                 "shared_count": int(count),
                 "shared":       shared_entities.get(other_id, []),
             })
         return results
-
-    # ------------------------------------------------------------------
-    # Sentiment reshape — mirror the aggregated histogram contract
-    # ------------------------------------------------------------------
-
-    @staticmethod
-    def _reshape_sentiment(raw: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """Turn a single article's 3-model raw sentiment into the same
-        bucket-histogram shape that the aggregate panel expects.
-
-        For each model, emit ``count=1`` in the one bucket this article
-        landed in, 0 elsewhere. Missing values simply don't populate any
-        bucket, so the panel renders an empty state.
-        """
-        by_model: Dict[str, Any] = {}
-        for model in SENTIMENT_MODELS:
-            slice_raw = raw.get(model, {}) or {}
-            polarite = slice_raw.get("polarite") or ""
-            centralite = slice_raw.get("centralite") or ""
-            subjectivite = slice_raw.get("subjectivite")
-
-            # Build each histogram with count=1 in the matching bucket,
-            # 0 elsewhere. Preserves the canonical IWAC ordering.
-            pol_hist = [
-                {"name": name, "count": 1 if name == polarite else 0}
-                for name in POLARITE_ORDER
-            ]
-            # Drop trailing zero buckets on polarite/centralite for
-            # parity with the aggregate generator's trimming. Keeps the
-            # JSON compact while leaving the panel's render logic
-            # unchanged.
-            while pol_hist and pol_hist[-1]["count"] == 0 and pol_hist[-1]["name"] not in (polarite,):
-                pol_hist.pop()
-
-            cen_hist = [
-                {"name": name, "count": 1 if name == centralite else 0}
-                for name in CENTRALITE_ORDER
-            ]
-            while cen_hist and cen_hist[-1]["count"] == 0 and cen_hist[-1]["name"] not in (centralite,):
-                cen_hist.pop()
-
-            sub_bucket = None
-            if subjectivite is not None:
-                sub_bucket = str(max(1, min(5, int(round(float(subjectivite))))))
-            sub_hist = [
-                {"name": name, "count": 1 if name == sub_bucket else 0}
-                for name in SUBJECTIVITE_BUCKETS
-            ]
-
-            rated = bool(polarite or centralite or subjectivite is not None)
-            by_model[model] = {
-                "polarite":         pol_hist,
-                "centralite":       cen_hist,
-                "subjectivite":     sub_hist,
-                "subjectivite_avg": (round(float(subjectivite), 2) if subjectivite is not None else None),
-                "rated_articles":   1 if rated else 0,
-            }
-        return {
-            "models":          list(SENTIMENT_MODELS),
-            "by_model":        by_model,
-            "articles_total":  1,
-        }
 
     # ------------------------------------------------------------------
     # Spatial pins + entities list for the network
@@ -736,10 +613,8 @@ class ArticleDashboardGenerator:
         meta = self.article_meta[article_id]
         entities, spatial = self.build_entities_list(article_id)
         related = self.compute_related_articles(article_id)
-        sentiment = self._reshape_sentiment(meta.get("_sentiment_raw") or {})
 
-        # Compact article header — the raw sentiment stash is stripped
-        # out; it was only used during reshape.
+        # Compact article header — feeds the client-side stats panel.
         article_block = {
             "o_id":             meta["o_id"],
             "title":            meta.get("title", ""),
@@ -752,15 +627,15 @@ class ArticleDashboardGenerator:
             "readability":      meta.get("readability"),
             "nb_pages":         meta.get("nb_pages"),
             "lda_label":        meta.get("lda_label", ""),
+            "thumbnail":        meta.get("thumbnail", ""),
         }
 
         return {
-            "version":             1,
+            "version":             2,
             "generated_at":        datetime.now(timezone.utc).isoformat(),
             "article":             article_block,
             "entities":            entities,
             "spatial":             spatial,
-            "sentiment":           sentiment,
             "related_by_entities": related,
             "semantic_neighbors":  semantic_neighbours,
         }

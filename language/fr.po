@@ -70,3 +70,86 @@ msgstr "Chargement de la vue d’ensemble des références"
 
 msgid "Toggle fullscreen"
 msgstr "Basculer en plein écran"
+
+# Article dashboard (v0.11.0) — sentiment panel (server-rendered from
+# Omeka item metadata via SentimentExtractor). Strings come from the
+# retired IwacSentiment module so existing installations' translation
+# memory keeps working.
+
+msgid "AI sentiment"
+msgstr "Sentiment IA"
+
+msgid "Polarity"
+msgstr "Polarité"
+
+msgid "Centrality"
+msgstr "Centralité"
+
+msgid "Subjectivity"
+msgstr "Subjectivité"
+
+msgid "Show reasoning"
+msgstr "Voir les justifications"
+
+msgid "Model comparison"
+msgstr "Comparaison des modèles"
+
+msgid "Not rated"
+msgstr "Non évalué"
+
+msgid "desc_article_sentiment"
+msgstr "Polarité, centralité à l’islam / aux musulmans et subjectivité attribuées à cet article par les trois évaluateurs IA (Gemini, ChatGPT, Mistral). Lues directement depuis les métadonnées de la notice Omeka."
+
+msgid "Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)"
+msgstr "Échelles : polarité 1 (très négatif) – 5 (très positif) · centralité 1 (non abordé) – 5 (très central) · subjectivité 1 (objectif) – 5 (subjectif)"
+
+# Controlled vocabulary — Centrality (English source labels from Module::CENTRALITE_ITEMS)
+msgid "Very central"
+msgstr "Très central"
+
+msgid "Central"
+msgstr "Central"
+
+msgid "Secondary"
+msgstr "Secondaire"
+
+msgid "Marginal"
+msgstr "Marginal"
+
+msgid "Not addressed"
+msgstr "Non abordé"
+
+# Controlled vocabulary — Polarity (English source labels from Module::POLARITE_ITEMS)
+msgid "Very positive"
+msgstr "Très positif"
+
+msgid "Positive"
+msgstr "Positif"
+
+msgid "Neutral"
+msgstr "Neutre"
+
+msgid "Negative"
+msgstr "Négatif"
+
+msgid "Very negative"
+msgstr "Très négatif"
+
+msgid "Not applicable"
+msgstr "Non applicable"
+
+# Controlled vocabulary — Subjectivity
+msgid "Very objective"
+msgstr "Très objectif"
+
+msgid "Rather objective"
+msgstr "Plutôt objectif"
+
+msgid "Mixed"
+msgstr "Mixte"
+
+msgid "Rather subjective"
+msgstr "Plutôt subjectif"
+
+msgid "Very subjective"
+msgstr "Très subjectif"

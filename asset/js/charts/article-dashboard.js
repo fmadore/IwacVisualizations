@@ -5,21 +5,23 @@
  * builds the layout skeleton, and dispatches each panel's render to
  * its module under asset/js/charts/article-dashboard/.
  *
- * Layout:
- *   Row 1 (compact stat cards)             — stats.js
- *   Row 2 (wide: AI sentiment tabs)        — sentiment.js
- *   Row 3 (wide: context force graph)      — network.js
- *   Row 4 (side-by-side on desktop):
- *     - Similar articles (semantic bar)    — semantic.js
- *     - Spatial coverage (MapLibre)        — spatial-map.js
+ * Layout (top → bottom):
+ *   1. Stats row                               — stats.js
+ *   2. Server-rendered sentiment panel         — (rendered in article.phtml,
+ *                                                the orchestrator leaves
+ *                                                it in place)
+ *   3. Context network (wide)                  — network.js
+ *   4. Related by shared entities (wide)       — related.js
+ *   5. Similar articles by embedding (wide)    — semantic.js
+ *   6. Spatial coverage (wide)                 — spatial-map.js
  *
- * Unlike person / entity dashboards, articles have no role facet —
- * we pass a no-op facet to sentiment.js so its interface stays
- * symmetric with the aggregate panel.
- *
- * Panels whose backing precompute is empty are elided from the layout
- * entirely (no dead "No data" cards for articles missing AI sentiment,
- * embeddings, or spatial tags).
+ * Sentiment is rendered server-side from Omeka item metadata via
+ * article.phtml + SentimentExtractor, so it is NOT fetched from the
+ * precomputed JSON. That's intentional: editorial changes on
+ * islam.zmo.de land instantly without waiting for a regenerator pass.
+ * The radar chart for the 3-model comparison self-initialises from a
+ * `<script type="application/json">` embedded in the rendered PHP; see
+ * article-dashboard/radar.js.
  */
 (function () {
     'use strict';
@@ -31,10 +33,7 @@
     }
     var P = ns.panels;
 
-    /**
-     * No-op facet honored by the sentiment panel's `.subscribe()` call.
-     * Matches the interface the person / entity panels expect.
-     */
+    /** No-op facet — keeps the panel call signature uniform with the person / entity dashboards. */
     function createNoopFacet() {
         return {
             role: 'all',
@@ -43,78 +42,81 @@
         };
     }
 
-    function hasSentimentData(data) {
-        var s = data && data.sentiment;
-        if (!s || !s.by_model) return false;
-        var models = s.models || Object.keys(s.by_model);
-        for (var i = 0; i < models.length; i++) {
-            var m = s.by_model[models[i]];
-            if (!m) continue;
-            // A panel is worth rendering if the model rated ANY axis.
-            if ((m.polarite && m.polarite.length) ||
-                (m.centralite && m.centralite.length) ||
-                (m.subjectivite && m.subjectivite.length)) return true;
-        }
-        return false;
-    }
-
     function hasNetworkData(data) {
         var entities = (data && data.entities) || [];
-        var related = (data && data.related_by_entities) || [];
-        // We still render the network if there's at least one entity —
-        // the center article + a ring of entities is a useful view even
-        // without any related articles.
+        var related  = (data && data.related_by_entities) || [];
         return entities.length > 0 || related.length > 0;
     }
-
-    function hasSemanticData(data) {
-        var n = (data && data.semantic_neighbors) || [];
-        return n.length > 0;
+    function hasRelatedData(data) {
+        return ((data && data.related_by_entities) || []).length > 0;
     }
-
+    function hasSemanticData(data) {
+        return ((data && data.semantic_neighbors) || []).length > 0;
+    }
     function hasSpatialData(data) {
-        var s = (data && data.spatial) || [];
-        return s.length > 0;
+        return ((data && data.spatial) || []).length > 0;
     }
 
     function buildLayout(container, data) {
         var loading = container.querySelector('.iwac-vis-article__loading');
         if (loading) loading.remove();
 
-        var body = P.el('div', 'iwac-vis-article__body');
-        container.appendChild(body);
+        // The server-rendered sentiment panel (`.iwac-vis-article__sentiment`)
+        // already lives inside the container; we need to insert our
+        // dynamic panels AFTER it so the reader's scroll order matches
+        // the conceptual reading order (metrics → sentiment → context →
+        // related → similar → spatial).
+        var sentimentSection = container.querySelector('.iwac-vis-article__sentiment');
 
-        // 1. Compact stats row — hosted by a plain div, stats.js fills it.
+        var body = P.el('div', 'iwac-vis-article__body');
+
+        // 1. Stats row
         var statsHost = P.el('div', 'iwac-vis-article__stats');
         body.appendChild(statsHost);
 
-        // 2–5. Panels grid.
+        // 3–6. Panel grid (below the PHP-rendered sentiment section).
         var grid = P.buildChartsGrid();
         grid.classList.add('iwac-vis-article__grid');
         body.appendChild(grid);
 
-        var sentimentPanel = hasSentimentData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('AI sentiment'), P.t('desc_article_sentiment'))
-            : null;
         var networkPanel = hasNetworkData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Context network'), P.t('desc_article_context_network'))
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('Context network'), P.t('desc_article_context_network'))
+            : null;
+        var relatedPanel = hasRelatedData(data)
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('Related articles'), P.t('desc_article_related'))
             : null;
         var semanticPanel = hasSemanticData(data)
-            ? P.buildPanel('iwac-vis-panel', P.t('Semantic neighbors'), P.t('desc_article_semantic_neighbors'))
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('Semantic neighbors'), P.t('desc_article_semantic_neighbors'))
             : null;
         var spatialPanel = hasSpatialData(data)
-            ? P.buildPanel('iwac-vis-panel', P.t('Spatial coverage'), P.t('desc_article_spatial'))
+            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('Spatial coverage'), P.t('desc_article_spatial'))
             : null;
 
-        [sentimentPanel, networkPanel, semanticPanel, spatialPanel]
+        [networkPanel, relatedPanel, semanticPanel, spatialPanel]
             .forEach(function (p) { if (p) grid.appendChild(p.panel); });
 
+        // Insert body AFTER the sentiment section. If no sentiment was
+        // rendered (unrated article, or the whole section skipped),
+        // the body lands at the end of the container as normal.
+        if (sentimentSection && sentimentSection.parentNode === container) {
+            container.insertBefore(body, sentimentSection.nextSibling);
+            // Also move the stats ABOVE the sentiment section so the
+            // reader sees the quick metric card row first.
+            container.insertBefore(statsHost, sentimentSection);
+        } else {
+            container.appendChild(body);
+        }
+
         return {
-            stats: statsHost,
-            sentiment: sentimentPanel,
-            network: networkPanel,
+            stats:    statsHost,
+            network:  networkPanel,
+            related:  relatedPanel,
             semantic: semanticPanel,
-            spatial: spatialPanel
+            spatial:  spatialPanel
         };
     }
 
@@ -125,7 +127,7 @@
         var ctx = {
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || '',
-            itemId: itemId
+            itemId:   itemId
         };
         var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/article-dashboards/' + itemId + '.json';
 
@@ -139,11 +141,13 @@
                 var facet = createNoopFacet();
                 var h = buildLayout(container, data);
 
-                if (ad.stats)                      ad.stats.render(h.stats, data, facet);
-                if (ad.sentiment && h.sentiment)   ad.sentiment.render(h.sentiment, data, facet);
-                if (ad.network && h.network)       ad.network.render(h.network, data, facet, ctx);
-                if (ad.semantic && h.semantic)     ad.semantic.render(h.semantic, data, facet, ctx);
-                if (ad.spatialMap && h.spatial)    ad.spatialMap.render(h.spatial, data, facet, ctx);
+                if (ad.stats)                    ad.stats.render(h.stats, data, facet);
+                if (ad.network && h.network)     ad.network.render(h.network, data, facet, ctx);
+                if (ad.related && h.related)     ad.related.render(h.related, data, facet, ctx);
+                if (ad.semantic && h.semantic)   ad.semantic.render(h.semantic, data, facet, ctx);
+                if (ad.spatialMap && h.spatial)  ad.spatialMap.render(h.spatial, data, facet, ctx);
+                // articleDashboard.radar self-initialises from the
+                // inline JSON script block in article.phtml; no-op here.
             })
             .catch(function (err) {
                 console.error('IWACVis article dashboard:', err);

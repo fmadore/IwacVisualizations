@@ -66,6 +66,15 @@
     --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
     --iwac-vis-subj-5: var(--primary, #e67a14);
 
+    /* AI model accents — used by the article dashboard's sentiment
+     * radar so each model's polygon is visually distinct. Picked from
+     * the IWAC palette rather than brand colours so dark / light
+     * themes stay legible. Feel free to override per-site if you want
+     * to match the actual brand HSLs from each vendor. */
+    --iwac-vis-model-gemini:  #3b82f6;
+    --iwac-vis-model-chatgpt: #10a37f;
+    --iwac-vis-model-mistral: #f97316;
+
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on
      * the same palette. Read by C.heatmap via getComputedStyle. */
@@ -191,6 +200,78 @@
     width: 100%;
     min-width: 0;
     min-height: 320px;
+}
+
+/* -------------------------------------------------------------------
+ * Graph-host override — specificity bump.
+ *
+ * Panels that embed a force-directed graph mark the chart host with
+ * `.iwac-vis-graph-host`. The rule in `blocks/person-dashboard.css`
+ * sets `min-height: 640px`, but since that selector has the same
+ * specificity as `.iwac-vis-panel > .iwac-vis-chart` AND loses to it
+ * on ordering-independent child-combinator matching, the graph was
+ * getting squashed to 320px — forcing the force layout's computed
+ * node positions outside the drawn canvas and producing the "edges
+ * floating into nowhere" artefact the user flagged.
+ *
+ * We bump the selector's specificity by chaining it to `.iwac-vis-panel`
+ * so it always wins against the generic 320px floor.
+ * ----------------------------------------------------------------- */
+.iwac-vis-panel > .iwac-vis-graph-host,
+.iwac-vis-panel > .iwac-vis-chord-host {
+    min-height: 640px;
+}
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-panel > .iwac-vis-graph-host,
+    .iwac-vis-panel > .iwac-vis-chord-host {
+        min-height: 520px;
+    }
+}
+
+/* -------------------------------------------------------------------
+ * `.iwac-vis-overview-grid` — shared dashboard grid.
+ *
+ * Previously defined only inside collection-overview.css, which meant
+ * person / entity / article dashboards inherited `display: block` on
+ * their `.iwac-vis-overview-grid` containers and their panels rendered
+ * flush against each other with no gap. Hoisted into core so every
+ * block that calls `P.buildChartsGrid()` gets the same responsive
+ * 1-column → 2-column layout with `--wide` panels spanning full width.
+ * ----------------------------------------------------------------- */
+.iwac-vis-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 768px) { /* md */
+    .iwac-vis-overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .iwac-vis-overview-grid .iwac-vis-panel--wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel {
+    /* Flex column so the title / description / chart stack cleanly.
+     * `min-width: 0` is essential inside a grid track or an ECharts
+     * canvas can force the column to grow past the viewport. */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    min-width: 0;
+    overflow: hidden;
+}
+
+.iwac-vis-overview-grid .iwac-vis-panel h4 {
+    margin: 0;
+}
+
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-overview-grid {
+        gap: var(--space-3, 0.75rem);
+    }
 }
 
 .iwac-vis-panel-desc {

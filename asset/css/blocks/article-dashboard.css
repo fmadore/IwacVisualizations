@@ -2,18 +2,18 @@
 /*  Article Dashboard — per-article resource page                        */
 /* =================================================================== */
 /*                                                                       */
-/*  The article view reuses the person / entity dashboard stylesheet     */
-/*  (`css/blocks/person-dashboard.css`) for shared patterns:             */
-/*    - Sentiment panel (model picker, caption, chart stack)             */
-/*    - Network graph host + toolbar                                     */
+/*  Reuses person-dashboard.css for the shared chrome (network graph    */
+/*  toolbar / chord host / map). This file layers article-specific      */
+/*  patterns on top:                                                    */
+/*    - Body wrapper                                                    */
+/*    - Stats row + LDA-topic --wide card modifier                      */
+/*    - Similar / related-article card grids (semantic + entity-shared)*/
+/*    - Sentiment cards (per-model), chips, centrality dots,            */
+/*      justifications drawer, radar wrapper                            */
 /*                                                                       */
-/*  This file only contains the overrides that are article-specific:     */
-/*    - Body / stats wrappers (BEM prefix `.iwac-vis-article__…`)        */
-/*    - Stat-card `--wide` modifier for the LDA Topic label              */
-/*    - Semantic-neighbors / spatial-map pair layout (2-col on desktop)  */
-/*                                                                       */
-/*  Depends on iwac-core.css + iwac-maplibre.css + person-dashboard.css  */
-/*  (loaded in that order by the article.phtml partial).                 */
+/*  All colours resolve through tokens declared in iwac-core.css        */
+/*  (`--iwac-vis-sent-*`, `--iwac-vis-cent-*`, `--iwac-vis-subj-*`,     */
+/*  `--iwac-vis-model-*`). No hex literals.                             */
 /* =================================================================== */
 
 .iwac-vis-article {
@@ -30,45 +30,388 @@
     margin-bottom: var(--space-3, 0.75rem);
 }
 
-/*  Summary cards follow the token ramp already in iwac-core.css so the
- *  numeric value size + label size match the person / entity dashboards.
- *  The article-specific `iwac-vis-article-stats` class is a marker only
- *  — no style override, just a semantic hook for future tweaks. */
-.iwac-vis-article-stats {
-    /* intentionally empty — see note above */
-}
-
-/*  The LDA topic label is a long French phrase ("religieux - politique
- *  - etat - question - communauté") that wraps awkwardly in a standard
- *  summary-card width. The `--wide` modifier lets a single card span
- *  roughly two column units in the auto-fit grid that iwac-core.css
- *  sets up for `.iwac-vis-overview-summary`. */
+/* --------------------------------------------------------------------
+ * Stats card `--wide` modifier for the LDA topic label.
+ * The topic label is a long French phrase that wraps awkwardly in a
+ * single-column summary card; let it span two columns on desktop.
+ * ------------------------------------------------------------------ */
 .iwac-vis-summary-card--wide {
     grid-column: span 2;
 }
-
 @media (max-width: 640px) { /* sm */
     .iwac-vis-summary-card--wide {
         grid-column: auto;
     }
 }
 
-/*  Semantic-neighbors + spatial-map side-by-side on desktop. The shared
- *  `.iwac-vis-overview-grid` already auto-fits panels into a responsive
- *  grid — this override tightens the visual pairing when both panels
- *  are present. Wide panels (network, sentiment) span the full row
- *  unchanged via `.iwac-vis-panel--wide`. */
-.iwac-vis-article__grid {
-    /* Inherit the base grid auto-fit rules from iwac-core.css. */
+/* --------------------------------------------------------------------
+ * Similar / related articles — card grid (thumbnail + meta)
+ *
+ * Used by semantic.js (similarity %) and related.js (shared entities).
+ * Same skeleton, different badge colour, different semantics.
+ * ------------------------------------------------------------------ */
+.iwac-vis-article-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3, 0.75rem);
 }
 
-/*  Semantic bar chart needs more vertical room than a typical
- *  horizontal bar — 10 article titles at ~34px line-height each = ~340px
- *  minimum for bars not to be cramped. */
-.iwac-vis-article__grid .iwac-vis-panel:not(.iwac-vis-panel--wide) .iwac-vis-chart {
-    min-height: 360px;
+.iwac-vis-article-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface, #fdfdfc);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 0.75rem);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition:
+        transform var(--transition-fast, 150ms ease-out),
+        box-shadow var(--transition-fast, 150ms ease-out),
+        border-color var(--transition-fast, 150ms ease-out);
+}
+.iwac-vis-article-card:hover,
+.iwac-vis-article-card:focus-visible {
+    border-color: color-mix(in srgb, var(--primary, #e67a14) 45%, var(--border, #dcd7ce));
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+    transform: translateY(-2px);
+    text-decoration: none;
+    outline: none;
 }
 
-/*  Map panel keeps its taller minimum so tiles have room to render
- *  above the attribution bar. Uses the shared `.iwac-vis-map` host
- *  class that iwac-maplibre.css already styles. */
+.iwac-vis-article-card__thumb {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: color-mix(in srgb, var(--primary, #e67a14) 6%, var(--surface, #fdfdfc));
+    overflow: hidden;
+    /* Stacking context for the similarity / shared-entity badges */
+    isolation: isolate;
+}
+.iwac-vis-article-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.iwac-vis-article-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: color-mix(in srgb, var(--ink, #18202a) 35%, transparent);
+}
+
+/* --------------------------------------------------------------------
+ * Card badges — top-right overlay on the thumbnail.
+ * Two variants so the two panels read as different signals.
+ * ------------------------------------------------------------------ */
+.iwac-vis-article-card__sim,
+.iwac-vis-article-card__shared {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    padding: 0.2rem 0.5rem;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    border-radius: var(--radius-full, 9999px);
+    color: var(--surface, #fdfdfc);
+    backdrop-filter: blur(4px);
+}
+.iwac-vis-article-card__sim {
+    /* semantic similarity = primary accent */
+    background: color-mix(in srgb, var(--primary, #e67a14) 85%, transparent);
+}
+.iwac-vis-article-card__shared {
+    /* shared-entities = cool blue/info accent so the two badges
+     * don't look like the same signal */
+    background: color-mix(in srgb, var(--info, #2563eb) 85%, transparent);
+}
+
+.iwac-vis-article-card__body {
+    padding: var(--space-3, 0.75rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+    flex: 1;
+}
+.iwac-vis-article-card__title {
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    line-height: 1.35;
+    /* 2-line clamp so titles don't blow up the card height */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.iwac-vis-article-card__meta {
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    font-variant-numeric: tabular-nums;
+    /* Single-line clamp — newspaper · country · date is deliberately
+     * one row so the meta stays glanceable. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =================================================================== */
+/*  Sentiment cards — server-rendered by article.phtml                   */
+/* =================================================================== */
+
+/* Panel-level container — the panel itself uses the standard
+ * .iwac-vis-panel chrome from iwac-core.css. The sentiment-specific
+ * layout is the child cards grid + the radar block below it. */
+.iwac-vis-article__sentiment {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+.iwac-vis-sent-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-sent-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface, #fdfdfc);
+    border: 1px solid var(--border, #dcd7ce);
+    border-radius: var(--radius-md, 0.75rem);
+    /* Thin left accent coloured by the model's palette token. */
+    border-left-width: 3px;
+    overflow: hidden;
+}
+.iwac-vis-sent-card--gemini  { border-left-color: var(--iwac-vis-model-gemini,  #3b82f6); }
+.iwac-vis-sent-card--chatgpt { border-left-color: var(--iwac-vis-model-chatgpt, #10a37f); }
+.iwac-vis-sent-card--mistral { border-left-color: var(--iwac-vis-model-mistral, #f97316); }
+
+.iwac-vis-sent-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-3, 0.75rem);
+    border-bottom: 1px solid var(--border-light, var(--border, #dcd7ce));
+}
+.iwac-vis-sent-card__logo {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+.iwac-vis-sent-card__name {
+    margin: 0;
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-sent-card__metrics {
+    margin: 0;
+    padding: var(--space-3, 0.75rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-sent-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+}
+.iwac-vis-sent-row__label {
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 500;
+    color: var(--muted, #6e7a82);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin: 0;
+}
+.iwac-vis-sent-row__value {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9rem);
+    color: var(--ink, #18202a);
+}
+.iwac-vis-sent-row__value--inline {
+    flex-wrap: nowrap;
+}
+.iwac-vis-sent-row__text {
+    font-weight: 500;
+}
+
+
+/* --------------------------------------------------------------------
+ * Chips — pill-shaped labels for polarity / subjectivity
+ * ------------------------------------------------------------------ */
+.iwac-vis-chip {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 500;
+    border-radius: var(--radius-full, 9999px);
+    line-height: 1.4;
+    /* Foreground is picked to read against the chip background.
+     * Polarity + subjectivity rules below override with the right
+     * color for each variant. */
+    color: var(--surface, #fdfdfc);
+}
+
+/* Polarity chip colours — aligned with the --iwac-vis-sent-* ramp
+ * already defined in iwac-core.css. Keys are the English source
+ * labels as slugs so the PHP partial can just do
+ * `iwac-vis-chip--polarity-<slug($s['polarite'])>`. */
+.iwac-vis-chip--polarity-very-positive { background: var(--iwac-vis-sent-pos-strong); }
+.iwac-vis-chip--polarity-positive      { background: var(--iwac-vis-sent-pos); }
+.iwac-vis-chip--polarity-neutral       { background: var(--iwac-vis-sent-neutral); }
+.iwac-vis-chip--polarity-negative      { background: var(--iwac-vis-sent-neg); }
+.iwac-vis-chip--polarity-very-negative { background: var(--iwac-vis-sent-neg-strong); }
+.iwac-vis-chip--polarity-not-applicable {
+    background: var(--iwac-vis-sent-na);
+    color: var(--ink, #18202a);
+}
+
+/* Subjectivity chip colours — use the sequential --iwac-vis-subj-*
+ * ramp. Low values (1 = very objective) get a light tint of --primary
+ * so the contrast with white text is weak — flip to dark ink instead. */
+.iwac-vis-chip--subjectivity-1 {
+    background: var(--iwac-vis-subj-1);
+    color: var(--ink, #18202a);
+}
+.iwac-vis-chip--subjectivity-2 {
+    background: var(--iwac-vis-subj-2);
+    color: var(--ink, #18202a);
+}
+.iwac-vis-chip--subjectivity-3 {
+    background: var(--iwac-vis-subj-3);
+    color: var(--ink, #18202a);
+}
+.iwac-vis-chip--subjectivity-4 {
+    background: var(--iwac-vis-subj-4);
+    /* 75% --primary mix reads well against --surface, so stick with
+     * light foreground at this level. */
+    color: var(--surface, #fdfdfc);
+}
+.iwac-vis-chip--subjectivity-5 {
+    background: var(--iwac-vis-subj-5);
+    color: var(--surface, #fdfdfc);
+}
+
+
+/* --------------------------------------------------------------------
+ * Centrality dot scale — 5 dots, `--on` = filled, `--off` = empty
+ * ------------------------------------------------------------------ */
+.iwac-vis-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+.iwac-vis-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--border, #dcd7ce);
+    background: var(--border-light, var(--border, #dcd7ce));
+}
+.iwac-vis-dot--on {
+    background: var(--iwac-vis-cent-1);
+    border-color: color-mix(in srgb, var(--iwac-vis-cent-1) 70%, var(--ink, #18202a));
+}
+
+
+/* --------------------------------------------------------------------
+ * Justifications drawer — `<details>` reveal
+ * ------------------------------------------------------------------ */
+.iwac-vis-sent-card__justifications {
+    padding: 0 var(--space-3, 0.75rem) var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, var(--border, #dcd7ce));
+    margin-top: auto; /* push to card bottom when card taller than content */
+}
+.iwac-vis-sent-card__justifications > summary {
+    cursor: pointer;
+    padding: var(--space-2, 0.5rem) 0;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    list-style: none;
+    transition: color var(--transition-fast, 150ms ease-out);
+}
+.iwac-vis-sent-card__justifications > summary::-webkit-details-marker { display: none; }
+.iwac-vis-sent-card__justifications > summary::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 0.35rem;
+    transition: transform var(--transition-fast, 150ms ease-out);
+}
+.iwac-vis-sent-card__justifications[open] > summary::before {
+    transform: rotate(90deg);
+}
+.iwac-vis-sent-card__justifications > summary:hover {
+    color: var(--ink, #18202a);
+}
+
+.iwac-vis-sent-just {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+.iwac-vis-sent-just__item {
+    font-size: var(--text-xs, 0.75rem);
+    line-height: 1.5;
+}
+.iwac-vis-sent-just__item strong {
+    display: block;
+    color: var(--ink-light, var(--ink, #18202a));
+    margin-bottom: 0.25rem;
+}
+.iwac-vis-sent-just__item p {
+    margin: 0;
+    color: var(--muted, #6e7a82);
+    padding-left: var(--space-2, 0.5rem);
+    border-left: 2px solid var(--border-light, var(--border, #dcd7ce));
+}
+
+
+/* --------------------------------------------------------------------
+ * Radar chart wrapper — sits below the sentiment cards
+ * ------------------------------------------------------------------ */
+.iwac-vis-sent-radar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-3, 0.75rem);
+    background: color-mix(in srgb, var(--primary, #e67a14) 3%, var(--surface, #fdfdfc));
+    border: 1px solid var(--border-light, var(--border, #dcd7ce));
+    border-radius: var(--radius-md, 0.75rem);
+}
+.iwac-vis-sent-radar__title {
+    margin: 0;
+    font-size: var(--text-sm, 0.9rem);
+    font-weight: 600;
+    color: var(--ink, #18202a);
+    text-align: center;
+}
+.iwac-vis-sent-radar__chart {
+    /* ECharts populates this; we give it a deterministic height so
+     * the radar renders without waiting on a resize event. */
+    width: 100%;
+    min-height: 340px;
+    max-width: 520px;
+    margin: 0 auto;
+}
+.iwac-vis-sent-radar__data { display: none; }
+.iwac-vis-sent-radar__scale {
+    margin: 0;
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #6e7a82);
+    text-align: center;
+    line-height: 1.5;
+}

@@ -300,7 +300,9 @@
 
             // Article dashboard — panel descriptions
             'desc_article_context_network':
-                'This article at the centre, its persons / organisations / places / subjects in the inner ring, and the top articles that share the most entities with it in the outer ring. Click an entity to open its page, or an outer-ring article to jump there.',
+                'This article at the centre, its persons / organisations / places / subjects in the inner ring, and a sample of articles that share the most entities with it in the outer ring. Click an entity to open its page, or an outer-ring article to jump there. For the full sortable list see "Related articles" below.',
+            'desc_article_related':
+                'Articles that share the most index entities (persons, organisations, places, subjects) with this one. The badge shows the number of overlapping entities; hover for the list.',
             'desc_article_semantic_neighbors':
                 'Articles closest to this one by cosine similarity of the Gemini OCR embeddings. Surfaces thematic siblings that may not share any tagged entity.',
             'desc_article_spatial':
@@ -308,7 +310,7 @@
             'desc_article_metrics':
                 'Lexical and readability metrics computed from the OCR text: word count, Flesch readability score, type\u2013token ratio, page count, and assigned LDA-30 topic.',
             'desc_article_sentiment':
-                'How each of the three AI raters (Gemini, ChatGPT, Mistral) scored this article on polarity, centrality to Islam/Muslim communities, and subjectivity.',
+                'How each of the three AI raters (Gemini, ChatGPT, Mistral) scored this article on polarity, centrality to Islam/Muslim communities, and subjectivity. Read directly from the Omeka item metadata.',
 
             // Article dashboard — stats card labels
             'Word count':              'Word count',
@@ -318,7 +320,7 @@
             'Language':                'Language',
             'Topic':                   'Topic',
 
-            // Article dashboard — tables + tooltips
+            // Article dashboard — card labels + tooltips
             'Similarity':              'Similarity',
             'Shared entities':         'Shared entities',
             'Shares':                  'Shares',
@@ -327,6 +329,35 @@
             'No similar articles':     'No similar articles available',
             'No related articles':     'No related articles found',
             'No entities tagged':      'No entities tagged on this article',
+
+            // Sentiment panel (server-rendered) — English source labels
+            // match the IwacSentiment module's vocabulary maps so
+            // existing translation catalogues keep working.
+            'Model comparison':        'Model comparison',
+            'Show reasoning':          'Show reasoning',
+            'Not rated':               'Not rated',
+            // Polarity
+            'Very positive':           'Very positive',
+            'Positive':                'Positive',
+            'Neutral':                 'Neutral',
+            'Negative':                'Negative',
+            'Very negative':           'Very negative',
+            'Not applicable':          'Not applicable',
+            // Centrality
+            'Very central':            'Very central',
+            'Central':                 'Central',
+            'Secondary':               'Secondary',
+            'Marginal':                'Marginal',
+            'Not addressed':           'Not addressed',
+            // Subjectivity
+            'Very objective':          'Very objective',
+            'Rather objective':        'Rather objective',
+            'Mixed':                   'Mixed',
+            'Rather subjective':       'Rather subjective',
+            'Very subjective':         'Very subjective',
+            // Scale hint under the radar
+            'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)':
+                'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)',
 
             // Index overview — block + section labels
             'Loading index overview':    'Loading index overview',
@@ -640,7 +671,9 @@
 
             // Article dashboard — panel descriptions
             'desc_article_context_network':
-                'Cet article au centre, ses personnes / organisations / lieux / sujets dans l\u2019anneau int\u00e9rieur, et les articles qui partagent le plus d\u2019entit\u00e9s avec lui dans l\u2019anneau ext\u00e9rieur. Cliquez sur une entit\u00e9 pour ouvrir sa fiche, ou sur un article ext\u00e9rieur pour y naviguer.',
+                'Cet article au centre, ses personnes / organisations / lieux / sujets dans l\u2019anneau int\u00e9rieur, et un \u00e9chantillon d\u2019articles qui partagent le plus d\u2019entit\u00e9s avec lui dans l\u2019anneau ext\u00e9rieur. Cliquez sur une entit\u00e9 pour ouvrir sa fiche, ou sur un article ext\u00e9rieur pour y naviguer. Pour la liste compl\u00e8te et triable, voir \u00ab Articles connexes \u00bb ci-dessous.',
+            'desc_article_related':
+                'Articles qui partagent le plus d\u2019entit\u00e9s (personnes, organisations, lieux, sujets) avec celui-ci. Le badge indique le nombre d\u2019entit\u00e9s en commun\u00A0; survolez pour voir la liste.',
             'desc_article_semantic_neighbors':
                 'Articles les plus proches de celui-ci selon la similarit\u00e9 cosinus des plongements OCR Gemini. R\u00e9v\u00e8le des fr\u00e8res th\u00e9matiques m\u00eame sans entit\u00e9 balis\u00e9e commune.',
             'desc_article_spatial':
@@ -648,7 +681,7 @@
             'desc_article_metrics':
                 'M\u00e9triques lexicales et de lisibilit\u00e9 calcul\u00e9es sur le texte OCR : nombre de mots, score de lisibilit\u00e9 Flesch, ratio type/occurrence, nombre de pages et th\u00e8me LDA-30 attribu\u00e9.',
             'desc_article_sentiment':
-                'Polarit\u00e9, centralit\u00e9 \u00e0 l\u2019islam / aux musulmans et subjectivit\u00e9 attribu\u00e9es \u00e0 cet article par les trois \u00e9valuateurs IA (Gemini, ChatGPT, Mistral).',
+                'Polarit\u00e9, centralit\u00e9 \u00e0 l\u2019islam / aux musulmans et subjectivit\u00e9 attribu\u00e9es \u00e0 cet article par les trois \u00e9valuateurs IA (Gemini, ChatGPT, Mistral). Lues directement depuis les m\u00e9tadonn\u00e9es de la notice Omeka.',
 
             // Article dashboard — stats card labels
             'Word count':              'Nombre de mots',
@@ -658,7 +691,7 @@
             'Language':                'Langue',
             'Topic':                   'Th\u00e8me',
 
-            // Article dashboard — tables + tooltips
+            // Article dashboard — card labels + tooltips
             'Similarity':              'Similarit\u00e9',
             'Shared entities':         'Entit\u00e9s partag\u00e9es',
             'Shares':                  'Partage',
@@ -667,6 +700,34 @@
             'No similar articles':     'Aucun article similaire disponible',
             'No related articles':     'Aucun article connexe trouv\u00e9',
             'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
+
+            // Sentiment panel (server-rendered) \u2014 French translations
+            // keyed on the IwacSentiment English source labels.
+            'Model comparison':        'Comparaison des mod\u00e8les',
+            'Show reasoning':          'Voir les justifications',
+            'Not rated':               'Non \u00e9valu\u00e9',
+            // Polarity
+            'Very positive':           'Tr\u00e8s positif',
+            'Positive':                'Positif',
+            'Neutral':                 'Neutre',
+            'Negative':                'N\u00e9gatif',
+            'Very negative':           'Tr\u00e8s n\u00e9gatif',
+            'Not applicable':          'Non applicable',
+            // Centrality
+            'Very central':            'Tr\u00e8s central',
+            'Central':                 'Central',
+            'Secondary':               'Secondaire',
+            'Marginal':                'Marginal',
+            'Not addressed':           'Non abord\u00e9',
+            // Subjectivity
+            'Very objective':          'Tr\u00e8s objectif',
+            'Rather objective':        'Plut\u00f4t objectif',
+            'Mixed':                   'Mixte',
+            'Rather subjective':       'Plut\u00f4t subjectif',
+            'Very subjective':         'Tr\u00e8s subjectif',
+            // Scale hint (keyed on the English source phrase)
+            'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)':
+                '\u00c9chelles\u00A0: polarit\u00e9 1 (tr\u00e8s n\u00e9gatif) \u2013 5 (tr\u00e8s positif) \u00B7 centralit\u00e9 1 (non abord\u00e9) \u2013 5 (tr\u00e8s central) \u00B7 subjectivit\u00e9 1 (objectif) \u2013 5 (subjectif)',
 
             // Index overview — block + section labels
             'Loading index overview':    'Chargement de la vue d\u2019ensemble de l\u2019index',

@@ -123,7 +123,14 @@
             });
         });
 
-        (relatedArticles || []).forEach(function (rel) {
+        // Cap the outer ring: 20 was visually too dense at typical
+        // panel widths and made the force layout chase long edges
+        // across the viewport. Twelve reads as a cloud around each
+        // entity cluster without overwhelming the graph — readers who
+        // want the full list now use the dedicated "Related articles"
+        // card panel below.
+        var OUTER_CAP = 12;
+        (relatedArticles || []).slice(0, OUTER_CAP).forEach(function (rel) {
             if (rel == null || rel.o_id == null) return;
             var sharedIds = (rel.shared || []).filter(function (id) { return entityIds[id]; });
             if (sharedIds.length === 0) return; // unreachable entity set — skip

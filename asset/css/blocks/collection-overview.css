@@ -34,33 +34,12 @@
 /*  Charts grid                                                          */
 /* =================================================================== */
 
-.iwac-vis-overview-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
-}
-
-@media (min-width: 768px) { /* md */
-    .iwac-vis-overview-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    .iwac-vis-overview-grid .iwac-vis-panel--wide {
-        grid-column: 1 / -1;
-    }
-}
-
-.iwac-vis-overview-grid .iwac-vis-panel {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
-    /* Prevent ECharts canvas from bloating the column. */
-    min-width: 0;
-    overflow: hidden;
-}
-
-.iwac-vis-overview-grid .iwac-vis-panel h4 {
-    margin: 0;
-}
+/* The base grid rules (display:grid, 1-col / 2-col responsive,
+ * --wide panels spanning full width, panel display:flex) now live in
+ * iwac-core.css so every dashboard inherits them. This block keeps
+ * only the chart-height tweaks that are specific to the collection
+ * overview's mix of tall (wordcloud, gantt, map) and short (summary
+ * bars) panels. */
 
 .iwac-vis-overview-grid .iwac-vis-chart {
     min-height: 280px;
@@ -71,9 +50,6 @@
 }
 
 @media (max-width: 640px) { /* sm */
-    .iwac-vis-overview-grid {
-        gap: var(--space-3, 0.75rem);
-    }
     .iwac-vis-overview-grid .iwac-vis-chart {
         min-height: 240px;
     }
