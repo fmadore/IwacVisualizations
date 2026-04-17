@@ -38,9 +38,11 @@
 
         var summary = data.summary || {};
 
-        // 1. Summary cards — 11 cards per the expansion spec
+        // 1. Summary cards — headline "Total items" + the rest of the facets.
+        //    `featured: true` marks the card rendered as the primary masthead
+        //    stat (see .iwac-vis-summary-card--featured in iwac-core.css).
         root.appendChild(P.buildSummaryCards([
-            { value: summary.articles,             labelKey: 'Articles' },
+            { value: summary.total_items,          labelKey: 'Total items', featured: true },
             { value: summary.index_entries,        labelKey: 'Index' },
             { value: summary.total_words,          labelKey: 'Total words' },
             { value: summary.total_pages,          labelKey: 'Total pages' },

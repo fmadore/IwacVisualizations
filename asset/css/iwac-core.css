@@ -504,51 +504,110 @@
     .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
 }
 
+/*  Editorial "masthead" card — label sits on top like a newspaper
+ *  section eyebrow, underscored by a thin rule; the number reads below
+ *  it as a display-serif headline. A short primary-tinted rule in the
+ *  top-left corner replaces the old full-height left accent so the
+ *  card feels lighter and more typographic. */
 .iwac-vis-summary-card {
     background: var(--panel-bg, var(--surface, #fdfcfa));
     border: 1px solid var(--border, #dad5cb);
-    border-left: var(--accent-line-md, 3px) solid
-        color-mix(in srgb, var(--primary, #d86a11) var(--accent-mix-medium, 40%), var(--border, #dad5cb));
     border-radius: var(--radius-md, 0.75rem);
-    box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.04)));
+    padding: var(--space-4, 1rem) var(--space-4, 1rem) var(--space-3, 0.75rem);
     display: flex;
     flex-direction: column;
-    gap: var(--space-1, 0.25rem);
+    gap: var(--space-2, 0.5rem);
+    position: relative;
+    overflow: hidden;
     transition:
         box-shadow     var(--transition-fast, 150ms ease),
-        background-color var(--transition-fast, 150ms ease),
-        border-color   var(--transition-fast, 150ms ease);
+        border-color   var(--transition-fast, 150ms ease),
+        transform      var(--transition-fast, 150ms ease);
+}
+
+/*  Short primary rule in the top-left corner — a masthead marker. */
+.iwac-vis-summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.25rem;
+    height: 3px;
+    background: color-mix(in srgb, var(--primary, #d86a11) 60%, transparent);
+    transition: width var(--transition-fast, 150ms ease),
+                background-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-summary-card:hover {
-    border-left-color: var(--primary, #d86a11);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px var(--iwac-vis-shadow-soft));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
+    box-shadow: var(--shadow-md, 0 4px 6px -1px var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.08)));
+    transform: translateY(-1px);
 }
 
-/*  Newspaper-style display number — heavier ink, tight leading and
- *  tracking so the big figure reads as an editorial headline rather
- *  than a UI count. Uses `--ink-strong` (IWAC theme v1.7.0+) with a
- *  graceful fallback to `--ink` on older theme versions. */
-.iwac-vis-summary-card__value {
-    font-size: var(--text-2xl, clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem));
-    font-weight: 700;
-    color: var(--ink-strong, var(--ink, #101620));
-    line-height: 1.05;
-    letter-spacing: var(--tracking-tight, -0.02em);
-    font-variant-numeric: tabular-nums;
+.iwac-vis-summary-card:hover::before {
+    width: 100%;
+    background: var(--primary, #d86a11);
 }
 
-/*  Eyebrow-style label — restrained primary-mix (40%) so the label
- *  feels like editorial metadata, not a second accent. `--tracking-wide`
- *  matches the theme's resource-tag pill treatment for cross-module
- *  typographic unity. */
+/*  Eyebrow label sits above the number, separated by a hairline rule
+ *  that stretches to the end of the card — mirrors how magazine
+ *  section heads are set. */
 .iwac-vis-summary-card__label {
-    font-size: var(--text-sm, 0.9375rem);
-    color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--muted, #707f86));
+    order: 0;
+    font-size: var(--text-xs, 0.75rem);
+    color: color-mix(in srgb, var(--primary, #d86a11) 55%, var(--muted, #707f86));
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
+    letter-spacing: var(--tracking-wider, 0.08em);
+    font-weight: 700;
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid color-mix(in srgb, var(--border, #dad5cb) 80%, transparent);
+    line-height: 1.2;
+}
+
+/*  Display-serif numeral — picks up the section-heading treatment
+ *  used elsewhere in the module ("Noto Serif") so the stat reads as
+ *  editorial rather than UI. Tabular lining figures keep the digits
+ *  vertically aligned across cards. */
+.iwac-vis-summary-card__value {
+    order: 1;
+    font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+    font-size: var(--text-3xl, clamp(2rem, 1.6rem + 1.6vw, 2.75rem));
     font-weight: 600;
+    color: var(--ink-strong, var(--ink, #101620));
+    line-height: 1.02;
+    letter-spacing: var(--tracking-tight, -0.02em);
+    font-variant-numeric: tabular-nums lining-nums;
+    margin-top: auto;
+}
+
+/* ---- Featured variant --------------------------------------------- */
+/*  Used for the headline "Total items" figure. Tinted background,
+ *  stronger top rule and a larger display numeral set it apart from
+ *  the surrounding facet cards without breaking the 6-col grid. */
+.iwac-vis-summary-card--featured {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--primary, #d86a11) 7%, var(--panel-bg, var(--surface, #fdfcfa))) 0%,
+            var(--panel-bg, var(--surface, #fdfcfa)) 100%
+        );
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 25%, var(--border, #dad5cb));
+}
+
+.iwac-vis-summary-card--featured::before {
+    width: 100%;
+    height: 4px;
+    background: var(--primary, #d86a11);
+}
+
+.iwac-vis-summary-card--featured .iwac-vis-summary-card__label {
+    color: var(--primary, #d86a11);
+}
+
+.iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
+    font-size: var(--text-4xl, clamp(2.25rem, 1.7rem + 2vw, 3.25rem));
+    font-weight: 700;
 }
 
 

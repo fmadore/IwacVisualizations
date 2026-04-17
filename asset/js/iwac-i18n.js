@@ -70,6 +70,7 @@
             'Total': 'Total',
 
             // Collection overview — summary labels
+            'Total items': 'Total items',
             'Articles': 'Articles',
             'Publications': 'Publications',
             'Documents': 'Documents',
@@ -434,6 +435,7 @@
             'Total': 'Total',
 
             // Collection overview — summary labels
+            'Total items': 'Total d\u2019items',
             'Articles': 'Articles',
             'Publications': 'Publications',
             'Documents': 'Documents',

@@ -287,16 +287,22 @@
     /**
      * Build the row of summary stat cards at the top of an overview block.
      *
-     * @param {Array<{value:number|null, labelKey:string}>} cards
+     * Pass `featured: true` on a card to render it with the masthead
+     * treatment (`iwac-vis-summary-card--featured`) — used for a single
+     * headline stat such as "Total items" on the collection overview.
+     *
+     * @param {Array<{value:number|null, labelKey:string, featured?:boolean}>} cards
      * @returns {HTMLElement}
      */
     P.buildSummaryCards = function (cards) {
         var cardsEl = P.el('div', 'iwac-vis-overview-summary');
         cards.forEach(function (c) {
             if (c == null || c.value == null) return;
-            var card = P.el('div', 'iwac-vis-summary-card');
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value', P.formatNumber(c.value)));
+            var cls = 'iwac-vis-summary-card';
+            if (c.featured) cls += ' iwac-vis-summary-card--featured';
+            var card = P.el('div', cls);
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(c.labelKey)));
+            card.appendChild(P.el('div', 'iwac-vis-summary-card__value', P.formatNumber(c.value)));
             cardsEl.appendChild(card);
         });
         return cardsEl;

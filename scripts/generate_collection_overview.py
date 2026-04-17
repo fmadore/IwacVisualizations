@@ -907,24 +907,39 @@ def compute_summary(
     """
     counts = {s: subset_summaries.get(s, {}).get("total_records", 0) for s in subset_summaries}
 
-    # Total words — articles only (publications/documents rarely have nb_mots)
-    articles_df = dataframes.get("articles")
+    # Total items — sum of every content record across articles, documents,
+    # publications, audiovisual, and references. This is the headline figure
+    # for the collection as a whole (what we used to show as "Articles").
+    total_items = sum(
+        counts.get(s, 0)
+        for s in ("articles", "publications", "documents", "audiovisual", "references")
+    )
+
+    # Total words — sum `nb_mots` across every subset that carries it.
+    # Articles dominate, but publications / documents / references also expose
+    # word counts for their full-text-OCR'd items on the Hugging Face dataset.
     total_words = 0
-    if articles_df is not None and not articles_df.empty and "nb_mots" in articles_df.columns:
-        total_words = int(
-            pd.to_numeric(articles_df["nb_mots"], errors="coerce").fillna(0).sum()
+    for subset in ("articles", "publications", "documents", "references"):
+        df = dataframes.get(subset)
+        if df is None or df.empty or "nb_mots" not in df.columns:
+            continue
+        total_words += int(
+            pd.to_numeric(df["nb_mots"], errors="coerce").fillna(0).sum()
         )
 
-    # Total pages — tries `nb_pages` first, falls back to None if column absent
+    # Total pages — same permissive sweep for `nb_pages` across every subset
+    # that exposes the column (primarily publications, documents, references,
+    # but keep the loop open so new subsets are picked up automatically).
     total_pages = 0
     pages_column_found = False
-    for subset in ("publications", "documents"):
+    for subset in ("articles", "publications", "documents", "audiovisual", "references"):
         df = dataframes.get(subset)
-        if df is None or df.empty:
+        if df is None or df.empty or "nb_pages" not in df.columns:
             continue
-        if "nb_pages" in df.columns:
-            pages_column_found = True
-            total_pages += int(pd.to_numeric(df["nb_pages"], errors="coerce").fillna(0).sum())
+        pages_column_found = True
+        total_pages += int(
+            pd.to_numeric(df["nb_pages"], errors="coerce").fillna(0).sum()
+        )
 
     # Unique sources — `source` column on articles + audiovisual + publications.
     # References are explicitly excluded per the spec.
@@ -988,6 +1003,7 @@ def compute_summary(
 
     years = timeline.get("years") or []
     summary: Dict[str, Any] = {
+        "total_items": int(total_items),
         "articles": counts.get("articles", 0),
         "index_entries": counts.get("index", 0),
         "total_words": int(total_words),
