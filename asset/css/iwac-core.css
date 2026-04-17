@@ -514,12 +514,15 @@
     border: 1px solid var(--border, #dad5cb);
     border-radius: var(--radius-md, 0.75rem);
     box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.04)));
-    padding: var(--space-4, 1rem) var(--space-4, 1rem) var(--space-3, 0.75rem);
+    padding: var(--space-4, 1rem) var(--space-3, 0.75rem) var(--space-3, 0.75rem);
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     position: relative;
-    overflow: hidden;
+    /*  min-width:0 is essential — without it the card's intrinsic width
+     *  becomes the unwrappable number's width, which overflows the
+     *  grid column on 6-col layouts with 7+-digit figures. */
+    min-width: 0;
     transition:
         box-shadow     var(--transition-fast, 150ms ease),
         border-color   var(--transition-fast, 150ms ease),
@@ -567,18 +570,26 @@
 
 /*  Display-serif numeral — picks up the section-heading treatment
  *  used elsewhere in the module ("Noto Serif") so the stat reads as
- *  editorial rather than UI. Tabular lining figures keep the digits
- *  vertically aligned across cards. */
+ *  editorial rather than UI. Proportional lining figures (not tabular)
+ *  because serif tabular digits are wider and push 7-8 digit numbers
+ *  past the edge of the narrow 6-col cards — visual rhythm matters
+ *  less here than keeping the whole figure readable. */
 .iwac-vis-summary-card__value {
     order: 1;
     font-family: "Noto Serif", Georgia, "Times New Roman", serif;
-    font-size: var(--text-3xl, clamp(2rem, 1.6rem + 1.6vw, 2.75rem));
+    /*  Sized to keep the widest real figure in the dataset (8-digit
+     *  totals like 28,142,934) on a single line inside a narrow 6-col
+     *  grid cell. Do not raise the max without re-measuring against
+     *  the narrowest actual deployment. */
+    font-size: clamp(1.375rem, 0.95rem + 0.55vw, 1.75rem);
     font-weight: 600;
     color: var(--ink-strong, var(--ink, #101620));
-    line-height: 1.02;
-    letter-spacing: var(--tracking-tight, -0.02em);
-    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: lining-nums;
     margin-top: auto;
+    min-width: 0;
+    white-space: nowrap;
 }
 
 /* ---- Featured variant --------------------------------------------- */
@@ -606,7 +617,7 @@
 }
 
 .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
-    font-size: var(--text-4xl, clamp(2.25rem, 1.7rem + 2vw, 3.25rem));
+    font-size: clamp(1.5rem, 1.05rem + 0.7vw, 2rem);
     font-weight: 700;
 }
 
