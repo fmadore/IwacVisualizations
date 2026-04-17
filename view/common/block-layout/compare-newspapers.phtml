@@ -15,7 +15,9 @@
 echo $this->partial('common/iwac-assets', [
     'blockCss' => 'compare-newspapers',
     'needs' => [
-        'wordcloud' => true,
+        'wordcloud'    => true,
+        'chartOptions' => true,
+        'maplibre'     => true,
     ],
     'orchestrator' => 'compare-newspapers',
 ]);

@@ -19,7 +19,8 @@
     gap: var(--space-lg, 1.5rem);
 }
 
-.iwac-vis-compare-root {
+.iwac-vis-compare-root,
+.iwac-vis-compare-results {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg, 1.5rem);
@@ -212,6 +213,17 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* Text metric (e.g. "Période couverte: 1961 – 2024") — drop the serif
+ * display treatment, reduce size, and allow wrapping so the year range
+ * always fits the half-card cell. Numeric values keep the serif. */
+.iwac-vis-compare-metric__value--text {
+    font-family: inherit;
+    font-size: var(--text-sm, 0.875rem);
+    font-weight: 600;
+    white-space: normal;
+    line-height: 1.25;
 }
 
 .iwac-vis-compare-metric__value[data-side="A"] {
@@ -437,4 +449,137 @@
 
 body[data-theme="dark"] .iwac-vis-compare-newspapers {
     --iwac-compare-color-b: #7fb4d6;
+}
+
+
+/* =================================================================== */
+/*  Clickable overlap tags                                               */
+/* =================================================================== */
+
+a.iwac-vis-compare-overlap__tag {
+    color: var(--ink-light, #4a5766);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        border-color var(--transition-fast, 150ms ease),
+        background    var(--transition-fast, 150ms ease),
+        transform     var(--transition-fast, 150ms ease);
+}
+
+a.iwac-vis-compare-overlap__tag:hover,
+a.iwac-vis-compare-overlap__tag:focus-visible {
+    background: color-mix(in srgb, var(--primary, #d86a11) 10%, var(--surface, #fdfcfa));
+    transform: translateY(-1px);
+}
+
+a.iwac-vis-compare-overlap__tag:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline-offset: 2px;
+}
+
+
+/* =================================================================== */
+/*  MapLibre comparison panel                                            */
+/* =================================================================== */
+
+.iwac-vis-compare-map {
+    position: relative;
+    min-height: 360px;
+    height: clamp(360px, 48vh, 520px);
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+}
+
+.iwac-vis-compare-map-legend {
+    display: flex;
+    gap: var(--space-md, 1rem);
+    flex-wrap: wrap;
+    margin-top: var(--space-sm, 0.5rem);
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #707f86);
+}
+
+.iwac-vis-compare-map-legend__swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.iwac-vis-compare-map-legend__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: var(--radius-full, 9999px);
+    opacity: 0.7;
+}
+
+.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #d86a11)); }
+.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, #1d4e6b); }
+
+
+/* =================================================================== */
+/*  Sentiment comparison panel                                           */
+/* =================================================================== */
+
+.iwac-vis-compare-sentiment {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md, 1rem);
+}
+
+@media (min-width: 900px) {
+    .iwac-vis-compare-sentiment {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.iwac-vis-compare-sentiment__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.5rem);
+}
+
+.iwac-vis-compare-sentiment__heading {
+    font-size: var(--text-xs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    font-weight: 700;
+    color: var(--muted, #707f86);
+}
+
+.iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {
+    color: var(--iwac-compare-color-a, var(--primary, #d86a11));
+}
+
+.iwac-vis-compare-sentiment__col[data-side="B"] .iwac-vis-compare-sentiment__heading {
+    color: var(--iwac-compare-color-b, #1d4e6b);
+}
+
+.iwac-vis-compare-sentiment__chart {
+    min-height: 240px;
+    flex: 1;
+}
+
+.iwac-vis-compare-sentiment__toolbar {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.iwac-vis-compare-sentiment__toolbar label {
+    font-size: var(--text-xs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    color: var(--muted, #707f86);
+    font-weight: 700;
+}
+
+.iwac-vis-compare-sentiment__toolbar select {
+    background: var(--surface, #fdfcfa);
+    border: 1px solid var(--border, #dad5cb);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: 0.35rem 0.6rem;
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--ink, #1c232d);
+    font-family: inherit;
 }

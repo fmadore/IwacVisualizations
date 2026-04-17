@@ -346,6 +346,17 @@
             'Unique subjects':               'Unique subjects',
             'Period covered':                'Period covered',
             'Single-newspaper corpus \u2014 no breakdown': 'Single-newspaper corpus \u2014 no breakdown',
+            'Geographic comparison':         'Geographic comparison',
+            'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
+                'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.',
+            'mentions':                      'mentions',
+            'Open entity':                   'Open entity',
+            'AI sentiment comparison':       'AI sentiment comparison',
+            'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
+                'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.',
+            'Axis':                          'Axis',
+            'Model':                         'Model',
+            'Sentiment only on articles':    'Sentiment only on articles',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
@@ -732,6 +743,17 @@
             'Unique subjects':               'Sujets distincts',
             'Period covered':                'P\u00e9riode couverte',
             'Single-newspaper corpus \u2014 no breakdown': 'Corpus \u00e0 un seul journal \u2014 pas de d\u00e9tail',
+            'Geographic comparison':         'Comparaison g\u00e9ographique',
+            'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
+                'Lieux mentionn\u00e9s dans chaque corpus, reli\u00e9s \u00e0 l\u2019index d\u2019autorit\u00e9 IWAC. La taille de la bulle est proportionnelle au nombre d\u2019articles o\u00f9 ce lieu est balis\u00e9.',
+            'mentions':                      'mentions',
+            'Open entity':                   'Ouvrir la fiche',
+            'AI sentiment comparison':       'Comparaison des sentiments (IA)',
+            'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
+                'Distribution de la polarit\u00e9 et de la centralit\u00e9 des articles de chaque corpus, \u00e9valu\u00e9es par trois mod\u00e8les d\u2019IA. Le s\u00e9lecteur change de mod\u00e8le\u00a0; les publications ne sont pas \u00e9valu\u00e9es.',
+            'Axis':                          'Axe',
+            'Model':                         'Mod\u00e8le',
+            'Sentiment only on articles':    'Sentiments uniquement sur les articles',
 
             // Sentiment panel (server-rendered) \u2014 French translations
             // keyed on the IwacSentiment English source labels.
