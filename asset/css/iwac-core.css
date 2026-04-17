@@ -198,11 +198,17 @@
 .iwac-vis-panel {
     position: relative;
     background: var(--panel-bg, var(--surface, #fdfcfa));
-    /* IWAC theme v1.7.0's --panel-border resolves to `1px solid var(--border)`
-     * so we can safely use it as the shorthand. Every chart panel reads as
-     * a distinct card, matching the visual weight of the Keyword Explorer
-     * sidebar and summary cards. */
-    border: var(--panel-border, 1px solid var(--border, #dad5cb));
+    /* Use `--panel-border-color` directly rather than the composite
+     * `--panel-border` shorthand. The composite in older IWAC theme
+     * builds (v1.7.0 and below) declared `--panel-border: 1px solid
+     * var(--panel-border-color)` only at :root, which meant the inner
+     * var() got frozen at the root cascade and ignored the override
+     * in `body[data-theme="light"]` — producing a dark blue-grey
+     * "black line" on light-mode cards when the user's system
+     * prefers dark. The unrolled form below re-resolves on every
+     * element that inherits it, so every chart panel reads as a
+     * distinct warm-grey card regardless of theme version. */
+    border: 1px solid var(--panel-border-color, var(--border, #dad5cb));
     border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
     box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-4, 1rem);
