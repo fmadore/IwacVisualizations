@@ -612,11 +612,27 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
 
         subj_avg: Optional[float] = None
         subj_n = 0
+        subj_buckets: List[Dict[str, Any]] = []
         if has_subj:
             numeric = pd.to_numeric(sub[subj_col], errors="coerce").dropna()
             subj_n = int(len(numeric))
             if subj_n:
                 subj_avg = float(numeric.mean())
+                # Bucket each score into the nearest 1..5 integer so it
+                # renders as a distribution bar alongside polarite /
+                # centralite. Each label is the English source key used
+                # in iwac-i18n.js (1="Very objective" ... 5="Very subjective")
+                # so the JS can translate it the same way the sentiment
+                # panel in the person dashboard does.
+                rounded = numeric.round().clip(1, 5).astype(int)
+                bucket_counter = Counter(rounded.tolist())
+                for score in range(1, 6):
+                    count = bucket_counter.get(score, 0)
+                    if count:
+                        subj_buckets.append({
+                            "label": str(score),
+                            "count": int(count),
+                        })
 
         def ordered(counter: Counter, order: Tuple[str, ...]) -> List[Dict[str, Any]]:
             seen = set()
@@ -634,6 +650,7 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
         result["models"][model] = {
             "polarite": ordered(pol_counter, POLARITE_ORDER),
             "centralite": ordered(cen_counter, CENTRALITE_ORDER),
+            "subjectivite": subj_buckets,
             "subjectivite_avg": subj_avg,
             "subjectivite_n": subj_n,
         }

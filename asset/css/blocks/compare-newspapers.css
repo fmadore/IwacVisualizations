@@ -422,6 +422,23 @@
     min-height: 280px;
 }
 
+/* Pagination control inside the newspaper breakdown column — shorter
+ * top margin than the default table pagination because the chart above
+ * already has generous internal padding. */
+.iwac-vis-compare-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xs, 0.25rem);
+}
+
+.iwac-vis-compare-pagination .iwac-vis-pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm, 0.5rem);
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--ink-light, #4a5766);
+}
+
 
 /* =================================================================== */
 /*  Placeholder / empty state                                            */

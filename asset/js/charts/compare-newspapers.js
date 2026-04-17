@@ -600,9 +600,36 @@
     /*  MapLibre spatial-comparison panel                                 */
     /* ----------------------------------------------------------------- */
 
+    function hexToRgb(hex) {
+        // Accepts #rgb or #rrggbb — returns [r, g, b] for use in rgba() strings.
+        var h = String(hex || '').replace('#', '');
+        if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+        var n = parseInt(h, 16);
+        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+
     function buildMap(dataA, dataB, ctx) {
-        var aPts = dataA.geo_points || [];
-        var bPts = dataB.geo_points || [];
+        // Filter out each corpus's own name as a spatial tag — country-
+        // scope corpora have their own country tagged on thousands of
+        // items (Burkina Faso mentions Burkina Faso), which renders as
+        // a single enormous bubble at the country centroid and swamps
+        // every other location. Newspaper-scope corpora often do the
+        // same with their home country.
+        function filterSelf(pts, data) {
+            var dropName = null;
+            if (data.scope === 'country') dropName = data.name;
+            // For a newspaper, drop its top country too — usually the
+            // country where the paper is published. The per-corpus JSON
+            // carries this in summary.top_country (newspaper scope only).
+            var extra = data.summary && data.summary.top_country;
+            return pts.filter(function (p) {
+                if (dropName && p.name === dropName) return false;
+                if (data.scope === 'newspaper' && extra && p.name === extra) return false;
+                return true;
+            });
+        }
+        var aPts = filterSelf(dataA.geo_points || [], dataA);
+        var bPts = filterSelf(dataB.geo_points || [], dataB);
         if (!aPts.length && !bPts.length) return null;
         if (typeof maplibregl === 'undefined' || !P.createIwacMap) return null;
 
@@ -629,6 +656,9 @@
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var colorA = tokens.primary || '#d86a11';
         var colorB = '#1d4e6b';
+        var rgbA = hexToRgb(colorA);
+        var rgbB = hexToRgb(colorB);
+        function rgba(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
 
         function toGeoJSON(pts) {
             return {
@@ -649,68 +679,119 @@
         var geoA = toGeoJSON(aPts);
         var geoB = toGeoJSON(bPts);
 
-        // Compute the max count across both sides for a shared radius scale.
+        // Shared max count across both sides so the two heatmaps + bubble
+        // layers use a single weight scale — direct visual comparison.
         var maxCount = 1;
         aPts.concat(bPts).forEach(function (p) {
             if (p.count > maxCount) maxCount = p.count;
         });
-        var MAX_RADIUS = 30;
-        function circleRadiusExpr() {
+
+        // Square-root radius scaling keeps the long tail (a country
+        // centroid with 2000 mentions) from visually destroying everything
+        // else. Under linear scaling a 2000-mention bubble was ~200× bigger
+        // than a 10-mention one; sqrt makes it ~14×.
+        var sqrtMax = Math.sqrt(maxCount);
+        function bubbleRadius() {
             return [
                 'interpolate', ['linear'],
-                ['get', 'count'],
-                0, 3,
-                maxCount, MAX_RADIUS
+                ['sqrt', ['max', ['get', 'count'], 1]],
+                1, 3,
+                sqrtMax, 16
             ];
         }
 
-        // Build a rough bounds box covering both sides so the initial
-        // fitBounds lands on West Africa without hardcoding a region.
-        function bounds(pts) {
-            if (!pts.length) return null;
-            var minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity;
-            pts.forEach(function (p) {
-                if (p.lng < minLng) minLng = p.lng;
-                if (p.lng > maxLng) maxLng = p.lng;
-                if (p.lat < minLat) minLat = p.lat;
-                if (p.lat > maxLat) maxLat = p.lat;
+        // Heatmap weight curve — also sqrt-squashed so the top handful of
+        // places don't saturate the heatmap and wash out the rest.
+        function heatWeight() {
+            return [
+                'interpolate', ['linear'],
+                ['sqrt', ['max', ['get', 'count'], 1]],
+                1, 0,
+                sqrtMax, 1
+            ];
+        }
+
+        function heatColor(rgb) {
+            return [
+                'interpolate', ['linear'], ['heatmap-density'],
+                0,   rgba(rgb, 0),
+                0.2, rgba(rgb, 0.25),
+                0.5, rgba(rgb, 0.5),
+                0.8, rgba(rgb, 0.75),
+                1,   rgba(rgb, 0.9)
+            ];
+        }
+
+        function heatRadius() {
+            // Heatmap kernel grows with zoom so hotspots stay readable.
+            return [
+                'interpolate', ['linear'], ['zoom'],
+                0, 6,
+                4, 14,
+                7, 28
+            ];
+        }
+
+        function addSideLayers(m, sideKey, sourceData, rgb, solidColor) {
+            var srcId = 'compare-' + sideKey;
+            var heatId = srcId + '-heat';
+            var circId = srcId + '-circles';
+            m.addSource(srcId, { type: 'geojson', data: sourceData });
+            m.addLayer({
+                id: heatId,
+                type: 'heatmap',
+                source: srcId,
+                paint: {
+                    'heatmap-weight': heatWeight(),
+                    'heatmap-intensity': [
+                        'interpolate', ['linear'], ['zoom'],
+                        0, 0.8, 8, 2
+                    ],
+                    'heatmap-color': heatColor(rgb),
+                    'heatmap-radius': heatRadius(),
+                    // Fade the heatmap out at higher zoom so the bubble
+                    // layer (which is clickable and exact) takes over.
+                    'heatmap-opacity': [
+                        'interpolate', ['linear'], ['zoom'],
+                        0, 0.6,
+                        6, 0.5,
+                        9, 0.15
+                    ]
+                }
             });
-            return [[minLng, minLat], [maxLng, maxLat]];
+            m.addLayer({
+                id: circId,
+                type: 'circle',
+                source: srcId,
+                paint: {
+                    'circle-radius': bubbleRadius(),
+                    'circle-color': solidColor,
+                    'circle-opacity': [
+                        'interpolate', ['linear'], ['zoom'],
+                        0, 0.25,
+                        5, 0.55,
+                        8, 0.75
+                    ],
+                    'circle-stroke-color': solidColor,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-opacity': 0.9
+                }
+            });
+            return circId;
         }
 
         var map = P.createIwacMap(mapHost, {
-            center: [1, 10],
-            zoom: 3.2,
+            // Default view centered on West Africa — there's no point in
+            // fitBounds when the points can span Mecca, Paris, and New
+            // York; forcing the view to that bounding box zooms out too
+            // far for the primary region of interest.
+            center: [0, 10],
+            zoom: 3.5,
             onStyleReady: function (m) {
-                // Side A
-                m.addSource('compare-a', { type: 'geojson', data: geoA });
-                m.addLayer({
-                    id: 'compare-a-circles', type: 'circle', source: 'compare-a',
-                    paint: {
-                        'circle-radius': circleRadiusExpr(),
-                        'circle-color': colorA,
-                        'circle-opacity': 0.45,
-                        'circle-stroke-color': colorA,
-                        'circle-stroke-width': 1.5,
-                        'circle-stroke-opacity': 0.9
-                    }
-                });
+                var layerA = addSideLayers(m, 'a', geoA, rgbA, colorA);
+                var layerB = addSideLayers(m, 'b', geoB, rgbB, colorB);
 
-                // Side B
-                m.addSource('compare-b', { type: 'geojson', data: geoB });
-                m.addLayer({
-                    id: 'compare-b-circles', type: 'circle', source: 'compare-b',
-                    paint: {
-                        'circle-radius': circleRadiusExpr(),
-                        'circle-color': colorB,
-                        'circle-opacity': 0.45,
-                        'circle-stroke-color': colorB,
-                        'circle-stroke-width': 1.5,
-                        'circle-stroke-opacity': 0.9
-                    }
-                });
-
-                ['compare-a-circles', 'compare-b-circles'].forEach(function (layerId) {
+                [layerA, layerB].forEach(function (layerId) {
                     m.on('click', layerId, function (e) {
                         var f = e.features && e.features[0];
                         if (!f) return;
@@ -735,14 +816,6 @@
                         m.getCanvas().style.cursor = '';
                     });
                 });
-
-                var allPts = aPts.concat(bPts);
-                var b = bounds(allPts);
-                if (b) {
-                    try {
-                        m.fitBounds(b, { padding: 40, duration: 0, maxZoom: 6 });
-                    } catch (e) { /* empty or invalid bounds — keep default view */ }
-                }
             }
         });
 
@@ -777,8 +850,9 @@
         var axisSelect = P.el('select');
         axisSelect.id = axisLabel.htmlFor;
         [
-            { key: 'polarite',   label: P.t('Polarity') },
-            { key: 'centralite', label: P.t('Centrality') }
+            { key: 'polarite',     label: P.t('Polarity') },
+            { key: 'centralite',   label: P.t('Centrality') },
+            { key: 'subjectivite', label: P.t('Subjectivity') }
         ].forEach(function (o) {
             var opt = P.el('option', null, o.label);
             opt.value = o.key;
@@ -896,6 +970,8 @@
     /*  Newspapers breakdown (country-scope sides only)                   */
     /* ----------------------------------------------------------------- */
 
+    var NEWSPAPERS_PAGE_SIZE = 12;
+
     function buildNewspapersBreakdown(dataA, dataB) {
         var showA = dataA.scope === 'country' && (dataA.newspapers || []).length;
         var showB = dataB.scope === 'country' && (dataB.newspapers || []).length;
@@ -913,24 +989,46 @@
         function addSide(side, data, color) {
             var col = P.el('div', 'iwac-vis-compare-wordcloud');
             col.dataset.side = side;
-            col.appendChild(P.el('div', 'iwac-vis-compare-wordcloud__label', data.name));
+
+            var header = P.el('div', 'iwac-vis-compare-wordcloud__label',
+                data.name + ' \u2014 ' + P.formatNumber((data.newspapers || []).length)
+                    + ' ' + P.t('Newspapers'));
+            col.appendChild(header);
+
             var host = P.el('div', 'iwac-vis-compare-wordcloud__chart');
             col.appendChild(host);
+
+            // Pagination footer — hidden automatically when <= 1 page
+            var pagerHost = P.el('div', 'iwac-vis-compare-pagination');
+            col.appendChild(pagerHost);
+
             wrap.appendChild(col);
 
-            var entries = (data.newspapers || []).slice(0, 10).reverse();
+            // All newspapers for this side, sorted count-desc (generator
+            // emits them that way). Paginate client-side with 12 rows
+            // per page so users can browse the full list rather than
+            // just the top 10.
+            var entries = (data.newspapers || []).slice();
             if (!entries.length) {
                 host.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
                 return;
             }
-            ns.registerChart(host, function (el, instance) {
+            var totalPages = Math.max(1, Math.ceil(entries.length / NEWSPAPERS_PAGE_SIZE));
+
+            var instance = null;
+            function renderPage(page) {
+                var slice = entries
+                    .slice(page * NEWSPAPERS_PAGE_SIZE, (page + 1) * NEWSPAPERS_PAGE_SIZE)
+                    .slice()
+                    .reverse();  // largest at the top of the bar chart
+                if (!instance || instance.isDisposed()) return;
                 instance.setOption({
                     grid: { left: 8, right: 40, top: 8, bottom: 8, containLabel: true },
                     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
                     xAxis: { type: 'value' },
                     yAxis: {
                         type: 'category',
-                        data: entries.map(function (e) { return e.name; }),
+                        data: slice.map(function (e) { return e.name; }),
                         axisTick: { show: false },
                         axisLabel: { width: 160, overflow: 'truncate' }
                     },
@@ -939,12 +1037,28 @@
                         itemStyle: { color: color, borderRadius: [0, 4, 4, 0] },
                         label: { show: true, position: 'right',
                                  formatter: function (p) { return P.formatNumber(p.value); } },
-                        data: entries.map(function (e) { return e.count; })
+                        data: slice.map(function (e) { return e.count; })
                     }],
-                    animationDuration: 600,
+                    animationDuration: 400,
                     animationEasing: 'cubicOut'
+                }, true);
+            }
+
+            instance = ns.registerChart(host, function () { renderPage(0); });
+
+            if (totalPages > 1 && P.buildPagination) {
+                var pager = P.buildPagination({
+                    currentPage: 0,
+                    totalPages: totalPages,
+                    onChange: function (newPage) {
+                        // The ECharts instance may be re-created after a
+                        // theme swap; grab the live one each time.
+                        instance = ns.getLiveChart ? ns.getLiveChart(host) : instance;
+                        renderPage(newPage);
+                    }
                 });
-            });
+                pagerHost.appendChild(pager.root);
+            }
         }
 
         function placeholderCol(side, name) {
