@@ -780,6 +780,27 @@
             return circId;
         }
 
+        // MapLibre reads the container size at init time and only
+        // re-measures on window resize. When the block's layout hasn't
+        // settled yet (or the map host isn't attached to the DOM),
+        // MapLibre falls back to the default 400x300 canvas and never
+        // grows to fill its flex panel. A ResizeObserver on the host
+        // picks up the first real layout pass and every subsequent
+        // container-size change (window resize, flex reflow, etc.),
+        // firing map.resize() each time.
+        var _mapRef = null;
+        if (typeof ResizeObserver !== 'undefined') {
+            var ro = new ResizeObserver(function () {
+                if (_mapRef && typeof _mapRef.resize === 'function') {
+                    try { _mapRef.resize(); } catch (e) { /* map removed mid-observe */ }
+                }
+            });
+            ro.observe(mapHost);
+            // Stash on the element so disposeCharts() can tear it down
+            // when the user swaps corpora.
+            mapHost._iwacResizeObserver = ro;
+        }
+
         var map = P.createIwacMap(mapHost, {
             // Default view centered on West Africa — there's no point in
             // fitBounds when the points can span Mecca, Paris, and New
@@ -790,6 +811,10 @@
             onStyleReady: function (m) {
                 var layerA = addSideLayers(m, 'a', geoA, rgbA, colorA);
                 var layerB = addSideLayers(m, 'b', geoB, rgbB, colorB);
+
+                // Belt-and-suspenders: the container may have grown to
+                // its real size between createIwacMap() and now.
+                m.resize();
 
                 [layerA, layerB].forEach(function (layerId) {
                     m.on('click', layerId, function (e) {
@@ -818,6 +843,8 @@
                 });
             }
         });
+
+        _mapRef = map;
 
         return panel;
     }
@@ -1015,14 +1042,21 @@
             }
             var totalPages = Math.max(1, Math.ceil(entries.length / NEWSPAPERS_PAGE_SIZE));
 
-            var instance = null;
-            function renderPage(page) {
+            // `registerChart` runs its render callback synchronously
+            // *before* returning the instance, which means anything
+            // closing over an outer `instance` variable sees `null` on
+            // the first pass. Pass the instance through the callback
+            // args instead so the first render always has a live chart.
+            var currentPage = 0;
+            function renderPage(page, chart) {
+                var live = chart
+                    || (ns.getLiveChart ? ns.getLiveChart(host) : null);
+                if (!live || live.isDisposed()) return;
                 var slice = entries
                     .slice(page * NEWSPAPERS_PAGE_SIZE, (page + 1) * NEWSPAPERS_PAGE_SIZE)
                     .slice()
                     .reverse();  // largest at the top of the bar chart
-                if (!instance || instance.isDisposed()) return;
-                instance.setOption({
+                live.setOption({
                     grid: { left: 8, right: 40, top: 8, bottom: 8, containLabel: true },
                     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
                     xAxis: { type: 'value' },
@@ -1044,16 +1078,16 @@
                 }, true);
             }
 
-            instance = ns.registerChart(host, function () { renderPage(0); });
+            ns.registerChart(host, function (el, chart) {
+                renderPage(currentPage, chart);
+            });
 
             if (totalPages > 1 && P.buildPagination) {
                 var pager = P.buildPagination({
                     currentPage: 0,
                     totalPages: totalPages,
                     onChange: function (newPage) {
-                        // The ECharts instance may be re-created after a
-                        // theme swap; grab the live one each time.
-                        instance = ns.getLiveChart ? ns.getLiveChart(host) : instance;
+                        currentPage = newPage;
                         renderPage(newPage);
                     }
                 });
@@ -1101,6 +1135,18 @@
             }
         }
         ns._charts = next;
+
+        // Tear down any ResizeObservers we attached directly to map hosts
+        // so they don't fire against disposed maps when the user picks a
+        // new corpus.
+        var mapHosts = root.querySelectorAll('.iwac-vis-compare-map');
+        for (var j = 0; j < mapHosts.length; j++) {
+            var ro = mapHosts[j]._iwacResizeObserver;
+            if (ro && typeof ro.disconnect === 'function') {
+                try { ro.disconnect(); } catch (e) {}
+                mapHosts[j]._iwacResizeObserver = null;
+            }
+        }
     }
 
     function renderResults(resultsRoot, dataA, dataB, ctx) {
