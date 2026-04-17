@@ -53,6 +53,7 @@
             'Loading knowledge graph': 'Loading knowledge graph',
             'Loading collection overview': 'Loading collection overview',
             'Loading project comparison': 'Loading project comparison',
+            'Loading newspaper comparison': 'Loading newspaper comparison',
             'Dashboard': 'Dashboard',
             'Visualizations': 'Visualizations',
             'Knowledge Graph': 'Knowledge Graph',
@@ -321,6 +322,31 @@
             'By shared tags':          'By shared tags',
             'By similar content':      'By similar content',
 
+            // Compare newspapers block
+            'Corpus A':                      'Corpus A',
+            'Corpus B':                      'Corpus B',
+            'Newspaper articles':            'Newspaper articles',
+            'Islamic publications':          'Islamic publications',
+            'Scope':                         'Scope',
+            'Selection':                     'Selection',
+            'Whole country':                 'Whole country',
+            'Single newspaper':              'Single newspaper',
+            'Choose two corpora to compare': 'Choose two corpora to compare',
+            'Subject overlap':               'Subject overlap',
+            'Spatial coverage overlap':      'Spatial coverage overlap',
+            'Timeline (items per year)':     'Timeline (items per year)',
+            'Top subjects (combined top 15)': 'Top subjects (combined top 15)',
+            'Most frequent words':           'Most frequent words',
+            'Newspapers within each corpus': 'Newspapers within each corpus',
+            'Shared':                        'Shared',
+            'Only in A':                     'Only in {name}',
+            'Only in B':                     'Only in {name}',
+            'No overlap':                    'No overlap',
+            'Places mentioned':              'Places mentioned',
+            'Unique subjects':               'Unique subjects',
+            'Period covered':                'Period covered',
+            'Single-newspaper corpus \u2014 no breakdown': 'Single-newspaper corpus \u2014 no breakdown',
+
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
             // existing translation catalogues keep working.
@@ -419,6 +445,7 @@
             'Loading knowledge graph': 'Chargement du graphe de connaissances',
             'Loading collection overview': 'Chargement de la vue d\u2019ensemble',
             'Loading project comparison': 'Chargement de la comparaison',
+            'Loading newspaper comparison': 'Chargement de la comparaison des journaux',
             'Dashboard': 'Tableau de bord',
             'Visualizations': 'Visualisations',
             'Knowledge Graph': 'Graphe de connaissances',
@@ -680,6 +707,31 @@
             // Further reading — toggle labels
             'By shared tags':          'Par balises communes',
             'By similar content':      'Par contenu similaire',
+
+            // Compare newspapers block
+            'Corpus A':                      'Corpus A',
+            'Corpus B':                      'Corpus B',
+            'Newspaper articles':            'Articles de presse',
+            'Islamic publications':          'Publications islamiques',
+            'Scope':                         'P\u00e9rim\u00e8tre',
+            'Selection':                     'S\u00e9lection',
+            'Whole country':                 'Pays entier',
+            'Single newspaper':              'Un seul journal',
+            'Choose two corpora to compare': 'Choisissez deux corpus \u00e0 comparer',
+            'Subject overlap':               'Chevauchement des sujets',
+            'Spatial coverage overlap':      'Chevauchement des lieux couverts',
+            'Timeline (items per year)':     'Chronologie (items par ann\u00e9e)',
+            'Top subjects (combined top 15)': 'Principaux sujets (top 15 combin\u00e9)',
+            'Most frequent words':           'Mots les plus fr\u00e9quents',
+            'Newspapers within each corpus': 'Journaux dans chaque corpus',
+            'Shared':                        'Communs',
+            'Only in A':                     'Seulement dans {name}',
+            'Only in B':                     'Seulement dans {name}',
+            'No overlap':                    'Aucun chevauchement',
+            'Places mentioned':              'Lieux mentionn\u00e9s',
+            'Unique subjects':               'Sujets distincts',
+            'Period covered':                'P\u00e9riode couverte',
+            'Single-newspaper corpus \u2014 no breakdown': 'Corpus \u00e0 un seul journal \u2014 pas de d\u00e9tail',
 
             // Sentiment panel (server-rendered) \u2014 French translations
             // keyed on the IwacSentiment English source labels.

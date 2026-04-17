@@ -5,6 +5,7 @@ return [
     'block_layouts' => [
         'invokables' => [
             'compareProjects' => Site\BlockLayout\CompareProjects::class,
+            'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,
