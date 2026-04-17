@@ -69,9 +69,9 @@
 }
 
 .iwac-vis-keywords-sidebar {
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
-    border-radius: var(--radius-md, 8px);
+    background: var(--panel-bg, var(--surface, #fdfcfa));
+    border: 1px solid var(--panel-border-color, var(--border, #dad5cb));
+    border-radius: var(--radius-md, 0.75rem);
     padding: var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
@@ -109,7 +109,7 @@
     font-weight: 600;
     color: var(--ink-light, #4a5766);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 /* Base form-control styling lives in the shared rule in iwac-core.css;
@@ -128,7 +128,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding-top: var(--space-3, 0.75rem);
-    border-top: 1px solid var(--border-light, #ebe7df);
+    border-top: 1px solid var(--border-light, #e8e3d9);
 }
 
 .iwac-vis-keywords-compare__badges {
@@ -144,10 +144,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-    border: 1px solid var(--border-light, #ebe7df);
-    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--border-light, #e8e3d9);
+    border-radius: var(--radius-md, 0.75rem);
     padding: var(--space-2, 0.5rem);
-    background: var(--surface, #fdfdfc);
+    background: var(--surface, #fdfcfa);
 }
 
 .iwac-vis-keywords-compare__item {
@@ -158,15 +158,15 @@
     border-radius: var(--radius-sm, 4px);
     cursor: pointer;
     font-size: var(--text-sm, 0.9rem);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-keywords-compare__item:hover {
-    background: var(--surface-raised, #f9f7f3);
+    background: var(--surface-raised, #f7f4ee);
 }
 
 .iwac-vis-keywords-compare__item input[type="checkbox"]:disabled + .iwac-vis-keywords-compare__name {
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
 }
 
 .iwac-vis-keywords-compare__name {
@@ -178,7 +178,7 @@
 }
 
 .iwac-vis-keywords-compare__count {
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-size: var(--text-xs, 0.75rem);
 }
 
@@ -189,7 +189,7 @@
 
 .iwac-vis-keywords-chart__subtitle {
     margin: 0 0 var(--space-2, 0.5rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-size: var(--text-sm, 0.9rem);
     font-style: italic;
 }

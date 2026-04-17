@@ -341,15 +341,15 @@
             // hardcode hex values in chart code.
             var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
             var primaryResolved = (ns.resolveCssVar && ns.resolveCssVar('--primary'))
-                || tokens.primary || '#e67a14';
+                || tokens.primary || '#d86a11';
             var surfaceResolved = (ns.resolveCssVar && ns.resolveCssVar('--surface-raised'))
-                || tokens.surfaceRaised || tokens.surface || '#f9f7f3';
+                || tokens.surfaceRaised || tokens.surface || '#f7f4ee';
             var inkResolved = (ns.resolveCssVar && ns.resolveCssVar('--ink'))
-                || tokens.ink || '#18202a';
+                || tokens.ink || '#1c232d';
             var mutedResolved = (ns.resolveCssVar && ns.resolveCssVar('--muted'))
-                || tokens.muted || '#6e7a82';
+                || tokens.muted || '#707f86';
             var borderResolved = (ns.resolveCssVar && ns.resolveCssVar('--border'))
-                || tokens.border || '#dcd7ce';
+                || tokens.border || '#dad5cb';
 
             if (!cooccurrence || !slice) {
                 return {

@@ -43,28 +43,29 @@
      * palette uses elsewhere. */
     --iwac-vis-sent-pos-strong: var(--success-strong, #15803d);
     --iwac-vis-sent-pos:        var(--success,        #65a30d);
-    --iwac-vis-sent-neutral:    var(--muted,          #6e7a82);
+    --iwac-vis-sent-neutral:    var(--muted,          #707f86);
     --iwac-vis-sent-neg:        var(--warning,        #ea580c);
     --iwac-vis-sent-neg-strong: var(--error,          #b91c1c);
-    --iwac-vis-sent-na:         var(--border-light,   var(--border, #dcd7ce));
+    --iwac-vis-sent-na:         var(--border-light,   var(--border, #dad5cb));
 
     /* Centralité — sequential (single hue, fading toward background).
      * Built from --primary so the centralité palette tracks whichever
-     * accent color the IWAC theme is currently configured with. */
-    --iwac-vis-cent-1:  var(--primary, #e67a14);
-    --iwac-vis-cent-2:  color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
-    --iwac-vis-cent-3:  color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
-    --iwac-vis-cent-4:  color-mix(in srgb, var(--primary, #e67a14) 30%, var(--surface, #fdfdfc));
-    --iwac-vis-cent-na: var(--border-light, var(--border, #dcd7ce));
+     * accent color the IWAC theme is currently configured with.
+     * Fallback updated for IWAC theme v1.7.0 primary (hsl 22, 76%, 48%). */
+    --iwac-vis-cent-1:  var(--primary, #d86a11);
+    --iwac-vis-cent-2:  color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-3:  color-mix(in srgb, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-4:  color-mix(in srgb, var(--primary, #d86a11) 30%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-na: var(--border-light, var(--border, #dad5cb));
 
     /* Subjectivité — sequential 1..5 (objective → subjective), built
      * from --primary the same way centralité is. 1 = factual/objective
      * is the lightest tint, 5 = highly subjective is the accent itself. */
-    --iwac-vis-subj-1: color-mix(in srgb, var(--primary, #e67a14) 15%, var(--surface, #fdfdfc));
-    --iwac-vis-subj-2: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--surface, #fdfdfc));
-    --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--surface, #fdfdfc));
-    --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
-    --iwac-vis-subj-5: var(--primary, #e67a14);
+    --iwac-vis-subj-1: color-mix(in srgb, var(--primary, #d86a11) 15%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-2: color-mix(in srgb, var(--primary, #d86a11) 35%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #d86a11) 55%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-5: var(--primary, #d86a11);
 
     /* AI model accents — used by the article dashboard's sentiment
      * radar so each model's polygon is visually distinct. Picked from
@@ -78,18 +79,18 @@
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on
      * the same palette. Read by C.heatmap via getComputedStyle. */
-    --iwac-vis-heatmap-0: color-mix(in srgb, var(--primary, #e67a14)  8%, var(--surface, #fdfdfc));
-    --iwac-vis-heatmap-1: color-mix(in srgb, var(--primary, #e67a14) 28%, var(--surface, #fdfdfc));
-    --iwac-vis-heatmap-2: color-mix(in srgb, var(--primary, #e67a14) 50%, var(--surface, #fdfdfc));
-    --iwac-vis-heatmap-3: color-mix(in srgb, var(--primary, #e67a14) 75%, var(--surface, #fdfdfc));
-    --iwac-vis-heatmap-4: var(--primary, #e67a14);
+    --iwac-vis-heatmap-0: color-mix(in srgb, var(--primary, #d86a11)  8%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-1: color-mix(in srgb, var(--primary, #d86a11) 28%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-2: color-mix(in srgb, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-3: color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-4: var(--primary, #d86a11);
 
     /* Shared decorative shadow colors derived from --ink. Used by
      * custom shadows (slider glow, map controls) so every layered
      * effect tracks light/dark without hardcoded rgba. */
-    --iwac-vis-shadow-subtle: color-mix(in srgb, var(--ink, #18202a)  8%, transparent);
-    --iwac-vis-shadow-soft:   color-mix(in srgb, var(--ink, #18202a) 14%, transparent);
-    --iwac-vis-shadow-strong: color-mix(in srgb, var(--ink, #18202a) 22%, transparent);
+    --iwac-vis-shadow-subtle: color-mix(in srgb, var(--ink, #1c232d)  8%, transparent);
+    --iwac-vis-shadow-soft:   color-mix(in srgb, var(--ink, #1c232d) 14%, transparent);
+    --iwac-vis-shadow-strong: color-mix(in srgb, var(--ink, #1c232d) 22%, transparent);
 
     /* Recent-additions thumbnail sizing — exposed as tokens so block
      * CSS and future panels stay aligned on the same responsive ramp.
@@ -107,6 +108,15 @@
      * collision with the download + fullscreen buttons injected by
      * panel-toolbar.js. Two 32px buttons + gap ≈ 72px; 96px breathes. */
     --iwac-vis-panel-toolbar-reserve: 96px;
+
+    /* Module-scoped icon-button sizes. The IWAC theme v1.7.0+ defines
+     * `--size-control-xs` (28px) / `--size-control-sm` (36px) / etc.;
+     * we define a middle-ground 32px for panel and graph toolbar
+     * buttons, which sit in panel corners where 36px crowds the
+     * chart. Used by `.iwac-vis-panel-toolbar__btn`, the map popup
+     * close button, and the graph toolbar. */
+    --iwac-vis-icon-btn: 32px;
+    --iwac-vis-icon-btn-sm: 28px;
 }
 
 
@@ -116,14 +126,19 @@
 
 .iwac-vis-block {
     margin: var(--space-8, 2rem) 0;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/*  Panel titles stay sans-serif — they're UI labels above charts, not
+ *  editorial headings. Bigger block / section titles (see the serif
+ *  `.iwac-vis-section-heading` rule below) are serif so the block
+ *  unifies visually with the theme's h1 / h2 treatment. */
 .iwac-vis-block h3 {
     font-size: var(--text-lg, 1.25rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
+    letter-spacing: var(--tracking-tight, -0.01em);
     margin: 0 0 var(--space-3, 0.75rem);
     overflow-wrap: break-word;
     word-break: break-word;
@@ -132,7 +147,7 @@
 .iwac-vis-block h4 {
     font-size: var(--text-base, 1rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
     margin: 0 0 var(--space-2, 0.5rem);
 }
 
@@ -150,7 +165,7 @@
     justify-content: center;
     gap: var(--space-3, 0.75rem);
     min-height: 180px;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-size: var(--text-sm, 0.9rem);
 }
 
@@ -161,8 +176,8 @@
 .iwac-vis-spinner {
     width: 32px;
     height: 32px;
-    border: 3px solid var(--border, #dcd7ce);
-    border-top-color: var(--primary, #e67a14);
+    border: 3px solid var(--border, #dad5cb);
+    border-top-color: var(--primary, #d86a11);
     border-radius: 50%;
     animation: iwac-vis-spin 0.8s linear infinite;
 }
@@ -182,13 +197,12 @@
 
 .iwac-vis-panel {
     position: relative;
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    /* Bypass the IWAC theme's near-transparent --panel-border shorthand
-     * (which resolves to ~6% alpha on the active site theme — barely
-     * visible against the wide chart panels). Use --border directly so
-     * every chart panel reads as a distinct card. Matches the visual
-     * weight of the Keyword Explorer sidebar and summary cards. */
-    border: 1px solid var(--border, #dcd7ce);
+    background: var(--panel-bg, var(--surface, #fdfcfa));
+    /* IWAC theme v1.7.0's --panel-border resolves to `1px solid var(--border)`
+     * so we can safely use it as the shorthand. Every chart panel reads as
+     * a distinct card, matching the visual weight of the Keyword Explorer
+     * sidebar and summary cards. */
+    border: var(--panel-border, 1px solid var(--border, #dad5cb));
     border-radius: var(--panel-radius, var(--radius-md, 0.75rem));
     box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-4, 1rem);
@@ -276,7 +290,7 @@
 
 .iwac-vis-panel-desc {
     margin: 0 0 var(--space-3, 0.75rem);
-    color: var(--muted, #6e7a82);
+    color: var(--ink-subtle, var(--muted, #677481));
     font-size: var(--text-sm, 0.9rem);
     line-height: 1.5;
     /* Deliberately no max-width: the description should span the full
@@ -310,8 +324,8 @@
 }
 
 .iwac-vis-panel-toolbar__btn {
-    width: 32px;
-    height: 32px;
+    width: var(--iwac-vis-icon-btn, 32px);
+    height: var(--iwac-vis-icon-btn, 32px);
     padding: 0;
     font-size: var(--text-base, 1rem);
     line-height: 1;
@@ -319,9 +333,9 @@
 }
 
 .iwac-vis-panel-toolbar__btn--pressed {
-    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
-    color: var(--primary, #e67a14);
+    background: color-mix(in srgb, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    color: var(--primary, #d86a11);
 }
 
 /* -------------------------------------------------------------------
@@ -342,7 +356,7 @@
     margin: 0;
     z-index: 1000;
     padding: var(--space-5, 1.25rem);
-    background: var(--surface, #fdfdfc);
+    background: var(--surface, #fdfcfa);
     overflow: auto;
     border-radius: 0;
 }
@@ -411,23 +425,25 @@
     align-items: center;
     justify-content: center;
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    background: var(--surface, #fdfdfc);
-    color: var(--ink, #18202a);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
+    background: var(--surface, #fdfcfa);
+    color: var(--ink, #1c232d);
+    border: 1px solid var(--border, #dad5cb);
+    border-radius: var(--radius-md, 0.75rem);
     font-size: var(--text-sm, 0.9rem);
     font-family: inherit;
     cursor: pointer;
-    transition: background-color 150ms ease, border-color 150ms ease;
+    transition:
+        background-color var(--transition-fast, 150ms ease),
+        border-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-btn:hover {
-    background: var(--surface-raised, #f9f7f3);
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    background: var(--surface-raised, #f7f4ee);
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-btn:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
+    outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
 }
 
@@ -438,7 +454,7 @@
 
 .iwac-vis-btn:disabled:hover {
     background: transparent;
-    border-color: var(--border, #dcd7ce);
+    border-color: var(--border, #dad5cb);
 }
 
 /* Size / tone variants composed on top of .iwac-vis-btn */
@@ -483,10 +499,10 @@
 }
 
 .iwac-vis-summary-card {
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: 1px solid var(--border, #dcd7ce);
+    background: var(--panel-bg, var(--surface, #fdfcfa));
+    border: 1px solid var(--border, #dad5cb);
     border-left: var(--accent-line-md, 3px) solid
-        color-mix(in srgb, var(--primary, #e67a14) var(--accent-mix-medium, 40%), var(--border, #dcd7ce));
+        color-mix(in srgb, var(--primary, #d86a11) var(--accent-mix-medium, 40%), var(--border, #dad5cb));
     border-radius: var(--radius-md, 0.75rem);
     box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
@@ -500,23 +516,32 @@
 }
 
 .iwac-vis-summary-card:hover {
-    border-left-color: var(--primary, #e67a14);
-    box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
+    border-left-color: var(--primary, #d86a11);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px var(--iwac-vis-shadow-soft));
 }
 
+/*  Newspaper-style display number — heavier ink, tight leading and
+ *  tracking so the big figure reads as an editorial headline rather
+ *  than a UI count. Uses `--ink-strong` (IWAC theme v1.7.0+) with a
+ *  graceful fallback to `--ink` on older theme versions. */
 .iwac-vis-summary-card__value {
     font-size: var(--text-2xl, clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem));
     font-weight: 700;
-    color: var(--ink, #18202a);
-    line-height: 1.1;
+    color: var(--ink-strong, var(--ink, #101620));
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight, -0.02em);
     font-variant-numeric: tabular-nums;
 }
 
+/*  Eyebrow-style label — restrained primary-mix (40%) so the label
+ *  feels like editorial metadata, not a second accent. `--tracking-wide`
+ *  matches the theme's resource-tag pill treatment for cross-module
+ *  typographic unity. */
 .iwac-vis-summary-card__label {
     font-size: var(--text-sm, 0.9375rem);
-    color: color-mix(in srgb, var(--primary, #e67a14) 55%, var(--muted, #6e7a82));
+    color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--muted, #707f86));
     text-transform: uppercase;
-    letter-spacing: 0.025em;
+    letter-spacing: var(--tracking-wide, 0.04em);
     font-weight: 600;
 }
 
@@ -537,7 +562,7 @@
     flex-wrap: wrap;
     gap: var(--space-1, 0.25rem);
     padding-bottom: var(--space-2, 0.5rem);
-    border-bottom: 1px solid var(--border-light, #ebe7df);
+    border-bottom: 1px solid var(--border-light, #e8e3d9);
 }
 
 .iwac-vis-tab,
@@ -546,41 +571,41 @@
 .iwac-vis-facets__sub-btn {
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     background: transparent;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     border: 1px solid transparent;
-    border-radius: var(--radius-md, 8px);
+    border-radius: var(--radius-md, 0.75rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9rem);
     font-weight: 500;
     cursor: pointer;
     transition:
-        background-color 150ms ease,
-        color            150ms ease,
-        border-color     150ms ease;
+        background-color var(--transition-fast, 150ms ease),
+        color            var(--transition-fast, 150ms ease),
+        border-color     var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-tab:hover,
 .iwac-vis-pagination__btn:hover:not(:disabled),
 .iwac-vis-facets__btn:hover,
 .iwac-vis-facets__sub-btn:hover {
-    background: var(--surface-raised, #f9f7f3);
-    color: var(--ink, #18202a);
+    background: var(--surface-raised, #f7f4ee);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-tab:focus-visible,
 .iwac-vis-pagination__btn:focus-visible,
 .iwac-vis-facets__btn:focus-visible,
 .iwac-vis-facets__sub-btn:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
+    outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
 }
 
 .iwac-vis-tab--active,
 .iwac-vis-facets__btn--active,
 .iwac-vis-facets__sub-btn--active {
-    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
-    color: var(--ink, #18202a);
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    color: var(--ink, #1c232d);
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-pagination__btn:disabled {
@@ -594,12 +619,12 @@
     justify-content: center;
     gap: var(--space-3, 0.75rem);
     padding: var(--space-3, 0.75rem) 0;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-pagination__indicator {
     font-size: var(--text-sm, 0.9rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     min-width: 8ch;
     text-align: center;
 }
@@ -635,18 +660,20 @@
     gap: 0.25rem;
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-full, 999px);
-    border: 1px solid color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
-    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface, #fdfdfc));
-    color: var(--ink, #18202a);
+    border: 1px solid color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface, #fdfcfa));
+    color: var(--ink, #1c232d);
     font-size: var(--text-xs, 0.75rem);
     font-family: inherit;
     cursor: pointer;
-    transition: background-color 150ms ease, border-color 150ms ease;
+    transition:
+        background-color var(--transition-fast, 150ms ease),
+        border-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-chip:hover {
-    background: color-mix(in srgb, var(--primary, #e67a14) 22%, var(--surface, #fdfdfc));
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #d86a11) 22%, var(--surface, #fdfcfa));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
 }
 
 
@@ -665,19 +692,21 @@
 .iwac-vis-keywords-compare__search,
 .iwac-vis-scary-select {
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    background: var(--surface, #fdfdfc);
-    color: var(--ink, #18202a);
-    border: 1px solid var(--border, #dcd7ce);
-    border-radius: var(--radius-md, 8px);
+    background: var(--surface, #fdfcfa);
+    color: var(--ink, #1c232d);
+    border: 1px solid var(--border, #dad5cb);
+    border-radius: var(--radius-md, 0.75rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9rem);
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    transition:
+        border-color var(--transition-fast, 150ms ease),
+        box-shadow var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-facets__select:hover,
 .iwac-vis-keywords-filters__select:hover,
 .iwac-vis-scary-select:hover {
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-facets__select:focus-visible,
@@ -685,9 +714,9 @@
 .iwac-vis-index-table-search:focus-visible,
 .iwac-vis-keywords-compare__search:focus-visible,
 .iwac-vis-scary-select:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
+    outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
 }
 
 .iwac-vis-facets__select {
@@ -713,27 +742,33 @@
 .iwac-vis-table__header {
     text-align: left;
     padding: 0.5rem 0.75rem;
-    background: var(--surface-raised, #f9f7f3);
-    border-bottom: 2px solid var(--border, #dcd7ce);
+    /*  Prefer the theme's sunken surface for header — reads as a
+     *  recessed band against the panel's raised surface, which is the
+     *  editorial convention for table chrome. */
+    background: var(--surface-sunken, var(--surface-raised, #f1ede6));
+    border-bottom: 1px solid var(--border-strong, var(--border, #c4bead));
+    font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--muted, #707f86);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
     position: sticky;
     top: 0;
 }
 
 .iwac-vis-table__row {
-    border-bottom: 1px solid var(--border, #dcd7ce);
-    transition: background 0.12s ease;
+    border-bottom: 1px solid var(--border-light, #e8e3d9);
+    transition: background var(--transition-fast, 120ms ease);
 }
 
 .iwac-vis-table__row:hover {
-    background: color-mix(in srgb, var(--primary, #e67a14) 4%, transparent);
+    background: color-mix(in srgb, var(--primary, #d86a11) 4%, transparent);
 }
 
 .iwac-vis-table__cell {
     padding: 0.5rem 0.75rem;
     vertical-align: middle;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-table__cell--thumbnail {
@@ -756,13 +791,13 @@
     align-items: center;
     justify-content: center;
     background: var(--surface, #f4f2ed);
-    border: 1px dashed var(--border, #dcd7ce);
+    border: 1px dashed var(--border, #dad5cb);
     border-radius: var(--radius-sm, 4px);
     color: var(--border, #a9a49a);
 }
 
 .iwac-vis-table__link {
-    color: var(--primary, #e67a14);
+    color: var(--primary, #d86a11);
     text-decoration: none;
     font-weight: 500;
 }
@@ -783,17 +818,34 @@
     font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    background: var(--badge-bg, var(--surface-raised, #f9f7f3));
-    color:      var(--badge-fg, var(--ink, #18202a));
-    border: 1px solid var(--badge-border, var(--border, #dcd7ce));
+    letter-spacing: var(--tracking-wide, 0.04em);
+    background: var(--badge-bg, var(--surface-raised, #f7f4ee));
+    color:      var(--badge-fg, var(--ink, #1c232d));
+    border: 1px solid var(--badge-border, var(--border, #dad5cb));
 }
 
+/*  Resource-type badges — category-distinct pastel palettes so the
+ *  reader can scan item types at a glance. Hues were chosen to stay
+ *  distinguishable under the warm IWAC surface without fighting the
+ *  primary orange. */
 .iwac-vis-badge--article     { --badge-bg: #fef3c7; --badge-fg: #92400e; --badge-border: #fde68a; }
 .iwac-vis-badge--publication { --badge-bg: #dbeafe; --badge-fg: #1e40af; --badge-border: #bfdbfe; }
 .iwac-vis-badge--document    { --badge-bg: #ede9fe; --badge-fg: #5b21b6; --badge-border: #ddd6fe; }
 .iwac-vis-badge--audiovisual { --badge-bg: #fce7f3; --badge-fg: #9d174d; --badge-border: #fbcfe8; }
 .iwac-vis-badge--reference   { --badge-bg: #d1fae5; --badge-fg: #065f46; --badge-border: #a7f3d0; }
+
+/*  Dark-mode palettes — duplicated across `@media (prefers-color-scheme: dark)`
+ *  + `body[data-theme="dark"]` so the system preference AND the manual
+ *  theme toggle both hit the right colors. Missing the media-query
+ *  variant meant badges stayed light-mode under system-dark before
+ *  the user explicitly toggled. */
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]) .iwac-vis-badge--article     { --badge-bg: #78350f; --badge-fg: #fef3c7; --badge-border: #92400e; }
+    body:not([data-theme="light"]) .iwac-vis-badge--publication { --badge-bg: #1e3a8a; --badge-fg: #dbeafe; --badge-border: #1e40af; }
+    body:not([data-theme="light"]) .iwac-vis-badge--document    { --badge-bg: #4c1d95; --badge-fg: #ede9fe; --badge-border: #5b21b6; }
+    body:not([data-theme="light"]) .iwac-vis-badge--audiovisual { --badge-bg: #831843; --badge-fg: #fce7f3; --badge-border: #9d174d; }
+    body:not([data-theme="light"]) .iwac-vis-badge--reference   { --badge-bg: #064e3b; --badge-fg: #d1fae5; --badge-border: #065f46; }
+}
 
 body[data-theme="dark"] .iwac-vis-badge--article     { --badge-bg: #78350f; --badge-fg: #fef3c7; --badge-border: #92400e; }
 body[data-theme="dark"] .iwac-vis-badge--publication { --badge-bg: #1e3a8a; --badge-fg: #dbeafe; --badge-border: #1e40af; }
@@ -806,19 +858,28 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
 /*  Section headings (Index Overview sub-sections + future blocks)       */
 /* =================================================================== */
 
+/*  Section heading — serif, tight tracking, matches the IWAC theme's
+ *  h2 / h3 editorial treatment so Index Overview Section A / B labels
+ *  (and any future block that renders this class) visually belong to
+ *  the same hierarchy as the surrounding page title. */
 .iwac-vis-section-heading {
     margin: 0;
+    font-family: "Noto Serif", Georgia, serif;
     font-size: var(--text-xl, 1.25rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink-strong, var(--ink, #101620));
+    line-height: 1.2;
+    letter-spacing: var(--tracking-tight, -0.02em);
     padding-bottom: var(--space-2, 0.5rem);
-    border-bottom: 1px solid var(--border-light, #ebe7df);
+    border-bottom: 1px solid var(--border, #dad5cb);
 }
 
 .iwac-vis-section-desc {
     margin: 0;
-    color: var(--muted, #6e7a82);
+    color: var(--ink-subtle, var(--muted, #677481));
     font-size: var(--text-sm, 0.9rem);
+    line-height: 1.55;
+    max-width: var(--measure-narrow, 44rem);
 }
 
 
@@ -827,7 +888,7 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
 /* =================================================================== */
 
 .iwac-vis-muted {
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-size: var(--text-sm, 0.9rem);
 }
 

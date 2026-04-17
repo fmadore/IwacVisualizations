@@ -33,18 +33,25 @@
     gap: var(--space-2, 0.5rem);
 }
 
+/*  Block title — serif display, tight tracking, matches theme h1/h2
+ *  editorial treatment so the "Scary Terms" block reads as a genuine
+ *  section header rather than a dashboard widget title. */
 .iwac-vis-scary-title {
     margin: 0;
-    font-size: var(--text-xl, 1.5rem);
-    font-weight: 700;
-    color: var(--ink, #18202a);
+    font-family: "Noto Serif", Georgia, serif;
+    font-size: var(--text-2xl, 1.5rem);
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #101620));
+    line-height: 1.15;
+    letter-spacing: var(--tracking-tight, -0.02em);
 }
 
 .iwac-vis-scary-desc {
     margin: 0;
-    color: var(--muted, #6e7a82);
+    color: var(--ink-subtle, var(--muted, #677481));
     font-size: var(--text-sm, 0.9rem);
-    max-width: 72ch;
+    line-height: 1.55;
+    max-width: var(--measure-narrow, 44rem);
 }
 
 
@@ -72,8 +79,8 @@
     flex-direction: column;
     gap: var(--space-3, 0.75rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    background: var(--panel-bg, var(--surface, #fdfcfa));
+    border: 1px solid var(--panel-border-color, var(--border, #dad5cb));
     border-radius: var(--radius-md, 0.75rem);
     box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
 }
@@ -89,7 +96,7 @@
 .iwac-vis-scary-label {
     font-size: var(--text-sm, 0.9rem);
     font-weight: 600;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     margin-right: var(--space-2, 0.5rem);
 }
 
@@ -97,12 +104,12 @@
  * what the heatmap encodes so readers don't have to guess. */
 .iwac-vis-scary-matrix-desc {
     margin: 0;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-size: var(--text-xs, 0.75rem);
     line-height: 1.5;
     max-width: 72ch;
     padding-top: var(--space-1, 0.25rem);
-    border-top: 1px solid var(--border-light, #ebe7df);
+    border-top: 1px solid var(--border-light, #e8e3d9);
 }
 
 
@@ -126,34 +133,34 @@
 .iwac-vis-scary-view-btn {
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
     background: transparent;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     border: 1px solid transparent;
-    border-radius: var(--radius-md, 8px);
+    border-radius: var(--radius-md, 0.75rem);
     font-size: var(--text-sm, 0.9rem);
     font-family: inherit;
     font-weight: 500;
     cursor: pointer;
     transition:
-        background-color 150ms ease,
-        color            150ms ease,
-        border-color     150ms ease;
+        background-color var(--transition-fast, 150ms ease),
+        color            var(--transition-fast, 150ms ease),
+        border-color     var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-view-btn:hover {
-    background: var(--surface-raised, #f9f7f3);
-    color: var(--ink, #18202a);
+    background: var(--surface-raised, #f7f4ee);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-scary-view-btn:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
+    outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
 }
 
 .iwac-vis-scary-view-btn--active,
 .iwac-vis-scary-view-btn--active:hover {
-    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
-    color: var(--ink, #18202a);
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    color: var(--ink, #1c232d);
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 
@@ -192,40 +199,40 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--surface-raised, #f9f7f3);
+    background: var(--surface-raised, #f7f4ee);
     color: var(--ink-light, #4a5766);
-    border: 1px solid var(--border, #dcd7ce);
+    border: 1px solid var(--border, #dad5cb);
     border-radius: var(--radius-sm, 4px);
     font-size: var(--text-sm, 0.9rem);
     font-family: inherit;
     cursor: pointer;
     transition:
-        background-color 150ms ease,
-        border-color     150ms ease,
-        color            150ms ease;
+        background-color var(--transition-fast, 150ms ease),
+        border-color     var(--transition-fast, 150ms ease),
+        color            var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-ctrl-btn:hover {
-    background: color-mix(in srgb, var(--primary, #e67a14) 10%, var(--surface-raised, #f9f7f3));
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
-    color: var(--ink, #18202a);
+    background: color-mix(in srgb, var(--primary, #d86a11) 10%, var(--surface-raised, #f7f4ee));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-scary-ctrl-btn:focus-visible {
-    outline: 2px solid var(--primary, #e67a14);
+    outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
 }
 
 .iwac-vis-scary-play-btn {
-    background: var(--primary, #e67a14);
-    color: var(--surface, #fdfdfc);
-    border-color: var(--primary, #e67a14);
+    background: var(--primary, #d86a11);
+    color: var(--surface, #fdfcfa);
+    border-color: var(--primary, #d86a11);
 }
 
 .iwac-vis-scary-play-btn:hover {
-    background: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 85%, var(--ink, #18202a));
-    color: var(--surface, #fdfdfc);
+    background: color-mix(in srgb, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
+    color: var(--surface, #fdfcfa);
 }
 
 .iwac-vis-scary-year-label {
@@ -234,7 +241,7 @@
     padding: 0 var(--space-2, 0.5rem);
     font-size: var(--text-base, 1rem);
     font-weight: 700;
-    color: var(--primary, #e67a14);
+    color: var(--primary, #d86a11);
     font-variant-numeric: tabular-nums;
 }
 
@@ -256,14 +263,14 @@
 .iwac-vis-scary-slider-edge {
     font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-variant-numeric: tabular-nums;
     min-width: 3.5ch;
 }
 
 .iwac-vis-scary-slider {
     --iwac-vis-scary-fill: 0%;
-    --iwac-vis-scary-track: color-mix(in srgb, var(--primary, #e67a14) 14%, var(--border-light, #ebe7df));
+    --iwac-vis-scary-track: color-mix(in srgb, var(--primary, #d86a11) 14%, var(--border-light, #e8e3d9));
     flex: 1;
     -webkit-appearance: none;
     appearance: none;
@@ -273,21 +280,21 @@
     cursor: pointer;
     background: linear-gradient(
         to right,
-        var(--primary, #e67a14)           0%,
-        var(--primary, #e67a14)           var(--iwac-vis-scary-fill),
+        var(--primary, #d86a11)           0%,
+        var(--primary, #d86a11)           var(--iwac-vis-scary-fill),
         var(--iwac-vis-scary-track)       var(--iwac-vis-scary-fill),
         var(--iwac-vis-scary-track)       100%
     );
     box-shadow:
         inset 0 1px 2px var(--iwac-vis-shadow-subtle),
-        0 0 0 1px var(--border-light, #ebe7df);
-    transition: box-shadow 150ms ease;
+        0 0 0 1px var(--border-light, #e8e3d9);
+    transition: box-shadow var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-slider:hover {
     box-shadow:
         inset 0 1px 2px var(--iwac-vis-shadow-soft),
-        0 0 0 1px color-mix(in srgb, var(--primary, #e67a14) 40%, var(--border, #dcd7ce));
+        0 0 0 1px color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 /* WebKit thumb */
@@ -297,21 +304,21 @@
     appearance: none;
     width: 22px;
     height: 22px;
-    background: var(--surface, #fdfdfc);
-    border: 3px solid var(--primary, #e67a14);
+    background: var(--surface, #fdfcfa);
+    border: 3px solid var(--primary, #d86a11);
     border-radius: 50%;
     box-shadow:
         0 2px 6px var(--iwac-vis-shadow-soft),
-        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+        0 0 0 0 color-mix(in srgb, var(--primary, #d86a11) 40%, transparent);
     cursor: grab;
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-slider::-webkit-slider-thumb:hover {
     transform: scale(1.12);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
+        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 18%, transparent);
 }
 
 .iwac-vis-scary-slider:active::-webkit-slider-thumb {
@@ -319,13 +326,13 @@
     transform: scale(1.08);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 8px color-mix(in srgb, var(--primary, #e67a14) 25%, transparent);
+        0 0 0 8px color-mix(in srgb, var(--primary, #d86a11) 25%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 32%, transparent);
 }
 
 /* Firefox thumb (Gecko uses a different pseudo-element name, so every
@@ -335,27 +342,27 @@
 .iwac-vis-scary-slider::-moz-range-thumb {
     width: 22px;
     height: 22px;
-    background: var(--surface, #fdfdfc);
-    border: 3px solid var(--primary, #e67a14);
+    background: var(--surface, #fdfcfa);
+    border: 3px solid var(--primary, #d86a11);
     border-radius: 50%;
     box-shadow:
         0 2px 6px var(--iwac-vis-shadow-soft),
-        0 0 0 0 color-mix(in srgb, var(--primary, #e67a14) 40%, transparent);
+        0 0 0 0 color-mix(in srgb, var(--primary, #d86a11) 40%, transparent);
     cursor: grab;
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-slider::-moz-range-thumb:hover {
     transform: scale(1.12);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 18%, transparent);
+        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 18%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #e67a14) 32%, transparent);
+        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 32%, transparent);
 }
 
 /* Firefox also uses a dedicated track element — keep it transparent so
@@ -391,7 +398,7 @@
     margin: 0;
     font-size: var(--text-base, 1rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-scary-badge {
@@ -400,9 +407,9 @@
     border-radius: var(--radius-full, 999px);
     font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
-    background: color-mix(in srgb, var(--primary, #e67a14) 12%, var(--surface-raised, #f9f7f3));
-    color: var(--ink, #18202a);
-    border: 1px solid color-mix(in srgb, var(--primary, #e67a14) 30%, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    color: var(--ink, #1c232d);
+    border: 1px solid color-mix(in srgb, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
 }
 
 .iwac-vis-scary-badge:empty {
@@ -443,7 +450,7 @@
     margin: 0;
     font-size: var(--text-base, 1rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-scary-defs-grid {
@@ -461,23 +468,23 @@
 }
 
 .iwac-vis-scary-def-card {
-    background: var(--panel-bg, var(--surface, #fdfdfc));
-    border: 1px solid var(--panel-border-color, var(--border, #dcd7ce));
+    background: var(--panel-bg, var(--surface, #fdfcfa));
+    border: 1px solid var(--panel-border-color, var(--border, #dad5cb));
     border-radius: var(--radius-md, 0.75rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    transition: border-color 150ms ease, background-color 150ms ease;
+    transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-scary-def-card:hover {
-    background: var(--surface-raised, #f9f7f3);
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 35%, var(--border, #dcd7ce));
+    background: var(--surface-raised, #f7f4ee);
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 35%, var(--border, #dad5cb));
 }
 
 .iwac-vis-scary-def-title {
     margin: 0 0 var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9rem);
     font-weight: 700;
-    color: var(--primary, #e67a14);
+    color: var(--primary, #d86a11);
     text-transform: capitalize;
 }
 
@@ -494,6 +501,6 @@
     font-size: var(--text-xs, 0.75rem);
     font-weight: 500;
     color: var(--ink-light, #4a5766);
-    background: var(--surface-raised, #f9f7f3);
-    border: 1px solid var(--border-light, #ebe7df);
+    background: var(--surface-raised, #f7f4ee);
+    border: 1px solid var(--border-light, #e8e3d9);
 }

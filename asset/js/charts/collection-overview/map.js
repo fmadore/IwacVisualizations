@@ -114,11 +114,11 @@
         // hex values and keeps colors aligned with the active theme.
         function resolvePrimary() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return resolved || '#e67a14';
+            return resolved || '#d86a11';
         }
         function resolveInk() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return resolved || '#18202a';
+            return resolved || '#1c232d';
         }
 
         var mapInstance = null;

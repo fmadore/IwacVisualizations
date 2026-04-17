@@ -87,7 +87,7 @@
      */
     C._stableLabelColor = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return tokens.ink || '#18202a';
+        return tokens.ink || '#1c232d';
     };
 
     /**
@@ -103,7 +103,7 @@
     C._labelHalo = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         return {
-            textBorderColor: tokens.surface || '#fdfdfc',
+            textBorderColor: tokens.surface || '#fdfcfa',
             textBorderWidth: 2
         };
     };
@@ -148,7 +148,7 @@
 
     C._countryColor = function (country) {
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        if (palette.length === 0) palette = ['#e67a14', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
+        if (palette.length === 0) palette = ['#d86a11', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
         var idx;
         if (COUNTRY_MAP[country] != null) {
             idx = COUNTRY_MAP[country];
@@ -558,7 +558,7 @@
     C.treemap = function (tree, opts) {
         opts = opts || {};
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var surfaceColor = tokens.surface || '#fdfdfc';
+        var surfaceColor = tokens.surface || '#fdfcfa';
 
         function sanitize(node, depth, depthRef) {
             if (!node || typeof node !== 'object') return null;
@@ -913,7 +913,7 @@
         var smMaxFont = Math.round(maxFont * 0.8);
 
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#e67a14', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
+            || ['#d86a11', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
 
         var base = {
             tooltip: {
@@ -1493,7 +1493,7 @@
         var edges = (graph && graph.edges) || [];
 
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#e67a14', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
+            || ['#d86a11', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
 
         // Edge color per collaboration type. Categories are also exposed
         // via a `categories` array on the graph series so ECharts can
@@ -1870,7 +1870,7 @@
                 label: { show: false },
                 emphasis: {
                     itemStyle: {
-                        borderColor: tokens.ink || '#18202a',
+                        borderColor: tokens.ink || '#1c232d',
                         borderWidth: 2
                     }
                 }

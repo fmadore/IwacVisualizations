@@ -62,7 +62,7 @@
 
 .iwac-vis-sentiment__caption {
     font-size: var(--text-sm, 0.9rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-variant-numeric: tabular-nums;
 }
 
@@ -121,8 +121,8 @@
 }
 
 .iwac-vis-graph-toolbar__btn {
-    width: 32px;
-    height: 32px;
+    width: var(--iwac-vis-icon-btn, 32px);
+    height: var(--iwac-vis-icon-btn, 32px);
     padding: 0;
     font-size: var(--text-lg, 1.125rem);
     line-height: 1;
@@ -130,7 +130,7 @@
 }
 
 .iwac-vis-graph-toolbar__btn--pressed {
-    background: color-mix(in srgb, var(--primary, #e67a14) 18%, var(--surface, #fdfdfc));
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 60%, var(--border, #dcd7ce));
-    color: var(--primary, #e67a14);
+    background: color-mix(in srgb, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    color: var(--primary, #d86a11);
 }

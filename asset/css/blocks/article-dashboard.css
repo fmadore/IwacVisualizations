@@ -48,8 +48,8 @@
 .iwac-vis-article-card {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfdfc);
-    border: 1px solid var(--border, #dcd7ce);
+    background: var(--surface, #fdfcfa);
+    border: 1px solid var(--border, #dad5cb);
     border-radius: var(--radius-md, 0.75rem);
     overflow: hidden;
     text-decoration: none;
@@ -61,9 +61,13 @@
 }
 .iwac-vis-article-card:hover,
 .iwac-vis-article-card:focus-visible {
-    border-color: color-mix(in srgb, var(--primary, #e67a14) 45%, var(--border, #dcd7ce));
+    border-color: color-mix(in srgb, var(--primary, #d86a11) 45%, var(--border, #dad5cb));
     box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
-    transform: translateY(-2px);
+    /*  Restrained 2px lift — matches the IWAC theme's --lift-xs token
+     *  used on primary buttons / linked resource cards. Bigger lifts
+     *  feel dated (material-design era); 2px is the current editorial
+     *  convention for subtle interactive feedback. */
+    transform: translateY(var(--lift-xs, -0.125rem));
     text-decoration: none;
     outline: none;
 }
@@ -71,7 +75,7 @@
 .iwac-vis-article-card__thumb {
     position: relative;
     aspect-ratio: 4 / 3;
-    background: color-mix(in srgb, var(--primary, #e67a14) 6%, var(--surface, #fdfdfc));
+    background: color-mix(in srgb, var(--primary, #d86a11) 6%, var(--surface, #fdfcfa));
     overflow: hidden;
     /* Stacking context for the similarity / shared-entity badges */
     isolation: isolate;
@@ -88,7 +92,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    color: color-mix(in srgb, var(--ink, #18202a) 35%, transparent);
+    color: color-mix(in srgb, var(--ink, #1c232d) 35%, transparent);
 }
 
 /* --------------------------------------------------------------------
@@ -104,12 +108,12 @@
     font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
     border-radius: var(--radius-full, 9999px);
-    color: var(--surface, #fdfdfc);
+    color: var(--surface, #fdfcfa);
     backdrop-filter: blur(4px);
 }
 .iwac-vis-article-card__sim {
     /* semantic similarity = primary accent */
-    background: color-mix(in srgb, var(--primary, #e67a14) 85%, transparent);
+    background: color-mix(in srgb, var(--primary, #d86a11) 85%, transparent);
 }
 .iwac-vis-article-card__shared {
     /* shared-entities = cool blue/info accent so the two badges
@@ -127,7 +131,7 @@
 .iwac-vis-article-card__title {
     font-size: var(--text-sm, 0.9rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
     line-height: 1.35;
     /* 2-line clamp so titles don't blow up the card height */
     display: -webkit-box;
@@ -137,7 +141,7 @@
 }
 .iwac-vis-article-card__meta {
     font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     font-variant-numeric: tabular-nums;
     /* Single-line clamp — newspaper · country · date is deliberately
      * one row so the meta stays glanceable. */
@@ -175,8 +179,8 @@
 .iwac-vis-sent-card {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfdfc);
-    border: 1px solid var(--border, #dcd7ce);
+    background: var(--surface, #fdfcfa);
+    border: 1px solid var(--border, #dad5cb);
     border-radius: var(--radius-md, 0.75rem);
     /* Thin left accent coloured by the model's palette token. */
     border-left-width: 3px;
@@ -191,7 +195,7 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    border-bottom: 1px solid var(--border-light, var(--border, #dcd7ce));
+    border-bottom: 1px solid var(--border-light, var(--border, #dad5cb));
 }
 .iwac-vis-sent-card__logo {
     width: 22px;
@@ -208,12 +212,12 @@
     margin: 0;
     font-size: var(--text-sm, 0.9rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
     line-height: 1.2;
 }
 .iwac-vis-sent-card__org {
     font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     line-height: 1.2;
 }
 
@@ -233,10 +237,10 @@
 }
 .iwac-vis-sent-row__label {
     font-size: var(--text-xs, 0.75rem);
-    font-weight: 500;
-    color: var(--muted, #6e7a82);
+    font-weight: 600;
+    color: var(--muted, #707f86);
     text-transform: uppercase;
-    letter-spacing: 0.025em;
+    letter-spacing: var(--tracking-wide, 0.04em);
     margin: 0;
 }
 .iwac-vis-sent-row__value {
@@ -246,7 +250,7 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9rem);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 .iwac-vis-sent-row__value--inline {
     flex-wrap: nowrap;
@@ -269,7 +273,7 @@
     /* Foreground is picked to read against the chip background.
      * Polarity + subjectivity rules below override with the right
      * color for each variant. */
-    color: var(--surface, #fdfdfc);
+    color: var(--surface, #fdfcfa);
 }
 
 /* Polarity chip colours — aligned with the --iwac-vis-sent-* ramp
@@ -283,7 +287,7 @@
 .iwac-vis-chip--polarity-very-negative { background: var(--iwac-vis-sent-neg-strong); }
 .iwac-vis-chip--polarity-not-applicable {
     background: var(--iwac-vis-sent-na);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 /* Subjectivity chip colours — use the sequential --iwac-vis-subj-*
@@ -291,25 +295,25 @@
  * so the contrast with white text is weak — flip to dark ink instead. */
 .iwac-vis-chip--subjectivity-1 {
     background: var(--iwac-vis-subj-1);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 .iwac-vis-chip--subjectivity-2 {
     background: var(--iwac-vis-subj-2);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 .iwac-vis-chip--subjectivity-3 {
     background: var(--iwac-vis-subj-3);
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 .iwac-vis-chip--subjectivity-4 {
     background: var(--iwac-vis-subj-4);
     /* 75% --primary mix reads well against --surface, so stick with
      * light foreground at this level. */
-    color: var(--surface, #fdfdfc);
+    color: var(--surface, #fdfcfa);
 }
 .iwac-vis-chip--subjectivity-5 {
     background: var(--iwac-vis-subj-5);
-    color: var(--surface, #fdfdfc);
+    color: var(--surface, #fdfcfa);
 }
 
 
@@ -325,12 +329,12 @@
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    border: 1px solid var(--border, #dcd7ce);
-    background: var(--border-light, var(--border, #dcd7ce));
+    border: 1px solid var(--border, #dad5cb);
+    background: var(--border-light, var(--border, #dad5cb));
 }
 .iwac-vis-dot--on {
     background: var(--iwac-vis-cent-1);
-    border-color: color-mix(in srgb, var(--iwac-vis-cent-1) 70%, var(--ink, #18202a));
+    border-color: color-mix(in srgb, var(--iwac-vis-cent-1) 70%, var(--ink, #1c232d));
 }
 
 
@@ -339,14 +343,14 @@
  * ------------------------------------------------------------------ */
 .iwac-vis-sent-card__justifications {
     padding: 0 var(--space-3, 0.75rem) var(--space-3, 0.75rem);
-    border-top: 1px solid var(--border-light, var(--border, #dcd7ce));
+    border-top: 1px solid var(--border-light, var(--border, #dad5cb));
     margin-top: auto; /* push to card bottom when card taller than content */
 }
 .iwac-vis-sent-card__justifications > summary {
     cursor: pointer;
     padding: var(--space-2, 0.5rem) 0;
     font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     list-style: none;
     transition: color var(--transition-fast, 150ms ease-out);
 }
@@ -361,7 +365,7 @@
     transform: rotate(90deg);
 }
 .iwac-vis-sent-card__justifications > summary:hover {
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
 }
 
 .iwac-vis-sent-just {
@@ -375,14 +379,14 @@
 }
 .iwac-vis-sent-just__item strong {
     display: block;
-    color: var(--ink-light, var(--ink, #18202a));
+    color: var(--ink-light, var(--ink, #1c232d));
     margin-bottom: 0.25rem;
 }
 .iwac-vis-sent-just__item p {
     margin: 0;
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     padding-left: var(--space-2, 0.5rem);
-    border-left: 2px solid var(--border-light, var(--border, #dcd7ce));
+    border-left: 2px solid var(--border-light, var(--border, #dad5cb));
 }
 
 
@@ -394,15 +398,15 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    background: color-mix(in srgb, var(--primary, #e67a14) 3%, var(--surface, #fdfdfc));
-    border: 1px solid var(--border-light, var(--border, #dcd7ce));
+    background: color-mix(in srgb, var(--primary, #d86a11) 3%, var(--surface, #fdfcfa));
+    border: 1px solid var(--border-light, var(--border, #dad5cb));
     border-radius: var(--radius-md, 0.75rem);
 }
 .iwac-vis-sent-radar__title {
     margin: 0;
     font-size: var(--text-sm, 0.9rem);
     font-weight: 600;
-    color: var(--ink, #18202a);
+    color: var(--ink, #1c232d);
     text-align: center;
 }
 .iwac-vis-sent-radar__chart {
@@ -417,7 +421,7 @@
 .iwac-vis-sent-radar__scale {
     margin: 0;
     font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     text-align: center;
     line-height: 1.5;
 }
@@ -444,7 +448,7 @@
 .iwac-vis-further__caption {
     margin: 0;
     font-size: var(--text-sm, 0.9rem);
-    color: var(--muted, #6e7a82);
+    color: var(--muted, #707f86);
     line-height: 1.5;
 }
 .iwac-vis-further__grid {

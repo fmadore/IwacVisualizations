@@ -132,11 +132,11 @@
         // MapLibre understands.
         function primaryColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return resolved || '#e67a14';
+            return resolved || '#d86a11';
         }
         function inkColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return resolved || '#18202a';
+            return resolved || '#1c232d';
         }
 
         var mapInstance = null;

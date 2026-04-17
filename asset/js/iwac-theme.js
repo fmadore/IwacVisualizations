@@ -26,20 +26,21 @@
     /* ----------------------------------------------------------------- */
 
     // Used only if the IWAC theme is not the active Omeka theme and the CSS
-    // custom properties don't resolve. Mirrors _colors.scss defaults.
+    // custom properties don't resolve. Mirrors _colors.scss defaults for
+    // IWAC theme v1.7.0+ (hue 22 primary, warm neutral surfaces).
     var FALLBACK_LIGHT = {
-        primary:       '#e67a14',
-        ink:           '#18202a',
+        primary:       '#d86a11',
+        ink:           '#1c232d',
         inkLight:      '#4a5766',
-        muted:         '#6e7a82',
-        surface:       '#fdfdfc',
-        surfaceRaised: '#f9f7f3',
-        background:    '#f5f3ee',
-        border:        '#dcd7ce',
-        borderLight:   '#ebe7df'
+        muted:         '#707f86',
+        surface:       '#fdfcfa',
+        surfaceRaised: '#f7f4ee',
+        background:    '#f1ede3',
+        border:        '#dad5cb',
+        borderLight:   '#e8e3d9'
     };
     var FALLBACK_DARK = {
-        primary:       '#ea8c2e',
+        primary:       '#ee8f30',
         ink:           '#f2f5f9',
         inkLight:      '#aab4bf',
         muted:         '#969ca4',
