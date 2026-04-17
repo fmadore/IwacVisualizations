@@ -78,23 +78,100 @@
     }
 
     /**
+     * Shared sacrificial <span> for color resolution. Parking it in the
+     * DOM (hidden) lets us reuse it across every call instead of paying
+     * the append/remove cost per token.
+     */
+    var _colorProbe = null;
+    function _getColorProbe() {
+        if (_colorProbe && _colorProbe.isConnected) return _colorProbe;
+        if (typeof document === 'undefined' || !document.body) return null;
+        _colorProbe = document.createElement('span');
+        _colorProbe.setAttribute('aria-hidden', 'true');
+        _colorProbe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;visibility:hidden;pointer-events:none;';
+        document.body.appendChild(_colorProbe);
+        return _colorProbe;
+    }
+
+    /**
+     * Resolve a CSS color string (including hsl(h, calc(...), l%),
+     * var(--primary), or color-mix()) to a plain `rgb(r, g, b)` or
+     * `rgba(r, g, b, a)` string that ECharts' color parser understands.
+     *
+     * Background — ECharts' zrender color parser does NOT handle
+     * `calc()` inside `hsl()`. When the site admin's dynamic primary
+     * color injects something like
+     *     --primary: hsl(14, calc(80% - 12%), 48%);
+     * handing that raw value to ECharts as a bar color works for the
+     * NORMAL render (the browser resolves it when drawing), but the
+     * moment ECharts tries to brighten the color for the hover
+     * emphasis state (via `echarts.color.lift`), the parse fails and
+     * the returned color is undefined — which renders the bar
+     * transparent. The bar visibly "disappears" on hover. Stacked
+     * bars use `emphasis.focus: 'series'` which dims siblings without
+     * touching the hovered bar's color, so they're unaffected.
+     *
+     * Fix: round-trip the value through the browser's color engine,
+     * which evaluates calc() and returns `rgb()/rgba()` — always
+     * parseable by ECharts.
+     *
+     * Safe to call with already-resolved colors (hex, rgb, named);
+     * the browser just normalizes them. Returns the raw input as a
+     * last resort so callers never get undefined.
+     */
+    function resolveCssColor(value) {
+        if (!value || typeof value !== 'string') return value;
+        var trimmed = value.trim();
+        if (!trimmed) return trimmed;
+        // Fast path — hex / rgb / rgba don't need round-tripping and
+        // the probe append/reflow is the expensive part of this fn.
+        if (/^#([0-9a-f]{3}){1,2}$/i.test(trimmed)) return trimmed;
+        if (/^rgba?\(/i.test(trimmed)) return trimmed;
+
+        var probe = _getColorProbe();
+        if (!probe) return trimmed;
+        try {
+            probe.style.color = '';
+            probe.style.color = trimmed;
+            var resolved = getComputedStyle(probe).color;
+            return resolved || trimmed;
+        } catch (e) {
+            return trimmed;
+        }
+    }
+    // Expose for chart modules that read CSS vars directly
+    // (e.g. scary-terms, map panels) via ns.resolveCssVar —
+    // they should route their color reads through this so they
+    // never hand ECharts an unparseable `calc()` / color-mix().
+    ns.resolveCssColor = resolveCssColor;
+
+    /** Read a CSS color variable and resolve it to a parseable rgb(). */
+    function readColorVar(name) {
+        return resolveCssColor(readVar(name));
+    }
+    ns.readColorVar = readColorVar;
+
+    /**
      * Read the current IWAC theme tokens from CSS custom properties on
-     * document.body. Unresolvable values fall back to the appropriate
-     * FALLBACK_* object based on the current mode.
+     * document.body. Every token is routed through `resolveCssColor`
+     * so ECharts receives parseable rgb() values — this is what stops
+     * single-series bars from disappearing on hover. Unresolvable
+     * values fall back to the appropriate FALLBACK_* object based on
+     * the current mode.
      */
     function readTokens() {
         var mode = ns.getCurrentTheme(); // 'light' | 'dark'
         var fallback = mode === 'dark' ? FALLBACK_DARK : FALLBACK_LIGHT;
         return {
-            primary:       readVar('--primary')        || fallback.primary,
-            ink:           readVar('--ink')             || fallback.ink,
-            inkLight:      readVar('--ink-light')       || fallback.inkLight,
-            muted:         readVar('--muted')           || fallback.muted,
-            surface:       readVar('--surface')         || fallback.surface,
-            surfaceRaised: readVar('--surface-raised')  || fallback.surfaceRaised,
-            background:    readVar('--background')      || fallback.background,
-            border:        readVar('--border')          || fallback.border,
-            borderLight:   readVar('--border-light')    || fallback.borderLight
+            primary:       readColorVar('--primary')        || fallback.primary,
+            ink:           readColorVar('--ink')            || fallback.ink,
+            inkLight:      readColorVar('--ink-light')      || fallback.inkLight,
+            muted:         readColorVar('--muted')          || fallback.muted,
+            surface:       readColorVar('--surface')        || fallback.surface,
+            surfaceRaised: readColorVar('--surface-raised') || fallback.surfaceRaised,
+            background:    readColorVar('--background')     || fallback.background,
+            border:        readColorVar('--border')         || fallback.border,
+            borderLight:   readColorVar('--border-light')   || fallback.borderLight
         };
     }
 

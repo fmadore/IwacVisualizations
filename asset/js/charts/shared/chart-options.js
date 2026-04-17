@@ -775,7 +775,14 @@
         if (!isFinite(yearMax)) yearMax = new Date().getFullYear();
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var strokeColor = tokens.border ? tokens.border + '36' : 'rgba(0,0,0,0.13)';
+        // modifyAlpha rather than string-concat an '36' hex-alpha suffix —
+        // the latter only worked for hex tokens and silently broke the
+        // stroke (producing e.g. `rgb(210,213,203)36`, an invalid color)
+        // once iwac-theme.js started emitting rgb() via the probe-based
+        // resolver. 0.21 ≈ 21% matches the previous `36` hex alpha.
+        var strokeColor = (tokens.border && echarts && echarts.color && echarts.color.modifyAlpha)
+            ? echarts.color.modifyAlpha(tokens.border, 0.21)
+            : 'rgba(0,0,0,0.13)';
 
         function renderItem(params, api) {
             var yIndex = api.value(0);
