@@ -152,6 +152,47 @@
     ns.readColorVar = readColorVar;
 
     /**
+     * Apply an alpha to an already-resolved color string. Inputs are
+     * expected to be `rgb(r, g, b)` (the form `resolveCssColor` returns);
+     * `rgba(...)` and `#hex` are also accepted. Returns a flat
+     * `rgba(r, g, b, a)` that ECharts' color parser fully understands —
+     * crucially, it survives ECharts' internal color manipulations
+     * (lift/darken on hover/emphasis), unlike runtime `color-mix(...)`
+     * strings which canvas2d will fill directly but ECharts cannot
+     * deconstruct.
+     *
+     * Use this for any chart color that needs to vary in opacity off a
+     * theme token — never inline `color-mix()` in a chart string.
+     */
+    function withAlpha(color, alpha) {
+        if (!color || typeof color !== 'string') return color;
+        var a = Math.max(0, Math.min(1, Number(alpha)));
+        // rgb(r, g, b) | rgba(r, g, b, ?)
+        var m = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(color);
+        if (m) {
+            return 'rgba(' + m[1] + ', ' + m[2] + ', ' + m[3] + ', ' + a + ')';
+        }
+        // #rgb / #rrggbb — expand and convert
+        var hex = /^#([0-9a-f]{3,8})$/i.exec(color);
+        if (hex) {
+            var h = hex[1];
+            if (h.length === 3 || h.length === 4) {
+                h = h.split('').map(function (c) { return c + c; }).join('');
+            }
+            var r = parseInt(h.slice(0, 2), 16);
+            var g = parseInt(h.slice(2, 4), 16);
+            var b = parseInt(h.slice(4, 6), 16);
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        }
+        // Fallback: round-trip through the browser via resolveCssColor,
+        // then retry. Covers named colors, color(srgb ...), oklch(...).
+        var resolved = resolveCssColor(color);
+        if (resolved !== color) return withAlpha(resolved, alpha);
+        return color;
+    }
+    ns.withAlpha = withAlpha;
+
+    /**
      * Read the current IWAC theme tokens from CSS custom properties on
      * document.body. Every token is routed through `resolveCssColor`
      * so ECharts receives parseable rgb() values — this is what stops
@@ -276,7 +317,9 @@
             dataZoom: {
                 backgroundColor:     'transparent',
                 dataBackgroundColor: tokens.borderLight,
-                fillerColor:         'color-mix(in oklab, ' + tokens.primary + ' 18%, transparent)',
+                // 18% primary on transparent — composed via withAlpha (NOT
+                // color-mix) so ECharts' internal parser can deconstruct it.
+                fillerColor:         withAlpha(tokens.primary, 0.18),
                 handleColor:         tokens.primary,
                 handleSize:          '100%',
                 textStyle:           { color: tokens.inkLight },
