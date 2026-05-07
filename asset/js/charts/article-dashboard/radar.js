@@ -87,6 +87,18 @@
             };
         });
 
+        // Theme-aware fallbacks: a hard-coded dark hex for `tokens.ink`
+        // (e.g. "#222") is invisible on a dark surface, which is exactly
+        // how the polarity / centrality / subjectivity labels became
+        // unreadable in dark mode. Pick light defaults for dark theme.
+        var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
+        var fallbackInk      = isDark ? '#e6e7eb' : '#1c232d';
+        var fallbackInkLight = isDark ? '#b1b3ba' : '#535862';
+        var fallbackBorder   = isDark ? '#3d4148' : '#d4d6da';
+        var inkColor      = tokens.ink      || fallbackInk;
+        var inkLightColor = tokens.inkLight || fallbackInkLight;
+        var borderColor   = tokens.borderLight || tokens.border || fallbackBorder;
+
         ns.registerChart(canvasEl, function (el, instance) {
             instance.setOption({
                 tooltip: {
@@ -115,7 +127,7 @@
                 },
                 legend: {
                     bottom: 0,
-                    textStyle: { color: tokens.inkLight || tokens.ink || '#333' }
+                    textStyle: { color: inkLightColor }
                 },
                 radar: {
                     indicator: indicators,
@@ -123,16 +135,16 @@
                     radius: '65%',
                     splitNumber: 5,
                     axisName: {
-                        color: tokens.ink || '#222',
+                        color: inkColor,
                         fontWeight: 600,
                         fontSize: 12
                     },
                     splitLine: {
-                        lineStyle: { color: tokens.borderLight || tokens.border || '#ccc' }
+                        lineStyle: { color: borderColor }
                     },
                     splitArea: { show: false },
                     axisLine: {
-                        lineStyle: { color: tokens.borderLight || tokens.border || '#ccc' }
+                        lineStyle: { color: borderColor }
                     }
                 },
                 series: [{

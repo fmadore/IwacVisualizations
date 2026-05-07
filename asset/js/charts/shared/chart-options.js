@@ -1279,6 +1279,17 @@
             : function (name) { return name; };
         var total = segments.reduce(function (s, e) { return s + (e.count || 0); }, 0);
 
+        // Pick theme-aware text colors so the y-axis label and legend
+        // remain readable when the chart inherits the dark ECharts theme.
+        // ECharts' merge semantics: setting `axisLabel: {fontSize: 11}`
+        // shouldn't clobber the theme's color, but in practice some panels
+        // re-init outside the standard theme scope. Setting color
+        // explicitly here is defensive.
+        var themeTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
+        var labelInk      = themeTokens.ink      || (isDark ? '#e6e7eb' : '#1c232d');
+        var labelInkLight = themeTokens.inkLight || (isDark ? '#b1b3ba' : '#535862');
+
         var series = segments.map(function (seg) {
             return {
                 name: labelFor(seg.name),
@@ -1323,7 +1334,7 @@
                 bottom: 0,
                 itemWidth: 12,
                 itemHeight: 10,
-                textStyle: { fontSize: 11 }
+                textStyle: { fontSize: 11, color: labelInkLight }
             },
             xAxis: {
                 type: 'value',
@@ -1335,7 +1346,7 @@
                 data: [opts.axisLabel || ''],
                 axisLine: { show: false },
                 axisTick: { show: false },
-                axisLabel: { fontSize: 11 }
+                axisLabel: { fontSize: 11, color: labelInk, fontWeight: 600 }
             },
             series: series
         };
