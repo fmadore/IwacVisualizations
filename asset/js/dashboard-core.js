@@ -296,14 +296,9 @@
      */
     // Cached canvas2d context — used to coerce modern color forms
     // (oklch/oklab/color-mix/color()) into legacy rgb()/rgba() that
-    // ECharts AND MapLibre's style validator both accept.
-    //
-    // CAUTION: `ctx.fillStyle = oklch(…); return ctx.fillStyle` does NOT
-    // normalize in recent Chromium (it round-trips the modern format
-    // unchanged). The reliable technique is to actually RASTERIZE the
-    // color into the canvas's sRGB backing store and read back the
-    // bytes via getImageData — the pixel buffer is always sRGB, so the
-    // bytes are Color-Level-3 RGB by definition.
+    // ECharts AND MapLibre's style validator both accept. canvas2d's
+    // fillStyle setter accepts any CSS color the browser knows and
+    // emits a Color-Level-3-legal serialization on read.
     var _normProbe = null;
     function _normalizeViaCanvas(value) {
         if (!value) return value;
@@ -311,20 +306,12 @@
             if (!_normProbe) {
                 var canvas = document.createElement('canvas');
                 canvas.width = canvas.height = 1;
-                // Force sRGB so we don't accidentally land on a wide-gamut
-                // backing buffer in environments that default to display-p3.
-                _normProbe = canvas.getContext('2d', { colorSpace: 'srgb' })
-                          || canvas.getContext('2d');
+                _normProbe = canvas.getContext('2d');
             }
             if (!_normProbe) return value;
-            _normProbe.clearRect(0, 0, 1, 1);
+            _normProbe.fillStyle = '#000';
             _normProbe.fillStyle = value;
-            _normProbe.fillRect(0, 0, 1, 1);
-            var d = _normProbe.getImageData(0, 0, 1, 1).data;
-            if (d[3] === 255) {
-                return 'rgb(' + d[0] + ', ' + d[1] + ', ' + d[2] + ')';
-            }
-            return 'rgba(' + d[0] + ', ' + d[1] + ', ' + d[2] + ', ' + (d[3] / 255) + ')';
+            return _normProbe.fillStyle || value;
         } catch (e) {
             return value;
         }

@@ -134,15 +134,12 @@
      * the browser just normalizes them. Returns the raw input as a
      * last resort so callers never get undefined.
      */
-    // Coerce modern color forms (oklch/oklab/color-mix/color()) into legacy
-    // rgb()/rgba() by RASTERIZING into a 1x1 sRGB canvas and reading back
-    // the pixel bytes. `ctx.fillStyle = oklch(…); return ctx.fillStyle`
-    // does NOT normalize in recent Chromium — it round-trips the modern
-    // format unchanged. Rasterization works because the canvas backing
-    // store is sRGB, so the bytes from getImageData are Color-Level-3 RGB
-    // by construction. This is what lets IWAC theme v2.0.0 OKLCH tokens
-    // (`oklch(20% .012 264)`, `color-mix(in oklab,…)`) survive ECharts'
-    // internal lift/darken AND MapLibre's style validator.
+    // canvas2d fillStyle is the most permissive normalizer the platform
+    // exposes — it accepts oklch/oklab/color-mix/color()/named/hex/rgb/hsl
+    // and serializes back to a hex or rgba() string. Used to coerce IWAC
+    // theme v2.0.0 OKLCH tokens (`oklch(20% .012 264)`, `color-mix(in oklab,…)`)
+    // that getComputedStyle leaves AS-IS in modern Chromium — both ECharts'
+    // internal lift/darken AND MapLibre's style validator reject those forms.
     var _canvasProbe = null;
     function _normalizeViaCanvas(value) {
         if (!value) return value;
@@ -150,18 +147,12 @@
             if (!_canvasProbe) {
                 var canvas = document.createElement('canvas');
                 canvas.width = canvas.height = 1;
-                _canvasProbe = canvas.getContext('2d', { colorSpace: 'srgb' })
-                            || canvas.getContext('2d');
+                _canvasProbe = canvas.getContext('2d');
             }
             if (!_canvasProbe) return value;
-            _canvasProbe.clearRect(0, 0, 1, 1);
+            _canvasProbe.fillStyle = '#000';
             _canvasProbe.fillStyle = value;
-            _canvasProbe.fillRect(0, 0, 1, 1);
-            var d = _canvasProbe.getImageData(0, 0, 1, 1).data;
-            if (d[3] === 255) {
-                return 'rgb(' + d[0] + ', ' + d[1] + ', ' + d[2] + ')';
-            }
-            return 'rgba(' + d[0] + ', ' + d[1] + ', ' + d[2] + ', ' + (d[3] / 255) + ')';
+            return _canvasProbe.fillStyle || value;
         } catch (e) {
             return value;
         }
