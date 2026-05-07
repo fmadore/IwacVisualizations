@@ -305,18 +305,20 @@
         document.body.removeChild(probe);
         if (!resolved || resolved === 'rgba(0, 0, 0, 0)') return '';
 
-        var cm = /^color\(\s*srgb\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)(?:\s*\/\s*([\d.eE+\-]+))?\s*\)$/.exec(resolved);
-        if (cm) {
-            var toByte = function (s) {
-                return Math.max(0, Math.min(255, Math.round(parseFloat(s) * 255)));
-            };
-            var r = toByte(cm[1]);
-            var g = toByte(cm[2]);
-            var b = toByte(cm[3]);
-            if (cm[4] != null && parseFloat(cm[4]) < 1) {
-                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + parseFloat(cm[4]) + ')';
-            }
-            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        // rgb / rgba are already Color-3-legal — fast path.
+        if (/^rgba?\(/i.test(resolved)) return resolved;
+
+        // After IWAC theme v2.0.0 reframed tokens around OKLCH, modern
+        // Chromium serializes `color-mix(in oklab, …)` and `oklch(…)`
+        // results as oklab(…) / oklch(…) AS-IS, not as rgb. ECharts'
+        // parse → undefined → hover lift fails → orange "disappears".
+        // ns._convertModernColor (defined in iwac-theme.js) does pure-JS
+        // Oklab → linear sRGB → sRGB math, so the result is parseable
+        // by ECharts AND accepted by MapLibre's style validator. No
+        // canvas (anti-fingerprinting layers can corrupt canvas reads).
+        if (typeof ns._convertModernColor === 'function') {
+            var converted = ns._convertModernColor(resolved);
+            if (converted) return converted;
         }
         return resolved;
     };

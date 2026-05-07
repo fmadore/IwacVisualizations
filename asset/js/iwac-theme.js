@@ -108,40 +108,146 @@
         return _colorProbe;
     }
 
+    /* ------------------------------------------------------------- */
+    /*  Pure-JS oklab / oklch / color(srgb …) → legacy rgb           */
+    /* ------------------------------------------------------------- */
+    //
+    // Why this exists: ECharts' zrender parser only understands CSS
+    // Color Module Level 3 (hex, rgb, hsl, named). On normal render
+    // the browser resolves whatever string we hand fillStyle, but for
+    // hover emphasis ECharts itself calls `color.lift(seriesColor)`
+    // which calls `color.parse(seriesColor)`. Parse returns undefined
+    // for oklab/oklch/color(srgb), lift returns undefined, and the
+    // hovered shape is drawn with no fill — the orange bar visibly
+    // "disappears" on hover.
+    //
+    // After IWAC theme v2.0.0 reframed tokens around OKLCH:
+    //     --ink:     oklch(20% 0.012 264);
+    //     --primary: color-mix(in oklab, var(--primary-base), black 8%);
+    // modern Chromium serializes `getComputedStyle(probe).color` AS
+    // oklab() / oklch() — not rgb(). Probe round-trip alone no longer
+    // produces a parseable result.
+    //
+    // The fix: parse oklab() / oklch() / color(srgb) ourselves and
+    // emit legacy rgb()/rgba(). Pure math, no canvas (Brave Shields
+    // and other anti-fingerprinting layers can corrupt canvas reads),
+    // no DOM, deterministic.
+
+    function _clip01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+    // Linear sRGB → sRGB (gamma encode)
+    function _linearToSrgb(v) {
+        v = _clip01(v);
+        return v >= 0.0031308
+            ? 1.055 * Math.pow(v, 1 / 2.4) - 0.055
+            : 12.92 * v;
+    }
+
+    // Oklab → linear sRGB (Björn Ottosson's reference matrix)
+    function _oklabToLinearSrgb(L, a, b) {
+        var l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+        var m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+        var s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+        var l = l_ * l_ * l_;
+        var m = m_ * m_ * m_;
+        var s = s_ * s_ * s_;
+        return [
+             4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+        ];
+    }
+
+    // Parse a CSS number that may be `0.94`, `94%`, etc.
+    function _num(s, base) {
+        s = String(s).trim();
+        if (s.slice(-1) === '%') return parseFloat(s) / 100 * (base || 1);
+        return parseFloat(s);
+    }
+
+    // Build an "rgb(...)" or "rgba(...)" from float linear sRGB triple
+    // and an alpha 0..1. Clips out-of-gamut to [0,1].
+    function _emitRgbFromLinear(rL, gL, bL, alpha) {
+        var r = Math.round(_linearToSrgb(rL) * 255);
+        var g = Math.round(_linearToSrgb(gL) * 255);
+        var b = Math.round(_linearToSrgb(bL) * 255);
+        if (r < 0) r = 0; if (r > 255) r = 255;
+        if (g < 0) g = 0; if (g > 255) g = 255;
+        if (b < 0) b = 0; if (b > 255) b = 255;
+        if (alpha != null && alpha < 1) {
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+        }
+        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    }
+
+    // Match  oklab( L A B [ / alpha ] )   space- or comma-separated
+    var _oklabRe = /^oklab\(\s*([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)(?:\s*\/\s*([\d.eE+\-%]+))?\s*\)$/i;
+    // Match  oklch( L C H [ / alpha ] )
+    var _oklchRe = /^oklch\(\s*([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)(?:deg)?(?:\s*\/\s*([\d.eE+\-%]+))?\s*\)$/i;
+    // Match  color(srgb r g b [ / alpha ] )
+    var _csrgbRe = /^color\(\s*srgb\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)(?:\s*\/\s*([\d.eE+\-]+))?\s*\)$/i;
+
+    function _convertModernColor(s) {
+        var m = _oklabRe.exec(s);
+        if (m) {
+            var L = _num(m[1], 1);   // 0..1 (or %)
+            var a = _num(m[2], 0.4); // unitless (rough scale ~0.4)
+            var b = _num(m[3], 0.4);
+            var alpha = m[4] != null ? _num(m[4], 1) : 1;
+            var lin = _oklabToLinearSrgb(L, a, b);
+            return _emitRgbFromLinear(lin[0], lin[1], lin[2], alpha);
+        }
+        m = _oklchRe.exec(s);
+        if (m) {
+            var L2 = _num(m[1], 1);
+            var C  = _num(m[2], 0.4);
+            var H  = _num(m[3], 360);   // already degrees
+            var alpha2 = m[4] != null ? _num(m[4], 1) : 1;
+            var hRad = H * Math.PI / 180;
+            var aLab = C * Math.cos(hRad);
+            var bLab = C * Math.sin(hRad);
+            var lin2 = _oklabToLinearSrgb(L2, aLab, bLab);
+            return _emitRgbFromLinear(lin2[0], lin2[1], lin2[2], alpha2);
+        }
+        m = _csrgbRe.exec(s);
+        if (m) {
+            var rByte = Math.round(_clip01(parseFloat(m[1])) * 255);
+            var gByte = Math.round(_clip01(parseFloat(m[2])) * 255);
+            var bByte = Math.round(_clip01(parseFloat(m[3])) * 255);
+            var aSrgb = m[4] != null ? parseFloat(m[4]) : 1;
+            if (aSrgb < 1) {
+                return 'rgba(' + rByte + ', ' + gByte + ', ' + bByte + ', ' + aSrgb + ')';
+            }
+            return 'rgb(' + rByte + ', ' + gByte + ', ' + bByte + ')';
+        }
+        return null;
+    }
+
     /**
-     * Resolve a CSS color string (including hsl(h, calc(...), l%),
-     * var(--primary), or color-mix()) to a plain `rgb(r, g, b)` or
-     * `rgba(r, g, b, a)` string that ECharts' color parser understands.
+     * Resolve a CSS color string to a Color-3-legal `rgb(...)` /
+     * `rgba(...)` that ECharts AND MapLibre's style validator both
+     * accept. Strategy:
+     *   1. hex / rgb / rgba — fast-pass.
+     *   2. probe round-trip via getComputedStyle for hsl/calc/var/color-mix.
+     *   3. if the round-trip yields oklab / oklch / color(srgb), convert
+     *      via pure JS math (Oklab → linear sRGB → sRGB).
+     *   4. fallback: return the round-tripped string (anything ECharts
+     *      already understood: rgb, hsl, named).
      *
-     * Background — ECharts' zrender color parser does NOT handle
-     * `calc()` inside `hsl()`. When the site admin's dynamic primary
-     * color injects something like
-     *     --primary: hsl(14, calc(80% - 12%), 48%);
-     * handing that raw value to ECharts as a bar color works for the
-     * NORMAL render (the browser resolves it when drawing), but the
-     * moment ECharts tries to brighten the color for the hover
-     * emphasis state (via `echarts.color.lift`), the parse fails and
-     * the returned color is undefined — which renders the bar
-     * transparent. The bar visibly "disappears" on hover. Stacked
-     * bars use `emphasis.focus: 'series'` which dims siblings without
-     * touching the hovered bar's color, so they're unaffected.
-     *
-     * Fix: round-trip the value through the browser's color engine,
-     * which evaluates calc() and returns `rgb()/rgba()` — always
-     * parseable by ECharts.
-     *
-     * Safe to call with already-resolved colors (hex, rgb, named);
-     * the browser just normalizes them. Returns the raw input as a
-     * last resort so callers never get undefined.
+     * No canvas — anti-fingerprinting layers (Brave Shields) can
+     * corrupt canvas pixel reads, which would silently produce wrong
+     * colors and break ECharts hover lifts.
      */
     function resolveCssColor(value) {
         if (!value || typeof value !== 'string') return value;
         var trimmed = value.trim();
         if (!trimmed) return trimmed;
-        // Fast path — hex / rgb / rgba don't need round-tripping and
-        // the probe append/reflow is the expensive part of this fn.
         if (/^#([0-9a-f]{3}){1,2}$/i.test(trimmed)) return trimmed;
         if (/^rgba?\(/i.test(trimmed)) return trimmed;
+
+        // Direct math conversion if the input is already a modern form
+        var direct = _convertModernColor(trimmed);
+        if (direct) return direct;
 
         var probe = _getColorProbe();
         if (!probe) return trimmed;
@@ -149,11 +255,20 @@
             probe.style.color = '';
             probe.style.color = trimmed;
             var resolved = getComputedStyle(probe).color;
-            return resolved || trimmed;
+            if (!resolved) return trimmed;
+            if (/^rgba?\(/i.test(resolved)) return resolved;
+            // Modern Chromium can emit oklab() / oklch() / color(srgb)
+            // for color-mix() / oklch() / hsl(modern syntax) inputs.
+            var converted = _convertModernColor(resolved);
+            return converted || resolved;
         } catch (e) {
             return trimmed;
         }
     }
+    // Exposed for callers that want to convert raw strings (not only
+    // CSS variables) — e.g. tokens.primary that already came from
+    // readTokens() but is being repurposed as a MapLibre paint value.
+    ns._convertModernColor = _convertModernColor;
     // Expose for chart modules that read CSS vars directly
     // (e.g. scary-terms, map panels) via ns.resolveCssVar —
     // they should route their color reads through this so they
