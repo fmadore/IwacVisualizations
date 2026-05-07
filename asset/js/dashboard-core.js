@@ -294,29 +294,6 @@
      * @param {string} varName  e.g. '--iwac-vis-heatmap-2'
      * @returns {string} legacy-rgb color, or '' if undefined / unresolvable
      */
-    // Cached canvas2d context — used to coerce modern color forms
-    // (oklch/oklab/color-mix/color()) into legacy rgb()/rgba() that
-    // ECharts AND MapLibre's style validator both accept. canvas2d's
-    // fillStyle setter accepts any CSS color the browser knows and
-    // emits a Color-Level-3-legal serialization on read.
-    var _normProbe = null;
-    function _normalizeViaCanvas(value) {
-        if (!value) return value;
-        try {
-            if (!_normProbe) {
-                var canvas = document.createElement('canvas');
-                canvas.width = canvas.height = 1;
-                _normProbe = canvas.getContext('2d');
-            }
-            if (!_normProbe) return value;
-            _normProbe.fillStyle = '#000';
-            _normProbe.fillStyle = value;
-            return _normProbe.fillStyle || value;
-        } catch (e) {
-            return value;
-        }
-    }
-
     ns.resolveCssVar = function (varName) {
         if (typeof document === 'undefined' || !document.body) return '';
         var probe = document.createElement('span');
@@ -328,17 +305,20 @@
         document.body.removeChild(probe);
         if (!resolved || resolved === 'rgba(0, 0, 0, 0)') return '';
 
-        // Fast path: legacy rgb()/rgba() — already Color-3-legal.
-        if (/^rgba?\(/i.test(resolved)) return resolved;
-
-        // Modern Chromium serializes oklch()/oklab() / color-mix(in oklab,…)
-        // results AS-IS from getComputedStyle (theme v2.0.0+ tokens like
-        // `--ink: oklch(20% .012 264)` round-trip unchanged). MapLibre's
-        // style validator and ECharts' lift/darken both reject those.
-        // color(srgb …) is the legacy serialization the old branch handled.
-        // Route every non-rgb shape through canvas2d fillStyle, which
-        // returns a hex / rgba() string the rest of the stack accepts.
-        return _normalizeViaCanvas(resolved) || resolved;
+        var cm = /^color\(\s*srgb\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)(?:\s*\/\s*([\d.eE+\-]+))?\s*\)$/.exec(resolved);
+        if (cm) {
+            var toByte = function (s) {
+                return Math.max(0, Math.min(255, Math.round(parseFloat(s) * 255)));
+            };
+            var r = toByte(cm[1]);
+            var g = toByte(cm[2]);
+            var b = toByte(cm[3]);
+            if (cm[4] != null && parseFloat(cm[4]) < 1) {
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + parseFloat(cm[4]) + ')';
+            }
+            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        }
+        return resolved;
     };
 
     /** Truncate a string with ellipsis if it exceeds maxLen. */
