@@ -134,6 +134,30 @@
      * the browser just normalizes them. Returns the raw input as a
      * last resort so callers never get undefined.
      */
+    // canvas2d fillStyle is the most permissive normalizer the platform
+    // exposes — it accepts oklch/oklab/color-mix/color()/named/hex/rgb/hsl
+    // and serializes back to a hex or rgba() string. Used to coerce IWAC
+    // theme v2.0.0 OKLCH tokens (`oklch(20% .012 264)`, `color-mix(in oklab,…)`)
+    // that getComputedStyle leaves AS-IS in modern Chromium — both ECharts'
+    // internal lift/darken AND MapLibre's style validator reject those forms.
+    var _canvasProbe = null;
+    function _normalizeViaCanvas(value) {
+        if (!value) return value;
+        try {
+            if (!_canvasProbe) {
+                var canvas = document.createElement('canvas');
+                canvas.width = canvas.height = 1;
+                _canvasProbe = canvas.getContext('2d');
+            }
+            if (!_canvasProbe) return value;
+            _canvasProbe.fillStyle = '#000';
+            _canvasProbe.fillStyle = value;
+            return _canvasProbe.fillStyle || value;
+        } catch (e) {
+            return value;
+        }
+    }
+
     function resolveCssColor(value) {
         if (!value || typeof value !== 'string') return value;
         var trimmed = value.trim();
@@ -144,12 +168,17 @@
         if (/^rgba?\(/i.test(trimmed)) return trimmed;
 
         var probe = _getColorProbe();
-        if (!probe) return trimmed;
+        if (!probe) return _normalizeViaCanvas(trimmed) || trimmed;
         try {
             probe.style.color = '';
             probe.style.color = trimmed;
             var resolved = getComputedStyle(probe).color;
-            return resolved || trimmed;
+            if (!resolved) return trimmed;
+            // rgb/rgba is Color-3-legal; everything else (oklch, oklab,
+            // color(srgb …), color-mix(…)) gets canvas-normalized so it
+            // survives ECharts' parser AND MapLibre's style validator.
+            if (/^rgba?\(/i.test(resolved)) return resolved;
+            return _normalizeViaCanvas(resolved) || resolved;
         } catch (e) {
             return trimmed;
         }
