@@ -27,28 +27,29 @@
 
     // Used only if the IWAC theme is not the active Omeka theme and the CSS
     // custom properties don't resolve. Mirrors _colors.scss defaults for
-    // IWAC theme v1.7.0+ (hue 22 primary, warm neutral surfaces).
+    // IWAC theme v2.0.0 — OKLCH-based, cool-neutral surfaces (NOT cream),
+    // primary hex `#e77f11` matching layout.phtml's `--primary-base`.
     var FALLBACK_LIGHT = {
-        primary:       '#d86a11',
-        ink:           '#1c232d',
-        inkLight:      '#4a5766',
-        muted:         '#707f86',
-        surface:       '#fdfcfa',
-        surfaceRaised: '#f7f4ee',
-        background:    '#f1ede3',
-        border:        '#dad5cb',
-        borderLight:   '#e8e3d9'
+        primary:       '#e77f11',  // brand orange, near oklch(67% 0.156 51)
+        ink:           '#2c2f37',  // ~oklch(20% 0.012 264)
+        inkLight:      '#535862',  // ~oklch(38% 0.012 260)
+        muted:         '#767880',  // ~oklch(54% 0.008 256)
+        surface:       '#fdfdfd',  // ~oklch(99.2% 0.002 60)  near-white, not cream
+        surfaceRaised: '#fafaf9',  // ~oklch(98.0% 0.003 60)
+        background:    '#f7f7f6',  // ~oklch(97.0% 0.003 60)
+        border:        '#d4d6da',  // ~oklch(86% 0.007 258) cool-neutral
+        borderLight:   '#e6e7eb'   // ~oklch(92% 0.005 258)
     };
     var FALLBACK_DARK = {
-        primary:       '#ee8f30',
-        ink:           '#f2f5f9',
-        inkLight:      '#aab4bf',
-        muted:         '#969ca4',
-        surface:       '#191d24',
-        surfaceRaised: '#1e2229',
-        background:    '#13171d',
-        border:        '#31363e',
-        borderLight:   '#272b33'
+        primary:       '#f29541',  // mix(primary-base, white 12%) in oklab
+        ink:           '#ebecf0',  // ~oklch(94% 0.008 258)
+        inkLight:      '#b1b3ba',  // ~oklch(76% 0.010 258)
+        muted:         '#84878f',  // ~oklch(60% 0.010 258)
+        surface:       '#1f232b',  // ~oklch(17% 0.010 264)
+        surfaceRaised: '#262a32',  // ~oklch(20% 0.010 264)
+        background:    '#15181f',  // ~oklch(12% 0.010 264)
+        border:        '#3d4148',  // ~oklch(30% 0.012 264)
+        borderLight:   '#2f343c'   // ~oklch(24% 0.012 264)
     };
 
     /* ----------------------------------------------------------------- */
@@ -75,6 +76,20 @@
     function readVar(name) {
         if (typeof getComputedStyle === 'undefined' || !document.body) return '';
         return getComputedStyle(document.body).getPropertyValue(name).trim();
+    }
+
+    /**
+     * Read the body's resolved font-family stack so charts inherit the
+     * theme's typography automatically. Theme v2.0.0 ships Public Sans
+     * (body) + Source Serif 4 (headings); previous hardcoded "Inter"
+     * here meant every chart visibly clashed with the surrounding UI.
+     */
+    function readBodyFont() {
+        if (typeof getComputedStyle === 'undefined' || !document.body) {
+            return null;
+        }
+        var ff = getComputedStyle(document.body).fontFamily;
+        return (ff && ff.trim()) || null;
     }
 
     /**
@@ -212,7 +227,11 @@
             surfaceRaised: readColorVar('--surface-raised') || fallback.surfaceRaised,
             background:    readColorVar('--background')     || fallback.background,
             border:        readColorVar('--border')         || fallback.border,
-            borderLight:   readColorVar('--border-light')   || fallback.borderLight
+            borderLight:   readColorVar('--border-light')   || fallback.borderLight,
+            // Inherits whatever the theme's body font-family is, so charts
+            // never visibly clash with surrounding type. Stack fallback
+            // matches theme v2.0.0 (Public Sans).
+            fontFamily:    readBodyFont() || '"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
         };
     }
 
@@ -237,7 +256,7 @@
             aria: { enabled: true },
             textStyle: {
                 color: tokens.ink,
-                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+                fontFamily: tokens.fontFamily
             },
             title: {
                 textStyle: { color: tokens.ink, fontWeight: 600 },
@@ -252,7 +271,9 @@
                 borderColor: tokens.border,
                 borderWidth: 1,
                 textStyle: { color: tokens.ink },
-                extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-radius: 6px;',
+                // Radius matches theme v2.0.0 --radius-md (8px, tightened
+                // from 12px in v1.x for an institutional register).
+                extraCssText: 'box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-radius: 8px;',
                 // Prevent hover tooltips from being clipped by panels with
                 // `overflow: hidden` (recent-additions scrollbox, grid
                 // cells) or extending beyond the chart on narrow screens.
