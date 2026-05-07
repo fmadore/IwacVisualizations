@@ -278,7 +278,7 @@
      *
      * Why this exists: our theme ramps under iwac-core.css
      * (--iwac-vis-heatmap-0..4, --iwac-vis-cent-*, --iwac-vis-subj-*)
-     * are defined as `color-mix(in srgb, var(--primary), var(--surface))`
+     * are defined as `color-mix(in oklab, var(--primary), var(--surface))`
      * expressions so they track the IWAC theme's --primary / --surface
      * tokens. Two things conspire against ECharts here:
      *   1. `getPropertyValue('--x')` returns the raw source — ECharts has

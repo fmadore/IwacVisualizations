@@ -276,7 +276,7 @@
             dataZoom: {
                 backgroundColor:     'transparent',
                 dataBackgroundColor: tokens.borderLight,
-                fillerColor:         'color-mix(in srgb, ' + tokens.primary + ' 18%, transparent)',
+                fillerColor:         'color-mix(in oklab, ' + tokens.primary + ' 18%, transparent)',
                 handleColor:         tokens.primary,
                 handleSize:          '100%',
                 textStyle:           { color: tokens.inkLight },

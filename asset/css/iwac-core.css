@@ -53,18 +53,18 @@
      * accent color the IWAC theme is currently configured with.
      * Fallback updated for IWAC theme v1.7.0 primary (hsl 22, 76%, 48%). */
     --iwac-vis-cent-1:  var(--primary, #d86a11);
-    --iwac-vis-cent-2:  color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
-    --iwac-vis-cent-3:  color-mix(in srgb, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
-    --iwac-vis-cent-4:  color-mix(in srgb, var(--primary, #d86a11) 30%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-2:  color-mix(in oklab, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-3:  color-mix(in oklab, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
+    --iwac-vis-cent-4:  color-mix(in oklab, var(--primary, #d86a11) 30%, var(--surface, #fdfcfa));
     --iwac-vis-cent-na: var(--border-light, var(--border, #dad5cb));
 
     /* Subjectivité — sequential 1..5 (objective → subjective), built
      * from --primary the same way centralité is. 1 = factual/objective
      * is the lightest tint, 5 = highly subjective is the accent itself. */
-    --iwac-vis-subj-1: color-mix(in srgb, var(--primary, #d86a11) 15%, var(--surface, #fdfcfa));
-    --iwac-vis-subj-2: color-mix(in srgb, var(--primary, #d86a11) 35%, var(--surface, #fdfcfa));
-    --iwac-vis-subj-3: color-mix(in srgb, var(--primary, #d86a11) 55%, var(--surface, #fdfcfa));
-    --iwac-vis-subj-4: color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-1: color-mix(in oklab, var(--primary, #d86a11) 15%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-2: color-mix(in oklab, var(--primary, #d86a11) 35%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-3: color-mix(in oklab, var(--primary, #d86a11) 55%, var(--surface, #fdfcfa));
+    --iwac-vis-subj-4: color-mix(in oklab, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
     --iwac-vis-subj-5: var(--primary, #d86a11);
 
     /* AI model accents — used by the article dashboard's sentiment
@@ -79,18 +79,18 @@
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on
      * the same palette. Read by C.heatmap via getComputedStyle. */
-    --iwac-vis-heatmap-0: color-mix(in srgb, var(--primary, #d86a11)  8%, var(--surface, #fdfcfa));
-    --iwac-vis-heatmap-1: color-mix(in srgb, var(--primary, #d86a11) 28%, var(--surface, #fdfcfa));
-    --iwac-vis-heatmap-2: color-mix(in srgb, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
-    --iwac-vis-heatmap-3: color-mix(in srgb, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-0: color-mix(in oklab, var(--primary, #d86a11)  8%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-1: color-mix(in oklab, var(--primary, #d86a11) 28%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-2: color-mix(in oklab, var(--primary, #d86a11) 50%, var(--surface, #fdfcfa));
+    --iwac-vis-heatmap-3: color-mix(in oklab, var(--primary, #d86a11) 75%, var(--surface, #fdfcfa));
     --iwac-vis-heatmap-4: var(--primary, #d86a11);
 
     /* Shared decorative shadow colors derived from --ink. Used by
      * custom shadows (slider glow, map controls) so every layered
      * effect tracks light/dark without hardcoded rgba. */
-    --iwac-vis-shadow-subtle: color-mix(in srgb, var(--ink, #1c232d)  8%, transparent);
-    --iwac-vis-shadow-soft:   color-mix(in srgb, var(--ink, #1c232d) 14%, transparent);
-    --iwac-vis-shadow-strong: color-mix(in srgb, var(--ink, #1c232d) 22%, transparent);
+    --iwac-vis-shadow-subtle: color-mix(in oklab, var(--ink, #1c232d)  8%, transparent);
+    --iwac-vis-shadow-soft:   color-mix(in oklab, var(--ink, #1c232d) 14%, transparent);
+    --iwac-vis-shadow-strong: color-mix(in oklab, var(--ink, #1c232d) 22%, transparent);
 
     /* Recent-additions thumbnail sizing — exposed as tokens so block
      * CSS and future panels stay aligned on the same responsive ramp.
@@ -339,8 +339,8 @@
 }
 
 .iwac-vis-panel-toolbar__btn--pressed {
-    background: color-mix(in srgb, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    background: color-mix(in oklab, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
     color: var(--primary, #d86a11);
 }
 
@@ -445,7 +445,7 @@
 
 .iwac-vis-btn:hover {
     background: var(--surface-raised, #f7f4ee);
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-btn:focus-visible {
@@ -537,13 +537,13 @@
     left: 0;
     width: 2.25rem;
     height: 3px;
-    background: color-mix(in srgb, var(--primary, #d86a11) 60%, transparent);
+    background: color-mix(in oklab, var(--primary, #d86a11) 60%, transparent);
     transition: width var(--transition-fast, 150ms ease),
                 background-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-summary-card:hover {
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
     box-shadow: var(--shadow-md, 0 4px 6px -1px var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.08)));
     transform: translateY(-1px);
 }
@@ -559,12 +559,12 @@
 .iwac-vis-summary-card__label {
     order: 0;
     font-size: var(--text-xs, 0.75rem);
-    color: color-mix(in srgb, var(--primary, #d86a11) 55%, var(--muted, #707f86));
+    color: color-mix(in oklab, var(--primary, #d86a11) 55%, var(--muted, #707f86));
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
     padding-bottom: var(--space-2, 0.5rem);
-    border-bottom: 1px solid color-mix(in srgb, var(--border, #dad5cb) 80%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--border, #dad5cb) 80%, transparent);
     line-height: 1.2;
 }
 
@@ -600,10 +600,10 @@
     background:
         linear-gradient(
             180deg,
-            color-mix(in srgb, var(--primary, #d86a11) 7%, var(--panel-bg, var(--surface, #fdfcfa))) 0%,
+            color-mix(in oklab, var(--primary, #d86a11) 7%, var(--panel-bg, var(--surface, #fdfcfa))) 0%,
             var(--panel-bg, var(--surface, #fdfcfa)) 100%
         );
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 25%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 25%, var(--border, #dad5cb));
 }
 
 .iwac-vis-summary-card--featured::before {
@@ -679,9 +679,9 @@
 .iwac-vis-tab--active,
 .iwac-vis-facets__btn--active,
 .iwac-vis-facets__sub-btn--active {
-    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
     color: var(--ink, #1c232d);
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-pagination__btn:disabled {
@@ -736,8 +736,8 @@
     gap: 0.25rem;
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-full, 999px);
-    border: 1px solid color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
-    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface, #fdfcfa));
+    border: 1px solid color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface, #fdfcfa));
     color: var(--ink, #1c232d);
     font-size: var(--text-xs, 0.75rem);
     font-family: inherit;
@@ -748,8 +748,8 @@
 }
 
 .iwac-vis-chip:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 22%, var(--surface, #fdfcfa));
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    background: color-mix(in oklab, var(--primary, #d86a11) 22%, var(--surface, #fdfcfa));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
 }
 
 
@@ -782,7 +782,7 @@
 .iwac-vis-facets__select:hover,
 .iwac-vis-keywords-filters__select:hover,
 .iwac-vis-scary-select:hover {
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 .iwac-vis-facets__select:focus-visible,
@@ -792,7 +792,7 @@
 .iwac-vis-scary-select:focus-visible {
     outline: 2px solid var(--primary, #d86a11);
     outline-offset: 2px;
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
 }
 
 .iwac-vis-facets__select {
@@ -838,7 +838,7 @@
 }
 
 .iwac-vis-table__row:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 4%, transparent);
+    background: color-mix(in oklab, var(--primary, #d86a11) 4%, transparent);
 }
 
 .iwac-vis-table__cell {

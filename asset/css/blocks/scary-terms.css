@@ -158,9 +158,9 @@
 
 .iwac-vis-scary-view-btn--active,
 .iwac-vis-scary-view-btn--active:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
     color: var(--ink, #1c232d);
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 
@@ -213,8 +213,8 @@
 }
 
 .iwac-vis-scary-ctrl-btn:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 10%, var(--surface-raised, #f7f4ee));
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+    background: color-mix(in oklab, var(--primary, #d86a11) 10%, var(--surface-raised, #f7f4ee));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
     color: var(--ink, #1c232d);
 }
 
@@ -230,8 +230,8 @@
 }
 
 .iwac-vis-scary-play-btn:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
+    background: color-mix(in oklab, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 85%, var(--ink, #1c232d));
     color: var(--surface, #fdfcfa);
 }
 
@@ -270,7 +270,7 @@
 
 .iwac-vis-scary-slider {
     --iwac-vis-scary-fill: 0%;
-    --iwac-vis-scary-track: color-mix(in srgb, var(--primary, #d86a11) 14%, var(--border-light, #e8e3d9));
+    --iwac-vis-scary-track: color-mix(in oklab, var(--primary, #d86a11) 14%, var(--border-light, #e8e3d9));
     flex: 1;
     -webkit-appearance: none;
     appearance: none;
@@ -294,7 +294,7 @@
 .iwac-vis-scary-slider:hover {
     box-shadow:
         inset 0 1px 2px var(--iwac-vis-shadow-soft),
-        0 0 0 1px color-mix(in srgb, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
+        0 0 0 1px color-mix(in oklab, var(--primary, #d86a11) 40%, var(--border, #dad5cb));
 }
 
 /* WebKit thumb */
@@ -309,7 +309,7 @@
     border-radius: 50%;
     box-shadow:
         0 2px 6px var(--iwac-vis-shadow-soft),
-        0 0 0 0 color-mix(in srgb, var(--primary, #d86a11) 40%, transparent);
+        0 0 0 0 color-mix(in oklab, var(--primary, #d86a11) 40%, transparent);
     cursor: grab;
     transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
 }
@@ -318,7 +318,7 @@
     transform: scale(1.12);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 18%, transparent);
+        0 0 0 6px color-mix(in oklab, var(--primary, #d86a11) 18%, transparent);
 }
 
 .iwac-vis-scary-slider:active::-webkit-slider-thumb {
@@ -326,13 +326,13 @@
     transform: scale(1.08);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 8px color-mix(in srgb, var(--primary, #d86a11) 25%, transparent);
+        0 0 0 8px color-mix(in oklab, var(--primary, #d86a11) 25%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 32%, transparent);
+        0 0 0 6px color-mix(in oklab, var(--primary, #d86a11) 32%, transparent);
 }
 
 /* Firefox thumb (Gecko uses a different pseudo-element name, so every
@@ -347,7 +347,7 @@
     border-radius: 50%;
     box-shadow:
         0 2px 6px var(--iwac-vis-shadow-soft),
-        0 0 0 0 color-mix(in srgb, var(--primary, #d86a11) 40%, transparent);
+        0 0 0 0 color-mix(in oklab, var(--primary, #d86a11) 40%, transparent);
     cursor: grab;
     transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
 }
@@ -356,13 +356,13 @@
     transform: scale(1.12);
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 18%, transparent);
+        0 0 0 6px color-mix(in oklab, var(--primary, #d86a11) 18%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
     box-shadow:
         0 3px 10px var(--iwac-vis-shadow-strong),
-        0 0 0 6px color-mix(in srgb, var(--primary, #d86a11) 32%, transparent);
+        0 0 0 6px color-mix(in oklab, var(--primary, #d86a11) 32%, transparent);
 }
 
 /* Firefox also uses a dedicated track element — keep it transparent so
@@ -407,9 +407,9 @@
     border-radius: var(--radius-full, 999px);
     font-size: var(--text-xs, 0.75rem);
     font-weight: 600;
-    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
     color: var(--ink, #1c232d);
-    border: 1px solid color-mix(in srgb, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
+    border: 1px solid color-mix(in oklab, var(--primary, #d86a11) 30%, var(--border, #dad5cb));
 }
 
 .iwac-vis-scary-badge:empty {
@@ -477,7 +477,7 @@
 
 .iwac-vis-scary-def-card:hover {
     background: var(--surface-raised, #f7f4ee);
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 35%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 35%, var(--border, #dad5cb));
 }
 
 .iwac-vis-scary-def-title {

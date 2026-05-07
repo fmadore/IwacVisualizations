@@ -130,7 +130,7 @@
 }
 
 .iwac-vis-graph-toolbar__btn--pressed {
-    background: color-mix(in srgb, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
-    border-color: color-mix(in srgb, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
+    background: color-mix(in oklab, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
     color: var(--primary, #d86a11);
 }

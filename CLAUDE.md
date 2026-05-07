@@ -25,28 +25,30 @@ The skill catches the kind of subtle mistakes that have already cost real time h
 
 This module is built to drop into the **[IWAC theme](https://github.com/fmadore/IWAC-theme)**. Every visual choice here must compose with the theme rather than fight it.
 
-**Design philosophy** (from the theme's CLAUDE.md): *modern, professional, academic — warm and inviting without being flashy.* This is a **newspaper collection**, so the aesthetic is editorial / journalistic, not archival or antiquarian. Light theme uses **warm neutral tones** (hue ~35-40, subtle cream undertones), the IWAC primary orange is an **accent — not dominant**, and shadows are warm-tinted (avoid harsh black). Read the theme's CLAUDE.md before doing any visual work.
+**Design philosophy** (from theme v2.0.0): *research instrument, not editorial product.* Cool-leaning near-white surfaces (chroma ~0.002), cool-neutral inks, OKLCH-based palette, primary used **rarely** (focus / current-state / intentional accents only — never as decorative wash, never as gradient bar, never coloring h2s). No body atmospheric gradients. Visual neighborhood: MIT Press / Stripe Press / eLife / Linear docs — not a small museum's website. Read the theme's CLAUDE.md before doing any visual work.
 
 **Token budget** — read these from the theme at runtime via `iwac-theme.js::readTokens()`; never hardcode equivalents:
 
-- **Colors** — `--primary`, `--ink`, `--ink-light`, `--muted`, `--surface`, `--surface-raised`, `--background`, `--border`, `--border-light`, `--focus-ring`. Both light and dark modes are auto-derived from `--primary-hue` / `--primary-sat`.
-- **Spacing** — `--space-{xs,sm,md,lg,xl}` (0.25 / 0.5 / 1 / 1.5 / 2 rem).
-- **Radii** — `--radius-{sm,md,lg,xl,full}` (0.375 → 1.5 rem; `--radius-full = 9999px` for pills).
+- **Colors** — `--primary` (admin-overridable hex; do NOT redeclare), `--ink-strong`, `--ink`, `--ink-light`, `--ink-subtle`, `--muted`, `--surface`, `--surface-raised`, `--surface-sunken`, `--background`, `--border`, `--border-light`, `--border-strong`, `--focus-ring`. The theme owns dark/light derivations via Sass mixins; do not consume `--primary-hue` / `--primary-sat` (those HSL components were removed in v2.0.0 — derive variants from `--primary` via `color-mix(in oklab, ...)` instead).
+- **Spacing** — `--space-{xs,sm,md,lg,xl,2xl,3xl}` (0.25 / 0.5 / 1 / 1.5 / 2 / 3 / 4 rem).
+- **Radii** — `--radius-{sm,md,lg,xl,full}` (0.375 → 1 rem; `--radius-full = 9999px` for pills). Note: `--radius-md` was tightened from 12px → 8px in v2.0.0 for an institutional register.
 - **Control sizing** — `--size-control-{xs,sm,md,lg,xl}` (28 → 48 px). `lg` (44px) is the WCAG tap target.
-- **Measure** — `--measure-{narrow,base,wide}` for prose width caps.
+- **Measure** — `--measure-{narrow,base,wide}` (44 / 52.5 / 72.5 rem) for prose width caps.
 - **Tracking** — `--tracking-tight` (display headings), `--tracking-wide` (small caps), `--tracking-wider` (eyebrow / metadata labels).
-- **Shadows** — `--shadow-{xs,sm,md,lg}` and the `--glow-*` ramp (warm, primary-tinted).
+- **Shadows** — `--shadow-{xs,sm,md,lg,xl}` (neutral cool, NOT warm-tinted). `--glow-*` ramp is primary-tinted, derived from `--primary` via `color-mix(in oklab, ...)`.
 - **Accent line widths** — `--accent-line-sm` (2px), `--accent-line-md` (3px).
-- **Color mixing** — use `--accent-mix-{subtle,medium,strong}` (25 / 40 / 60%) with `color-mix()` rather than baking hex values.
+- **Color mixing** — always `color-mix(in oklab, ...)` (sRGB mixing produces muddy mid-tones). Use `--accent-mix-{subtle,medium,strong}` (25 / 40 / 60%) for standard primary tints rather than baking hex values.
 
 **Theme switching:** the theme owns `body[data-theme="light|dark"]` and `localStorage['iwac-theme-preference']`. `dashboard-core.js` already wires a `MutationObserver` on `body[data-theme]` and rebuilds the ECharts theme + reinits every tracked chart on toggle. MapLibre instances `setStyle()` between Carto positron / dark-matter URLs. **Don't add a separate theme listener** in new panels — register charts via `IWACVis.registerChart()` and they auto-handle the swap.
 
 **Visual conventions to match:**
 
 - **Resource tag pills** — `border-radius: var(--radius-full)`, `text-transform: uppercase`, `letter-spacing: 0.06em`. The theme rule lives at `base/elements/_resource-tag.scss`; reuse the look on any chip / tag in chart UI.
-- **Section headings** — `--tracking-tight` for display titles; small-caps + `--tracking-wide` for metadata labels.
-- **Hover affordances** — fast purposeful transitions (150-200 ms). No bouncing / elastic curves.
+- **Section headings** — `--tracking-tight` for display titles; small-caps + `--tracking-wide` for metadata labels. Default h2 color is `--ink-strong`, NOT `--primary` (theme v2.0.0 reserves brand color for state, not section markers).
+- **Hover affordances** — fast purposeful transitions (150-200 ms). No bouncing / elastic curves. No card lift > 2px.
 - **Focus** — visible focus rings via `--ring-focus`; never `outline: none` without a replacement.
+- **Side-stripe borders** — `border-left/right` ≥ 2px is allowed ONLY for structural data-marker affordances (e.g. multi-color sentiment-card model indicator, compare-corpus A/B). Never as a decorative accent on cards or callouts.
+- **AI-generated values** — when surfacing model output (sentiment scores, generated labels, summaries) give it explicit visual treatment (sparkle / badge / tinted block) so readers can distinguish computational artefacts from human-authored archival metadata. The theme's `.property--ai` block (resource-show) is the reference pattern.
 
 **Block-CSS structure already in place:** `iwac-core.css` (tokens / panel / chip controls / table / form controls / section heading) → `iwac-maplibre.css` (only when the block uses a map) → `asset/css/blocks/<block>.css`. Add new block-local selectors to `blocks/<block>.css`; promote shared patterns into `iwac-core.css`. The README's "Build & development" section has the canonical breakdown.
 

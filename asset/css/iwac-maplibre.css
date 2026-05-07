@@ -36,7 +36,7 @@
     border: 1px solid var(--border, #dad5cb);
     border-radius: var(--radius-sm, 4px);
     box-shadow: 0 6px 18px
-        var(--iwac-vis-shadow-soft, color-mix(in srgb, var(--ink, #1c232d) 14%, transparent));
+        var(--iwac-vis-shadow-soft, color-mix(in oklab, var(--ink, #1c232d) 14%, transparent));
     padding: 0.85rem 2.5rem 0.85rem 1.1rem;
     font-size: var(--text-sm, 0.9rem);
     line-height: 1.45;
@@ -80,7 +80,7 @@
 
 .iwac-vis-maplibre-popup .maplibregl-popup-close-button:hover,
 .iwac-vis-maplibre-popup .maplibregl-popup-close-button:focus-visible {
-    background: color-mix(in srgb, var(--primary, #d86a11) 14%, transparent);
+    background: color-mix(in oklab, var(--primary, #d86a11) 14%, transparent);
     color: var(--ink, #1c232d);
     border-color: var(--border, #dad5cb);
     outline: none;
@@ -249,7 +249,7 @@ a.iwac-vis-map-popup__item-title:hover {
     background: var(--surface-raised, #f7f4ee);
     border: 1px solid var(--border, #dad5cb);
     box-shadow: 0 2px 8px
-        var(--iwac-vis-shadow-soft, color-mix(in srgb, var(--ink, #1c232d) 14%, transparent));
+        var(--iwac-vis-shadow-soft, color-mix(in oklab, var(--ink, #1c232d) 14%, transparent));
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button {
@@ -258,7 +258,7 @@ a.iwac-vis-map-popup__item-title:hover {
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button:hover {
-    background: color-mix(in srgb, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface-raised, #f7f4ee));
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
@@ -286,7 +286,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
  * base rule handles both; the dark overrides below only adjust the
  * opacity and text color. */
 .iwac-vis-map .maplibregl-ctrl-attrib {
-    background: color-mix(in srgb, var(--surface, #fdfcfa) 92%, transparent);
+    background: color-mix(in oklab, var(--surface, #fdfcfa) 92%, transparent);
     color: var(--ink-light, #4a5766);
     font-size: 0.72rem;
 }
@@ -297,11 +297,11 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-group button .maplibregl-
 
 @media (prefers-color-scheme: dark) {
     body:not([data-theme="light"]) .iwac-vis-map .maplibregl-ctrl-attrib {
-        background: color-mix(in srgb, var(--surface) 90%, transparent);
+        background: color-mix(in oklab, var(--surface) 90%, transparent);
         color: var(--ink-light);
     }
 }
 body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
-    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    background: color-mix(in oklab, var(--surface) 90%, transparent);
     color: var(--ink-light);
 }
