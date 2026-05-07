@@ -110,15 +110,21 @@
         var maxCount = featureResult.max;
         function filteredFeatures() { return featureResult.collection; }
 
-        // Resolve theme tokens via ns.resolveCssVar — avoids hardcoded
-        // hex values and keeps colors aligned with the active theme.
+        // Resolve theme tokens via ns.resolveCssVar, then normalize for
+        // MapLibre — IWAC theme v2.0.0 OKLCH tokens otherwise serialize
+        // as oklab()/oklch(), which MapLibre's style validator rejects.
+        // P.normalizeColorForMapLibre canvas-rasterizes them into legacy
+        // rgb() bytes. ECharts callers don't go through this path.
+        function ml(c) {
+            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
+        }
         function resolvePrimary() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return resolved || '#d86a11';
+            return ml(resolved || '#d86a11');
         }
         function resolveInk() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return resolved || '#1c232d';
+            return ml(resolved || '#1c232d');
         }
 
         var mapInstance = null;

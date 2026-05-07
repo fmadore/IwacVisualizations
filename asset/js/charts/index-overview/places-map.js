@@ -123,20 +123,21 @@
         function authorityFeatures() { return authResult.collection; }
         function mentionFeatures() { return mentionResult.collection; }
 
-        // Resolve theme tokens to legacy rgb() form for MapLibre —
-        // MapLibre's style parser rejects `hsl(..., calc(...), ...)`
-        // and `color-mix()`, which is what getChartTokens() returns
-        // when the theme's --primary is defined as a calc-based hsl
-        // expression. ns.resolveCssVar uses an offscreen probe to
-        // compute the expression into a plain rgb() value that
-        // MapLibre understands.
+        // Resolve theme tokens to legacy rgb() for MapLibre. After
+        // theme v2.0.0, getComputedStyle returns oklab()/oklch() for
+        // OKLCH-based tokens, which MapLibre's style validator rejects.
+        // P.normalizeColorForMapLibre canvas-rasterizes them. ECharts
+        // is intentionally NOT routed through this path.
+        function ml(c) {
+            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
+        }
         function primaryColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return resolved || '#d86a11';
+            return ml(resolved || '#d86a11');
         }
         function inkColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return resolved || '#1c232d';
+            return ml(resolved || '#1c232d');
         }
 
         var mapInstance = null;

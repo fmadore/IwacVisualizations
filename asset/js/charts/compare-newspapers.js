@@ -654,10 +654,23 @@
         panel.appendChild(legend);
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var colorA = tokens.primary || '#d86a11';
+        // Normalize for MapLibre — tokens.primary may be oklab()/oklch()
+        // after theme v2.0.0; the style validator only accepts Color-3
+        // forms. P.normalizeColorForMapLibre canvas-rasterizes to rgb().
+        var rawColorA = tokens.primary || '#d86a11';
+        var colorA = P.normalizeColorForMapLibre
+            ? P.normalizeColorForMapLibre(rawColorA)
+            : rawColorA;
         var colorB = '#1d4e6b';
-        var rgbA = hexToRgb(colorA);
-        var rgbB = hexToRgb(colorB);
+        // Parse [r,g,b] bytes from either hex or rgb()/rgba() — colorA
+        // is rgb() after normalization, colorB stays hex.
+        function colorToRgb(c) {
+            var m = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(c);
+            if (m) return [Math.round(+m[1]), Math.round(+m[2]), Math.round(+m[3])];
+            return hexToRgb(c);
+        }
+        var rgbA = colorToRgb(colorA);
+        var rgbB = colorToRgb(colorB);
         function rgba(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
 
         function toGeoJSON(pts) {

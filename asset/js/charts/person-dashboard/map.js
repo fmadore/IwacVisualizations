@@ -105,13 +105,18 @@
                 .addTo(mapInstance);
         }
 
+        // Normalize for MapLibre — theme v2.0.0 OKLCH tokens otherwise
+        // serialize as oklab()/oklch() and the style validator rejects.
+        function ml(c) {
+            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
+        }
         function resolvePrimary() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return resolved || '#d86a11';
+            return ml(resolved || '#d86a11');
         }
         function resolveInk() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return resolved || '#1c232d';
+            return ml(resolved || '#1c232d');
         }
 
         var createdMap = P.createIwacMap(mapContainer, {

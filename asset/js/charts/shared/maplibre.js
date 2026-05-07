@@ -47,6 +47,58 @@
         return;
     }
 
+    /* ----------------------------------------------------------------- */
+    /*  MapLibre color normalization                                      */
+    /* ----------------------------------------------------------------- */
+    //
+    // MapLibre's style validator only accepts CSS Color Module Level 3
+    // colors (hex, rgb/rgba, hsl/hsla, named). After IWAC theme v2.0.0
+    // reframed its palette around OKLCH, `getComputedStyle()` may return
+    // `oklch(...)` / `oklab(...)` / `color(srgb ...)` strings that
+    // MapLibre rejects with errors like:
+    //
+    //   layers.location-circles.paint.circle-color: color expected,
+    //   "oklab(0.574 0.149 0.109)" found
+    //
+    // We rasterize through a 1x1 sRGB canvas and read pixel bytes via
+    // getImageData — the backing store is sRGB by spec, so the result is
+    // Color-Level-3 RGB regardless of input format. ONLY called from the
+    // MapLibre paint path; the ECharts resolvers (resolveCssColor /
+    // resolveCssVar) are untouched because canvas rasterization can be
+    // affected by browser anti-fingerprinting (Brave Shields) and
+    // ECharts' color parser already handles the formats those resolvers
+    // emit. Don't reroute ECharts through this.
+    //
+    var _mlProbe = null;
+    P.normalizeColorForMapLibre = function (value) {
+        if (!value || typeof value !== 'string') return value;
+        var trimmed = value.trim();
+        if (!trimmed) return trimmed;
+        // Fast paths — already Color-3-legal.
+        if (/^#([0-9a-f]{3,8})$/i.test(trimmed)) return trimmed;
+        if (/^rgba?\(/i.test(trimmed)) return trimmed;
+        if (/^hsla?\(/i.test(trimmed)) return trimmed;
+        try {
+            if (!_mlProbe) {
+                var canvas = document.createElement('canvas');
+                canvas.width = canvas.height = 1;
+                _mlProbe = canvas.getContext('2d', { colorSpace: 'srgb' })
+                        || canvas.getContext('2d');
+            }
+            if (!_mlProbe) return trimmed;
+            _mlProbe.clearRect(0, 0, 1, 1);
+            _mlProbe.fillStyle = trimmed;
+            _mlProbe.fillRect(0, 0, 1, 1);
+            var d = _mlProbe.getImageData(0, 0, 1, 1).data;
+            if (d[3] === 255) {
+                return 'rgb(' + d[0] + ', ' + d[1] + ', ' + d[2] + ')';
+            }
+            return 'rgba(' + d[0] + ', ' + d[1] + ', ' + d[2] + ', ' + (d[3] / 255) + ')';
+        } catch (e) {
+            return trimmed;
+        }
+    };
+
     /**
      * @param {HTMLElement|string} container  Map container (element or id)
      * @param {Object} config
