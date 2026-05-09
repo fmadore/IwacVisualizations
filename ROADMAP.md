@@ -104,6 +104,16 @@ dataset. Reuse its patterns before writing new generators.
   country / newspaper distributions + most-representative articles).
   Eighth shared renderer added: `horizontal-bar`. Backed by
   `scripts/generate_topic_explorer.py`.
+- **v0.22.0 — Compare Newspapers split-corpus choropleth**
+  (2026-05-09) — geographic-comparison map's choropleth toggle
+  upgraded to a 4-way segmented control (**Bubbles · A · B · A − B**).
+  `shared/choropleth.js` extended with `hideDefaultControl` +
+  `paint` config (sequential w/ accent or diverging neg/pos/neutral).
+  `compare-newspapers.js` computes per-corpus and diff counts, hosts
+  a custom `CompareSelectorCtrl` MapLibre control. The diverging A−B
+  view is the new feature: countries dominated by A render in primary
+  orange, countries dominated by B in slate blue, balanced countries
+  in neutral surface. See README v0.22.0 section.
 - **v0.21.0 — Minimal item dashboard for Audio / Video / Photograph**
   (2026-05-09) — three more resource templates wired through
   `Visualizations::TEMPLATE_PARTIALS`: Audio (9), Video recording

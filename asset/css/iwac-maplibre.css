@@ -357,3 +357,87 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 .iwac-choropleth-ctrl__btn--active:hover {
     background: color-mix(in oklab, var(--primary, #d86a11) 24%, transparent);
 }
+
+
+/* =================================================================== */
+/*  Compare-Newspapers segmented choropleth selector                     */
+/*                                                                       */
+/*  Replaces the default choropleth toggle on the geographic-comparison  */
+/*  map with a 4-way picker: Bubbles | <A> | <B> | A − B. Sits in the    */
+/*  same top-right MapLibre control stack but lays its buttons out       */
+/*  horizontally (vs the default vertical maplibregl-ctrl-group). Text   */
+/*  labels rather than glyphs because the corpus names need to be        */
+/*  legible at a glance. CSS keeps the control compact on narrow         */
+/*  viewports — the buttons clip with ellipsis below 320px-wide host.    */
+/* =================================================================== */
+
+.iwac-compare-choropleth-ctrl {
+    /* Override the default maplibregl-ctrl-group vertical stack. */
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background: var(--surface, #fdfcfa);
+    border-radius: var(--radius-sm, 4px);
+    overflow: hidden;
+    /* Inherit the maplibregl-ctrl-group shadow from the maplibre
+     * baseline so the control sits visually consistent with
+     * navigation / globe / fullscreen controls. */
+}
+
+.iwac-compare-choropleth-ctrl__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 29px;
+    min-width: 32px;
+    padding: 0 0.55rem;
+    border: 0;
+    border-right: 1px solid var(--border-light, #e6e7eb);
+    background: transparent;
+    color: var(--ink, #1c232d);
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 12rem;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.iwac-compare-choropleth-ctrl__btn:last-child {
+    border-right: 0;
+}
+
+.iwac-compare-choropleth-ctrl__btn:hover {
+    background: color-mix(in oklab, var(--primary, #d86a11) 8%, transparent);
+}
+
+.iwac-compare-choropleth-ctrl__btn:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+.iwac-compare-choropleth-ctrl__btn--active {
+    background: color-mix(in oklab, var(--primary, #d86a11) 18%, transparent);
+    color: var(--primary, #d86a11);
+    font-weight: 600;
+}
+
+.iwac-compare-choropleth-ctrl__btn--active:hover {
+    background: color-mix(in oklab, var(--primary, #d86a11) 24%, transparent);
+}
+
+@media (max-width: 480px) {
+    /* Phones: shrink the labels — the default 'Bubbles' label gets
+     * clipped fast at 32-min-width buttons, but corpus names should
+     * still fit if the host is at least ~280px wide. */
+    .iwac-compare-choropleth-ctrl__btn {
+        font-size: 0.65rem;
+        padding: 0 0.4rem;
+        max-width: 6rem;
+    }
+}

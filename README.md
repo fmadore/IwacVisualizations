@@ -25,6 +25,16 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.22.0 — Compare Newspapers split-corpus choropleth
+
+The geographic-comparison map's choropleth toggle replaced with a 4-way segmented control: **Bubbles · A · B · A − B**. Click A or B to see one corpus's per-country mention distribution as a sequential surface→corpus-color ramp; click "A − B" for a diverging fill where countries dominated by A render in the primary color, countries dominated by B render in slate blue, and balanced countries render near surface neutral. The bubble layers (heatmap + circles) for both sides hide automatically while a choropleth view is active.
+
+- **`shared/choropleth.js`** extended with two new options:
+  - `hideDefaultControl: true` — skip the built-in toggle button so a caller can wire its own UI (used here so the segmented selector replaces the toggle).
+  - `paint` config — `{ mode: 'sequential', accentColor }` builds a surface→accent ramp (corpus A or B), `{ mode: 'diverging', negColor, posColor, neutralColor }` builds neg ← neutral → pos centred on zero (the A − B diff). The `updateCounts(newCounts, { paint: {...} })` method now accepts a paint override on every call, so cycling through the selector swaps both data and palette without re-init.
+- **`compare-newspapers.js`** computes three count maps from the regenerated `geo_points` (`country` per point landed in v0.20.0): `aCounts`, `bCounts`, `diffCounts = aCounts − bCounts` over the union of country keys. The custom `CompareSelectorCtrl` MapLibre control hosts the four buttons, calls `applySelector(key)` on click, and tracks active state via an `--active` modifier.
+- **`asset/css/iwac-maplibre.css`** ships an `iwac-compare-choropleth-ctrl` style — horizontal segmented buttons (vs the default vertical `maplibregl-ctrl-group`), corpus-name labels (rather than glyphs) so the picker is self-describing at a glance.
+
 ### v0.21.0 — Minimal-item dashboard for Audio / Video / Photograph templates
 
 The Visualizations resource-page block now dispatches three more templates: Audio (9), Video recording (19), and Photograph (15). All three route to a new lightweight ``minimal-item.phtml`` partial that renders a small two-slot dashboard via the v0.16.0 layout system — sibling sparkline + "other items in this collection" strip. No per-item bundle bloat: a single corpus-level ``asset/data/template-summary.json`` (37 KB minified) drives every per-item page.

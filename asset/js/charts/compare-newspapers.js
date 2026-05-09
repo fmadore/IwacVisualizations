@@ -859,29 +859,139 @@
 
         _mapRef = map;
 
-        // Choropleth toggle. Aggregates per-country mention counts
-        // across BOTH corpora (A + B) so the fill answers "which IWAC
-        // countries does this two-corpus comparison cover most heavily,
-        // overall." Bubble layers (heatmap + circles) for both sides
-        // are hidden when the user switches to choropleth — the fill
-        // is the comparison view, not an overlay. A future enhancement
-        // could add an A | B selector to swap which side drives the
-        // fill, or a diff palette (A − B) for direct comparison.
+        // Choropleth selector — 4-way segmented control replaces the
+        // helper's default toggle button on this map. The user picks
+        // between four views:
+        //
+        //   * Bubbles      — both corpora as heatmap + circle layers
+        //                     (the original visualisation)
+        //   * <A name>     — choropleth fill driven by corpus A's
+        //                     per-country mentions, surface→colorA ramp
+        //   * <B name>     — same for corpus B, surface→colorB ramp
+        //   * A − B        — diverging fill on (aCount − bCount) per
+        //                     country: colorB ← surface → colorA. Direct
+        //                     comparison of which corpus dominates each
+        //                     IWAC country, neutral when balanced.
+        //
+        // A−B uses the same scaling on both sides (max abs diff)
+        // so the saturation between an A-heavy country and a
+        // B-heavy country reads as comparable strength.
         if (map && typeof P.attachChoroplethToggle === 'function') {
-            var combinedCounts = {};
-            aPts.concat(bPts).forEach(function (p) {
+            var aCounts = {};
+            var bCounts = {};
+            aPts.forEach(function (p) {
                 if (!p || !p.country) return;
-                combinedCounts[p.country] = (combinedCounts[p.country] || 0) + (p.count || 0);
+                aCounts[p.country] = (aCounts[p.country] || 0) + (p.count || 0);
             });
-            P.attachChoroplethToggle(map, {
-                countryCounts: combinedCounts,
-                bubbleLayers:  [
+            bPts.forEach(function (p) {
+                if (!p || !p.country) return;
+                bCounts[p.country] = (bCounts[p.country] || 0) + (p.count || 0);
+            });
+            // Diff: aCount − bCount over the union of country keys.
+            // Missing entries on either side default to 0, so a
+            // country exclusive to one corpus comes out as ±count
+            // (saturated end of the diverging palette).
+            var diffCounts = {};
+            var allCountries = {};
+            for (var ka in aCounts) { if (aCounts.hasOwnProperty(ka)) allCountries[ka] = true; }
+            for (var kb in bCounts) { if (bCounts.hasOwnProperty(kb)) allCountries[kb] = true; }
+            for (var kc in allCountries) {
+                if (allCountries.hasOwnProperty(kc)) {
+                    diffCounts[kc] = (aCounts[kc] || 0) - (bCounts[kc] || 0);
+                }
+            }
+
+            var paintA = { mode: 'sequential', accentColor: colorA };
+            var paintB = { mode: 'sequential', accentColor: colorB };
+            var paintDiff = {
+                mode: 'diverging',
+                negColor: colorB,
+                posColor: colorA,
+                neutralColor: tokens.surface || '#fdfcfa'
+            };
+
+            var choropleth = P.attachChoroplethToggle(map, {
+                countryCounts:      aCounts,
+                bubbleLayers:       [
                     'compare-a-heat', 'compare-a-circles',
                     'compare-b-heat', 'compare-b-circles'
                 ],
-                basePath:      (ctx && ctx.basePath) || '',
-                labelKey:      'mentions'
+                basePath:           (ctx && ctx.basePath) || '',
+                labelKey:           'mentions',
+                hideDefaultControl: true,
+                paint:              paintA
             });
+
+            // Custom MapLibre control with 4 segmented buttons — sits
+            // top-right alongside the navigation / globe / fullscreen
+            // controls. State is owned by `currentSelector`; the bubble
+            // mode resets the selector but the helper's internal mode
+            // tracking handles layer visibility.
+            var nameA = dataA.name || 'A';
+            var nameB = dataB.name || 'B';
+            var selectorModes = [
+                { key: 'bubbles', label: P.t('Bubbles'),       title: P.t('Show point bubbles') },
+                { key: 'a',       label: nameA,                title: nameA },
+                { key: 'b',       label: nameB,                title: nameB },
+                { key: 'diff',    label: nameA + ' − ' + nameB, title: P.t('Diverging A minus B') }
+            ];
+
+            function CompareSelectorCtrl() {}
+            CompareSelectorCtrl.prototype.onAdd = function () {
+                var c = document.createElement('div');
+                c.className = 'maplibregl-ctrl maplibregl-ctrl-group iwac-compare-choropleth-ctrl';
+                this._buttons = {};
+                var self = this;
+                selectorModes.forEach(function (m) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'iwac-compare-choropleth-ctrl__btn';
+                    b.dataset.mode = m.key;
+                    b.title = m.title;
+                    b.setAttribute('aria-label', m.title);
+                    b.textContent = m.label;
+                    b.addEventListener('click', function () {
+                        applySelector(m.key);
+                        self._setActive(m.key);
+                    });
+                    c.appendChild(b);
+                    self._buttons[m.key] = b;
+                });
+                this._container = c;
+                this._setActive('bubbles');
+                return c;
+            };
+            CompareSelectorCtrl.prototype.onRemove = function () {
+                if (this._container && this._container.parentNode) {
+                    this._container.parentNode.removeChild(this._container);
+                }
+            };
+            CompareSelectorCtrl.prototype._setActive = function (key) {
+                if (!this._buttons) return;
+                for (var k in this._buttons) {
+                    if (!this._buttons.hasOwnProperty(k)) continue;
+                    var on = (k === key);
+                    this._buttons[k].classList.toggle('iwac-compare-choropleth-ctrl__btn--active', on);
+                    this._buttons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
+                }
+            };
+
+            function applySelector(key) {
+                if (key === 'bubbles') {
+                    choropleth.setMode('bubbles');
+                } else if (key === 'a') {
+                    choropleth.updateCounts(aCounts,    { paint: paintA });
+                    choropleth.setMode('choropleth');
+                } else if (key === 'b') {
+                    choropleth.updateCounts(bCounts,    { paint: paintB });
+                    choropleth.setMode('choropleth');
+                } else if (key === 'diff') {
+                    choropleth.updateCounts(diffCounts, { paint: paintDiff });
+                    choropleth.setMode('choropleth');
+                }
+            }
+
+            map.addControl(new CompareSelectorCtrl(), 'top-right');
         }
 
         return panel;

@@ -391,6 +391,9 @@
             'Show choropleth':              'Show choropleth',
             'Show bubbles':                 'Show bubbles',
             'Toggle choropleth view':       'Toggle choropleth view',
+            'Bubbles':                      'Bubbles',
+            'Show point bubbles':           'Show point bubbles',
+            'Diverging A minus B':          'Diverging A minus B',
 
             // Minimal item dashboard (Audio / Video / Photograph)
             'Loading visualizations':            'Loading visualizations',
@@ -839,6 +842,9 @@
             'Show choropleth':              'Afficher la choropl\u00e8the',
             'Show bubbles':                 'Afficher les bulles',
             'Toggle choropleth view':       'Basculer la vue choropl\u00e8the',
+            'Bubbles':                      'Bulles',
+            'Show point bubbles':           'Afficher les bulles ponctuelles',
+            'Diverging A minus B':          'Carte divergente A moins B',
 
             // Minimal item dashboard \u2014 French
             'Loading visualizations':            'Chargement des visualisations',

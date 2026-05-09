@@ -106,16 +106,65 @@
         return stops;
     }
 
-    function buildFillExpression(maxCount) {
-        var stops = resolveRamp();
-        // Scale the count axis from 0..maxCount across the ramp. With 5
-        // stops that's evenly spaced quintiles; with 2 it's a linear
-        // tween. ECharts' visualMap-style "calculable" smoothness in
-        // both cases — no banding artefacts at the boundaries.
+    /**
+     * Build a sequential surface→accent ramp at runtime. Used when a
+     * paint config supplies a single `accentColor` (e.g. one corpus
+     * side in a comparison map). Two stops only — surface for zero,
+     * accent for max — for a clean linear tween.
+     */
+    function buildAccentRamp(accentColor) {
+        var t = (ns.getChartTokens && ns.getChartTokens()) || {};
+        return [
+            ml(t.surface || '#fdfcfa'),
+            ml(accentColor)
+        ];
+    }
+
+    /**
+     * Build the MapLibre `fill-color` expression for the polygon
+     * layer based on the current paint config + value range.
+     *
+     *  - sequential (default) — surface→accent or the IWAC heatmap
+     *    ramp; values clamp to [0, max].
+     *  - diverging              — neg → neutral → pos centred on
+     *    zero; works on signed counts (e.g. A − B per country).
+     */
+    function buildFillExpression(paintConfig, counts) {
+        var values = [];
+        for (var k in counts) {
+            if (Object.prototype.hasOwnProperty.call(counts, k)) {
+                values.push(counts[k]);
+            }
+        }
+
+        if (paintConfig && paintConfig.mode === 'diverging') {
+            var maxAbs = 1;
+            for (var v = 0; v < values.length; v++) {
+                if (Math.abs(values[v]) > maxAbs) maxAbs = Math.abs(values[v]);
+            }
+            var t = (ns.getChartTokens && ns.getChartTokens()) || {};
+            return [
+                'interpolate', ['linear'], ['get', '_iwac_count'],
+                -maxAbs, ml(paintConfig.negColor),
+                0,        ml(paintConfig.neutralColor || t.surface || '#fdfcfa'),
+                maxAbs,  ml(paintConfig.posColor)
+            ];
+        }
+
+        // Sequential: caller can override the ramp with a single
+        // accentColor (e.g. corpus colour); otherwise the default
+        // IWAC heatmap ramp tied to --iwac-vis-heatmap-* tokens.
+        var stops = (paintConfig && paintConfig.accentColor)
+            ? buildAccentRamp(paintConfig.accentColor)
+            : resolveRamp();
+        var maxCount = 1;
+        for (var w = 0; w < values.length; w++) {
+            if (values[w] > maxCount) maxCount = values[w];
+        }
         var expr = ['interpolate', ['linear'], ['get', '_iwac_count']];
         for (var i = 0; i < stops.length; i++) {
-            var t = stops.length === 1 ? 0 : (maxCount * i) / (stops.length - 1);
-            expr.push(t, stops[i]);
+            var step = stops.length === 1 ? 0 : (maxCount * i) / (stops.length - 1);
+            expr.push(step, stops[i]);
         }
         return expr;
     }
@@ -200,10 +249,26 @@
      *   the count suffix in the country-click popup.
      * @param {string} [opts.position='top-right']  MapLibre control
      *   anchor position.
+     * @param {boolean} [opts.hideDefaultControl=false]  Skip the
+     *   built-in toggle button so the caller can wire its own
+     *   custom control (e.g. compare-newspapers' Bubbles | A | B |
+     *   A−B segmented selector). The returned object's `setMode` /
+     *   `updateCounts` still drive the layers as normal.
+     * @param {Object} [opts.paint]  Initial paint config. When omitted,
+     *   the default IWAC heatmap ramp is used.
+     * @param {string} [opts.paint.mode='sequential']  `'sequential'`
+     *   or `'diverging'`.
+     * @param {string} [opts.paint.accentColor]  Sequential override:
+     *   surface → accentColor ramp instead of the default heatmap stops.
+     * @param {string} [opts.paint.negColor]  Diverging negative end.
+     * @param {string} [opts.paint.posColor]  Diverging positive end.
+     * @param {string} [opts.paint.neutralColor]  Diverging zero point;
+     *   defaults to surface token.
      * @param {function(string)} [opts.onModeChange]  Fires with the
      *   new mode ("bubbles" | "choropleth") on every successful swap.
      * @returns {{getMode: function, setMode: function(string),
-     *            updateCounts: function(Object), destroy: function}}
+     *            updateCounts: function(Object, Object=),
+     *            destroy: function}}
      */
     P.attachChoroplethToggle = function (map, opts) {
         opts = opts || {};
@@ -214,6 +279,8 @@
         var basePath      = opts.basePath || '';
         var labelKey      = opts.labelKey || 'mentions';
         var onModeChange  = opts.onModeChange;
+        var hideDefaultControl = !!opts.hideDefaultControl;
+        var currentPaint  = opts.paint || null;
 
         // Random suffix so multiple maps on the same page (e.g. compare-
         // newspapers' two corpora maps side-by-side) don't collide on
@@ -225,16 +292,6 @@
 
         var mode = 'bubbles';
         var pendingFetch = null;
-
-        function maxValue() {
-            var m = 1;
-            for (var k in countryCounts) {
-                if (countryCounts.hasOwnProperty(k) && countryCounts[k] > m) {
-                    m = countryCounts[k];
-                }
-            }
-            return m;
-        }
 
         function annotate(geo) {
             // Mutate a clone — keep _geojsonCache pristine across maps
@@ -280,7 +337,7 @@
                     source: SOURCE,
                     layout: { visibility: 'none' },
                     paint: {
-                        'fill-color': buildFillExpression(maxValue()),
+                        'fill-color': buildFillExpression(currentPaint, countryCounts),
                         'fill-opacity': [
                             'case',
                             ['boolean', ['feature-state', 'hover'], false],
@@ -355,15 +412,20 @@
             mode = next;
             (mode === 'choropleth' ? showChoropleth() : Promise.resolve(showBubbles()))
                 .then(function () {
-                    control.refresh(mode);
+                    if (control && typeof control.refresh === 'function') {
+                        control.refresh(mode);
+                    }
                     if (typeof onModeChange === 'function') onModeChange(mode);
                 });
         }
 
-        var control = buildToggleControl(mode, function () {
-            setMode(mode === 'bubbles' ? 'choropleth' : 'bubbles');
-        });
-        map.addControl(control, opts.position || 'top-right');
+        var control = null;
+        if (!hideDefaultControl) {
+            control = buildToggleControl(mode, function () {
+                setMode(mode === 'bubbles' ? 'choropleth' : 'bubbles');
+            });
+            map.addControl(control, opts.position || 'top-right');
+        }
 
         // Theme swap path: setStyle() wipes our source + layers. Re-add
         // them on every style.load IF we're currently in choropleth
@@ -379,16 +441,26 @@
             getMode: function () { return mode; },
             setMode: setMode,
             /**
-             * Replace the per-country counts. Recomputes the fill-color
-             * expression's max value and pushes the new feature data
-             * to the existing source.
+             * Replace the per-country counts and (optionally) the
+             * paint config in one shot. Recomputes the fill-color
+             * expression and pushes the new feature data to the
+             * existing source. Pass `{ paint: {...} }` in `opts` to
+             * swap between sequential / diverging modes (e.g.
+             * compare-newspapers' Bubbles | A | B | A−B selector
+             * cycles paint config on every click).
+             *
+             * @param {Object<string, number>} newCounts
+             * @param {{paint?: Object}} [opts]
              */
-            updateCounts: function (newCounts) {
+            updateCounts: function (newCounts, updateOpts) {
                 countryCounts = newCounts || {};
+                if (updateOpts && Object.prototype.hasOwnProperty.call(updateOpts, 'paint')) {
+                    currentPaint = updateOpts.paint;
+                }
                 if (map.getLayer(FILL)) {
                     map.setPaintProperty(
                         FILL, 'fill-color',
-                        buildFillExpression(maxValue())
+                        buildFillExpression(currentPaint, countryCounts)
                     );
                 }
                 if (map.getSource(SOURCE) && _geojsonCache) {
@@ -396,8 +468,10 @@
                 }
             },
             destroy: function () {
-                try { map.removeControl(control); }
-                catch (e) { /* control may already be gone */ }
+                if (control) {
+                    try { map.removeControl(control); }
+                    catch (e) { /* control may already be gone */ }
+                }
                 if (map.getLayer(FILL))   { try { map.removeLayer(FILL); } catch (e) {} }
                 if (map.getLayer(STROKE)) { try { map.removeLayer(STROKE); } catch (e) {} }
                 if (map.getSource(SOURCE)) { try { map.removeSource(SOURCE); } catch (e) {} }
