@@ -35,16 +35,20 @@ echo $this->partial('common/iwac-assets', [
         'facetButtons' => true,
         'table'        => true,
         'pagination'   => true,
+        'layout'       => true,
     ],
     // Self-registering IIFEs for the client-side panels. The sentiment
     // panel is rendered server-side and is NOT included here — see
     // the <section> further down for its static markup. The radar
     // panel self-initialises from the inline JSON script we emit
-    // below (article-dashboard/radar.js scans for it).
+    // below. `dashboard-panels-bridge` MUST load after the per-panel
+    // IIFEs — it registers thin wrappers into IWACVis.dashboardLayout
+    // so the orchestrator can dispatch via declarative slot arrays.
     'panels' => [
         'article-dashboard/network',
         'article-dashboard/further-reading',
         'article-dashboard/radar',
+        'shared/dashboard-panels-bridge',
     ],
     'orchestrator' => 'article-dashboard',
 ]);

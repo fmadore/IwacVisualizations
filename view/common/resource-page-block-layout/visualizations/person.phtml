@@ -20,12 +20,13 @@ echo $this->partial('common/iwac-assets', [
         'facetButtons' => true,
         'table'        => true,
         'pagination'   => true,
+        'layout'       => true,
     ],
     // Self-registering IIFE panels. Each file hangs a render function off
-    // IWACVis.personDashboard — the entity dashboard reuses these same
-    // modules with a no-op facet, which is why they live under
-    // person-dashboard/ rather than per-template. `facet.js` is the role
-    // picker UI (subject vs creator vs editor) and is person-only.
+    // IWACVis.personDashboard. `dashboard-panels-bridge` MUST load after
+    // every per-panel IIFE — it registers thin wrappers around them into
+    // IWACVis.dashboardLayout so the orchestrator can dispatch via
+    // declarative slot arrays.
     'panels' => [
         'person-dashboard/stats',
         'person-dashboard/facet',
@@ -38,6 +39,7 @@ echo $this->partial('common/iwac-assets', [
         'person-dashboard/network',
         'person-dashboard/cooccurrence',
         'person-dashboard/map',
+        'shared/dashboard-panels-bridge',
     ],
     'orchestrator' => 'person-dashboard',
 ]);

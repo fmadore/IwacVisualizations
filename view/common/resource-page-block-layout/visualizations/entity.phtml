@@ -21,13 +21,14 @@ echo $this->partial('common/iwac-assets', [
         'facetButtons' => true,
         'table'        => true,
         'pagination'   => true,
+        'layout'       => true,
     ],
     // Reuse the person panel modules: the entity precompute wraps every
     // section in `by_role.all` precisely so these modules work unchanged
-    // with a no-op facet provided by entity-dashboard.js. Same source
-    // files load on person and entity pages — zero forked panel JS.
-    // `facet.js` is omitted here because entities don't have a role
-    // facet bar.
+    // with a no-op facet. `dashboard-panels-bridge` registers thin
+    // wrappers into IWACVis.dashboardLayout — same source files load on
+    // person and entity pages, zero forked panel JS. `facet.js` is
+    // omitted here because entities don't have a role facet bar.
     'panels' => [
         'person-dashboard/stats',
         'person-dashboard/timeline',
@@ -39,6 +40,7 @@ echo $this->partial('common/iwac-assets', [
         'person-dashboard/network',
         'person-dashboard/cooccurrence',
         'person-dashboard/map',
+        'shared/dashboard-panels-bridge',
     ],
     'orchestrator' => 'entity-dashboard',
 ]);

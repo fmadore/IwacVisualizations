@@ -1,34 +1,35 @@
 /**
  * IWAC Visualizations — Person Dashboard block (orchestrator)
  *
- * Thin controller: fetches asset/data/person-dashboards/{o_id}.json,
- * builds the layout skeleton, wires up the global role facet, and
- * delegates each panel's render to its dedicated module under
- * asset/js/charts/person-dashboard/.
+ * Migrated to the v0.16.0 declarative dashboard-layout system. The
+ * orchestrator now registers one layout (`'person'`) once at module
+ * load, then on `DOMContentLoaded` it fetches the per-person JSON,
+ * mounts the header (summary stats + role facet bar — outside the
+ * grid, since they're not chart panels), and delegates the panel
+ * grid to `IWACVis.dashboardLayout.render(body, 'person', data, ctx)`.
  *
- * Panel render order:
- *   1. (Header card is rendered server-side in the PHTML — skipped here)
- *   2. Summary stats row        → stats.js
- *   3. Global role facet bar    → facet.js
- *   4. Mentions timeline        (reuses C.timeline via timeline.js)
- *   5. Top newspapers           (C.newspaper via newspapers.js)
- *   6. Countries breakdown      (C.horizontalBar via countries.js)
- *   7. Neighbors network        (C.network via network.js)
- *   8. Locations map            (createIwacMap via map.js)
+ * Renderer wiring lives in `shared/dashboard-panels-bridge.js`, which
+ * the template loads as the last `panels` entry. Predicates
+ * (`hasNewspapersData`, `hasTopicsData`, `hasSentimentData`) live
+ * here as part of the layout definition — they're person/entity-
+ * specific and read from the precomputed bundle's `by_role.all`
+ * sections (the same shape as the legacy hand-rolled orchestrator).
  */
 (function () {
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels || !ns.chartOptions) {
-        console.warn('IWACVis person dashboard: missing panels or chartOptions — check script load order');
+    if (!ns || !ns.panels || !ns.chartOptions || !ns.dashboardLayout) {
+        console.warn('IWACVis person dashboard: missing dependencies — check script load order');
         return;
     }
-    var P = ns.panels;
+    var P  = ns.panels;
+    var DL = ns.dashboardLayout;
 
-    // Whether the given precompute slice has any data at all. Empty
-    // slices are elided from the layout so persons with zero AI
-    // sentiment / LDA / newspaper coverage don't show dead cards.
+    /* ----------------------------------------------------------------- */
+    /*  Empty-payload predicates                                          */
+    /* ----------------------------------------------------------------- */
+
     function hasNewspapersData(data) {
         var all = data && data.newspapers && data.newspapers.by_role && data.newspapers.by_role.all;
         return !!(all && all.length > 0);
@@ -48,60 +49,46 @@
         return false;
     }
 
-    function buildLayout(container, data, facet) {
-        container.querySelector('.iwac-vis-person__loading') &&
-            container.querySelector('.iwac-vis-person__loading').remove();
+    /* ----------------------------------------------------------------- */
+    /*  Layout registration — slot per panel module                       */
+    /* ----------------------------------------------------------------- */
+    //
+    // Every slot uses `DL.fullSlice` as its dataAccessor so the slice
+    // *is* the whole data bundle. Predicates above receive that bundle
+    // and return true/false; the bridge renderer reads `ctx.data` for
+    // the actual payload (same as the slice — it's the full bundle).
+    // Titles + descriptions are i18n keys that the layout system
+    // routes through `P.t()` automatically.
 
-        var body = P.el('div', 'iwac-vis-person__body');
-        container.appendChild(body);
+    var ALL = DL.fullSlice;
 
-        // 2. Summary stats row
-        var statsHost = P.el('div', 'iwac-vis-person__stats');
-        body.appendChild(statsHost);
+    DL.register('person', [
+        { chart: 'iwacTimeline',     wide: true, dataAccessor: ALL,
+          title: 'Mentions',                description: 'desc_mentions_timeline' },
+        { chart: 'iwacHeatmap',      wide: true, dataAccessor: ALL,
+          title: 'Year × month heatmap',    description: 'desc_year_month_heatmap' },
+        { chart: 'iwacNewspapers',               dataAccessor: ALL,
+          title: 'Top newspapers',          description: 'desc_top_newspapers',
+          hasData: hasNewspapersData },
+        { chart: 'iwacCountries',                dataAccessor: ALL,
+          title: 'Countries covered',       description: 'desc_countries_covered' },
+        { chart: 'iwacTopics',       wide: true, dataAccessor: ALL,
+          title: 'Top LDA topics',          description: 'desc_lda_topics',
+          hasData: hasTopicsData },
+        { chart: 'iwacSentiment',    wide: true, dataAccessor: ALL,
+          title: 'AI sentiment',            description: 'desc_ai_sentiment',
+          hasData: hasSentimentData },
+        { chart: 'iwacEntityNet',    wide: true, dataAccessor: ALL,
+          title: 'Associated entities',     description: 'desc_associated_entities' },
+        { chart: 'iwacCoOccurrence', wide: true, dataAccessor: ALL,
+          title: 'Subject co-occurrence',   description: 'desc_subject_cooccurrence' },
+        { chart: 'iwacEntityMap',    wide: true, dataAccessor: ALL,
+          title: 'Associated locations',    description: 'desc_associated_locations' }
+    ]);
 
-        // 3. Facet bar
-        var facetHost = P.el('div', 'iwac-vis-person__facet');
-        body.appendChild(facetHost);
-
-        // 4–8. Charts grid
-        var grid = P.buildChartsGrid();
-        grid.classList.add('iwac-vis-person__grid');
-        body.appendChild(grid);
-
-        var timelinePanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Mentions'),               P.t('desc_mentions_timeline'));
-        var heatmapPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Year × month heatmap'),   P.t('desc_year_month_heatmap'));
-        var newspapersPanel   = hasNewspapersData(data)
-            ? P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'),         P.t('desc_top_newspapers'))
-            : null;
-        var countriesPanel    = P.buildPanel('iwac-vis-panel',                      P.t('Countries covered'),      P.t('desc_countries_covered'));
-        var topicsPanel       = hasTopicsData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top LDA topics'),         P.t('desc_lda_topics'))
-            : null;
-        var sentimentPanel    = hasSentimentData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('AI sentiment'),           P.t('desc_ai_sentiment'))
-            : null;
-        var networkPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated entities'),    P.t('desc_associated_entities'));
-        var cooccurrencePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Subject co-occurrence'),  P.t('desc_subject_cooccurrence'));
-        var mapPanel          = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated locations'),   P.t('desc_associated_locations'));
-
-        [timelinePanel, heatmapPanel, newspapersPanel, countriesPanel,
-         topicsPanel, sentimentPanel, networkPanel, cooccurrencePanel, mapPanel]
-            .forEach(function (p) { if (p) grid.appendChild(p.panel); });
-
-        return {
-            stats: statsHost,
-            facetHost: facetHost,
-            timeline: timelinePanel,
-            heatmap: heatmapPanel,
-            newspapers: newspapersPanel,
-            countries: countriesPanel,
-            topics: topicsPanel,
-            sentiment: sentimentPanel,
-            network: networkPanel,
-            cooccurrence: cooccurrencePanel,
-            map: mapPanel
-        };
-    }
+    /* ----------------------------------------------------------------- */
+    /*  Bootstrap                                                         */
+    /* ----------------------------------------------------------------- */
 
     function initDashboard(container) {
         var itemId = container.dataset.itemId;
@@ -110,7 +97,7 @@
         var ctx = {
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || '',
-            itemId: itemId
+            itemId:   itemId
         };
         var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/person-dashboards/' + itemId + '.json';
 
@@ -120,22 +107,36 @@
                 return r.json();
             })
             .then(function (data) {
+                var loading = container.querySelector('.iwac-vis-person__loading');
+                if (loading) loading.remove();
+
                 var pd = ns.personDashboard || {};
-                var facet = pd.facet ? pd.facet.create('all') : { role: 'all', subscribe: function () {}, set: function () {} };
+                var facet = pd.facet
+                    ? pd.facet.create('all')
+                    : { role: 'all', subscribe: function () {}, set: function () {} };
 
-                var h = buildLayout(container, data, facet);
+                // Header — stats row + role facet bar. Mounted before
+                // the chart grid so the order is: stats / facet / grid.
+                var body = P.el('div', 'iwac-vis-person__body');
+                container.appendChild(body);
 
-                if (pd.stats)                     pd.stats.render(h.stats, data, facet);
-                if (pd.facet)                     pd.facet.render(h.facetHost, data, facet);
-                if (pd.timeline)                  pd.timeline.render(h.timeline, data, facet);
-                if (pd.heatmap)                   pd.heatmap.render(h.heatmap, data, facet);
-                if (pd.newspapers && h.newspapers) pd.newspapers.render(h.newspapers, data, facet, ctx);
-                if (pd.countries)                 pd.countries.render(h.countries, data, facet);
-                if (pd.topics && h.topics)        pd.topics.render(h.topics, data, facet);
-                if (pd.sentiment && h.sentiment)  pd.sentiment.render(h.sentiment, data, facet);
-                if (pd.network)                   pd.network.render(h.network, data, facet, ctx);
-                if (pd.cooccurrence)              pd.cooccurrence.render(h.cooccurrence, data, facet);
-                if (pd.map)                       pd.map.render(h.map, data, facet, ctx);
+                var statsHost = P.el('div', 'iwac-vis-person__stats');
+                body.appendChild(statsHost);
+                if (pd.stats) pd.stats.render(statsHost, data, facet);
+
+                var facetHost = P.el('div', 'iwac-vis-person__facet');
+                body.appendChild(facetHost);
+                if (pd.facet) pd.facet.render(facetHost, data, facet);
+
+                // Grid — declarative slot list dispatched through the
+                // layout system. Each slot's renderer is a thin
+                // wrapper around the legacy panel module, registered
+                // by shared/dashboard-panels-bridge.js. ctx carries
+                // `data` and `facet` so the bridge can reassemble the
+                // legacy `(panelEl, data, facet, ctx)` signature.
+                ctx.data  = data;
+                ctx.facet = facet;
+                DL.render(body, 'person', data, ctx);
             })
             .catch(function (err) {
                 console.error('IWACVis person dashboard:', err);

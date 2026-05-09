@@ -104,6 +104,17 @@ dataset. Reuse its patterns before writing new generators.
   country / newspaper distributions + most-representative articles).
   Eighth shared renderer added: `horizontal-bar`. Backed by
   `scripts/generate_topic_explorer.py`.
+- **v0.19.0 — Person / Entity / Article migrated to dashboardLayout**
+  (2026-05-09) — three resource-page-block orchestrators converted
+  from hand-rolled `buildLayout(...)` + per-panel `mod.render(...)`
+  chains into declarative slot arrays dispatched through
+  `IWACVis.dashboardLayout.render()`. Behaviour identical (same
+  empty-payload predicates, same role-facet observer on Person,
+  same i18n descriptors). New `shared/dashboard-panels-bridge.js`
+  registers thin wrappers around the existing 11 panel modules
+  (9 person + 2 article) into `IWACVis.dashboardLayout` so the
+  panel modules themselves stay unchanged. Three layouts:
+  `'person'`, `'entity'`, `'article'`. See README v0.19.0 section.
 - **v0.18.0 — Choropleth on every map + Compare Projects retired**
   (2026-05-09) — single-button MapLibre control on every IWAC map
   that toggles between point-bubble view and a 6-country choropleth
@@ -130,13 +141,6 @@ dataset. Reuse its patterns before writing new generators.
       Collection Overview generator with an item-set filter and
       consumes the v0.16.0 dashboard-layout system from day 1
       (no migration cost).
-- [ ] **Migrate existing dashboards to `dashboardLayout`** — Person,
-      Entity, and Article orchestrators are still hand-rolled.
-      Converting each to a declarative layout array shrinks the
-      orchestrator by ~150 lines and lets new chart types drop in
-      via a single slot edit. Low-risk, behind-the-scenes — do
-      alongside Item Set Dashboard so the latter validates against
-      a freshly-migrated Person dashboard's slot vocabulary.
 - [ ] **Compare Newspapers choropleth** (v0.18.0 follow-up) — wire
       the geographic-comparison map's choropleth toggle. Needs
       `scripts/generate_compare_newspapers.py` to emit a `country`

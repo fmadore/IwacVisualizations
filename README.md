@@ -22,6 +22,16 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.19.0 — Person / Entity / Article migrated to `dashboardLayout`
+
+The three resource-page-block orchestrators (Person, Entity, Article) are now declarative slot lists dispatched through `IWACVis.dashboardLayout.render()` instead of hand-rolled `buildLayout(...)` + per-panel `pd.timeline.render(h.timeline, data, facet)` chains. The behaviour is identical — empty-payload predicates, role-faceted slices on Person, no-op facet on Entity / Article — but each orchestrator shrinks to ~120-150 lines of slot definitions plus a tiny bootstrap.
+
+- **`shared/dashboard-panels-bridge.js`** (new) registers thin wrappers around the existing 9 person-panel modules and 2 article-panel modules into `IWACVis.dashboardLayout`. Each wrapper reconstructs the legacy `(panelEl, data, facet, ctx)` signature so the panel modules themselves don't change. Loaded as the **last** entry in each phtml's `panels` array (after the per-panel IIFEs populate `IWACVis.personDashboard.*` / `IWACVis.articleDashboard.*`, before the orchestrator).
+- **Three layouts registered**: `'person'` (9 slots, role-faceted via the existing `pd.facet` observer), `'entity'` (same renderer keys, entity-specific `desc_entity_*` strings), `'article'` (2 slots, no facet).
+- **Empty-payload predicates** (`hasNewspapersData`, `hasTopicsData`, `hasSentimentData`, `hasNetworkData`, `hasFurtherData`) move from imperative `if (...) ... else null` ternaries into slot-level `hasData` callbacks. Result: dashboards never render "No data available" placeholders — empty slots are filtered before the panel shell is built.
+- **i18n keys + descriptors are now data, not code**. Adding a new panel to the person dashboard becomes (a) write the panel module under `person-dashboard/`, (b) add a renderer registration to `dashboard-panels-bridge.js`, (c) add a slot to the `'person'` and `'entity'` layouts. No `buildLayout(...)` edit, no template change.
+- **Phtml updates**: each of `person.phtml`, `entity.phtml`, `article.phtml` adds `'layout' => true` to `needs` and `'shared/dashboard-panels-bridge'` as the last `panels` entry.
+
 ### v0.18.0 — Choropleth on every map + Compare Projects retired
 
 - **Choropleth toggle button** on every IWAC map. A single MapLibre control swaps between the existing point-bubble view and a 6-country choropleth fill (Bénin, Burkina Faso, Côte d'Ivoire, Niger, Nigeria, Togo). Theme-aware paint via the `--iwac-vis-heatmap-*` ramp the year × month and calendar heatmaps already use, so light/dark propagation is automatic. Wired on **Collection Overview's world map**, the **Index Overview Places map**, and the **Person / Entity locations map** (with role-faceted updates on the latter via `P.setMapTheme`'s sibling `choropleth.updateCounts`).
@@ -532,7 +542,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across **65 files: ≈ 667 KB → 243 KB (−63.6%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle.
+Current minification results across **66 files: ≈ 671 KB → 242 KB (−63.9%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
 
 There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
 

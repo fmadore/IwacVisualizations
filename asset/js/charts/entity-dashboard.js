@@ -2,41 +2,34 @@
  * IWAC Visualizations — Entity Dashboard block (orchestrator)
  *
  * Drives the dashboard for non-person entities (Lieux, Organisations,
- * Sujets, Événements). Fetches asset/data/entity-dashboards/{o_id}.json,
- * builds a layout WITHOUT the role facet bar, and delegates each
- * panel render to the existing IWACVis.personDashboard panel modules.
+ * Sujets, Événements). Same nine panels as the person dashboard MINUS
+ * the role facet bar — non-person items always pass `role = 'all'`
+ * since the precompute (`generate_entity_dashboards.py`) wraps every
+ * section in `by_role.all` precisely so the panel modules work
+ * unchanged with a no-op facet.
  *
- * The precompute script (generate_entity_dashboards.py) wraps every
- * section in `by_role.all` precisely so we can pass a no-op facet
- * here and reuse the person panel modules verbatim — no fork, no
- * duplicate JS, just a thin orchestrator that omits the facet UI.
+ * Migrated to the v0.16.0 declarative dashboard-layout system. The
+ * `'entity'` layout is structurally identical to `'person'` but uses
+ * the entity-specific i18n descriptors (`desc_entity_*`) — the
+ * underlying panel modules are the same ones the person dashboard
+ * dispatches to, registered into `IWACVis.dashboardLayout` by
+ * `shared/dashboard-panels-bridge.js`.
  */
 (function () {
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels || !ns.chartOptions) {
-        console.warn('IWACVis entity dashboard: missing panels or chartOptions — check script load order');
+    if (!ns || !ns.panels || !ns.chartOptions || !ns.dashboardLayout) {
+        console.warn('IWACVis entity dashboard: missing dependencies — check script load order');
         return;
     }
-    var P = ns.panels;
+    var P  = ns.panels;
+    var DL = ns.dashboardLayout;
 
-    /**
-     * No-op facet that always returns 'all'. Matches the interface the
-     * person panel modules expect (role / subscribe / set) but never
-     * fires updates because non-person dashboards have a single view.
-     */
-    function createNoopFacet() {
-        return {
-            role: 'all',
-            subscribe: function () {},
-            set: function () {}
-        };
-    }
+    /* ----------------------------------------------------------------- */
+    /*  Empty-payload predicates (same shape as person dashboard)         */
+    /* ----------------------------------------------------------------- */
 
-    // Whether the given precompute slice has any data at all. Empty
-    // slices are elided from the layout so entities with zero AI
-    // sentiment / LDA / newspaper coverage don't show dead cards.
     function hasNewspapersData(data) {
         var all = data && data.newspapers && data.newspapers.by_role && data.newspapers.by_role.all;
         return !!(all && all.length > 0);
@@ -56,54 +49,42 @@
         return false;
     }
 
-    function buildLayout(container, data) {
-        var loading = container.querySelector('.iwac-vis-entity__loading');
-        if (loading) loading.remove();
+    /* ----------------------------------------------------------------- */
+    /*  Layout — same renderer keys as 'person', entity-specific descs    */
+    /* ----------------------------------------------------------------- */
 
-        var body = P.el('div', 'iwac-vis-entity__body');
-        container.appendChild(body);
+    var ALL = DL.fullSlice;
 
-        // Summary stats row
-        var statsHost = P.el('div', 'iwac-vis-entity__stats');
-        body.appendChild(statsHost);
+    DL.register('entity', [
+        { chart: 'iwacTimeline',     wide: true, dataAccessor: ALL,
+          title: 'Mentions',                description: 'desc_entity_mentions_timeline' },
+        { chart: 'iwacHeatmap',      wide: true, dataAccessor: ALL,
+          title: 'Year × month heatmap',    description: 'desc_year_month_heatmap' },
+        { chart: 'iwacNewspapers',               dataAccessor: ALL,
+          title: 'Top newspapers',          description: 'desc_entity_top_newspapers',
+          hasData: hasNewspapersData },
+        { chart: 'iwacCountries',                dataAccessor: ALL,
+          title: 'Countries covered',       description: 'desc_entity_countries_covered' },
+        { chart: 'iwacTopics',       wide: true, dataAccessor: ALL,
+          title: 'Top LDA topics',          description: 'desc_lda_topics',
+          hasData: hasTopicsData },
+        { chart: 'iwacSentiment',    wide: true, dataAccessor: ALL,
+          title: 'AI sentiment',            description: 'desc_ai_sentiment',
+          hasData: hasSentimentData },
+        { chart: 'iwacEntityNet',    wide: true, dataAccessor: ALL,
+          title: 'Associated entities',     description: 'desc_entity_associated_entities' },
+        { chart: 'iwacCoOccurrence', wide: true, dataAccessor: ALL,
+          title: 'Subject co-occurrence',   description: 'desc_subject_cooccurrence' },
+        { chart: 'iwacEntityMap',    wide: true, dataAccessor: ALL,
+          title: 'Associated locations',    description: 'desc_entity_associated_locations' }
+    ]);
 
-        // Charts grid (no facet bar — non-person entities have a single view)
-        var grid = P.buildChartsGrid();
-        grid.classList.add('iwac-vis-entity__grid');
-        body.appendChild(grid);
+    /* ----------------------------------------------------------------- */
+    /*  Bootstrap                                                         */
+    /* ----------------------------------------------------------------- */
 
-        var timelinePanel     = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Mentions'),               P.t('desc_entity_mentions_timeline'));
-        var heatmapPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Year × month heatmap'),   P.t('desc_year_month_heatmap'));
-        var newspapersPanel   = hasNewspapersData(data)
-            ? P.buildPanel('iwac-vis-panel',                      P.t('Top newspapers'),         P.t('desc_entity_top_newspapers'))
-            : null;
-        var countriesPanel    = P.buildPanel('iwac-vis-panel',                      P.t('Countries covered'),      P.t('desc_entity_countries_covered'));
-        var topicsPanel       = hasTopicsData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top LDA topics'),         P.t('desc_lda_topics'))
-            : null;
-        var sentimentPanel    = hasSentimentData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('AI sentiment'),           P.t('desc_ai_sentiment'))
-            : null;
-        var networkPanel      = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated entities'),    P.t('desc_entity_associated_entities'));
-        var cooccurrencePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Subject co-occurrence'),  P.t('desc_subject_cooccurrence'));
-        var mapPanel          = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Associated locations'),   P.t('desc_entity_associated_locations'));
-
-        [timelinePanel, heatmapPanel, newspapersPanel, countriesPanel,
-         topicsPanel, sentimentPanel, networkPanel, cooccurrencePanel, mapPanel]
-            .forEach(function (p) { if (p) grid.appendChild(p.panel); });
-
-        return {
-            stats: statsHost,
-            timeline: timelinePanel,
-            heatmap: heatmapPanel,
-            newspapers: newspapersPanel,
-            countries: countriesPanel,
-            topics: topicsPanel,
-            sentiment: sentimentPanel,
-            network: networkPanel,
-            cooccurrence: cooccurrencePanel,
-            map: mapPanel
-        };
+    function noopFacet() {
+        return { role: 'all', subscribe: function () {}, set: function () {} };
     }
 
     function initDashboard(container) {
@@ -113,7 +94,7 @@
         var ctx = {
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || '',
-            itemId: itemId
+            itemId:   itemId
         };
         var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/entity-dashboards/' + itemId + '.json';
 
@@ -123,20 +104,22 @@
                 return r.json();
             })
             .then(function (data) {
-                var pd = ns.personDashboard || {};
-                var facet = createNoopFacet();
-                var h = buildLayout(container, data);
+                var loading = container.querySelector('.iwac-vis-entity__loading');
+                if (loading) loading.remove();
 
-                if (pd.stats)                      pd.stats.render(h.stats, data, facet);
-                if (pd.timeline)                   pd.timeline.render(h.timeline, data, facet);
-                if (pd.heatmap)                    pd.heatmap.render(h.heatmap, data, facet);
-                if (pd.newspapers && h.newspapers) pd.newspapers.render(h.newspapers, data, facet, ctx);
-                if (pd.countries)                  pd.countries.render(h.countries, data, facet);
-                if (pd.topics && h.topics)         pd.topics.render(h.topics, data, facet);
-                if (pd.sentiment && h.sentiment)   pd.sentiment.render(h.sentiment, data, facet);
-                if (pd.network)                    pd.network.render(h.network, data, facet, ctx);
-                if (pd.cooccurrence)               pd.cooccurrence.render(h.cooccurrence, data, facet);
-                if (pd.map)                        pd.map.render(h.map, data, facet, ctx);
+                var pd = ns.personDashboard || {};
+                var facet = noopFacet();
+
+                var body = P.el('div', 'iwac-vis-entity__body');
+                container.appendChild(body);
+
+                var statsHost = P.el('div', 'iwac-vis-entity__stats');
+                body.appendChild(statsHost);
+                if (pd.stats) pd.stats.render(statsHost, data, facet);
+
+                ctx.data  = data;
+                ctx.facet = facet;
+                DL.render(body, 'entity', data, ctx);
             })
             .catch(function (err) {
                 console.error('IWACVis entity dashboard:', err);

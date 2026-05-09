@@ -1,39 +1,37 @@
 /**
  * IWAC Visualizations — Article Dashboard block (orchestrator)
  *
- * Layout (top → bottom):
- *   1. Server-rendered sentiment panel    — rendered in article.phtml
- *                                           directly, left in place
- *   2. Context network (wide)             — network.js
- *   3. Further reading (wide)             — further-reading.js
- *                                           (toggle: by shared tags |
- *                                            by similar content)
+ * Migrated to the v0.16.0 declarative dashboard-layout system. The
+ * `'article'` layout is two slots:
  *
- * The stats panel, separate related-articles grid, separate similar-
- * articles grid, and the spatial-coverage map are intentionally NOT
- * rendered on article pages anymore — per user feedback the first
- * two were noise and the last two read better as a single toggleable
- * panel.
+ *   1. Context network    — `iwacArticleNetwork` (the 3-layer force
+ *                            graph: article + tagged entities + top
+ *                            related articles via shared-entity overlap)
+ *   2. Further reading    — `iwacArticleFurther` (toggle between
+ *                            "by shared tags" and "by similar content")
  *
- * Sentiment is rendered server-side from Omeka item metadata via
- * article.phtml + SentimentExtractor, so it is NOT fetched from the
- * precomputed JSON. The radar chart for the 3-model comparison
- * self-initialises from a `<script type="application/json">` embedded
- * in the rendered PHP; see article-dashboard/radar.js.
+ * Server-side renders (the AI sentiment cards + the radar chart that
+ * self-initialises from the inline JSON) live in `article.phtml` and
+ * are NOT part of the dashboardLayout slot list. The radar
+ * (`articleDashboard.radar`) hangs off its own DOM hook — it doesn't
+ * need an orchestrator.
+ *
+ * Renderer wiring lives in `shared/dashboard-panels-bridge.js`.
  */
 (function () {
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels || !ns.chartOptions) {
-        console.warn('IWACVis article dashboard: missing panels or chartOptions — check script load order');
+    if (!ns || !ns.panels || !ns.chartOptions || !ns.dashboardLayout) {
+        console.warn('IWACVis article dashboard: missing dependencies — check script load order');
         return;
     }
-    var P = ns.panels;
+    var P  = ns.panels;
+    var DL = ns.dashboardLayout;
 
-    function createNoopFacet() {
-        return { role: 'all', subscribe: function () {}, set: function () {} };
-    }
+    /* ----------------------------------------------------------------- */
+    /*  Empty-payload predicates                                          */
+    /* ----------------------------------------------------------------- */
 
     function hasNetworkData(data) {
         var entities = (data && data.entities) || [];
@@ -45,38 +43,27 @@
             || ((data && data.semantic_neighbors) || []).length > 0;
     }
 
-    function buildLayout(container, data) {
-        var loading = container.querySelector('.iwac-vis-article__loading');
-        if (loading) loading.remove();
+    /* ----------------------------------------------------------------- */
+    /*  Layout                                                            */
+    /* ----------------------------------------------------------------- */
 
-        // The PHP-rendered sentiment section already lives inside the
-        // container. We append our dynamic panels as siblings in an
-        // .iwac-vis-article__body wrapper BELOW it. The wrapper is
-        // what establishes the inter-panel gap (flex column + gap).
-        var body = P.el('div', 'iwac-vis-article__body');
-        container.appendChild(body);
+    var ALL = DL.fullSlice;
 
-        var grid = P.buildChartsGrid();
-        grid.classList.add('iwac-vis-article__grid');
-        body.appendChild(grid);
+    DL.register('article', [
+        { chart: 'iwacArticleNetwork', wide: true, dataAccessor: ALL,
+          title: 'Context network',  description: 'desc_article_context_network',
+          hasData: hasNetworkData },
+        { chart: 'iwacArticleFurther', wide: true, dataAccessor: ALL,
+          title: 'Further reading',  description: 'desc_article_further_reading',
+          hasData: hasFurtherData }
+    ]);
 
-        var networkPanel = hasNetworkData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('Context network'), P.t('desc_article_context_network'))
-            : null;
-        var furtherPanel = hasFurtherData(data)
-            ? P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
-                P.t('Further reading'), P.t('desc_article_further_reading'))
-            : null;
+    /* ----------------------------------------------------------------- */
+    /*  Bootstrap                                                         */
+    /* ----------------------------------------------------------------- */
 
-        [networkPanel, furtherPanel].forEach(function (p) {
-            if (p) grid.appendChild(p.panel);
-        });
-
-        return {
-            network: networkPanel,
-            further: furtherPanel
-        };
+    function noopFacet() {
+        return { role: 'all', subscribe: function () {}, set: function () {} };
     }
 
     function initDashboard(container) {
@@ -96,15 +83,23 @@
                 return r.json();
             })
             .then(function (data) {
-                var ad = ns.articleDashboard || {};
-                var facet = createNoopFacet();
-                var h = buildLayout(container, data);
+                var loading = container.querySelector('.iwac-vis-article__loading');
+                if (loading) loading.remove();
 
-                if (ad.network && h.network)     ad.network.render(h.network, data, facet, ctx);
-                if (ad.furtherReading && h.further)
-                    ad.furtherReading.render(h.further, data, facet, ctx);
-                // articleDashboard.radar self-initialises from the inline
-                // JSON script block emitted by article.phtml.
+                // Mount the dynamic-panels wrapper as a sibling of the
+                // server-rendered sentiment block already present in
+                // article.phtml; keeps the inter-panel gap consistent
+                // with the other dashboards.
+                var body = P.el('div', 'iwac-vis-article__body');
+                container.appendChild(body);
+
+                ctx.data  = data;
+                ctx.facet = noopFacet();
+                DL.render(body, 'article', data, ctx);
+
+                // articleDashboard.radar self-initialises off the
+                // inline `<script type="application/json">` block
+                // emitted by article.phtml — no orchestrator step.
             })
             .catch(function (err) {
                 console.error('IWACVis article dashboard:', err);
