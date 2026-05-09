@@ -15,12 +15,29 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 | References Overview | page block | **Live** — 6 panels | Live fetch from HF datasets-server |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
+| Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
+| Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
+| Visualizations / Photograph (template 15) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Person | resource-page block | **Live** — 11 panels | Precompute (`generate_person_dashboards.py`) |
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |
 | Item Set Dashboard | resource-page block | Placeholder (assets enqueued, no orchestrator) | — |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v0.21.0 — Minimal-item dashboard for Audio / Video / Photograph templates
+
+The Visualizations resource-page block now dispatches three more templates: Audio (9), Video recording (19), and Photograph (15). All three route to a new lightweight ``minimal-item.phtml`` partial that renders a small two-slot dashboard via the v0.16.0 layout system — sibling sparkline + "other items in this collection" strip. No per-item bundle bloat: a single corpus-level ``asset/data/template-summary.json`` (37 KB minified) drives every per-item page.
+
+- **`scripts/generate_template_summary.py`** (new) walks the `audiovisual` (45 items) and `documents` (26 items) HF subsets, emits per-subset year histograms + the 30 most-recent items, plus optional `by_medium` (audiovisual) and `by_type` (documents) facet slices for future granular splits when the upstream data grows. Slice keys are NFC-lowercase normalised so the front-end can look them up case-insensitively.
+- **`view/common/resource-page-block-layout/visualizations/minimal-item.phtml`** dispatches based on template ID: 9/19 → `audiovisual`, 15 → `documents`. Reads `dcterms:date` to populate `data-pub-year` so the sparkline can highlight the current item's year.
+- **`asset/js/charts/minimal-item-dashboard.js`** (~120 lines) registers a `'minimalItem'` layout (two declarative slots) and dispatches via `IWACVis.dashboardLayout.render(body, 'minimalItem', sliceBundle, ctx)`. The `siblingSparkline` and `similarItems` renderers come from the v0.16.0 shared/renderers/ collection — first non-Topic-Explorer external consumer of the layout system + first reuse of those two renderers outside the article dashboard / Topic Explorer.
+- **`Visualizations.php`** TEMPLATE_PARTIALS map gains three entries: `9 ⇒ minimal-item`, `19 ⇒ minimal-item`, `15 ⇒ minimal-item`. The dispatcher's "items whose template is not in the map produce no output" rule means unsupported templates remain silent — no regression risk.
+
+Caveats picked up during the build:
+
+- The HF `audiovisual.medium` field carries physical-format labels (`DVD` × 43, `CD` × 1) rather than `audio` / `video`. So Audio and Video pages currently show the **whole audiovisual subset** as siblings, not a clean per-medium slice. The `by_medium` slices are emitted in the JSON for when the upstream pipeline gains cleaner per-template tagging.
+- The HF `documents.type` field is currently uniform `'Document'` across all 26 items — Photograph (15) reads from the entire `documents` subset for the same reason. The `by_type` map is in place for the future.
 
 ### v0.20.0 — Compare Newspapers choropleth lit up
 
@@ -552,7 +569,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across **66 files: ≈ 671 KB → 242 KB (−63.9%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
+Current minification results across **67 files: ≈ 680 KB → 245 KB (−63.9%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
 
 There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
 

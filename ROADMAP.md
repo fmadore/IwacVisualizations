@@ -104,6 +104,21 @@ dataset. Reuse its patterns before writing new generators.
   country / newspaper distributions + most-representative articles).
   Eighth shared renderer added: `horizontal-bar`. Backed by
   `scripts/generate_topic_explorer.py`.
+- **v0.21.0 — Minimal item dashboard for Audio / Video / Photograph**
+  (2026-05-09) — three more resource templates wired through
+  `Visualizations::TEMPLATE_PARTIALS`: Audio (9), Video recording
+  (19), and Photograph (15) all dispatch to a new lightweight
+  `minimal-item.phtml` that renders a two-slot dashboard
+  (sibling-sparkline + similar-items) via the v0.16.0 dashboardLayout
+  system. New `scripts/generate_template_summary.py` (37 KB
+  output JSON) drives every per-item page from a single
+  corpus-level bundle — no per-item precompute. Caveats: HF
+  `audiovisual.medium` carries DVD/CD physical labels rather than
+  audio/video, and `documents.type` is uniform `'Document'`, so
+  both per-template pages currently show their whole subset as
+  siblings. The `by_medium` / `by_type` facet slices are emitted
+  in the JSON so the dashboard can switch to granular splits when
+  the upstream data grows. See README v0.21.0 section.
 - **v0.20.0 — Compare Newspapers choropleth** (2026-05-09) —
   geographic-comparison map's choropleth toggle now lights up.
   `scripts/generate_compare_newspapers.py` extended to emit a
@@ -150,16 +165,14 @@ dataset. Reuse its patterns before writing new generators.
       Collection Overview generator with an item-set filter and
       consumes the v0.16.0 dashboard-layout system from day 1
       (no migration cost).
-- [ ] **Resource templates audit (informational)** — the live Omeka S
-      installation at `islam.zmo.de` exposes 19 resource templates;
-      6 are already wired (Person/5, Location/6, Organization/7,
-      Newspaper article/8, Topic/3, Event/2). Untapped: Item set/4
-      (placeholder ready), Audio/9, Book and friends/10–14 + 17–18
+- [ ] **Resource templates audit (informational)** — 9 of 19
+      resource templates from `islam.zmo.de` are now wired: Event/2,
+      Topic/3, Person/5, Location/6, Organization/7, Newspaper
+      article/8, Audio/9 (v0.21.0), Photograph/15 (v0.21.0), Video
+      recording/19 (v0.21.0). Untapped: Item set/4 (placeholder
+      ready, user-deferred), Book and friends/10–14 + 17–18
       (covered by References Overview at corpus level — likely no
-      need for per-item dashboards), Photograph/15, Blog post/16,
-      Video recording/19, Media/20. Audio + Video together = 45
-      items (the audiovisual subset); Photograph alone is a
-      candidate for a small dedicated dashboard but ROI is low.
+      need for per-item dashboards), Blog post/16, Media/20.
 
 ## Later
 

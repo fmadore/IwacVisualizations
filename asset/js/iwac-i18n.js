@@ -392,6 +392,13 @@
             'Show bubbles':                 'Show bubbles',
             'Toggle choropleth view':       'Toggle choropleth view',
 
+            // Minimal item dashboard (Audio / Video / Photograph)
+            'Loading visualizations':            'Loading visualizations',
+            'Activity over time':                'Activity over time',
+            'Other items in this collection':    'Other items in this collection',
+            'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
+            'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
+
             // Topic Explorer — labels + descriptions
             'Loading Topic Explorer':       'Loading Topic Explorer',
             'Topic distribution':           'Topic distribution',
@@ -832,6 +839,13 @@
             'Show choropleth':              'Afficher la choropl\u00e8the',
             'Show bubbles':                 'Afficher les bulles',
             'Toggle choropleth view':       'Basculer la vue choropl\u00e8the',
+
+            // Minimal item dashboard \u2014 French
+            'Loading visualizations':            'Chargement des visualisations',
+            'Activity over time':                'Activit\u00e9 dans le temps',
+            'Other items in this collection':    'Autres \u00e9l\u00e9ments de cette collection',
+            'desc_minimal_sparkline':            'O\u00f9 cet \u00e9l\u00e9ment se situe dans la chronologie d\u2019activit\u00e9 de sa collection. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
+            'desc_minimal_similar':              'Autres \u00e9l\u00e9ments du m\u00eame sous-ensemble IWAC, du plus r\u00e9cent au plus ancien. Cliquez sur un \u00e9l\u00e9ment pour ouvrir sa fiche.',
 
             // Topic Explorer \u2014 French
             'Loading Topic Explorer':       'Chargement de l\u2019explorateur de th\u00e8mes',

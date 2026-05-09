@@ -1,0 +1,29 @@
+/* ==========================================================================
+ *  Minimal item block — block-specific layout only
+ *
+ *  Used by the per-item Visualizations dashboard for resource templates
+ *  9 (Audio), 19 (Video recording), and 15 (Photograph). The orchestrator
+ *  composes its grid through the v0.16.0 dashboardLayout system, so
+ *  every panel inherits the standard ``iwac-vis-panel`` chrome,
+ *  ``iwac-vis-similar-strip`` card grid, and ``iwac-vis-sparkline-host``
+ *  styling already defined in iwac-core.css. This sheet only adds
+ *  block-local layout — the body wrapper that establishes the inter-
+ *  panel gap.
+ *
+ *  All colors and spacing read through theme tokens, no hex literals.
+ * ========================================================================== */
+
+.iwac-vis-minimal-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+    margin-top: var(--space-3, 0.75rem);
+}
+
+/* The minimal block doesn't render a header card — Omeka already shows
+ * the item's bibliographic metadata above the resource page block — so
+ * the loading state shouldn't push the actual content too far down.
+ */
+.iwac-vis-minimal-item__loading {
+    margin: var(--space-3, 0.75rem) 0;
+}

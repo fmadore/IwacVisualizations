@@ -1,0 +1,99 @@
+<?php
+/**
+ * Visualizations: minimal per-item partial.
+ *
+ * Dispatched by ``Visualizations::TEMPLATE_PARTIALS`` for resource
+ * templates that don't have a dedicated dashboard but still benefit
+ * from a small "where does this item sit in the corpus" view:
+ *
+ *   * 9  Audio              → ``audiovisual`` subset
+ *   * 19 Video recording    → ``audiovisual`` subset
+ *   * 15 Photograph         → ``documents`` subset
+ *
+ * The orchestrator (``minimal-item-dashboard.js``) loads
+ * ``asset/data/template-summary.json``, picks the matching subset's
+ * slice, and renders two slots through the v0.16.0 dashboardLayout
+ * system:
+ *
+ *   1. Sibling sparkline — year histogram for the whole subset, with
+ *      a dot at the current item's year (no ECharts; pure inline SVG).
+ *   2. Similar-items strip — the most-recent N items in the subset
+ *      excluding this one. The strip is the same renderer the Topic
+ *      Explorer + per-article dashboard use; absent similarity scores
+ *      it just renders plain link cards.
+ *
+ * Server side renders only the asynchronous container — Omeka already
+ * shows the item's bibliographic metadata above the block, so we don't
+ * duplicate it.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\ItemRepresentation $resource
+ */
+
+// Template ID → HF subset that drives the sibling context.
+//
+// audiovisual (45 items) is small enough that we use the WHOLE subset
+// as siblings for both Audio (9) and Video (19) pages — the
+// HF `medium` column carries physical-format labels (DVD / CD) rather
+// than a clean audio/video split, so a per-medium filter would yield
+// uneven slices (43 vs 1). When the upstream pipeline emits cleaner
+// per-template tagging we can switch to the by_medium / by_type
+// slices already present in template-summary.json.
+//
+// documents (26 items) is fully typed `Document` in the current
+// dataset, so Photograph (15) reads from the whole documents subset.
+$templateMap = [
+    9  => 'audiovisual',
+    19 => 'audiovisual',
+    15 => 'documents',
+];
+
+$template   = $resource->resourceTemplate();
+$templateId = $template ? (int) $template->id() : 0;
+$subset     = $templateMap[$templateId] ?? '';
+
+// Pull the current item's year out of dcterms:date so the sparkline
+// can place the highlight dot. Bare-year and full ISO dates both
+// work; missing dates leave the dot off.
+$pubYear = '';
+$dateValue = $resource->value('dcterms:date');
+if ($dateValue) {
+    $dateStr = (string) $dateValue;
+    if (preg_match('/^(\d{4})/', $dateStr, $m)) {
+        $pubYear = $m[1];
+    }
+}
+
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'minimal-item',
+    'needs' => [
+        'chartOptions' => true,
+        'layout'       => true,
+        'renderers'    => [
+            'sibling-sparkline',
+            'similar-items',
+        ],
+    ],
+    'orchestrator' => 'minimal-item-dashboard',
+]);
+
+$siteSlug   = $this->currentSite()->slug();
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+$translate  = $this->plugin('translate');
+?>
+
+<div class="iwac-vis-block iwac-vis-minimal-item"
+     data-item-id="<?= $escapeAttr($resource->id()) ?>"
+     data-template-id="<?= $escapeAttr($templateId) ?>"
+     data-subset="<?= $escapeAttr($subset) ?>"
+     data-pub-year="<?= $escapeAttr($pubYear) ?>"
+     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
+     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
+
+    <h3><?= $translate('Visualizations') ?></h3>
+
+    <div class="iwac-vis-loading iwac-vis-minimal-item__loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $translate('Loading visualizations') ?>&hellip;</span>
+    </div>
+</div>
