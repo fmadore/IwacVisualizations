@@ -180,11 +180,43 @@
             });
         }
 
+        // Choropleth toggle. Per-country counts come from the
+        // dashboard's separate `countries` panel data — those are
+        // already aggregated per role at precompute time, so we just
+        // route the active role's slice into the helper. The location
+        // bubbles themselves don't carry country tags, so we don't try
+        // to derive aggregate counts from them.
+        function getCountryCounts(role) {
+            var src = data && data.countries && data.countries.by_role;
+            if (!src) return {};
+            var entries = src[role] || src.all || [];
+            var counts = {};
+            entries.forEach(function (e) {
+                var name = e.name || e.country;
+                var val  = e.value != null ? e.value : (e.count != null ? e.count : 0);
+                if (name) counts[name] = val;
+            });
+            return counts;
+        }
+
+        var choropleth = null;
+        if (createdMap && typeof P.attachChoroplethToggle === 'function') {
+            choropleth = P.attachChoroplethToggle(createdMap, {
+                countryCounts: getCountryCounts(facet.role),
+                bubbleLayers:  ['person-location-circles'],
+                basePath:      (ctx && ctx.basePath) || '',
+                labelKey:      'mentions'
+            });
+        }
+
         facet.subscribe(function () {
             currentLocations = byRole[facet.role] || [];
-            if (!mapInstance) return;
-            var src = mapInstance.getSource('person-locations');
-            if (src) src.setData(featuresFrom(currentLocations));
+            if (mapInstance) {
+                var src = mapInstance.getSource('person-locations');
+                if (src) src.setData(featuresFrom(currentLocations));
+            }
+            // Mirror the role-faceted counts into the choropleth fill.
+            if (choropleth) choropleth.updateCounts(getCountryCounts(facet.role));
         });
     }
 

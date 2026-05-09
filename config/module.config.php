@@ -4,12 +4,12 @@ namespace IwacVisualizations;
 return [
     'block_layouts' => [
         'invokables' => [
-            'compareProjects' => Site\BlockLayout\CompareProjects::class,
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,
             'scaryTerms' => Site\BlockLayout\ScaryTerms::class,
+            'topicExplorer' => Site\BlockLayout\TopicExplorer::class,
         ],
     ],
     'resource_page_block_layouts' => [

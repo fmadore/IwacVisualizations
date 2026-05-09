@@ -21,6 +21,16 @@
  *             'facetButtons' => true,
  *             'table'        => true,
  *             'pagination'   => true,
+ *             'layout'       => true,           // declarative dashboard layout
+ *             'renderers'    => [               // which shared renderers to load
+ *                 'calendar-heatmap',
+ *                 'chord',
+ *                 'radar-profile',
+ *                 'sibling-sparkline',
+ *                 'similar-items',
+ *                 'sunburst',
+ *                 'treemap',
+ *             ],
  *         ],
  *         'panels'       => [
  *             'collection-overview/recent-additions',
@@ -31,7 +41,8 @@
  *     ]); ?>
  *
  * Load order is fixed: stylesheets → CDN libs → IWAC i18n/theme/core →
- * shared primitives → block panels → orchestrator. headScript/headLink
+ * shared primitives → dashboard-layout (if needed) → shared renderers
+ * (if needed) → block panels → orchestrator. headScript/headLink
  * de-dupe by URL, so if two partial calls ever clash on a page, each
  * asset is still emitted only once.
  *
@@ -64,6 +75,9 @@ $needChartOpts  = !empty($needs['chartOptions']);
 $needPagination = !empty($needs['pagination']) || !empty($needs['table']);
 $needTable      = !empty($needs['table']);
 $needFacets     = !empty($needs['facetButtons']);
+// Renderers imply the dashboard-layout module they register against.
+$rendererList   = isset($needs['renderers']) ? (array) $needs['renderers'] : [];
+$needLayout     = !empty($needs['layout']) || !empty($rendererList);
 
 $module = 'IwacVisualizations';
 $defer  = ['defer' => 'defer'];
@@ -118,8 +132,32 @@ if ($needFacets) {
     $headScript->appendFile($this->assetUrl('js/charts/shared/faceted-chart.min.js',  $module), 'text/javascript', $defer);
 }
 if ($needMaplibre) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js',  $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js', $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js',   $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js',  $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/choropleth.min.js', $module), 'text/javascript', $defer);
+}
+
+// -- Dashboard layout system + opt-in renderers ------------------------
+//
+// dashboard-layout.js is the registry; each renderer file under
+// shared/renderers/ self-registers into it on load. Only the renderers
+// the page declares are emitted, so blocks that don't use the layout
+// system pay nothing.
+if ($needLayout) {
+    $headScript->appendFile($this->assetUrl('js/charts/shared/dashboard-layout.min.js', $module), 'text/javascript', $defer);
+    foreach ($rendererList as $renderer) {
+        // Sanitize: only allow [a-z0-9-] so the assetUrl path can't
+        // be coerced into a directory traversal.
+        $clean = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) $renderer));
+        if ($clean === '') {
+            continue;
+        }
+        $headScript->appendFile(
+            $this->assetUrl('js/charts/shared/renderers/' . $clean . '.min.js', $module),
+            'text/javascript',
+            $defer
+        );
+    }
 }
 
 // -- Block-specific panel modules --------------------------------------

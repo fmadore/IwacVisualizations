@@ -170,9 +170,20 @@
      * Re-render every tracked chart against the current theme.
      *
      * For ECharts we rebuild the theme from the current CSS variables
-     * (via refreshThemes) and then dispose + reinit each chart, because
-     * ECharts 6 no longer supports `chart.setTheme()`. For MapLibre we
-     * swap the style URL.
+     * (via refreshThemes) and then call `instance.setTheme()` — supported
+     * since ECharts 6.0.0 — followed by re-running the registered render
+     * callback. setTheme alone preserves DOM state (no detach / reattach
+     * flash, no re-init cost), and re-rendering immediately afterwards
+     * picks up any theme tokens that callers baked into their option
+     * literal via `getChartTokens()`. The ECharts 6 caveat ("multiple
+     * setOption merge calls before setTheme are discarded") doesn't bite
+     * us because the render callback always rebuilds the option from
+     * scratch with `setOption(..., true)` — the canonical IWAC pattern.
+     *
+     * For MapLibre we swap the style URL. The `createIwacMap` factory
+     * registers an `onStyleReady` callback that re-runs on every
+     * `style.load`, so custom sources / layers / markers get rebuilt
+     * automatically after the basemap swap.
      */
     ns.applyThemeToCharts = function () {
         if (typeof ns.refreshThemes === 'function') ns.refreshThemes();
@@ -180,17 +191,31 @@
         var themeName = ns.getChartTheme ? ns.getChartTheme() : null;
         ns._charts.forEach(function (entry) {
             if (entry.kind === 'echarts') {
-                if (!entry.render || !entry.el) return; // can't re-render untracked charts
+                if (!entry.instance || entry.instance.isDisposed()) return;
                 try {
-                    entry.instance.dispose();
-                    entry.instance = echarts.init(entry.el, themeName);
-                    entry.render(entry.el, entry.instance);
+                    if (themeName && typeof entry.instance.setTheme === 'function') {
+                        entry.instance.setTheme(themeName);
+                    }
+                    if (typeof entry.render === 'function' && entry.el) {
+                        entry.render(entry.el, entry.instance);
+                    }
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);
                 }
             } else if (entry.kind === 'maplibre') {
-                try { entry.instance.setStyle(ns.getBasemapStyle()); }
-                catch (e) { console.error('IWACVis: basemap swap failed', e); }
+                try {
+                    // Route through P.setMapTheme when shared/maplibre.js
+                    // is loaded — gives us the per-map no-op cache so a
+                    // theme attribute write that didn't actually change
+                    // the value can't blow away custom layers.
+                    var maps = ns.panels;
+                    var mode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
+                    if (maps && typeof maps.setMapTheme === 'function') {
+                        maps.setMapTheme(entry.instance, mode);
+                    } else {
+                        entry.instance.setStyle(ns.getBasemapStyle());
+                    }
+                } catch (e) { console.error('IWACVis: basemap swap failed', e); }
             }
         });
     };

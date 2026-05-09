@@ -1,0 +1,214 @@
+/* ==========================================================================
+ *  Topic Explorer block — block-specific layout only
+ *
+ *  Shared chart / panel / summary-card / button styles all live in
+ *  iwac-core.css; this sheet adds:
+ *    - the two-mode container (overview ↔ detail)
+ *    - the topic-card grid + per-card top-words badges
+ *    - the back / drill-in affordances on the detail view
+ *
+ *  All colors and spacing read through theme tokens (--primary,
+ *  --ink, --surface, --border, --space-*, --radius-*) — no hex
+ *  literals, per the IWAC theme integration contract.
+ * ========================================================================== */
+
+.iwac-vis-topic-explorer__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+/* -------------------------------------------------------------------
+ *  View switcher — overview vs detail.
+ *
+ *  Both views are rendered into the same container and toggled by an
+ *  `is-active` modifier on the wrapper. The overview is the default;
+ *  selecting a topic adds `is-active` to the detail wrapper and
+ *  removes it from the overview wrapper.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-topic-explorer__view {
+    display: none;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+.iwac-vis-topic-explorer__view.is-active {
+    display: flex;
+}
+
+/* -------------------------------------------------------------------
+ *  Topic card grid (overview mode)
+ *
+ *  Up to 30 topic cards laid out in a responsive auto-fill grid.
+ *  Each card carries the topic's top words, an article count, and
+ *  is keyboard-focusable so the entire card acts as a button to
+ *  drill into the topic.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-topic-explorer__topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-topic-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-3, 0.75rem);
+    background: var(--surface, #fdfcfa);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+    transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+    position: relative;
+}
+
+.iwac-vis-topic-card:hover,
+.iwac-vis-topic-card:focus-visible {
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #d4d6da));
+    box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
+    transform: translateY(-1px);
+}
+
+.iwac-vis-topic-card:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline-offset: 2px;
+}
+
+.iwac-vis-topic-card__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-topic-card__id {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted, #767880);
+}
+
+.iwac-vis-topic-card__count {
+    font-size: 0.75rem;
+    color: var(--ink-light, #535862);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-topic-card__words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.4rem;
+}
+
+.iwac-vis-topic-card__word {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full, 9999px);
+    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface, #fdfcfa));
+    color: color-mix(in oklab, var(--primary, #d86a11) 70%, var(--ink-strong, var(--ink, #2c2f37)));
+    line-height: 1.4;
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.iwac-vis-topic-card__years {
+    font-size: 0.75rem;
+    color: var(--muted, #767880);
+    font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------------------------------------------------
+ *  Detail view header — title + back button + meta
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-topic-detail__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    background: var(--surface, #fdfcfa);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+.iwac-vis-topic-detail__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+    justify-content: space-between;
+}
+
+.iwac-vis-topic-detail__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #2c2f37));
+    margin: 0;
+}
+
+.iwac-vis-topic-detail__back {
+    /* uses the shared .iwac-vis-btn class for sizing + colour;
+       this rule only adds the trailing chevron spacing. */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.iwac-vis-topic-detail__words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.4rem;
+}
+
+.iwac-vis-topic-detail__word {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full, 9999px);
+    background: color-mix(in oklab, var(--primary, #d86a11) 14%, var(--surface, #fdfcfa));
+    color: color-mix(in oklab, var(--primary, #d86a11) 75%, var(--ink-strong, var(--ink, #2c2f37)));
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.iwac-vis-topic-detail__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3, 0.75rem);
+    font-size: 0.8125rem;
+    color: var(--ink-light, #535862);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-topic-detail__meta strong {
+    color: var(--ink-strong, var(--ink, #2c2f37));
+    font-weight: 600;
+}
+
+/* -------------------------------------------------------------------
+ *  Treemap host — give it a generous fixed height so 30 cells lay
+ *  out without becoming postage stamps on wide screens.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-topic-explorer__treemap {
+    /* Acts as a panel chrome already (iwac-vis-panel + chart);
+       this rule just pins a sane minimum. */
+    min-height: 480px;
+}
+
+@media (max-width: 768px) {
+    .iwac-vis-topic-explorer__treemap {
+        min-height: 360px;
+    }
+    .iwac-vis-topic-explorer__topics {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}

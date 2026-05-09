@@ -1,0 +1,41 @@
+<?php
+/**
+ * Topic Explorer page block.
+ *
+ * Two-mode block: an overview that lists every LDA-30 topic alongside
+ * a clickable treemap, and a per-topic detail view (calendar heatmap +
+ * country / newspaper distributions + most representative articles).
+ * Both views share the same block container; the orchestrator swaps
+ * them client-side.
+ *
+ * Backed by `asset/data/topic-explorer.json` produced by
+ * `scripts/generate_topic_explorer.py`.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-assets', [
+    'blockCss' => 'topic-explorer',
+    'needs' => [
+        'chartOptions' => true,
+        'layout'       => true,
+        'renderers'    => [
+            'calendar-heatmap',
+            'horizontal-bar',
+            'similar-items',
+            'treemap',
+        ],
+    ],
+    'orchestrator' => 'topic-explorer',
+]);
+?>
+
+<div class="iwac-vis-block iwac-vis-topic-explorer"
+     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
+     data-site-base="<?= $this->escapeHtmlAttr($this->basePath('s/' . $this->currentSite()->slug())) ?>">
+    <div class="iwac-vis-loading iwac-vis-topic-explorer__loading">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $this->translate('Loading Topic Explorer') ?>&hellip;</span>
+    </div>
+</div>

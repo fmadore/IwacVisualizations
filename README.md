@@ -14,13 +14,40 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 6 panels | Live fetch from HF datasets-server |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
+| Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
 | Visualizations / Person | resource-page block | **Live** — 11 panels | Precompute (`generate_person_dashboards.py`) |
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |
-| Compare Projects | page block | Placeholder (assets enqueued, no orchestrator) | — |
 | Item Set Dashboard | resource-page block | Placeholder (assets enqueued, no orchestrator) | — |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v0.18.0 — Choropleth on every map + Compare Projects retired
+
+- **Choropleth toggle button** on every IWAC map. A single MapLibre control swaps between the existing point-bubble view and a 6-country choropleth fill (Bénin, Burkina Faso, Côte d'Ivoire, Niger, Nigeria, Togo). Theme-aware paint via the `--iwac-vis-heatmap-*` ramp the year × month and calendar heatmaps already use, so light/dark propagation is automatic. Wired on **Collection Overview's world map**, the **Index Overview Places map**, and the **Person / Entity locations map** (with role-faceted updates on the latter via `P.setMapTheme`'s sibling `choropleth.updateCounts`).
+- **`shared/choropleth.js` helper** — `P.attachChoroplethToggle(map, {countryCounts, bubbleLayers, basePath, labelKey})` returns a `{getMode, setMode, updateCounts, destroy}` handle. Lazy-loads the polygon GeoJSON once per page (cached across maps), re-adds the source + layers after `style.load` (theme swap), and gates same-mode toggles. ~330 lines.
+- **6-country polygon GeoJSON** at `asset/data/iwac-countries.geojson` (138 KB) — derived from the [`datasets/geo-countries`](https://github.com/datasets/geo-countries) repository (CC0/PDDL Natural Earth derivative), filtered to the 6 IWAC countries by ISO-3166 alpha-3, with property cleanup so each feature carries `iso_a3 / iso_a2 / name (canonical IWAC) / name_en`.
+- **Compare Projects block retired** — the orphan placeholder block layout (no orchestrator) was removed: only **Compare Newspapers** ships in this module. Removed: `src/Site/BlockLayout/CompareProjects.php`, `view/common/block-layout/compare-projects.phtml`, and the `compareProjects` registration in `module.config.php`.
+- **Compare Newspapers choropleth deferred** — the geographic-comparison map's data points lack a `country` property in the output of `generate_compare_newspapers.py`, so wiring its choropleth needs a generator change + ~300 JSON regeneration. Tracked as a follow-up in ROADMAP.md.
+
+### v0.17.0 — Topic Explorer block
+
+First end-to-end consumer of the v0.16.0 layout system:
+
+- **`topicExplorer` page block** under `src/Site/BlockLayout/TopicExplorer.php`. Two modes share the same block container: an **overview** with summary cards, a clickable treemap of all 30 LDA topics sized by article count, and a responsive grid of topic cards (top words + article count + year span); a **per-topic detail** view (calendar heatmap of articles, country / newspaper distributions, most-representative articles strip) built declaratively via `IWACVis.dashboardLayout.render(rootEl, 'topicDetail', sliceBundle)`.
+- **One new shared renderer** — `horizontal-bar` (8th in `shared/renderers/`) — wraps `C.horizontalBar` so any layout slot can drop in a top-N bar without a bespoke renderer.
+- **`generate_topic_explorer.py`** aggregates `articles.lda_topic_id` / `lda_topic_prob` / `lda_topic_label` into one bundle: per-topic counts, year ranges, year × day cells (calendar heatmap, partial-date rows excluded so cells aren't fake-positioned), country and newspaper distributions, and the top 10 most-representative articles per topic by topic probability.
+- **Outliers** (`lda_topic_id == -1`, ~2 % of articles) excluded from per-topic stats but counted in the corpus metadata so the un-classified residual stays visible.
+
+### v0.16.0 — declarative dashboard layout + new renderers
+
+Composition refactor (no breaking changes — existing dashboards keep working unchanged):
+
+- **Declarative layout system** (`asset/js/charts/shared/dashboard-layout.js`). `IWACVis.dashboardLayout` exposes a slot / renderer / metadata registry so per-entity orchestrators can be 5–20-line layout arrays. Slots auto-skip when their data fails the registered predicate (`shouldRender`), so dashboards never display "No data available" placeholders. Built-in `isEmpty` predicates cover list, network, chord, geo, hierarchical, radar, and cell-grid shapes; fragments let multiple layouts share common slot groups.
+- **7 new shared renderers** under `asset/js/charts/shared/renderers/`, opt-in via `$needs['renderers']`: `calendar-heatmap` (multi-year per-day, ECharts `calendar` coordinate system), `chord` (circular co-occurrence, capped at top-30 nodes by row-sum), `radar-profile` (auto-rescaled per-axis comparison), `sibling-sparkline` (pure inline-SVG, no ECharts, CSS-variable-driven), `similar-items` (DOM card grid that consumes the `semantic_neighbors` shape already produced by `generate_article_dashboards.py`), `sunburst`, and `treemap`.
+- **ECharts theme swap via `chart.setTheme()` (supported since 6.0.0)** instead of dispose+reinit. Same registered render callback re-runs after the swap, so charts that bake theme tokens into their option literal still pick up the new colours, but the underlying instance survives — no DOM detach/reattach flash, no re-init cost.
+- **MapLibre per-map theme cache** (`P.setMapTheme(map, mode)`) — no-ops when the requested mode already matches, guarding against spurious theme observer fires that would otherwise blow away custom layers. `createIwacMap` stamps the initial theme on the instance.
+- **PNG export composites the panel title + description + ISO date footer** onto the chart raster, waiting on `document.fonts.load` first so the export uses Public Sans rather than a canvas fallback. Falls back to the raw `getDataURL` on tainted-canvas / font failure.
 
 ### v0.9.0 — refactor pass
 
@@ -99,6 +126,17 @@ Tracks the frequency of a curated set of "scary" term families (terrorisme, extr
 
 Backed by four precomputed JSONs (`scary-terms-metadata.json`, `scary-terms-temporal.json`, `scary-terms-countries.json`, `scary-terms-global.json`) generated by `scripts/generate_scary_terms.py`.
 
+### Topic Explorer (page block)
+
+LDA-30 topic overview of the IWAC `articles` subset. The block has two modes that share the same container:
+
+- **Overview** — summary cards (total topics, articles classified, outliers, newspapers), a clickable **treemap** of all 30 topics sized by article count, and a responsive grid of **topic cards** (each carrying the top 5 words, article count, and year span). Clicking either a treemap cell or a card swaps to that topic's detail view.
+- **Per-topic detail** — a **calendar heatmap** of articles per day (year × day, partial-date rows excluded), top **countries** and top **newspapers** as horizontal bars, and the top 10 **most representative articles** (similar-items strip sorted by `lda_topic_prob` and click-through to each article's page).
+
+This is the first end-to-end consumer of the v0.16.0 declarative dashboard-layout system: the per-topic detail view is registered once as `topicDetail` (a four-slot array) and dispatched via `IWACVis.dashboardLayout.render(detailEl, 'topicDetail', sliceBundle, ctx)`. The four slots map to the `calendarHeatmap`, `horizontalBar` (used twice with different `dataKey`s), and `similarItems` renderers — `horizontalBar` was added as the eighth shared renderer for this block.
+
+Backed by `asset/data/topic-explorer.json` (single bundle, generated by `scripts/generate_topic_explorer.py`). Outlier articles (`lda_topic_id == -1`, ~2 %) are excluded from per-topic stats but counted in corpus metadata.
+
 ### Visualizations (resource-page block) — Person
 
 Per-Person resource-page block that renders when attached to an item whose resource template is `Personnes` (template ID 5). 11 panels:
@@ -135,7 +173,7 @@ The 3-layer network is built client-side in `network.js` from the precomputed `e
 
 ### Placeholders
 
-**Compare Projects** (page block) and **Item Set Dashboard** (resource-page block) both enqueue the module's asset stack and render a loading spinner container. They're registered so Omeka recognizes the block layouts, but no orchestrator JS has been written yet — they'll be implemented in follow-up passes. See `ROADMAP.md` for timelines.
+**Item Set Dashboard** (resource-page block) enqueues the module's asset stack and renders a loading spinner container. It's registered so Omeka recognizes the block layout, but no orchestrator JS has been written yet — implementation is the current "Next up" item in `ROADMAP.md`.
 
 ## Architecture
 
@@ -152,7 +190,8 @@ IwacVisualizations/
 │   │   ├── IndexOverview.php               # Live — extends AbstractIwacBlockLayout
 │   │   ├── ReferencesOverview.php          # Live — extends AbstractIwacBlockLayout
 │   │   ├── ScaryTerms.php                  # Live — extends AbstractIwacBlockLayout
-│   │   └── CompareProjects.php             # Placeholder — extends AbstractIwacBlockLayout
+│   │   ├── TopicExplorer.php               # Live — extends AbstractIwacBlockLayout (v0.17.0)
+│   │   └── CompareNewspapers.php           # Live — extends AbstractIwacBlockLayout
 │   └── ResourcePageBlockLayout/
 │       ├── Visualizations.php              # Template-ID dispatch (person vs entity)
 │       └── ItemSetDashboard.php            # Placeholder
@@ -163,7 +202,8 @@ IwacVisualizations/
 │   │   ├── index-overview.phtml            # Live — precompute path
 │   │   ├── references-overview.phtml       # Live — live-fetch path
 │   │   ├── scary-terms.phtml               # Live — precompute path
-│   │   └── compare-projects.phtml          # Placeholder
+│   │   ├── topic-explorer.phtml            # Live — precompute path (v0.17.0)
+│   │   └── compare-newspapers.phtml        # Live — precompute path
 │   └── resource-page-block-layout/
 │       ├── visualizations/
 │       │   ├── person.phtml                # Live — dispatched for template 5
@@ -184,6 +224,7 @@ IwacVisualizations/
 │   │       ├── collection-overview.css     #   overview grid, wordcloud, recent additions
 │   │       ├── index-overview.css          #   section layout, keyword explorer sidebar
 │   │       ├── scary-terms.css             #   metrics, view toggle, slider, matrix
+│   │       ├── topic-explorer.css          #   topic-card grid, detail header (v0.17.0)
 │   │       └── person-dashboard.css        #   body/stats, sentiment, graph/chord host
 │   ├── js/                                 # Every .js has a .min.js sibling (terser, committed)
 │   │   ├── iwac-i18n.js                    # Locale detection + en/fr dictionary + t()
@@ -195,9 +236,18 @@ IwacVisualizations/
 │   │       │                               #     + loading/empty/error states
 │   │       │                               #     + attachFeatureStateHover),
 │   │       │                               #   faceted-chart (buildFacetedChart helper),
+│   │       │                               #   dashboard-layout (slot/renderer registry,
+│   │       │                               #     shouldRender + isEmpty predicates),
 │   │       │                               #   pagination, table, facet-buttons,
 │   │       │                               #   chart-options, maplibre, map-popup,
-│   │       │                               #   panel-toolbar, responsive
+│   │       │                               #   choropleth (toggle button + 6-country
+│   │       │                               #     fill, v0.18.0),
+│   │       │                               #   panel-toolbar (composited PNG export),
+│   │       │                               #   responsive
+│   │       ├── shared/renderers/           # Opt-in chart renderers, self-registering into
+│   │       │                               #   IWACVis.dashboardLayout: calendar-heatmap,
+│   │       │                               #   chord, radar-profile, sibling-sparkline,
+│   │       │                               #   similar-items, sunburst, treemap
 │   │       ├── collection-overview.js      # Collection Overview orchestrator
 │   │       ├── collection-overview/        # Panel modules (growth, gantt, wordcloud, map, …)
 │   │       ├── index-overview.js           # Index Overview orchestrator
@@ -207,6 +257,7 @@ IwacVisualizations/
 │   │       │                               #   keywords-filters, keywords-chart, keywords-table
 │   │       ├── references-overview.js      # References Overview orchestrator
 │   │       ├── scary-terms.js              # Scary Terms orchestrator (bar-chart race)
+│   │       ├── topic-explorer.js           # Topic Explorer orchestrator — first consumer of dashboardLayout (v0.17.0)
 │   │       ├── person-dashboard.js         # Person orchestrator
 │   │       ├── person-dashboard/           # Panel modules (stats, network, sentiment, …)
 │   │       └── entity-dashboard.js         # Entity orchestrator (reuses person panels)
@@ -233,6 +284,7 @@ IwacVisualizations/
 │   ├── generate_index_overview.py          # Section A — authority index bundle
 │   ├── generate_keyword_explorer.py        # Section B — subjects + spatial + metadata
 │   ├── generate_scary_terms.py
+│   ├── generate_topic_explorer.py          # LDA-30 topic aggregation (v0.17.0)
 │   ├── generate_person_dashboards.py
 │   ├── generate_entity_dashboards.py
 │   ├── generate_article_dashboards.py      # per-article + semantic kNN
@@ -267,6 +319,16 @@ echo $this->partial('common/iwac-assets', [
         'facetButtons' => true,                 // shared/facet-buttons + shared/faceted-chart
         'table'        => true,                 // shared/table (implicitly loads pagination)
         'pagination'   => true,                 // shared/pagination
+        'layout'       => true,                 // shared/dashboard-layout (implied by any 'renderers')
+        'renderers'    => [                     // opt-in shared renderers under shared/renderers/
+            'calendar-heatmap',
+            'chord',
+            'radar-profile',
+            'sibling-sparkline',
+            'similar-items',
+            'sunburst',
+            'treemap',
+        ],
     ],
     'panels' => [                               // block-specific panel modules, in order
         'collection-overview/recent-additions',
@@ -301,8 +363,9 @@ The shared partial enqueues scripts in this fixed order. All are deferred, so th
 1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js`, `maplibre-gl.js` + CSS (not deferred for CSS)
 2. **IWAC infrastructure** — order matters: `iwac-i18n.min.js` → `iwac-theme.min.js` → `dashboard-core.min.js`
 3. **Shared primitives** — `panels` + `panel-toolbar` + `responsive` always load; `chart-options`, `pagination`, `table`, `facet-buttons` + `faceted-chart`, `maplibre` + `map-popup` load only when the block opts in via `needs`
-4. **Panel modules** — self-registering IIFEs under `charts/<block>/` that attach to `IWACVis.<block>Dashboard.<panel>`
-5. **Orchestrator** — `charts/<block>.js` — waits for `DOMContentLoaded`, fetches JSON (or live HF data), builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel
+4. **Dashboard layout system + renderers (opt-in)** — `dashboard-layout.js` (the registry) followed by every entry in `needs.renderers` from `shared/renderers/<name>.js`; each renderer self-registers into `IWACVis.dashboardLayout` on load. Skipped entirely when the block declares neither `'layout' => true` nor a `'renderers' => [...]` list.
+5. **Panel modules** — self-registering IIFEs under `charts/<block>/` that attach to `IWACVis.<block>Dashboard.<panel>`
+6. **Orchestrator** — `charts/<block>.js` — waits for `DOMContentLoaded`, fetches JSON (or live HF data), builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
 
 ### Shared JS helpers (`asset/js/charts/shared/panels.js`)
 
@@ -317,6 +380,8 @@ Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as
 | `P.attachFeatureStateHover(map, layers)` | Wires `feature-state`-driven hover highlights to one or more MapLibre layers. Pair with `'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], <hover>, <normal>]` in the paint spec. Prerequisite: each source must be created with `generateId: true` so MapLibre has a stable feature identity. |
 | `P.createIwacMap(container, config)` / `P.createIwacPopup(options)` / `P.buildMapPopup(config)` | The MapLibre stack: theme-aware basemap, auto-restyle on theme swap, shared popup CSS hooks, paginated article-list popup body. |
 | `P.buildFacetButtons(config)` / `P.buildTable(config)` / `P.buildPagination(config)` | Facet bar (buttons / select / subcategories), accessible HTML table with column renderers, and a reusable pagination widget. |
+| `P.setMapTheme(map, mode)` | Switch a MapLibre instance to the IWAC light/dark basemap, no-opping when the requested mode already matches. Stamps `_iwacThemeMode` on the map; `createIwacMap` initializes it. |
+| `IWACVis.dashboardLayout.{register, registerRenderer, registerMetadata, defineFragment, render, shouldRender, isEmpty}` | Declarative entity-dashboard composition. Layouts are arrays of slot objects; renderers self-register from `shared/renderers/<name>.js`; `render()` filters slots whose data fails the predicate cascade and dispatches the rest. See v0.16.0 above for the canonical example. |
 
 ### Data strategy — hybrid
 
@@ -381,8 +446,9 @@ Language switching in IWAC is a full page navigation (the Internationalisation m
 
 - Signal: `body[data-theme="light" | "dark"]`, owned by the IWAC theme's `theme-toggle.js` (persisted in `localStorage['iwac-theme-preference']`).
 - `dashboard-core.js` attaches a `MutationObserver` to `document.body` filtered on `data-theme` changes.
-- On change, it calls `IWACVis.refreshThemes()` (rebuild + re-register the ECharts theme from the live CSS vars) then iterates `IWACVis._charts` to dispose every tracked ECharts instance and re-run its render function.
-- ECharts 6 removed `chart.setTheme()`, which is why we use dispose + reinit. MapLibre instances get `setStyle()` pointed at the Carto positron / dark-matter URL.
+- On change, it calls `IWACVis.refreshThemes()` (rebuild + re-register the ECharts theme from the live CSS vars) then iterates `IWACVis._charts`, calling `chart.setTheme(...)` on each tracked ECharts instance and re-running its registered render function.
+- ECharts theme swap goes through `chart.setTheme()` — supported since 6.0.0. The post-swap render call ensures charts that read theme tokens at option-build time pick up the new colours. Caveat (per ECharts docs): previous `setOption` calls in merge mode are discarded after `setTheme`, but every IWAC render callback rebuilds the full option with `setOption(..., true)` so this is a non-issue.
+- MapLibre instances swap basemaps via `P.setMapTheme(map, mode)`, which is gated by a per-map `_iwacThemeMode` cache so a no-op call doesn't blow away custom layers. Falls back to a direct `setStyle()` against the Carto positron / dark-matter URL when `shared/maplibre.js` isn't loaded.
 
 ## Mobile & touch UX
 
@@ -438,6 +504,9 @@ python3 scripts/generate_keyword_explorer.py   --minify     # → asset/data/key
 # Scary Terms
 python3 scripts/generate_scary_terms.py                     # → asset/data/scary-terms-*.json (4 files)
 
+# Topic Explorer (LDA-30)
+python3 scripts/generate_topic_explorer.py     --minify     # → asset/data/topic-explorer.json
+
 # Per-entity data
 python3 scripts/generate_person_dashboards.py   # → asset/data/person-dashboards/{o_id}.json
 python3 scripts/generate_entity_dashboards.py   # → asset/data/entity-dashboards/{o_id}.json
@@ -463,7 +532,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across **49 files: ≈ 408 KB → 153 KB (−62.4%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 69 KB → 22 KB). The tiny `faceted-chart.js` helper minifies to under 1 KB.
+Current minification results across **65 files: ≈ 667 KB → 243 KB (−63.6%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle.
 
 There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
 

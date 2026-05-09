@@ -43,7 +43,7 @@
                 })
                 .then(function (mapData) {
                     panelEl.chart.innerHTML = '';
-                    build(panelEl, mapData, geoUrl);
+                    build(panelEl, mapData, geoUrl, basePath);
                 })
                 .catch(function (err) {
                     console.error('IWACVis map:', err);
@@ -67,7 +67,7 @@
         }
     }
 
-    function build(panelEl, mapData, geoUrl) {
+    function build(panelEl, mapData, geoUrl, basePath) {
         var state = { type: ALL_KEY };
         var locations = mapData.locations || [];
 
@@ -220,6 +220,26 @@
                 layer: 'location-circles',
                 source: 'locations'
             });
+
+            // Choropleth toggle — sums every location's count up to the
+            // canonical IWAC country it belongs to. Locations whose
+            // `country` is empty (the data does carry a few rare ones)
+            // simply don't contribute to any country bucket; they still
+            // show as bubbles when in bubble mode.
+            if (typeof P.attachChoroplethToggle === 'function') {
+                var countryCounts = {};
+                locations.forEach(function (l) {
+                    var c = l.country;
+                    if (!c) return;
+                    countryCounts[c] = (countryCounts[c] || 0) + (l.count || 0);
+                });
+                P.attachChoroplethToggle(map, {
+                    countryCounts: countryCounts,
+                    bubbleLayers:  ['location-circles'],
+                    basePath:      basePath || '',
+                    labelKey:      'mentions'
+                });
+            }
         }
 
         function updateSource() {

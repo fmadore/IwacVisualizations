@@ -48,6 +48,38 @@
     }
 
     /* ----------------------------------------------------------------- */
+    /*  Per-map theme cache                                               */
+    /* ----------------------------------------------------------------- */
+    //
+    // Stamp the active theme mode on every map instance the first time
+    // we apply a basemap, then no-op subsequent setStyle() calls that
+    // try to apply the SAME theme. This guards against:
+    //   * Spurious theme observer fires (the body[data-theme] attribute
+    //     can be written without changing value).
+    //   * External callers (panels rebuilding their map) accidentally
+    //     blowing away the current style + custom layers.
+    //
+    // Returns true if the basemap actually changed, false otherwise.
+    // Either way the active mode is recorded on the map.
+
+    P.setMapTheme = function (map, mode) {
+        if (!map) return false;
+        var next = mode === 'dark' ? 'dark' : 'light';
+        if (map._iwacThemeMode === next) return false;
+        map._iwacThemeMode = next;
+        var url = next === 'dark'
+            ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+            : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        try {
+            map.setStyle(url);
+            return true;
+        } catch (e) {
+            console.error('IWACVis.maplibre: setStyle failed', e);
+            return false;
+        }
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  MapLibre color normalization                                      */
     /* ----------------------------------------------------------------- */
     //
@@ -151,6 +183,10 @@
         }
 
         var map = new maplibregl.Map(baseOptions);
+
+        // Stamp the initial theme so future P.setMapTheme calls can no-op
+        // when the requested mode already matches.
+        map._iwacThemeMode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
 
         // Built-in controls
         if (config.navigation !== false) {

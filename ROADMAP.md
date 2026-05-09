@@ -15,8 +15,9 @@ schema.
 
 **`/home/fmadore/projects/iwac-dashboard/scripts/`** — sibling SvelteKit
 dashboard with ~3,200 lines of working Python reading the same HF
-dataset. Reuse its patterns before writing new generators. `iwac_utils.py`
-has been ported verbatim into `scripts/`. See `scripts/README.md`.
+dataset. Reuse its patterns before writing new generators.
+`iwac_utils.py` has been ported verbatim into `scripts/`. See
+`scripts/README.md`.
 
 ## Done
 
@@ -28,132 +29,156 @@ has been ported verbatim into `scripts/`. See `scripts/README.md`.
   namespace. ECharts themes are built from the IWAC theme's live CSS
   custom properties (`--primary`, `--ink`, `--surface`, ...), so chart
   colors always track the site's brand config and the light/dark
-  toggle. `MutationObserver` on `body[data-theme]` disposes and
-  re-renders every tracked chart when the user toggles.
+  toggle. `MutationObserver` on `body[data-theme]` re-renders every
+  tracked chart when the user toggles.
 - **Gettext catalog** (2026-04) — `language/template.pot`,
   `language/fr.po`; loading/UI strings covered for the first block.
 - **HF dataset audit** (2026-04) — full schema for all 6 subsets
   documented in `DATA_NOTES.md`.
-- **Collection Overview page block** (2026-04) — first end-to-end
-  visualization, precompute-backed:
-  - `scripts/generate_collection_overview.py` pulls summary stats,
-    timeline by year × country, country / language distributions, and
-    top-N entities per type from the `index` subset
-  - `asset/js/charts/collection-overview.js` renders 4 ECharts panels
-    (timeline, countries, languages, tabbed top-entities) with
-    click-through to Omeka items on the entity bars
-  - Summary cards use HTML/CSS only (no chart framework) for the
-    big-number row
-  - Responsive grid: single column on mobile, two columns above 800 px,
-    full-width panels for the timeline and entities
-- **Hybrid data strategy** (2026-04) — module now supports two data
-  paths chosen per block:
-  * **Live fetch** — paginated parallel calls to the Hugging Face
-    datasets-server `/rows` endpoint, aggregation in the browser. Used
-    when the source subset is small enough (< ~5k rows) and doesn't
-    carry large per-row blobs.
-  * **Precompute** — Python script reads HF dataset, writes JSON to
-    `asset/data/`. Used for heavy subsets (articles with 12k rows +
-    embeddings), networks, and cross-subset joins.
+- **Collection Overview page block** (2026-04, expanded 2026-04-10) —
+  13 panels: 11 summary cards, recent additions table, growth
+  (monthly + cumulative), types-over-time, countries, languages, top
+  entities (5 tabs × 50/type, paginated), gantt of newspaper
+  coverage, lazy word cloud + world map.
+- **Hybrid data strategy** (2026-04) — live-fetch + precompute paths
+  documented in README, picked per-block based on subset size +
+  per-row blob weight.
 - **References Overview page block** (2026-04) — live-fetch exemplar:
-  - `asset/js/charts/references-overview.js` paginates the `references`
-    subset (864 rows, 9 parallel requests), then aggregates in the
-    browser into summary / timeline-by-type / types / languages /
-    top authors / top subjects
-  - No Python step — drop the module in, activate, add the block
-  - Registered as `referencesOverview` block layout
-
-- **Collection Overview v0.2 expansion** (2026-04-10) — 13-panel block,
-  hybrid architecture with shared primitives and per-panel modules:
-  - Refreshed summary row: **11 cards** (Articles, Index, Total words,
-    Total pages, Scanned pages, Unique sources, Document types,
-    Audiovisual minutes, References, Countries, Languages). Dropped the
-    confusing "1,501 Publications" card.
-  - **Reusable primitives** under `asset/js/charts/shared/`:
-    `pagination.js` (`P.buildPagination`), `table.js` (`P.buildTable`
-    with text/link/date/badge/thumbnail/number render modes + client
-    pagination), `facet-buttons.js` (`P.buildFacetButtons` with
-    buttons-or-select auto rule + per-facet override).
-  - **New ECharts builders** in `chart-options.js`: `C.gantt` (custom
-    series, horizontal period bars), `C.wordcloud` (echarts-wordcloud
-    with horizontal-bar fallback), `C.growthBar` (dual-axis bar +
-    cumulative line), `C.stackedBar` (generic stacked bar).
-  - **Treemap crash fixed** via defensive tree sanitization + dynamic
-    `levels[]` array sized to max tree depth.
-  - **Entities revamp**: 50 per type (was 10), client pagination at
-    10/page, middle-ellipsis label truncation via `maxLabelLength: 30`.
-  - **New panels** under `asset/js/charts/collection-overview/`:
-    recent-additions (table with thumbnail/title/source/type/date,
-    20/page), languages (facets: global / by type / by country),
-    growth (monthly additions + cumulative), types-over-time
-    (stacked, country facet), gantt (newspaper coverage periods,
-    country + type facets), wordcloud (lazy, global / by country /
-    by year facets), map (lazy MapLibre bubbles with type facet,
-    GeoJSON plumbed for future choropleth).
-  - **Three Python generators** emit `collection-overview.json`
-    (extended), `collection-wordcloud.json`, `collection-map.json`.
-    Wordcloud uses Unicode letter class to preserve `œ/æ/ÿ/ñ`.
-    Country handling uses `parse_pipe_separated` across all aggregators
-    so multi-tagged items contribute to each country independently.
-  - **i18n**: new EN+FR keys for summary labels, chart titles, facet UI,
-    item type badges. French labels use "Article de presse",
-    "Périodique islamique", "Enregistrement audio-visuel".
-  - **Lazy loading**: word cloud + map panels use `IntersectionObserver`
-    with 200px rootMargin so sidecar JSONs only fetch when in view.
-  - Design spec: `docs/superpowers/specs/2026-04-10-collection-overview-expansion-design.md`
-  - Plan: `docs/superpowers/plans/2026-04-10-collection-overview-expansion.md`
+  864 rows fetched in 9 parallel requests, aggregated client-side
+  into 6 panels (timeline, types, languages, top authors, top
+  subjects, summary cards). Drop-in: no Python step required.
+- **Per-Person resource-page block** (2026-04-11) — 11 panels, global
+  role facet, TF-IDF neighbor network, mentions timeline, year ×
+  month heatmap, top newspapers, countries, top LDA topics, AI
+  sentiment (3-model), associated locations map. Backed by
+  `scripts/generate_person_dashboards.py`.
+- **Per-Entity resource-page block** (2026-04) — same template
+  dispatch as Person; reuses every Person panel for templates 2/3/6/7
+  (`Lieux`, `Organisations`, `Sujets`, `Événements`). Backed by
+  `scripts/generate_entity_dashboards.py`. **Resolves the original
+  "audit Omeka resource templates" task** — the dispatch in
+  `Visualizations::render()` lives in
+  `src/Site/ResourcePageBlockLayout/Visualizations.php`.
+- **Per-Article resource-page block** (2026-04-16) — `bibo:Article`
+  template (id 8): 5 panels including 3-layer context network
+  (article + entities + top related articles via shared-entity
+  overlap) and top-10 semantic neighbours via cosine similarity over
+  the 768-dim Gemini `embedding_OCR`. Backed by
+  `scripts/generate_article_dashboards.py`.
+- **Index Overview page block** (2026-04) — 7-panel Section A
+  (entities by type, top entities, lifespan × frequency, places map,
+  temporal extent, index table) plus Section B Keyword Explorer
+  (Subjects + Spatial Coverage tabs, faceted by country / newspaper,
+  Top frequent / Compare modes). Backed by
+  `generate_index_overview.py` + `generate_keyword_explorer.py`.
+- **Scary Terms page block** (2026-04) — bar chart race + by-country
+  + global views over a curated set of "scary"/radical term families
+  (terrorisme, djihadisme, extrémisme, …) from 1961–2025. Backed by
+  `generate_scary_terms.py`.
+- **Per-item JSON hosting** — settled in favour of "commit to git":
+  ~12,287 article-dashboards, ~2,800 person-dashboards, ~1,550
+  entity-dashboards committed in `asset/data/`.
+- **v0.9.0 — refactor pass** (2026-04) — shared
+  `view/common/iwac-assets.phtml` partial replaces 70-line
+  `headLink`/`headScript` blocks per template. `AbstractIwacBlockLayout`
+  base class collapses 5 near-identical block layouts to ~15 lines
+  each. Shared JS helpers (`P.buildFacetedChart`,
+  `P.buildCountFeatures`, `P.buildLoadingState`/`buildEmptyState`,
+  `P.formatDate`, `P.attachFeatureStateHover`).
+  `feature-state`-driven hover highlights on every map.
+  `iwac_utils.py` upgraded with `canonical_country`, `clean_str`,
+  `extract_month_num`, etc.
+- **v0.16.0 — declarative dashboard layout + new renderers**
+  (2026-05-09) — `IWACVis.dashboardLayout` slot/renderer/metadata
+  registry with empty-payload predicate cascade. Seven new shared
+  renderers under `asset/js/charts/shared/renderers/`:
+  `calendar-heatmap`, `chord`, `radar-profile`, `sibling-sparkline`,
+  `similar-items`, `sunburst`, `treemap`. ECharts theme swap migrated
+  to `chart.setTheme()` (no more dispose+reinit). MapLibre per-map
+  theme cache via `P.setMapTheme(map, mode)`. Composited PNG export
+  with title/description/footer + font preload via
+  `document.fonts.load`. See README v0.16.0 section.
+- **v0.17.0 — Topic Explorer block** (2026-05-09) — first end-to-end
+  consumer of the layout system. LDA-30 overview (clickable treemap
+  + topic cards) with per-topic drill-down (calendar heatmap +
+  country / newspaper distributions + most-representative articles).
+  Eighth shared renderer added: `horizontal-bar`. Backed by
+  `scripts/generate_topic_explorer.py`.
+- **v0.18.0 — Choropleth on every map + Compare Projects retired**
+  (2026-05-09) — single-button MapLibre control on every IWAC map
+  that toggles between point-bubble view and a 6-country choropleth
+  fill (Bénin, Burkina Faso, Côte d'Ivoire, Niger, Nigeria, Togo).
+  Theme-aware paint via the `--iwac-vis-heatmap-*` ramp (same tokens
+  the year × month and calendar heatmaps use, so light/dark
+  propagates without manual re-paint). 6-country GeoJSON staged at
+  `asset/data/iwac-countries.geojson` (138 KB, derived from Natural
+  Earth via the `datasets/geo-countries` repository). Wired on
+  Collection Overview, Index Overview Places map, and the
+  Person / Entity locations map (4 of 4 in-scope maps). Compare
+  Newspapers' geographic-comparison map needs `country` per point
+  in its precompute output before its choropleth can light up —
+  see "Next up" below. The orphan `Compare Projects` block layout
+  (placeholder, no orchestrator) was removed: only Compare
+  Newspapers ships in this module.
 
 ## Next up
 
-- [ ] **Audit Omeka resource templates** on islam.zmo.de → HF subset
-      mapping. Needed before implementing any resource-page block
-      (knowledge graph, per-item dashboards). User will point at the
-      templates directly.
-- [x] **Per-Person resource-page block** (2026-04-11) — precomputed,
-      TF-IDF neighbor network, global creator/subject facet,
-      MapLibre locations map. See
-      `scripts/generate_person_dashboards.py` and
-      `asset/js/charts/person-dashboard.js`.
-- [ ] **Per-Organisation / Lieux / Sujets / Événements resource-page
-      blocks** — reuse the Person skeleton (generator + orchestrator
-      + `C.network`). One new block layout class per Type.
-- [ ] **Decide per-item JSON hosting** for precompute-backed per-item
-      dashboards: commit ~5k entity dashboards to git, or generate
-      into an Omeka volume at deploy time. Only relevant if the
-      per-entity block ends up using precompute (e.g. for
-      co-occurrence joins against articles).
-- [x] **Per-article page** (2026-04-16) — resource-page block attached
-      to the `bibo:Article` template (id 8): 3-model AI sentiment,
-      compact metrics card (word count / readability / TTR / pages /
-      language / LDA topic), a unified 3-layer context network
-      (article + entities + top related articles via shared-entity
-      overlap), top-10 semantic neighbours, spatial coverage map. See
-      `scripts/generate_article_dashboards.py`,
-      `view/common/resource-page-block-layout/visualizations/article.phtml`,
-      `asset/js/charts/article-dashboard.js`.
-- [x] **Semantic-neighbour "related articles"** (2026-04-16) — folded
-      into the per-article block above. `generate_article_dashboards.py`
-      L2-normalizes the 12,287×768 `embedding_OCR` matrix and
-      batches an `argpartition` top-K pass at ~4 seconds total.
+- [ ] **Item Set Dashboard resource-page block** — registered
+      placeholder; binds to template 4 (`Item set`). The natural
+      next pick: aggregate Collection Overview panels filtered to a
+      specific item set's membership. Reuses every existing
+      Collection Overview generator with an item-set filter and
+      consumes the v0.16.0 dashboard-layout system from day 1
+      (no migration cost).
+- [ ] **Migrate existing dashboards to `dashboardLayout`** — Person,
+      Entity, and Article orchestrators are still hand-rolled.
+      Converting each to a declarative layout array shrinks the
+      orchestrator by ~150 lines and lets new chart types drop in
+      via a single slot edit. Low-risk, behind-the-scenes — do
+      alongside Item Set Dashboard so the latter validates against
+      a freshly-migrated Person dashboard's slot vocabulary.
+- [ ] **Compare Newspapers choropleth** (v0.18.0 follow-up) — wire
+      the geographic-comparison map's choropleth toggle. Needs
+      `scripts/generate_compare_newspapers.py` to emit a `country`
+      property on every `geo_points` entry (currently only
+      `name / lng / lat / count / o_id`). Once the generator emits
+      it, the orchestrator can compute per-corpus country counts
+      and call `P.attachChoroplethToggle` like the other maps. ~300
+      JSON files to regenerate.
+- [ ] **Resource templates audit (informational)** — the live Omeka S
+      installation at `islam.zmo.de` exposes 19 resource templates;
+      6 are already wired (Person/5, Location/6, Organization/7,
+      Newspaper article/8, Topic/3, Event/2). Untapped: Item set/4
+      (placeholder ready), Audio/9, Book and friends/10–14 + 17–18
+      (covered by References Overview at corpus level — likely no
+      need for per-item dashboards), Photograph/15, Blog post/16,
+      Video recording/19, Media/20. Audio + Video together = 45
+      items (the audiovisual subset); Photograph alone is a
+      candidate for a small dedicated dashboard but ROI is low.
 
 ## Later
 
-- [ ] Knowledge graph per entity — model on
-      `iwac-dashboard/scripts/generate_knowledge_graph.py`
-- [ ] World map page block — polygon choropleth of the 6 countries +
-      marker clusters from `index` `Lieux` entries with `Coordonnées`
-- [ ] Topic explorer page block — LDA 30-topic overview with drill-down
-- [ ] Item-set dashboard — aggregate per Omeka item set
+- [ ] **Knowledge graph per entity** — model on
+      `iwac-dashboard/scripts/generate_knowledge_graph.py`. Dedicated
+      resource-page block; force-directed graph at corpus scale with
+      filters per entity type.
+- [ ] **World map page block — choropleth** — polygon choropleth of
+      the 6 IWAC countries with a metric picker (article count, index
+      entries, sentiment polarity). The Index Overview *Places map*
+      already covers point-level mention bubbles, so this is
+      complementary, not a replacement.
+- [ ] **Country dashboards** — per-country resource-page block (or
+      page block keyed by country slug) reusing entity-dashboard
+      panels with the country slice as the data filter.
+- [ ] **Cross-entity timelines** — chord / sankey of how entities
+      co-travel across the corpus over time.
 
 ## Open questions
 
-1. **Omeka template → HF subset mapping**: which templates map to
-   `articles` vs `publications` vs `documents` vs `audiovisual` vs
-   `index:{Personnes|Organisations|Lieux|...}`? Waiting on user input.
-2. **audiovisual (45) / documents (26)** are tiny — skip per-item
+1. **`audiovisual` (45) / `documents` (26)** are tiny — skip per-item
    dashboards entirely and fold them into collection-level stats only?
-3. **Hosting strategy** for 5k+ per-item JSONs — git vs deploy-time
-   volume vs sharded index file.
+2. **Topic Explorer outliers** — `lda_topic_id == -1` rows (~2 % of
+   articles) should they be hidden or shown as a 31st pseudo-topic?
 
 ## Deferred / orphaned
 

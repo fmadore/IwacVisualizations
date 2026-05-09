@@ -305,3 +305,55 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     background: color-mix(in oklab, var(--surface) 90%, transparent);
     color: var(--ink-light);
 }
+
+
+/* =================================================================== */
+/*  Choropleth toggle (shared/choropleth.js)                             */
+/*                                                                       */
+/*  Single-button MapLibre control mounted on every IWAC map. Reuses     */
+/*  the standard maplibregl-ctrl-group chrome so it visually nests with  */
+/*  the navigation / globe / fullscreen controls without an extra        */
+/*  border or shadow. The active state borrows the same primary-tinted   */
+/*  fill the panel-toolbar pressed-button rule uses, so consistent       */
+/*  language across the module.                                          */
+/* =================================================================== */
+
+.iwac-choropleth-ctrl {
+    /* maplibregl-ctrl-group already supplies the box, so just inherit. */
+}
+
+.iwac-choropleth-ctrl__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink, #1c232d);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+    /* MapLibre's group buttons are 29px squares — match the size so
+     * our button doesn't visually break the stack alignment. */
+}
+
+.iwac-choropleth-ctrl__btn:hover {
+    background: color-mix(in oklab, var(--primary, #d86a11) 8%, transparent);
+}
+
+.iwac-choropleth-ctrl__btn:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline-offset: -2px;
+}
+
+.iwac-choropleth-ctrl__btn--active {
+    background: color-mix(in oklab, var(--primary, #d86a11) 18%, transparent);
+    color: var(--primary, #d86a11);
+}
+
+.iwac-choropleth-ctrl__btn--active:hover {
+    background: color-mix(in oklab, var(--primary, #d86a11) 24%, transparent);
+}

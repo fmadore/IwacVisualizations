@@ -324,6 +324,27 @@
                 { layer: 'place-authority-pins',   source: 'places-authority' },
                 { layer: 'place-mentions-bubbles', source: 'places-mentions'  }
             ]);
+
+            // Choropleth toggle — aggregates the index's per-place
+            // frequencies up to country level. Places that lack a
+            // canonical IWAC country (a small minority of authority
+            // records, e.g. African capitals tagged outside the 6-
+            // country scope) silently don't contribute. The choropleth
+            // hides BOTH bubble layers when toggled on.
+            if (typeof P.attachChoroplethToggle === 'function') {
+                var countryCounts = {};
+                places.forEach(function (p) {
+                    var c = p.country;
+                    if (!c) return;
+                    countryCounts[c] = (countryCounts[c] || 0) + (p.frequency || 0);
+                });
+                P.attachChoroplethToggle(createdMap, {
+                    countryCounts: countryCounts,
+                    bubbleLayers:  ['place-authority-pins', 'place-mentions-bubbles'],
+                    basePath:      (ctx && ctx.basePath) || '',
+                    labelKey:      'mentions'
+                });
+            }
         }
     }
 

@@ -8,8 +8,9 @@
  *   - the admin-configured primary color (injected inline in layout.phtml)
  *   - light/dark switching (body[data-theme] + prefers-color-scheme)
  *
- * ECharts 6 removed `chart.setTheme()`, so switching requires dispose+reinit;
- * dashboard-core.js owns that plumbing. This file exposes:
+ * Theme switching uses `chart.setTheme()` — supported in ECharts 6.0.0+ —
+ * orchestrated from dashboard-core.js so individual chart modules don't
+ * each register a theme observer. This file exposes:
  *   IWACVis.refreshThemes()      rebuild + re-register both themes from CSS
  *   IWACVis.getCurrentTheme()    'light' | 'dark'
  *   IWACVis.getChartTheme()      'iwac-light' | 'iwac-dark'
