@@ -22,6 +22,16 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.20.0 — Compare Newspapers choropleth lit up
+
+The deferred v0.18.0 follow-up: the geographic-comparison map in the Compare Newspapers block now responds to the choropleth toggle. Combined A+B counts per IWAC country fill the polygons; the union answers "which IWAC countries does this two-corpus comparison cover most heavily, overall." Both sides' point clouds (heatmap + circle layers) are hidden when the user switches to choropleth.
+
+- **`scripts/generate_compare_newspapers.py`** extended: `build_index_lookups` now produces a `place_country` map (place name → canonical IWAC country, sourced from the IWAC index's `countries` column on each Lieu, first entry, canonicalised through `canonical_country`). `geo_points` entries inherit it as a `country` field — the front-end aggregates by country without doing point-in-polygon at runtime.
+- **61 per-corpus JSONs regenerated** to populate the new field.
+- **`asset/js/charts/compare-newspapers.js`** wires `P.attachChoroplethToggle(map, …)` after `createIwacMap`, summing `aPts.concat(bPts)` by `country`. Hides all four bubble/heatmap layers (`compare-a-heat`, `compare-a-circles`, `compare-b-heat`, `compare-b-circles`) when in choropleth mode.
+
+A future enhancement could add an A | B selector to swap which side drives the fill, or a diverging palette (A − B per country) for direct visual comparison.
+
 ### v0.19.0 — Person / Entity / Article migrated to `dashboardLayout`
 
 The three resource-page-block orchestrators (Person, Entity, Article) are now declarative slot lists dispatched through `IWACVis.dashboardLayout.render()` instead of hand-rolled `buildLayout(...)` + per-panel `pd.timeline.render(h.timeline, data, facet)` chains. The behaviour is identical — empty-payload predicates, role-faceted slices on Person, no-op facet on Entity / Article — but each orchestrator shrinks to ~120-150 lines of slot definitions plus a tiny bootstrap.

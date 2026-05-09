@@ -104,6 +104,15 @@ dataset. Reuse its patterns before writing new generators.
   country / newspaper distributions + most-representative articles).
   Eighth shared renderer added: `horizontal-bar`. Backed by
   `scripts/generate_topic_explorer.py`.
+- **v0.20.0 — Compare Newspapers choropleth** (2026-05-09) —
+  geographic-comparison map's choropleth toggle now lights up.
+  `scripts/generate_compare_newspapers.py` extended to emit a
+  `country` field per `geo_points` entry (sourced from the IWAC
+  index's `countries` column on each Lieu, canonicalised); 61
+  per-corpus JSONs regenerated. Orchestrator wires
+  `P.attachChoroplethToggle` with combined A+B counts so the fill
+  shows the union of both corpora. A future v1 could add an
+  A | B selector or a diverging palette for direct A−B comparison.
 - **v0.19.0 — Person / Entity / Article migrated to dashboardLayout**
   (2026-05-09) — three resource-page-block orchestrators converted
   from hand-rolled `buildLayout(...)` + per-panel `mod.render(...)`
@@ -141,14 +150,6 @@ dataset. Reuse its patterns before writing new generators.
       Collection Overview generator with an item-set filter and
       consumes the v0.16.0 dashboard-layout system from day 1
       (no migration cost).
-- [ ] **Compare Newspapers choropleth** (v0.18.0 follow-up) — wire
-      the geographic-comparison map's choropleth toggle. Needs
-      `scripts/generate_compare_newspapers.py` to emit a `country`
-      property on every `geo_points` entry (currently only
-      `name / lng / lat / count / o_id`). Once the generator emits
-      it, the orchestrator can compute per-corpus country counts
-      and call `P.attachChoroplethToggle` like the other maps. ~300
-      JSON files to regenerate.
 - [ ] **Resource templates audit (informational)** — the live Omeka S
       installation at `islam.zmo.de` exposes 19 resource templates;
       6 are already wired (Person/5, Location/6, Organization/7,

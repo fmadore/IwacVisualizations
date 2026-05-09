@@ -56,6 +56,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    canonical_country,
     canonicalize_country_field,
     configure_logging,
     create_metadata_block,
@@ -275,7 +276,7 @@ def build_index_lookups(
     Title and alternative titles are both indexed, so aliases like
     "Cote d'Ivoire" still join to the canonical record.
     """
-    out = {"subject_oid": {}, "place_oid": {}, "place_coords": {}}
+    out = {"subject_oid": {}, "place_oid": {}, "place_coords": {}, "place_country": {}}
     if index_df is None or index_df.empty:
         return out
     if "Titre" not in index_df.columns or "Type" not in index_df.columns:
@@ -284,6 +285,7 @@ def build_index_lookups(
     oid_col = "o:id" if "o:id" in index_df.columns else None
     alt_col = "Titre alternatif" if "Titre alternatif" in index_df.columns else None
     coord_col = "Coordonn\u00e9es" if "Coordonn\u00e9es" in index_df.columns else None
+    country_col = "countries" if "countries" in index_df.columns else None
 
     PLACE_TYPES = {"Lieux"}
 
@@ -319,6 +321,19 @@ def build_index_lookups(
                 if coords is not None:
                     for alias in aliases:
                         out["place_coords"].setdefault(alias, coords)
+            if country_col is not None:
+                # The index's ``countries`` column is pipe-separated. For
+                # places it's typically a single canonical IWAC country
+                # (the geographic country of the place). When there are
+                # multiple, the first one is the primary association —
+                # matches what the existing generators rely on.
+                country_raw = index_df[country_col].iat[idx]
+                country_list = parse_pipe_separated(country_raw)
+                if country_list:
+                    canon = canonical_country(country_list[0])
+                    if canon:
+                        for alias in aliases:
+                            out["place_country"].setdefault(alias, canon)
         else:
             for alias in aliases:
                 out["subject_oid"].setdefault(alias, oid)
@@ -425,8 +440,9 @@ def compute_corpus(
     language_counter = _count_pipe_field(sub["language"]) if "language" in sub.columns else Counter()
 
     subject_oids = lookups.get("subject_oid") or {}
-    place_oids = lookups.get("place_oid") or {}
-    place_coords = lookups.get("place_coords") or {}
+    place_oids    = lookups.get("place_oid")     or {}
+    place_coords  = lookups.get("place_coords")  or {}
+    place_country = lookups.get("place_country") or {}
 
     def top_list(counter: Counter, limit: int,
                  name_to_oid: Optional[Dict[str, int]] = None) -> List[Dict[str, Any]]:
@@ -445,7 +461,11 @@ def compute_corpus(
     languages = top_list(language_counter, 10)
 
     # Geo points — every spatial tag that joins to a geocoded Lieux
-    # authority record contributes a (lat, lng, count, o_id) feature.
+    # authority record contributes a (lat, lng, count, o_id, country)
+    # feature. ``country`` powers the front-end's MapLibre choropleth
+    # toggle (see asset/js/charts/shared/choropleth.js); points whose
+    # place isn't an IWAC country drop out of the choropleth aggregation
+    # but still appear as bubbles.
     geo_points: List[Dict[str, Any]] = []
     for place_name, count in spatial_counter.most_common():
         coords = place_coords.get(place_name)
@@ -461,6 +481,9 @@ def compute_corpus(
         oid = place_oids.get(place_name)
         if oid is not None:
             entry["o_id"] = int(oid)
+        country = place_country.get(place_name)
+        if country:
+            entry["country"] = country
         geo_points.append(entry)
 
     newspapers: List[Dict[str, Any]] = []

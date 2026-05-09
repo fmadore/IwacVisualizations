@@ -859,6 +859,31 @@
 
         _mapRef = map;
 
+        // Choropleth toggle. Aggregates per-country mention counts
+        // across BOTH corpora (A + B) so the fill answers "which IWAC
+        // countries does this two-corpus comparison cover most heavily,
+        // overall." Bubble layers (heatmap + circles) for both sides
+        // are hidden when the user switches to choropleth — the fill
+        // is the comparison view, not an overlay. A future enhancement
+        // could add an A | B selector to swap which side drives the
+        // fill, or a diff palette (A − B) for direct comparison.
+        if (map && typeof P.attachChoroplethToggle === 'function') {
+            var combinedCounts = {};
+            aPts.concat(bPts).forEach(function (p) {
+                if (!p || !p.country) return;
+                combinedCounts[p.country] = (combinedCounts[p.country] || 0) + (p.count || 0);
+            });
+            P.attachChoroplethToggle(map, {
+                countryCounts: combinedCounts,
+                bubbleLayers:  [
+                    'compare-a-heat', 'compare-a-circles',
+                    'compare-b-heat', 'compare-b-circles'
+                ],
+                basePath:      (ctx && ctx.basePath) || '',
+                labelKey:      'mentions'
+            });
+        }
+
         return panel;
     }
 
