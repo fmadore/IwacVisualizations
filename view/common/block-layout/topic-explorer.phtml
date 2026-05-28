@@ -15,27 +15,22 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'topic-explorer',
-    'needs' => [
-        'chartOptions' => true,
-        'layout'       => true,
-        'renderers'    => [
-            'calendar-heatmap',
-            'horizontal-bar',
-            'similar-items',
-            'treemap',
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'topic-explorer',
+        'needs' => [
+            'chartOptions' => true,
+            'layout'       => true,
+            'renderers'    => [
+                'calendar-heatmap',
+                'horizontal-bar',
+                'similar-items',
+                'treemap',
+            ],
         ],
+        'orchestrator' => 'topic-explorer',
     ],
-    'orchestrator' => 'topic-explorer',
+    'blockClass'   => 'iwac-vis-topic-explorer',
+    'loading'      => $this->translate('Loading Topic Explorer'),
+    'loadingClass' => 'iwac-vis-topic-explorer__loading',
 ]);
-?>
-
-<div class="iwac-vis-block iwac-vis-topic-explorer"
-     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
-     data-site-base="<?= $this->escapeHtmlAttr($this->basePath('s/' . $this->currentSite()->slug())) ?>">
-    <div class="iwac-vis-loading iwac-vis-topic-explorer__loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading Topic Explorer') ?>&hellip;</span>
-    </div>
-</div>

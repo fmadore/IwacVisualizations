@@ -20,37 +20,29 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'collection-overview',
-    'needs' => [
-        'maplibre'     => true,
-        'wordcloud'    => true,
-        'chartOptions' => true,
-        'facetButtons' => true,
-        'table'        => true,
-        'pagination'   => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'collection-overview',
+        'needs' => [
+            'maplibre'     => true,
+            'wordcloud'    => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+        ],
+        'panels' => [
+            'collection-overview/recent-additions',
+            'collection-overview/entities',
+            'collection-overview/languages',
+            'collection-overview/growth',
+            'collection-overview/types-over-time',
+            'collection-overview/gantt',
+            'collection-overview/wordcloud',
+            'collection-overview/map',
+        ],
+        'orchestrator' => 'collection-overview',
     ],
-    'panels' => [
-        'collection-overview/recent-additions',
-        'collection-overview/entities',
-        'collection-overview/languages',
-        'collection-overview/growth',
-        'collection-overview/types-over-time',
-        'collection-overview/gantt',
-        'collection-overview/wordcloud',
-        'collection-overview/map',
-    ],
-    'orchestrator' => 'collection-overview',
+    'blockClass' => 'iwac-vis-overview',
+    'loading'    => $this->translate('Loading collection overview'),
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-?>
-
-<div class="iwac-vis-block iwac-vis-overview"
-     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
-     data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-    <div class="iwac-vis-loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading collection overview') ?>&hellip;</span>
-    </div>
-</div>

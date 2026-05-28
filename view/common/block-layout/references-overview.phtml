@@ -17,21 +17,13 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-echo $this->partial('common/iwac-assets', [
-    'needs' => [
-        'chartOptions' => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'references-overview',
     ],
-    'orchestrator' => 'references-overview',
+    'blockClass' => 'iwac-vis-references-overview',
+    'loading'    => $this->translate('Loading references overview'),
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-?>
-
-<div class="iwac-vis-block iwac-vis-references-overview"
-     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
-     data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-    <div class="iwac-vis-loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading references overview') ?>&hellip;</span>
-    </div>
-</div>

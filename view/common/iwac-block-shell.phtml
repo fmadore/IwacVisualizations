@@ -1,0 +1,87 @@
+<?php
+/**
+ * IWAC Visualizations — shared block shell partial.
+ *
+ * Every IWAC block (page block or resource-page block) emits the same
+ * scaffold: it enqueues assets through `common/iwac-assets`, then renders
+ * an `.iwac-vis-block` wrapper carrying the standard data-* hooks the JS
+ * orchestrators read (`data-base-path`, `data-site-base`, optionally
+ * `data-item-id` and friends) plus a loading spinner the orchestrator
+ * replaces once its JSON arrives.
+ *
+ * This partial centralizes that scaffold so individual block templates
+ * only declare *what* differs: the asset config, the block's modifier
+ * class, the loading message, and any extra data attributes.
+ *
+ * Usage (page block):
+ *
+ *     echo $this->partial('common/iwac-block-shell', [
+ *         'assets'     => [ ...passed straight to common/iwac-assets... ],
+ *         'blockClass' => 'iwac-vis-overview',
+ *         'loading'    => $this->translate('Loading collection overview'),
+ *     ]);
+ *
+ * Usage (resource-page block):
+ *
+ *     echo $this->partial('common/iwac-block-shell', [
+ *         'assets'     => [ ... ],
+ *         'blockClass' => 'iwac-vis-person',
+ *         'heading'    => $this->translate('Visualizations'),
+ *         'loading'    => $this->translate('Loading dashboard'),
+ *         'data'       => ['item-id' => $resource->id()],
+ *     ]);
+ *
+ * Keep the `$this->translate('…')` literals in the caller (not here) so
+ * gettext extraction still sees them.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array|null  $assets        Config forwarded to common/iwac-assets.
+ * @var string|null $blockClass    Modifier class added after `iwac-vis-block`.
+ * @var string|null $heading       Optional <h3> text (already translated).
+ * @var string|null $loading       Loading message (already translated).
+ * @var string|null $loadingClass  Extra class on the loading div.
+ * @var array|null  $data          Extra data attributes (key => value; the
+ *                                 `data-` prefix is added automatically).
+ * @var bool|null   $siteBase      Emit data-site-base (default true).
+ */
+
+echo $this->partial('common/iwac-assets', isset($assets) ? (array) $assets : []);
+
+$escapeAttr   = $this->plugin('escapeHtmlAttr');
+$escapeHtml   = $this->plugin('escapeHtml');
+$blockClass   = isset($blockClass)   ? (string) $blockClass : '';
+$heading      = isset($heading)      ? (string) $heading : '';
+$loading      = isset($loading)      ? (string) $loading : '';
+$loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
+$extraData    = isset($data)         ? (array) $data : [];
+$withSiteBase = !isset($siteBase) || $siteBase;
+
+$basePath = $this->basePath();
+$siteSlug = $this->currentSite()->slug();
+
+// Standard data-* hooks, in a stable order. Block-specific attributes
+// (item-id, template-id, subset, …) follow base-path / site-base.
+$attrs = ['base-path' => $basePath];
+if ($withSiteBase) {
+    $attrs['site-base'] = $basePath . '/s/' . $siteSlug;
+}
+foreach ($extraData as $key => $value) {
+    $attrs[$key] = $value;
+}
+
+$wrapperClass = trim('iwac-vis-block ' . $blockClass);
+$loadingCls   = trim('iwac-vis-loading ' . $loadingClass);
+?>
+
+<div class="<?= $escapeAttr($wrapperClass) ?>"<?php foreach ($attrs as $name => $value): ?>
+     data-<?= $escapeAttr($name) ?>="<?= $escapeAttr($value) ?>"<?php endforeach; ?>>
+<?php if ($heading !== ''): ?>
+
+    <h3><?= $escapeHtml($heading) ?></h3>
+<?php endif; ?>
+
+    <div class="<?= $escapeAttr($loadingCls) ?>">
+        <div class="iwac-vis-spinner"></div>
+        <span><?= $escapeHtml($loading) ?>&hellip;</span>
+    </div>
+</div>

@@ -111,16 +111,8 @@ class SentimentExtractor
      */
     private static function linkedItemId(AbstractResourceEntityRepresentation $item, string $property): ?int
     {
-        try {
-            $values = $item->value($property, ['all' => true]);
-            if ($values && isset($values[0])) {
-                $resource = $values[0]->valueResource();
-                if ($resource) return $resource->id();
-            }
-        } catch (\Exception $e) {
-            // Property not present on this resource template — skip.
-        }
-        return null;
+        $resource = self::firstValueResource($item, $property);
+        return $resource ? $resource->id() : null;
     }
 
     /**
@@ -130,16 +122,8 @@ class SentimentExtractor
      */
     private static function linkedItemLabel(AbstractResourceEntityRepresentation $item, string $property): string
     {
-        try {
-            $values = $item->value($property, ['all' => true]);
-            if ($values && isset($values[0])) {
-                $resource = $values[0]->valueResource();
-                if ($resource) return (string) $resource->displayTitle();
-            }
-        } catch (\Exception $e) {
-            // no-op
-        }
-        return '';
+        $resource = self::firstValueResource($item, $property);
+        return $resource ? (string) $resource->displayTitle() : '';
     }
 
     /**
@@ -147,12 +131,36 @@ class SentimentExtractor
      */
     private static function literalValue(AbstractResourceEntityRepresentation $item, string $property): string
     {
+        $value = self::firstValue($item, $property);
+        return $value ? (string) $value : '';
+    }
+
+    /**
+     * The first value of a property, or null. Wraps the `value(...,
+     * ['all' => true])` lookup with the shared try/catch — a property
+     * may be absent on a given resource template, which throws; we
+     * treat "not present" as "no value" rather than surfacing noise.
+     */
+    private static function firstValue(AbstractResourceEntityRepresentation $item, string $property)
+    {
         try {
             $values = $item->value($property, ['all' => true]);
-            if ($values && isset($values[0])) return (string) $values[0];
+            if ($values && isset($values[0])) {
+                return $values[0];
+            }
         } catch (\Exception $e) {
-            // no-op
+            // Property not present on this resource template — skip silently.
         }
-        return '';
+        return null;
+    }
+
+    /**
+     * The linked resource behind a property's first value, or null when
+     * the property is empty or the first value is a literal.
+     */
+    private static function firstValueResource(AbstractResourceEntityRepresentation $item, string $property)
+    {
+        $value = self::firstValue($item, $property);
+        return $value ? $value->valueResource() : null;
     }
 }

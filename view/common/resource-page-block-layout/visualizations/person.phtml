@@ -12,51 +12,41 @@
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'person-dashboard',
-    'needs' => [
-        'maplibre'     => true,
-        'chartOptions' => true,
-        'facetButtons' => true,
-        'table'        => true,
-        'pagination'   => true,
-        'layout'       => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'person-dashboard',
+        'needs' => [
+            'maplibre'     => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+            'layout'       => true,
+        ],
+        // Self-registering IIFE panels. Each file hangs a render function off
+        // IWACVis.personDashboard. `dashboard-panels-bridge` MUST load after
+        // every per-panel IIFE — it registers thin wrappers around them into
+        // IWACVis.dashboardLayout so the orchestrator can dispatch via
+        // declarative slot arrays.
+        'panels' => [
+            'person-dashboard/stats',
+            'person-dashboard/facet',
+            'person-dashboard/timeline',
+            'person-dashboard/heatmap',
+            'person-dashboard/newspapers',
+            'person-dashboard/countries',
+            'person-dashboard/topics',
+            'person-dashboard/sentiment',
+            'person-dashboard/network',
+            'person-dashboard/cooccurrence',
+            'person-dashboard/map',
+            'shared/dashboard-panels-bridge',
+        ],
+        'orchestrator' => 'person-dashboard',
     ],
-    // Self-registering IIFE panels. Each file hangs a render function off
-    // IWACVis.personDashboard. `dashboard-panels-bridge` MUST load after
-    // every per-panel IIFE — it registers thin wrappers around them into
-    // IWACVis.dashboardLayout so the orchestrator can dispatch via
-    // declarative slot arrays.
-    'panels' => [
-        'person-dashboard/stats',
-        'person-dashboard/facet',
-        'person-dashboard/timeline',
-        'person-dashboard/heatmap',
-        'person-dashboard/newspapers',
-        'person-dashboard/countries',
-        'person-dashboard/topics',
-        'person-dashboard/sentiment',
-        'person-dashboard/network',
-        'person-dashboard/cooccurrence',
-        'person-dashboard/map',
-        'shared/dashboard-panels-bridge',
-    ],
-    'orchestrator' => 'person-dashboard',
+    'blockClass'   => 'iwac-vis-person',
+    'heading'      => $this->translate('Visualizations'),
+    'loading'      => $this->translate('Loading dashboard'),
+    'loadingClass' => 'iwac-vis-person__loading',
+    'data'         => ['item-id' => $resource->id()],
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-$escapeAttr = $this->plugin('escapeHtmlAttr');
-?>
-
-<div class="iwac-vis-block iwac-vis-person"
-     data-item-id="<?= $escapeAttr($resource->id()) ?>"
-     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
-     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-
-    <h3><?= $this->translate('Visualizations') ?></h3>
-
-    <div class="iwac-vis-loading iwac-vis-person__loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
-    </div>
-</div>

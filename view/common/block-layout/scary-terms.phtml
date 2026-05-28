@@ -14,19 +14,15 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'scary-terms',
-    'needs' => [
-        'chartOptions' => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'scary-terms',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'scary-terms',
     ],
-    'orchestrator' => 'scary-terms',
+    'blockClass' => 'iwac-vis-scary',
+    'loading'    => $this->translate('Loading scary terms'),
+    'siteBase'   => false,
 ]);
-?>
-
-<div class="iwac-vis-block iwac-vis-scary"
-     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>">
-    <div class="iwac-vis-loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading scary terms') ?>&hellip;</span>
-    </div>
-</div>

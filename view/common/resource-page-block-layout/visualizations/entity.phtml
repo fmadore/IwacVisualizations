@@ -13,51 +13,41 @@
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'person-dashboard',
-    'needs' => [
-        'maplibre'     => true,
-        'chartOptions' => true,
-        'facetButtons' => true,
-        'table'        => true,
-        'pagination'   => true,
-        'layout'       => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'person-dashboard',
+        'needs' => [
+            'maplibre'     => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+            'layout'       => true,
+        ],
+        // Reuse the person panel modules: the entity precompute wraps every
+        // section in `by_role.all` precisely so these modules work unchanged
+        // with a no-op facet. `dashboard-panels-bridge` registers thin
+        // wrappers into IWACVis.dashboardLayout — same source files load on
+        // person and entity pages, zero forked panel JS. `facet.js` is
+        // omitted here because entities don't have a role facet bar.
+        'panels' => [
+            'person-dashboard/stats',
+            'person-dashboard/timeline',
+            'person-dashboard/heatmap',
+            'person-dashboard/newspapers',
+            'person-dashboard/countries',
+            'person-dashboard/topics',
+            'person-dashboard/sentiment',
+            'person-dashboard/network',
+            'person-dashboard/cooccurrence',
+            'person-dashboard/map',
+            'shared/dashboard-panels-bridge',
+        ],
+        'orchestrator' => 'entity-dashboard',
     ],
-    // Reuse the person panel modules: the entity precompute wraps every
-    // section in `by_role.all` precisely so these modules work unchanged
-    // with a no-op facet. `dashboard-panels-bridge` registers thin
-    // wrappers into IWACVis.dashboardLayout — same source files load on
-    // person and entity pages, zero forked panel JS. `facet.js` is
-    // omitted here because entities don't have a role facet bar.
-    'panels' => [
-        'person-dashboard/stats',
-        'person-dashboard/timeline',
-        'person-dashboard/heatmap',
-        'person-dashboard/newspapers',
-        'person-dashboard/countries',
-        'person-dashboard/topics',
-        'person-dashboard/sentiment',
-        'person-dashboard/network',
-        'person-dashboard/cooccurrence',
-        'person-dashboard/map',
-        'shared/dashboard-panels-bridge',
-    ],
-    'orchestrator' => 'entity-dashboard',
+    'blockClass'   => 'iwac-vis-entity',
+    'heading'      => $this->translate('Visualizations'),
+    'loading'      => $this->translate('Loading dashboard'),
+    'loadingClass' => 'iwac-vis-entity__loading',
+    'data'         => ['item-id' => $resource->id()],
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-$escapeAttr = $this->plugin('escapeHtmlAttr');
-?>
-
-<div class="iwac-vis-block iwac-vis-entity"
-     data-item-id="<?= $escapeAttr($resource->id()) ?>"
-     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
-     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-
-    <h3><?= $this->translate('Visualizations') ?></h3>
-
-    <div class="iwac-vis-loading iwac-vis-entity__loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
-    </div>
-</div>
