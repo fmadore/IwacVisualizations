@@ -36,6 +36,33 @@
 
 
     /* ----------------------------------------------------------------- */
+    /*  Side colors                                                       */
+    /*                                                                    */
+    /*  Corpus A tracks the theme --primary (via getChartTokens). Corpus  */
+    /*  B is the slate-blue accent declared as --iwac-compare-color-b on  */
+    /*  the block, which the CSS flips to a lighter shade in dark mode.   */
+    /*  Read that custom property off the live block element so the       */
+    /*  ECharts / MapLibre series match the CSS swatches in BOTH themes   */
+    /*  (previously colorB was a hardcoded '#1d4e6b' literal repeated in  */
+    /*  five panels, so the charts stayed dark-blue in dark mode while    */
+    /*  the CSS legend dots went light — a mismatch). Falls back to the   */
+    /*  literal when the block / theme isn't resolvable. One source of    */
+    /*  truth instead of five copy-pasted blocks.                         */
+    /* ----------------------------------------------------------------- */
+
+    function compareColors() {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var b = '#1d4e6b';
+        var block = document.querySelector('.iwac-vis-compare-newspapers');
+        if (block && window.getComputedStyle) {
+            var vb = getComputedStyle(block).getPropertyValue('--iwac-compare-color-b');
+            if (vb && vb.trim()) b = vb.trim();
+        }
+        return { a: tokens.primary || '#d86a11', b: b };
+    }
+
+
+    /* ----------------------------------------------------------------- */
     /*  Data loading                                                      */
     /* ----------------------------------------------------------------- */
 
@@ -406,9 +433,9 @@
         var host = P.el('div', 'iwac-vis-chart');
         panel.appendChild(host);
 
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var colorA = tokens.primary || '#d86a11';
-        var colorB = '#1d4e6b';
+        var _cc = compareColors();
+        var colorA = _cc.a;
+        var colorB = _cc.b;
 
         var yearSet = {};
         (dataA.timeline.years || []).forEach(function (y) { yearSet[y] = true; });
@@ -481,9 +508,9 @@
         var host = P.el('div', 'iwac-vis-chart');
         panel.appendChild(host);
 
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var colorA = tokens.primary || '#d86a11';
-        var colorB = '#1d4e6b';
+        var _cc = compareColors();
+        var colorA = _cc.a;
+        var colorB = _cc.b;
 
         var mapA = {}, mapB = {};
         (dataA.subjects || []).forEach(function (e) { mapA[e.name] = e.count; });
@@ -654,14 +681,15 @@
         panel.appendChild(legend);
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        // Normalize for MapLibre — tokens.primary may be oklab()/oklch()
-        // after theme v2.0.0; the style validator only accepts Color-3
-        // forms. P.normalizeColorForMapLibre canvas-rasterizes to rgb().
-        var rawColorA = tokens.primary || '#d86a11';
+        var _cc = compareColors();
+        // Normalize for MapLibre — colorA may be oklab()/oklch() after
+        // theme v2.0.0; the style validator only accepts Color-3 forms.
+        // P.normalizeColorForMapLibre canvas-rasterizes to rgb().
+        var rawColorA = _cc.a;
         var colorA = P.normalizeColorForMapLibre
             ? P.normalizeColorForMapLibre(rawColorA)
             : rawColorA;
-        var colorB = '#1d4e6b';
+        var colorB = _cc.b;
         // Parse [r,g,b] bytes from either hex or rgb()/rgba() — colorA
         // is rgb() after normalization, colorB stays hex.
         function colorToRgb(c) {
@@ -1053,9 +1081,9 @@
         var wrap = P.el('div', 'iwac-vis-compare-sentiment');
         panel.appendChild(wrap);
 
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var colorA = tokens.primary || '#d86a11';
-        var colorB = '#1d4e6b';
+        var _cc = compareColors();
+        var colorA = _cc.a;
+        var colorB = _cc.b;
 
         function makeSide(side, data, color) {
             var col = P.el('div', 'iwac-vis-compare-sentiment__col');
@@ -1157,9 +1185,9 @@
         var wrap = P.el('div', 'iwac-vis-compare-wordclouds');
         panel.appendChild(wrap);
 
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var colorA = tokens.primary || '#d86a11';
-        var colorB = '#1d4e6b';
+        var _cc = compareColors();
+        var colorA = _cc.a;
+        var colorB = _cc.b;
 
         function addSide(side, data, color) {
             var col = P.el('div', 'iwac-vis-compare-wordcloud');

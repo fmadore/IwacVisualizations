@@ -28,6 +28,16 @@
     var P = ns.panels;
     var C = ns.chartOptions;
 
+    // Stateless builders + i18n strings live in companion files
+    // (scary-terms/helpers.js, scary-terms/i18n.js), loaded before this
+    // orchestrator. Alias the builders locally so the call sites below
+    // read exactly as they did before the split.
+    var SH = ns.scaryTerms || {};
+    var buildTermColorMap = SH.buildTermColorMap;
+    var buildMetricCards = SH.buildMetricCards;
+    var buildTermDefinitions = SH.buildTermDefinitions;
+    var buildCumulativeSnapshots = SH.buildCumulativeSnapshots;
+
     var DATA_FILES = {
         metadata:     'scary-terms-metadata.json',
         temporal:     'scary-terms-temporal.json',
@@ -39,78 +49,6 @@
     var TOP_N = 10;
     var RACE_TICK_MS = 1000;
 
-    // ---------------------------------------------------------------------
-    //  i18n — register block-specific strings at parse time so callers can
-    //  just use P.t('scary.xxx'). Keys are stable identifiers, not English
-    //  source strings, so we register English explicitly.
-    // ---------------------------------------------------------------------
-
-    if (ns.addTranslations) {
-        ns.addTranslations('en', {
-            'Loading scary terms':              'Loading "scary" terms',
-            'scary.title':                      '"Scary" terms in the IWAC collection',
-            'scary.description':                'Frequency of radical / extremism-related term families across West African Islamic periodicals and newspapers, 1961–2025.',
-            'scary.view_mode':                  'View',
-            'scary.bar_race':                   'Bar chart race',
-            'scary.by_country':                 'By country',
-            'scary.global_view':                'Global',
-            'scary.matrix':                     'Co-occurrence matrix',
-            'scary.country':                    'Country',
-            'scary.all_countries':              'All countries',
-            'scary.chart_title':                '"Scary" terms',
-            'scary.country_chart_title':        '"Scary" terms in {country}',
-            'scary.global_chart_title':         '"Scary" terms — global',
-            'scary.matrix_chart_title':         'Co-occurrence matrix — global',
-            'scary.matrix_country_chart_title': 'Co-occurrence matrix — {country}',
-            'scary.matrix_description':         'How often pairs of "scary" term families appear together in the same article. Darker cells = more shared articles. The diagonal is hidden because self-co-occurrence is meaningless — hover a term label for its overall article count.',
-            'scary.matrix_empty':               'No co-occurrences recorded for this slice.',
-            'scary.matrix_pair_tooltip':        '{a} × {b}<br>{count} shared articles',
-            'scary.matrix_articles':            '{count} articles',
-            'scary.total_articles':             'Total articles',
-            'scary.term_families':              'Term families',
-            'scary.term_variants':              'Term variants',
-            'scary.total_occurrences':          'Total occurrences',
-            'scary.term_definitions':           'Term definitions',
-            'scary.top_term':                   'Top term',
-            'scary.play':                       'Play',
-            'scary.pause':                      'Pause',
-            'scary.previous':                   'Previous',
-            'scary.next':                       'Next',
-            'scary.reset':                      'Reset'
-        });
-        ns.addTranslations('fr', {
-            'Loading scary terms':              'Chargement des termes \u00ab scary \u00bb',
-            'scary.title':                      'Termes \u00ab scary \u00bb dans la collection IWAC',
-            'scary.description':                'Fr\u00e9quence des familles de termes li\u00e9es \u00e0 la radicalisation et \u00e0 l\u2019extr\u00e9misme dans les journaux et p\u00e9riodiques ouest-africains, 1961-2025.',
-            'scary.view_mode':                  'Vue',
-            'scary.bar_race':                   'Course de barres',
-            'scary.by_country':                 'Par pays',
-            'scary.global_view':                'Global',
-            'scary.matrix':                     'Matrice de co-occurrence',
-            'scary.country':                    'Pays',
-            'scary.all_countries':              'Tous les pays',
-            'scary.chart_title':                'Termes \u00ab scary \u00bb',
-            'scary.country_chart_title':        'Termes \u00ab scary \u00bb \u2014 {country}',
-            'scary.global_chart_title':         'Termes \u00ab scary \u00bb \u2014 global',
-            'scary.matrix_chart_title':         'Matrice de co-occurrence \u2014 global',
-            'scary.matrix_country_chart_title': 'Matrice de co-occurrence \u2014 {country}',
-            'scary.matrix_description':         'Fr\u00e9quence \u00e0 laquelle les paires de familles de termes \u00ab scary \u00bb apparaissent ensemble dans un m\u00eame article. Plus la cellule est sombre, plus les articles sont partag\u00e9s. La diagonale est masqu\u00e9e (la co-occurrence d\u2019un terme avec lui-m\u00eame n\u2019a pas de sens) \u2014 survolez une \u00e9tiquette pour voir le total d\u2019articles.',
-            'scary.matrix_empty':               'Aucune co-occurrence enregistr\u00e9e pour cette s\u00e9lection.',
-            'scary.matrix_pair_tooltip':        '{a} \u00d7 {b}<br>{count} articles partag\u00e9s',
-            'scary.matrix_articles':            '{count} articles',
-            'scary.total_articles':             'Articles totaux',
-            'scary.term_families':              'Familles de termes',
-            'scary.term_variants':              'Variantes',
-            'scary.total_occurrences':          'Occurrences totales',
-            'scary.term_definitions':           'D\u00e9finitions des termes',
-            'scary.top_term':                   'Terme principal',
-            'scary.play':                       'Lecture',
-            'scary.pause':                      'Pause',
-            'scary.previous':                   'Pr\u00e9c\u00e9dent',
-            'scary.next':                       'Suivant',
-            'scary.reset':                      'R\u00e9initialiser'
-        });
-    }
 
     // ---------------------------------------------------------------------
     //  Boot
@@ -729,86 +667,4 @@
         draw();
     }
 
-    // ---------------------------------------------------------------------
-    //  Helpers
-    // ---------------------------------------------------------------------
-
-    /**
-     * Build a stable ``{term_family: color}`` map from the registered IWAC
-     * ECharts palette. The palette is theme-aware (dark / light) and starts
-     * with --primary in slot 0, so every term family inherits colors from
-     * the active theme without any hardcoded hex.
-     */
-    function buildTermColorMap(families) {
-        var palette = (ns.getPalette && ns.getPalette()) || [];
-        var tokens = ns.getChartTokens && ns.getChartTokens();
-        var fallback = (tokens && tokens.primary) || '';
-        var map = {};
-        families.forEach(function (family, idx) {
-            map[family] = palette[idx % palette.length] || fallback;
-        });
-        return map;
-    }
-
-    function buildMetricCards(metadata, globalData) {
-        var grid = P.el('div', 'iwac-vis-scary-metrics');
-        function card(labelKey, value) {
-            var cardEl = P.el('div', 'iwac-vis-summary-card');
-            cardEl.appendChild(P.el('span', 'iwac-vis-summary-card__value',
-                                    P.formatNumber(value || 0)));
-            cardEl.appendChild(P.el('span', 'iwac-vis-summary-card__label',
-                                    P.t(labelKey)));
-            return cardEl;
-        }
-        var families = metadata.term_families || [];
-        grid.appendChild(card('scary.total_articles',    metadata.total_articles));
-        grid.appendChild(card('scary.term_families',     metadata.term_families_count || families.length));
-        grid.appendChild(card('scary.term_variants',     metadata.total_variants));
-        grid.appendChild(card('scary.total_occurrences', (globalData && globalData.total_occurrences) || 0));
-        return grid;
-    }
-
-    function buildTermDefinitions(metadata) {
-        var wrap = P.el('div', 'iwac-vis-scary-defs');
-        wrap.appendChild(P.el('h4', 'iwac-vis-scary-defs-title',
-                              P.t('scary.term_definitions')));
-        var grid = P.el('div', 'iwac-vis-scary-defs-grid');
-        var defs = metadata.term_definitions || {};
-        Object.keys(defs).forEach(function (family) {
-            var cardEl = P.el('div', 'iwac-vis-scary-def-card');
-            cardEl.appendChild(P.el('h5', 'iwac-vis-scary-def-title', family));
-            var tags = P.el('div', 'iwac-vis-scary-def-tags');
-            (defs[family] || []).forEach(function (variant) {
-                tags.appendChild(P.el('span', 'iwac-vis-scary-def-tag', variant));
-            });
-            cardEl.appendChild(tags);
-            grid.appendChild(cardEl);
-        });
-        wrap.appendChild(grid);
-        return wrap;
-    }
-
-    /**
-     * Pre-compute one sorted ``[[term, count], ...]`` snapshot per year.
-     * Snapshot ``i`` is the **cumulative** sum of counts from
-     * ``years[0]`` through ``years[i]`` — matching the iwac-dashboard
-     * bar chart race semantics where bars grow monotonically over time
-     * (running totals, not year-over-year counts).
-     */
-    function buildCumulativeSnapshots(temporal, years) {
-        var snapshots = [];
-        var running = {};
-        for (var i = 0; i < years.length; i++) {
-            var pairs = (temporal[String(years[i])] || {}).data || [];
-            for (var j = 0; j < pairs.length; j++) {
-                var term = pairs[j][0];
-                running[term] = (running[term] || 0) + pairs[j][1];
-            }
-            var snapshot = Object.keys(running).map(function (k) {
-                return [k, running[k]];
-            }).sort(function (a, b) { return b[1] - a[1]; });
-            snapshots.push(snapshot);
-        }
-        return snapshots;
-    }
 })();

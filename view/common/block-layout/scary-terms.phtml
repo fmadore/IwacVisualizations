@@ -20,6 +20,13 @@ echo $this->partial('common/iwac-block-shell', [
         'needs' => [
             'chartOptions' => true,
         ],
+        // Companion modules: i18n strings + stateless builders. Both must
+        // load before the orchestrator (which aliases the builders and
+        // reads the registered translations).
+        'panels' => [
+            'scary-terms/i18n',
+            'scary-terms/helpers',
+        ],
         'orchestrator' => 'scary-terms',
     ],
     'blockClass' => 'iwac-vis-scary',
