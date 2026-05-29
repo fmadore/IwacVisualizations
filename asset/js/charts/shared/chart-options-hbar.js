@@ -68,6 +68,9 @@
      * @param {string} [opts.nameKey='name']
      * @param {string} [opts.valueKey='count']
      * @param {boolean} [opts.filterUnknown=true]
+     * @param {boolean} [opts.log=false] Logarithmic value axis — use when a
+     *   single category dwarfs the rest (e.g. French at 97% of languages) so
+     *   the long tail stays legible instead of collapsing to invisible bars.
      */
     C.horizontalBar = function (entries, opts) {
         opts = opts || {};
@@ -86,7 +89,13 @@
         var base = {
             grid: C._grid({ left: 8, top: 8, bottom: 8 }),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            xAxis: { type: 'value' },
+            // Log axis can't anchor at 0 — start the scale at 1 (every real
+            // count is ≥1). Bars still carry their true count in the value
+            // label + tooltip; only the bar LENGTH is log-scaled.
+            xAxis: opts.log
+                ? { type: 'log', min: 1, minorSplitLine: { show: false },
+                    axisLabel: { formatter: function (v) { return fmt(v); } } }
+                : { type: 'value' },
             yAxis: {
                 type: 'category',
                 data: names,

@@ -69,6 +69,7 @@
             'Count': 'Count',
             'Year': 'Year',
             'Total': 'Total',
+            'Logarithmic scale': 'Logarithmic scale',
 
             // Collection overview — summary labels
             'Total items': 'Total items',
@@ -525,6 +526,7 @@
             'Count': 'Nombre',
             'Year': 'Ann\u00e9e',
             'Total': 'Total',
+            'Logarithmic scale': '\u00c9chelle logarithmique',
 
             // Collection overview — summary labels
             'Total items': 'Total d\u2019items',

@@ -1,10 +1,15 @@
 /**
  * IWAC Visualizations — Collection Overview: World map panel
  *
- * Lazy-loaded MapLibre map with circle markers sized by item count.
- * Faceted by item type via a button group. Choropleth overlay is NOT
- * rendered in v1 — the GeoJSON source is still loaded so a future
- * enhancement can add it with a few lines.
+ * Lazy-loaded MapLibre map with two views, switched by a segmented facet:
+ *   - Places — circle bubbles per index "Lieux" place, sized by mention
+ *     frequency (click → popup, hover → highlight).
+ *   - By country — a 6-country choropleth fill from `country_counts`, with
+ *     a Type sub-facet (All / News article / Islamic periodical / …) that
+ *     re-fills by item type, plus a hover read-out of country + count.
+ *
+ * The Type filter lives only under "By country" because that is the only
+ * data with a per-type breakdown; the place bubbles carry a single total.
  *
  * Falls back to a "map unavailable" message if maplibregl is missing.
  */
@@ -67,26 +72,71 @@
         }
     }
 
-    function build(panelEl, mapData, geoUrl, basePath) {
-        var state = { type: ALL_KEY };
-        var locations = mapData.locations || [];
-
-        var types = {};
-        types[ALL_KEY] = P.t('All types');
-        ['article', 'publication', 'document', 'audiovisual', 'reference'].forEach(function (t) {
-            types[t] = P.t('item_type_' + t);
+    // Map raw country spellings to their accented/unaccented twin so the
+    // choropleth count keys match the polygon GeoJSON's `name` whichever
+    // variant it carries. (Burkina Faso / Niger / Nigeria / Togo need no
+    // alias.) The non-accent forms come straight from the dataset's raw
+    // `country` field; the polygon layer uses the canonical IWAC names.
+    var COUNTRY_ALIASES = {
+        'Benin': 'Bénin', 'Bénin': 'Benin',
+        "Cote d'Ivoire": "Côte d'Ivoire", "Côte d'Ivoire": "Cote d'Ivoire",
+        'Senegal': 'Sénégal', 'Sénégal': 'Senegal'
+    };
+    function withAliases(counts) {
+        Object.keys(counts).forEach(function (k) {
+            var alias = COUNTRY_ALIASES[k];
+            if (alias && counts[alias] == null) counts[alias] = counts[k];
         });
+        return counts;
+    }
+
+    function build(panelEl, mapData, geoUrl, basePath) {
+        var locations = mapData.locations || [];
+        var countryData = mapData.country_counts || {};
+        var TYPE_KEYS = ['article', 'publication', 'document', 'audiovisual', 'reference'];
+
+        // Per-country counts for the choropleth fill. ALL_KEY uses each
+        // country's grand total; a specific type reads from its by_type
+        // breakdown. This is the ONLY data with a type dimension — the
+        // place bubbles below carry a single total with no type split.
+        var choropleth = null;
+        function countryCountsFor(type) {
+            var out = {};
+            Object.keys(countryData).forEach(function (c) {
+                var rec = countryData[c] || {};
+                var v = (type === ALL_KEY)
+                    ? (rec.total || 0)
+                    : ((rec.by_type && rec.by_type[type]) || 0);
+                if (v > 0) out[c] = v;
+            });
+            return withAliases(out);
+        }
+
+        // View facet: Places (point bubbles) ↔ By country (choropleth fill).
+        // The Type sub-buttons hang off "By country" — they re-fill the
+        // choropleth by item type. They are deliberately NOT offered for the
+        // Places view: the bubble layer has no per-place type split, so a
+        // type filter there was a no-op (the bug the user reported). The
+        // built-in choropleth toggle button is hidden; this control drives
+        // the mode instead.
+        var typeSub = {};
+        typeSub[ALL_KEY] = P.t('All types');
+        TYPE_KEYS.forEach(function (k) { typeSub[k] = P.t('item_type_' + k); });
+
         var facetBar = P.buildFacetButtons({
-            facets: [{
-                key: 'type',
-                label: P.t('Type'),
-                subFacets: types,
-                renderAs: 'buttons'
-            }],
-            activeKey: 'type',
+            facets: [
+                { key: 'places', label: P.t('Places') },
+                { key: 'countries', label: P.t('By country'), subFacets: typeSub, renderAs: 'buttons' }
+            ],
+            activeKey: 'places',
             onChange: function (evt) {
-                state.type = evt.subFacet || ALL_KEY;
-                updateSource();
+                if (!choropleth) return;
+                if (evt.facet === 'countries') {
+                    choropleth.updateCounts(countryCountsFor(evt.subFacet || ALL_KEY));
+                    choropleth.setMode('choropleth');
+                } else {
+                    choropleth.setMode('bubbles');
+                }
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
@@ -94,10 +144,9 @@
         var mapContainer = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(mapContainer);
 
-        // Pre-compute features + max count once. The max drives the radius
-        // interpolation and must stay stable across theme swaps (onStyleReady
-        // runs multiple times). filteredFeatures() returns the cached
-        // collection so updateSource() stays a 1-liner.
+        // Pre-compute bubble features + max count once. The max drives the
+        // radius interpolation and must stay stable across theme swaps
+        // (onStyleReady runs multiple times).
         var featureResult = P.buildCountFeatures(locations, {
             toProps: function (loc) {
                 return {
@@ -108,7 +157,6 @@
             }
         });
         var maxCount = featureResult.max;
-        function filteredFeatures() { return featureResult.collection; }
 
         // Resolve theme tokens via ns.resolveCssVar, then normalize for
         // MapLibre — IWAC theme v2.0.0 OKLCH tokens otherwise serialize
@@ -139,7 +187,7 @@
             if (!map.getSource('locations')) {
                 map.addSource('locations', {
                     type: 'geojson',
-                    data: filteredFeatures(),
+                    data: featureResult.collection,
                     generateId: true
                 });
             }
@@ -221,31 +269,24 @@
                 source: 'locations'
             });
 
-            // Choropleth toggle — sums every location's count up to the
-            // canonical IWAC country it belongs to. Locations whose
-            // `country` is empty (the data does carry a few rare ones)
-            // simply don't contribute to any country bucket; they still
-            // show as bubbles when in bubble mode.
+            // Choropleth driven by the view facet above (its built-in
+            // toggle button is hidden via hideDefaultControl). Starts in
+            // bubbles mode filled with each country's grand total; the
+            // "By country" facet switches it on and the Type sub-buttons
+            // re-fill it by item type via choropleth.updateCounts(). The
+            // per-country breakdown comes from country_counts (the place
+            // bubbles have no type dimension). hoverInfo shows the country
+            // name + count on hover so the fill isn't a silent block.
             if (typeof P.attachChoroplethToggle === 'function') {
-                var countryCounts = {};
-                locations.forEach(function (l) {
-                    var c = l.country;
-                    if (!c) return;
-                    countryCounts[c] = (countryCounts[c] || 0) + (l.count || 0);
-                });
-                P.attachChoroplethToggle(map, {
-                    countryCounts: countryCounts,
-                    bubbleLayers:  ['location-circles'],
-                    basePath:      basePath || '',
-                    labelKey:      'mentions'
+                choropleth = P.attachChoroplethToggle(map, {
+                    countryCounts:      countryCountsFor(ALL_KEY),
+                    bubbleLayers:       ['location-circles'],
+                    basePath:           basePath || '',
+                    labelKey:           'mentions',
+                    hideDefaultControl: true,
+                    hoverInfo:          true
                 });
             }
-        }
-
-        function updateSource() {
-            if (!map) return;
-            var src = map.getSource('locations');
-            if (src) src.setData(filteredFeatures());
         }
     }
 

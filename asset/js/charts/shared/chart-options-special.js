@@ -293,8 +293,24 @@
             animationEasing: 'cubicOut'
         };
 
+        // On phones the value x-axis crowds ~10 year ticks into ~330px and
+        // R.gridMedia's bottom:24 dropped the "Year" name into the bars.
+        // Custom media: ~5 year ticks (interval /5 instead of /10), smaller
+        // font, and a bottom gutter that keeps the axis name clear.
+        var ganttMedia = [{
+            query: { maxWidth: R ? R.BP.sm : 640 },
+            option: {
+                grid: { left: 8, right: 14, top: 8, bottom: 44, containLabel: true },
+                xAxis: {
+                    interval: Math.max(1, Math.ceil((yearMax - yearMin) / 5)),
+                    nameGap: 24,
+                    axisLabel: { fontSize: 10 }
+                }
+            }
+        }];
+
         return R && R.withMedia
-            ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), R.gridMedia)
+            ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), ganttMedia)
             : base;
     };
 

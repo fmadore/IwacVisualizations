@@ -254,6 +254,9 @@
      *   custom control (e.g. compare-newspapers' Bubbles | A | B |
      *   A−B segmented selector). The returned object's `setMode` /
      *   `updateCounts` still drive the layers as normal.
+     * @param {boolean} [opts.hoverInfo=false]  Show a cursor-following
+     *   popup with the hovered country's name + count while the
+     *   choropleth fill is visible. Off by default.
      * @param {Object} [opts.paint]  Initial paint config. When omitted,
      *   the default IWAC heatmap ramp is used.
      * @param {string} [opts.paint.mode='sequential']  `'sequential'`
@@ -281,6 +284,7 @@
         var onModeChange  = opts.onModeChange;
         var hideDefaultControl = !!opts.hideDefaultControl;
         var currentPaint  = opts.paint || null;
+        var hoverInfo     = !!opts.hoverInfo;
 
         // Random suffix so multiple maps on the same page (e.g. compare-
         // newspapers' two corpora maps side-by-side) don't collide on
@@ -386,6 +390,31 @@
                     .setHTML(html)
                     .addTo(map);
             });
+
+            // Optional hover read-out: a borderless popup that follows the
+            // cursor over a country, showing its name + count. Off by
+            // default (compare-newspapers uses its own A/B semantics); the
+            // collection map opts in so the choropleth isn't a silent block
+            // of colour. The transient popup is independent of the
+            // click-to-pin popup above.
+            if (hoverInfo) {
+                var hoverPopup = P.createIwacPopup({ closeButton: false, closeOnClick: false });
+                map.on('mousemove', FILL, function (e) {
+                    if (!e.features || !e.features[0]) return;
+                    map.getCanvas().style.cursor = 'pointer';
+                    var hp = e.features[0].properties || {};
+                    var hc = Number(hp._iwac_count || 0);
+                    hoverPopup
+                        .setLngLat(e.lngLat)
+                        .setHTML('<strong>' + P.escapeHtml(hp.name || '') + '</strong><br>' +
+                            P.formatNumber(hc) + ' ' + P.t(labelKey))
+                        .addTo(map);
+                });
+                map.on('mouseleave', FILL, function () {
+                    map.getCanvas().style.cursor = '';
+                    hoverPopup.remove();
+                });
+            }
         }
 
         function showChoropleth() {

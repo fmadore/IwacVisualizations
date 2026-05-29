@@ -44,8 +44,19 @@
         subBar.style.display = 'none';
         root.appendChild(subBar);
 
+        // A bar with a single facet has nothing to toggle — its lone "main
+        // button" was rendering as a permanently-active, primary-tinted chip
+        // that looked selected but did nothing (the salmon "Country" / "Type"
+        // pseudo-buttons the user flagged as ugly). Render it as a plain
+        // eyebrow label instead and let the sub-control (select / sub-buttons)
+        // carry all the interaction.
+        var singleFacet = facets.length === 1;
         var mainButtons = {};
         facets.forEach(function (f) {
+            if (singleFacet) {
+                mainBar.appendChild(P.el('span', 'iwac-vis-facets__label', f.label));
+                return;
+            }
             var btn = P.el('button', 'iwac-vis-facets__btn', f.label);
             btn.type = 'button';
             btn.dataset.facetKey = f.key;

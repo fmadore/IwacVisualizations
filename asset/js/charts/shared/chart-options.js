@@ -136,6 +136,28 @@
         };
     };
 
+    /**
+     * Value-axis NAME placed vertically along the LEFT edge — the
+     * conventional spot for a y-axis title. ECharts' default puts the name
+     * at the axis 'end' (floating at the top-left, above the tick labels),
+     * which crowds the top of the panel and reads as disconnected on
+     * mobile. A centred, 90°-rotated title declutters the top and labels
+     * the axis properly. Callers spread this over a `{ type: 'value' }`
+     * base; pair it with a left grid gutter of ≥56px (desktop) so the
+     * rotated glyph clears the tick numbers — R.valueChartMedia narrows
+     * the gutter + name gap to 42/28px on phones. Validated to stay fully
+     * on-canvas at a 360px container width.
+     */
+    C._valueAxisName = function (name) {
+        return {
+            name: name,
+            nameLocation: 'middle',
+            nameRotate: 90,
+            nameGap: 42,
+            nameTextStyle: { align: 'center' }
+        };
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Country color map                                                 */
     /*                                                                    */

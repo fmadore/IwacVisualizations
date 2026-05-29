@@ -728,6 +728,56 @@
     align-items: center;
 }
 
+/* -------------------------------------------------------------------
+ *  Facet chips — clean segmented-control treatment
+ *
+ *  The shared chip rule above renders tabs / facets / pagination as
+ *  transparent-until-hover chips. For FACET controls specifically we want
+ *  a crisper, self-evidently tappable pill at rest, with the brand color
+ *  reserved for the selected state only (border + weight + a restrained
+ *  10% tint) — never the heavy primary wash that read as "salmon" before.
+ *  Matches the theme's "primary = state, not decoration" rule. Scoped to
+ *  facet selectors so tabs + pagination keep their own look.
+ *
+ *  `.iwac-vis-facets__label` is the static eyebrow that single-facet bars
+ *  now render in place of a dead, permanently-active button.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-facets__label {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1, 0.25rem) 0;
+    margin-right: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    color: var(--ink-light, #535862);
+    white-space: nowrap;
+}
+
+.iwac-vis-facets__btn,
+.iwac-vis-facets__sub-btn {
+    background: var(--surface, #fdfcfa);
+    border-color: var(--border, #dad5cb);
+    color: var(--ink-light, #535862);
+}
+
+.iwac-vis-facets__btn:hover,
+.iwac-vis-facets__sub-btn:hover {
+    background: var(--surface-raised, #f7f4ee);
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 35%, var(--border, #dad5cb));
+    color: var(--ink, #1c232d);
+}
+
+.iwac-vis-facets__btn--active,
+.iwac-vis-facets__sub-btn--active {
+    background: color-mix(in oklab, var(--primary, #d86a11) 10%, var(--surface, #fdfcfa));
+    border-color: color-mix(in oklab, var(--primary, #d86a11) 55%, var(--border, #dad5cb));
+    color: var(--ink-strong, var(--ink, #101620));
+    font-weight: 600;
+}
+
 
 /* =================================================================== */
 /*  Dismissable selection chip (Keyword Explorer)                        */

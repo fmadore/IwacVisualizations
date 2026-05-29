@@ -65,7 +65,10 @@
         var dataZoom = C._dataZoom(years.length);
         var useZoom = dataZoom.length > 0;
         var base = {
-            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
+            // left:56 — room for the rotated y-axis name to clear the tick
+            // numbers; bottom widened so, with a slider present, the x-axis
+            // name sits above the slider track instead of colliding.
+            grid: C._grid({ left: 56, bottom: useZoom ? 64 : 40 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
@@ -73,9 +76,9 @@
                 data: years,
                 name: opts.categoryName || t('Year'),
                 nameLocation: 'middle',
-                nameGap: useZoom ? 36 : 24
+                nameGap: useZoom ? 34 : 26
             },
-            yAxis: { type: 'value', name: opts.valueName || t('Count') },
+            yAxis: Object.assign({ type: 'value' }, C._valueAxisName(opts.valueName || t('Count'))),
             dataZoom: dataZoom,
             series: series,
             animationDuration: 600,
@@ -83,7 +86,7 @@
         };
 
         return R && R.withMedia
-            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            ? R.withMedia(base, R.valueChartMedia({ hasZoom: useZoom }))
             : base;
     };
 
@@ -103,7 +106,10 @@
         var useZoom = dataZoom.length > 0;
 
         var base = {
-            grid: C._grid({ right: 56, bottom: useZoom ? 56 : 32 }),
+            // left + right gutters hold the two rotated axis names (Monthly
+            // on the left, Cumulative on the right); bottom widened for the
+            // x-axis name to clear any slider.
+            grid: C._grid({ left: 56, right: 56, bottom: useZoom ? 64 : 44 }),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             legend: {
                 top: 4,
@@ -116,11 +122,11 @@
                 data: months,
                 name: t('Month'),
                 nameLocation: 'middle',
-                nameGap: useZoom ? 36 : 24
+                nameGap: useZoom ? 34 : 26
             },
             yAxis: [
-                { type: 'value', name: t('Monthly') },
-                { type: 'value', name: t('Cumulative'), splitLine: { show: false } }
+                Object.assign({ type: 'value' }, C._valueAxisName(t('Monthly'))),
+                Object.assign({ type: 'value', splitLine: { show: false } }, C._valueAxisName(t('Cumulative')))
             ],
             dataZoom: dataZoom,
             series: [
@@ -146,8 +152,30 @@
             animationEasing: 'cubicOut'
         };
 
+        // Dual-axis chart is the most cramped on phones: rotate the long
+        // "YYYY-MM" month labels, shrink fonts, and keep both rotated axis
+        // names close. Custom media (not R.valueChartMedia) because the
+        // yAxis is a two-element array that must be merged element-wise.
+        var growthMedia = [{
+            query: { maxWidth: R ? R.BP.sm : 640 },
+            option: {
+                grid: { left: 44, right: 44, top: 56, bottom: useZoom ? 64 : 56, containLabel: true },
+                xAxis: {
+                    nameGap: useZoom ? 28 : 24,
+                    axisLabel: { rotate: 45, fontSize: 9, hideOverlap: true }
+                },
+                yAxis: [
+                    { nameGap: 28, nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 9 } },
+                    { nameGap: 28, nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 9 } }
+                ]
+            }
+        }];
+        if (useZoom) {
+            growthMedia[0].option.dataZoom = [{ bottom: 4, height: 14 }];
+        }
+
         return R && R.withMedia
-            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            ? R.withMedia(base, growthMedia)
             : base;
     };
 
@@ -192,7 +220,7 @@
         var dataZoom = C._dataZoom(categories.length);
         var useZoom = dataZoom.length > 0;
         var base = {
-            grid: C._grid({ bottom: useZoom ? 56 : 32 }),
+            grid: C._grid({ left: 56, bottom: useZoom ? 64 : 40 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
@@ -200,9 +228,9 @@
                 data: categories,
                 name: opts.categoryName || '',
                 nameLocation: 'middle',
-                nameGap: useZoom ? 36 : 24
+                nameGap: useZoom ? 34 : 26
             },
-            yAxis: { type: 'value', name: opts.valueName || t('Count') },
+            yAxis: Object.assign({ type: 'value' }, C._valueAxisName(opts.valueName || t('Count'))),
             dataZoom: dataZoom,
             series: series,
             animationDuration: 600,
@@ -210,7 +238,7 @@
         };
 
         return R && R.withMedia
-            ? R.withMedia(base, R.gridMedia, R.dataZoomMedia)
+            ? R.withMedia(base, R.valueChartMedia({ hasZoom: useZoom }))
             : base;
     };
 })();

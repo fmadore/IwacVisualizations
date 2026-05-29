@@ -82,9 +82,24 @@
             getData: currentEntries,
             hasData: function (entries) { return entries.length > 0; },
             buildOption: function (entries) {
-                return C.pie(entries, { nameKey: 'name', valueKey: 'count' });
+                // Log-scaled horizontal bar instead of a donut: French is
+                // ~97% of the corpus, so a pie buries the other 8 languages
+                // as unreadable slivers. A log bar keeps every language a
+                // legible, labelled row while French still clearly leads.
+                return C.horizontalBar(entries, {
+                    nameKey: 'name',
+                    valueKey: 'count',
+                    filterUnknown: false,
+                    log: true
+                });
             }
         });
+
+        // Make the log scale explicit so the minor languages aren't misread
+        // as comparable to French in absolute terms.
+        panelEl.panel.appendChild(
+            P.el('p', 'iwac-vis-muted iwac-vis-lang-note', P.t('Logarithmic scale'))
+        );
     }
 
     ns.collectionOverview = ns.collectionOverview || {};

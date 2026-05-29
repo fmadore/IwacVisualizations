@@ -25,6 +25,18 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.24.0 — Collection Overview mobile + chart polish
+
+Targeted fixes to the Collection Overview block, mostly mobile readability:
+
+- **Vertical y-axis titles.** The value-axis name (e.g. "Count") on every vertical bar chart now sits rotated along the left edge instead of floating at the top-left. New shared helper `C._valueAxisName()` (chart-options core) applied to `timeline`, `stackedBar`, and `growthBar`; the left grid gutter widens to clear the tick numbers. Declutters the panel top, especially on phones.
+- **dataZoom no longer collides with the x-axis label.** New `R.valueChartMedia({hasZoom})` preset replaces the blunt `gridMedia`/`dataZoomMedia` combo on the vertical bar charts: on ≤640px it keeps a left gutter wide enough for the rotated name, reserves bottom space so the "Year"/"Month" label sits **above** the slider, and shrinks the slider + fonts. (gridMedia's `bottom:24` under a 36px name gap was dropping the label into the slider track.)
+- **Collection growth over time** gets a dedicated mobile preset: both axis names rotate to their respective edges, the long `YYYY-MM` month labels rotate 45° with `hideOverlap`, and fonts/margins tighten so the dual-axis chart stops overlapping itself on phones.
+- **Newspaper coverage (Gantt)** thins its year ticks on mobile (interval `/5` instead of `/10`) and keeps a bottom gutter so the "Year" label clears the bars.
+- **Languages represented** switches from a donut to a **log-scale horizontal bar**. French is ~97% of the corpus, so the donut buried the other eight languages as unreadable slivers; a log axis (`C.horizontalBar({log:true})`) keeps every language a legible, labelled row while French still clearly leads. A "Logarithmic scale" caption makes the axis explicit.
+- **World map** redesign. The Type facet was a no-op (the place bubbles carry no per-type split). Replaced the cryptic toggle glyph + broken type pills with a **Places · By country** segmented control; "By country" reveals a Type sub-facet (All / News article / Islamic periodical / …) that re-fills a choropleth from `country_counts.by_type`. The choropleth gains an opt-in **hover read-out** (`choropleth.js` `hoverInfo`) showing each country's name + count.
+- **Facet controls restyle.** Single-facet bars (the "Country" / "Type" labels) rendered their lone button as a permanently-active salmon chip that toggled nothing; they now render as a plain eyebrow `label`. The facet chips themselves get a cleaner segmented-control treatment — a self-evidently tappable pill at rest with the brand color reserved for the selected state (border + weight + a 10% tint), not a heavy wash.
+
 ### v0.23.0 — maintainability refactor pass
 
 Structural cleanup, no behavior changes:

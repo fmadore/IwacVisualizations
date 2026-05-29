@@ -86,6 +86,35 @@
         }
     ];
 
+    /* Mobile preset for vertical value charts (timeline / stacked bar).
+     * Three jobs the blunt gridMedia couldn't do for these charts:
+     *   1. keep a left gutter (42px) wide enough for the rotated y-axis
+     *      NAME so "Count"/"Nombre" doesn't clip off the left edge;
+     *   2. when a bottom dataZoom slider is present, reserve enough bottom
+     *      space (60px) and shrink the slider so the x-axis NAME sits ABOVE
+     *      the slider instead of dropping into the track (the overlap bug
+     *      on phones — gridMedia forced bottom:24 under a 36px nameGap);
+     *   3. shrink axis-name + tick fonts to 10px so the narrow canvas
+     *      breathes.
+     * Validated at 360px container width: rotated name fully on-canvas,
+     * ~18px clearance between the x-axis name and the slider. */
+    R.valueChartMedia = function (opts) {
+        opts = opts || {};
+        var hasZoom = !!opts.hasZoom;
+        var rule = {
+            query: { maxWidth: R.BP.sm },
+            option: {
+                grid: { left: 42, right: 14, top: 34, bottom: hasZoom ? 60 : 36, containLabel: true },
+                xAxis: { nameGap: hasZoom ? 28 : 22, axisLabel: { fontSize: 10 } },
+                yAxis: { nameGap: 28, nameTextStyle: { fontSize: 10 }, axisLabel: { fontSize: 10 } }
+            }
+        };
+        if (hasZoom) {
+            rule.option.dataZoom = [{ bottom: 4, height: 14 }];
+        }
+        return [rule];
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Merge utility                                                     */
     /* ----------------------------------------------------------------- */

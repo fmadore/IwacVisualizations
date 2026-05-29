@@ -73,6 +73,20 @@
 
 
 /* =================================================================== */
+/*  Languages panel — log-scale caption                                  */
+/* =================================================================== */
+
+/* Right-aligned eyebrow under the language bars, reading like an axis
+ * note ("Logarithmic scale"). The bars are log-scaled because French is
+ * ~97% of the corpus; the caption keeps that explicit. */
+.iwac-vis-lang-note {
+    margin: var(--space-2, 0.5rem) 0 0;
+    text-align: right;
+    font-size: var(--text-xs, 0.75rem);
+}
+
+
+/* =================================================================== */
 /*  Recent additions — wide panel, rich table cells                      */
 /* =================================================================== */
 
