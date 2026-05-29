@@ -22,41 +22,33 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'index-overview',
-    'needs' => [
-        'maplibre'     => true,
-        'chartOptions' => true,
-        'facetButtons' => true,
-        'table'        => true,
-        'pagination'   => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'index-overview',
+        'needs' => [
+            'maplibre'     => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+        ],
+        'panels' => [
+            // Section A — Entity Index Explorer
+            'index-overview/stats',
+            'index-overview/type-distribution',
+            'index-overview/top-entities',
+            'index-overview/lifespan',
+            'index-overview/places-map',
+            'index-overview/activity-gantt',
+            'index-overview/index-table',
+            // Section B — Keyword Explorer
+            'index-overview/keywords-state',
+            'index-overview/keywords-filters',
+            'index-overview/keywords-chart',
+            'index-overview/keywords-table',
+        ],
+        'orchestrator' => 'index-overview',
     ],
-    'panels' => [
-        // Section A — Entity Index Explorer
-        'index-overview/stats',
-        'index-overview/type-distribution',
-        'index-overview/top-entities',
-        'index-overview/lifespan',
-        'index-overview/places-map',
-        'index-overview/activity-gantt',
-        'index-overview/index-table',
-        // Section B — Keyword Explorer
-        'index-overview/keywords-state',
-        'index-overview/keywords-filters',
-        'index-overview/keywords-chart',
-        'index-overview/keywords-table',
-    ],
-    'orchestrator' => 'index-overview',
+    'blockClass' => 'iwac-vis-index-overview',
+    'loading'    => $this->translate('Loading index overview'),
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-?>
-
-<div class="iwac-vis-block iwac-vis-index-overview"
-     data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
-     data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-    <div class="iwac-vis-loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $this->translate('Loading index overview') ?>&hellip;</span>
-    </div>
-</div>

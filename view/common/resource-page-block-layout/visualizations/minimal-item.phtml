@@ -64,36 +64,27 @@ if ($dateValue) {
     }
 }
 
-echo $this->partial('common/iwac-assets', [
-    'blockCss' => 'minimal-item',
-    'needs' => [
-        'chartOptions' => true,
-        'layout'       => true,
-        'renderers'    => [
-            'sibling-sparkline',
-            'similar-items',
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'minimal-item',
+        'needs' => [
+            'chartOptions' => true,
+            'layout'       => true,
+            'renderers'    => [
+                'sibling-sparkline',
+                'similar-items',
+            ],
         ],
+        'orchestrator' => 'minimal-item-dashboard',
     ],
-    'orchestrator' => 'minimal-item-dashboard',
+    'blockClass'   => 'iwac-vis-minimal-item',
+    'heading'      => $this->translate('Visualizations'),
+    'loading'      => $this->translate('Loading visualizations'),
+    'loadingClass' => 'iwac-vis-minimal-item__loading',
+    'data'         => [
+        'item-id'     => $resource->id(),
+        'template-id' => $templateId,
+        'subset'      => $subset,
+        'pub-year'    => $pubYear,
+    ],
 ]);
-
-$siteSlug   = $this->currentSite()->slug();
-$escapeAttr = $this->plugin('escapeHtmlAttr');
-$translate  = $this->plugin('translate');
-?>
-
-<div class="iwac-vis-block iwac-vis-minimal-item"
-     data-item-id="<?= $escapeAttr($resource->id()) ?>"
-     data-template-id="<?= $escapeAttr($templateId) ?>"
-     data-subset="<?= $escapeAttr($subset) ?>"
-     data-pub-year="<?= $escapeAttr($pubYear) ?>"
-     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
-     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-
-    <h3><?= $translate('Visualizations') ?></h3>
-
-    <div class="iwac-vis-loading iwac-vis-minimal-item__loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $translate('Loading visualizations') ?>&hellip;</span>
-    </div>
-</div>

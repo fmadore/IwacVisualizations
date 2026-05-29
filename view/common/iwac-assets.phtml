@@ -119,7 +119,14 @@ $headScript->appendFile($this->assetUrl('js/charts/shared/panels.min.js',       
 $headScript->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module), 'text/javascript', $defer);
 $headScript->appendFile($this->assetUrl('js/charts/shared/responsive.min.js',    $module), 'text/javascript', $defer);
 if ($needChartOpts) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js', $module), 'text/javascript', $defer);
+    // chart-options is split into a core (shared helpers) + four builder
+    // files by chart family. Core must load first; the builders extend the
+    // same IWACVis.chartOptions namespace and can follow in any order.
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js',         $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-bar.min.js',     $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-hbar.min.js',    $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-graph.min.js',   $module), 'text/javascript', $defer);
+    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-special.min.js', $module), 'text/javascript', $defer);
 }
 if ($needPagination) {
     $headScript->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', $module), 'text/javascript', $defer);

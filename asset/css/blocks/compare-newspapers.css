@@ -37,7 +37,7 @@
     gap: var(--space-md, 1rem);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) { /* md */
     .iwac-vis-compare-pickers {
         grid-template-columns: 1fr 1fr;
     }
@@ -95,7 +95,7 @@
     gap: var(--space-sm, 0.5rem);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 640px) { /* sm */
     .iwac-vis-compare-picker__row {
         grid-template-columns: auto 1fr;
         align-items: center;
@@ -172,7 +172,7 @@
     gap: var(--space-sm, 0.5rem);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) { /* md */
     .iwac-vis-compare-metrics {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -247,7 +247,7 @@
     gap: var(--space-md, 1rem);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) { /* lg */
     .iwac-vis-compare-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -293,7 +293,7 @@
     gap: var(--space-sm, 0.5rem);
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) { /* md */
     .iwac-vis-compare-overlap {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -388,7 +388,7 @@
     gap: var(--space-sm, 0.5rem);
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) { /* md */
     .iwac-vis-compare-wordclouds {
         grid-template-columns: 1fr 1fr;
     }
@@ -543,7 +543,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     gap: var(--space-md, 1rem);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) { /* lg */
     .iwac-vis-compare-sentiment {
         grid-template-columns: 1fr 1fr;
     }

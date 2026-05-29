@@ -25,6 +25,16 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v0.23.0 — maintainability refactor pass
+
+Structural cleanup, no behavior changes:
+
+- **Shared block-shell partial** (`view/common/iwac-block-shell.phtml`) collapses the asset-loader call + `.iwac-vis-block` wrapper + loading-spinner scaffold that was copy-pasted across nine block templates. Each template now declares only what differs (asset config, modifier class, loading message, optional heading + `data-*` attributes). `SentimentExtractor.php`'s three near-identical property readers fold onto two shared helpers.
+- **Breakpoints normalized** to the documented `640 / 768 / 1024` (sm / md / lg) scale. `compare-newspapers.css` had four off-scale one-offs (560 / 720×2 / 900) and `iwac-maplibre.css` used 480; all now snap to the standard tier with a label comment.
+- **`chart-options.js` split** from one 1982-line god-module into a core (shared private helpers + country-color map) plus four chart-family files — `chart-options-bar.js`, `-hbar.js`, `-graph.js`, `-special.js` — all extending the same `IWACVis.chartOptions` namespace. The split was a lossless line-range slice (all 26 builders preserved). The repeated right-aligned bar-label config shared by `horizontalBar` / `newspaper` / `entities` is factored into `haloLabel()` / `haloEmphasis()` helpers.
+- **Compare Newspapers colors centralized** into one `compareColors()` helper (was copy-pasted across five panels). It reads `--iwac-compare-color-b` off the live block element so the ECharts / MapLibre series track the CSS swatches in *both* themes — fixing a latent bug where dark mode left the charts slate-blue while the CSS legend dots switched to the lighter accent.
+- **Scary Terms modularized** — the 60-line en/fr i18n table moves to `scary-terms/i18n.js` and the four stateless builders to `scary-terms/helpers.js`; the orchestrator shrinks from 814 → 670 lines. Its stateful render closure (view modes / playback / co-occurrence matrix) stays in place.
+
 ### v0.22.0 — Compare Newspapers split-corpus choropleth
 
 The geographic-comparison map's choropleth toggle replaced with a 4-way segmented control: **Bubbles · A · B · A − B**. Click A or B to see one corpus's per-country mention distribution as a sequential surface→corpus-color ramp; click "A − B" for a diverging fill where countries dominated by A render in the primary color, countries dominated by B render in slate blue, and balanced countries render near surface neutral. The bubble layers (heatmap + circles) for both sides hide automatically while a choropleth view is active.
@@ -244,6 +254,7 @@ IwacVisualizations/
 │       └── ItemSetDashboard.php            # Placeholder
 ├── view/common/
 │   ├── iwac-assets.phtml                   # Shared asset-loader partial (v0.9.0+)
+│   ├── iwac-block-shell.phtml              # Shared block wrapper + loading scaffold (v0.23.0)
 │   ├── block-layout/
 │   │   ├── collection-overview.phtml       # Live — precompute path
 │   │   ├── index-overview.phtml            # Live — precompute path
@@ -579,7 +590,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across **67 files: ≈ 680 KB → 245 KB (−63.9%)**. The biggest single drop is `charts/shared/chart-options.js` (≈ 81 KB → 25 KB). The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
+Current minification results across **73 files: ≈ 685 KB → 249 KB (−63.6%)**. The chart-options builders (formerly a single ≈ 81 KB `charts/shared/chart-options.js`) were split in v0.23.0 into a small core plus four chart-family files (`chart-options-bar`, `-hbar`, `-graph`, `-special`) that together minify to ≈ 25 KB. The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
 
 There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
 
