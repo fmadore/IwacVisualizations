@@ -127,7 +127,7 @@
 .iwac-vis-block {
     margin: var(--space-8, 2rem) 0;
     color: var(--ink, #1c232d);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
 }
 
 /*  Panel titles stay sans-serif — they're UI labels above charts, not
@@ -576,15 +576,15 @@
     line-height: 1.2;
 }
 
-/*  Display-serif numeral — picks up the section-heading treatment
- *  used elsewhere in the module ("Noto Serif") so the stat reads as
- *  editorial rather than UI. Proportional lining figures (not tabular)
+/*  Display-serif numeral — follows the theme's display serif
+ *  (Source Serif 4 via --font-headings, "Noto Serif" as fallback) so
+ *  the stat reads as editorial rather than UI. Proportional lining figures (not tabular)
  *  because serif tabular digits are wider and push 7-8 digit numbers
  *  past the edge of the narrow 6-col cards — visual rhythm matters
  *  less here than keeping the whole figure readable. */
 .iwac-vis-summary-card__value {
     order: 1;
-    font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+    font-family: var(--font-headings, "Noto Serif", Georgia, "Times New Roman", serif);
     /*  Sized to keep the widest real figure in the dataset (8-digit
      *  totals like 28,142,934) on a single line inside a narrow 6-col
      *  grid cell. Do not raise the max without re-measuring against
@@ -998,7 +998,7 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
  *  the same hierarchy as the surrounding page title. */
 .iwac-vis-section-heading {
     margin: 0;
-    font-family: "Noto Serif", Georgia, serif;
+    font-family: var(--font-headings, "Noto Serif", Georgia, serif);
     font-size: var(--text-xl, 1.25rem);
     font-weight: 600;
     color: var(--ink-strong, var(--ink, #101620));

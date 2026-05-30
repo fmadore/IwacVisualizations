@@ -298,7 +298,8 @@
                         style: {
                             text: P.t('scary.matrix_empty'),
                             fill: mutedResolved,
-                            font: '14px Inter, -apple-system, sans-serif'
+                            font: '14px ' + (tokens.fontFamily ||
+                                '"Public Sans", system-ui, -apple-system, sans-serif')
                         }
                     }]
                 };

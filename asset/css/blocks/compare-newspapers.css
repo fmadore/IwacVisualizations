@@ -204,7 +204,7 @@
 }
 
 .iwac-vis-compare-metric__value {
-    font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+    font-family: var(--font-headings, "Noto Serif", Georgia, "Times New Roman", serif);
     font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
     font-weight: 600;
     line-height: 1.05;

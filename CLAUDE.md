@@ -35,6 +35,7 @@ This module is built to drop into the **[IWAC theme](https://github.com/fmadore/
 - **Control sizing** — `--size-control-{xs,sm,md,lg,xl}` (28 → 48 px). `lg` (44px) is the WCAG tap target.
 - **Measure** — `--measure-{narrow,base,wide}` (44 / 52.5 / 72.5 rem) for prose width caps.
 - **Tracking** — `--tracking-tight` (display headings), `--tracking-wide` (small caps), `--tracking-wider` (eyebrow / metadata labels).
+- **Fonts** — consume `--font-headings` / `--font-body` / `--font-mono` from the theme; do NOT hardcode Inter / Noto Serif. In CSS wrap as `var(--font-headings, "Noto Serif", …)` keeping the prior stack as fallback; in chart JS read `tokens.fontFamily` (from `iwac-theme.js::readTokens()`, which mirrors the body `font-family`).
 - **Shadows** — `--shadow-{xs,sm,md,lg,xl}` (neutral cool, NOT warm-tinted). `--glow-*` ramp is primary-tinted, derived from `--primary` via `color-mix(in oklab, ...)`.
 - **Accent line widths** — `--accent-line-sm` (2px), `--accent-line-md` (3px).
 - **Color mixing** — always `color-mix(in oklab, ...)` (sRGB mixing produces muddy mid-tones). Use `--accent-mix-{subtle,medium,strong}` (25 / 40 / 60%) for standard primary tints rather than baking hex values.
