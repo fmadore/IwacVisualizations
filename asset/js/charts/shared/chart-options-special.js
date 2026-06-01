@@ -109,14 +109,22 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Hierarchical treemap with defensive sanitization. ECharts 6 crashes
+     * Hierarchical, fully-nested treemap. Every level renders at once \u2014
+     * parent groups carry a tinted header bar (`upperLabel`) and leaves
+     * are saturation-shaded tints of their ancestor, so the structure
+     * (country \u203a type \u203a source) reads on first sight instead of behind a
+     * `leafDepth` drill-down. Clicking a parent still zooms into it; the
+     * breadcrumb climbs back out.
+     *
+     * Defensive sanitization is preserved \u2014 ECharts 6 crashes
      * (`Cannot set properties of undefined (setting '2')`) when:
      *   - levels[] is shorter than the actual tree depth
      *   - non-leaf nodes carry `children: []`
      *   - parents are missing `value`
      *
-     * We sanitize the tree and compute `levels` dynamically to match
-     * whatever depth the data has.
+     * We sanitize the tree, track its depth, and build exactly
+     * `maxDepth + 1` `levels` entries so the array can never be too short
+     * for the rendered depth.
      *
      * @param {Object} tree { name, children: [...] }
      * @param {Object} [opts]
@@ -125,7 +133,20 @@
     C.treemap = function (tree, opts) {
         opts = opts || {};
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var surfaceColor = tokens.surface || '#fdfcfa';
+        var surfaceColor  = tokens.surface       || '#fdfcfa';
+        var surfaceRaised = tokens.surfaceRaised  || surfaceColor;
+        var inkLight      = tokens.inkLight       || '#535862';
+        var borderColor   = tokens.border         || '#d4d6da';
+        var fontFamily    = tokens.fontFamily     || 'sans-serif';
+
+        // Abbreviate big counts for in-tile labels (4804 -> "4.8K"); the
+        // tooltip still carries the exact figure via `fmt`.
+        function shortNum(n) {
+            n = Number(n) || 0;
+            if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+            if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+            return String(n);
+        }
 
         function sanitize(node, depth, depthRef) {
             if (!node || typeof node !== 'object') return null;
@@ -150,6 +171,41 @@
         var depthRef = { max: 0 };
         var sanitized = sanitize(tree || { children: [] }, 0, depthRef);
         var children = (sanitized && sanitized.children) || [];
+        var maxDepth = Math.max(1, depthRef.max);
+
+        // Per-depth styling. ECharts indexes `levels` from the root (0)
+        // down and THROWS when the array is shorter than the rendered
+        // depth \u2014 so emit exactly `maxDepth + 1` entries.
+        //
+        //   depth 0          root container \u2014 no header, widest gaps
+        //   1 .. maxDepth-1  parent groups \u2014 tinted header bar (upperLabel)
+        //   maxDepth         leaves \u2014 saturation-shaded colour tiles
+        //
+        // The first visible level (countries / top categories) keeps its
+        // distinct palette hue; only depth >= 2 is saturation-shaded so
+        // descendants read as tints of their ancestor.
+        var levels = [];
+        for (var d = 0; d <= maxDepth; d++) {
+            var isRoot = d === 0;
+            var isLeaf = d === maxDepth;
+            var level = {
+                upperLabel: { show: !isRoot && !isLeaf },
+                itemStyle: {
+                    borderColor: surfaceColor,
+                    borderWidth: isRoot ? 0 : 1,
+                    gapWidth: isRoot ? 4 : 2
+                }
+            };
+            if (d >= 2) {
+                var hi = Math.max(0.34, 0.58 - (d - 2) * 0.1);
+                level.colorSaturation = [Math.max(0.2, hi - 0.16), hi];
+            }
+            levels.push(level);
+        }
+
+        // Flat depth-1 trees (e.g. the topic treemap) have no parent level
+        // to label, so the header bar stays off there.
+        var hasHeaders = maxDepth >= 2;
 
         return {
             tooltip: {
@@ -164,15 +220,63 @@
                 name: opts.rootName || (tree && tree.name) || 'Root',
                 roam: false,
                 nodeClick: 'zoomToNode',
-                leafDepth: 2,
-                breadcrumb: { show: true, bottom: 4 },
-                label: { show: true, formatter: '{b}' },
-                itemStyle: { borderWidth: 1, gapWidth: 2, borderColor: surfaceColor },
-                levels: [
-                    { itemStyle: { borderWidth: 0, gapWidth: 3, borderColor: surfaceColor } },
-                    { itemStyle: { gapWidth: 2, borderColor: surfaceColor } },
-                    { colorSaturation: [0.35, 0.5], itemStyle: { gapWidth: 1, borderColor: surfaceColor } }
-                ],
+                left: 2, top: 2, right: 2, bottom: 26,
+                breadcrumb: {
+                    show: true,
+                    bottom: 4,
+                    height: 20,
+                    emptyItemWidth: 18,
+                    itemStyle: {
+                        color: surfaceRaised,
+                        borderColor: borderColor,
+                        borderWidth: 1,
+                        textStyle: { color: inkLight, fontFamily: fontFamily }
+                    },
+                    emphasis: { itemStyle: { color: borderColor } }
+                },
+                // Leaf labels: name over abbreviated count, anchored
+                // top-left. White text + a soft dark halo stays legible
+                // across every tile hue (light tan through saturated orange).
+                label: {
+                    show: true,
+                    position: 'insideTopLeft',
+                    overflow: 'truncate',
+                    lineHeight: 15,
+                    padding: [3, 4, 0, 4],
+                    formatter: function (p) {
+                        return '{n|' + p.name + '}\n{v|' + shortNum(p.value) + '}';
+                    },
+                    rich: {
+                        n: {
+                            fontFamily: fontFamily, fontSize: 12, color: '#fff',
+                            textBorderColor: 'rgba(0, 0, 0, 0.34)', textBorderWidth: 2
+                        },
+                        v: {
+                            fontFamily: fontFamily, fontSize: 11, color: 'rgba(255, 255, 255, 0.82)',
+                            textBorderColor: 'rgba(0, 0, 0, 0.30)', textBorderWidth: 2,
+                            padding: [1, 0, 0, 0]
+                        }
+                    }
+                },
+                // Parent headers: bold name + abbreviated count on the
+                // group's own tinted bar.
+                upperLabel: {
+                    show: hasHeaders,
+                    height: 22,
+                    overflow: 'truncate',
+                    fontFamily: fontFamily,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: '#fff',
+                    textBorderColor: 'rgba(0, 0, 0, 0.32)',
+                    textBorderWidth: 2,
+                    formatter: function (p) {
+                        return p.name + '   ' + shortNum(p.value);
+                    }
+                },
+                itemStyle: { borderColor: surfaceColor, borderWidth: 1, gapWidth: 2 },
+                emphasis: { upperLabel: { color: '#fff' } },
+                levels: levels,
                 data: children
             }],
             animationDuration: 600,

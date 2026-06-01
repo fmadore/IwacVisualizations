@@ -249,6 +249,22 @@
 }
 
 /* -------------------------------------------------------------------
+ * Treemap host — fully-nested treemaps (country › type › source) stack
+ * a header bar per level on top of the leaf tiles, so the 320px floor
+ * leaves the leaves too cramped to label. The `.iwac-vis-chart` chain
+ * lifts specificity above the generic floor without relying on source
+ * order. (See the graph-host note above for the same pattern.)
+ * ----------------------------------------------------------------- */
+.iwac-vis-panel > .iwac-vis-chart.iwac-vis-treemap-host {
+    min-height: 460px;
+}
+@media (max-width: 640px) { /* sm */
+    .iwac-vis-panel > .iwac-vis-chart.iwac-vis-treemap-host {
+        min-height: 420px;
+    }
+}
+
+/* -------------------------------------------------------------------
  * `.iwac-vis-overview-grid` — shared dashboard grid.
  *
  * Previously defined only inside collection-overview.css, which meant

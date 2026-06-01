@@ -99,6 +99,9 @@
         var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'));
         var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'));
         var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
+        // Nested treemap (country › source) — give it room past the 320px
+        // floor, matching the collection-overview breakdown panel.
+        treemapPanel.chart.classList.add('iwac-vis-treemap-host');
         var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'));
         // The collaboration network needs the same breathing room as
         // the entity-dashboard graph host so labels on the outer ring
