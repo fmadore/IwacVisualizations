@@ -57,7 +57,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    background: var(--surface, #fdfcfa);
+    background: var(--surface, #fdfdfd);
     border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
     cursor: pointer;
@@ -70,13 +70,13 @@
 
 .iwac-vis-topic-card:hover,
 .iwac-vis-topic-card:focus-visible {
-    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--primary, #e64a19) 60%, var(--border, #d4d6da));
     box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
     transform: translateY(-1px);
 }
 
 .iwac-vis-topic-card:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
     outline-offset: 2px;
 }
 
@@ -111,8 +111,8 @@
     font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #d86a11) 12%, var(--surface, #fdfcfa));
-    color: color-mix(in oklab, var(--primary, #d86a11) 70%, var(--ink-strong, var(--ink, #2c2f37)));
+    background: color-mix(in oklab, var(--primary, #e64a19) 12%, var(--surface, #fdfdfd));
+    color: color-mix(in oklab, var(--primary, #e64a19) 70%, var(--ink-strong, var(--ink, #2c2f37)));
     line-height: 1.4;
     text-transform: lowercase;
     letter-spacing: 0.02em;
@@ -134,7 +134,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--surface, #fdfcfa);
+    background: var(--surface, #fdfdfd);
     border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
 }
@@ -172,8 +172,8 @@
     font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #d86a11) 14%, var(--surface, #fdfcfa));
-    color: color-mix(in oklab, var(--primary, #d86a11) 75%, var(--ink-strong, var(--ink, #2c2f37)));
+    background: color-mix(in oklab, var(--primary, #e64a19) 14%, var(--surface, #fdfdfd));
+    color: color-mix(in oklab, var(--primary, #e64a19) 75%, var(--ink-strong, var(--ink, #2c2f37)));
     text-transform: lowercase;
     letter-spacing: 0.02em;
     white-space: nowrap;

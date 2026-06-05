@@ -43,7 +43,7 @@
     /*  the block, which the CSS flips to a lighter shade in dark mode.   */
     /*  Read that custom property off the live block element so the       */
     /*  ECharts / MapLibre series match the CSS swatches in BOTH themes   */
-    /*  (previously colorB was a hardcoded '#1d4e6b' literal repeated in  */
+    /*  (previously colorB was a hardcoded '#394f68' literal repeated in  */
     /*  five panels, so the charts stayed dark-blue in dark mode while    */
     /*  the CSS legend dots went light — a mismatch). Falls back to the   */
     /*  literal when the block / theme isn't resolvable. One source of    */
@@ -52,13 +52,13 @@
 
     function compareColors() {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var b = '#1d4e6b';
+        var b = '#394f68';
         var block = document.querySelector('.iwac-vis-compare-newspapers');
         if (block && window.getComputedStyle) {
             var vb = getComputedStyle(block).getPropertyValue('--iwac-compare-color-b');
             if (vb && vb.trim()) b = vb.trim();
         }
-        return { a: tokens.primary || '#d86a11', b: b };
+        return { a: tokens.primary || '#e64a19', b: b };
     }
 
 
@@ -935,7 +935,7 @@
                 mode: 'diverging',
                 negColor: colorB,
                 posColor: colorA,
-                neutralColor: tokens.surface || '#fdfcfa'
+                neutralColor: tokens.surface || '#fdfdfd'
             };
 
             var choropleth = P.attachChoroplethToggle(map, {

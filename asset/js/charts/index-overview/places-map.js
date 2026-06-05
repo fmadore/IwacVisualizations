@@ -133,11 +133,11 @@
         }
         function primaryColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return ml(resolved || '#d86a11');
+            return ml(resolved || '#e64a19');
         }
         function inkColor() {
             var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return ml(resolved || '#1c232d');
+            return ml(resolved || '#2c2f37');
         }
 
         var mapInstance = null;

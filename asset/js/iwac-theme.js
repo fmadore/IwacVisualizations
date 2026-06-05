@@ -29,9 +29,10 @@
     // Used only if the IWAC theme is not the active Omeka theme and the CSS
     // custom properties don't resolve. Mirrors _colors.scss defaults for
     // IWAC theme v2.0.0 — OKLCH-based, cool-neutral surfaces (NOT cream),
-    // primary hex `#e77f11` matching layout.phtml's `--primary-base`.
+    // primary hex `#e64a19` matching layout.phtml's `--primary-base`.
     var FALLBACK_LIGHT = {
-        primary:       '#e77f11',  // brand orange, near oklch(67% 0.156 51)
+        primary:       '#e64a19',  // IWAC burnt orange (--primary-base seed)
+        secondary:     '#394f68',  // slate — shared 2nd categorical / data colour
         ink:           '#2c2f37',  // ~oklch(20% 0.012 264)
         inkLight:      '#535862',  // ~oklch(38% 0.012 260)
         muted:         '#767880',  // ~oklch(54% 0.008 256)
@@ -42,7 +43,8 @@
         borderLight:   '#e6e7eb'   // ~oklch(92% 0.005 258)
     };
     var FALLBACK_DARK = {
-        primary:       '#f29541',  // mix(primary-base, white 12%) in oklab
+        primary:       '#ec653f',  // mix(--primary-base, white 12%) in oklab
+        secondary:     '#708093',  // mix(--secondary-base, white 30%) in oklab
         ink:           '#ebecf0',  // ~oklch(94% 0.008 258)
         inkLight:      '#b1b3ba',  // ~oklch(76% 0.010 258)
         muted:         '#84878f',  // ~oklch(60% 0.010 258)
@@ -58,9 +60,13 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Categorical series colors. Index 0 is filled in from --primary so the
-     * first series always matches the site's brand color. The remaining hues
-     * are hand-picked to read well in both light and dark themes.
+     * Categorical series colours used after the two theme-driven slots.
+     * buildPalette() prepends --primary (slot 0) and --secondary (slot 1),
+     * so PALETTE_REST[0] (#394f68) is the slate's hardcoded twin and is
+     * skipped via slice(1). The remaining hues are hand-picked to read well
+     * in both light and dark themes. These are SANCTIONED, module-owned data
+     * colours (data encoding needs more distinct hues than a UI theme should
+     * carry) — see IWAC-theme/docs/DESIGN-SYSTEM.md, "chart-palette exception".
      */
     var PALETTE_REST = [
         '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574',
@@ -336,6 +342,7 @@
         var fallback = mode === 'dark' ? FALLBACK_DARK : FALLBACK_LIGHT;
         return {
             primary:       readColorVar('--primary')        || fallback.primary,
+            secondary:     readColorVar('--secondary')      || fallback.secondary,
             ink:           readColorVar('--ink')            || fallback.ink,
             inkLight:      readColorVar('--ink-light')      || fallback.inkLight,
             muted:         readColorVar('--muted')          || fallback.muted,
@@ -355,9 +362,14 @@
     /*  Theme object builder                                              */
     /* ----------------------------------------------------------------- */
 
-    /** Build a palette with --primary in the first slot. */
+    /**
+     * Build the categorical palette. Slot 0 = --primary (brand), slot 1 =
+     * --secondary (the shared slate); then the hand-picked categorical hues.
+     * PALETTE_REST[0] is the slate's hardcoded twin, so slice(1) avoids
+     * emitting it twice when --secondary resolves to that same value.
+     */
     function buildPalette(tokens) {
-        return [tokens.primary].concat(PALETTE_REST);
+        return [tokens.primary, tokens.secondary].concat(PALETTE_REST.slice(1));
     }
 
     /** Build an ECharts theme object from the IWAC tokens. */

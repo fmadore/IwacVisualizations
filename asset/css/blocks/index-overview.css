@@ -69,9 +69,9 @@
 }
 
 .iwac-vis-keywords-sidebar {
-    background: var(--panel-bg, var(--surface, #fdfcfa));
-    border: 1px solid var(--panel-border-color, var(--border, #dad5cb));
-    border-radius: var(--radius-md, 0.75rem);
+    background: var(--panel-bg, var(--surface, #fdfdfd));
+    border: 1px solid var(--panel-border-color, var(--border, #d4d6da));
+    border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-4, 1rem);
     display: flex;
     flex-direction: column;
@@ -105,7 +105,7 @@
 }
 
 .iwac-vis-keywords-filters__label {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     color: var(--ink-light, #4a5766);
     text-transform: uppercase;
@@ -128,7 +128,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding-top: var(--space-3, 0.75rem);
-    border-top: 1px solid var(--border-light, #e8e3d9);
+    border-top: 1px solid var(--border-light, #e6e7eb);
 }
 
 .iwac-vis-keywords-compare__badges {
@@ -144,10 +144,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-    border: 1px solid var(--border-light, #e8e3d9);
-    border-radius: var(--radius-md, 0.75rem);
+    border: 1px solid var(--border-light, #e6e7eb);
+    border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-2, 0.5rem);
-    background: var(--surface, #fdfcfa);
+    background: var(--surface, #fdfdfd);
 }
 
 .iwac-vis-keywords-compare__item {
@@ -155,18 +155,18 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     padding: 0.2rem 0.3rem;
-    border-radius: var(--radius-sm, 4px);
+    border-radius: var(--radius-sm, 0.375rem);
     cursor: pointer;
-    font-size: var(--text-sm, 0.9rem);
-    color: var(--ink, #1c232d);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #2c2f37);
 }
 
 .iwac-vis-keywords-compare__item:hover {
-    background: var(--surface-raised, #f7f4ee);
+    background: var(--surface-raised, #fafaf9);
 }
 
 .iwac-vis-keywords-compare__item input[type="checkbox"]:disabled + .iwac-vis-keywords-compare__name {
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-keywords-compare__name {
@@ -178,8 +178,8 @@
 }
 
 .iwac-vis-keywords-compare__count {
-    color: var(--muted, #707f86);
-    font-size: var(--text-xs, 0.75rem);
+    color: var(--muted, #767880);
+    font-size: var(--text-xs, 0.8125rem);
 }
 
 
@@ -189,7 +189,7 @@
 
 .iwac-vis-keywords-chart__subtitle {
     margin: 0 0 var(--space-2, 0.5rem);
-    color: var(--muted, #707f86);
-    font-size: var(--text-sm, 0.9rem);
+    color: var(--muted, #767880);
+    font-size: var(--text-sm, 0.9375rem);
     font-style: italic;
 }

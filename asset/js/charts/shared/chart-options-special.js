@@ -133,7 +133,7 @@
     C.treemap = function (tree, opts) {
         opts = opts || {};
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var surfaceColor  = tokens.surface       || '#fdfcfa';
+        var surfaceColor  = tokens.surface       || '#fdfdfd';
         var surfaceRaised = tokens.surfaceRaised  || surfaceColor;
         var inkLight      = tokens.inkLight       || '#535862';
         var borderColor   = tokens.border         || '#d4d6da';
@@ -480,7 +480,7 @@
         var smMaxFont = Math.round(maxFont * 0.8);
 
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#d86a11', '#c9442a', '#2d6a4f', '#1d4e6b', '#7a3b89', '#8a5a2b', '#4d3a1f'];
+            || ['#e64a19', '#c9442a', '#2d6a4f', '#394f68', '#7a3b89', '#8a5a2b', '#4d3a1f'];
 
         var base = {
             tooltip: {
@@ -585,7 +585,7 @@
         // explicitly here is defensive.
         var themeTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
-        var labelInk      = themeTokens.ink      || (isDark ? '#e6e7eb' : '#1c232d');
+        var labelInk      = themeTokens.ink      || (isDark ? '#e6e7eb' : '#2c2f37');
         var labelInkLight = themeTokens.inkLight || (isDark ? '#b1b3ba' : '#535862');
 
         var series = segments.map(function (seg) {
@@ -845,7 +845,7 @@
                 label: { show: false },
                 emphasis: {
                     itemStyle: {
-                        borderColor: tokens.ink || '#1c232d',
+                        borderColor: tokens.ink || '#2c2f37',
                         borderWidth: 2
                     }
                 }

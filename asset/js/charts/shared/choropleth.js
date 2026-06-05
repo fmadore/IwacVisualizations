@@ -101,7 +101,7 @@
         ].filter(Boolean).map(ml);
         if (stops.length < 2) {
             var t = (ns.getChartTokens && ns.getChartTokens()) || {};
-            stops = [t.surface || '#fdfcfa', t.primary || '#d86a11'].map(ml);
+            stops = [t.surface || '#fdfdfd', t.primary || '#e64a19'].map(ml);
         }
         return stops;
     }
@@ -115,7 +115,7 @@
     function buildAccentRamp(accentColor) {
         var t = (ns.getChartTokens && ns.getChartTokens()) || {};
         return [
-            ml(t.surface || '#fdfcfa'),
+            ml(t.surface || '#fdfdfd'),
             ml(accentColor)
         ];
     }
@@ -146,7 +146,7 @@
             return [
                 'interpolate', ['linear'], ['get', '_iwac_count'],
                 -maxAbs, ml(paintConfig.negColor),
-                0,        ml(paintConfig.neutralColor || t.surface || '#fdfcfa'),
+                0,        ml(paintConfig.neutralColor || t.surface || '#fdfdfd'),
                 maxAbs,  ml(paintConfig.posColor)
             ];
         }

@@ -44,9 +44,9 @@
 }
 
 .iwac-vis-compare-picker {
-    background: var(--surface-raised, #f7f4ee);
-    border: 1px solid var(--border, #dad5cb);
-    border-radius: var(--radius-lg, 1rem);
+    background: var(--surface-raised, #fafaf9);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-lg, 0.75rem);
     padding: var(--space-md, 1rem);
     display: flex;
     flex-direction: column;
@@ -62,31 +62,31 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--accent, var(--primary, #d86a11));
+    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-picker[data-side="A"]::before {
-    background: var(--iwac-compare-color-a, var(--primary, #d86a11));
+    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-picker[data-side="B"]::before {
-    background: var(--iwac-compare-color-b, #1d4e6b);
+    background: var(--iwac-compare-color-b, #394f68);
 }
 
 .iwac-vis-compare-picker__eyebrow {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-compare-picker[data-side="A"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-a, var(--primary, #d86a11));
+    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-picker[data-side="B"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-b, #1d4e6b);
+    color: var(--iwac-compare-color-b, #394f68);
 }
 
 .iwac-vis-compare-picker__row {
@@ -103,36 +103,36 @@
 }
 
 .iwac-vis-compare-picker__label {
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #4a5766);
     font-weight: 600;
 }
 
 .iwac-vis-compare-picker__select {
-    background: var(--surface, #fdfcfa);
-    border: 1px solid var(--border, #dad5cb);
+    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.5rem 0.75rem;
-    font-size: var(--text-sm, 0.875rem);
-    color: var(--ink, #1c232d);
-    min-height: var(--size-control-md, 36px);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #2c2f37);
+    min-height: var(--size-control-md, 2.5rem);
     min-width: 0;
     max-width: 100%;
     font-family: inherit;
 }
 
 .iwac-vis-compare-picker__select:focus {
-    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
     outline-offset: 2px;
 }
 
 .iwac-vis-compare-picker__type {
     display: flex;
     gap: 0;
-    border: 1px solid var(--border, #dad5cb);
+    border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
-    background: var(--surface, #fdfcfa);
+    background: var(--surface, #fdfdfd);
 }
 
 .iwac-vis-compare-picker__type button {
@@ -141,7 +141,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #4a5766);
     font-family: inherit;
     font-weight: 500;
@@ -149,16 +149,16 @@
 }
 
 .iwac-vis-compare-picker__type button + button {
-    border-left: 1px solid var(--border, #dad5cb);
+    border-left: 1px solid var(--border, #d4d6da);
 }
 
 .iwac-vis-compare-picker__type button:hover {
-    background: color-mix(in oklab, var(--primary, #d86a11) 8%, transparent);
+    background: color-mix(in oklab, var(--primary, #e64a19) 8%, transparent);
 }
 
 .iwac-vis-compare-picker__type button[aria-pressed="true"] {
-    background: var(--primary, #d86a11);
-    color: var(--on-primary, #fff);
+    background: var(--primary, #e64a19);
+    color: var(--white, #fff);
 }
 
 
@@ -179,9 +179,9 @@
 }
 
 .iwac-vis-compare-metric {
-    background: var(--surface, #fdfcfa);
-    border: 1px solid var(--border, #dad5cb);
-    border-radius: var(--radius-md, 0.75rem);
+    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
     display: flex;
     flex-direction: column;
@@ -189,10 +189,10 @@
 }
 
 .iwac-vis-compare-metric__label {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
     font-weight: 700;
 }
 
@@ -208,7 +208,7 @@
     font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
     font-weight: 600;
     line-height: 1.05;
-    color: var(--ink, #1c232d);
+    color: var(--ink, #2c2f37);
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -220,19 +220,19 @@
  * always fits the half-card cell. Numeric values keep the serif. */
 .iwac-vis-compare-metric__value--text {
     font-family: inherit;
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
     white-space: normal;
     line-height: 1.25;
 }
 
 .iwac-vis-compare-metric__value[data-side="A"] {
-    border-left: 3px solid var(--iwac-compare-color-a, var(--primary, #d86a11));
+    border-left: 3px solid var(--iwac-compare-color-a, var(--primary, #e64a19));
     padding-left: 0.5rem;
 }
 
 .iwac-vis-compare-metric__value[data-side="B"] {
-    border-left: 3px solid var(--iwac-compare-color-b, #1d4e6b);
+    border-left: 3px solid var(--iwac-compare-color-b, #394f68);
     padding-left: 0.5rem;
 }
 
@@ -257,9 +257,9 @@
 }
 
 .iwac-vis-compare-grid .iwac-vis-panel {
-    background: var(--surface, #fdfcfa);
-    border: 1px solid var(--border, #dad5cb);
-    border-radius: var(--radius-md, 0.75rem);
+    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-md, 1rem);
     display: flex;
     flex-direction: column;
@@ -268,9 +268,9 @@
 
 .iwac-vis-compare-grid .iwac-vis-panel h4 {
     margin: 0;
-    font-size: var(--text-base, 1rem);
-    letter-spacing: var(--tracking-tight, -0.01em);
-    color: var(--ink, #1c232d);
+    font-size: var(--text-base, 1.0625rem);
+    letter-spacing: var(--tracking-tight, -0.02em);
+    color: var(--ink, #2c2f37);
 }
 
 .iwac-vis-compare-grid .iwac-vis-chart {
@@ -300,8 +300,8 @@
 }
 
 .iwac-vis-compare-overlap__col {
-    background: color-mix(in oklab, var(--surface-raised, #f7f4ee) 70%, var(--surface, #fdfcfa));
-    border: 1px solid var(--border-light, #e8e3d9);
+    background: color-mix(in oklab, var(--surface-raised, #fafaf9) 70%, var(--surface, #fdfdfd));
+    border: 1px solid var(--border-light, #e6e7eb);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
     display: flex;
@@ -311,24 +311,24 @@
 }
 
 .iwac-vis-compare-overlap__title {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-a, var(--primary, #d86a11));
+    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-b, #1d4e6b);
+    color: var(--iwac-compare-color-b, #394f68);
 }
 
 .iwac-vis-compare-overlap__count {
-    font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #707f86);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #767880);
     font-weight: 400;
     letter-spacing: 0;
     text-transform: none;
@@ -349,9 +349,9 @@
     gap: 0.25rem;
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-full, 9999px);
-    border: 1px solid var(--border, #dad5cb);
-    background: var(--surface, #fdfcfa);
-    font-size: var(--text-xs, 0.75rem);
+    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfdfd);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink-light, #4a5766);
@@ -360,21 +360,21 @@
 
 .iwac-vis-compare-overlap__tag strong {
     font-weight: 700;
-    color: var(--ink, #1c232d);
+    color: var(--ink, #2c2f37);
     text-transform: none;
     letter-spacing: 0;
 }
 
 .iwac-vis-compare-overlap__col[data-kind="shared"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--primary, #d86a11) 35%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--primary, #e64a19) 35%, var(--border, #d4d6da));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-a, var(--primary, #d86a11)) 35%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--iwac-compare-color-a, var(--primary, #e64a19)) 35%, var(--border, #d4d6da));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-b, #1d4e6b) 35%, var(--border, #dad5cb));
+    border-color: color-mix(in oklab, var(--iwac-compare-color-b, #394f68) 35%, var(--border, #d4d6da));
 }
 
 
@@ -402,19 +402,19 @@
 }
 
 .iwac-vis-compare-wordcloud__label {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-compare-wordcloud[data-side="A"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-a, var(--primary, #d86a11));
+    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-wordcloud[data-side="B"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-b, #1d4e6b);
+    color: var(--iwac-compare-color-b, #394f68);
 }
 
 .iwac-vis-compare-wordcloud__chart {
@@ -435,7 +435,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-sm, 0.5rem);
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-light, #4a5766);
 }
 
@@ -447,11 +447,11 @@
 .iwac-vis-compare-empty {
     text-align: center;
     padding: var(--space-xl, 2rem);
-    color: var(--muted, #707f86);
-    font-size: var(--text-sm, 0.875rem);
-    background: var(--surface-raised, #f7f4ee);
-    border: 1px dashed var(--border, #dad5cb);
-    border-radius: var(--radius-md, 0.75rem);
+    color: var(--muted, #767880);
+    font-size: var(--text-sm, 0.9375rem);
+    background: var(--surface-raised, #fafaf9);
+    border: 1px dashed var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
 }
 
 
@@ -460,12 +460,15 @@
 /* =================================================================== */
 
 .iwac-vis-compare-newspapers {
-    --iwac-compare-color-a: var(--primary, #d86a11);
-    --iwac-compare-color-b: #1d4e6b;
-}
-
-body[data-theme="dark"] .iwac-vis-compare-newspapers {
-    --iwac-compare-color-b: #7fb4d6;
+    /* Corpus A tracks the brand --primary; corpus B the shared --secondary
+     * slate. Both auto-adjust for dark mode via the theme tokens (which
+     * lighten them on dark surfaces), so no manual dark override is needed —
+     * and unlike the old body[data-theme="dark"] rule this also covers
+     * system dark (prefers-color-scheme). The ECharts/MapLibre series read
+     * these props in compare-newspapers.js, so charts match the CSS swatches
+     * in both themes. */
+    --iwac-compare-color-a: var(--primary, #e64a19);
+    --iwac-compare-color-b: var(--secondary, #394f68);
 }
 
 
@@ -485,12 +488,12 @@ a.iwac-vis-compare-overlap__tag {
 
 a.iwac-vis-compare-overlap__tag:hover,
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    background: color-mix(in oklab, var(--primary, #d86a11) 10%, var(--surface, #fdfcfa));
+    background: color-mix(in oklab, var(--primary, #e64a19) 10%, var(--surface, #fdfdfd));
     transform: translateY(-1px);
 }
 
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #d86a11));
+    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
     outline-offset: 2px;
 }
 
@@ -512,8 +515,8 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     gap: var(--space-md, 1rem);
     flex-wrap: wrap;
     margin-top: var(--space-sm, 0.5rem);
-    font-size: var(--text-xs, 0.75rem);
-    color: var(--muted, #707f86);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-compare-map-legend__swatch {
@@ -529,8 +532,8 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     opacity: 0.7;
 }
 
-.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #d86a11)); }
-.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, #1d4e6b); }
+.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #e64a19)); }
+.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, #394f68); }
 
 
 /* =================================================================== */
@@ -556,19 +559,19 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-sentiment__heading {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
 }
 
 .iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-a, var(--primary, #d86a11));
+    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
 }
 
 .iwac-vis-compare-sentiment__col[data-side="B"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-b, #1d4e6b);
+    color: var(--iwac-compare-color-b, #394f68);
 }
 
 .iwac-vis-compare-sentiment__chart {
@@ -584,19 +587,19 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-sentiment__toolbar label {
-    font-size: var(--text-xs, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--muted, #707f86);
+    color: var(--muted, #767880);
     font-weight: 700;
 }
 
 .iwac-vis-compare-sentiment__toolbar select {
-    background: var(--surface, #fdfcfa);
-    border: 1px solid var(--border, #dad5cb);
+    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.35rem 0.6rem;
-    font-size: var(--text-sm, 0.875rem);
-    color: var(--ink, #1c232d);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #2c2f37);
     font-family: inherit;
 }

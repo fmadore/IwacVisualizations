@@ -444,7 +444,7 @@
         var edges = (graph && graph.edges) || [];
 
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#d86a11', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
+            || ['#e64a19', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
 
         // Edge color per collaboration type. Categories are also exposed
         // via a `categories` array on the graph series so ECharts can

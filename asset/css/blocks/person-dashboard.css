@@ -61,8 +61,8 @@
 }
 
 .iwac-vis-sentiment__caption {
-    font-size: var(--text-sm, 0.9rem);
-    color: var(--muted, #707f86);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--muted, #767880);
     font-variant-numeric: tabular-nums;
 }
 
@@ -124,13 +124,13 @@
     width: var(--iwac-vis-icon-btn, 32px);
     height: var(--iwac-vis-icon-btn, 32px);
     padding: 0;
-    font-size: var(--text-lg, 1.125rem);
+    font-size: var(--text-lg, 1.1875rem);
     line-height: 1;
     box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
 }
 
 .iwac-vis-graph-toolbar__btn--pressed {
-    background: color-mix(in oklab, var(--primary, #d86a11) 18%, var(--surface, #fdfcfa));
-    border-color: color-mix(in oklab, var(--primary, #d86a11) 60%, var(--border, #dad5cb));
-    color: var(--primary, #d86a11);
+    background: color-mix(in oklab, var(--primary, #e64a19) 18%, var(--surface, #fdfdfd));
+    border-color: color-mix(in oklab, var(--primary, #e64a19) 60%, var(--border, #d4d6da));
+    color: var(--primary, #e64a19);
 }

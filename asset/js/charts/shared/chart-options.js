@@ -101,7 +101,7 @@
      */
     C._stableLabelColor = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return tokens.ink || '#1c232d';
+        return tokens.ink || '#2c2f37';
     };
 
     /**
@@ -117,7 +117,7 @@
     C._labelHalo = function () {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         return {
-            textBorderColor: tokens.surface || '#fdfcfa',
+            textBorderColor: tokens.surface || '#fdfdfd',
             textBorderWidth: 2
         };
     };
@@ -184,7 +184,7 @@
 
     C._countryColor = function (country) {
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        if (palette.length === 0) palette = ['#d86a11', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
+        if (palette.length === 0) palette = ['#e64a19', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
         var idx;
         if (COUNTRY_MAP[country] != null) {
             idx = COUNTRY_MAP[country];
