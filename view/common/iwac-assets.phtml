@@ -80,99 +80,131 @@ $rendererList   = isset($needs['renderers']) ? (array) $needs['renderers'] : [];
 $needLayout     = !empty($needs['layout']) || !empty($rendererList);
 
 $module = 'IwacVisualizations';
-$defer  = ['defer' => 'defer'];
 
 $headLink   = $this->headLink();
 $headScript = $this->headScript();
 
-// -- Stylesheets --------------------------------------------------------
-$headLink->appendStylesheet($this->assetUrl('css/iwac-core.css', $module));
+// -- Stylesheets (minified; regenerate with `npm run build:css`) --------
+$headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));
 if ($needMaplibre) {
-    $headLink->appendStylesheet($this->assetUrl('css/iwac-maplibre.css', $module));
+    $headLink->appendStylesheet($this->assetUrl('css/iwac-maplibre.min.css', $module));
 }
 if ($blockCss) {
-    $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $blockCss . '.css', $module));
+    $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $blockCss . '.min.css', $module));
 }
 
-// -- CDN JS libraries ---------------------------------------------------
-$headScript->appendFile($cdnEcharts, 'text/javascript', $defer);
+// -- Deferred, on-view asset loading -----------------------------------
+//
+// IWAC dashboards live below the fold, but the libraries they need are heavy
+// (echarts ~640 KB + maplibre ~360 KB + wordcloud parse/exec dominate the
+// homepage's main-thread time). Rather than emit ~30 eager `<script defer>`
+// tags that all download + execute during page load, we collect the ordered
+// script list here and hand it to a tiny inline loader (below) that injects
+// them — in order, via `async=false` — only once a `.iwac-vis-block` nears the
+// viewport. No orchestrator code changes: the same scripts run in the same
+// order, just later. If IntersectionObserver is unavailable or no block marker
+// is found, the loader falls back to loading immediately, so a chart can never
+// be stranded behind its spinner.
+//
+// $scripts preserves the previous load order exactly: CDN libs → IWAC
+// infra (i18n → theme → core) → shared primitives → conditional features →
+// dashboard-layout + renderers → block panels → orchestrator (last).
+$scripts = [];
+
+// CDN libraries (echarts must precede the IWAC theme + panels).
+$scripts[] = $cdnEcharts;
 if ($needWordcloud) {
-    $headScript->appendFile($cdnWordcloud, 'text/javascript', $defer);
+    $scripts[] = $cdnWordcloud;
 }
+$mapCss = null;
 if ($needMaplibre) {
-    $headScript->appendFile($cdnMaplibreJs, 'text/javascript', $defer);
-    $headLink->appendStylesheet($cdnMaplibreCss);
+    $scripts[] = $cdnMaplibreJs;
+    // The map renders on-view only, so its stylesheet rides along with the
+    // loader instead of render-blocking the whole page from a CDN.
+    $mapCss = $cdnMaplibreCss;
 }
 
-// -- IWAC infrastructure (i18n → theme → dashboard-core) ---------------
-$headScript->appendFile($this->assetUrl('js/iwac-i18n.min.js', $module), 'text/javascript', $defer);
-$headScript->appendFile($this->assetUrl('js/iwac-theme.min.js', $module), 'text/javascript', $defer);
-$headScript->appendFile($this->assetUrl('js/dashboard-core.min.js', $module), 'text/javascript', $defer);
+// IWAC infrastructure (i18n → theme → dashboard-core).
+$scripts[] = $this->assetUrl('js/iwac-i18n.min.js', $module);
+$scripts[] = $this->assetUrl('js/iwac-theme.min.js', $module);
+$scripts[] = $this->assetUrl('js/dashboard-core.min.js', $module);
 
-// -- Shared primitives --------------------------------------------------
-// panels.js is the base for every other primitive and is always loaded.
-// panel-toolbar + responsive are tiny and universally useful, so they
-// load unconditionally too. Heavier or feature-specific primitives
-// (chart-options, table, pagination, facet-buttons+faceted-chart,
-// maplibre, map-popup) are opt-in via $needs.
-$headScript->appendFile($this->assetUrl('js/charts/shared/panels.min.js',        $module), 'text/javascript', $defer);
-$headScript->appendFile($this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module), 'text/javascript', $defer);
-$headScript->appendFile($this->assetUrl('js/charts/shared/responsive.min.js',    $module), 'text/javascript', $defer);
+// Shared primitives — panels is the base for every other primitive;
+// panel-toolbar + responsive are tiny and universally useful. Heavier or
+// feature-specific primitives are opt-in via $needs.
+$scripts[] = $this->assetUrl('js/charts/shared/panels.min.js', $module);
+$scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
+$scripts[] = $this->assetUrl('js/charts/shared/responsive.min.js', $module);
 if ($needChartOpts) {
-    // chart-options is split into a core (shared helpers) + four builder
-    // files by chart family. Core must load first; the builders extend the
-    // same IWACVis.chartOptions namespace and can follow in any order.
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options.min.js',         $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-bar.min.js',     $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-hbar.min.js',    $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-graph.min.js',   $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/chart-options-special.min.js', $module), 'text/javascript', $defer);
+    // chart-options core must load before its four family builders, which
+    // extend the same IWACVis.chartOptions namespace in any order.
+    $scripts[] = $this->assetUrl('js/charts/shared/chart-options.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-bar.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-hbar.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-graph.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-special.min.js', $module);
 }
 if ($needPagination) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/pagination.min.js', $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/shared/pagination.min.js', $module);
 }
 if ($needTable) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/table.min.js', $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/shared/table.min.js', $module);
 }
 if ($needFacets) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/facet-buttons.min.js',  $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/faceted-chart.min.js',  $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/shared/facet-buttons.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/faceted-chart.min.js', $module);
 }
 if ($needMaplibre) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/maplibre.min.js',   $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/map-popup.min.js',  $module), 'text/javascript', $defer);
-    $headScript->appendFile($this->assetUrl('js/charts/shared/choropleth.min.js', $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/shared/maplibre.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/map-popup.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/choropleth.min.js', $module);
 }
 
-// -- Dashboard layout system + opt-in renderers ------------------------
-//
-// dashboard-layout.js is the registry; each renderer file under
-// shared/renderers/ self-registers into it on load. Only the renderers
-// the page declares are emitted, so blocks that don't use the layout
-// system pay nothing.
+// Dashboard layout system + opt-in renderers (each renderer self-registers
+// into dashboard-layout on load; only declared renderers are emitted).
 if ($needLayout) {
-    $headScript->appendFile($this->assetUrl('js/charts/shared/dashboard-layout.min.js', $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/shared/dashboard-layout.min.js', $module);
     foreach ($rendererList as $renderer) {
-        // Sanitize: only allow [a-z0-9-] so the assetUrl path can't
-        // be coerced into a directory traversal.
+        // Sanitize: only [a-z0-9-] so the assetUrl path can't be coerced
+        // into a directory traversal.
         $clean = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) $renderer));
         if ($clean === '') {
             continue;
         }
-        $headScript->appendFile(
-            $this->assetUrl('js/charts/shared/renderers/' . $clean . '.min.js', $module),
-            'text/javascript',
-            $defer
-        );
+        $scripts[] = $this->assetUrl('js/charts/shared/renderers/' . $clean . '.min.js', $module);
     }
 }
 
-// -- Block-specific panel modules --------------------------------------
+// Block-specific panel modules, then the orchestrator (LAST).
 foreach ($panels as $panel) {
-    $headScript->appendFile($this->assetUrl('js/charts/' . $panel . '.min.js', $module), 'text/javascript', $defer);
+    $scripts[] = $this->assetUrl('js/charts/' . $panel . '.min.js', $module);
+}
+if ($orchestrator) {
+    $scripts[] = $this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module);
 }
 
-// -- Orchestrator (LAST) -----------------------------------------------
-if ($orchestrator) {
-    $headScript->appendFile($this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module), 'text/javascript', $defer);
-}
+// -- On-view loader -----------------------------------------------------
+// Emitted per block; multiple blocks on one page merge their script lists
+// into the same window.IWACVisLazy queue at runtime and only the first arms
+// the IntersectionObserver. json_encode keeps slashes escaped so the inline
+// payload can never break out of the <script> element.
+$payload = json_encode(['scripts' => $scripts, 'mapCss' => $mapCss]);
+$headScript->appendScript(
+    '(function(){'
+    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:null,armed:false,done:false});'
+    . 'var p=' . $payload . ';'
+    . 'p.scripts.forEach(function(u){if(S.q.indexOf(u)<0)S.q.push(u);});'
+    . 'if(p.mapCss&&!S.css)S.css=p.mapCss;'
+    . 'if(S.armed)return;S.armed=true;'
+    . 'function load(){if(S.done)return;S.done=true;'
+    . 'if(S.css){var l=document.createElement("link");l.rel="stylesheet";l.href=S.css;document.head.appendChild(l);}'
+    . 'S.q.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});'
+    . '}'
+    . 'function arm(){var b=document.querySelectorAll(".iwac-vis-block");'
+    . 'if(!b.length||!("IntersectionObserver" in window)){load();return;}'
+    . 'var io=new IntersectionObserver(function(en){for(var i=0;i<en.length;i++){if(en[i].isIntersecting){io.disconnect();load();return;}}},{rootMargin:"400px 0px"});'
+    . 'for(var i=0;i<b.length;i++)io.observe(b[i]);'
+    . '}'
+    . 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",arm);}else{arm();}'
+    . '})();'
+);
