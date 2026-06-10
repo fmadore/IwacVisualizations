@@ -38,12 +38,12 @@
  *  section header rather than a dashboard widget title. */
 .iwac-vis-scary-title {
     margin: 0;
-    font-family: var(--font-headings, "Noto Serif", Georgia, serif);
+    font-family: var(--font-headings, "Besley", Georgia, serif);
     font-size: var(--text-2xl, 1.875rem);
     font-weight: 600;
     color: var(--ink-strong, var(--ink, #101620));
     line-height: 1.15;
-    letter-spacing: var(--tracking-tight, -0.02em);
+    letter-spacing: -0.01em;
 }
 
 .iwac-vis-scary-desc {

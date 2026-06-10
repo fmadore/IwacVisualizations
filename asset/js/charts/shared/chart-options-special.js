@@ -585,8 +585,8 @@
         // explicitly here is defensive.
         var themeTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
-        var labelInk      = themeTokens.ink      || (isDark ? '#e6e7eb' : '#2c2f37');
-        var labelInkLight = themeTokens.inkLight || (isDark ? '#b1b3ba' : '#535862');
+        var labelInk      = themeTokens.ink      || (isDark ? '#e7e4df' : '#2c2f37');
+        var labelInkLight = themeTokens.inkLight || (isDark ? '#b5b0aa' : '#535862');
 
         var series = segments.map(function (seg) {
             return {

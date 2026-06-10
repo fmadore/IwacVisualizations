@@ -182,14 +182,12 @@
     background: var(--surface, #fdfdfd);
     border: 1px solid var(--border, #d4d6da);
     border-radius: var(--radius-md, 0.5rem);
-    /* Thin left accent coloured by the model's palette token. */
-    border-left-width: 3px;
     overflow: hidden;
 }
-.iwac-vis-sent-card--gemini  { border-left-color: var(--iwac-vis-model-gemini,  #3b82f6); }
-.iwac-vis-sent-card--chatgpt { border-left-color: var(--iwac-vis-model-chatgpt, #10a37f); }
-.iwac-vis-sent-card--mistral { border-left-color: var(--iwac-vis-model-mistral, #f97316); }
-
+/*  The model is identified by its vendor logo + name in the header and by
+ *  a dot on the header rule; the old 3px coloured left stripe was chart
+ *  junk on a metadata card. The dot picks up the same palette token the
+ *  radar overlay uses, keeping the link between card and chart. */
 .iwac-vis-sent-card__header {
     display: flex;
     align-items: center;
@@ -197,6 +195,18 @@
     padding: var(--space-3, 0.75rem);
     border-bottom: 1px solid var(--border-light, var(--border, #d4d6da));
 }
+.iwac-vis-sent-card__header::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    background: var(--iwac-vis-sent-card-dot, var(--muted, #767880));
+}
+.iwac-vis-sent-card--gemini  { --iwac-vis-sent-card-dot: var(--iwac-vis-model-gemini,  #3b82f6); }
+.iwac-vis-sent-card--chatgpt { --iwac-vis-sent-card-dot: var(--iwac-vis-model-chatgpt, #10a37f); }
+.iwac-vis-sent-card--mistral { --iwac-vis-sent-card-dot: var(--iwac-vis-model-mistral, #f97316); }
 .iwac-vis-sent-card__logo {
     width: 22px;
     height: 22px;

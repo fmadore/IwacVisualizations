@@ -43,16 +43,18 @@
         borderLight:   '#e6e7eb'   // ~oklch(92% 0.005 258)
     };
     var FALLBACK_DARK = {
+        // Warm "lamplit reading room" dark set (theme v2.6 — hue ~70-80,
+        // chroma ~0.012) replacing the old blue-cool dark palette.
         primary:       '#ec653f',  // mix(--primary-base, white 12%) in oklab
         secondary:     '#708093',  // mix(--secondary-base, white 30%) in oklab
-        ink:           '#ebecf0',  // ~oklch(94% 0.008 258)
-        inkLight:      '#b1b3ba',  // ~oklch(76% 0.010 258)
-        muted:         '#84878f',  // ~oklch(60% 0.010 258)
-        surface:       '#1f232b',  // ~oklch(17% 0.010 264)
-        surfaceRaised: '#262a32',  // ~oklch(20% 0.010 264)
-        background:    '#15181f',  // ~oklch(12% 0.010 264)
-        border:        '#3d4148',  // ~oklch(30% 0.012 264)
-        borderLight:   '#2f343c'   // ~oklch(24% 0.012 264)
+        ink:           '#e7e4df',  // oklch(92% 0.008 78)
+        inkLight:      '#b5b0aa',  // oklch(76% 0.010 75)
+        muted:         '#817c77',  // oklch(59% 0.010 70)
+        surface:       '#110c08',  // oklch(16% 0.012 70)
+        surfaceRaised: '#1a1510',  // oklch(20% 0.013 70)
+        background:    '#080503',  // oklch(12% 0.012 75)
+        border:        '#352f28',  // oklch(31% 0.015 70)
+        borderLight:   '#26211a'   // oklch(25% 0.014 70)
     };
 
     /* ----------------------------------------------------------------- */

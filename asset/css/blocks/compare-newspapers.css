@@ -204,7 +204,7 @@
 }
 
 .iwac-vis-compare-metric__value {
-    font-family: var(--font-headings, "Noto Serif", Georgia, "Times New Roman", serif);
+    font-family: var(--font-headings, "Besley", Georgia, "Times New Roman", serif);
     font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
     font-weight: 600;
     line-height: 1.05;
@@ -226,14 +226,30 @@
     line-height: 1.25;
 }
 
-.iwac-vis-compare-metric__value[data-side="A"] {
-    border-left: 3px solid var(--iwac-compare-color-a, var(--primary, #e64a19));
-    padding-left: 0.5rem;
+/*  Corpus key: a round swatch dot before the figure (legend semantics),
+ *  replacing the old 3px side stripes. */
+.iwac-vis-compare-metric__value[data-side="A"],
+.iwac-vis-compare-metric__value[data-side="B"] {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
 }
 
-.iwac-vis-compare-metric__value[data-side="B"] {
-    border-left: 3px solid var(--iwac-compare-color-b, #394f68);
-    padding-left: 0.5rem;
+.iwac-vis-compare-metric__value[data-side]::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.iwac-vis-compare-metric__value[data-side="A"]::before {
+    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
+}
+
+.iwac-vis-compare-metric__value[data-side="B"]::before {
+    background: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 

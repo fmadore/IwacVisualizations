@@ -532,17 +532,17 @@
     .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
 }
 
-/*  Editorial "masthead" card — label sits on top like a newspaper
- *  section eyebrow, underscored by a thin rule; the number reads below
- *  it as a display-serif headline. A short primary-tinted rule in the
- *  top-left corner replaces the old full-height left accent so the
- *  card feels lighter and more typographic. */
+/*  Almanac figure — not a card. Each stat is a ruled column entry:
+ *  2px ink rule on top (the ledger line), uppercase eyebrow, then the
+ *  display-serif numeral. No box, no shadow, no hover theatrics — the
+ *  typography carries it, matching the theme's rule grammar. */
 .iwac-vis-summary-card {
-    background: var(--panel-bg, var(--surface, #fdfdfd));
-    border: 1px solid var(--border, #d4d6da);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.04)));
-    padding: var(--space-4, 1rem) var(--space-3, 0.75rem) var(--space-3, 0.75rem);
+    background: transparent;
+    border: none;
+    border-top: 2px solid var(--ink-strong, var(--ink, #101620));
+    border-radius: 0;
+    box-shadow: none;
+    padding: var(--space-2, 0.5rem) 0 var(--space-2, 0.5rem);
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
@@ -551,60 +551,28 @@
      *  becomes the unwrappable number's width, which overflows the
      *  grid column on 6-col layouts with 7+-digit figures. */
     min-width: 0;
-    transition:
-        box-shadow     var(--transition-fast, 150ms ease),
-        border-color   var(--transition-fast, 150ms ease),
-        transform      var(--transition-fast, 150ms ease);
 }
 
-/*  Short primary rule in the top-left corner — a masthead marker. */
-.iwac-vis-summary-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2.25rem;
-    height: 3px;
-    background: color-mix(in oklab, var(--primary, #e64a19) 60%, transparent);
-    transition: width var(--transition-fast, 150ms ease),
-                background-color var(--transition-fast, 150ms ease);
-}
-
-.iwac-vis-summary-card:hover {
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 30%, var(--border, #d4d6da));
-    box-shadow: var(--shadow-md, 0 4px 6px -1px var(--iwac-vis-shadow-soft, rgba(16, 22, 32, 0.08)));
-    transform: translateY(-1px);
-}
-
-.iwac-vis-summary-card:hover::before {
-    width: 100%;
-    background: var(--primary, #e64a19);
-}
-
-/*  Eyebrow label sits above the number, separated by a hairline rule
- *  that stretches to the end of the card — mirrors how magazine
- *  section heads are set. */
+/*  Eyebrow label above the numeral. */
 .iwac-vis-summary-card__label {
     order: 0;
     font-size: var(--text-xs, 0.8125rem);
-    color: color-mix(in oklab, var(--primary, #e64a19) 55%, var(--muted, #767880));
+    color: var(--muted, #767880);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    padding-bottom: var(--space-2, 0.5rem);
-    border-bottom: 1px solid color-mix(in oklab, var(--border, #d4d6da) 80%, transparent);
     line-height: 1.2;
 }
 
 /*  Display-serif numeral — follows the theme's display serif
- *  (Source Serif 4 via --font-headings, "Noto Serif" as fallback) so
- *  the stat reads as editorial rather than UI. Proportional lining figures (not tabular)
+ *  (Besley via --font-headings) so the stat reads as a ledger figure
+ *  rather than UI. Proportional lining figures (not tabular)
  *  because serif tabular digits are wider and push 7-8 digit numbers
  *  past the edge of the narrow 6-col cards — visual rhythm matters
  *  less here than keeping the whole figure readable. */
 .iwac-vis-summary-card__value {
     order: 1;
-    font-family: var(--font-headings, "Noto Serif", Georgia, "Times New Roman", serif);
+    font-family: var(--font-headings, "Besley", Georgia, "Times New Roman", serif);
     /*  Sized to keep the widest real figure in the dataset (8-digit
      *  totals like 28,142,934) on a single line inside a narrow 6-col
      *  grid cell. Do not raise the max without re-measuring against
@@ -621,27 +589,10 @@
 }
 
 /* ---- Featured variant --------------------------------------------- */
-/*  Used for the headline "Total items" figure. Tinted background,
- *  stronger top rule and a larger display numeral set it apart from
- *  the surrounding facet cards without breaking the 6-col grid. */
+/*  The headline "Total items" figure: its ledger rule turns primary and
+ *  the numeral steps up. One accent, no gradient wash. */
 .iwac-vis-summary-card--featured {
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in oklab, var(--primary, #e64a19) 7%, var(--panel-bg, var(--surface, #fdfdfd))) 0%,
-            var(--panel-bg, var(--surface, #fdfdfd)) 100%
-        );
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 25%, var(--border, #d4d6da));
-}
-
-.iwac-vis-summary-card--featured::before {
-    width: 100%;
-    height: 4px;
-    background: var(--primary, #e64a19);
-}
-
-.iwac-vis-summary-card--featured .iwac-vis-summary-card__label {
-    color: var(--primary, #e64a19);
+    border-top-color: var(--primary, #e64a19);
 }
 
 .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
@@ -965,47 +916,41 @@
 /*  Badges (item-type pills used inside tables)                          */
 /* =================================================================== */
 
+/*  Outlined chip + categorical dot — the same type-badge grammar as the
+ *  IwacSearch result rows, so item types read identically everywhere.
+ *  The dot carries the category colour from semantic theme tokens; both
+ *  themes follow automatically (no hand-tuned dark hex pairs). */
 .iwac-vis-badge {
-    display: inline-block;
+    --iwac-vis-badge-dot: var(--muted, #767880);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
     padding: 0.15rem 0.55rem;
     border-radius: var(--radius-full, 9999px);
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide, 0.04em);
-    background: var(--badge-bg, var(--surface-raised, #fafaf9));
-    color:      var(--badge-fg, var(--ink, #2c2f37));
-    border: 1px solid var(--badge-border, var(--border, #d4d6da));
+    background: transparent;
+    color: var(--ink-light, var(--ink, #2c2f37));
+    border: 1px solid var(--border, #d4d6da);
+    white-space: nowrap;
 }
 
-/*  Resource-type badges — category-distinct pastel palettes so the
- *  reader can scan item types at a glance. Hues were chosen to stay
- *  distinguishable under the warm IWAC surface without fighting the
- *  primary orange. */
-.iwac-vis-badge--article     { --badge-bg: #fef3c7; --badge-fg: #92400e; --badge-border: #fde68a; }
-.iwac-vis-badge--publication { --badge-bg: #dbeafe; --badge-fg: #1e40af; --badge-border: #bfdbfe; }
-.iwac-vis-badge--document    { --badge-bg: #ede9fe; --badge-fg: #5b21b6; --badge-border: #ddd6fe; }
-.iwac-vis-badge--audiovisual { --badge-bg: #fce7f3; --badge-fg: #9d174d; --badge-border: #fbcfe8; }
-.iwac-vis-badge--reference   { --badge-bg: #d1fae5; --badge-fg: #065f46; --badge-border: #a7f3d0; }
-
-/*  Dark-mode palettes — duplicated across `@media (prefers-color-scheme: dark)`
- *  + `body[data-theme="dark"]` so the system preference AND the manual
- *  theme toggle both hit the right colors. Missing the media-query
- *  variant meant badges stayed light-mode under system-dark before
- *  the user explicitly toggled. */
-@media (prefers-color-scheme: dark) {
-    body:not([data-theme="light"]) .iwac-vis-badge--article     { --badge-bg: #78350f; --badge-fg: #fef3c7; --badge-border: #92400e; }
-    body:not([data-theme="light"]) .iwac-vis-badge--publication { --badge-bg: #1e3a8a; --badge-fg: #dbeafe; --badge-border: #1e40af; }
-    body:not([data-theme="light"]) .iwac-vis-badge--document    { --badge-bg: #4c1d95; --badge-fg: #ede9fe; --badge-border: #5b21b6; }
-    body:not([data-theme="light"]) .iwac-vis-badge--audiovisual { --badge-bg: #831843; --badge-fg: #fce7f3; --badge-border: #9d174d; }
-    body:not([data-theme="light"]) .iwac-vis-badge--reference   { --badge-bg: #064e3b; --badge-fg: #d1fae5; --badge-border: #065f46; }
+.iwac-vis-badge::before {
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--iwac-vis-badge-dot);
+    flex-shrink: 0;
 }
 
-body[data-theme="dark"] .iwac-vis-badge--article     { --badge-bg: #78350f; --badge-fg: #fef3c7; --badge-border: #92400e; }
-body[data-theme="dark"] .iwac-vis-badge--publication { --badge-bg: #1e3a8a; --badge-fg: #dbeafe; --badge-border: #1e40af; }
-body[data-theme="dark"] .iwac-vis-badge--document    { --badge-bg: #4c1d95; --badge-fg: #ede9fe; --badge-border: #5b21b6; }
-body[data-theme="dark"] .iwac-vis-badge--audiovisual { --badge-bg: #831843; --badge-fg: #fce7f3; --badge-border: #9d174d; }
-body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --badge-fg: #d1fae5; --badge-border: #065f46; }
+.iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--primary, #e64a19); }
+.iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--secondary, #394f68); }
+.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--warning, #ea580c); }
+.iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--info, #4a90c8); }
+.iwac-vis-badge--reference   { --iwac-vis-badge-dot: var(--muted, #767880); }
 
 
 /* =================================================================== */
@@ -1018,14 +963,16 @@ body[data-theme="dark"] .iwac-vis-badge--reference   { --badge-bg: #064e3b; --ba
  *  the same hierarchy as the surrounding page title. */
 .iwac-vis-section-heading {
     margin: 0;
-    font-family: var(--font-headings, "Noto Serif", Georgia, serif);
+    font-family: var(--font-headings, "Besley", Georgia, serif);
     font-size: var(--text-xl, 1.5rem);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ink-strong, var(--ink, #101620));
     line-height: 1.2;
-    letter-spacing: var(--tracking-tight, -0.02em);
-    padding-bottom: var(--space-2, 0.5rem);
-    border-bottom: 1px solid var(--border, #d4d6da);
+    letter-spacing: -0.01em;
+    /*  Newspaper section head: 2px ink rule ABOVE the title (matches the
+     *  theme's h1.title grammar), no rule below. */
+    padding-top: var(--space-2, 0.5rem);
+    border-top: 2px solid var(--ink-strong, var(--ink, #101620));
 }
 
 .iwac-vis-section-desc {

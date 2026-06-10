@@ -92,8 +92,8 @@
         // how the polarity / centrality / subjectivity labels became
         // unreadable in dark mode. Pick light defaults for dark theme.
         var isDark = ns.getCurrentTheme && ns.getCurrentTheme() === 'dark';
-        var fallbackInk      = isDark ? '#e6e7eb' : '#2c2f37';
-        var fallbackInkLight = isDark ? '#b1b3ba' : '#535862';
+        var fallbackInk      = isDark ? '#e7e4df' : '#2c2f37';
+        var fallbackInkLight = isDark ? '#b5b0aa' : '#535862';
         var fallbackBorder   = isDark ? '#3d4148' : '#d4d6da';
         var inkColor      = tokens.ink      || fallbackInk;
         var inkLightColor = tokens.inkLight || fallbackInkLight;
