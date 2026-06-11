@@ -213,11 +213,20 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       property set verified identical (incl. the unaccented `Benin` /
       `Cote d'Ivoire` variants the map's `COUNTRY_ALIASES` already
       handles). The 6-country choropleth file is untouched.
-- [ ] **5.2 Split `index-overview.json`** (779 KB): chart aggregates vs
-      the full index-table rows; the table tab fetches its rows on
-      demand. Generator emits two files; orchestrator stitches.
-- [ ] **5.3 Audit per-block first-load payloads** after 5.1/5.2 and
-      record the before/after in the README perf note.
+- [x] **5.2 Split `index-overview.json`** — done: the generator now
+      writes the chart aggregates to `index-overview.json` (**186 KB**,
+      was 779) and the 4,385 table rows to a sibling
+      `index-overview-table.json` (**567 KB**) that the orchestrator
+      fetches only when the table panel nears the viewport. Combined
+      with 1.4, the block's eager payload dropped from ~1.9 MB to
+      ~190 KB.
+- [x] **5.3 Per-block payload numbers recorded** (README + this file):
+      Index Overview eager payload ~1.9 MB → ~190 KB (1.4 + 5.2);
+      world map polygons 1,022 → 200 KB (5.1); publications fan-out
+      avg 1.7 KB/issue; semantic landscape deliberately heavy
+      (1 MB / ~300 KB gzipped, on-view only). A formal PageSpeed
+      re-test against the deployed site belongs to the 4.8 live
+      session.
 - [ ] **5.4 DECISION (owner): self-host ECharts/MapLibre vs CDN.**
       Self-hosting = first-party origin, Omeka `?v=` versioning, no
       GDPR question (jsDelivr sees visitor IPs); CDN = better edge
@@ -227,21 +236,33 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
 
 ## Phase 6 — New corpus-level visualizations
 
-- [ ] **6.1 Sentiment Atlas page block.** The 3-model AI sentiment
-      exists on all 12,287 articles but is only surfaced per-item.
-      Corpus level: polarity over time (country facet),
-      centrality-of-Islam trend, subjectivity distribution, and a
-      model-agreement matrix (4.6). Generator aggregates the
-      `{gemini,chatgpt,mistral}_*` columns; visual treatment follows
-      the `.property--ai` convention (model dot-chips, tinted blocks).
-- [ ] **6.2 Semantic landscape page block.** Precomputed 2-D UMAP of
-      `embedding_OCR` (~12k points ≈ 200 KB JSON; `umap-learn` added to
-      requirements, CPU fine), ECharts scatter with progressive
-      rendering + dataZoom, colour by topic / country / decade facets,
-      click-through to articles. The collection's "map of everything".
-- [ ] **6.3 Lexical metrics block.** `Lisibilite_OCR`,
-      `Richesse_Lexicale_OCR`, `nb_mots` over time by newspaper /
-      country — "the language of the press".
+- [x] **6.1 Sentiment Atlas page block** — done:
+      `generate_sentiment_atlas.py` → `sentiment-atlas.json` (10.4 KB).
+      Per model: polarity + centralité over time (canonical stack
+      order, 'Non applicable' excluded from stacks but captioned),
+      polarity by country, subjectivity trend (one line per model via
+      `--iwac-vis-model-*` tokens); cross-model agreement panel
+      (pairwise % cards + pair-selectable 6×6 cross-tab heatmap).
+      Every panel carries the AI-provenance sentence (en/fr).
+      Side-finding worth knowing: pairwise polarity agreement is
+      gemini↔chatgpt 71.0 %, chatgpt↔mistral 70.9 %, gemini↔mistral
+      64.1 %.
+- [x] **6.2 Semantic landscape page block** — done:
+      `generate_semantic_landscape.py` (UMAP cosine, n_neighbors 15,
+      random_state 42; umap-learn in the venv) emits a columnar bundle
+      of **12,286 points** — `semantic-landscape.json` is 1,048 KB
+      minified (titles dominate; ~300 KB gzipped, lazy-loaded on-view
+      and only on pages carrying the block). Orchestrator renders
+      per-category scatter series (Country / Decade / Topic facets,
+      top-12 LDA topics + Other), progressive rendering, hidden axes,
+      inside-dataZoom pan/zoom, click-through to articles. *Visual
+      pass on the live site pending (4.8 session).*
+- [x] **6.3 Lexical metrics block ("Press Language")** — done:
+      `generate_lexical_metrics.py` → `lexical-metrics.json` (5.7 KB).
+      Readability (Flesch FR) / lexical richness (TTR) / article
+      length over time; newspapers ranked by readability and richness
+      (≥ 50 articles, 31 qualify); per-country means; metric
+      explanations in plain language in both locales.
 - [x] **6.4 Item Set Dashboard.** Done — and cheaper than designed: no
       slug re-implementation needed. The orchestrator
       (`asset/js/charts/item-set-dashboard.js`) matches the item set's
@@ -267,16 +288,24 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
 The June 2026 CSS audit found **zero violations** of the IWAC theme
 v2.0.0 rules — this phase is consolidation, not correction.
 
-- [ ] **7.1 Single source for AI-model colours.** The Gemini / ChatGPT /
-      Mistral hexes live in both `iwac-theme.js:79-81` and
-      `asset/css/blocks/article-dashboard.css:207-209`. Define
-      `--iwac-vis-model-{gemini,chatgpt,mistral}` custom properties
-      once in `iwac-core.css`; JS reads them with fallbacks. Candidate
-      for upstreaming into the IWAC theme later.
+- [x] **7.1 Single source for AI-model colours — already satisfied.**
+      Verified during implementation: `--iwac-vis-model-{gemini,
+      chatgpt,mistral}` are defined exactly once in
+      `iwac-core.css:79-81`; `article-dashboard/radar.js` and
+      `article-dashboard.css` both consume them via `var()` with
+      documented fallbacks (the audit had read the fallback values as
+      duplication). Still a candidate for upstreaming into the IWAC
+      theme.
 - [ ] **7.2 Decal/accessibility review** after 4.5 lands: confirm
       colour-blind-safe distinction on the most colour-dense charts
       (types-over-time, sentiment stacks) without breaking the
-      restrained register.
+      restrained register. Fold into the 4.8 live-site session.
+- [ ] **7.3 PHP translation catalog refresh.** The v1.5/v1.6 blocks
+      added server-side strings (block labels + descriptions, loading
+      messages like 'Loading periodicals overview' / 'Loading semantic
+      landscape'). Regenerate `language/template.pot`, add French to
+      `language/fr.po`, compile with `msgfmt`. (Chart/panel strings are
+      unaffected — they live in the JS dictionary, already bilingual.)
 
 ---
 

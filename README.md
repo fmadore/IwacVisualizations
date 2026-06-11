@@ -6,7 +6,7 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Five page blocks and two resource-page block layouts are fully wired end-to-end with live data. Two placeholder blocks load the asset stack but have no orchestrator code yet.
+Every registered block is wired end-to-end with live data — eight page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists).
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
@@ -15,6 +15,10 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 | References Overview | page block | **Live** — 10 panels | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
+| Periodicals Overview | page block | **Live** — 6 panels: runs gantt, issues/year, languages, countries, top subjects | Precompute (`generate_periodicals_overview.py`) |
+| Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets | Precompute (`generate_semantic_landscape.py`) |
+| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, cross-model agreement | Precompute (`generate_sentiment_atlas.py`) |
+| Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
@@ -22,9 +26,18 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |
 | Visualizations / Publication (bibo:Issue, template 21) | resource-page block | **Live** — stat cards + periodical-run sparkline + nearest issues in the run + semantic neighbours (auto-elided until upstream ToC coverage grows) | Precompute (`generate_publication_dashboards.py`) |
-| Item Set Dashboard | resource-page block | Placeholder (assets enqueued, no orchestrator) | — |
+| Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.6.0 — four new corpus blocks + Index Overview payload split (Phases 5–6 of [ROADMAP](ROADMAP.md))
+
+- **Periodicals Overview page block** — corpus view of the Islamic press: periodical-runs gantt (25 runs, 1981–2024), issues/year by country, languages (log axis), countries, top subjects. 4.6 KB bundle.
+- **Semantic Landscape page block** — zoomable UMAP scatter of all 12,286 articles by full-text embedding similarity, faceted by Country / Decade / Topic, click-through to articles. The bundle is deliberately the module's heaviest (~1 MB minified / ~300 KB gzipped; titles dominate) and loads on-view only. `umap-learn` added to `scripts/requirements.txt`.
+- **Sentiment Atlas page block** — the 3-model AI sentiment at corpus level: polarity + centralité over time, polarity by country, per-model subjectivity trends, and cross-model agreement (Gemini↔ChatGPT 71.0 %, ChatGPT↔Mistral 70.9 %, Gemini↔Mistral 64.1 % — pairwise cards + a selectable 6×6 cross-tab). Every panel is labelled as AI-generated assessment.
+- **Press Language page block** — readability (Flesch FR), lexical richness (TTR), and article length over time and by newspaper (31 newspapers ≥ 50 articles).
+- **Item Set Dashboard went live** (was a placeholder since the scaffold) — see its section above; reuses the compare-newspapers corpus aggregates, zero new precompute.
+- **Index Overview split**: `index-overview.json` now carries only the chart aggregates (**186 KB**, was 779); the 4,385 table rows moved to `index-overview-table.json` (**567 KB**) fetched when the table panel nears the viewport. With the v1.3.0 Section B deferral, the block's eager payload dropped ~1.9 MB → ~190 KB.
 
 ### v1.4.0 — ECharts 6 adoption + compare-newspapers modularization + payload diet (Phases 3–5 of [ROADMAP](ROADMAP.md))
 
@@ -194,7 +207,7 @@ Two complementary sections bundled in one block.
 - All-keywords table with client search and 20-row pagination; each row has an Add → compare-mode action
 - Counts reflect **item-level tagging**, not text occurrence: a document tagged with "Terrorisme" contributes exactly one mention per year regardless of how often the word appears in the body. The section subheading says so.
 
-Section A is backed by `asset/data/index-overview.json` (one bundle, ~790 KB minified) generated by `scripts/generate_index_overview.py`. Section B is backed by three files — `keyword-explorer-subjects.json`, `keyword-explorer-spatial.json`, `keyword-explorer-metadata.json` — generated by `scripts/generate_keyword_explorer.py` (~1 MB total minified). State is in-memory only; filters reset on reload (page blocks can be embedded anywhere, so hijacking the page URL for block-local state is explicitly avoided).
+Section A is backed by `asset/data/index-overview.json` (chart aggregates, **186 KB** minified) plus `index-overview-table.json` (the 4,385 table rows, **567 KB**, fetched only when the table panel nears the viewport) — both written by `scripts/generate_index_overview.py` since the v1.6.0 split. Section B is backed by three files — `keyword-explorer-subjects.json`, `keyword-explorer-spatial.json`, `keyword-explorer-metadata.json` — generated by `scripts/generate_keyword_explorer.py` (~1 MB total minified), fetched on-view when the Keyword Explorer section approaches (v1.3.0). Net effect: the block's eager payload dropped from ~1.9 MB to ~190 KB. State is in-memory only; filters reset on reload (page blocks can be embedded anywhere, so hijacking the page URL for block-local state is explicitly avoided).
 
 ### References Overview (page block)
 
@@ -266,6 +279,26 @@ Attaches to `bibo:Article` items (template id 8 on islam.zmo.de). `Visualization
 
 The 3-layer network is built client-side in `network.js` from the precomputed `entities` + `related_by_entities` arrays (no separate `network` key in the JSON — saves ~3 KB per file). Reuses `C.network` unchanged: the builder is topology-agnostic, so adding `type: 'article'` for the outer ring just picks up the next palette colour and a new legend entry via the `entity_type_article` i18n key.
 
+### Periodicals Overview (page block)
+
+Corpus-level view of the Islamic press (`publications` subset, 1,501 issues across 25 periodicals, 1981–2024). Backed by `asset/data/periodicals-overview.json` (4.6 KB, `generate_periodicals_overview.py`): summary cards, a periodical-runs gantt (first → last issue per title, colored by country), issues-per-year stacked by country, languages on a log axis (Français is 99.9 % of issues), countries, and top subjects.
+
+### Semantic Landscape (page block)
+
+The "map of everything": a zoomable scatter of all 12,286 articles placed by UMAP over their 768-dim Gemini `embedding_OCR` (cosine metric, fixed seed). Color facets: Country / Decade / Topic (top-12 LDA topics + Other). Axes are hidden — only proximity means anything, and the panel description says so plainly. Click any point to open the article. Backed by `asset/data/semantic-landscape.json` (columnar, ~1 MB minified / ~300 KB gzipped — the heaviest single bundle in the module, loaded on-view only on pages carrying the block; `generate_semantic_landscape.py`, requires `umap-learn`).
+
+### Sentiment Atlas (page block)
+
+Corpus-level view of the 3-model AI sentiment (Gemini Flash 3.0 / ChatGPT GPT-5 mini / Mistral Ministral 14B) that until now was only visible item-by-item: polarity and centralité-of-Islam over time, polarity by country, subjectivity trends per model, and cross-model agreement (pairwise rates + a polarity cross-tab). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts. Backed by `generate_sentiment_atlas.py`.
+
+### Press Language (page block)
+
+"The language of the press": readability (Flesch FR), lexical richness (type-token ratio), and article length over time and by newspaper, from the dataset's precomputed OCR text metrics. Backed by `generate_lexical_metrics.py`.
+
+### Item Set Dashboard (resource-page block)
+
+Newspapers, Islamic periodicals, and countries exist as item sets on islam.zmo.de — and the Compare Newspapers precompute already aggregates each of them. This block reuses those single-corpus JSONs: the orchestrator matches the item set's title against `compare-newspapers/index.json` (newspapers before countries, articles before publications) and renders summary cards + period subtitle, items per year, top subjects, spatial coverage, and most-frequent words (wordcloud with bar fallback). Item sets with no matching corpus remove the block client-side, so it is safe to enable for **all** item sets. Zero additional precompute.
+
 ### Visualizations (resource-page block) — Publication
 
 Attaches to `bibo:Issue` items (template 21 — the Islamic periodical issues of the `publications` subset, 1,501 items). `Visualizations::render()` routes to `publication.phtml`, which loads the per-issue JSON at `asset/data/publication-dashboards/{o_id}.json` (generated by `scripts/generate_publication_dashboards.py`, ~1.7 KB each). Panels, all declarative `dashboardLayout` slots:
@@ -275,9 +308,7 @@ Attaches to `bibo:Issue` items (template 21 — the Islamic periodical issues of
 - **Other issues of this periodical** — the chronologically nearest issues in the same run (prev/next browsing), as a similar-items card strip with cover thumbnails
 - **Similar issues** — semantic neighbours by cosine similarity over `embedding_tableOfContents`. Data reality (2026-06): the upstream table-of-contents pipeline covers only 4 of 1,501 issues so far, so this slot auto-elides almost everywhere today and lights up as coverage grows — regenerate after each dataset update.
 
-### Placeholders
-
-**Item Set Dashboard** (resource-page block) enqueues the module's asset stack and renders a loading spinner container. It's registered so Omeka recognizes the block layout, but no orchestrator JS has been written yet — implementation is the current "Next up" item in `ROADMAP.md`.
+*(No placeholder blocks remain — every registered layout is live as of v1.6.0.)*
 
 ## Architecture
 
@@ -629,6 +660,12 @@ python3 scripts/generate_article_dashboards.py  # → asset/data/article-dashboa
 
 # Per-publication-issue data (periodical runs + kNN over embedding_tableOfContents)
 python3 scripts/generate_publication_dashboards.py  # → asset/data/publication-dashboards/{o_id}.json
+
+# Corpus-level blocks added in v1.6.0
+python3 scripts/generate_periodicals_overview.py            # → asset/data/periodicals-overview.json
+python3 scripts/generate_semantic_landscape.py   --minify   # → asset/data/semantic-landscape.json (needs umap-learn)
+python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
+python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
 ```
 
 `--minify` strips indentation and whitespace from the JSON output. Use it on the heavier bundles (`collection-overview`, `index-overview`, `keyword-explorer-*`) — it typically halves file size with no downside, since the JSON is only ever consumed by JS, not read by humans. Per-entity dashboards are individually small enough that pretty-printed output stays below a few KB each.

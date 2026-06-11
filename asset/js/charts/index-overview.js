@@ -13,12 +13,14 @@
  *      facets, top-N and compare view modes, and a paginated
  *      all-keywords table with an Add-to-compare action.
  *
- * Data fetch is two-stage: Section A's bundle
- * (asset/data/index-overview.json) loads immediately; Section B's three
- * keyword-explorer files (~1.08 MB combined, the bulk of the block's
- * payload) load only when the Keyword Explorer section nears the
- * viewport — it always sits below Section A, so eager-fetching it
- * penalised every visitor who never scrolled that far.
+ * Data fetch is three-stage: Section A's chart bundle
+ * (asset/data/index-overview.json, ~160 KB since the v1.6.0 split)
+ * loads immediately; the index-table rows
+ * (index-overview-table.json, ~620 KB — 80% of the old bundle) load
+ * when the table panel nears the viewport; Section B's three
+ * keyword-explorer files (~1.08 MB combined) load only when the
+ * Keyword Explorer section nears the viewport. Both deferred stages
+ * sit below the first screenful, so most visits never pay for them.
  *
  * Panel modules are self-registering under `ns.indexOverview.*` and
  * this file just composes the layout + hands them their host elements.
@@ -128,7 +130,7 @@
         };
     }
 
-    function wireSectionA(h, dataA, ctx) {
+    function wireSectionA(h, dataA, ctx, base) {
         var io = ns.indexOverview || {};
         // Mount panels one macrotask apiece instead of one synchronous
         // pass — seven chart inits in a row block the main thread for
@@ -143,7 +145,7 @@
             function () { if (io.lifespan)         io.lifespan.render(h.lifespanPanel, dataA, ctx); },
             function () { if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA, ctx); },
             function () { if (io.activityGantt)    io.activityGantt.render(h.ganttPanel, dataA, ctx); },
-            function () { if (io.indexTable)       io.indexTable.render(h.indexPanel, dataA, ctx); }
+            function () { armIndexTable(h, ctx, base); }
         ];
         (function next() {
             if (!tasks.length) return;
@@ -151,6 +153,51 @@
             try { task(); } catch (e) { console.error('IWACVis index overview panel:', e); }
             if (tasks.length) setTimeout(next, 0);
         })();
+    }
+
+    /**
+     * The index-table rows live in a sibling file
+     * (index-overview-table.json — ~80% of the old bundle's weight)
+     * fetched only when the table panel nears the viewport. It is the
+     * last panel in Section A, so most visits never pay for it.
+     */
+    function armIndexTable(h, ctx, base) {
+        var io = ns.indexOverview || {};
+        if (!io.indexTable) return;
+
+        var spinner = P.buildLoadingState();
+        h.indexPanel.chart.appendChild(spinner);
+
+        var requested = false;
+        function load() {
+            if (requested) return;
+            requested = true;
+            P.fetchJSON(base + 'index-overview-table.json')
+                .then(function (tableData) {
+                    if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                    io.indexTable.render(h.indexPanel, tableData, ctx);
+                })
+                .catch(function (err) {
+                    console.error('IWACVis index table:', err);
+                    if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                    h.indexPanel.chart.appendChild(P.buildErrorState());
+                });
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            load();
+            return;
+        }
+        var obs = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    obs.disconnect();
+                    load();
+                    return;
+                }
+            }
+        }, { rootMargin: '400px 0px' });
+        obs.observe(h.indexPanel.panel);
     }
 
     function wireSectionB(h, datasets) {
@@ -231,7 +278,7 @@
         P.fetchJSON(base + 'index-overview.json')
             .then(function (dataA) {
                 var h = buildLayout(container, dataA);
-                wireSectionA(h, dataA, ctx);
+                wireSectionA(h, dataA, ctx, base);
                 armSectionB(h, base);
             })
             .catch(function (err) {

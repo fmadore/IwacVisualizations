@@ -1,0 +1,24 @@
+<?php
+/**
+ * Semantic Landscape page block.
+ *
+ * One zoomable scatter of the whole press corpus: every article placed
+ * by UMAP over its 768-dim Gemini `embedding_OCR`, color-faceted by
+ * country / decade / LDA topic. Loads a single precomputed columnar
+ * bundle from `asset/data/semantic-landscape.json` (built by
+ * `scripts/generate_semantic_landscape.py`).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'facetButtons' => true,
+        ],
+        'orchestrator' => 'semantic-landscape',
+    ],
+    'blockClass' => 'iwac-vis-semantic-landscape',
+    'loading'    => $this->translate('Loading semantic landscape'),
+]);

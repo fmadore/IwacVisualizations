@@ -28,6 +28,9 @@ Payload shape (top-level keys):
     activity              — per-type gantt rows (top 30 each)
     recent_additions      — newest authority records
     index_table           — slim list of ALL entities for the searchable table
+                            (written to the sibling index-overview-table.json,
+                            fetched on-view — it is 80% of the payload but
+                            feeds only the last panel)
 
 Usage
 -----
@@ -442,8 +445,9 @@ def compute_index_table(index_df: pd.DataFrame) -> List[Dict[str, Any]]:
     """Slim row per entity for the searchable/sortable/paginated table.
 
     Dropping aliases + descriptions + graph edges keeps the payload
-    around a few hundred KB, which comfortably fits into one
-    ``index-overview.json`` file.
+    around a few hundred KB. Since v1.6.0 the rows are written to a
+    sibling ``index-overview-table.json`` that the front-end fetches
+    on-view, so the main chart bundle stays light.
     """
     if index_df.empty:
         return []
@@ -616,8 +620,20 @@ def main() -> None:
         module_root = Path(__file__).resolve().parent.parent
         output_path = module_root / output_path
 
+    # The slim table rows are ~80% of the bundle (≈620 of 780 KB) but
+    # feed only the LAST panel in Section A. They ship as a sibling
+    # file the front-end fetches on-view, keeping the chart bundle
+    # (everything the visitor sees first) around 160 KB.
+    table_payload = {
+        "metadata": payload.get("metadata"),
+        "index_table": payload.pop("index_table", []),
+    }
     save_json(payload, output_path, minify=args.minify)
-    logger.info("Index overview written to %s", output_path)
+    table_path = output_path.with_name("index-overview-table.json")
+    save_json(table_payload, table_path, minify=args.minify)
+    logger.info(
+        "Index overview written to %s (+ %s)", output_path, table_path.name
+    )
 
 
 if __name__ == "__main__":

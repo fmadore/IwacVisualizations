@@ -1,0 +1,32 @@
+<?php
+/**
+ * Sentiment Atlas page block.
+ *
+ * Corpus-level view of the AI sentiment ratings on the IWAC `articles`
+ * subset (three language models: Gemini 3 Flash, GPT-5 mini, Ministral
+ * 14B). Loads a single precomputed JSON bundle from
+ * `asset/data/sentiment-atlas.json` (built by
+ * `scripts/generate_sentiment_atlas.py`) and renders a multi-panel
+ * dashboard — no runtime calls to the Hugging Face datasets-server.
+ *
+ * Panels: summary cards (rated per model), a model facet bar driving
+ * polarity-over-time, centrality-over-time and polarity-by-country
+ * stacked bars, a subjectivity trend (one line per model), and the
+ * cross-model agreement panel (pairwise cards + polarity cross-tab
+ * heatmap). Every panel is flagged as AI-generated assessment.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            'facetButtons' => true,
+        ],
+        'orchestrator' => 'sentiment-atlas',
+    ],
+    'blockClass' => 'iwac-vis-sentiment-atlas',
+    'loading'    => $this->translate('Loading sentiment atlas'),
+]);

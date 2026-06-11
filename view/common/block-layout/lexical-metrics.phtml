@@ -1,0 +1,29 @@
+<?php
+/**
+ * Press Language page block.
+ *
+ * Corpus-level lexical metrics of the IWAC `articles` subset, computed
+ * from the OCR text: readability (Flesch, French adaptation), lexical
+ * richness (type-token ratio) and words per article. Loads a single
+ * precomputed JSON bundle from `asset/data/lexical-metrics.json` (built
+ * by `scripts/generate_lexical_metrics.py`) and renders a multi-panel
+ * dashboard — no runtime calls to the Hugging Face datasets-server.
+ *
+ * Panels: summary cards (corpus means + article count), three
+ * single-series trend lines (readability, richness, article length),
+ * and two newspaper rankings (by mean readability, by mean richness).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'lexical-metrics',
+    ],
+    'blockClass' => 'iwac-vis-lexical-metrics',
+    'loading'    => $this->translate('Loading press language metrics'),
+]);
