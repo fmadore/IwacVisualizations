@@ -1,25 +1,15 @@
-# IWAC Visualizations — Gettext template
-# Copyright (C) Frédérick Madore
-# This file is distributed under the same license as the IwacVisualizations module.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: IwacVisualizations 0.1.0\n"
+"Project-Id-Version: IwacVisualizations 1.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-09 00:00+0000\n"
+"POT-Creation-Date: 2026-06-11 00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-# Block layout labels (src/Site/BlockLayout/*.php, src/Site/ResourcePageBlockLayout/*.php)
-
-msgid "Knowledge Graph"
-msgstr ""
 
 msgid "Visualizations"
 msgstr ""
@@ -30,44 +20,203 @@ msgstr ""
 msgid "Collection Overview"
 msgstr ""
 
-msgid "Compare Projects"
+msgid "Compare Newspapers"
+msgstr ""
+
+msgid "Index Overview"
+msgstr ""
+
+msgid "Press Language"
+msgstr ""
+
+msgid "Periodicals Overview"
 msgstr ""
 
 msgid "References Overview"
 msgstr ""
 
-msgid "Person dashboard"
+msgid "Semantic Landscape"
 msgstr ""
 
-# Block layout form hints
-
-msgid "Aggregate visualizations across the entire collection. No configuration needed."
+msgid "Sentiment Atlas"
 msgstr ""
 
-msgid "Side-by-side comparison of two projects. No configuration needed."
+msgid "Scary Terms"
 msgstr ""
 
-msgid "Bibliographic references overview: timeline, types, top authors, and top subjects. Data is fetched live from Hugging Face. No configuration needed."
+msgid "Topic Explorer"
 msgstr ""
 
-# Loading states (view/common/**/*.phtml)
+msgid ""
+"Aggregate visualizations across the entire collection. No configuration "
+"needed."
+msgstr ""
 
-msgid "Loading knowledge graph"
+msgid ""
+"Side-by-side comparison of two newspaper corpora (articles or Islamic "
+"publications), scoped either to a whole country or a single newspaper. No "
+"configuration needed."
+msgstr ""
+
+msgid ""
+"Explore authority entities (persons, places, organisations, events, topics) "
+"and Dublin Core Subject + Spatial Coverage prevalence over time. No "
+"configuration needed."
+msgstr ""
+
+msgid ""
+"Press language metrics of the newspaper articles: readability (Flesch), "
+"lexical richness (type-token ratio) and article length over time, with "
+"newspapers ranked by readability and richness. Data is precomputed from the "
+"OCR text of the IWAC articles subset. No configuration needed."
+msgstr ""
+
+msgid ""
+"Islamic periodicals overview: publication runs, issues per year by country, "
+"languages, countries, and top subjects. Data is precomputed from the IWAC "
+"publications subset. No configuration needed."
+msgstr ""
+
+msgid ""
+"Bibliographic references overview: timeline, types, languages, countries, "
+"top authors and subjects, country-by-type treemap, and co-authorship "
+"network. Data is precomputed from the IWAC references subset. No "
+"configuration needed."
+msgstr ""
+
+msgid ""
+"Zoomable map of the whole press corpus: every article placed by the semantic"
+" similarity of its full text (UMAP over AI embeddings), color-faceted by "
+"country, decade, or topic. Data is precomputed. No configuration needed."
+msgstr ""
+
+msgid ""
+"AI sentiment atlas of the newspaper articles: polarity, centrality of Islam "
+"and subjectivity over time and by country as rated by three language models,"
+" plus cross-model agreement. All figures are AI-generated assessments "
+"precomputed from the IWAC articles subset. No configuration needed."
+msgstr ""
+
+msgid ""
+"Bar chart of radical / extremism-related terms across the IWAC collection, "
+"with bar chart race, by-country, and global views. No configuration needed."
+msgstr ""
+
+msgid ""
+"LDA-30 topic overview of the IWAC articles subset, with a treemap of all "
+"topics and a per-topic drill-down (calendar heatmap, country / newspaper "
+"distributions, most-representative articles). No configuration needed."
 msgstr ""
 
 msgid "Loading dashboard"
 msgstr ""
 
+msgid "Loading visualizations"
+msgstr ""
+
 msgid "Loading collection overview"
 msgstr ""
 
-msgid "Loading project comparison"
+msgid "Loading newspaper comparison"
+msgstr ""
+
+msgid "Loading index overview"
+msgstr ""
+
+msgid "Loading press language metrics"
+msgstr ""
+
+msgid "Loading periodicals overview"
 msgstr ""
 
 msgid "Loading references overview"
 msgstr ""
 
-# Controls
+msgid "Loading scary terms"
+msgstr ""
 
-msgid "Toggle fullscreen"
+msgid "Loading semantic landscape"
+msgstr ""
+
+msgid "Loading sentiment atlas"
+msgstr ""
+
+msgid "Loading Topic Explorer"
+msgstr ""
+
+msgid "AI sentiment"
+msgstr ""
+
+msgid "Polarity"
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Subjectivity"
+msgstr ""
+
+msgid "Show reasoning"
+msgstr ""
+
+msgid "Model comparison"
+msgstr ""
+
+msgid ""
+"Polarity, centrality to Islam and Muslim communities, and subjectivity "
+"ratings for this article, produced by three AI models (Gemini 3 Flash, GPT-5"
+" mini, Ministral 14B). Read directly from the Omeka item metadata."
+msgstr ""
+
+msgid ""
+"Scales: polarity 1 (very negative) – 5 (very positive) · centrality 1 (not "
+"addressed) – 5 (very central) · subjectivity 1 (objective) – 5 (subjective)"
+msgstr ""
+
+msgid "Very central"
+msgstr ""
+
+msgid "Central"
+msgstr ""
+
+msgid "Secondary"
+msgstr ""
+
+msgid "Marginal"
+msgstr ""
+
+msgid "Not addressed"
+msgstr ""
+
+msgid "Very positive"
+msgstr ""
+
+msgid "Positive"
+msgstr ""
+
+msgid "Neutral"
+msgstr ""
+
+msgid "Negative"
+msgstr ""
+
+msgid "Very negative"
+msgstr ""
+
+msgid "Not applicable"
+msgstr ""
+
+msgid "Very objective"
+msgstr ""
+
+msgid "Rather objective"
+msgstr ""
+
+msgid "Mixed"
+msgstr ""
+
+msgid "Rather subjective"
+msgstr ""
+
+msgid "Very subjective"
 msgstr ""

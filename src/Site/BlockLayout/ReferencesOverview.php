@@ -10,7 +10,7 @@ class ReferencesOverview extends AbstractIwacBlockLayout
 
     protected function description(): string
     {
-        return 'Bibliographic references overview: timeline, types, top authors, and top subjects. Data is fetched live from Hugging Face. No configuration needed.'; // @translate
+        return 'Bibliographic references overview: timeline, types, languages, countries, top authors and subjects, country-by-type treemap, and co-authorship network. Data is precomputed from the IWAC references subset. No configuration needed.'; // @translate
     }
 
     protected function templateViewScript(): string

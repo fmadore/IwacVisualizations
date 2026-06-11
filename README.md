@@ -30,6 +30,11 @@ Every registered block is wired end-to-end with live data — eight page blocks 
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.6.1 — French translation catalog regenerated (ROADMAP 7.3)
+
+- `language/template.pot` + `language/fr.po` rebuilt from the current sources: **58 entries** (was 17) — all v1.5/v1.6 block labels, admin descriptions, and loading strings now have French; six entries for retired blocks (Knowledge Graph, Compare Projects, …) dropped. `fr.mo` compiled (polib — no gettext needed on Windows).
+- `ReferencesOverview`'s admin description corrected (it still claimed live Hugging Face fetch; the block has been precompute-backed since v1.x) and translated accordingly.
+
 ### v1.6.0 — four new corpus blocks + Index Overview payload split (Phases 5–6 of [ROADMAP](ROADMAP.md))
 
 - **Periodicals Overview page block** — corpus view of the Islamic press: periodical-runs gantt (25 runs, 1981–2024), issues/year by country, languages (log axis), countries, top subjects. 4.6 KB bundle.
@@ -581,7 +586,7 @@ If you add new theme-dependent properties, register them in `readTokens()` and p
 
 Two layers:
 
-1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `msgfmt language/fr.po -o language/fr.mo`. Current catalog is 17 entries. See `language/README.md`.
+1. **PHP (`$this->translate()`)** — block labels, form hints, loading messages, and any other text rendered server-side. Edit `language/fr.po` and compile with `msgfmt language/fr.po -o language/fr.mo` (or, without gettext installed: `python -c "import polib; polib.pofile('language/fr.po').save_as_mofile('language/fr.mo')"`). Current catalog is 58 entries, regenerated v1.6.1. See `language/README.md`.
 2. **JavaScript (`IWACVis.t()`)** — chart labels, tooltips, summary card labels, tab names, facet UI. Dictionary lives inline in `asset/js/iwac-i18n.js`. Locale is detected once at render time from `document.documentElement.lang` (populated by Omeka's Internationalisation module).
 
 Language switching in IWAC is a full page navigation (the Internationalisation module links to equivalent URLs under each locale), so no runtime switch is needed — `IWACVis.t()` just reads the locale when the orchestrator fires.

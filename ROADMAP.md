@@ -300,12 +300,14 @@ v2.0.0 rules — this phase is consolidation, not correction.
       colour-blind-safe distinction on the most colour-dense charts
       (types-over-time, sentiment stacks) without breaking the
       restrained register. Fold into the 4.8 live-site session.
-- [ ] **7.3 PHP translation catalog refresh.** The v1.5/v1.6 blocks
-      added server-side strings (block labels + descriptions, loading
-      messages like 'Loading periodicals overview' / 'Loading semantic
-      landscape'). Regenerate `language/template.pot`, add French to
-      `language/fr.po`, compile with `msgfmt`. (Chart/panel strings are
-      unaffected — they live in the JS dictionary, already bilingual.)
+- [x] **7.3 PHP translation catalog refresh** (v1.6.1) — done:
+      `template.pot` + `fr.po` regenerated from the current sources —
+      **58 entries** (was 17), covering every block label, admin
+      description, and loading string from v1.5/v1.6; six
+      retired-block entries dropped; `fr.mo` compiled via polib (no
+      gettext on this machine — the README documents both compile
+      paths). Also fixed `ReferencesOverview`'s stale "fetched live
+      from Hugging Face" admin description while extracting it.
 
 ---
 
