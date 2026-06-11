@@ -1,0 +1,28 @@
+<?php
+/**
+ * Periodicals Overview page block.
+ *
+ * Corpus-level view of the IWAC `publications` subset (Islamic-periodical
+ * issues). Loads a single precomputed JSON bundle from
+ * `asset/data/periodicals-overview.json` (built by
+ * `scripts/generate_periodicals_overview.py`) and renders a multi-panel
+ * dashboard — no runtime calls to the Hugging Face datasets-server.
+ *
+ * Panels: summary cards, period subtitle, periodical-runs Gantt, issues
+ * per year stacked by country, languages bar, countries bar, and top
+ * subjects bar.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'periodicals-overview',
+    ],
+    'blockClass' => 'iwac-vis-periodicals-overview',
+    'loading'    => $this->translate('Loading periodicals overview'),
+]);

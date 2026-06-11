@@ -2,35 +2,38 @@
 /**
  * Item Set Dashboard resource page block.
  *
- * Async container. Aggregated visualizations for an item set are expected
- * to load from a precomputed JSON file (pipeline TBD).
+ * Newspapers, Islamic periodicals, and countries exist as item sets on
+ * islam.zmo.de, and `generate_compare_newspapers.py` already emits a
+ * single-corpus aggregate JSON for each. This block reuses those
+ * aggregates: `asset/js/charts/item-set-dashboard.js` matches the item
+ * set's title against `compare-newspapers/index.json` (articles +
+ * publications; newspapers before countries) and renders the matching
+ * corpus as a one-sided dashboard — summary cards, items per year, top
+ * subjects, spatial coverage, most frequent words.
  *
- * Assets are pre-loaded via the shared `common/iwac-assets` partial so
- * the future orchestrator can render charts + maps + word clouds
- * without re-touching this file.
+ * Item sets with no matching corpus remove the block client-side
+ * (heading included) — the same silent-skip rule the Visualizations
+ * block applies to unsupported templates — so admins can enable this
+ * for ALL item sets safely.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemSetRepresentation $resource
  */
 
-echo $this->partial('common/iwac-assets', [
-    'needs' => [
-        'maplibre'  => true,
-        'wordcloud' => true,
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            'wordcloud'    => true,
+        ],
+        'orchestrator' => 'item-set-dashboard',
+    ],
+    'blockClass'   => 'iwac-vis-item-set',
+    'heading'      => $this->translate('Visualizations'),
+    'loading'      => $this->translate('Loading dashboard'),
+    'loadingClass' => 'iwac-vis-item-set__loading',
+    'data'         => [
+        'item-set-id'    => $resource->id(),
+        'item-set-title' => $resource->displayTitle(),
     ],
 ]);
-
-$siteSlug = $this->currentSite()->slug();
-?>
-
-<div class="iwac-vis-block dashboard-block">
-    <div class="dashboard-async-container"
-         data-item-set-id="<?= $this->escapeHtmlAttr($resource->id()) ?>"
-         data-base-path="<?= $this->escapeHtmlAttr($this->basePath()) ?>"
-         data-site-base="<?= $this->escapeHtmlAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-        <div class="iwac-vis-loading">
-            <div class="iwac-vis-spinner"></div>
-            <span><?= $this->translate('Loading dashboard') ?>&hellip;</span>
-        </div>
-    </div>
-</div>

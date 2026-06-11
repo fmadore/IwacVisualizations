@@ -92,7 +92,7 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
 `tableOfContents`, 768-dim `embedding_tableOfContents`, clean
 `publisher` runs) is the one rich resource type with no visualization.
 
-- [ ] **2.1 `scripts/generate_publication_dashboards.py`** — per-issue
+- [x] **2.1 `scripts/generate_publication_dashboards.py`** — per-issue
       JSON under `asset/data/publication-dashboards/{o_id}.json`:
       metrics (pages, words, language, country), the issue's periodical
       run (per-`publisher` year histogram + position of this issue —
@@ -100,84 +100,119 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       kNN over `embedding_tableOfContents` (reuse the
       `generate_article_dashboards.py` kNN code), subjects/spatial of
       the issue. Standard CLI flags; `--limit` for dev.
-- [ ] **2.2 `publication.phtml` + dispatch.** `21 => 'publication'` in
+- [x] **2.2 `publication.phtml` + dispatch.** `21 => 'publication'` in
       `TEMPLATE_PARTIALS`; partial declares layout + renderers
       (sibling-sparkline, similar-items, horizontal-bar) through
       `iwac-block-shell`.
-- [ ] **2.3 `publication-dashboard.js` orchestrator** — declarative
+- [x] **2.3 `publication-dashboard.js` orchestrator** — declarative
       `dashboardLayout` slots from day 1 (no bridge needed).
-- [ ] **2.4 Periodicals Overview page block** — corpus-level view of the
-      Islamic press: gantt of periodical runs (reuse the
-      collection-overview gantt builder over `publications`),
-      issues-per-year stacked by country, language split, top subjects.
-      `generate_periodicals_overview.py` + BlockLayout + template +
-      orchestrator.
-- [ ] **2.5 Generate + commit data** (~1,501 JSONs + 1 bundle), bump
-      version.
+      **Data reality found during the build:** the live dataset carries
+      a `tableOfContents` (and hence an embedding) for only **4 of
+      1,501 issues** — the upstream ToC pipeline has barely started. So
+      the dashboard leads with panels that work for every issue today
+      (stat cards; the periodical-run sparkline; "other issues of this
+      periodical" — the chronologically nearest issues in the same run)
+      and keeps the semantic-neighbours slot wired but auto-elided
+      until upstream coverage grows. Re-run the generator after each
+      dataset update to light it up progressively.
+- [x] **2.4 Periodicals Overview page block** — done:
+      `generate_periodicals_overview.py` → `periodicals-overview.json`
+      (4.6 KB; 25 runs / 1,501 issues / 1981–2024 verified),
+      `PeriodicalsOverview.php` + phtml + `periodicals-overview.js`
+      (summary cards, periodical-runs gantt with built-in dataZoom,
+      issues-per-year stacked by country, languages on a log axis —
+      Français is 99.9% — countries, top subjects).
+- [x] **2.5 Generate + commit data** — 1,501 issue JSONs (~2.5 MB,
+      avg 1.7 KB) + the periodicals bundle committed; version bumped.
 
 ## Phase 3 — Refactors: efficiency + modularity
 
-- [ ] **3.1 Split `compare-newspapers.js`** (1,452 lines — the last
-      monolith) along its nine seams into
-      `compare-newspapers/{picker,metrics,overlap,timeline,subjects,wordclouds,map,sentiment,newspapers}.js`
-      + a ~200-line orchestrator, mirroring the v0.23.0 scary-terms
-      split. No behaviour change; templates gain the `panels` list.
-- [ ] **3.2 Python: shared dashboard-aggregation core.**
-      `generate_person_dashboards.py` (1,051 lines) and
-      `generate_entity_dashboards.py` (892) duplicate ~15 methods
-      (`load_index`, `load_content`, `build_entity_lookup`,
-      `resolve_items`, `build_document_frequency`, the `compute_*`
-      family). Extract a shared `dashboard_aggregator.py` (role
-      iteration as the override point; entity keeps its
-      `by_role.all` wrap). Verify by diffing regenerated JSON against
-      current output on a `--limit` sample.
-- [ ] **3.3 CLI normalization** across generators: `--output-dir`,
-      `--minify/--no-minify` (person/entity currently hardcode
-      minify=True), `--limit` everywhere, `--min-cooccurrence` naming
-      (compare-newspapers uses `--min-count`).
+- [x] **3.1 Split `compare-newspapers.js`** — done: 1,452 lines → a
+      239-line orchestrator + 10 modules under `compare-newspapers/`
+      (`helpers, picker, metrics, overlap, timeline, subjects,
+      wordclouds, map, sentiment, newspapers`), every moved function
+      verified byte-identical against the pre-refactor file (the only
+      substitutions: `compareColors()`/`_uid` now route through the
+      shared `helpers.js`). The phtml gained the ordered `panels` list.
+- [x] **3.2 Python: shared dashboard-aggregation core** — done:
+      `scripts/dashboard_aggregator.py` (933 lines, template-method
+      base; `_role_slices()` is the person/entity override point).
+      Person generator 1,051 → 337 lines, entity 892 → 281. Output
+      verified **byte-identical** on samples — with one discovery worth
+      keeping: entity output iterates raw string-key sets, so
+      reproducible runs require `PYTHONHASHSEED=0` (true of the OLD
+      code too; the verification pinned it for both sides).
+- [x] **3.3 CLI normalization** — done across all 13 generators:
+      `--minify/--no-minify` everywhere via BooleanOptionalAction with
+      defaults matching prior behaviour (and fixing a latent bug:
+      collection_overview's `--minify` flag was never wired to
+      `save_json`); `--min-count` → `--min-cooccurrence` on
+      compare-newspapers with the old spelling kept as a deprecated
+      alias; `--limit` deliberately kept fan-out-only (a row cap would
+      silently corrupt single-bundle analytics — rationale in
+      `scripts/README.md`, which now documents the full flag table).
+      Drive-by: `references_overview --help` no longer crashes on
+      cp1252 Windows consoles.
 - [ ] **3.4 (parked) Migrate collection/index/references overviews to
       `dashboardLayout`.** Possible (~50–80-line orchestrators) but low
       ROI vs. 3.1; scary-terms stays as-is (animation-stateful).
 
 ## Phase 4 — ECharts 6.1 / MapLibre 5.24 adoption
 
-- [ ] **4.1 Native `chord` series** (new in 6.0) replaces the
+- [x] **4.1 Native `chord` series** (new in 6.0) replaces the
       `graph`+circular emulation in `C.chord` — ribbon widths finally
-      encode co-occurrence magnitude. Fix the now-wrong "ECharts dropped
-      chord" docblock in `shared/renderers/chord.js`.
-- [ ] **4.2 Graph `thumbnail` minimap** (6.0) on the person association
-      network and the article 3-layer context network.
-- [ ] **4.3 Main-thread budget for heavy series.** Scary-terms
-      co-occurrence heatmap → `progressive`; force networks → verify
-      the correct 6.x mechanism per docs (`force.layoutAnimation` /
-      precomputed layout) and apply; stagger Index Overview panel
-      mounts (yield between panels).
-- [ ] **4.4 Scatter jitter** (6.0) on Index Overview lifespan ×
-      frequency to fix overplotting at low spans.
-- [ ] **4.5 `aria.enabled: true`** in the built ECharts theme
-      (screen-reader chart descriptions, zero visual change). Decal
-      patterns: opt-in flag on stacked-bar builders, applied where
-      series count is high — evaluate against the restrained register
-      before defaulting on.
+      encode co-occurrence magnitude. Same `{names, matrix}` contract,
+      so the renderer + person co-occurrence panel needed no changes;
+      the stale "ECharts dropped chord" docblock in
+      `shared/renderers/chord.js` is fixed. *Needs a visual pass on the
+      live site (4.8 session).*
+- [x] **4.2 Graph `thumbnail` minimap** (6.0 component, opt-in via
+      `C.network(…, {thumbnail: true})`) on the person association
+      network and the article 3-layer context network; token-styled,
+      auto-hidden ≤ 640px.
+- [x] **4.3 Main-thread budget.** Index Overview panels now mount one
+      macrotask apiece (yield between panels) instead of one
+      synchronous 7-panel pass. Evaluated and *not* applied: heatmap
+      `progressive` (the scary-terms co-occurrence matrix is ≤ ~20×20
+      cells — nothing to chunk) and force-layout changes (the
+      networks already freeze layout via `layoutAnimation: false`).
+- [x] **4.4 Scatter jitter — evaluated, not applicable.** ECharts 6
+      jitter lives on category/single axes only; lifespan × frequency
+      is value × value and already blends overplot via 0.75 opacity.
+      (A `C.beeswarm` builder with deterministic jitter already exists
+      for single-axis cases.)
+- [x] **4.5 `aria.enabled: true`** applied to every registered chart
+      via `ns._applyAria` (merge-mode setOption after each render, so
+      the notMerge render pattern and theme swaps can't drop it).
+      Decal patterns deliberately left off → 7.2.
 - [ ] **4.6 `matrix` coordinate system** for the scary-terms
       co-occurrence view (6.1 adds cell `triggerEvent`); foundation for
-      the Phase 6 sentiment model-agreement matrix.
-- [ ] **4.7 MapLibre niceties:** GeoJSON `source.getBounds()` to
-      simplify fit-to-pins (article spatial map), popup `padding` near
-      edges, `cooperativeGestures` enabled on page blocks now that the
-      hint dialog is localizable via the map `locale` option (fr/en).
+      the Phase 6 sentiment model-agreement matrix. *Deferred: the
+      heatmap version works; converting is a visual rewrite that needs
+      a live render-test session, not a blind swap.*
+- [x] **4.7 MapLibre niceties.** `cooperativeGestures` now on for every
+      IWAC map with fr/en hint strings via the map `locale` option
+      (opt-out per map via `mapOptions`); popup `padding` turned out to
+      be already shipped in `P.createIwacPopup`. GeoJSON `getBounds()`
+      fit-simplification skipped — the only manual-bounds map
+      (compare-newspapers) deliberately avoids fitBounds (Mecca/Paris
+      outliers would zoom the view out of West Africa).
 - [ ] **4.8 Re-test the v0.24.0 mobile grid presets against ECharts
       6.1's default auto axis-layout** (labels/names no longer overflow
       by default) — remove hand-tuned gutters that became redundant.
+      *Needs a Playwright session against the live site after deploy —
+      includes the 4.1 chord visual check.*
 - **Won't do:** globe projection (editorial-product register, not
   research-instrument), color-relief/terrain (n/a to these maps).
 
 ## Phase 5 — Payload & deep performance
 
-- [ ] **5.1 Simplify `world_countries_simple.geojson`** (1,022 KB →
-      target ≤ ~300 KB via mapshaper/geometry simplification at the
-      zoom levels actually used; verify the 6 IWAC countries keep
-      crisp borders since they also exist in the dedicated 135 KB file).
+- [x] **5.1 Simplify `world_countries_simple.geojson`** — done with
+      mapshaper (visvalingam 15%, keep-shapes, coordinate precision
+      0.001°): **1,022 KB → 200 KB**, 242 features and the `name`
+      property set verified identical (incl. the unaccented `Benin` /
+      `Cote d'Ivoire` variants the map's `COUNTRY_ALIASES` already
+      handles). The 6-country choropleth file is untouched.
 - [ ] **5.2 Split `index-overview.json`** (779 KB): chart aggregates vs
       the full index-table rows; the table tab fetches its rows on
       demand. Generator emits two files; orchestrator stitches.
@@ -207,14 +242,21 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
 - [ ] **6.3 Lexical metrics block.** `Lisibilite_OCR`,
       `Richesse_Lexicale_OCR`, `nb_mots` over time by newspaper /
       country — "the language of the press".
-- [ ] **6.4 Item Set Dashboard (template 4).** Newspapers are item
-      sets, so this doubles as per-newspaper dashboards. Design:
-      resource-page block reads the item set title server-side, slugs
-      it with the same rules as `generate_compare_newspapers.py`, and
-      loads the matching single-corpus aggregate
-      (`compare-newspapers/{articles,publications}/newspaper-*.json` —
-      already generated). Item sets with no matching corpus render
-      nothing (same silent-skip rule as unsupported templates).
+- [x] **6.4 Item Set Dashboard.** Done — and cheaper than designed: no
+      slug re-implementation needed. The orchestrator
+      (`asset/js/charts/item-set-dashboard.js`) matches the item set's
+      title (NFC + case-folded) against the corpus display names in
+      `compare-newspapers/index.json` (newspapers before countries,
+      articles before publications) and renders the matching
+      single-corpus aggregate: summary cards + period subtitle, items
+      per year, top subjects, spatial coverage, most-frequent words
+      (wordcloud with hbar fallback). No new precompute. Item sets with
+      no matching corpus remove the whole block client-side.
+      *Caveat:* because assets lazy-load on-view, a non-matching item
+      set shows the heading + spinner until the visitor scrolls near
+      it, then the block disappears — acceptable, but if it bothers,
+      the fix is a server-side corpus-name allowlist exported into the
+      phtml at precompute time.
 - [x] **6.5 References Overview enhancements** — already shipped
       pre-evaluation (discovered during Phase 1): the block carries a
       co-authorship force network and a country → type treemap since the

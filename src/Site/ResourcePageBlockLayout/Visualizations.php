@@ -51,6 +51,7 @@ class Visualizations implements ResourcePageBlockLayoutInterface
         3 => 'entity',         // Sujets
         2 => 'entity',         // Événements
         8 => 'article',        // bibo:Article (Article de presse)
+        21 => 'publication',   // bibo:Issue (Publication islamique)
         9 => 'minimal-item',   // Audio
         19 => 'minimal-item',  // Video recording
         22 => 'minimal-item',  // Document

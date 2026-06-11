@@ -84,6 +84,18 @@
             'Words': 'Words',
             'Newspapers': 'Newspapers',
             'Unknown': 'Unknown',
+            'Pages': 'Pages',
+            'Issue': 'Issue',
+            'Language': 'Language',
+            'Date': 'Date',
+
+            // Publication (periodical issue) dashboard
+            'This issue in its periodical run': 'This issue in its periodical run',
+            'desc_publication_run': 'Issues of this periodical per year — the dot marks this issue.',
+            'Other issues of this periodical': 'Other issues of this periodical',
+            'desc_publication_other_issues': 'The issues published closest to this one in the same run.',
+            'Similar issues': 'Similar issues',
+            'desc_publication_similar': 'Closest issues by table-of-contents similarity (Gemini embeddings).',
 
             // Collection overview — chart titles
             'Items per year, by country': 'Items per year, by country',
@@ -541,6 +553,18 @@
             'Words': 'Mots',
             'Newspapers': 'Journaux',
             'Unknown': 'Inconnu',
+            'Pages': 'Pages',
+            'Issue': 'Numéro',
+            'Language': 'Langue',
+            'Date': 'Date',
+
+            // Publication (periodical issue) dashboard
+            'This issue in its periodical run': 'Ce numéro dans la collection du périodique',
+            'desc_publication_run': 'Numéros de ce périodique par année — le point marque ce numéro.',
+            'Other issues of this periodical': 'Autres numéros de ce périodique',
+            'desc_publication_other_issues': 'Les numéros parus au plus près de celui-ci dans la même collection.',
+            'Similar issues': 'Numéros similaires',
+            'desc_publication_similar': 'Numéros les plus proches par similarité des sommaires (plongements Gemini).',
 
             // Collection overview — chart titles
             'Items per year, by country': '\u00c9l\u00e9ments par ann\u00e9e, par pays',
