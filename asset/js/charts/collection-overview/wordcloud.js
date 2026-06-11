@@ -33,11 +33,7 @@
             if (loaded) return;
             loaded = true;
 
-            fetch(url)
-                .then(function (r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                })
+            P.fetchJSON(url)
                 .then(function (wc) {
                     panelEl.chart.innerHTML = '';
                     build(panelEl, wc);

@@ -108,11 +108,7 @@
         var basePath = container.dataset.basePath || '';
         var url = basePath + '/modules/IwacVisualizations/asset/data/topic-explorer.json';
 
-        fetch(url)
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        P.fetchJSON(url)
             .then(function (data) {
                 renderInitial(container, data);
             })

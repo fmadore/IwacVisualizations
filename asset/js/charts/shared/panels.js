@@ -55,6 +55,46 @@
     };
 
     /* ----------------------------------------------------------------- */
+    /*  JSON fetch                                                        */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Shared JSON fetch for module data files — the single fetch path
+     * every orchestrator / panel should use instead of bare fetch().
+     *
+     * - Appends `?v=<asset version>` (when dashboard-core.js could parse
+     *   one off its own script URL) so regenerated asset/data/ JSON busts
+     *   browser caches in lockstep with the config/module.ini version,
+     *   exactly like the CSS/JS assets Omeka versions via assetUrl.
+     * - Sends same-origin credentials and a JSON Accept header.
+     * - Rejects on non-2xx with the URL in the error message.
+     *
+     * @param {string} url
+     * @param {Object} [opts]  Extra fetch options merged over the defaults.
+     * @returns {Promise<any>} parsed JSON body
+     */
+    P.fetchJSON = function (url, opts) {
+        var u = url;
+        if (ns.assetVersion && !/[?&]v=/.test(u)) {
+            u += (u.indexOf('?') === -1 ? '?' : '&')
+                + 'v=' + encodeURIComponent(ns.assetVersion);
+        }
+        var init = {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' }
+        };
+        if (opts) {
+            for (var k in opts) {
+                if (Object.prototype.hasOwnProperty.call(opts, k)) init[k] = opts[k];
+            }
+        }
+        return fetch(u, init).then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + u);
+            return r.json();
+        });
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  i18n + number formatting shortcuts                                */
     /* ----------------------------------------------------------------- */
 

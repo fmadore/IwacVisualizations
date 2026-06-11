@@ -8,7 +8,7 @@
  *
  *   * 9  Audio              → ``audiovisual`` subset
  *   * 19 Video recording    → ``audiovisual`` subset
- *   * 15 Photograph         → ``documents`` subset
+ *   * 22 Document           → ``documents`` subset
  *
  * The orchestrator (``minimal-item-dashboard.js``) loads
  * ``asset/data/template-summary.json``, picks the matching subset's
@@ -41,11 +41,13 @@
 // slices already present in template-summary.json.
 //
 // documents (26 items) is fully typed `Document` in the current
-// dataset, so Photograph (15) reads from the whole documents subset.
+// dataset, so Document (22) reads from the whole documents subset.
+// (Photograph (15) was mapped to `documents` until v1.3.0 — removed:
+// photographs aren't in the HF dataset, so the slice was unrelated.)
 $templateMap = [
     9  => 'audiovisual',
     19 => 'audiovisual',
-    15 => 'documents',
+    22 => 'documents',
 ];
 
 $template   = $resource->resourceTemplate();

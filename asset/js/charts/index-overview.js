@@ -13,11 +13,12 @@
  *      facets, top-N and compare view modes, and a paginated
  *      all-keywords table with an Add-to-compare action.
  *
- * Data fetch: 4 JSON files in parallel.
- *   asset/data/index-overview.json
- *   asset/data/keyword-explorer-subjects.json
- *   asset/data/keyword-explorer-spatial.json
- *   asset/data/keyword-explorer-metadata.json
+ * Data fetch is two-stage: Section A's bundle
+ * (asset/data/index-overview.json) loads immediately; Section B's three
+ * keyword-explorer files (~1.08 MB combined, the bulk of the block's
+ * payload) load only when the Keyword Explorer section nears the
+ * viewport — it always sits below Section A, so eager-fetching it
+ * penalised every visitor who never scrolled that far.
  *
  * Panel modules are self-registering under `ns.indexOverview.*` and
  * this file just composes the layout + hands them their host elements.
@@ -120,6 +121,7 @@
             mapPanel:       mapPanel,
             ganttPanel:     ganttPanel,
             indexPanel:     indexPanel,
+            sectionB:       sectionB,
             filtersHost:    filtersHost,
             chartPanel:     chartPanel,
             tablePanel:     tablePanel
@@ -152,6 +154,59 @@
         io.keywordsTable.render(h.tablePanel.chart, state);
     }
 
+    /**
+     * Arm the deferred Section B fetch: the three keyword-explorer JSONs
+     * download only when the Keyword Explorer section nears the viewport
+     * (same 400px rootMargin as the asset lazy loader). The section's
+     * panels are already laid out with their min-height reservations, so
+     * deferral causes no layout shift — just a spinner until the data
+     * lands. Falls back to an immediate load when IntersectionObserver
+     * is unavailable.
+     */
+    function armSectionB(h, base) {
+        var spinner = P.buildLoadingState();
+        h.chartPanel.chart.appendChild(spinner);
+
+        var requested = false;
+        function load() {
+            if (requested) return;
+            requested = true;
+            Promise.all([
+                P.fetchJSON(base + 'keyword-explorer-subjects.json'),
+                P.fetchJSON(base + 'keyword-explorer-spatial.json'),
+                P.fetchJSON(base + 'keyword-explorer-metadata.json')
+            ])
+            .then(function (payloads) {
+                if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                wireSectionB(h, {
+                    subjects: payloads[0],
+                    spatial:  payloads[1],
+                    metadata: payloads[2]
+                });
+            })
+            .catch(function (err) {
+                console.error('IWACVis keyword explorer:', err);
+                if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+                h.chartPanel.chart.appendChild(P.buildErrorState());
+            });
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            load();
+            return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    io.disconnect();
+                    load();
+                    return;
+                }
+            }
+        }, { rootMargin: '400px 0px' });
+        io.observe(h.sectionB);
+    }
+
     function initBlock(container) {
         var ctx = {
             basePath: container.dataset.basePath || '',
@@ -159,35 +214,17 @@
         };
         var base = ctx.basePath + '/modules/IwacVisualizations/asset/data/';
 
-        var urls = [
-            base + 'index-overview.json',
-            base + 'keyword-explorer-subjects.json',
-            base + 'keyword-explorer-spatial.json',
-            base + 'keyword-explorer-metadata.json'
-        ];
-
-        Promise.all(urls.map(function (u) {
-            return fetch(u).then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + u);
-                return r.json();
+        P.fetchJSON(base + 'index-overview.json')
+            .then(function (dataA) {
+                var h = buildLayout(container, dataA);
+                wireSectionA(h, dataA, ctx);
+                armSectionB(h, base);
+            })
+            .catch(function (err) {
+                console.error('IWACVis index overview:', err);
+                container.innerHTML = '';
+                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
             });
-        }))
-        .then(function (payloads) {
-            var dataA = payloads[0];
-            var datasets = {
-                subjects: payloads[1],
-                spatial:  payloads[2],
-                metadata: payloads[3]
-            };
-            var h = buildLayout(container, dataA);
-            wireSectionA(h, dataA, ctx);
-            wireSectionB(h, datasets);
-        })
-        .catch(function (err) {
-            console.error('IWACVis index overview:', err);
-            container.innerHTML = '';
-            container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
-        });
     }
 
     function init() {

@@ -156,11 +156,7 @@
         };
         var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/collection-overview.json';
 
-        fetch(url)
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        P.fetchJSON(url)
             .then(function (data) {
                 var h = buildLayout(container, data, ctx);
                 wireInlinePanels(h, data);

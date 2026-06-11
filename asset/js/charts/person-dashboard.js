@@ -101,11 +101,7 @@
         };
         var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/person-dashboards/' + itemId + '.json';
 
-        fetch(url)
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        P.fetchJSON(url)
             .then(function (data) {
                 var loading = container.querySelector('.iwac-vis-person__loading');
                 if (loading) loading.remove();

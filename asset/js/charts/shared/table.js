@@ -51,6 +51,11 @@
                 img.className = 'iwac-vis-table__thumb';
                 img.src = String(value);
                 img.alt = '';
+                // Intrinsic dimensions so the browser reserves space
+                // before CSS loads; the --iwac-vis-thumb-* ramp still
+                // owns the rendered size at each breakpoint.
+                img.width = 56;
+                img.height = 56;
                 img.loading = 'lazy';
                 img.addEventListener('error', function () {
                     img.replaceWith(buildThumbPlaceholder());

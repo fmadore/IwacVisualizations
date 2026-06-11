@@ -56,11 +56,7 @@
         if (_geojsonInflight) return _geojsonInflight;
         var url = (basePath || '') +
             '/modules/IwacVisualizations/asset/data/iwac-countries.geojson';
-        _geojsonInflight = fetch(url)
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        _geojsonInflight = P.fetchJSON(url)
             .then(function (geo) {
                 _geojsonCache = geo;
                 _geojsonInflight = null;

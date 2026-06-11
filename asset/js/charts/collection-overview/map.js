@@ -41,11 +41,7 @@
         function loadAndRender() {
             if (loaded) return;
             loaded = true;
-            fetch(dataUrl)
-                .then(function (r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                })
+            P.fetchJSON(dataUrl)
                 .then(function (mapData) {
                     panelEl.chart.innerHTML = '';
                     build(panelEl, mapData, geoUrl, basePath);

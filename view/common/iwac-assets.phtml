@@ -54,13 +54,15 @@
  */
 
 // -- CDN versions -------------------------------------------------------
-// Single source of truth. `@6` / `@5` / `@2` hold the major version and
-// let patch releases through. Pin tighter (e.g. `@6.0.4`) if a specific
-// upstream release causes regressions.
-$cdnEcharts     = 'https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js';
-$cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js';
-$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js';
-$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css';
+// Single source of truth, pinned to EXACT versions. Floating major tags
+// (`@6`) resolve through a short-TTL redirect and silently upgrade the
+// live site to untested releases (6.1.0 landed that way on 2026-05-19);
+// exact pins are immutable-cached by jsDelivr for a year and make every
+// upgrade a deliberate, testable bump of these constants.
+$cdnEcharts     = 'https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js';
+$cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js';
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css';
 
 // -- Defaults -----------------------------------------------------------
 $blockCss     = isset($blockCss)     ? $blockCss     : null;
@@ -83,6 +85,15 @@ $module = 'IwacVisualizations';
 
 $headLink   = $this->headLink();
 $headScript = $this->headScript();
+
+// -- CDN preconnect ------------------------------------------------------
+// The on-view lazy loader (bottom of this file) injects the chart
+// libraries only when a block nears the viewport — without this hint the
+// very first library request also pays DNS + TCP + TLS (~100-200 ms).
+// Classic <script>/<link> fetches are non-CORS, so no crossorigin variant
+// is needed (a crossorigin preconnect would open a second, unused socket).
+$headLink(['rel' => 'preconnect',   'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
+$headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREPEND');
 
 // -- Stylesheets (minified; regenerate with `npm run build:css`) --------
 $headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));

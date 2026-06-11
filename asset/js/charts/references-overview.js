@@ -196,11 +196,7 @@
         var basePath = container.getAttribute('data-base-path') || '';
         var url = basePath + '/modules/IwacVisualizations/asset/data/references-overview.json';
 
-        fetch(url, { headers: { Accept: 'application/json' }})
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        P.fetchJSON(url)
             .then(function (raw) {
                 if (!raw || !raw.summary || raw.summary.total === 0) {
                     container.innerHTML = '';

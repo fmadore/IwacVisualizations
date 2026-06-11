@@ -17,6 +17,18 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
 
+    // Module asset version, parsed from this script's own URL — Omeka's
+    // assetUrl appends `?v=<config/module.ini version>` to every module
+    // asset. P.fetchJSON (shared/panels.js) re-appends it to asset/data/
+    // JSON requests so regenerated data busts browser caches in lockstep
+    // with code. document.currentScript is set during execution of classic
+    // scripts, including ones the on-view lazy loader injects async=false.
+    (function () {
+        var el = document.currentScript;
+        var m = el && el.src ? /[?&]v=([^&#]+)/.exec(el.src) : null;
+        ns.assetVersion = m ? decodeURIComponent(m[1]) : '';
+    })();
+
     function debounce(fn, ms) {
         var timer;
         return function () {

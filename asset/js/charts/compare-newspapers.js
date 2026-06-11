@@ -75,11 +75,10 @@
             + type + '/' + scope + '-' + slug + '.json';
     }
 
+    // Delegates to the shared helper so corpus JSONs get the same
+    // credentials + `?v=` cache-busting treatment as every other block.
     function fetchJson(url) {
-        return fetch(url).then(function (r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status + ': ' + url);
-            return r.json();
-        });
+        return P.fetchJSON(url);
     }
 
 

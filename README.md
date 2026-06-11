@@ -12,18 +12,28 @@ Five page blocks and two resource-page block layouts are fully wired end-to-end 
 |---|---|---|---|
 | Collection Overview | page block | **Live** — 13 panels | Precompute (`generate_collection_overview.py` + two sidecar generators) |
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
-| References Overview | page block | **Live** — 6 panels | Live fetch from HF datasets-server |
+| References Overview | page block | **Live** — 10 panels | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
-| Visualizations / Photograph (template 15) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
+| Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Person | resource-page block | **Live** — 11 panels | Precompute (`generate_person_dashboards.py`) |
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |
 | Item Set Dashboard | resource-page block | Placeholder (assets enqueued, no orchestrator) | — |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.3.0 — performance + correctness quick wins (Phase 1 of [ROADMAP](ROADMAP.md))
+
+- **Exact CDN pins.** `iwac-assets.phtml` now pins `echarts@6.1.0`, `maplibre-gl@5.24.0`, `echarts-wordcloud@2.1.0` instead of floating major tags — the floating `@6` had silently auto-upgraded the live site to ECharts 6.1.0 on 2026-05-19. Exact-version jsDelivr URLs are also immutable-cached for a year (floating tags resolve through a short-TTL redirect), so repeat-visit LCP improves and every upgrade becomes a deliberate, testable constant bump.
+- **CDN preconnect.** A `<link rel="preconnect">` (+ `dns-prefetch` fallback) to `cdn.jsdelivr.net` is emitted from the shared partial — the on-view lazy loader meant the first library request also paid DNS + TCP + TLS (~100–200 ms) right when the user reached the block.
+- **`P.fetchJSON()` + JSON cache-busting.** New shared fetch helper in `shared/panels.js` (same-origin credentials, JSON Accept header, consistent error messages) that appends `?v=<asset version>` to every `asset/data/` request. The version is parsed at runtime from `dashboard-core.min.js`'s own script URL (Omeka's `assetUrl` puts it there from `config/module.ini`), so regenerated data bundles finally bust browser caches in lockstep with code — previously a monthly regeneration could serve stale dashboards for weeks. All 13 fetch sites migrated; the per-block `fetchJson`/`fetchJSON` wrappers in compare-newspapers / scary-terms now delegate to it.
+- **Index Overview Section B deferred.** The three keyword-explorer JSONs (~1.08 MB of the block's ~1.9 MB payload) now load only when the Keyword Explorer section nears the viewport instead of up-front with Section A. Panels keep their height reservations, so no layout shift — just a spinner if you outrun the fetch.
+- **Documents/Photograph wiring fixed.** `Visualizations::TEMPLATE_PARTIALS` mapped Photograph (15) to the `documents` HF slice, but photographs aren't exported to the HF dataset at all — those pages showed unrelated archival-documents data, while real Document items (which moved to their own template 22 upstream) got nothing. Now: `22 => minimal-item`; photograph pages intentionally render nothing.
+- **Table thumbnails** get intrinsic `width`/`height` attributes (CLS belt-and-braces; the `--iwac-vis-thumb-*` ramp still owns rendered size).
+- **Docs**: References Overview sections updated to the precompute reality (the live-fetch path remains documented as a supported strategy, currently unused); ROADMAP.md rewritten as the phased implementation tracker for the June 2026 evaluation.
 
 ### v0.24.0 — Collection Overview mobile + chart polish
 
@@ -175,12 +185,15 @@ Section A is backed by `asset/data/index-overview.json` (one bundle, ~790 KB min
 
 ### References Overview (page block)
 
-Bibliographic dashboard pulled directly from the Hugging Face dataset at page load — no Python precompute needed. `asset/js/charts/references-overview.js` paginates the HF `datasets-server /rows` endpoint (9 parallel requests of 100 rows each, ~1 s on a good network), then aggregates in the browser:
+Bibliographic dashboard over the `references` subset (864 rows), backed by a precomputed bundle (`asset/data/references-overview.json`, generated by `scripts/generate_references_overview.py`). It began life as the live-fetch exemplar that paged the HF `datasets-server /rows` endpoint at every visit (9 parallel requests + client-side aggregation); the move to precompute makes repeat visits one cacheable JSON. 10 panels:
 
 - Summary cards — references / authors / publishers / types / languages / countries
-- Timeline — stacked bar by reference type
-- Reference types, languages — top-10 horizontal bars
-- Top 15 authors, top 15 subjects
+- "Period covered" subtitle
+- Timeline — stacked bar of references per year, by type
+- Reference types, languages, countries studied — horizontal bars / pie
+- Top authors, top subjects — horizontal bars
+- References breakdown — country → type treemap
+- Author collaborations — force-directed co-authorship network
 
 ### Scary Terms (page block)
 
@@ -459,7 +472,7 @@ The module intentionally supports **two data paths**, chosen per-block based on 
 
 | Path | When to use | Example | Python needed? |
 |---|---|---|---|
-| **Live fetch** | Small subsets (< ~5k rows) without heavy per-row blobs. The chart JS paginates the Hugging Face `datasets-server /rows` endpoint (100 rows/request, parallel) and aggregates client-side. Always fresh, no precompute. | **References Overview** — 864 rows, 9 parallel requests, ~1 s | No |
+| **Live fetch** | Small subsets (< ~5k rows) without heavy per-row blobs. The chart JS paginates the Hugging Face `datasets-server /rows` endpoint (100 rows/request, parallel) and aggregates client-side. Always fresh, no precompute. | *(none currently — References Overview used this path until it moved to precompute; the strategy remains supported for future small-subset blocks)* | No |
 | **Precompute** | Heavy aggregations (the full `articles` subset is 12,287 rows × 47 cols including 768-dim embeddings), cross-subset joins, networks, per-entity dashboards. A Python script reads the HF dataset via the `datasets` lib and writes compact JSON into `asset/data/`. Run manually when the dataset updates (~monthly). | Collection Overview, Person dashboards, Entity dashboards, word cloud, world map | Yes |
 
 Rough decision rule: **precompute if fetching would take > 50 parallel HF requests OR the source rows carry large blobs (OCR, embeddings, images)**. Networks and semantic-neighbor computations also belong in precompute — they're expensive and stable between dataset updates.
@@ -604,23 +617,29 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 Current minification results across **73 files: ≈ 685 KB → 249 KB (−63.6%)**. The chart-options builders (formerly a single ≈ 81 KB `charts/shared/chart-options.js`) were split in v0.23.0 into a small core plus four chart-family files (`chart-options-bar`, `-hbar`, `-graph`, `-special`) that together minify to ≈ 25 KB. The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the eight renderers (the v0.16.0 seven plus `horizontal-bar` added in v0.17.0) fit in ≈ 12 KB combined. `choropleth.js` (v0.18.0) lands at ≈ 2.4 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` (v0.19.0) is ≈ 1 KB.
 
-There is no build step for CSS — every sheet under `asset/css/` is hand-authored and loaded as-is. The module's styles are split per-block, mirroring the JS architecture:
+Every sheet under `asset/css/` is hand-authored; the styles are split per-block, mirroring the JS architecture:
 
 ```
 asset/css/
 ├── iwac-core.css          # Shared by every block — tokens, panel, chip
 │                          #   controls (tabs / facets / pagination), btn,
 │                          #   summary card, table, form controls, section
-│                          #   headings, badges. ~600 lines.
+│                          #   headings, badges.
 ├── iwac-maplibre.css      # MapLibre chrome + shared P.buildMapPopup body
 │                          #   styles. Enqueued only by map-using blocks.
 └── blocks/                # One file per live block, block-specific
     │                      #   layouts and modifiers only.
+    ├── article-dashboard.css
     ├── collection-overview.css
+    ├── compare-newspapers.css
     ├── index-overview.css
+    ├── minimal-item.css
+    ├── person-dashboard.css   # Used by the person + entity resource-page blocks
     ├── scary-terms.css
-    └── person-dashboard.css   # Used by the person + entity resource-page blocks
+    └── topic-explorer.css
 ```
+
+Every sheet is mirrored to a committed `.min.css` sibling by `scripts/build-css.js` (csso); the shared partial enqueues the minified variants. Run `npm run build:css` (or `npm run build` for JS + CSS) after editing any sheet.
 
 Each block template enqueues `iwac-core.css` first, then `iwac-maplibre.css` if it uses a map, then its own block sheet (if any). **References Overview** uses `iwac-core.css` alone — it has no block-specific chrome beyond the generic panel + table. HTTP/2 makes the extra requests free, and splitting keeps each file under ~600 lines so conflicts stay localised to the block that touches them.
 

@@ -79,11 +79,7 @@
 
         var url = basePath + '/modules/IwacVisualizations/asset/data/template-summary.json';
 
-        fetch(url)
-            .then(function (r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
+        P.fetchJSON(url)
             .then(function (bundle) {
                 var loading = container.querySelector('.iwac-vis-minimal-item__loading');
                 if (loading) loading.remove();

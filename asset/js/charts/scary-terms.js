@@ -103,11 +103,10 @@
         });
     }
 
+    // Delegates to the shared helper (same-origin credentials + `?v=`
+    // cache-busting come from P.fetchJSON since v1.3.0).
     function fetchJSON(url) {
-        return fetch(url, { credentials: 'same-origin' }).then(function (r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + url);
-            return r.json();
-        });
+        return P.fetchJSON(url);
     }
 
     // ---------------------------------------------------------------------
