@@ -56,6 +56,23 @@
     ns._charts = [];
 
     /**
+     * Merge a baseline aria config into a chart AFTER its render callback
+     * ran. Render callbacks rebuild the whole option with
+     * `setOption(option, true)` (notMerge), which would discard anything
+     * injected earlier — applying aria as a follow-up merge survives that
+     * pattern, and the theme-swap path re-applies it after each re-render.
+     * `aria.enabled` makes ECharts generate a screen-reader description
+     * of the chart (series, types, data extent) on the canvas element.
+     * Zero visual change — decal patterns stay off (see ROADMAP 4.5/7.2).
+     */
+    ns._applyAria = function (instance) {
+        if (!instance || instance.isDisposed()) return;
+        try {
+            instance.setOption({ aria: { enabled: true } });
+        } catch (e) { /* enhancement only — never let aria break a render */ }
+    };
+
+    /**
      * Create an ECharts instance with the current IWAC theme applied.
      * Returns the ECharts instance. Caller is responsible for setOption().
      * Not normally called directly — prefer `ns.registerChart()`.
@@ -96,6 +113,7 @@
 
         ns._charts.push(entry);
         try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
+        ns._applyAria(instance);
 
         // Auto-attach the shared panel toolbar (download button) if the
         // panel-toolbar module is loaded and the chart lives inside a
@@ -210,6 +228,7 @@
                     }
                     if (typeof entry.render === 'function' && entry.el) {
                         entry.render(entry.el, entry.instance);
+                        ns._applyAria(entry.instance);
                     }
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);

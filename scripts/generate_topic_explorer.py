@@ -344,8 +344,9 @@ def main() -> int:
                         help='Output JSON path')
     parser.add_argument('--top-articles', type=int, default=DEFAULT_TOP_ARTICLES,
                         help='Most-representative articles per topic')
-    parser.add_argument('--minify', action='store_true',
-                        help='Strip whitespace from output JSON')
+    parser.add_argument('--minify', action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help='Strip whitespace from output JSON (default: %(default)s)')
     parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
 

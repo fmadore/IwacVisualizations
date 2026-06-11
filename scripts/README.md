@@ -194,25 +194,54 @@ classic `"lat, lng"` form.
 Constants: `DATASET_ID = "fmadore/islam-west-africa-collection"` and
 `SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]`.
 
+## Shared dashboard core — `dashboard_aggregator.py`
+
+`generate_person_dashboards.py` and `generate_entity_dashboards.py`
+emit the same JSON section shapes (summary, timeline, newspapers,
+countries, network, locations, topics, sentiment, heatmap,
+cooccurrence), so the whole pipeline — HF loading, the normalized-name
+→ index entity lookup, per-item metadata/reference resolution, the
+TF-IDF document-frequency pass, and the ten `compute_*` aggregators —
+lives once in `DashboardAggregator`. The two generators subclass it
+and only override where they genuinely diverge:
+
+- `_role_slices()` — **the main override point.** Persons yield four
+  `(role, item_keys)` slices (`all` / `subject` / `creator` /
+  `editor`); entities yield a single `all` slice, which is what
+  produces their `by_role.all` wrapper.
+- `_register_item()` / `_item_neighbor_ids()` / `_item_location_ids()`
+  / `_iter_target_items()` — bridge the per-item storage shapes
+  (persons keep role buckets + a separate spatial table; entities
+  collapse subject + spatial into one set per item).
+- `_is_target()` / `_target_label()` / `_cache_header_columns()` —
+  target selection and the person header columns.
+
+The refactor is output-stable: regenerated per-item JSON is
+byte-identical to the pre-refactor output (verified on `--limit 5`
+samples with the `generated_at` timestamp masked). When adding a new
+per-resource dashboard generator, subclass `DashboardAggregator`
+instead of copying either script.
+
 ## CLI conventions
 
-Every generator supports the same baseline flags (v0.9.0+):
+Every generator supports the same baseline flags (normalized in v1.3.x):
 
 | Flag | Purpose |
 |---|---|
 | `--repo` | Hugging Face dataset repo id. Defaults to `DATASET_ID`. Override to point at a fork or a dev mirror. |
 | `-v`, `--verbose` | Set log level to `DEBUG` (normally `INFO`). Prints per-subset load sizes and aggregation details. |
+| `--output` / `--output-dir` | Override the default asset/data target path. Single-bundle generators use `--output`; fan-out / multi-file generators use `--output-dir`. |
+| `--minify` / `--no-minify` | Compact vs. pretty-printed JSON (`argparse.BooleanOptionalAction`). Defaults match what each script always did: minified for the per-item dashboards (`person`, `entity`, `article`), `wordcloud`, and `compare-newspapers` per-corpus bundles; pretty for everything else. Typically halves file size. |
 
 Block-specific extras (partial list):
 
 | Flag | Scripts | Purpose |
 |---|---|---|
-| `--output` / `--output-dir` | all | Override the default asset/data target path. |
-| `--minify` | `collection-overview`, `index-overview`, `keyword-explorer` | Produce compact JSON (no indentation). Typically halves file size. |
-| `--top-n` | `collection-overview`, `index-overview` | Cap top-N entity lists. |
-| `--limit` | `entity-dashboards`, `person-dashboards`, `article-dashboards` | Only process the first N items (smoke testing). |
+| `--top-n` | `collection-overview`, `index-overview`, `compare-newspapers` | Cap top-N entity lists. |
+| `--limit` | `entity-dashboards`, `person-dashboards`, `article-dashboards` | Only emit the first N per-item files (smoke testing). The aggregates inside each file still use the full corpus, which is why the single-bundle overview generators deliberately have no `--limit` — truncating their input would silently corrupt the analytics without making the slow part (subset download/parse) any faster. |
 | `--type` | `entity-dashboards` | Restrict to one entity type (`Lieux` / `Organisations` / `Sujets` / `Événements`). |
 | `--min-cooccurrence` | `entity-dashboards`, `person-dashboards` | Threshold for the TF-IDF neighbor network. Default 2. Bump to 3–5 to prune noise. |
+| `--min-cooccurrence` | `compare-newspapers` | Minimum item count for a country / newspaper corpus to get its own JSON. Default 15. `--min-count` still works as a deprecated alias (logs a warning). |
 | `--top-k-semantic` | `article-dashboards` | Semantic-neighbour cap per article. Default 10. |
 | `--top-k-related` | `article-dashboards` | Related-by-entities cap per article. Default 20. |
 | `--min-country-articles` | `scary-terms` | Drop countries with fewer than N articles from the country view. Default 5. |
@@ -271,7 +300,10 @@ globally-common entities.
 The generator joins back into content subsets via string-match on
 `subject` (role: `subject`) and `author` (role: `creator`) fields
 using the same Unicode normalization as
-`iwac-dashboard/scripts/generate_entity_spatial.py`.
+`iwac-dashboard/scripts/generate_entity_spatial.py`. The aggregation
+pipeline itself is shared with the entity generator — see
+`dashboard_aggregator.py` above; this script only adds the role
+buckets and the person header fields.
 
 ## generate_entity_dashboards.py
 
@@ -291,4 +323,7 @@ Entities with zero mentions still get a placeholder JSON so the
 resource page block renders "no data available" states instead of 404-ing.
 The output shape mirrors `person-dashboards` exactly but wraps every
 section in a `by_role.all` envelope so the person panel JS modules can
-be reused unchanged with a no-op facet.
+be reused unchanged with a no-op facet. Like the person generator,
+this is a thin subclass of `dashboard_aggregator.DashboardAggregator`
+— it overrides the target filter (`--type`) and the collapsed
+subject+spatial reference set, nothing else.

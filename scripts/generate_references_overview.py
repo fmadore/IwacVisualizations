@@ -25,7 +25,7 @@ Payload shape (top-level keys):
     countries                  — top-N country histogram
     authors                    — top-N author histogram
     subjects                   — top-N subject histogram
-    treemap                    — country → type breakdown
+    treemap                    — country -> type breakdown
     author_collaborations      — { nodes, edges } graph of co-authoring +
                                  author-editor links, used by the new
                                  ``Author collaborations`` network panel
@@ -420,8 +420,9 @@ def main() -> None:
         "--network-min-degree", type=int, default=DEFAULT_NETWORK_MIN_DEGREE,
         help="Drop authors whose total collaborators are below this number",
     )
-    parser.add_argument("--minify", action="store_true",
-                        help="Produce compact JSON (no indentation)")
+    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help="Produce compact JSON (no indentation) (default: %(default)s)")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 

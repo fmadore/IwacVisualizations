@@ -130,13 +130,27 @@
 
     function wireSectionA(h, dataA, ctx) {
         var io = ns.indexOverview || {};
-        if (io.stats)            io.stats.render(h.statsHost, dataA);
-        if (io.typeDistribution) io.typeDistribution.render(h.typePanel, dataA);
-        if (io.topEntities)      io.topEntities.render(h.topEntitiesPanel, dataA, ctx);
-        if (io.lifespan)         io.lifespan.render(h.lifespanPanel, dataA, ctx);
-        if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA, ctx);
-        if (io.activityGantt)    io.activityGantt.render(h.ganttPanel, dataA, ctx);
-        if (io.indexTable)       io.indexTable.render(h.indexPanel, dataA, ctx);
+        // Mount panels one macrotask apiece instead of one synchronous
+        // pass — seven chart inits in a row block the main thread for
+        // a second-plus on mid-range phones (TBT/INP). Yielding between
+        // panels lets the browser paint and handle input while the rest
+        // mount in source order. Layout is pre-built with min-height
+        // reservations, so the stagger causes no layout shift.
+        var tasks = [
+            function () { if (io.stats)            io.stats.render(h.statsHost, dataA); },
+            function () { if (io.typeDistribution) io.typeDistribution.render(h.typePanel, dataA); },
+            function () { if (io.topEntities)      io.topEntities.render(h.topEntitiesPanel, dataA, ctx); },
+            function () { if (io.lifespan)         io.lifespan.render(h.lifespanPanel, dataA, ctx); },
+            function () { if (io.placesMap)        io.placesMap.render(h.mapPanel, dataA, ctx); },
+            function () { if (io.activityGantt)    io.activityGantt.render(h.ganttPanel, dataA, ctx); },
+            function () { if (io.indexTable)       io.indexTable.render(h.indexPanel, dataA, ctx); }
+        ];
+        (function next() {
+            if (!tasks.length) return;
+            var task = tasks.shift();
+            try { task(); } catch (e) { console.error('IWACVis index overview panel:', e); }
+            if (tasks.length) setTimeout(next, 0);
+        })();
     }
 
     function wireSectionB(h, datasets) {

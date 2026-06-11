@@ -6,9 +6,12 @@
  * co-occurrence (subjects, persons, places) in a circular layout that
  * reads better than a force-directed network past ~30 nodes.
  *
- * The underlying option uses `type: 'graph', layout: 'circular'` because
- * ECharts dropped the dedicated `chord` chart type — circular graph with
- * adjacency-driven curveness is the modern equivalent.
+ * The underlying option uses the native `series-chord` type
+ * (reintroduced in ECharts 6.0): ribbon widths encode the pairwise
+ * weights directly. Until v1.4 this was emulated with
+ * `type: 'graph', layout: 'circular'` because ECharts 5 had no chord
+ * series; `C.chord` kept the same `{names, matrix}` contract across
+ * the swap.
  *
  * Data shape (passes straight through to `C.chord`):
  *

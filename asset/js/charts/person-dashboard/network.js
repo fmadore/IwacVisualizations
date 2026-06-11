@@ -85,7 +85,9 @@
         // merge-mode setOption so the force simulation doesn't restart
         // — that was the "unsettling edge movement" on every click.
         function buildFullOption() {
-            return C.network(currentGraph(), { showLegend: legendVisible });
+            // thumbnail: ECharts 6 minimap — orientation aid once the
+            // user zooms/pans the 50-node graph (auto-hidden ≤640px).
+            return C.network(currentGraph(), { showLegend: legendVisible, thumbnail: true });
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {

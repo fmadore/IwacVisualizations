@@ -146,11 +146,13 @@ class ScaryTermsGenerator:
         output_dir: Path,
         min_country_articles: int = 5,
         repo_id: str = DATASET_ID,
+        minify: bool = False,
     ):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.min_country_articles = min_country_articles
         self.repo_id = repo_id
+        self.minify = minify
         self.patterns = _compile_patterns(SCARY_TERMS)
         self.df: pd.DataFrame | None = None
         self.logger = logging.getLogger(__name__)
@@ -402,16 +404,16 @@ class ScaryTermsGenerator:
         assert self.df is not None
 
         temporal = self.build_temporal()
-        save_json(temporal, self.output_dir / "scary-terms-temporal.json")
+        save_json(temporal, self.output_dir / "scary-terms-temporal.json", minify=self.minify)
 
         countries = self.build_countries()
-        save_json(countries, self.output_dir / "scary-terms-countries.json")
+        save_json(countries, self.output_dir / "scary-terms-countries.json", minify=self.minify)
 
         global_data = self.build_global()
-        save_json(global_data, self.output_dir / "scary-terms-global.json")
+        save_json(global_data, self.output_dir / "scary-terms-global.json", minify=self.minify)
 
         cooccurrence = self.build_cooccurrence()
-        save_json(cooccurrence, self.output_dir / "scary-terms-cooccurrence.json")
+        save_json(cooccurrence, self.output_dir / "scary-terms-cooccurrence.json", minify=self.minify)
 
         years = [int(y) for y in temporal.keys()] if temporal else []
         metadata = {
@@ -430,7 +432,7 @@ class ScaryTermsGenerator:
             },
             "term_definitions": {k: list(v) for k, v in SCARY_TERMS.items()},
         }
-        save_json(metadata, self.output_dir / "scary-terms-metadata.json")
+        save_json(metadata, self.output_dir / "scary-terms-metadata.json", minify=self.minify)
 
     # ---------------------------------------------------------------------
     #  Entry point
@@ -467,6 +469,12 @@ def main() -> None:
         help="Drop countries with fewer than this many articles (default: 5).",
     )
     parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
+    )
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Set log level to DEBUG",
@@ -478,6 +486,7 @@ def main() -> None:
         output_dir=Path(args.output_dir),
         min_country_articles=args.min_country_articles,
         repo_id=args.repo,
+        minify=args.minify,
     ).run()
 
 

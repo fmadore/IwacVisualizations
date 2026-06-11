@@ -209,6 +209,12 @@ def main() -> None:
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
     parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
+    )
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Set log level to DEBUG",
@@ -224,7 +230,7 @@ def main() -> None:
         year_min=args.year_min,
         year_max=args.year_max,
     )
-    save_json(result, Path(args.output), minify=True)
+    save_json(result, Path(args.output), minify=args.minify)
     logging.getLogger(__name__).info("Wrote %s", args.output)
 
 

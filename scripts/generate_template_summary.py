@@ -296,8 +296,9 @@ def main() -> int:
     parser.add_argument("--output", type=Path,
                         default=Path("asset/data/template-summary.json"),
                         help="Output JSON path")
-    parser.add_argument("--minify", action="store_true",
-                        help="Strip whitespace from output JSON")
+    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
+                        default=False,
+                        help="Strip whitespace from output JSON (default: %(default)s)")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 

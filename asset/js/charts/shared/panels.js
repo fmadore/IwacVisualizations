@@ -116,7 +116,10 @@
         if (!value) return '';
         var str = String(value).slice(0, 10);
         var d = new Date(str);
-        if (isNaN(d.getTime())) return str;
+        // Unparseable input (e.g. the publications subset's range dates
+        // like "2009-05/2009-08") passes through verbatim — slicing it
+        // to 10 chars would cut mid-range ("2009-05/20").
+        if (isNaN(d.getTime())) return String(value);
         try {
             return d.toLocaleDateString(
                 ns.locale === 'fr' ? 'fr-FR' : 'en-US',

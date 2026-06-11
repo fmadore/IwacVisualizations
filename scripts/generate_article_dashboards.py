@@ -114,12 +114,14 @@ class ArticleDashboardGenerator:
         repo_id: str = DATASET_ID,
         top_k_related: int = DEFAULT_TOP_K_RELATED,
         top_k_semantic: int = DEFAULT_TOP_K_SEMANTIC,
+        minify: bool = True,
     ) -> None:
         self.output_dir = output_dir
         self.limit = limit
         self.repo_id = repo_id
         self.top_k_related = top_k_related
         self.top_k_semantic = top_k_semantic
+        self.minify = minify
 
         self.index_df: Optional[pd.DataFrame] = None
         self.articles_df: Optional[pd.DataFrame] = None
@@ -661,7 +663,7 @@ class ArticleDashboardGenerator:
                 semantic_neighbours=semantic_map.get(article_id, []),
             )
             out_path = self.output_dir / f"{article_id}.json"
-            save_json(data, out_path, minify=True, log=False)
+            save_json(data, out_path, minify=self.minify, log=False)
             written += 1
             if written % 500 == 0:
                 logger.info(f"  {written} article JSONs written")
@@ -701,6 +703,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Semantic-neighbours cap per article (default: %(default)s)",
     )
     parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Minify the per-article JSON files (default: %(default)s)",
+    )
+    parser.add_argument(
         "-v", "--verbose",
         action="store_true",
         help="Set log level to DEBUG",
@@ -719,6 +727,7 @@ def main() -> int:
         repo_id=args.repo,
         top_k_related=args.top_k_related,
         top_k_semantic=args.top_k_semantic,
+        minify=args.minify,
     )
 
     gen.load_index()

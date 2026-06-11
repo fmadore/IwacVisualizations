@@ -266,10 +266,38 @@
             animationEasing: 'cubicOut'
         };
 
+        // Optional thumbnail minimap (ECharts 6.0 component) — orientation
+        // aid for the bigger ego networks: the window rectangle shows
+        // which part of the zoomed/panned graph is in view. Off by
+        // default; the person / article network panels opt in.
+        if (opts.thumbnail) {
+            var thumbTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+            base.thumbnail = {
+                show: true,
+                right: 8,
+                top: 8,
+                width: '24%',
+                height: '24%',
+                seriesIndex: 0,
+                itemStyle: {
+                    color: thumbTokens.surface || 'transparent',
+                    borderColor: thumbTokens.border || '#999',
+                    borderWidth: 1
+                },
+                windowStyle: {
+                    color: 'transparent',
+                    borderColor: thumbTokens.primary || thumbTokens.ink || '#999',
+                    borderWidth: 1
+                }
+            };
+        }
+
         var networkMedia = [
             {
                 query: { maxWidth: R ? R.BP.sm : 640 },
                 option: {
+                    // The minimap costs too much canvas on phones.
+                    thumbnail: { show: false },
                     series: [{
                         force: {
                             repulsion: 120,
@@ -290,14 +318,21 @@
     /* ------------------------------------------------------------------ */
 
     /**
-     * Render a symmetric pairwise matrix as a circular ECharts graph.
-     * ECharts has no first-class "chord" series, so this is implemented
-     * as `series-graph` with `layout: 'circular'` — every node sits on
-     * the perimeter and edge thickness encodes co-occurrence count.
+     * Render a symmetric pairwise matrix as a native ECharts chord
+     * diagram (`series-chord`, reintroduced in ECharts 6.0). Each
+     * entity is a perimeter sector sized by its total co-occurrences;
+     * each pair's ribbon width encodes the pairwise weight directly —
+     * something the pre-v1.4 emulation (`series-graph` with
+     * `layout: 'circular'`, written when ECharts 5 had no chord type)
+     * could only approximate with edge thickness.
+     *
+     * Accepts the same `{names, matrix}` shape as the old builder, so
+     * callers (person-dashboard co-occurrence, the shared `chord`
+     * renderer) need no changes.
      *
      * @param {{names: string[], matrix: number[][]}} data
      * @param {Object} [opts]
-     * @param {number} [opts.minWeight=1] Edges below this are dropped
+     * @param {number} [opts.minWeight=1] Ribbons below this are dropped
      */
     C.chord = function (data, opts) {
         opts = opts || {};
@@ -307,57 +342,32 @@
         var palette = (ns.getPalette && ns.getPalette())
             || ['#d97706', '#2563eb', '#059669', '#9333ea', '#dc2626', '#0891b2'];
 
-        // Pre-compute each row's total so symbol size can normalize
-        // against the largest node. Without normalization the
-        // variation is swamped when all values are small.
+        // Row totals feed the node tooltip ("Total: N") — sector arcs
+        // themselves are sized by ECharts from the surviving links.
         var rowSums = names.map(function (_, i) {
             return (matrix[i] || []).reduce(function (a, b) { return a + b; }, 0);
         });
-        var maxRowSum = rowSums.reduce(function (m, v) { return Math.max(m, v); }, 1);
 
         var nodes = names.map(function (name, i) {
-            // Node radius reflects the row sum (total cooccurrences),
-            // normalized so the biggest hub is always ~56px and the
-            // smallest participant ~14px regardless of absolute counts.
-            var rowSum = rowSums[i];
-            var norm = maxRowSum > 0 ? rowSum / maxRowSum : 0;
             return {
-                id: String(i),
-                name: C._truncate(name, 28),
-                fullName: name,
-                value: rowSum,
-                symbolSize: 14 + Math.sqrt(norm) * 42,
+                name: name,
+                value: rowSums[i],
                 itemStyle: { color: palette[i % palette.length] }
             };
         });
 
-        // Build undirected edges (i < j only) so each pair counts once.
-        var maxWeight = 1;
-        var rawEdges = [];
+        // Undirected links (i < j only) so each pair renders one ribbon.
+        var links = [];
         for (var i = 0; i < names.length; i++) {
             for (var j = i + 1; j < names.length; j++) {
                 var w = (matrix[i] && matrix[i][j]) || 0;
                 if (w >= minWeight) {
-                    if (w > maxWeight) maxWeight = w;
-                    rawEdges.push({ source: String(i), target: String(j), value: w });
+                    links.push({ source: names[i], target: names[j], value: w });
                 }
             }
         }
-        var edges = rawEdges.map(function (e) {
-            var norm = Math.max(0, Math.min(1, e.value / maxWeight));
-            return {
-                source: e.source,
-                target: e.target,
-                value: e.value,
-                lineStyle: {
-                    width: 1 + Math.sqrt(norm) * 5,
-                    opacity: 0.55,
-                    curveness: 0.3
-                }
-            };
-        });
 
-        var base = {
+        return {
             tooltip: {
                 trigger: 'item',
                 // See the network tooltip above for why both options
@@ -366,47 +376,40 @@
                 appendTo: function (chartEl) { return chartEl; },
                 formatter: function (p) {
                     if (p.dataType === 'node') {
-                        return '<strong>' + esc(p.data.fullName || '') + '</strong><br>' +
-                               (t('Total') + ': ' + fmt(p.data.value));
+                        return '<strong>' + esc(p.name || '') + '</strong><br>' +
+                               (t('Total') + ': ' + fmt((p.data && p.data.value) || 0));
                     }
                     if (p.dataType === 'edge') {
-                        var srcIdx = parseInt(p.data.source, 10);
-                        var tgtIdx = parseInt(p.data.target, 10);
-                        return '<strong>' + esc(names[srcIdx] || '') + '</strong><br>' +
-                               '<strong>' + esc(names[tgtIdx] || '') + '</strong><br>' +
-                               t('mentions_count', { count: fmt(p.data.value) });
+                        return '<strong>' + esc(p.data.source || '') + '</strong><br>' +
+                               '<strong>' + esc(p.data.target || '') + '</strong><br>' +
+                               t('mentions_count', { count: fmt(p.data.value || 0) });
                     }
                     return '';
                 }
             },
             series: [{
-                type: 'graph',
-                layout: 'circular',
-                circular: { rotateLabel: true },
-                top: 40,
-                bottom: 40,
-                left: 40,
-                right: 40,
-                roam: true,
-                draggable: false,
-                focusNodeAdjacency: true,
-                emphasis: {
-                    focus: 'adjacency',
-                    lineStyle: { width: 6 }
-                },
+                type: 'chord',
+                startAngle: 90,
+                padAngle: 2,
                 label: {
                     show: true,
-                    position: 'right',
-                    formatter: '{b}',
-                    fontSize: 11
+                    position: 'outside',
+                    fontSize: 11,
+                    // Long French subject labels get a middle-ellipsis on
+                    // the perimeter; tooltips carry the full name.
+                    formatter: function (p) { return C._truncate(p.name, 28); }
+                },
+                itemStyle: { borderRadius: 3 },
+                lineStyle: { color: 'gradient', opacity: 0.28 },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: { opacity: 0.6 }
                 },
                 data: nodes,
-                links: edges,
-                cursor: 'pointer'
+                links: links
             }],
             animationDuration: 600
         };
-        return base;
     };
 
     /* ------------------------------------------------------------------ */

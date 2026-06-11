@@ -21,6 +21,22 @@ echo $this->partial('common/iwac-block-shell', [
             'maplibre'     => true,
             'pagination'   => true,
         ],
+        // Companion modules: shared helpers (side colors + uid counter)
+        // first, then one module per panel. All must load before the
+        // orchestrator, which dispatches into them via
+        // IWACVis.compareNewspapers.
+        'panels' => [
+            'compare-newspapers/helpers',
+            'compare-newspapers/picker',
+            'compare-newspapers/metrics',
+            'compare-newspapers/overlap',
+            'compare-newspapers/timeline',
+            'compare-newspapers/subjects',
+            'compare-newspapers/wordclouds',
+            'compare-newspapers/map',
+            'compare-newspapers/sentiment',
+            'compare-newspapers/newspapers',
+        ],
         'orchestrator' => 'compare-newspapers',
     ],
     'blockClass' => 'iwac-vis-compare-newspapers',

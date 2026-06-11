@@ -160,12 +160,34 @@
             ? ns.getBasemapStyle()
             : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
+        // Localized cooperative-gestures hints. The historical reason
+        // for NOT enabling cooperativeGestures was MapLibre's
+        // English-only hint dialog; the `locale` map option localizes
+        // it, so the standard embedded-map etiquette (wheel zoom needs
+        // Ctrl/⌘, touch pan needs two fingers — page scroll always
+        // wins) is now on by default. Opt out per map via
+        // `mapOptions: { cooperativeGestures: false }`.
+        var fr = ns.locale === 'fr';
+        var gestureLocale = {
+            'CooperativeGesturesHandler.WindowsHelpText': fr
+                ? 'Utilisez Ctrl + molette pour zoomer la carte'
+                : 'Use Ctrl + scroll to zoom the map',
+            'CooperativeGesturesHandler.MacHelpText': fr
+                ? 'Utilisez ⌘ + molette pour zoomer la carte'
+                : 'Use ⌘ + scroll to zoom the map',
+            'CooperativeGesturesHandler.MobileHelpText': fr
+                ? 'Utilisez deux doigts pour déplacer la carte'
+                : 'Use two fingers to move the map'
+        };
+
         var baseOptions = {
             container: container,
             style: defaultStyle,
             center: config.center || [0, 0],
             zoom: config.zoom != null ? config.zoom : 2,
             attributionControl: { compact: true },
+            cooperativeGestures: true,
+            locale: gestureLocale,
             // Required for `canvas.toDataURL()` to return the rendered
             // pixels instead of a blank buffer. Without this flag the
             // WebGL context clears the drawing buffer after compositing,

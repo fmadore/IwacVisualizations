@@ -365,8 +365,8 @@ def main() -> None:
         help="Directory to write the three JSON files, relative to the module root",
     )
     parser.add_argument(
-        "--minify", action="store_true",
-        help="Produce compact JSON (no indentation)",
+        "--minify", action=argparse.BooleanOptionalAction, default=False,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
     )
     parser.add_argument(
         "-v", "--verbose",

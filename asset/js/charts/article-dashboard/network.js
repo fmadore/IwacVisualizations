@@ -175,7 +175,10 @@
         var hasData = graph.nodes.length > 1;
 
         function buildFullOption() {
-            return C.network(graph, { showLegend: legendVisible });
+            // thumbnail: ECharts 6 minimap — the 3-layer context graph
+            // is the module's densest; the minimap keeps the viewport
+            // situated while roaming (auto-hidden ≤640px).
+            return C.network(graph, { showLegend: legendVisible, thumbnail: true });
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {

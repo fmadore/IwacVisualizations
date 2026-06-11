@@ -1126,8 +1126,9 @@ def main() -> None:
     parser.add_argument("--year-max", type=int, default=2100)
     parser.add_argument(
         "--minify",
-        action="store_true",
-        help="Produce compact JSON (no indentation)",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
     )
     parser.add_argument(
         "-v", "--verbose",
@@ -1157,7 +1158,7 @@ def main() -> None:
         module_root = Path(__file__).resolve().parent.parent
         output_path = module_root / output_path
 
-    save_json(overview, output_path)
+    save_json(overview, output_path, minify=args.minify)
     logger.info("Collection overview written to %s", output_path)
 
 

@@ -35,7 +35,7 @@ Layout::
 Usage
 -----
     python scripts/generate_compare_newspapers.py
-    python scripts/generate_compare_newspapers.py --top-n 80 --min-count 25
+    python scripts/generate_compare_newspapers.py --top-n 80 --min-cooccurrence 25
 
 Environment
 -----------
@@ -47,6 +47,7 @@ import argparse
 import logging
 import os
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -809,20 +810,24 @@ def main() -> None:
                         help="Top-N cutoff for subjects / spatial / languages")
     parser.add_argument("--top-words", type=int, default=120,
                         help="Top-N cutoff for the wordcloud")
-    parser.add_argument("--min-count", type=int, default=15,
-                        help="Skip a country / newspaper corpus with fewer items")
+    parser.add_argument("--min-cooccurrence", "--min-count",
+                        dest="min_cooccurrence", type=int, default=15,
+                        help="Skip a country / newspaper corpus with fewer items "
+                             "(default: %(default)s). --min-count is a deprecated alias.")
     parser.add_argument("--min-wordcloud-freq", type=int, default=3,
                         help="Drop wordcloud tokens below this frequency")
     parser.add_argument("--year-min", type=int, default=1900)
     parser.add_argument("--year-max", type=int, default=2100)
-    parser.add_argument("--minify", action="store_true", default=True,
-                        help="Minify per-corpus JSON (default: True)")
-    parser.add_argument("--no-minify", dest="minify", action="store_false")
+    parser.add_argument("--minify", action=argparse.BooleanOptionalAction, default=True,
+                        help="Minify per-corpus JSON (default: %(default)s)")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
     configure_logging(logging.DEBUG if args.verbose else logging.INFO)
     logger = logging.getLogger(__name__)
+
+    if any(a == "--min-count" or a.startswith("--min-count=") for a in sys.argv[1:]):
+        logger.warning("--min-count is deprecated; use --min-cooccurrence instead.")
 
     token = os.getenv("HF_TOKEN") or None
     if token is None:
@@ -840,7 +845,7 @@ def main() -> None:
         output_root=output_root,
         top_n=args.top_n,
         top_words=args.top_words,
-        min_count=args.min_count,
+        min_count=args.min_cooccurrence,
         min_wordcloud_freq=args.min_wordcloud_freq,
         year_min=args.year_min,
         year_max=args.year_max,

@@ -116,13 +116,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=DATASET_ID)
     parser.add_argument("--output", default="asset/data/collection-map.json")
+    parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
+    )
     parser.add_argument("-v", "--verbose", action="store_true", help="Set log level to DEBUG")
     args = parser.parse_args()
 
     configure_logging(logging.DEBUG if args.verbose else logging.INFO)
 
     result = build_map(repo_id=args.repo)
-    save_json(result, Path(args.output), minify=False)
+    save_json(result, Path(args.output), minify=args.minify)
     logging.getLogger(__name__).info("Wrote %s", args.output)
 
 
