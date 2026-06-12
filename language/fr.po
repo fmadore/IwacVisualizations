@@ -3,10 +3,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: IwacVisualizations 1.6.1\n"
+"Project-Id-Version: IwacVisualizations 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 00:00+0000\n"
-"PO-Revision-Date: 2026-06-11 00:00+0000\n"
+"POT-Creation-Date: 2026-06-12 00:00+0000\n"
+"PO-Revision-Date: 2026-06-12 00:00+0000\n"
 "Last-Translator: Frédérick Madore\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 # Block layout labels
-
 msgid "Visualizations"
 msgstr "Visualisations"
 
@@ -53,40 +52,134 @@ msgstr "Termes « effrayants »"
 msgid "Topic Explorer"
 msgstr "Explorateur de thèmes"
 
+msgid "Entity Networks"
+msgstr "Réseaux d’entités"
+
+msgid "Spatial Exploration"
+msgstr "Exploration spatiale"
+
 # Block layout form hints (admin block picker)
+msgid ""
+"Aggregate visualizations across the entire collection. No configuration "
+"needed."
+msgstr ""
+"Visualisations agrégées sur l’ensemble de la collection. Aucune configuration"
+" nécessaire."
 
-msgid "Aggregate visualizations across the entire collection. No configuration needed."
-msgstr "Visualisations agrégées sur l’ensemble de la collection. Aucune configuration nécessaire."
+msgid ""
+"Side-by-side comparison of two newspaper corpora (articles or Islamic "
+"publications), scoped either to a whole country or a single newspaper. No "
+"configuration needed."
+msgstr ""
+"Comparaison côte à côte de deux corpus de presse (articles ou publications "
+"islamiques), à l’échelle d’un pays entier ou d’un seul journal. Aucune "
+"configuration nécessaire."
 
-msgid "Side-by-side comparison of two newspaper corpora (articles or Islamic publications), scoped either to a whole country or a single newspaper. No configuration needed."
-msgstr "Comparaison côte à côte de deux corpus de presse (articles ou publications islamiques), à l’échelle d’un pays entier ou d’un seul journal. Aucune configuration nécessaire."
+msgid ""
+"Explore authority entities (persons, places, organisations, events, topics) "
+"and Dublin Core Subject + Spatial Coverage prevalence over time. No "
+"configuration needed."
+msgstr ""
+"Explorer les entités d’autorité (personnes, lieux, organisations, événements,"
+" sujets) et la prévalence des champs Dublin Core Sujet et Couverture spatiale"
+" au fil du temps. Aucune configuration nécessaire."
 
-msgid "Explore authority entities (persons, places, organisations, events, topics) and Dublin Core Subject + Spatial Coverage prevalence over time. No configuration needed."
-msgstr "Explorer les entités d’autorité (personnes, lieux, organisations, événements, sujets) et la prévalence des champs Dublin Core Sujet et Couverture spatiale au fil du temps. Aucune configuration nécessaire."
+msgid ""
+"Press language metrics of the newspaper articles: readability (Flesch), "
+"lexical richness (type-token ratio) and article length over time, with "
+"newspapers ranked by readability and richness. Data is precomputed from the "
+"OCR text of the IWAC articles subset. No configuration needed."
+msgstr ""
+"Métriques linguistiques des articles de presse : lisibilité (Flesch), "
+"richesse lexicale (rapport types/occurrences) et longueur des articles au fil"
+" du temps, avec classement des journaux par lisibilité et richesse. Données "
+"précalculées à partir du texte océrisé du sous-ensemble d’articles IWAC. "
+"Aucune configuration nécessaire."
 
-msgid "Press language metrics of the newspaper articles: readability (Flesch), lexical richness (type-token ratio) and article length over time, with newspapers ranked by readability and richness. Data is precomputed from the OCR text of the IWAC articles subset. No configuration needed."
-msgstr "Métriques linguistiques des articles de presse : lisibilité (Flesch), richesse lexicale (rapport types/occurrences) et longueur des articles au fil du temps, avec classement des journaux par lisibilité et richesse. Données précalculées à partir du texte océrisé du sous-ensemble d’articles IWAC. Aucune configuration nécessaire."
+msgid ""
+"Islamic periodicals overview: publication runs, issues per year by country, "
+"languages, countries, and top subjects. Data is precomputed from the IWAC "
+"publications subset. No configuration needed."
+msgstr ""
+"Vue d’ensemble des périodiques islamiques : périodes de parution, numéros par"
+" année et par pays, langues, pays et principaux sujets. Données précalculées "
+"à partir du sous-ensemble de publications IWAC. Aucune configuration "
+"nécessaire."
 
-msgid "Islamic periodicals overview: publication runs, issues per year by country, languages, countries, and top subjects. Data is precomputed from the IWAC publications subset. No configuration needed."
-msgstr "Vue d’ensemble des périodiques islamiques : périodes de parution, numéros par année et par pays, langues, pays et principaux sujets. Données précalculées à partir du sous-ensemble de publications IWAC. Aucune configuration nécessaire."
+msgid ""
+"Bibliographic references overview: timeline, types, languages, countries, top"
+" authors and subjects, country-by-type treemap, and co-authorship network. "
+"Data is precomputed from the IWAC references subset. No configuration needed."
+msgstr ""
+"Vue d’ensemble des références bibliographiques : frise chronologique, types, "
+"langues, pays, principaux auteurs et sujets, treemap pays-type et réseau de "
+"co-auteurs. Données précalculées à partir du sous-ensemble de références "
+"IWAC. Aucune configuration nécessaire."
 
-msgid "Bibliographic references overview: timeline, types, languages, countries, top authors and subjects, country-by-type treemap, and co-authorship network. Data is precomputed from the IWAC references subset. No configuration needed."
-msgstr "Vue d’ensemble des références bibliographiques : frise chronologique, types, langues, pays, principaux auteurs et sujets, treemap pays-type et réseau de co-auteurs. Données précalculées à partir du sous-ensemble de références IWAC. Aucune configuration nécessaire."
+msgid ""
+"Zoomable map of the whole press corpus: every article placed by the semantic "
+"similarity of its full text (UMAP over AI embeddings), color-faceted by "
+"country, decade, or topic. Data is precomputed. No configuration needed."
+msgstr ""
+"Carte zoomable de l’ensemble du corpus de presse : chaque article positionné "
+"selon la similarité sémantique de son texte intégral (UMAP sur plongements "
+"d’IA), coloré par pays, décennie ou thème. Données précalculées. Aucune "
+"configuration nécessaire."
 
-msgid "Zoomable map of the whole press corpus: every article placed by the semantic similarity of its full text (UMAP over AI embeddings), color-faceted by country, decade, or topic. Data is precomputed. No configuration needed."
-msgstr "Carte zoomable de l’ensemble du corpus de presse : chaque article positionné selon la similarité sémantique de son texte intégral (UMAP sur plongements d’IA), coloré par pays, décennie ou thème. Données précalculées. Aucune configuration nécessaire."
+msgid ""
+"AI sentiment atlas of the newspaper articles: polarity, centrality of Islam "
+"and subjectivity over time and by country as rated by three language models, "
+"plus cross-model agreement. All figures are AI-generated assessments "
+"precomputed from the IWAC articles subset. No configuration needed."
+msgstr ""
+"Atlas des sentiments IA des articles de presse : polarité, centralité de "
+"l’islam et subjectivité au fil du temps et par pays selon trois modèles de "
+"langage, avec accord inter-modèles. Toutes les valeurs sont des évaluations "
+"générées par IA, précalculées à partir du sous-ensemble d’articles IWAC. "
+"Aucune configuration nécessaire."
 
-msgid "AI sentiment atlas of the newspaper articles: polarity, centrality of Islam and subjectivity over time and by country as rated by three language models, plus cross-model agreement. All figures are AI-generated assessments precomputed from the IWAC articles subset. No configuration needed."
-msgstr "Atlas des sentiments IA des articles de presse : polarité, centralité de l’islam et subjectivité au fil du temps et par pays selon trois modèles de langage, avec accord inter-modèles. Toutes les valeurs sont des évaluations générées par IA, précalculées à partir du sous-ensemble d’articles IWAC. Aucune configuration nécessaire."
+msgid ""
+"Bar chart of radical / extremism-related terms across the IWAC collection, "
+"with bar chart race, by-country, and global views. No configuration needed."
+msgstr ""
+"Évolution des termes liés au radicalisme et à l’extrémisme dans la collection"
+" IWAC, avec course de barres animée, vue par pays et vue globale. Aucune "
+"configuration nécessaire."
 
-msgid "Bar chart of radical / extremism-related terms across the IWAC collection, with bar chart race, by-country, and global views. No configuration needed."
-msgstr "Évolution des termes liés au radicalisme et à l’extrémisme dans la collection IWAC, avec course de barres animée, vue par pays et vue globale. Aucune configuration nécessaire."
+msgid ""
+"LDA-30 topic overview of the IWAC articles subset, with a treemap of all "
+"topics and a per-topic drill-down (calendar heatmap, country / newspaper "
+"distributions, most-representative articles). No configuration needed."
+msgstr ""
+"Vue d’ensemble des 30 thèmes LDA du sous-ensemble d’articles IWAC, avec un "
+"treemap de tous les thèmes et une exploration par thème (calendrier "
+"thermique, répartitions par pays et par journal, articles les plus "
+"représentatifs). Aucune configuration nécessaire."
 
-msgid "LDA-30 topic overview of the IWAC articles subset, with a treemap of all topics and a per-topic drill-down (calendar heatmap, country / newspaper distributions, most-representative articles). No configuration needed."
-msgstr "Vue d’ensemble des 30 thèmes LDA du sous-ensemble d’articles IWAC, avec un treemap de tous les thèmes et une exploration par thème (calendrier thermique, répartitions par pays et par journal, articles les plus représentatifs). Aucune configuration nécessaire."
+msgid ""
+"Co-occurrence networks across the collection: an entity graph linking "
+"persons, organizations, events, subjects and places that appear in the same "
+"items (layout precomputed), and a geographic network of co-mentioned places "
+"drawn over the basemap. No configuration needed."
+msgstr ""
+"Réseaux de cooccurrences de la collection : un graphe d’entités reliant "
+"personnes, organisations, événements, sujets et lieux qui apparaissent dans "
+"les mêmes éléments (disposition précalculée), et un réseau géographique des "
+"lieux co-mentionnés tracé sur le fond de carte. Aucune configuration "
+"nécessaire."
+
+msgid ""
+"Interactive world map of every place mentioned in the collection, with "
+"country focus and an entity picker (persons, organizations, events, subjects,"
+" places) that maps the locations related to the selected entity. Data is "
+"precomputed. No configuration needed."
+msgstr ""
+"Carte du monde interactive de tous les lieux mentionnés dans la collection, "
+"avec focus par pays et un sélecteur d’entités (personnes, organisations, "
+"événements, sujets, lieux) qui cartographie les lieux liés à l’entité "
+"sélectionnée. Les données sont précalculées. Aucune configuration nécessaire."
 
 # Loading states
-
 msgid "Loading dashboard"
 msgstr "Chargement du tableau de bord"
 
@@ -123,11 +216,16 @@ msgstr "Chargement de l’atlas des sentiments"
 msgid "Loading Topic Explorer"
 msgstr "Chargement de l’explorateur de thèmes"
 
+msgid "Loading entity networks"
+msgstr "Chargement des réseaux d’entités"
+
+msgid "Loading spatial exploration"
+msgstr "Chargement de l’exploration spatiale"
+
 # Article dashboard — sentiment panel (server-rendered from Omeka item
 # metadata via SentimentExtractor). Strings originate from the retired
 # IwacSentiment module so existing installations' translation memory
 # keeps working.
-
 msgid "AI sentiment"
 msgstr "Sentiment IA"
 
@@ -146,15 +244,24 @@ msgstr "Voir les justifications"
 msgid "Model comparison"
 msgstr "Comparaison des modèles"
 
-msgid "Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (Gemini 3 Flash, GPT-5 mini, Ministral 14B). Read directly from the Omeka item metadata."
-msgstr "Polarité, centralité à l’islam et aux communautés musulmanes, et subjectivité de cet article, évaluées par trois modèles d’IA (Gemini 3 Flash, GPT-5 mini, Ministral 14B). Lues directement depuis les métadonnées de la notice Omeka."
+msgid ""
+"Polarity, centrality to Islam and Muslim communities, and subjectivity "
+"ratings for this article, produced by three AI models (Gemini 3 Flash, GPT-5 "
+"mini, Ministral 14B). Read directly from the Omeka item metadata."
+msgstr ""
+"Polarité, centralité à l’islam et aux communautés musulmanes, et subjectivité"
+" de cet article, évaluées par trois modèles d’IA (Gemini 3 Flash, GPT-5 mini,"
+" Ministral 14B). Lues directement depuis les métadonnées de la notice Omeka."
 
-msgid "Scales: polarity 1 (very negative) – 5 (very positive) · centrality 1 (not addressed) – 5 (very central) · subjectivity 1 (objective) – 5 (subjective)"
-msgstr "Échelles : polarité 1 (très négatif) – 5 (très positif) · centralité 1 (non abordé) – 5 (très central) · subjectivité 1 (objectif) – 5 (subjectif)"
+msgid ""
+"Scales: polarity 1 (very negative) – 5 (very positive) · centrality 1 (not "
+"addressed) – 5 (very central) · subjectivity 1 (objective) – 5 (subjective)"
+msgstr ""
+"Échelles : polarité 1 (très négatif) – 5 (très positif) · centralité 1 (non "
+"abordé) – 5 (très central) · subjectivité 1 (objectif) – 5 (subjectif)"
 
 # Controlled vocabulary — Centrality (English source labels from
 # Module::CENTRALITE_ITEMS, translated at render time)
-
 msgid "Very central"
 msgstr "Très central"
 
@@ -171,7 +278,6 @@ msgid "Not addressed"
 msgstr "Non abordé"
 
 # Controlled vocabulary — Polarity (Module::POLARITE_ITEMS)
-
 msgid "Very positive"
 msgstr "Très positif"
 
@@ -191,7 +297,6 @@ msgid "Not applicable"
 msgstr "Non applicable"
 
 # Controlled vocabulary — Subjectivity (Module::SUBJECTIVITE_ITEMS)
-
 msgid "Very objective"
 msgstr "Très objectif"
 

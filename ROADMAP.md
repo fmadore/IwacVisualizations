@@ -282,8 +282,24 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       pre-evaluation (discovered during Phase 1): the block carries a
       co-authorship force network and a country → type treemap since the
       v1.x precompute migration. No further work needed.
-
-## Phase 7 — Visual / theming polish
+- [x] **6.6 Spatial Exploration + Entity Networks page blocks
+      (v1.7.0)** — port of the standalone IWAC-spatial-overview
+      dashboard's world map / country focus / entity drill-down and
+      networks views onto module infrastructure.
+      `generate_spatial_exploration.py` → `spatial-exploration.json`
+      (148 KB: places + per-type picker indexes + country counts/
+      bounds; per-entity data reuses the person-/entity-dashboards
+      fan-outs, zero duplication). `generate_entity_networks.py`
+      (networkx ForceAtlas2, seeded) → `entity-networks-global.json`
+      (1,554 nodes / 7,356 edges, 183 KB) +
+      `entity-networks-spatial.json` (508 / 11,030, 145 KB).
+      **Renderer decision:** both networks draw with MapLibre GL —
+      precomputed positions through inverse Web-Mercator, blank
+      theme-aware canvas style (`P.buildGraphStyle`, new
+      `styleMode: 'graph'` in shared/maplibre.js) — instead of
+      ECharts graph (canvas roam jank at 7k+ edges, client-side force
+      cost) or Sigma.js (second graph dependency duplicating MapLibre's
+      WebGL + collision + popup + theming infrastructure).
 
 The June 2026 CSS audit found **zero violations** of the IWAC theme
 v2.0.0 rules — this phase is consolidation, not correction.

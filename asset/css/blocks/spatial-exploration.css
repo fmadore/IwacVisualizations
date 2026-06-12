@@ -1,0 +1,220 @@
+/* =================================================================== */
+/*  IWAC Visualizations — Spatial Exploration block                      */
+/*                                                                       */
+/*  Two-column layout (entity picker sidebar + map panel), the picker    */
+/*  list, and the map toolbar. Chip / tab / form-control styling comes   */
+/*  from iwac-core.css; map chrome from iwac-maplibre.css.               */
+/*                                                                       */
+/*  Breakpoints (match iwac-core.css): sm 640 / md 768 / lg 1024.        */
+/* =================================================================== */
+
+.iwac-vis-spatial-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-spatial-layout {
+        grid-template-columns: minmax(260px, 320px) 1fr;
+    }
+}
+
+.iwac-vis-spatial-sidebar {
+    background: var(--panel-bg, var(--surface, #fdfdfd));
+    border: 1px solid var(--panel-border-color, var(--border, #d4d6da));
+    border-radius: var(--radius-md, 0.5rem);
+    padding: var(--space-4, 1rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    align-self: start;
+}
+
+.iwac-vis-spatial-main {
+    min-width: 0;
+}
+
+/* On large screens the map gets more height than the default panel
+ * chart floor — it is the block's main stage. */
+.iwac-vis-spatial-map-panel .iwac-vis-chart {
+    min-height: 420px;
+}
+
+.iwac-vis-spatial-map-panel .iwac-vis-map {
+    height: 560px;
+}
+
+@media (max-width: 768px) { /* md */
+    .iwac-vis-spatial-map-panel .iwac-vis-map {
+        height: 420px;
+    }
+}
+
+/* =================================================================== */
+/*  Entity picker sidebar                                                */
+/* =================================================================== */
+
+.iwac-vis-spatial-picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-spatial-picker__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-spatial-picker__label {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--ink-light, #4a5766);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+}
+
+.iwac-vis-spatial-picker__search {
+    width: 100%;
+}
+
+.iwac-vis-spatial-picker__list,
+.iwac-vis-spatial-picker__places-list {
+    max-height: 16rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    border: 1px solid var(--border-light, #e6e7eb);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: var(--space-2, 0.5rem);
+    background: var(--surface, #fdfdfd);
+}
+
+.iwac-vis-spatial-picker__places-list {
+    max-height: 13rem;
+    list-style: none;
+    margin: 0;
+}
+
+.iwac-vis-spatial-picker__places-list li {
+    margin: 0;
+}
+
+.iwac-vis-spatial-picker__item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2, 0.5rem);
+    width: 100%;
+    padding: 0.25rem 0.4rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm, 0.375rem);
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #2c2f37);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast, 150ms ease),
+        border-color     var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-spatial-picker__item:hover {
+    background: var(--surface-raised, #fafaf9);
+}
+
+.iwac-vis-spatial-picker__item:focus-visible {
+    outline: 2px solid var(--primary, #e64a19);
+    outline-offset: 1px;
+}
+
+.iwac-vis-spatial-picker__item--active {
+    background: color-mix(in oklab, var(--primary, #e64a19) 12%, var(--surface-raised, #fafaf9));
+    border-color: color-mix(in oklab, var(--primary, #e64a19) 40%, var(--border, #d4d6da));
+}
+
+.iwac-vis-spatial-picker__item-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.iwac-vis-spatial-picker__item-count {
+    flex: 0 0 auto;
+    color: var(--muted, #767880);
+    font-size: var(--text-xs, 0.8125rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-spatial-picker__selection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e6e7eb);
+}
+
+.iwac-vis-spatial-picker__chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-spatial-picker__summary {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-light, #4a5766);
+}
+
+.iwac-vis-spatial-picker__hint {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+.iwac-vis-spatial-picker__item-link {
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+.iwac-vis-spatial-picker__places {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e6e7eb);
+}
+
+/* =================================================================== */
+/*  Map toolbar (country focus + status line)                            */
+/* =================================================================== */
+
+.iwac-vis-spatial-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-spatial-toolbar__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
+    color: var(--ink-light, #4a5766);
+}
+
+.iwac-vis-spatial-toolbar__status {
+    margin-left: auto;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--muted, #767880);
+}
+
+/* Hover-popup "click for more" hint line. */
+.iwac-vis-map-popup__more {
+    margin-top: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #767880);
+}

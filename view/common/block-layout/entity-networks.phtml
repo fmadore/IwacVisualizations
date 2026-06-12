@@ -1,0 +1,29 @@
+<?php
+/**
+ * Entity Networks block — co-occurrence graphs rendered with MapLibre GL.
+ *
+ * Two modes: "Entities" draws the precomputed ForceAtlas2 layout of the
+ * cross-type entity graph on a blank canvas style; "Places" draws the
+ * geographic co-mention network over the regular basemap. Payloads are
+ * asset/data/entity-networks-global.json (fetched on init) and
+ * asset/data/entity-networks-spatial.json (fetched on first mode switch).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'entity-networks',
+        'needs' => [
+            'maplibre' => true,
+            'facetButtons' => true,
+        ],
+        'panels' => [
+            'entity-networks/graph',
+            'entity-networks/details',
+        ],
+        'orchestrator' => 'entity-networks',
+    ],
+    'blockClass' => 'iwac-vis-networks',
+    'loading'    => $this->translate('Loading entity networks'),
+]);

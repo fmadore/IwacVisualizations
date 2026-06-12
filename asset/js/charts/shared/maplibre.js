@@ -67,16 +67,53 @@
         var next = mode === 'dark' ? 'dark' : 'light';
         if (map._iwacThemeMode === next) return false;
         map._iwacThemeMode = next;
-        var url = next === 'dark'
-            ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-            : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        // Graph-mode maps (abstract layouts with no basemap) swap to a
+        // freshly-built blank style instead of a Carto URL; their
+        // custom layers are rebuilt by the same onStyleReady path with
+        // colors re-resolved from the new theme's tokens.
+        var style = map._iwacStyleMode === 'graph'
+            ? P.buildGraphStyle()
+            : (next === 'dark'
+                ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+                : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json');
         try {
-            map.setStyle(url);
+            map.setStyle(style);
             return true;
         } catch (e) {
             console.error('IWACVis.maplibre: setStyle failed', e);
             return false;
         }
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Blank "graph canvas" style                                        */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Build a minimal MapLibre style for non-geographic uses of the
+     * renderer (e.g. the Entity Networks block's abstract layout):
+     * a single background layer painted with the current theme's
+     * background token, no tile sources, and the CartoCDN glyphs
+     * endpoint so symbol layers (node labels) can render text. Called
+     * once per (re-)style, so colors always reflect the active theme.
+     *
+     * @returns {Object} MapLibre style object
+     */
+    P.buildGraphStyle = function () {
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var bg = P.normalizeColorForMapLibre(tokens.background || '#f7f7f6');
+        return {
+            version: 8,
+            // Same CDN family as the positron/dark-matter basemaps used
+            // everywhere else in the module.
+            glyphs: 'https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf',
+            sources: {},
+            layers: [{
+                id: 'iwac-graph-background',
+                type: 'background',
+                paint: { 'background-color': bg }
+            }]
+        };
     };
 
     /* ----------------------------------------------------------------- */
@@ -145,6 +182,9 @@
      * @param {boolean} [config.globe=true]  Show the GlobeControl toggle
      * @param {boolean} [config.navigation=true]  Show the NavigationControl
      * @param {boolean} [config.fullscreen=true]  Show MapLibre's native FullscreenControl
+     * @param {string} [config.styleMode='basemap']  'basemap' uses the
+     *   theme's Carto style; 'graph' uses the blank P.buildGraphStyle()
+     *   canvas (and theme swaps rebuild that instead of a basemap).
      * @param {Object} [config.mapOptions]  Extra options passed straight
      *   to `new maplibregl.Map` (overrides any defaults here)
      * @returns {maplibregl.Map|null}
@@ -156,9 +196,15 @@
         }
         config = config || {};
 
-        var defaultStyle = ns.getBasemapStyle
-            ? ns.getBasemapStyle()
-            : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        var graphMode = config.styleMode === 'graph';
+        var defaultStyle;
+        if (graphMode) {
+            defaultStyle = P.buildGraphStyle();
+        } else {
+            defaultStyle = ns.getBasemapStyle
+                ? ns.getBasemapStyle()
+                : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        }
 
         // Localized cooperative-gestures hints. The historical reason
         // for NOT enabling cooperativeGestures was MapLibre's
@@ -207,8 +253,10 @@
         var map = new maplibregl.Map(baseOptions);
 
         // Stamp the initial theme so future P.setMapTheme calls can no-op
-        // when the requested mode already matches.
+        // when the requested mode already matches, and the style mode so
+        // theme swaps know whether to rebuild a basemap or a graph canvas.
         map._iwacThemeMode = ns.getCurrentTheme ? ns.getCurrentTheme() : 'light';
+        if (graphMode) map._iwacStyleMode = 'graph';
 
         // Built-in controls
         if (config.navigation !== false) {

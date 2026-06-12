@@ -795,7 +795,11 @@
 .iwac-vis-keywords-filters__select,
 .iwac-vis-index-table-search,
 .iwac-vis-keywords-compare__search,
-.iwac-vis-scary-select {
+.iwac-vis-scary-select,
+.iwac-vis-spatial-picker__search,
+.iwac-vis-spatial-toolbar__select,
+.iwac-vis-networks-toolbar__select,
+.iwac-vis-networks-search__input {
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     background: var(--surface, #fdfdfd);
     color: var(--ink, #2c2f37);
@@ -810,7 +814,9 @@
 
 .iwac-vis-facets__select:hover,
 .iwac-vis-keywords-filters__select:hover,
-.iwac-vis-scary-select:hover {
+.iwac-vis-scary-select:hover,
+.iwac-vis-spatial-toolbar__select:hover,
+.iwac-vis-networks-toolbar__select:hover {
     border-color: color-mix(in oklab, var(--primary, #e64a19) 40%, var(--border, #d4d6da));
 }
 
@@ -818,7 +824,11 @@
 .iwac-vis-keywords-filters__select:focus-visible,
 .iwac-vis-index-table-search:focus-visible,
 .iwac-vis-keywords-compare__search:focus-visible,
-.iwac-vis-scary-select:focus-visible {
+.iwac-vis-scary-select:focus-visible,
+.iwac-vis-spatial-picker__search:focus-visible,
+.iwac-vis-spatial-toolbar__select:focus-visible,
+.iwac-vis-networks-toolbar__select:focus-visible,
+.iwac-vis-networks-search__input:focus-visible {
     outline: 2px solid var(--primary, #e64a19);
     outline-offset: 2px;
     border-color: color-mix(in oklab, var(--primary, #e64a19) 60%, var(--border, #d4d6da));

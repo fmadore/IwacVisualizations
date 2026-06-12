@@ -6,6 +6,7 @@ return [
         'invokables' => [
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
+            'entityNetworks' => Site\BlockLayout\EntityNetworks::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'lexicalMetrics' => Site\BlockLayout\LexicalMetrics::class,
             'periodicalsOverview' => Site\BlockLayout\PeriodicalsOverview::class,
@@ -13,6 +14,7 @@ return [
             'scaryTerms' => Site\BlockLayout\ScaryTerms::class,
             'semanticLandscape' => Site\BlockLayout\SemanticLandscape::class,
             'sentimentAtlas' => Site\BlockLayout\SentimentAtlas::class,
+            'spatialExploration' => Site\BlockLayout\SpatialExploration::class,
             'topicExplorer' => Site\BlockLayout\TopicExplorer::class,
         ],
     ],

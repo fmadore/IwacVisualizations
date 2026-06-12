@@ -161,6 +161,68 @@ The client (`network.js`) builds the 3-layer force graph at render time
 from `entities` + `related_by_entities` — keeping the graph out of the
 precomputed JSON saves ~3 KB per file.
 
+### `generate_spatial_exploration.py`
+
+Writes `asset/data/spatial-exploration.json` — the sidecar behind the
+Spatial Exploration page block.
+
+```bash
+python3 scripts/generate_spatial_exploration.py
+python3 scripts/generate_spatial_exploration.py --no-minify -v
+```
+
+**Output structure** (compact array rows, column order in `_meta.columns`):
+
+- `locations` — every geocoded index Lieu with `frequency > 0`:
+  `[o_id, name, lat, lng, count, focus_country_index]`. The focus
+  country (index into `focus_countries`, −1 = elsewhere) is resolved by
+  walking the index's `Partie de` chain up to one of the six IWAC
+  countries — it powers the country-focus bubble filter.
+- `pickers` — per entity type (Personnes / Organisations / Événements /
+  Sujets / Lieux) every index entity with at least one mention, as
+  `[o_id, label, frequency]`, sorted by frequency. The block searches
+  these client-side; **selection data comes from the existing
+  `person-dashboards/` / `entity-dashboards/` fan-outs**, so run those
+  generators in the same refresh cycle.
+- `country_counts` — items per canonical country across all five
+  content subsets (choropleth fill in collection mode).
+- `country_bounds` — `[w, s, e, n]` per IWAC country, read from the
+  committed `asset/data/iwac-countries.geojson`.
+
+### `generate_entity_networks.py`
+
+Writes the two payloads behind the Entity Networks page block:
+`asset/data/entity-networks-global.json` (cross-type entity graph) and
+`asset/data/entity-networks-spatial.json` (geographic co-mention
+network). Requires `networkx` (ForceAtlas2 layout).
+
+```bash
+python3 scripts/generate_entity_networks.py
+python3 scripts/generate_entity_networks.py --min-cooccurrence 3 -v
+python3 scripts/generate_entity_networks.py --pairs "personnes-organisations,lieux-evenements"
+```
+
+**Workflow:**
+
+1. Reuse the `DashboardAggregator` loading + resolution pipeline
+   (index lookup with `Titre alternatif` aliases; per-item subject +
+   spatial references over articles / publications / references)
+2. **Global**: for each item and each configured cross-type pair
+   (default mirrors IWAC-spatial-overview: person↔org plus events as
+   connective tissue), every co-occurring entity pair adds 1 to its
+   edge weight; prune below `--min-cooccurrence` (default 2), drop
+   isolated nodes
+3. Layout with `networkx.forceatlas2_layout` (seeded, weighted), then
+   project to pseudo-lng/lat through the **inverse Web-Mercator** so
+   MapLibre's forward projection reproduces the layout plane exactly —
+   the client renders with zero layout cost
+4. **Spatial**: same pipeline, but edges join geocoded Lieux that
+   appear in the same item; nodes carry real coordinates
+5. Both payloads are compact array rows (column order in
+   `_meta.columns`) with **no per-edge item-id lists** — that's what
+   keeps them at ~180 KB / ~145 KB versus the 2–4 MB equivalents in the
+   standalone app
+
 ## Shared helpers — `iwac_utils.py`
 
 Functions to use instead of rewriting. The **v0.9.0 refactor** promoted

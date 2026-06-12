@@ -6,7 +6,7 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — eight page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists).
+Every registered block is wired end-to-end with live data — twelve page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists).
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
@@ -19,6 +19,8 @@ Every registered block is wired end-to-end with live data — eight page blocks 
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets | Precompute (`generate_semantic_landscape.py`) |
 | Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, cross-model agreement | Precompute (`generate_sentiment_atlas.py`) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
+| Spatial Exploration | page block | **Live** — world bubble map + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
+| Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
@@ -29,6 +31,15 @@ Every registered block is wired end-to-end with live data — eight page blocks 
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.7.0 — Spatial Exploration + Entity Networks page blocks
+
+Two new page blocks porting the core views of the standalone [IWAC-spatial-overview](https://github.com/fmadore/IWAC-spatial-overview) dashboard into the module, on module infrastructure:
+
+- **Spatial Exploration page block** — world bubble map of every geocoded place in the collection with an entity picker (Persons / Organizations / Events / Subjects / Places, accent-insensitive search over the full authority index). Selecting an entity re-scopes the map to its related places; hovering a bubble previews the first items, clicking pins the full paginated item list (shared `P.buildMapPopup`). Country-focus select zooms + filters to one of the six IWAC countries (place→country resolved at generation time by walking the index's `Partie de` chain); the existing choropleth toggle fills countries with item counts (collection-wide, or the selected entity's). Entity selections hydrate from the **existing** `person-dashboards/` / `entity-dashboards/` fan-outs — zero data duplication; the block's own sidecar (`spatial-exploration.json`, 148 KB minified) carries only places, picker indexes, country counts and bounds.
+- **Entity Networks page block** — co-occurrence networks rendered with **MapLibre GL instead of a graph library**: positions are precomputed (networkx ForceAtlas2 in `generate_entity_networks.py`, inverse-Web-Mercator-projected so on-screen geometry is isometric to the layout), so the client does zero layout work and pan/zoom over ~7,400 edges (Entities) / ~11,000 edges (Places) stays GPU-bound; symbol layers give label-collision management for free, and theming / popups / fullscreen / PNG export ride the existing map infrastructure. ECharts graph was rejected (canvas re-render per frame janks at this edge count, force layout on load worse), as was Sigma.js (a second graph dependency duplicating what MapLibre already does here). Two modes: *Entities* (cross-type graph on a blank theme-aware canvas — `P.buildGraphStyle()`; type-filter chips, min-weight select, node search) and *Places* (geographic co-mention network over the basemap, lazily fetched). Clicking a node dims the rest of the graph, highlights incident links, and lists the strongest co-occurrences in a details sidebar (each row jumps the camera; title links to the item page).
+- **Shared infra:** `shared/maplibre.js` gains `styleMode: 'graph'` + `P.buildGraphStyle()` — blank-canvas maps whose theme swap rebuilds the canvas style (background token + CartoCDN glyphs) instead of applying a Carto basemap; `iwac-core.css` form-control lists extended with the new controls.
+- Payloads: `entity-networks-global.json` 183 KB / `entity-networks-spatial.json` 145 KB minified (compact array rows, no per-edge item-id lists — vs 2.2 MB / 4.4 MB for the equivalent data in the standalone app). `networkx` added to `scripts/requirements.txt`.
 
 ### v1.6.1 — French translation catalog regenerated (ROADMAP 7.3)
 
@@ -300,6 +311,14 @@ Corpus-level view of the 3-model AI sentiment (Gemini Flash 3.0 / ChatGPT GPT-5 
 
 "The language of the press": readability (Flesch FR), lexical richness (type-token ratio), and article length over time and by newspaper, from the dataset's precomputed OCR text metrics. Backed by `generate_lexical_metrics.py`.
 
+### Spatial Exploration (page block)
+
+"Where the collection looks": a world bubble map of all 543 geocoded places in the authority index (bubble size = mention frequency), with an entity picker sidebar covering the full index — Persons (2,707), Organizations (398), Events (222), Subjects (209), Places (664) — behind accent-insensitive search. Selecting an entity re-scopes the map to the places mentioned alongside it; hover previews the first related items, click pins the full paginated item list with links to the Omeka items. A country-focus select zooms and filters to one of the six IWAC countries, and the shared choropleth toggle fills countries with item counts (entity-specific when one is selected). The block's sidecar `spatial-exploration.json` (`generate_spatial_exploration.py`, 148 KB minified) carries places + picker indexes + country counts/bounds; per-entity data comes from the existing `person-dashboards/` / `entity-dashboards/` fan-outs, fetched lazily per selection and LRU-cached.
+
+### Entity Networks (page block)
+
+Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry for why not ECharts/Sigma). *Entities* mode draws the cross-type graph — persons↔organizations plus events as connective tissue to every other type — on a blank theme-aware canvas, with positions precomputed by ForceAtlas2 at generation time (`generate_entity_networks.py`, 1,554 nodes / 7,356 edges at co-occurrence ≥ 2). *Places* mode draws co-mentioned places over the basemap (508 nodes / 11,030 edges, lazily fetched). Node color = entity type (module palette), size = items mentioning it; labels collide via symbol layers with a hubs-first priority rank. Type chips, a min-link-strength select, and node search filter the view; clicking a node highlights its neighborhood and lists its strongest co-occurrences in the details sidebar.
+
 ### Item Set Dashboard (resource-page block)
 
 Newspapers, Islamic periodicals, and countries exist as item sets on islam.zmo.de — and the Compare Newspapers precompute already aggregates each of them. This block reuses those single-corpus JSONs: the orchestrator matches the item set's title against `compare-newspapers/index.json` (newspapers before countries, articles before publications) and renders summary cards + period subtitle, items per year, top subjects, spatial coverage, and most-frequent words (wordcloud with bar fallback). Item sets with no matching corpus remove the block client-side, so it is safe to enable for **all** item sets. Zero additional precompute.
@@ -407,7 +426,11 @@ IwacVisualizations/
 │   │       ├── publication-dashboard.js    # Publication-issue orchestrator (v1.5.0)
 │   │       ├── minimal-item-dashboard.js   # Audio / Video / Document two-slot dashboard
 │   │       ├── compare-newspapers.js       # Compare Newspapers orchestrator (split in v1.4.0)
-│   │       └── compare-newspapers/         # Panel modules (helpers, picker, map, sentiment, …)
+│   │       ├── compare-newspapers/         # Panel modules (helpers, picker, map, sentiment, …)
+│   │       ├── spatial-exploration.js      # Spatial Exploration orchestrator (v1.7.0)
+│   │       ├── spatial-exploration/        # Panel modules (state, picker, map)
+│   │       ├── entity-networks.js          # Entity Networks orchestrator (v1.7.0)
+│   │       └── entity-networks/            # Panel modules (graph renderer, details sidebar)
 │   └── data/
 │       ├── collection-overview.json
 │       ├── collection-wordcloud.json
@@ -420,6 +443,9 @@ IwacVisualizations/
 │       ├── scary-terms-temporal.json
 │       ├── scary-terms-countries.json
 │       ├── scary-terms-global.json
+│       ├── spatial-exploration.json        # Places + pickers + country counts/bounds (v1.7.0)
+│       ├── entity-networks-global.json     # Cross-type graph w/ FA2 positions (v1.7.0)
+│       ├── entity-networks-spatial.json    # Geographic co-mention network (v1.7.0)
 │       ├── person-dashboards/{o_id}.json   # ~2,800 files
 │       ├── entity-dashboards/{o_id}.json   # ~1,550 files
 │       ├── article-dashboards/{o_id}.json  # ~12,287 files (~120 MB)
@@ -437,6 +463,8 @@ IwacVisualizations/
 │   ├── generate_person_dashboards.py
 │   ├── generate_entity_dashboards.py
 │   ├── generate_article_dashboards.py      # per-article + semantic kNN
+│   ├── generate_spatial_exploration.py     # Spatial Exploration sidecar (v1.7.0)
+│   ├── generate_entity_networks.py         # Co-occurrence graphs + FA2 layout (v1.7.0)
 │   ├── build-js.js                         # terser-driven JS minification
 │   ├── requirements.txt
 │   └── README.md

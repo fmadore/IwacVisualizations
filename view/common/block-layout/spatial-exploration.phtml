@@ -1,0 +1,28 @@
+<?php
+/**
+ * Spatial Exploration block — world map + country focus + entity picker.
+ *
+ * The orchestrator fetches asset/data/spatial-exploration.json (places,
+ * pickers, country counts/bounds) and, on entity selection, the existing
+ * person-dashboards/{id}.json / entity-dashboards/{id}.json fan-out for
+ * the entity's locations and per-location article lists.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'spatial-exploration',
+        'needs' => [
+            'maplibre' => true,
+        ],
+        'panels' => [
+            'spatial-exploration/state',
+            'spatial-exploration/picker',
+            'spatial-exploration/map',
+        ],
+        'orchestrator' => 'spatial-exploration',
+    ],
+    'blockClass' => 'iwac-vis-spatial',
+    'loading'    => $this->translate('Loading spatial exploration'),
+]);
