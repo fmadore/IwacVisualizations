@@ -3,17 +3,23 @@
  * Sentiment Atlas page block.
  *
  * Corpus-level view of the AI sentiment ratings on the IWAC `articles`
- * subset (three language models: Gemini 3 Flash, GPT-5 mini, Ministral
- * 14B). Loads a single precomputed JSON bundle from
+ * subset (three rating models: Gemini 3 Flash, GPT-5 mini, Ministral
+ * 14B). Loads a precomputed bundle from
  * `asset/data/sentiment-atlas.json` (built by
- * `scripts/generate_sentiment_atlas.py`) and renders a multi-panel
- * dashboard — no runtime calls to the Hugging Face datasets-server.
+ * `scripts/generate_sentiment_atlas.py`) plus an optional, tiny
+ * `asset/data/sentiment-arbiter.json` (built by
+ * `scripts/generate_sentiment_arbiter.py` from the sibling
+ * IWAC-sentiment-analysis study) — no runtime calls to the Hugging
+ * Face datasets-server.
  *
- * Panels: summary cards (rated per model), a model facet bar driving
- * polarity-over-time, centrality-over-time and polarity-by-country
- * stacked bars, a subjectivity trend (one line per model), and the
- * cross-model agreement panel (pairwise cards + polarity cross-tab
- * heatmap). Every panel is flagged as AI-generated assessment.
+ * Sections: summary cards; a model facet driving polarity- and
+ * centrality-over-time, polarity by country, polarity × subjectivity,
+ * and a centrality-by-country-and-year heatmap; the subject/place
+ * keywords of the most extreme-rated articles; a subjectivity trend
+ * (one line per model); and a model-pair facet driving cross-model
+ * agreement (pairwise cards + polarity cross-tab) and the Gemini 3 Pro
+ * arbiter's verdicts where two models diverged sharply. Every panel is
+ * flagged as AI-generated assessment.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block

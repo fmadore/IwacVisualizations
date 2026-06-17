@@ -28,14 +28,22 @@ Payload shape (top-level keys):
                         Très négatif, Non applicable
     centrality_order  — canonical centralité labels: Très central,
                         Central, Secondaire, Marginal, Non abordé
+    subjectivity_levels — the 1–5 subjectivité scale used by the
+                        correlation matrix
+    extreme_categories — ids of the extreme-sentiment keyword buckets
     years             — sorted list of years; every per-year series
                         below is aligned to this axis
     countries         — country list ordered by total rated mentions;
                         every per-country series is aligned to it
     models            — per model: rated / not_applicable counts,
                         polarity_by_year, centrality_by_year,
-                        polarity_by_country (label → aligned counts)
-                        and subjectivity_by_year {mean, n}
+                        polarity_by_country (label → aligned counts),
+                        subjectivity_by_year {mean, n}, correlation
+                        (polarity label → counts at subjectivité 1..5),
+                        centrality_heatmap (sparse [countryIdx, yearIdx,
+                        mean, n] cells of mean centralité intensity), and
+                        extremes (category → {n, subject, spatial} top-N
+                        keyword lists)
     agreement         — per model pair: co-rated article count, % with
                         the identical polarity label, and the 6×6
                         polarity cross-tab (rows = first model, cols =
@@ -100,6 +108,40 @@ NOT_APPLICABLE = "Non applicable"
 
 _POLARITY_IDX = {label: i for i, label in enumerate(POLARITY_ORDER)}
 
+# Centralité label → ordinal intensity (5 = most central). "Non abordé"
+# floors the scale; "Non applicable" / missing are excluded from the
+# country × year intensity heatmap entirely.
+CENTRALITY_SCORES: Dict[str, int] = {
+    "Très central": 5,
+    "Central": 4,
+    "Secondaire": 3,
+    "Marginal": 2,
+    "Non abordé": 1,
+}
+
+# Subjectivité is a 1–5 integer scale (1 = very objective … 5 = very
+# subjective); the polarity × subjectivity correlation matrix keys on it.
+SUBJECTIVITY_LEVELS: Tuple[int, ...] = (1, 2, 3, 4, 5)
+
+# Extreme-sentiment buckets for the keyword panel. Thresholds mirror the
+# sibling IWAC-sentiment-analysis study (subjectivité ≥ 4 / ≤ 2; the most
+# extreme polarity and centrality labels).
+EXTREME_CATEGORIES: Tuple[str, ...] = (
+    "subjectivity_high",
+    "subjectivity_low",
+    "polarity_very_negative",
+    "polarity_very_positive",
+    "centrality_very_central",
+    "centrality_marginal",
+)
+
+# Keep the top-N keywords per (model, category, kind); enough for a bar
+# panel while keeping the payload small.
+EXTREME_TOP_N = 25
+
+# Drop keyword tokens shorter than this (matches the sibling's len > 2).
+_MIN_KEYWORD_LEN = 3
+
 
 def _label(value: Any) -> Optional[str]:
     """Clean a rating cell; None for empty / NaN / literal 'nan'."""
@@ -117,6 +159,55 @@ def _is_unknown(value: str) -> bool:
 
 def _clean_countries(value: Any) -> List[str]:
     return [c for c in parse_pipe_separated(value) if c and not _is_unknown(c)]
+
+
+def _clean_keywords(value: Any) -> List[str]:
+    """Pipe-split a subject/spatial cell, dropping very short tokens."""
+    return [k for k in parse_pipe_separated(value) if len(k) >= _MIN_KEYWORD_LEN]
+
+
+def _extreme_categories(
+    pol: Optional[str], cen: Optional[str], subj_int: Optional[int]
+) -> List[str]:
+    """Which extreme-sentiment buckets a single (model) rating falls into."""
+    cats: List[str] = []
+    if subj_int is not None:
+        if subj_int >= 4:
+            cats.append("subjectivity_high")
+        if subj_int <= 2:
+            cats.append("subjectivity_low")
+    if pol == "Très négatif":
+        cats.append("polarity_very_negative")
+    elif pol == "Très positif":
+        cats.append("polarity_very_positive")
+    if cen == "Très central":
+        cats.append("centrality_very_central")
+    elif cen == "Marginal":
+        cats.append("centrality_marginal")
+    return cats
+
+
+def _heatmap_cells(
+    cells: Dict[Tuple[str, int], List[int]],
+    countries: List[str],
+    years: List[int],
+) -> List[List[Any]]:
+    """Flatten a {(country, year): [sum, n]} accumulator into sparse
+    ``[countryIdx, yearIdx, mean, n]`` rows aligned to the payload's
+    ``countries`` / ``years`` axes. Empty cells are omitted."""
+    c_idx = {c: i for i, c in enumerate(countries)}
+    y_idx = {y: i for i, y in enumerate(years)}
+    out: List[List[Any]] = []
+    for (country, year), (total, n) in cells.items():
+        if n <= 0:
+            continue
+        ci = c_idx.get(country)
+        yi = y_idx.get(year)
+        if ci is None or yi is None:
+            continue
+        out.append([ci, yi, round(total / n, 2), int(n)])
+    out.sort(key=lambda r: (r[0], r[1]))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -162,6 +253,20 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
     not_applicable: Counter = Counter()
     stray_labels: Counter = Counter()
 
+    # model → polarity label → Counter(subjectivity 1..5)
+    corr: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    # model → (country, year) → [sum_centrality_score, n]
+    cen_heat: Dict[str, Dict[Tuple[str, int], List[int]]] = {
+        m: defaultdict(lambda: [0, 0]) for m in MODELS
+    }
+    # model → category → kind ('subject'/'spatial') → Counter(keyword)
+    ex_kw: Dict[str, Dict[str, Dict[str, Counter]]] = {
+        m: {cat: {"subject": Counter(), "spatial": Counter()} for cat in EXTREME_CATEGORIES}
+        for m in MODELS
+    }
+    # model → category → article count
+    ex_n: Dict[str, Counter] = {m: Counter() for m in MODELS}
+
     pairs: List[Tuple[str, str]] = list(combinations(MODELS, 2))
     co_rated: Counter = Counter()
     agree: Counter = Counter()
@@ -177,6 +282,8 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
     for _, row in df.iterrows():
         year = int(row["_year"])
         countries = _clean_countries(row.get("country"))
+        subject_kw = _clean_keywords(row.get("subject"))
+        spatial_kw = _clean_keywords(row.get("spatial"))
 
         row_pol: Dict[str, Optional[str]] = {}
         for m in MODELS:
@@ -198,7 +305,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
             if cen is not None:
                 if cen in CENTRALITY_ORDER:
                     cen_year[m][cen][year] += 1
-                else:
+                elif cen != NOT_APPLICABLE:
                     stray_labels[f"{m}:{cen}"] += 1
 
             score = clean_float(row.get(subj_cols[m]))
@@ -206,6 +313,28 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
                 acc = subj_year[m][year]
                 acc[0] += score
                 acc[1] += 1
+
+            # -- Derived per-model aggregates ---------------------------
+            subj_int = int(round(score)) if score is not None and 1 <= score <= 5 else None
+
+            # Polarity × subjectivity correlation (NA excluded).
+            if pol in _POLARITY_IDX and pol != NOT_APPLICABLE and subj_int is not None:
+                corr[m][pol][subj_int] += 1
+
+            # Centrality intensity by country × year ("Non abordé" floors
+            # the scale; "Non applicable" / missing excluded).
+            cen_score = CENTRALITY_SCORES.get(cen) if cen is not None else None
+            if cen_score is not None:
+                for c in countries:
+                    cell = cen_heat[m][(c, year)]
+                    cell[0] += cen_score
+                    cell[1] += 1
+
+            # Extreme-sentiment keyword buckets.
+            for cat in _extreme_categories(pol, cen, subj_int):
+                ex_n[m][cat] += 1
+                ex_kw[m][cat]["subject"].update(subject_kw)
+                ex_kw[m][cat]["spatial"].update(spatial_kw)
 
         for a, b in pairs:
             la, lb = row_pol[a], row_pol[b]
@@ -251,6 +380,19 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
                 ],
                 "n": [int(subj_year[m][y][1]) for y in years],
             },
+            "correlation": {
+                label: [int(corr[m][label].get(s, 0)) for s in SUBJECTIVITY_LEVELS]
+                for label in POLARITY_ORDER if label != NOT_APPLICABLE
+            },
+            "centrality_heatmap": _heatmap_cells(cen_heat[m], countries_sorted, years),
+            "extremes": {
+                cat: {
+                    "n": int(ex_n[m][cat]),
+                    "subject": ex_kw[m][cat]["subject"].most_common(EXTREME_TOP_N),
+                    "spatial": ex_kw[m][cat]["spatial"].most_common(EXTREME_TOP_N),
+                }
+                for cat in EXTREME_CATEGORIES
+            },
         }
 
     agreement: List[Dict[str, Any]] = []
@@ -288,7 +430,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         total_records=total_loaded,
         data_source=repo_id,
         script="generate_sentiment_atlas.py",
-        script_version="0.1.0",
+        script_version="0.2.0",
         excludedNoYear=excluded_no_year,
     )
 
@@ -297,6 +439,8 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         "summary": summary,
         "polarity_order": list(POLARITY_ORDER),
         "centrality_order": list(CENTRALITY_ORDER),
+        "subjectivity_levels": list(SUBJECTIVITY_LEVELS),
+        "extreme_categories": list(EXTREME_CATEGORIES),
         "years": years,
         "countries": countries_sorted,
         "models": models_payload,

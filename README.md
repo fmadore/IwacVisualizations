@@ -17,7 +17,7 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
 | Periodicals Overview | page block | **Live** — 6 panels: runs gantt, issues/year, languages, countries, top subjects | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets | Precompute (`generate_semantic_landscape.py`) |
-| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, cross-model agreement | Precompute (`generate_sentiment_atlas.py`) |
+| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, centralité-by-country heatmap, extreme-article keywords, cross-model agreement + Gemini 3 Pro arbiter | Precompute (`generate_sentiment_atlas.py` + `generate_sentiment_arbiter.py`) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
@@ -50,7 +50,7 @@ Two new page blocks porting the core views of the standalone [IWAC-spatial-overv
 
 - **Periodicals Overview page block** — corpus view of the Islamic press: periodical-runs gantt (25 runs, 1981–2024), issues/year by country, languages (log axis), countries, top subjects. 4.6 KB bundle.
 - **Semantic Landscape page block** — zoomable UMAP scatter of all 12,286 articles by full-text embedding similarity, faceted by Country / Decade / Topic, click-through to articles. The bundle is deliberately the module's heaviest (~1 MB minified / ~300 KB gzipped; titles dominate) and loads on-view only. `umap-learn` added to `scripts/requirements.txt`.
-- **Sentiment Atlas page block** — the 3-model AI sentiment at corpus level: polarity + centralité over time, polarity by country, per-model subjectivity trends, and cross-model agreement (Gemini↔ChatGPT 71.0 %, ChatGPT↔Mistral 70.9 %, Gemini↔Mistral 64.1 % — pairwise cards + a selectable 6×6 cross-tab). Every panel is labelled as AI-generated assessment.
+- **Sentiment Atlas page block** — the 3-model AI sentiment at corpus level: polarity + centralité over time, polarity by country, polarity × subjectivity, a centralité-by-country-and-year heatmap, the subject/place keywords driving the most extreme-rated articles, per-model subjectivity trends, and cross-model agreement (Gemini↔ChatGPT 71.0 %, ChatGPT↔Mistral 70.9 %, Gemini↔Mistral 64.1 % — pairwise cards + a selectable 6×6 cross-tab). A closing section surfaces the **Gemini 3 Pro arbiter**'s verdicts on the 366 articles where two models diverged sharply, ported from the sibling [IWAC-sentiment-analysis](https://github.com/fmadore/IWAC-sentiment-analysis) study and pre-aggregated to a 1.4 KB bundle. Every panel is labelled as AI-generated assessment.
 - **Press Language page block** — readability (Flesch FR), lexical richness (TTR), and article length over time and by newspaper (31 newspapers ≥ 50 articles).
 - **Item Set Dashboard went live** (was a placeholder since the scaffold) — see its section above; reuses the compare-newspapers corpus aggregates, zero new precompute.
 - **Index Overview split**: `index-overview.json` now carries only the chart aggregates (**186 KB**, was 779); the 4,385 table rows moved to `index-overview-table.json` (**567 KB**) fetched when the table panel nears the viewport. With the v1.3.0 Section B deferral, the block's eager payload dropped ~1.9 MB → ~190 KB.
@@ -305,7 +305,9 @@ The "map of everything": a zoomable scatter of all 12,286 articles placed by UMA
 
 ### Sentiment Atlas (page block)
 
-Corpus-level view of the 3-model AI sentiment (Gemini Flash 3.0 / ChatGPT GPT-5 mini / Mistral Ministral 14B) that until now was only visible item-by-item: polarity and centralité-of-Islam over time, polarity by country, subjectivity trends per model, and cross-model agreement (pairwise rates + a polarity cross-tab). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts. Backed by `generate_sentiment_atlas.py`.
+Corpus-level view of the 3-model AI sentiment (Gemini Flash 3.0 / ChatGPT GPT-5 mini / Mistral Ministral 14B) that until now was only visible item-by-item. A global model facet drives polarity and centralité-of-Islam over time, polarity by country, a polarity × subjectivity breakdown, and a centralité-by-country-and-year intensity heatmap; an extremes section shows the subject/place keywords most frequent among the articles a model rated at the ends of each scale; a subjectivity trend overlays all three models; and a model-pair facet drives cross-model agreement (pairwise rates + a polarity cross-tab) alongside the **Gemini 3 Pro arbiter** — an independent judge that, blind to which model was which, adjudicated the 366 articles where two models diverged sharply (≥ 3 points on a dimension). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts.
+
+The polarity/centrality/subjectivity/correlation/heatmap/extremes cuts all recompute from Hugging Face via `generate_sentiment_atlas.py` (≈ 40 KB bundle). The arbiter verdicts cannot be regenerated from HF (they are paid-API Gemini 3 Pro output), so `generate_sentiment_arbiter.py` reads the sibling [IWAC-sentiment-analysis](https://github.com/fmadore/IWAC-sentiment-analysis) study's per-article files once and reduces them to a counts-only 1.4 KB bundle — keeping the page-block payload tiny rather than fetching the study's multi-MB raw data at runtime. The block fetches the arbiter bundle optionally and omits the arbitration panels if it is absent.
 
 ### Press Language (page block)
 
@@ -698,6 +700,7 @@ python3 scripts/generate_publication_dashboards.py  # → asset/data/publication
 python3 scripts/generate_periodicals_overview.py            # → asset/data/periodicals-overview.json
 python3 scripts/generate_semantic_landscape.py   --minify   # → asset/data/semantic-landscape.json (needs umap-learn)
 python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
+python3 scripts/generate_sentiment_arbiter.py    --minify   # → asset/data/sentiment-arbiter.json (reads ../IWAC-sentiment-analysis)
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
 ```
 
