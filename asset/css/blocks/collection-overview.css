@@ -49,7 +49,7 @@
     min-height: clamp(280px, 40vh, 360px);
 }
 
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-overview-grid .iwac-vis-chart {
         min-height: 240px;
     }
@@ -172,7 +172,7 @@
 }
 
 /* Mobile: also hide the Added date column so only thumb + title remain */
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-recent-additions .iwac-vis-table__header,
     .iwac-vis-recent-additions .iwac-vis-table__cell {
         padding: 0.5rem 0.6rem;

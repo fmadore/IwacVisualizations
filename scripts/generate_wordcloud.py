@@ -32,7 +32,6 @@ import pandas as pd
 from iwac_utils import (
     DATASET_ID,
     configure_logging,
-    create_metadata_block,
     extract_year,
     load_dataset_safe,
     parse_pipe_separated,

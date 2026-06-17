@@ -138,7 +138,7 @@
                 console.error('IWACVis person dashboard:', err);
                 var loading = container.querySelector('.iwac-vis-person__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

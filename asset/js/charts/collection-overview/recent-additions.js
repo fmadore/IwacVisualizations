@@ -19,7 +19,7 @@
     function render(chartEl, data, ctx) {
         var items = (data && data.recent_additions) || [];
         if (items.length === 0) {
-            chartEl.appendChild(P.el('div', 'iwac-vis-empty', P.t('No recent additions')));
+            chartEl.appendChild(P.buildEmptyState('No recent additions'));
             return;
         }
 

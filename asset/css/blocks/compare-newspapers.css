@@ -70,7 +70,7 @@
 }
 
 .iwac-vis-compare-picker[data-side="B"]::before {
-    background: var(--iwac-compare-color-b, #394f68);
+    background: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-picker__eyebrow {
@@ -86,7 +86,7 @@
 }
 
 .iwac-vis-compare-picker[data-side="B"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-b, #394f68);
+    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-picker__row {
@@ -95,7 +95,7 @@
     gap: var(--space-sm, 0.5rem);
 }
 
-@media (min-width: 640px) { /* sm */
+@media (min-width: 600px) { /* sm */
     .iwac-vis-compare-picker__row {
         grid-template-columns: auto 1fr;
         align-items: center;
@@ -339,7 +339,7 @@
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-b, #394f68);
+    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-overlap__count {
@@ -390,7 +390,7 @@
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-b, #394f68) 35%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--iwac-compare-color-b, var(--secondary, #394f68)) 35%, var(--border, #d4d6da));
 }
 
 
@@ -430,7 +430,7 @@
 }
 
 .iwac-vis-compare-wordcloud[data-side="B"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-b, #394f68);
+    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-wordcloud__chart {
@@ -549,7 +549,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #e64a19)); }
-.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, #394f68); }
+.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, var(--secondary, #394f68)); }
 
 
 /* =================================================================== */
@@ -587,7 +587,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-sentiment__col[data-side="B"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-b, #394f68);
+    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-sentiment__chart {

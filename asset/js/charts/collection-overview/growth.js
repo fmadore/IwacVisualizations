@@ -18,7 +18,7 @@
     function render(chartEl, data) {
         var growth = data && data.growth;
         if (!growth || !growth.months || growth.months.length === 0) {
-            chartEl.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            chartEl.appendChild(P.buildEmptyState());
             return;
         }
 

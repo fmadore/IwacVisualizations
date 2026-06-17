@@ -114,7 +114,7 @@
                 instance.setOption(C.timeline(data.timeline));
             });
         } else {
-            h.timeline.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            h.timeline.chart.appendChild(P.buildEmptyState());
         }
 
         // Country bar
@@ -124,7 +124,7 @@
                 instance.setOption(C.horizontalBar(countries, { nameKey: 'name', valueKey: 'total' }));
             });
         } else {
-            h.country.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            h.country.chart.appendChild(P.buildEmptyState());
         }
 
         // Treemap (sanitized inside C.treemap — Task 7 fix)
@@ -133,7 +133,7 @@
                 instance.setOption(C.treemap(data.treemap));
             });
         } else {
-            h.treemap.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            h.treemap.chart.appendChild(P.buildEmptyState());
         }
     }
 
@@ -165,7 +165,7 @@
             .catch(function (err) {
                 console.error('IWACVis collection overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

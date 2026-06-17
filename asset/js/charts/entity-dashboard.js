@@ -121,7 +121,7 @@
                 console.error('IWACVis entity dashboard:', err);
                 var loading = container.querySelector('.iwac-vis-entity__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

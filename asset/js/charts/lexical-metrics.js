@@ -191,7 +191,7 @@
             .then(function (data) {
                 if (!data || !data.summary || !data.summary.articles) {
                     container.innerHTML = '';
-                    container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                    container.appendChild(P.buildEmptyState());
                     return;
                 }
 
@@ -232,7 +232,7 @@
                     h.grid.appendChild(panel.panel);
                     if (!byYear.years || !byYear.years.length) {
                         panel.chart.appendChild(
-                            P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                            P.buildEmptyState());
                         return;
                     }
                     ns.registerChart(panel.chart, function (el, chart) {
@@ -274,7 +274,7 @@
             .catch(function (err) {
                 console.error('IWACVis lexical metrics:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

@@ -117,7 +117,7 @@
         var lifespan = (data && data.lifespan) || {};
         var hasAny = TYPE_ORDER.some(function (t) { return (lifespan[t] || []).length > 0; });
         if (!hasAny) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
             return;
         }
 

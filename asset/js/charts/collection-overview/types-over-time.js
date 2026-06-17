@@ -20,7 +20,7 @@
     function render(panelEl, data) {
         var tot = data && data.types_over_time;
         if (!tot || !tot.years || tot.years.length === 0) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
             return;
         }
 

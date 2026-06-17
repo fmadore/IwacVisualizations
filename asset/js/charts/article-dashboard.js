@@ -101,7 +101,7 @@
                 console.error('IWACVis article dashboard:', err);
                 var loading = container.querySelector('.iwac-vis-article__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

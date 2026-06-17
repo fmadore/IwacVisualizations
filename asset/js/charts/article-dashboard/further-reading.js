@@ -91,7 +91,7 @@
     function renderTagView(gridHost, related, entityTitleMap, siteBase) {
         gridHost.innerHTML = '';
         if (!related.length) {
-            gridHost.appendChild(P.el('div', 'iwac-vis-empty', P.t('No related articles')));
+            gridHost.appendChild(P.buildEmptyState('No related articles'));
             return;
         }
         related.forEach(function (r) {
@@ -112,7 +112,7 @@
     function renderContentView(gridHost, neighbours, siteBase) {
         gridHost.innerHTML = '';
         if (!neighbours.length) {
-            gridHost.appendChild(P.el('div', 'iwac-vis-empty', P.t('No similar articles')));
+            gridHost.appendChild(P.buildEmptyState('No similar articles'));
             return;
         }
         neighbours.forEach(function (n) {
@@ -142,7 +142,7 @@
         // If neither signal has anything to show, collapse the whole
         // panel body to an empty state.
         if (!related.length && !neighbours.length) {
-            host.appendChild(P.el('div', 'iwac-vis-empty', P.t('No further reading found')));
+            host.appendChild(P.buildEmptyState('No further reading found'));
             return;
         }
 

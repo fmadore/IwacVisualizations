@@ -200,7 +200,7 @@
             .then(function (raw) {
                 if (!raw || !raw.summary || raw.summary.total === 0) {
                     container.innerHTML = '';
-                    container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                    container.appendChild(P.buildEmptyState());
                     return;
                 }
 
@@ -279,7 +279,7 @@
             .catch(function (err) {
                 console.error('IWACVis references overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

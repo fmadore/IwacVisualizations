@@ -749,7 +749,7 @@
 
                 if (!data || !data.models || !data.summary || !data.summary.total) {
                     container.innerHTML = '';
-                    container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                    container.appendChild(P.buildEmptyState());
                     return;
                 }
 
@@ -884,7 +884,7 @@
                 var agreement = data.agreement || [];
                 if (agreement.length === 0) {
                     h.agreementPanel.chart.appendChild(
-                        P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                        P.buildEmptyState());
                     return;
                 }
 
@@ -986,7 +986,7 @@
             .catch(function (err) {
                 console.error('IWACVis sentiment atlas:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

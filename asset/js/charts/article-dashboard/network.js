@@ -190,7 +190,7 @@
         });
 
         if (!hasData) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No entities tagged')));
+            panelEl.chart.appendChild(P.buildEmptyState('No entities tagged'));
             return;
         }
 

@@ -429,7 +429,7 @@
     min-height: 600px;
 }
 
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-scary-chart { min-height: 380px; }
     .iwac-vis-scary-panel--matrix .iwac-vis-scary-chart { min-height: 480px; }
     .iwac-vis-scary-chart-header { padding-right: 0; }
@@ -459,7 +459,7 @@
     gap: var(--space-3, 0.75rem);
 }
 
-@media (min-width: 640px) { /* sm */
+@media (min-width: 600px) { /* sm */
     .iwac-vis-scary-defs-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

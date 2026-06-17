@@ -41,7 +41,7 @@
                 .catch(function (err) {
                     console.error('IWACVis wordcloud:', err);
                     panelEl.chart.innerHTML = '';
-                    panelEl.chart.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                    panelEl.chart.appendChild(P.buildErrorState());
                 });
         }
 
@@ -85,9 +85,6 @@
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
 
         var meta = P.el('div', 'iwac-vis-wordcloud-meta');
-        meta.style.marginTop = '0.5rem';
-        meta.style.fontSize = '0.85rem';
-        meta.style.color = 'var(--ink-muted, #666)';
         panelEl.panel.appendChild(meta);
 
         function currentFacetData() {

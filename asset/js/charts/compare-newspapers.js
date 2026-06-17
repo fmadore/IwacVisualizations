@@ -197,8 +197,7 @@
                         }).catch(function (err) {
                             console.error('IWACVis compare-newspapers:', err);
                             resultsRoot.innerHTML = '';
-                            resultsRoot.appendChild(P.el('div', 'iwac-vis-error',
-                                P.t('Failed to load')));
+                            resultsRoot.appendChild(P.buildErrorState());
                         });
                     };
                 }
@@ -216,7 +215,7 @@
             .catch(function (err) {
                 console.error('IWACVis compare-newspapers index:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 
