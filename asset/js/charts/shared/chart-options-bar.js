@@ -68,7 +68,7 @@
             // left:56 — room for the rotated y-axis name to clear the tick
             // numbers; bottom widened so, with a slider present, the x-axis
             // name sits above the slider track instead of colliding.
-            grid: C._grid({ left: 56, bottom: useZoom ? 64 : 40 }),
+            grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
@@ -109,7 +109,7 @@
             // left + right gutters hold the two rotated axis names (Monthly
             // on the left, Cumulative on the right); bottom widened for the
             // x-axis name to clear any slider.
-            grid: C._grid({ left: 56, right: 56, bottom: useZoom ? 64 : 44 }),
+            grid: C._grid({ left: 64, right: 64, bottom: useZoom ? 64 : 44 }),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             legend: {
                 top: 4,
@@ -220,7 +220,7 @@
         var dataZoom = C._dataZoom(categories.length);
         var useZoom = dataZoom.length > 0;
         var base = {
-            grid: C._grid({ left: 56, bottom: useZoom ? 64 : 40 }),
+            grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {

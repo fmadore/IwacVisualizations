@@ -300,7 +300,7 @@
         var dataZoom = C._dataZoom(years.length);
         var useZoom = dataZoom.length > 0;
         return {
-            grid: C._grid({ left: 56, bottom: useZoom ? 64 : 40 }),
+            grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
             legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
             tooltip: {
                 trigger: 'axis',
@@ -387,7 +387,7 @@
                     });
                 }
             },
-            grid: { left: 96, right: 24, top: 12, bottom: 64, containLabel: true },
+            grid: { left: 8, right: 24, top: 12, bottom: 64, containLabel: true },
             xAxis: {
                 type: 'category',
                 data: years.map(String),
@@ -653,7 +653,7 @@
             P.t('sentiment.polarity_year_title'), descWithAiNote('sentiment.polarity_year_desc'));
         var centralityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.centrality_year_title'), descWithAiNote('sentiment.centrality_year_desc'));
-        var subjectivityPanel = P.buildPanel('iwac-vis-panel',
+        var subjectivityPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
             P.t('sentiment.subjectivity_title'), descWithAiNote('sentiment.subjectivity_desc'));
 
         // Dynamic "Non applicable" caption under the polarity timeline.

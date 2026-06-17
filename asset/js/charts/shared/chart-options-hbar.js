@@ -100,7 +100,11 @@
                 type: 'category',
                 data: names,
                 inverse: true,
-                axisTick: { show: false }
+                axisTick: { show: false },
+                // Cap long category labels with an ellipsis; the full name
+                // stays available in the axis tooltip. R.labelMedia narrows
+                // the cap on phones.
+                axisLabel: { width: 180, overflow: 'truncate' }
             },
             series: [{
                 type: 'bar',
@@ -115,7 +119,7 @@
         };
 
         return R && R.withMedia
-            ? R.withMedia(base, R.gridMedia)
+            ? R.withMedia(base, R.labelMedia({ smWidth: 110 }), R.gridMedia)
             : base;
     };
 
