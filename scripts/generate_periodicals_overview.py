@@ -53,6 +53,7 @@ from iwac_utils import (
     configure_logging,
     create_metadata_block,
     extract_year,
+    is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
@@ -72,12 +73,8 @@ def _str_or_none(value: Any) -> Optional[str]:
     return s or None
 
 
-def _is_unknown(value: str) -> bool:
-    """Match the JS-side P.isUnknown — treats empty / 'unknown' / 'inconnu'."""
-    if not value:
-        return True
-    low = value.lower()
-    return low in {"unknown", "inconnu", "n/a", "na", "none", "null", "—"}
+# Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
+_is_unknown = is_unknown
 
 
 def _clean_list(values: List[str]) -> List[str]:

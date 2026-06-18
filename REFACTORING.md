@@ -10,8 +10,9 @@ landed v1.8.2) and the build-verifiable Tier 2 reuse helpers (`bootPerItemDashbo
 landed v1.8.3) are **done and ship as v1.9.0** (2026-06-17), merged to `main`.
 The remaining Tier 2 items + all of Tier 3 + the Python tier are deferred — see
 the unchecked boxes and the "Deferred" note below: most touch map / graph /
-heatmap **color rendering** that needs live Playwright verification, or are
-blocked on the `iwac_utils` ↔ `iwac-dashboard` sync question.
+heatmap **color rendering** that needs live Playwright verification. (The Python
+tier is now **unblocked** — `iwac-dashboard` is deprecated, so `iwac_utils.py` has
+no sync constraint.)
 
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
@@ -194,12 +195,17 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   free `build_entity_index(index_df)`) — `generate_article_dashboards.py:171-226`
   is a forked copy of `dashboard_aggregator.py:305-376` `build_entity_lookup`;
   `build_index_lookups` in `generate_compare_newspapers.py:266-342` is a 3rd variant.
-- [ ] **Aggregation + scalar primitives in `iwac_utils.py`**: `count_pipe_field`,
-  `top_n_entries(counter, n, name_to_oid=None)` (~15 inline copies, e.g. the
-  duplicate `compute_newspapers`/`compute_newspaper_coverage` in
-  collection_overview); `clean_int`, `first_country`, `is_unknown`,
-  `clean_str_or_none` (~9 local copies across 8 files). Unify the inconsistent
-  `== "unknown"` vs full `_is_unknown` token-set checks.
+- [x] **`is_unknown` consolidated** — **DONE (v1.9.0)**. Added `is_unknown()` and
+  `clean_int()` to `iwac_utils.py`; the 4 identical local `_is_unknown` copies
+  (`lexical_metrics`, `periodicals_overview`, `references_overview`,
+  `sentiment_atlas`) are now one-line aliases of the shared helper. `py_compile`
+  clean; **byte-identical output unconfirmed** — generators need the live HF
+  dataset, so re-run one on `--limit 5` to verify before regenerating data.
+- [ ] **Remaining scalar/aggregation primitives** — consolidate `_int_or_none`
+  (3 files) onto the new `clean_int`; add `first_country`, `clean_str_or_none`,
+  `count_pipe_field`, `top_n_entries(counter, n, name_to_oid=None)` (~15 inline
+  copies, incl. the duplicate `compute_newspapers`/`compute_newspaper_coverage` in
+  collection_overview); fold the inline `== "unknown"` checks onto `is_unknown`.
 - [ ] **Shared sentiment constants + `tally_sentiment`** — `SENTIMENT_MODELS`,
   `POLARITE_ORDER`, `CENTRALITE_ORDER`, subjectivité buckets defined 2-3× across
   `dashboard_aggregator.py:114-142`, `generate_compare_newspapers.py:566-690`,
@@ -213,9 +219,11 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
 - [ ] **`generate_entity_networks.py:80`** — import `DEFAULT_MIN_COOCCURRENCE`
   from `dashboard_aggregator` rather than redeclaring.
 
-> ⚠️ **Confirm first:** the README claims `iwac_utils.py` is kept in sync with
-> the sibling `iwac-dashboard` repo. If that constraint is live, new helpers
-> land in both repos or the constraint is dropped.
+> ✅ **Resolved (2026-06-18):** `iwac-dashboard` is being **deprecated** — there is
+> no `iwac_utils.py` sync constraint. Add and refactor shared Python helpers freely
+> here. *(Generators can't run in this environment — they hit the live HF dataset —
+> so a Python refactor is `py_compile`-checked here; confirm byte-identical output by
+> re-running the affected generator on `--limit 5`, the project's established check.)*
 
 ### CSS — promote duplicated patterns into `iwac-core.css`
 - [ ] **Aside / surface-card shell** — identical rule 3×:

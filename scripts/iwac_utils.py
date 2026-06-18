@@ -499,6 +499,32 @@ def clean_float(value: Any) -> Optional[float]:
         return None
 
 
+def clean_int(value: Any) -> Optional[int]:
+    """Cast a DataFrame cell to int, or None for NaN / missing / garbage.
+
+    Integer counterpart of ``clean_float``; several generators carried a
+    local ``_int_or_none`` with this exact body.
+    """
+    try:
+        if value is None or (isinstance(value, float) and pd.isna(value)):
+            return None
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def is_unknown(value: Any) -> bool:
+    """True for empty / 'unknown'-like labels (matches the JS-side P.isUnknown).
+
+    Centralises the local ``_is_unknown`` several generators duplicated. The
+    membership set covers the FR/EN placeholders the dataset uses for a missing
+    value: unknown / inconnu / n/a / na / none / null / em-dash.
+    """
+    if not value:
+        return True
+    return str(value).lower() in {"unknown", "inconnu", "n/a", "na", "none", "null", "—"}
+
+
 def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:
     """
     Parse multi-value field using multiple possible separators.
