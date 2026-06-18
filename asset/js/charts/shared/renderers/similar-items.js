@@ -116,6 +116,10 @@
     }
 
     DL.registerRenderer('similarItems', function (el, data, slot, ctx) {
+        // Card strips size to their content — drop the 320px ECharts
+        // floor so a short strip doesn't float in a tall empty panel.
+        el.classList.add('iwac-vis-chart--auto');
+
         var opts = (slot && slot.options) || {};
         var max = opts.max != null ? opts.max : 8;
         var lowSignal = opts.lowSignal != null ? opts.lowSignal : 0.4;

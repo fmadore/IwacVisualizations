@@ -227,6 +227,20 @@
 }
 
 /* -------------------------------------------------------------------
+ * Content-sized hosts — opt out of the 320px ECharts floor.
+ *
+ * The floor above keeps ECharts canvases (which collapse to 0 height)
+ * legible. Plain-DOM renderers — the SVG sparkline, the similar-item
+ * card strips — size to their own content instead, so the floor would
+ * strand them at the top of a tall, mostly-empty panel. Those renderers
+ * add this marker class to their host to drop the floor and let the
+ * panel shrink-wrap its content.
+ * ----------------------------------------------------------------- */
+.iwac-vis-panel > .iwac-vis-chart.iwac-vis-chart--auto {
+    min-height: 0;
+}
+
+/* -------------------------------------------------------------------
  * Graph-host override — specificity bump.
  *
  * Panels that embed a force-directed graph mark the chart host with
@@ -265,6 +279,22 @@
 @media (max-width: 600px) { /* sm */
     .iwac-vis-panel > .iwac-vis-chart.iwac-vis-treemap-host {
         min-height: 420px;
+    }
+}
+
+/* -------------------------------------------------------------------
+ *  Word-cloud host — clouds need vertical room to lay out legibly, so
+ *  they reserve more than the generic 320px floor. Added by the shared
+ *  `wordCloud` renderer (per-issue publication dashboards, etc.).
+ *  Specificity is chained to `.iwac-vis-panel` to beat the generic
+ *  floor without depending on source order (see the graph-host note).
+ * ----------------------------------------------------------------- */
+.iwac-vis-panel > .iwac-vis-chart.iwac-vis-wordcloud-host {
+    min-height: 400px;
+}
+@media (max-width: 600px) { /* sm */
+    .iwac-vis-panel > .iwac-vis-chart.iwac-vis-wordcloud-host {
+        min-height: 320px;
     }
 }
 
@@ -530,6 +560,17 @@
 
 @media (min-width: 1024px) { /* lg */
     .iwac-vis-overview-summary { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* Publication (periodical-issue) dashboard body — stacks the stat-card
+ * row above the dashboardLayout grid with a consistent gap, and clears
+ * the "Visualizations" heading. Mirrors `.iwac-vis-minimal-item__body`;
+ * the publication block ships no block-CSS of its own. */
+.iwac-vis-publication__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+    margin-top: var(--space-3, 0.75rem);
 }
 
 /*  Almanac figure — not a card. Each stat is a ruled column entry:

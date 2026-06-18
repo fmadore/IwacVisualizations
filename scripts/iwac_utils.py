@@ -16,6 +16,8 @@ Functions:
 - parse_coordinates: Parse "lat, lng" or "lat lng" strings (or tuple/list)
 - normalize_location_name: Unicode NFC normalization for matching
 - parse_pipe_separated: Parse multivalue fields
+- tokenize: Word-cloud tokenizer (lowercase, strip punctuation, drop
+  stopwords and short tokens)
 - clean_str: Strip-and-cast a DataFrame cell, treating NaN/None as ""
 - clean_float: Cast a DataFrame cell to float, or None for garbage
 - load_dataset_safe: Load HuggingFace dataset with error handling
@@ -558,6 +560,65 @@ def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:
             return [v.strip() for v in value_str.split(sep) if v.strip()]
 
     return [value_str]
+
+
+# =============================================================================
+# Text / Tokenization
+# =============================================================================
+
+# Basic French stopwords — keep the list compact but cover the biggest
+# high-frequency items. Extend here rather than pulling NLTK to avoid a
+# runtime dependency. Shared by every generator that builds word clouds
+# (collection-wide and per-issue), so the token vocabulary stays
+# consistent across visualizations.
+FR_STOPWORDS = set("""
+a à ai ainsi ais ait alors après as au aucun aucune aussi autant autre autres
+aux avait avant avec avoir ayant c ça car ce ceci cela celle celles celui
+cent cependant certain certaine certaines certains ces cet cette ceux chacun
+chaque chez ci comme comment d dans de depuis des du deux dès donc dont doux
+du durant e elle elles en encore entre es est et étant été être eu eux
+fait faire fois font h hors i il ils j je l la là laquelle le lequel les
+lesquelles lesquels leur leurs lui m ma mais me même mes mien mienne miennes
+miens moi moins mon n ne ni nos notre nous nouveau nouveaux nouvelle nouvelles
+o on ont ou où oui par parce pas peu peut peuvent plus plusieurs plutôt pour
+pourquoi puis qu quand que quel quelle quelles quels qui quoi s sa sans
+se sera serait seront ses si sien sienne siennes siens soi soient sois soit
+sommes son sont sous suis sur t ta tandis tant te tel telle telles tels tes
+toi ton tous tout toute toutes très trois tu un une vais vas vers voici voilà
+vos votre vous y
+comme cette dans plus mais tout pour être avoir faire dire voir savoir pouvoir vouloir devoir
+""".split())
+
+# Additional IWAC-specific noise words that survived the generic list.
+CUSTOM_STOPWORDS = set("""
+article journal page pages numero numéro nombre date lieu monsieur madame
+selon ainsi cependant effet toutefois outre certes ailleurs notamment
+""".split())
+
+STOPWORDS = FR_STOPWORDS | CUSTOM_STOPWORDS
+
+# Unicode letter class — catches all accented Latin letters including
+# œ, æ, ÿ, ñ that an ASCII-plus-diacritics class would miss. Common French
+# words like cœur, sœur, œuvre, bœuf would otherwise fragment into sub-4-char
+# tokens and vanish entirely from the counts.
+TOKEN_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
+
+
+def tokenize(text: Any) -> List[str]:
+    """Lowercase, strip punctuation, split on whitespace, drop stopwords
+    and short (< 4 char) tokens. Non-string input returns an empty list.
+
+    The shared word-cloud tokenizer. Inputs may be raw ``OCR`` (where the
+    stopword set does the heavy lifting) or precomputed spaCy lemma
+    columns (``lemma_nostop`` / ``lemma_text``), where stopwords are
+    already gone and this mostly just splits and length-filters.
+    """
+    if not isinstance(text, str) or not text:
+        return []
+    return [
+        tok for tok in TOKEN_RE.findall(text.lower())
+        if len(tok) >= 4 and tok not in STOPWORDS
+    ]
 
 
 # =============================================================================

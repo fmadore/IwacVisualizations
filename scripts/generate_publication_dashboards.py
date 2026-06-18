@@ -6,12 +6,21 @@ One JSON per ``publications`` row (Islamic periodical issues —
 ``publication`` resource-page partial through
 ``asset/js/charts/publication-dashboard.js``.
 
-Each file carries three blocks:
+Each file carries these blocks:
 
   * ``metrics``            — words / pages / issue number / language /
                              country / date, for the stat-card row.
                              Missing values are ``None`` and the
                              front-end elides those cards.
+  * ``wordcloud``          — top ``[word, count]`` pairs from the issue's
+                             own text, for the per-issue word cloud. Source
+                             column priority is ``lemma_nostop`` →
+                             ``lemma_text`` → ``OCR``; the lemma columns are
+                             a planned addition to the publications subset,
+                             so this falls back to OCR and works today,
+                             sharpening automatically once lemmas publish.
+                             Empty when no text is available, so the slot
+                             elides.
   * ``run``                — the issue's periodical run: issues-per-year
                              for the same ``newspaper`` (the periodical
                              title in this subset), zero-filled across
@@ -21,11 +30,6 @@ Each file carries three blocks:
                              the minimal-item dashboards on whole-subset
                              siblings, ``newspaper`` is clean here, so
                              the per-periodical slice is honest.
-  * ``run_neighbors``      — up to 8 issues of the SAME periodical,
-                             chronologically closest to this one
-                             (prev/next browsing). No similarity score;
-                             the shared similar-items renderer handles
-                             score-less cards natively.
   * ``semantic_neighbors`` — top-K issues by cosine similarity over
                              ``embedding_tableOfContents`` (768-dim
                              Gemini), in the exact card shape the shared
@@ -34,17 +38,12 @@ Each file carries three blocks:
                              date / thumbnail / similarity``). Same kNN
                              recipe as ``generate_article_dashboards.py``
                              — N is only 1,501 so the similarity matrix
-                             fits comfortably in one shot.
-
-                             Data reality check (2026-06): the live
-                             dataset carries a ``tableOfContents`` for
-                             only 4 of 1,501 issues, so this block is
-                             empty almost everywhere today. It is wired
-                             anyway because the front-end slot elides
-                             when empty and lights up automatically as
-                             the upstream ToC pipeline progresses —
-                             ``run_neighbors`` is the panel that works
-                             for every issue right now.
+                             fits comfortably in one shot. This is the
+                             dashboard's "similar issues" block; it
+                             replaced an earlier chronological "other
+                             issues of this periodical" strip now that
+                             ``embedding_tableOfContents`` has coverage
+                             across the subset.
 
 Usage
 -----
@@ -72,6 +71,7 @@ from iwac_utils import (
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
+    tokenize,
 )
 
 logger = logging.getLogger("generate_publication_dashboards")
@@ -81,6 +81,11 @@ PUBLICATIONS_SUBSET = "publications"
 # Ten neighbour cards is what the article dashboards ship and what the
 # shared similar-items renderer paginates comfortably.
 DEFAULT_TOP_K_SEMANTIC = 10
+
+# Per-issue word cloud: ~120 words reads as a full but legible cloud, and a
+# min frequency of 2 drops one-off OCR noise. Both tunable via CLI.
+DEFAULT_WORDCLOUD_MAX_WORDS = 120
+DEFAULT_WORDCLOUD_MIN_FREQUENCY = 2
 
 
 class PublicationDashboardGenerator:
@@ -92,12 +97,16 @@ class PublicationDashboardGenerator:
         repo_id: str = DATASET_ID,
         limit: Optional[int] = None,
         top_k_semantic: int = DEFAULT_TOP_K_SEMANTIC,
+        wordcloud_max_words: int = DEFAULT_WORDCLOUD_MAX_WORDS,
+        wordcloud_min_frequency: int = DEFAULT_WORDCLOUD_MIN_FREQUENCY,
         minify: bool = True,
     ) -> None:
         self.output_dir = output_dir
         self.repo_id = repo_id
         self.limit = limit if limit else None
         self.top_k_semantic = top_k_semantic
+        self.wordcloud_max_words = wordcloud_max_words
+        self.wordcloud_min_frequency = wordcloud_min_frequency
         self.minify = minify
 
         self.df = None  # publications DataFrame
@@ -108,8 +117,6 @@ class PublicationDashboardGenerator:
         self.row_to_id: Dict[int, int] = {}
         # periodical title -> Counter({year: issue count})
         self.runs: Dict[str, Counter] = defaultdict(Counter)
-        # periodical title -> issue o_ids in chronological order
-        self.run_order: Dict[str, List[int]] = {}
 
         self.embedding_matrix: Optional[np.ndarray] = None
         self.valid_rows: Optional[np.ndarray] = None
@@ -140,9 +147,19 @@ class PublicationDashboardGenerator:
         nb_pages_col  = find_column(df, ["nb_pages", "pages"])
         nb_mots_col   = find_column(df, ["nb_mots", "word_count"])
         thumbnail_col = find_column(df, ["thumbnail"])
+        # Word-cloud source: prefer stopword-stripped lemmas, then raw
+        # lemmas, then OCR (the shared tokenizer strips stopwords either
+        # way). The lemma columns are a planned addition to the
+        # publications subset; until they land this falls back to OCR, so
+        # per-issue clouds render today and sharpen once lemmas publish.
+        text_col = find_column(df, ["lemma_nostop", "lemma_text", "OCR"])
 
         if not id_col:
             raise RuntimeError("publications subset has no o:id column")
+        if text_col:
+            logger.info(f"  word-cloud source column: {text_col}")
+        else:
+            logger.warning("  no lemma/OCR column — per-issue word clouds will be empty")
 
         for row_idx, row in df.iterrows():
             try:
@@ -176,6 +193,7 @@ class PublicationDashboardGenerator:
                 "nb_pages":   int(nb_pages) if nb_pages is not None else None,
                 "nb_mots":    int(nb_mots) if nb_mots is not None else None,
                 "thumbnail":  clean_str(row.get(thumbnail_col)) if thumbnail_col else "",
+                "wordcloud":  self._wordcloud_for(row.get(text_col)) if text_col else [],
             }
             self.row_to_id[row_idx] = pub_id
             self.target_ids.append(pub_id)
@@ -186,19 +204,25 @@ class PublicationDashboardGenerator:
         logger.info(
             f"  {len(self.meta)} issues across {len(self.runs)} periodicals"
         )
+        n_clouds = sum(1 for m in self.meta.values() if m.get("wordcloud"))
+        logger.info(f"  word clouds built for {n_clouds}/{len(self.meta)} issues")
 
-    def build_run_order(self) -> None:
-        """Per-periodical chronological issue order (ISO date string,
-        then o_id as the tiebreak; undated issues sort last) — feeds the
-        prev/next "other issues of this periodical" strips."""
-        by_periodical: Dict[str, List[int]] = defaultdict(list)
-        for pub_id in self.target_ids:
-            name = self.meta[pub_id]["newspaper"]
-            if name:
-                by_periodical[name].append(pub_id)
-        for name, ids in by_periodical.items():
-            ids.sort(key=lambda pid: (self.meta[pid]["pub_date"] or "9999", pid))
-        self.run_order = dict(by_periodical)
+    def _wordcloud_for(self, text: Any) -> List[List[Any]]:
+        """Top ``[word, count]`` pairs for one issue's text, ready for the
+        front-end ``wordCloud`` renderer. Returns an empty list when the
+        text is missing/blank or nothing clears the min-frequency floor, so
+        the dashboard slot elides instead of drawing a sparse cloud.
+        """
+        tokens = tokenize(text)
+        if not tokens:
+            return []
+        counts = Counter(tokens)
+        pairs = [
+            [word, int(freq)]
+            for word, freq in counts.most_common()
+            if freq >= self.wordcloud_min_frequency
+        ]
+        return pairs[: self.wordcloud_max_words]
 
     # ------------------------------------------------------------------
     # Semantic kNN over embedding_tableOfContents
@@ -361,38 +385,6 @@ class PublicationDashboardGenerator:
             "total":     int(sum(counts.values())),
         }
 
-    def build_run_neighbors(self, pub_id: int, cap: int = 8) -> List[Dict[str, Any]]:
-        """Up to ``cap`` issues of the same periodical, picked by
-        expanding outward from this issue's position in the run and
-        returned in chronological order. The periodical name is omitted
-        from the cards — every card in the strip shares it.
-        """
-        meta = self.meta[pub_id]
-        ids = self.run_order.get(meta["newspaper"] or "", [])
-        if len(ids) < 2:
-            return []
-        idx = ids.index(pub_id)
-        picked: List[int] = []
-        lo, hi = idx - 1, idx + 1
-        while len(picked) < cap and (lo >= 0 or hi < len(ids)):
-            if lo >= 0:
-                picked.append(lo)
-                lo -= 1
-            if len(picked) < cap and hi < len(ids):
-                picked.append(hi)
-                hi += 1
-        picked.sort()
-        cards = []
-        for i in picked:
-            m = self.meta[ids[i]]
-            cards.append({
-                "o_id":      ids[i],
-                "title":     m["title"],
-                "date":      m["pub_date"],
-                "thumbnail": m["thumbnail"],
-            })
-        return cards
-
     def generate_all(self, neighbours: Dict[int, List[Dict[str, Any]]]) -> int:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         targets = self.target_ids[: self.limit] if self.limit else self.target_ids
@@ -411,8 +403,8 @@ class PublicationDashboardGenerator:
                     "country":  meta["country"] or None,
                     "date":     meta["pub_date"] or None,
                 },
+                "wordcloud": meta.get("wordcloud") or [],
                 "run": self.build_run(meta),
-                "run_neighbors": self.build_run_neighbors(pub_id),
                 "semantic_neighbors": neighbours.get(pub_id, []),
             }
             out_path = self.output_dir / f"{pub_id}.json"
@@ -426,7 +418,6 @@ class PublicationDashboardGenerator:
     def run(self) -> int:
         self.load()
         self.build_meta()
-        self.build_run_order()
         self.build_embedding_matrix()
         neighbours = self.compute_semantic_neighbors()
         return self.generate_all(neighbours)
@@ -458,6 +449,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Semantic-neighbours cap per issue (default: %(default)s)",
     )
     parser.add_argument(
+        "--wordcloud-max-words",
+        type=int,
+        default=DEFAULT_WORDCLOUD_MAX_WORDS,
+        help="Max words in each issue's word cloud (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--wordcloud-min-frequency",
+        type=int,
+        default=DEFAULT_WORDCLOUD_MIN_FREQUENCY,
+        help="Drop issue word-cloud terms below this count (default: %(default)s)",
+    )
+    parser.add_argument(
         "--minify",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -481,6 +484,8 @@ def main() -> int:
         repo_id=args.repo,
         limit=args.limit,
         top_k_semantic=args.top_k_semantic,
+        wordcloud_max_words=args.wordcloud_max_words,
+        wordcloud_min_frequency=args.wordcloud_min_frequency,
         minify=args.minify,
     )
     written = gen.run()

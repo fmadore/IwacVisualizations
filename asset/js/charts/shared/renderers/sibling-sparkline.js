@@ -93,46 +93,55 @@
             'class': 'iwac-vis-sparkline__line'
         }));
 
-        // Highlight dot (current year)
-        if (data.highlight != null) {
-            var idx = years.indexOf(data.highlight);
-            if (idx >= 0) {
-                var p = pts[idx];
-                root.appendChild(svg('circle', {
-                    'cx': p[0],
-                    'cy': p[1],
-                    'r': 3.5,
-                    'class': 'iwac-vis-sparkline__dot'
-                }));
-                // Year label under the dot
-                var label = svg('text', {
-                    'x': p[0],
-                    'y': H - 1,
-                    'class': 'iwac-vis-sparkline__year',
-                    'text-anchor': 'middle'
-                });
-                label.textContent = String(data.highlight);
-                root.appendChild(label);
-            }
+        // Highlight dot (current year). When the highlight sits on an
+        // endpoint, anchor its label to that edge — otherwise the
+        // centre-anchored label both clips off-canvas and overprints the
+        // endpoint label below it (the garbled "207014" on first-year
+        // issues).
+        var lastIdx = years.length - 1;
+        var hlIdx = data.highlight != null ? years.indexOf(data.highlight) : -1;
+        if (hlIdx >= 0) {
+            var p = pts[hlIdx];
+            root.appendChild(svg('circle', {
+                'cx': p[0],
+                'cy': p[1],
+                'r': 3.5,
+                'class': 'iwac-vis-sparkline__dot'
+            }));
+            var hlAnchor = hlIdx === 0 ? 'start' : (hlIdx === lastIdx ? 'end' : 'middle');
+            var hlX      = hlIdx === 0 ? pad   : (hlIdx === lastIdx ? (W - pad) : p[0]);
+            var label = svg('text', {
+                'x': hlX,
+                'y': H - 1,
+                'class': 'iwac-vis-sparkline__year',
+                'text-anchor': hlAnchor
+            });
+            label.textContent = String(data.highlight);
+            root.appendChild(label);
         }
 
-        // Endpoints — small year labels at the ends
-        var startLabel = svg('text', {
-            'x': pad,
-            'y': H - 1,
-            'class': 'iwac-vis-sparkline__year iwac-vis-sparkline__year--end'
-        });
-        startLabel.textContent = String(years[0]);
-        root.appendChild(startLabel);
+        // Endpoint year labels — skip whichever end the highlight label
+        // already covers so the two never overprint.
+        if (hlIdx !== 0) {
+            var startLabel = svg('text', {
+                'x': pad,
+                'y': H - 1,
+                'class': 'iwac-vis-sparkline__year iwac-vis-sparkline__year--end'
+            });
+            startLabel.textContent = String(years[0]);
+            root.appendChild(startLabel);
+        }
 
-        var endLabel = svg('text', {
-            'x': W - pad,
-            'y': H - 1,
-            'class': 'iwac-vis-sparkline__year iwac-vis-sparkline__year--end',
-            'text-anchor': 'end'
-        });
-        endLabel.textContent = String(years[years.length - 1]);
-        root.appendChild(endLabel);
+        if (hlIdx !== lastIdx) {
+            var endLabel = svg('text', {
+                'x': W - pad,
+                'y': H - 1,
+                'class': 'iwac-vis-sparkline__year iwac-vis-sparkline__year--end',
+                'text-anchor': 'end'
+            });
+            endLabel.textContent = String(years[years.length - 1]);
+            root.appendChild(endLabel);
+        }
 
         return root;
     }
@@ -148,7 +157,9 @@
             el.appendChild(P.buildEmptyState());
             return;
         }
-        el.classList.add('iwac-vis-sparkline-host');
+        // `--auto` drops the 320px ECharts floor so the ~60px sparkline
+        // doesn't sit atop a tall empty panel.
+        el.classList.add('iwac-vis-sparkline-host', 'iwac-vis-chart--auto');
         el.appendChild(sparkline);
         if (data.caption) {
             var cap = P.el('p', 'iwac-vis-sparkline__caption', data.caption);

@@ -21,8 +21,10 @@ echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'needs' => [
             'chartOptions' => true,
+            'wordcloud'    => true,
             'layout'       => true,
             'renderers'    => [
+                'word-cloud',
                 'sibling-sparkline',
                 'similar-items',
             ],

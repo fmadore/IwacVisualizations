@@ -92,10 +92,12 @@
             // Publication (periodical issue) dashboard
             'This issue in its periodical run': 'This issue in its periodical run',
             'desc_publication_run': 'Issues of this periodical per year — the dot marks this issue.',
-            'Other issues of this periodical': 'Other issues of this periodical',
-            'desc_publication_other_issues': 'The issues published closest to this one in the same run.',
             'Similar issues': 'Similar issues',
             'desc_publication_similar': 'Closest issues by table-of-contents similarity (Gemini embeddings).',
+            'Most frequent words in this issue': 'Most frequent words in this issue',
+            'desc_publication_wordcloud': 'The words that appear most often in this issue’s text.',
+            'Word cloud': 'Word cloud',
+            'desc_word_cloud': 'Most frequent words, sized by how often they appear.',
 
             // Collection overview — chart titles
             'Items per year, by country': 'Items per year, by country',
@@ -593,10 +595,12 @@
             // Publication (periodical issue) dashboard
             'This issue in its periodical run': 'Ce numéro dans la collection du périodique',
             'desc_publication_run': 'Numéros de ce périodique par année — le point marque ce numéro.',
-            'Other issues of this periodical': 'Autres numéros de ce périodique',
-            'desc_publication_other_issues': 'Les numéros parus au plus près de celui-ci dans la même collection.',
             'Similar issues': 'Numéros similaires',
             'desc_publication_similar': 'Numéros les plus proches par similarité des sommaires (plongements Gemini).',
+            'Most frequent words in this issue': 'Mots les plus fréquents de ce numéro',
+            'desc_publication_wordcloud': 'Les mots qui reviennent le plus souvent dans le texte de ce numéro.',
+            'Word cloud': 'Nuage de mots',
+            'desc_word_cloud': 'Les mots les plus fréquents, dimensionnés selon leur occurrence.',
 
             // Collection overview — chart titles
             'Items per year, by country': '\u00c9l\u00e9ments par ann\u00e9e, par pays',

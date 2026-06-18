@@ -8,20 +8,20 @@
  *
  *   1. A stat-card row — words / pages / issue number / language /
  *      country / date. Cards with missing values are elided.
- *   2. `siblingSparkline` — the issue's periodical run (issues per
+ *   2. `wordCloud` — the most frequent words in this issue's text,
+ *      from a precomputed frequency list (lemmas, OCR as fallback).
+ *   3. `siblingSparkline` — the issue's periodical run (issues per
  *      year for the same periodical, zero-filled) with this issue's
  *      year dotted.
- *   3. `similarItems` × 2:
- *      - "Other issues of this periodical" — the chronologically
- *        nearest issues in the same run (no similarity scores).
- *      - "Similar issues" — semantic neighbours over
- *        embedding_tableOfContents. The upstream ToC pipeline has
- *        only covered a handful of issues so far, so this slot
- *        elides on most pages today and lights up as the dataset
- *        fills in — no front-end change needed.
+ *   4. `similarItems` — "Similar issues": semantic neighbours over
+ *      embedding_tableOfContents (768-dim Gemini). This replaced an
+ *      earlier chronological "other issues of this periodical" strip
+ *      now that the table-of-contents embeddings cover the subset.
  *
- * Dependencies: dashboard-layout + sibling-sparkline + similar-items
- * renderers (declared via the partial's $needs['renderers']).
+ * Dependencies: dashboard-layout + word-cloud + sibling-sparkline +
+ * similar-items renderers (declared via the partial's
+ * $needs['renderers']), plus chartOptions + the echarts-wordcloud
+ * extension ($needs['chartOptions'] + $needs['wordcloud']).
  */
 (function () {
     'use strict';
@@ -39,17 +39,14 @@
     /* ----------------------------------------------------------------- */
 
     DL.register('publication', [
+        { chart: 'wordCloud', wide: true,
+          dataKey: 'wordcloud',
+          title: 'Most frequent words in this issue',
+          description: 'desc_publication_wordcloud' },
         { chart: 'siblingSparkline', wide: true,
           dataKey: 'sparkline',
           title: 'This issue in its periodical run',
           description: 'desc_publication_run' },
-        { chart: 'similarItems', wide: true,
-          dataKey: 'run_neighbors',
-          title: 'Other issues of this periodical',
-          description: 'desc_publication_other_issues',
-          // Run neighbours carry no similarity score — drop the
-          // lowSignal threshold so nothing is filtered.
-          options: { max: 8, lowSignal: 0 } },
         { chart: 'similarItems', wide: true,
           dataKey: 'semantic_neighbors',
           title: 'Similar issues',
@@ -129,8 +126,8 @@
                 } : null;
 
                 DL.render(body, 'publication', {
+                    wordcloud:          data.wordcloud || [],
                     sparkline:          sparkline,
-                    run_neighbors:      data.run_neighbors || [],
                     semantic_neighbors: data.semantic_neighbors || []
                 }, {
                     siteBase: container.dataset.siteBase || '',
