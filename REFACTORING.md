@@ -127,10 +127,13 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `|| [...]` palette guards and the off-brand `#d97706` fallback arrays
   (`:57,343,450`) — `getPalette()` already never returns falsy, so they're dead
   code. *(reclassified from Tier 1)*
-- [ ] **Shared graph toolbar + click-through** extracted from the two
-  near-identical network panels (`person-dashboard/network.js:64-235`,
-  `article-dashboard/network.js:161-290`) — ZOOM_FACTOR, 6-button toolbar, PNG
-  download, fullscreen listener, drag-suppression all duplicated.
+- [x] **Shared graph toolbar + click-through** — **DONE (v1.8.3)**. Added
+  `P.buildGraphPanelToolbar(panelEl, chart, {downloadName})` (owns legend state,
+  exposes `isLegendVisible()`) + `P.attachGraphClickThrough(chart, onNode)` to
+  `shared/panels.js`; both network panels call them, dropping ~115 lines of
+  duplicated toolbar / zoom / download / fullscreen / drag-suppression each. The
+  only per-panel differences (download filename, centre-node guard, `o_id` check)
+  stay at the call site.
 - [ ] **Migrate hand-rolled person-dashboard panels** (`countries.js:26-46`,
   `newspapers.js:26-46`, `cooccurrence.js`, `sentiment.js`, `network.js`) onto
   the existing `P.buildFacetedChart` (half the folder already uses it).

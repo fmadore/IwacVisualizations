@@ -38,8 +38,9 @@
  *   - Center node is ignored (users already have a URL bar for that)
  *
  * The 6-button toolbar (zoom +/−, reset, legend, download, fullscreen)
- * mirrors the person + entity network panel so keyboard users have a
- * consistent affordance across the module.
+ * and the drag-suppressed click-through come from the shared
+ * `P.buildGraphPanelToolbar` / `P.attachGraphClickThrough` helpers, so
+ * this panel and the person/entity network stay consistent.
  */
 (function () {
     'use strict';
@@ -50,26 +51,6 @@
     if (!P || !C || !C.network) {
         console.warn('IWACVis.article-dashboard/network: missing deps (need C.network)');
         return;
-    }
-
-    var ZOOM_FACTOR = 1.4;
-
-    function dispatchZoom(chart, factor) {
-        chart.dispatchAction({
-            type: 'graphRoam',
-            zoom: factor,
-            originX: chart.getWidth() / 2,
-            originY: chart.getHeight() / 2
-        });
-    }
-
-    function buildButton(label, title, onClick) {
-        var b = P.el('button', 'iwac-vis-btn iwac-vis-graph-toolbar__btn', label);
-        b.type = 'button';
-        b.setAttribute('aria-label', title);
-        b.title = title;
-        b.addEventListener('click', onClick);
-        return b;
     }
 
     /**
@@ -163,9 +144,6 @@
         var entities = (data && data.entities) || [];
         var related  = (data && data.related_by_entities) || [];
 
-        var legendVisible = true;
-        var isFullscreen = false;
-
         panelEl.chart.classList.add('iwac-vis-graph-host');
         if (panelEl.panel && panelEl.panel.setAttribute) {
             panelEl.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
@@ -174,11 +152,17 @@
         var graph = buildGraph(article, entities, related);
         var hasData = graph.nodes.length > 1;
 
+        // The toolbar's legend toggle mutates legend visibility; buildFullOption
+        // reads it back so a theme-swap re-render keeps the user's choice.
+        var toolbar = null;
         function buildFullOption() {
             // thumbnail: ECharts 6 minimap — the 3-layer context graph
             // is the module's densest; the minimap keeps the viewport
             // situated while roaming (auto-hidden ≤640px).
-            return C.network(graph, { showLegend: legendVisible, thumbnail: true });
+            return C.network(graph, {
+                showLegend: toolbar ? toolbar.isLegendVisible() : true,
+                thumbnail: true
+            });
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {
@@ -194,92 +178,11 @@
             return;
         }
 
-        // ---------------- Toolbar ----------------
-        var bar = P.el('div', 'iwac-vis-graph-toolbar');
-
-        bar.appendChild(buildButton('+', P.t('Zoom in'), function () {
-            if (!chart.isDisposed()) dispatchZoom(chart, ZOOM_FACTOR);
-        }));
-        bar.appendChild(buildButton('\u2212', P.t('Zoom out'), function () {
-            if (!chart.isDisposed()) dispatchZoom(chart, 1 / ZOOM_FACTOR);
-        }));
-        bar.appendChild(buildButton('\u21BA', P.t('Reset view'), function () {
-            if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
-        }));
-
-        var legendBtn = buildButton('\u25A4', P.t('Toggle legend'), function () {
-            if (chart.isDisposed()) return;
-            legendVisible = !legendVisible;
-            chart.setOption({
-                legend: [{ show: legendVisible }],
-                series: [{ bottom: legendVisible ? 56 : 16 }]
-            });
-            legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
+        // ---------------- Toolbar + click-through ----------------
+        toolbar = P.buildGraphPanelToolbar(panelEl, chart, {
+            downloadName: 'iwac-article-context.png'
         });
-        bar.appendChild(legendBtn);
-
-        bar.appendChild(buildButton('\u2B73', P.t('Download chart'), function () {
-            var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
-            if (!live) return;
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var dataUrl = live.getDataURL({
-                type: 'png',
-                pixelRatio: 2,
-                backgroundColor: tokens.surface || '#ffffff'
-            });
-            if (!dataUrl) return;
-            var a = document.createElement('a');
-            a.download = 'iwac-article-context.png';
-            a.href = dataUrl;
-            a.rel = 'noopener';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }));
-
-        var fullBtn = buildButton('\u26F6', P.t('Toggle fullscreen'), function () {
-            var host = panelEl.panel;
-            if (!host) return;
-            if (!document.fullscreenElement) {
-                if (host.requestFullscreen) host.requestFullscreen();
-            } else if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        });
-        bar.appendChild(fullBtn);
-
-        document.addEventListener('fullscreenchange', function () {
-            var host = panelEl.panel;
-            if (!host) return;
-            isFullscreen = (document.fullscreenElement === host);
-            host.classList.toggle('iwac-vis-panel--fullscreen', isFullscreen);
-            fullBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', isFullscreen);
-            setTimeout(function () {
-                if (!chart.isDisposed()) chart.resize();
-            }, 50);
-        });
-
-        panelEl.chart.appendChild(bar);
-
-        // ---------------- Click-through with drag suppression ----------------
-        var pressX = 0, pressY = 0, suppressClick = false;
-        var zr = chart.getZr && chart.getZr();
-        if (zr) {
-            zr.on('mousedown', function (e) {
-                pressX = e.offsetX;
-                pressY = e.offsetY;
-                suppressClick = false;
-            });
-            zr.on('mouseup', function (e) {
-                var dx = Math.abs(e.offsetX - pressX);
-                var dy = Math.abs(e.offsetY - pressY);
-                if (dx > 4 || dy > 4) suppressClick = true;
-            });
-        }
-        chart.on('click', function (params) {
-            if (suppressClick) return;
-            if (params.dataType !== 'node') return;
-            var node = params.data || {};
+        P.attachGraphClickThrough(chart, function (node) {
             if (node.entityType === 'center') return;
             if (node.o_id != null && ctx && ctx.siteBase) {
                 // Both entity and article nodes route through /item/<o_id>;
