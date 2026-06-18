@@ -57,7 +57,7 @@ This module is built to drop into the **[IWAC theme](https://github.com/fmadore/
 
 ## Conventions specific to this module
 
-- **Use `iwac_utils.py`** for country canonicalization, year extraction, pipe-separated parsing, coordinate parsing, dataset loading, and JSON saving. Do not reinvent these — see `scripts/README.md`. The helpers are ported from the sibling `iwac-dashboard` project; consult that project's `scripts/` before writing a brand-new generator.
+- **Use `iwac_utils.py`** for country canonicalization, year extraction, pipe-separated parsing, coordinate parsing, dataset loading, and JSON saving. Do not reinvent these — see `scripts/README.md`. (`iwac_utils.py` was originally seeded from the now-**deprecated** sibling `iwac-dashboard` project, but is fully self-contained here: add and refactor shared helpers freely — there is **no** cross-repo sync constraint.)
 - **CLI flags** are standardized across generators: `--repo`, `-v/--verbose`, `--minify` (heavy bundles), and `--min-cooccurrence` (TF-IDF networks default 2).
 - **Output goes under `asset/data/`** as JSON. Per-item fan-out (`person-dashboards/{o_id}.json`, `entity-dashboards/{o_id}.json`, `article-dashboards/{o_id}.json`) is committed to git; collection-level bundles too. Use `--minify` on bundles > a few KB.
 - **Bump `config/module.ini` `version`** after any data regeneration so Omeka's `?v=` query string busts the browser cache. Match in `package.json`.
@@ -78,7 +78,7 @@ CPU-only environment (no GPU) — match the constraint when selecting models or 
 ## Adding a new visualization
 
 1. Reach for the `iwac-dataset` skill to confirm field names and types.
-2. Check `iwac-dashboard` for an existing generator before writing one.
+2. Model a new generator on the existing `scripts/generate_*.py`. (The `iwac-dashboard` project these were originally seeded from is deprecated — don't depend on it.)
 3. Decide live-fetch vs. precompute using the rule in README.md (precompute if > 50 parallel HF requests OR touches OCR/embeddings).
 4. Write `scripts/generate_<name>.py` following the existing CLI convention; reuse `iwac_utils.py`.
 5. Wire the JS panel and orchestrator under `asset/js/charts/` and the template under `view/common/block-layout/`.

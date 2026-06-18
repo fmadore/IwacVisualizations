@@ -116,11 +116,11 @@ Alternative: write a **single sharded JSON** (e.g., `entities.json` keyed by `o:
 
 - **HF `o:id` = Omeka item ID on https://islam.zmo.de** → precomputed per-item JSON can be keyed directly by `o:id`, and the existing PHTMLs' `data-item-id="<?= $resource->id() ?>"` wiring needs no translation layer.
 - **HF dataset update cadence**: roughly monthly, manual → precompute is a developer-run script, not a scheduled/CI job.
-- **Precompute reference**: `/home/fmadore/projects/iwac-dashboard/scripts/` is the canonical source of HF → JSON patterns for this project. See below.
+- **Precompute reference**: model new generators on the existing `scripts/generate_*.py` here. (The `iwac-dashboard` project that originally seeded them is deprecated — see below.)
 
-## Reusing iwac-dashboard
+## Provenance: iwac-dashboard (deprecated)
 
-`/home/fmadore/projects/iwac-dashboard` is an existing SvelteKit dashboard (static prerender) that reads the same HF dataset and ships precomputed JSON. **Always consult it before writing new Python here.** Its scripts should be ported / adapted rather than reinvented.
+`iwac-dashboard` was a sibling SvelteKit dashboard (static prerender) that read the same HF dataset; the generators and `iwac_utils.py` here were originally ported from it. **It is now deprecated** — this module's `scripts/` is self-contained and the source of truth, with no cross-repo sync constraint. The table below is retained only as historical context for where patterns came from, not as a live dependency.
 
 Relevant files in that project:
 

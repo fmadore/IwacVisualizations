@@ -11,16 +11,14 @@ It's a developer tool that runs on the curator's machine whenever the
 dataset changes (roughly monthly), or whenever the schema of a generator
 changes.
 
-## Canonical reference
+## Provenance
 
-Before writing anything new here, look at
-`/home/fmadore/projects/iwac-dashboard/scripts/` first. That sibling
-project is a standalone SvelteKit dashboard that reads the same dataset
-and has ~3,200 lines of working generators covering overview, timeline,
-co-occurrence, knowledge graph, treemap, wordcloud, world map, topic
-network, and more. Most data-normalization problems are already solved
-there. `iwac_utils.py` in this directory is a **verbatim copy** of its
-counterpart in iwac-dashboard.
+`iwac_utils.py` and several generators here were originally seeded from the
+sibling `iwac-dashboard` SvelteKit project. **That project is deprecated** — this
+directory is now the source of truth, and `iwac_utils.py` is fully self-contained:
+add and refactor shared helpers freely, with **no** cross-repo sync constraint.
+For the HF dataset schema, the `iwac-dataset` skill is the canonical reference;
+model new generators on the existing `generate_*.py` here.
 
 ## Quickstart
 

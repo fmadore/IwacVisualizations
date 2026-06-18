@@ -77,6 +77,7 @@ from iwac_utils import (
     configure_logging,
     create_metadata_block,
     extract_year,
+    is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
@@ -151,10 +152,8 @@ def _label(value: Any) -> Optional[str]:
     return s
 
 
-def _is_unknown(value: str) -> bool:
-    if not value:
-        return True
-    return value.lower() in {"unknown", "inconnu", "n/a", "na", "none", "null", "—"}
+# Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
+_is_unknown = is_unknown
 
 
 def _clean_countries(value: Any) -> List[str]:

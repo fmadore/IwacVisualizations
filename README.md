@@ -453,7 +453,7 @@ IwacVisualizations/
 │       ├── article-dashboards/{o_id}.json  # ~12,287 files (~120 MB)
 │       └── publication-dashboards/{o_id}.json # 1,501 files (~2.5 MB)
 ├── scripts/                                # Python precompute + Node build
-│   ├── iwac_utils.py                       # Shared helpers (ported from iwac-dashboard)
+│   ├── iwac_utils.py                       # Shared helpers (self-contained)
 │   ├── dashboard_aggregator.py             # Shared person/entity aggregation core (v1.4.0)
 │   ├── generate_collection_overview.py
 │   ├── generate_wordcloud.py
@@ -708,7 +708,7 @@ python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lex
 
 The HF dataset updates roughly monthly, so regeneration is a manual developer step, not a scheduled job. After every data regeneration, bump the version in `config/module.ini` (and `package.json` to match) so Omeka's `?v=` query string busts any stale browser caches pointing at the old asset URLs. When adding a new visualization, add a new `generate_*.py` next to the existing ones and document it in `scripts/README.md`.
 
-**Canonical reference:** the sibling project [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard) has ~3,200 lines of working Python that reads the same dataset. `iwac_utils.py` in this module is ported from it, and `generate_keyword_explorer.py` is a direct port of iwac-dashboard's `/keywords` generator generalized to scan every content subset. Consult it before writing new generators.
+**Provenance:** `iwac_utils.py` and several generators here were originally ported from the sibling [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard) project (`generate_keyword_explorer.py`, for instance, generalizes its `/keywords` generator). **That project is now deprecated** — this module's `scripts/` is self-contained and the source of truth; there is no cross-repo sync constraint. Use the `iwac-dataset` skill for the dataset schema.
 
 ## Build & development
 
