@@ -431,7 +431,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
     background: color-mix(in oklab, var(--primary, #e64a19) 24%, transparent);
 }
 
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     /* Phones: shrink the labels — the default 'Bubbles' label gets
      * clipped fast at 32-min-width buttons, but corpus names should
      * still fit if the host is at least ~280px wide. */

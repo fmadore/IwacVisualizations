@@ -79,7 +79,7 @@
             .catch(function (err) {
                 console.error('IWACVis entity networks:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

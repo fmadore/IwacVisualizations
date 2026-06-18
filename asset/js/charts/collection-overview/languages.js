@@ -27,7 +27,7 @@
             (langs.by_country && Object.keys(langs.by_country).length);
 
         if (!hasAnyData) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
             return;
         }
 

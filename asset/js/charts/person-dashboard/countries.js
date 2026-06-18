@@ -32,7 +32,7 @@
         });
 
         if (!hasData() && !chart) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
         }
 
         facet.subscribe(function () {

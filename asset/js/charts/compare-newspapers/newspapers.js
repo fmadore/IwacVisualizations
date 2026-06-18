@@ -57,7 +57,7 @@
             // just the top 10.
             var entries = (data.newspapers || []).slice();
             if (!entries.length) {
-                host.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                host.appendChild(P.buildEmptyState());
                 return;
             }
             var totalPages = Math.max(1, Math.ceil(entries.length / NEWSPAPERS_PAGE_SIZE));
@@ -119,8 +119,7 @@
             var col = P.el('div', 'iwac-vis-compare-wordcloud');
             col.dataset.side = side;
             col.appendChild(P.el('div', 'iwac-vis-compare-wordcloud__label', name));
-            col.appendChild(P.el('div', 'iwac-vis-empty',
-                P.t('Single-newspaper corpus \u2014 no breakdown')));
+            col.appendChild(P.buildEmptyState('Single-newspaper corpus \u2014 no breakdown'));
             wrap.appendChild(col);
         }
 

@@ -103,7 +103,7 @@
         var subEl = P.el('div', 'iwac-vis-sentiment__chart iwac-vis-sentiment__chart--sub');
         host.appendChild(subEl);
 
-        var emptyEl = P.el('div', 'iwac-vis-empty', P.t('No data available'));
+        var emptyEl = P.buildEmptyState();
         emptyEl.style.display = 'none';
         host.appendChild(emptyEl);
 

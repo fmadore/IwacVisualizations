@@ -379,12 +379,6 @@
         return resolved;
     };
 
-    /** Truncate a string with ellipsis if it exceeds maxLen. */
-    ns.truncateLabel = function (str, maxLen) {
-        if (!str) return '';
-        return str.length > maxLen ? str.substring(0, maxLen) + '\u2026' : str;
-    };
-
     /** Convert either {key: value} or array format to [{ name, value, itemId? }]. */
     ns.toEntries = function (data) {
         if (!data) return [];
@@ -392,26 +386,4 @@
         return Object.keys(data).map(function (k) { return { name: k, value: data[k] }; });
     };
 
-    /** Build a dataZoom config (slider + scroll) for timeline-type charts. */
-    ns.buildDataZoom = function (count) {
-        if (count <= 15) return [];
-        return [
-            { type: 'slider', start: 0, end: 100, bottom: 8, height: 22 },
-            { type: 'inside' }
-        ];
-    };
-
-    /** Add click-to-navigate on chart elements pointing at Omeka items. */
-    ns.addClickHandler = function (chart, entries, siteBase) {
-        if (!siteBase) return;
-        chart.on('click', function (params) {
-            var entry = entries.find(function (e) { return e.name === params.name; });
-            if (entry && entry.itemId) {
-                window.location.href = siteBase + '/item/' + entry.itemId;
-            }
-        });
-        chart.getZr().on('mousemove', function (e) {
-            chart.getZr().setCursorStyle(e.target ? 'pointer' : 'default');
-        });
-    };
 })();

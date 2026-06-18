@@ -87,75 +87,34 @@
     ]);
 
     /* ----------------------------------------------------------------- */
-    /*  Bootstrap                                                         */
+    /*  Bootstrap — shared per-item dashboard boot (fetch → header → grid) */
     /* ----------------------------------------------------------------- */
+    //
+    // The header (stats row + role facet bar) mounts before the chart
+    // grid via `mountHeader`, so the order stays stats / facet / grid.
+    // The facet built by `makeFacet` is placed on ctx.facet and reused by
+    // both the header renderers and the bridge's `(panelEl, data, facet,
+    // ctx)` reassembly. Predicates + layout above are person-specific.
 
-    function initDashboard(container) {
-        var itemId = container.dataset.itemId;
-        if (!itemId) return;
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-person',
+        classToken: 'person',
+        dataDir:    'person-dashboards',
+        layout:     'person',
+        warnLabel:  'IWACVis person dashboard',
+        makeFacet:  function () {
+            var pd = ns.personDashboard || {};
+            return pd.facet ? pd.facet.create('all') : null;
+        },
+        mountHeader: function (body, data, ctx) {
+            var pd = ns.personDashboard || {};
+            var statsHost = P.el('div', 'iwac-vis-person__stats');
+            body.appendChild(statsHost);
+            if (pd.stats) pd.stats.render(statsHost, data, ctx.facet);
 
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || '',
-            itemId:   itemId
-        };
-        var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/person-dashboards/' + itemId + '.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var loading = container.querySelector('.iwac-vis-person__loading');
-                if (loading) loading.remove();
-
-                var pd = ns.personDashboard || {};
-                var facet = pd.facet
-                    ? pd.facet.create('all')
-                    : { role: 'all', subscribe: function () {}, set: function () {} };
-
-                // Header — stats row + role facet bar. Mounted before
-                // the chart grid so the order is: stats / facet / grid.
-                var body = P.el('div', 'iwac-vis-person__body');
-                container.appendChild(body);
-
-                var statsHost = P.el('div', 'iwac-vis-person__stats');
-                body.appendChild(statsHost);
-                if (pd.stats) pd.stats.render(statsHost, data, facet);
-
-                var facetHost = P.el('div', 'iwac-vis-person__facet');
-                body.appendChild(facetHost);
-                if (pd.facet) pd.facet.render(facetHost, data, facet);
-
-                // Grid — declarative slot list dispatched through the
-                // layout system. Each slot's renderer is a thin
-                // wrapper around the legacy panel module, registered
-                // by shared/dashboard-panels-bridge.js. ctx carries
-                // `data` and `facet` so the bridge can reassemble the
-                // legacy `(panelEl, data, facet, ctx)` signature.
-                ctx.data  = data;
-                ctx.facet = facet;
-                DL.render(body, 'person', data, ctx);
-            })
-            .catch(function (err) {
-                console.error('IWACVis person dashboard:', err);
-                var loading = container.querySelector('.iwac-vis-person__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
-            });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis person dashboard: ECharts not loaded');
-            return;
+            var facetHost = P.el('div', 'iwac-vis-person__facet');
+            body.appendChild(facetHost);
+            if (pd.facet) pd.facet.render(facetHost, data, ctx.facet);
         }
-        var containers = document.querySelectorAll('.iwac-vis-person');
-        for (var i = 0; i < containers.length; i++) {
-            initDashboard(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

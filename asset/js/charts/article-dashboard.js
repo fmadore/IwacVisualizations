@@ -59,64 +59,19 @@
     ]);
 
     /* ----------------------------------------------------------------- */
-    /*  Bootstrap                                                         */
+    /*  Bootstrap — shared per-item dashboard boot                         */
     /* ----------------------------------------------------------------- */
+    //
+    // No header and no facet here: the dynamic-panels `__body` wrapper
+    // mounts as a sibling of the server-rendered sentiment block already
+    // in article.phtml, and `articleDashboard.radar` self-initialises off
+    // that template's inline JSON — neither needs an orchestrator step.
 
-    function noopFacet() {
-        return { role: 'all', subscribe: function () {}, set: function () {} };
-    }
-
-    function initDashboard(container) {
-        var itemId = container.dataset.itemId;
-        if (!itemId) return;
-
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || '',
-            itemId:   itemId
-        };
-        var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/article-dashboards/' + itemId + '.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var loading = container.querySelector('.iwac-vis-article__loading');
-                if (loading) loading.remove();
-
-                // Mount the dynamic-panels wrapper as a sibling of the
-                // server-rendered sentiment block already present in
-                // article.phtml; keeps the inter-panel gap consistent
-                // with the other dashboards.
-                var body = P.el('div', 'iwac-vis-article__body');
-                container.appendChild(body);
-
-                ctx.data  = data;
-                ctx.facet = noopFacet();
-                DL.render(body, 'article', data, ctx);
-
-                // articleDashboard.radar self-initialises off the
-                // inline `<script type="application/json">` block
-                // emitted by article.phtml — no orchestrator step.
-            })
-            .catch(function (err) {
-                console.error('IWACVis article dashboard:', err);
-                var loading = container.querySelector('.iwac-vis-article__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
-            });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis article dashboard: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-article');
-        for (var i = 0; i < containers.length; i++) initDashboard(containers[i]);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-article',
+        classToken: 'article',
+        dataDir:    'article-dashboards',
+        layout:     'article',
+        warnLabel:  'IWACVis article dashboard'
+    });
 })();

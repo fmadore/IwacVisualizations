@@ -92,13 +92,7 @@
             var model = modelSelect.value;   // gemini | chatgpt | mistral
             var entries = (((data.sentiment || {}).models || {})[model] || {})[axis] || [];
             if (!entries.length) {
-                instance.setOption({
-                    title: {
-                        text: P.t('Not rated'),
-                        left: 'center', top: 'middle',
-                        textStyle: { fontSize: 13, fontWeight: 'normal' }
-                    }
-                }, true);
+                instance.setOption(P.emptyChartOption('Not rated'), true);
                 return;
             }
 
@@ -131,7 +125,7 @@
             var placeA = P.el('div', 'iwac-vis-compare-sentiment__col');
             placeA.dataset.side = 'A';
             placeA.appendChild(P.el('div', 'iwac-vis-compare-sentiment__heading', dataA.name));
-            placeA.appendChild(P.el('div', 'iwac-vis-empty', P.t('Sentiment only on articles')));
+            placeA.appendChild(P.buildEmptyState('Sentiment only on articles'));
             wrap.appendChild(placeA);
         }
         if (hasB) sides.push(makeSide('B', dataB, colorB));
@@ -139,7 +133,7 @@
             var placeB = P.el('div', 'iwac-vis-compare-sentiment__col');
             placeB.dataset.side = 'B';
             placeB.appendChild(P.el('div', 'iwac-vis-compare-sentiment__heading', dataB.name));
-            placeB.appendChild(P.el('div', 'iwac-vis-empty', P.t('Sentiment only on articles')));
+            placeB.appendChild(P.buildEmptyState('Sentiment only on articles'));
             wrap.appendChild(placeB);
         }
 

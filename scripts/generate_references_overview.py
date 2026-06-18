@@ -79,13 +79,6 @@ TOP_N_TYPES = 10
 DEFAULT_NETWORK_MIN_DEGREE = 2
 
 
-def _str_or_none(value: Any) -> Optional[str]:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    s = str(value).strip()
-    return s or None
-
-
 def _is_unknown(value: str) -> bool:
     """Match the JS-side P.isUnknown — treats empty / 'unknown' / 'inconnu'."""
     if not value:

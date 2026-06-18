@@ -21,7 +21,7 @@
     function render(panelEl, data) {
         var coverage = (data && data.newspapers && data.newspapers.coverage) || [];
         if (coverage.length === 0) {
-            panelEl.chart.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+            panelEl.chart.appendChild(P.buildEmptyState());
             return;
         }
 

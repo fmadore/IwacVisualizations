@@ -45,9 +45,7 @@
      * still render gracefully.
      */
     function translateType(type) {
-        var key = 'ref_type_' + type;
-        var translated = P.t(key);
-        return translated === key ? type : translated;
+        return P.translateKeyed('ref_type_', type);
     }
 
     /**
@@ -57,9 +55,7 @@
      * one.
      */
     function translateLang(name) {
-        var key = 'lang_' + name;
-        var translated = P.t(key);
-        return translated === key ? name : translated;
+        return P.translateKeyed('lang_', name);
     }
 
     function translateEntries(entries, fn) {
@@ -200,7 +196,7 @@
             .then(function (raw) {
                 if (!raw || !raw.summary || raw.summary.total === 0) {
                     container.innerHTML = '';
-                    container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                    container.appendChild(P.buildEmptyState());
                     return;
                 }
 
@@ -279,7 +275,7 @@
             .catch(function (err) {
                 console.error('IWACVis references overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 

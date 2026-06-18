@@ -24,7 +24,7 @@
 /*  Class prefix: `.iwac-vis-` for everything owned by this module.      */
 /*                                                                       */
 /*  Breakpoints (cannot use var() in @media — values documented here):   */
-/*     sm: 640px   (large phones)                                        */
+/*     sm: 600px   (large phones)                                        */
 /*     md: 768px   (tablets)                                             */
 /*     lg: 1024px  (small laptops)                                       */
 /* =================================================================== */
@@ -245,7 +245,7 @@
 .iwac-vis-panel > .iwac-vis-chord-host {
     min-height: 640px;
 }
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-panel > .iwac-vis-graph-host,
     .iwac-vis-panel > .iwac-vis-chord-host {
         min-height: 520px;
@@ -262,7 +262,7 @@
 .iwac-vis-panel > .iwac-vis-chart.iwac-vis-treemap-host {
     min-height: 460px;
 }
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-panel > .iwac-vis-chart.iwac-vis-treemap-host {
         min-height: 420px;
     }
@@ -308,7 +308,7 @@
     margin: 0;
 }
 
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-overview-grid {
         gap: var(--space-3, 0.75rem);
     }
@@ -524,7 +524,7 @@
     gap: var(--space-3, 0.75rem);
 }
 
-@media (min-width: 640px) { /* sm */
+@media (min-width: 600px) { /* sm */
     .iwac-vis-overview-summary { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -1008,7 +1008,7 @@
 /*  Responsive — mobile spacing collapse                                 */
 /* =================================================================== */
 
-@media (max-width: 640px) { /* sm */
+@media (max-width: 600px) { /* sm */
     .iwac-vis-panel {
         padding: var(--space-3, 0.75rem);
     }

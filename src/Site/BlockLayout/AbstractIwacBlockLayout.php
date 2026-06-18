@@ -26,7 +26,7 @@ abstract class AbstractIwacBlockLayout extends AbstractBlockLayout
     }
 
     public function form(PhpRenderer $view, SiteRepresentation $site,
-        SitePageRepresentation $page = null, SitePageBlockRepresentation $block = null)
+        ?SitePageRepresentation $page = null, ?SitePageBlockRepresentation $block = null)
     {
         return '<p>' . $view->translate($this->description()) . '</p>';
     }

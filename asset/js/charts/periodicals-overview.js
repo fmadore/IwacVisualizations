@@ -69,9 +69,7 @@
      * Falls back to the raw name when no translation exists.
      */
     function translateLang(name) {
-        var key = 'lang_' + name;
-        var translated = P.t(key);
-        return translated === key ? name : translated;
+        return P.translateKeyed('lang_', name);
     }
 
     function localizeLanguages(entries) {
@@ -141,7 +139,7 @@
             .then(function (data) {
                 if (!data || !data.summary || !data.summary.total) {
                     container.innerHTML = '';
-                    container.appendChild(P.el('div', 'iwac-vis-empty', P.t('No data available')));
+                    container.appendChild(P.buildEmptyState());
                     return;
                 }
 
@@ -199,7 +197,7 @@
             .catch(function (err) {
                 console.error('IWACVis periodicals overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.el('div', 'iwac-vis-error', P.t('Failed to load')));
+                container.appendChild(P.buildErrorState());
             });
     }
 
