@@ -130,6 +130,19 @@
         }
     };
 
+    /**
+     * Translate a raw (French-source) label via a prefixed i18n key,
+     * falling back to the raw value when no translation exists. Centralizes
+     * the pattern used for reference types (`ref_type_<name>`), language
+     * names (`lang_<name>`), etc. — the precomputed JSON ships the French
+     * label and the JS localizes it per active site language.
+     */
+    P.translateKeyed = function (prefix, name) {
+        var key = prefix + name;
+        var translated = P.t(key);
+        return translated === key ? name : translated;
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Status banners (loading / empty / error)                          */
     /* ----------------------------------------------------------------- */
@@ -370,5 +383,100 @@
      */
     P.buildChartsGrid = function () {
         return P.el('div', 'iwac-vis-overview-grid');
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Per-item resource-page dashboard boot                             */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Boot a per-item resource-page dashboard (person / entity / article).
+     *
+     * Collapses the identical scaffold the three per-item orchestrators
+     * used to hand-roll: wait for ECharts + the DOM, find every matching
+     * container, read its data-* attributes, fetch the per-item JSON, swap
+     * the loading spinner for an `<classToken>__body` wrapper, optionally
+     * mount a header (stats / facet) above the grid, then dispatch the
+     * panel grid through `IWACVis.dashboardLayout.render(body, layout, data,
+     * ctx)`. On fetch failure it removes the spinner and shows the shared
+     * error banner.
+     *
+     * Call once at module load (it wires its own DOMContentLoaded).
+     *
+     * @param {Object} opts
+     * @param {string} opts.selector    Container selector, e.g. '.iwac-vis-person'.
+     * @param {string} opts.classToken  BEM token for the loading + body classes,
+     *                                   e.g. 'person' → '.iwac-vis-person__loading'
+     *                                   / 'iwac-vis-person__body'.
+     * @param {string} opts.dataDir     asset/data subdirectory, e.g. 'person-dashboards'.
+     * @param {string} opts.layout      Registered dashboardLayout key.
+     * @param {string} [opts.warnLabel] console prefix for warnings / errors.
+     * @param {function():Object} [opts.makeFacet]  Build the facet object placed on
+     *                                   ctx.facet (defaults to a no-op facet).
+     * @param {function(body, data, ctx):void} [opts.mountHeader]  Optional hook to
+     *                                   mount stats / facet markup above the grid;
+     *                                   runs after ctx.facet is set.
+     */
+    P.bootPerItemDashboard = function (opts) {
+        var DL = ns.dashboardLayout;
+        var label = opts.warnLabel || 'IWACVis dashboard';
+        if (!DL) {
+            console.warn(label + ': dashboardLayout not loaded');
+            return;
+        }
+
+        function noopFacet() {
+            return { role: 'all', subscribe: function () {}, set: function () {} };
+        }
+
+        function initOne(container) {
+            var itemId = container.dataset.itemId;
+            if (!itemId) return;
+
+            var ctx = {
+                basePath: container.dataset.basePath || '',
+                siteBase: container.dataset.siteBase || '',
+                itemId:   itemId
+            };
+            var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/'
+                + opts.dataDir + '/' + itemId + '.json';
+            var loadingSel = '.iwac-vis-' + opts.classToken + '__loading';
+
+            P.fetchJSON(url)
+                .then(function (data) {
+                    var loading = container.querySelector(loadingSel);
+                    if (loading) loading.remove();
+
+                    var body = P.el('div', 'iwac-vis-' + opts.classToken + '__body');
+                    container.appendChild(body);
+
+                    ctx.data  = data;
+                    ctx.facet = (opts.makeFacet && opts.makeFacet()) || noopFacet();
+                    if (opts.mountHeader) opts.mountHeader(body, data, ctx);
+
+                    DL.render(body, opts.layout, data, ctx);
+                })
+                .catch(function (err) {
+                    console.error(label + ':', err);
+                    var loading = container.querySelector(loadingSel);
+                    if (loading) loading.remove();
+                    container.appendChild(P.buildErrorState());
+                });
+        }
+
+        function run() {
+            if (typeof echarts === 'undefined') {
+                console.warn(label + ': ECharts not loaded');
+                return;
+            }
+            var containers = document.querySelectorAll(opts.selector);
+            for (var i = 0; i < containers.length; i++) initOne(containers[i]);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', run);
+        } else {
+            run();
+        }
     };
 })();

@@ -69,9 +69,7 @@
      * Falls back to the raw name when no translation exists.
      */
     function translateLang(name) {
-        var key = 'lang_' + name;
-        var translated = P.t(key);
-        return translated === key ? name : translated;
+        return P.translateKeyed('lang_', name);
     }
 
     function localizeLanguages(entries) {

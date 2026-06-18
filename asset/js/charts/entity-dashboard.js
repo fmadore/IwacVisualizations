@@ -80,65 +80,23 @@
     ]);
 
     /* ----------------------------------------------------------------- */
-    /*  Bootstrap                                                         */
+    /*  Bootstrap — shared per-item dashboard boot                         */
     /* ----------------------------------------------------------------- */
+    //
+    // No role facet (non-person entities are always `role = 'all'`), so we
+    // rely on the helper's default no-op facet and mount only the stats row.
 
-    function noopFacet() {
-        return { role: 'all', subscribe: function () {}, set: function () {} };
-    }
-
-    function initDashboard(container) {
-        var itemId = container.dataset.itemId;
-        if (!itemId) return;
-
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || '',
-            itemId:   itemId
-        };
-        var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/entity-dashboards/' + itemId + '.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var loading = container.querySelector('.iwac-vis-entity__loading');
-                if (loading) loading.remove();
-
-                var pd = ns.personDashboard || {};
-                var facet = noopFacet();
-
-                var body = P.el('div', 'iwac-vis-entity__body');
-                container.appendChild(body);
-
-                var statsHost = P.el('div', 'iwac-vis-entity__stats');
-                body.appendChild(statsHost);
-                if (pd.stats) pd.stats.render(statsHost, data, facet);
-
-                ctx.data  = data;
-                ctx.facet = facet;
-                DL.render(body, 'entity', data, ctx);
-            })
-            .catch(function (err) {
-                console.error('IWACVis entity dashboard:', err);
-                var loading = container.querySelector('.iwac-vis-entity__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.buildErrorState());
-            });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis entity dashboard: ECharts not loaded');
-            return;
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-entity',
+        classToken: 'entity',
+        dataDir:    'entity-dashboards',
+        layout:     'entity',
+        warnLabel:  'IWACVis entity dashboard',
+        mountHeader: function (body, data, ctx) {
+            var pd = ns.personDashboard || {};
+            var statsHost = P.el('div', 'iwac-vis-entity__stats');
+            body.appendChild(statsHost);
+            if (pd.stats) pd.stats.render(statsHost, data, ctx.facet);
         }
-        var containers = document.querySelectorAll('.iwac-vis-entity');
-        for (var i = 0; i < containers.length; i++) {
-            initDashboard(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

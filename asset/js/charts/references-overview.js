@@ -45,9 +45,7 @@
      * still render gracefully.
      */
     function translateType(type) {
-        var key = 'ref_type_' + type;
-        var translated = P.t(key);
-        return translated === key ? type : translated;
+        return P.translateKeyed('ref_type_', type);
     }
 
     /**
@@ -57,9 +55,7 @@
      * one.
      */
     function translateLang(name) {
-        var key = 'lang_' + name;
-        var translated = P.t(key);
-        return translated === key ? name : translated;
+        return P.translateKeyed('lang_', name);
     }
 
     function translateEntries(entries, fn) {

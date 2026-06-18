@@ -107,11 +107,12 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
 ## Tier 2 — Shared-helper consolidation (clear reuse win, light verification)
 
 ### JavaScript
-- [ ] **`P.bootPerItemDashboard(container, {classToken, dataDir, layoutKey,
-  makeFacet})`** — collapses the triplicated boot sequence in
-  `person-dashboard.js:93-142`, `entity-dashboard.js:90-126`,
-  `article-dashboard.js:69-105` to ~10-line configs. Promote one `noopFacet`
-  (defined 3×). Highest line-count leverage in the per-block layer.
+- [x] **`P.bootPerItemDashboard({selector, classToken, dataDir, layout,
+  warnLabel, makeFacet, mountHeader})`** — **DONE (v1.8.3)**. Collapsed the
+  triplicated boot sequence (fetch → spinner-swap → optional header → `DL.render`
+  → error banner) in `person/entity/article-dashboard.js` to ~10-line configs;
+  `noopFacet` now lives once inside the helper (`shared/panels.js`). The three
+  orchestrators shrank ~60% each; header mount order preserved (behavior-identical).
 - [ ] **Shared map primitives** `P.addBubbleLayer` / `P.resolveMapColors` /
   `P.computeBounds` — the bubble-map build + bounds scan is re-implemented across
   5 map panels (collection-overview, person-dashboard, index-overview/places-map,
@@ -135,8 +136,11 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   the existing `P.buildFacetedChart` (half the folder already uses it).
 - [ ] **Collapse `dashboard-core.js:353-380` `resolveCssVar`** into iwac-theme's
   cached `resolveCssColor` — removes per-call DOM append/remove churn on the
-  heatmap/choropleth/map hot paths and gives every caller the `color-mix` fast
-  path. (~25 lines.)
+  heatmap/choropleth/map hot paths. ⚠️ **Deferred (behavior-sensitive):** the old
+  probe resolves `var(--x, transparent)` *in-context*, while `readVar` returns the
+  raw (possibly nested-`var()`) token, so equivalence is browser-context-specific.
+  Needs Playwright color-equivalence checks on the live site before landing — not
+  worth a blind change on a hot color path.
 - [ ] **Add `C.hbar` + `ns.emptyChartOption(label)` + `ns.getHeatmapRamp()`** —
   the hbar option shape is copied 4× across compare-newspapers panels
   (`newspapers/sentiment/subjects/wordclouds`); the 5-stop heatmap ramp is
@@ -147,9 +151,11 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   instead of its private ink-token fallback.
 - [ ] **`map-popup.js:90-164`** — use `P.buildPagination` instead of its bespoke
   prev/next widget (it already reuses the CSS classes; `table.js` is the model).
-- [ ] **Promote small dup helpers**: `translateLang` (`references-overview.js:47`,
-  `periodicals-overview.js:71`) → `P.translateLang`; accent-`fold()`
-  (`spatial-exploration/picker.js:27`) → shared util.
+- [x] **Promote `translateLang`** — **DONE (v1.8.3)**. Generalized to
+  `P.translateKeyed(prefix, name)` in `shared/panels.js` (covers `lang_*` *and*
+  `ref_type_*`); the locals in `references-overview.js` / `periodicals-overview.js`
+  are now 1-line delegates, so the key-fallback logic lives in one place.
+- [ ] **Promote accent-`fold()`** (`spatial-exploration/picker.js:27`) → shared util.
 
 ### Python
 - [ ] **Shared dashboard harness** — `build_dashboard_arg_parser(default_subdir,
