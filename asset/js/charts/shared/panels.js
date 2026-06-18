@@ -165,6 +165,23 @@
         return P.el('div', 'iwac-vis-error', P.t(messageKey || 'Failed to load'));
     };
 
+    /**
+     * ECharts option fragment overlaying a centered "no data" message —
+     * for chart panels that `setOption` a placeholder when their slice is
+     * empty (so the chart host keeps its reserved height instead of
+     * collapsing). Pass a custom i18n key (e.g. 'Not rated') or default to
+     * "No data available".
+     */
+    P.emptyChartOption = function (messageKey) {
+        return {
+            title: {
+                text: P.t(messageKey || 'No data available'),
+                left: 'center', top: 'middle',
+                textStyle: { fontSize: 13, fontWeight: 'normal' }
+            }
+        };
+    };
+
     /* ----------------------------------------------------------------- */
     /*  GeoJSON feature builder for count-sized bubble maps               */
     /* ----------------------------------------------------------------- */

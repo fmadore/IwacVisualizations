@@ -92,13 +92,7 @@
             var model = modelSelect.value;   // gemini | chatgpt | mistral
             var entries = (((data.sentiment || {}).models || {})[model] || {})[axis] || [];
             if (!entries.length) {
-                instance.setOption({
-                    title: {
-                        text: P.t('Not rated'),
-                        left: 'center', top: 'middle',
-                        textStyle: { fontSize: 13, fontWeight: 'normal' }
-                    }
-                }, true);
+                instance.setOption(P.emptyChartOption('Not rated'), true);
                 return;
             }
 

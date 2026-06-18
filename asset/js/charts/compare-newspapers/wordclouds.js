@@ -36,13 +36,7 @@
             var pairs = data.wordcloud || [];
             ns.registerChart(host, function (el, instance) {
                 if (!pairs.length) {
-                    instance.setOption({
-                        title: {
-                            text: P.t('No data available'),
-                            left: 'center', top: 'middle',
-                            textStyle: { fontSize: 13, fontWeight: 'normal' }
-                        }
-                    });
+                    instance.setOption(P.emptyChartOption());
                     return;
                 }
                 var opts = (ns.chartOptions && ns.chartOptions.wordcloud)

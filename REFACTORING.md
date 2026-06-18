@@ -4,10 +4,14 @@ Findings from a repo-wide examination for refactoring opportunities, reusable
 components, modularity, and **theme-token compliance** (proper use of the IWAC
 theme's design tokens).
 
-**Implementation status:** Tier 1 landed in **v1.8.2** (2026-06-17) — see the
-checked items below. Tiers 2–3 pending. Each shipped batch bumps
-`config/module.ini` + `package.json` and rebuilds the `.min` assets. Two Tier 1
-items were reclassified to Tier 2 during implementation (rationale inline).
+**Implementation status:** Tier 1 (banner sweep + theme-token + dead-code wins,
+landed v1.8.2) and the build-verifiable Tier 2 reuse helpers (`bootPerItemDashboard`,
+`translateKeyed`, graph toolbar, `emptyChartOption`, on-brand graph palette —
+landed v1.8.3) are **done and ship as v1.9.0** (2026-06-17), merged to `main`.
+The remaining Tier 2 items + all of Tier 3 + the Python tier are deferred — see
+the unchecked boxes and the "Deferred" note below: most touch map / graph /
+heatmap **color rendering** that needs live Playwright verification, or are
+blocked on the `iwac_utils` ↔ `iwac-dashboard` sync question.
 
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
@@ -121,12 +125,15 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   entity-networks/graph:48, person-dashboard/map:110, index-overview/places-map:131,
   spatial-exploration/map:35, shared/choropleth:83) → one shared guarded entry.
   *(reclassified from Tier 1)*
-- [ ] **`C._forceGraphBase()`** shared by `C.network` (`chart-options-graph.js:50-314`)
-  and `C.collaborationNetwork` (`:443-590`) — ~120 duplicated lines (identical
-  force/scaleLimit/tooltip skeleton). **While in this file:** drop the dead
-  `|| [...]` palette guards and the off-brand `#d97706` fallback arrays
-  (`:57,343,450`) — `getPalette()` already never returns falsy, so they're dead
-  code. *(reclassified from Tier 1)*
+- [x] **On-brand graph palette fallbacks** — **DONE (v1.9.0)**. The off-brand
+  `#d97706…` fallback arrays in `chart-options-graph.js` (`:57,343,450`) now mirror
+  the module palette (`#e64a19, #394f68, …`), so a theme-JS-missing fallback render
+  stays on-brand.
+- [ ] **`C._forceGraphBase()`** — **deferred (assessed).** Read both builders: the
+  genuinely-shared `series` skeleton is only ~15 lines, it's a single-file *internal*
+  dedup (no cross-file reuse), and extracting it means restructuring a large option
+  literal in core graph rendering that the terser build can't validate. Low value
+  vs visual risk on all four network views — revisit only with live verification.
 - [x] **Shared graph toolbar + click-through** — **DONE (v1.8.3)**. Added
   `P.buildGraphPanelToolbar(panelEl, chart, {downloadName})` (owns legend state,
   exposes `isLegendVisible()`) + `P.attachGraphClickThrough(chart, onNode)` to
@@ -144,11 +151,16 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   raw (possibly nested-`var()`) token, so equivalence is browser-context-specific.
   Needs Playwright color-equivalence checks on the live site before landing — not
   worth a blind change on a hot color path.
-- [ ] **Add `C.hbar` + `ns.emptyChartOption(label)` + `ns.getHeatmapRamp()`** —
-  the hbar option shape is copied 4× across compare-newspapers panels
-  (`newspapers/sentiment/subjects/wordclouds`); the 5-stop heatmap ramp is
-  resolved independently in `choropleth.js:89-103`,
-  `chart-options-special.js:787-800`, `renderers/calendar-heatmap.js:82-91`.
+- [x] **`P.emptyChartOption(label)`** — **DONE (v1.9.0)**. The centered "no data"
+  ECharts title overlay (identical `fontSize:13`, center-middle) is now one helper
+  in `shared/panels.js`; `compare-newspapers/{wordclouds,sentiment}.js` use it.
+- [ ] **`C.hbar`** — **deferred (assessed).** The 4 compare-newspapers hbars are
+  NOT near-identical: grouped 2-series (subjects) vs single-series, with
+  legend / right-labels / grid-top / inverse-axis all differing. A single helper
+  would add params without clear benefit and risk changing a chart — revisit w/ verify.
+- [ ] **`ns.getHeatmapRamp()`** — **deferred.** 5-stop ramp dedup across
+  `choropleth.js` / `chart-options-special.js` / `renderers/calendar-heatmap.js`;
+  visual color output, needs live verification.
 - [ ] **Move `C.segmentedBar`** (`chart-options-special.js:571`) into
   `chart-options-hbar.js` and reuse `C._stableLabelColor` / `C._labelHalo`
   instead of its private ink-token fallback.
@@ -159,6 +171,14 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `ref_type_*`); the locals in `references-overview.js` / `periodicals-overview.js`
   are now 1-line delegates, so the key-fallback logic lives in one place.
 - [ ] **Promote accent-`fold()`** (`spatial-exploration/picker.js:27`) → shared util.
+
+> **The unchecked JS items above are deliberately deferred** to a focused pass with
+> live Playwright verification on `islam.zmo.de`. Most touch map / graph / heatmap
+> **color rendering** (or, for the `buildFacetedChart` migration, facet-update
+> behaviour) that the terser build can't confirm — shipping them blind risks subtle
+> visual regressions. The safe, build-verifiable Tier 2 wins are done + merged.
+> (`map-popup`→`buildPagination`, the `segmentedBar` move, and accent-`fold` are
+> lower-risk but were time-boxed out of this pass.)
 
 ### Python
 - [ ] **Shared dashboard harness** — `build_dashboard_arg_parser(default_subdir,
