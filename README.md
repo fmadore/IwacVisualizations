@@ -41,7 +41,10 @@ Every page block can now be embedded on a third-party site through a standalone 
   - `…/s/<site-slug>/iwac-embed/<block>` — one block, bare. Optional `?theme=light|dark` (else follows the viewer's OS preference) and `?primary=RRGGBB` (accent override).
 - **Why an iframe** — the page blocks are zero-configuration (they read only the current site + base path, never `$block`), so an iframe loading from this same origin keeps the relative `asset/data/` fetches, the module CSS, and the theme tokens resolving exactly as on a normal site page — no CORS, no cross-origin data copy, no stylesheet collision with the host. The bare layout (`view/iwac-visualizations/layout/embed.phtml`) posts its document height to the parent so the host iframe auto-resizes.
 - **Theme-faithful tooling** — the snippet gallery consumes the IWAC theme design tokens (cool near-white surfaces, ink greys, `--primary` reserved for state) with the canonical fallbacks from `IWAC-theme/docs/DESIGN-SYSTEM.md`, so the helper reads as part of the same research instrument. New UI strings are translated (en/fr).
+- **Live accent on the bare route** — the embed layout reads the theme's admin-set `primary_color` / `secondary_color` settings server-side and emits them as `:root` tokens (lightened in dark mode via `color-mix(in oklab, …)` the way the theme does), so an embedded block matches the site's accent even though the compiled theme CSS isn't on this route. `?primary=RRGGBB` still overrides.
 - **Access** — `Module::onBootstrap()` grants public ACL access to the embed controller so anonymous visitors (and the embedding site) can load it.
+
+**Theme-token guard.** `scripts/check-theme-tokens.js` (wired as `npm run lint:theme`, and run first by `npm run build`) fails the build on contract drift: removed tokens (`--primary-hue` / `--primary-sat`), `color-mix(in srgb …)`, or bare hex in CSS outside a `var(--token, #fallback)` slot. Sanctioned data-series colours opt out with a trailing `/* allow-hex */` marker.
 
 ### v1.13.0 — Country Focus folded into Spatial Exploration
 

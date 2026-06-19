@@ -30,6 +30,19 @@ $embedTheme   = isset($embedTheme)   ? (string) $embedTheme : '';
 $embedPrimary = isset($embedPrimary) ? (string) $embedPrimary : '';
 $embedTitle   = isset($embedTitle)   ? (string) $embedTitle : 'IWAC Visualizations';
 $isGallery    = !empty($isGallery);
+
+// Pull the live brand accent so the embed matches the site instead of the
+// module's generic fallback. `?primary=` (already validated upstream) wins;
+// otherwise read the IWAC theme's admin-set `primary_color` / `secondary_color`
+// settings. Without the compiled theme CSS on this bare route these tokens
+// would otherwise fall back to module defaults. Only accept clean hex.
+$hex = function ($v) {
+    $v = trim((string) $v);
+    return preg_match('/^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3}([0-9a-fA-F]{2})?)?$/', $v)
+        ? '#' . ltrim($v, '#') : '';
+};
+$primary   = $embedPrimary !== '' ? $embedPrimary : $hex($this->themeSetting('primary_color', ''));
+$secondary = $hex($this->themeSetting('secondary_color', ''));
 ?>
 <!doctype html>
 <html lang="<?= $escapeAttr($locale) ?>">
@@ -45,8 +58,21 @@ $isGallery    = !empty($isGallery);
         /* The block already self-paces; keep it edge-to-edge in the frame. */
         .iwac-embed-body .iwac-vis-block { margin: 0 auto; }
     </style>
-    <?php if ($embedPrimary !== ''): ?>
-    <style>:root { --primary: <?= $escapeAttr($embedPrimary) ?>; }</style>
+    <?php if ($primary !== '' || $secondary !== ''): ?>
+    <style>
+        :root {<?php if ($primary !== ''): ?> --primary: <?= $escapeAttr($primary) ?>;<?php endif;
+            if ($secondary !== ''): ?> --secondary: <?= $escapeAttr($secondary) ?>;<?php endif; ?> }
+        /* Match the theme's dark-mode habit of lightening the accent
+           (e.g. #e64a19 → #ec653f) rather than carrying the light value. */
+        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $escapeAttr($primary) ?>, white 12%);<?php endif;
+            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $escapeAttr($secondary) ?>, white 14%);<?php endif; ?> }
+        /* Same lightening when the mode follows the viewer's OS preference
+           (no forced data-theme attribute), matching the theme JS fallback. */
+        @media (prefers-color-scheme: dark) {
+            body:not([data-theme]) {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $escapeAttr($primary) ?>, white 12%);<?php endif;
+                if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $escapeAttr($secondary) ?>, white 14%);<?php endif; ?> }
+        }
+    </style>
     <?php endif; ?>
     <?= $this->headScript() ?>
 </head>
