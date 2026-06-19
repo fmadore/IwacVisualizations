@@ -1,0 +1,212 @@
+<?php
+/**
+ * Embed snippet gallery.
+ *
+ * A self-contained helper page that lists every embeddable IWAC page
+ * block with a live preview and a copy-paste `<iframe>` + auto-resize
+ * snippet. Authors visit /s/<site>/iwac-embed to grab the code for any
+ * block and drop it into a third-party site.
+ *
+ * Styling consumes the IWAC theme's design tokens (with the canonical
+ * fallbacks from IWAC-theme/docs/DESIGN-SYSTEM.md) so the tool reads as
+ * part of the same research instrument: cool near-white surfaces, ink
+ * greys for type, brand `--primary` reserved for state (copied / focus),
+ * never as decoration. iwac-core.css is enqueued for the token layer.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var array  $blocks    slug => label
+ * @var string $siteSlug  current site slug
+ */
+$escapeHtml = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+
+$this->headLink()->appendStylesheet($this->assetUrl('css/iwac-core.min.css', 'IwacVisualizations'));
+
+// Absolute origin so the generated snippet works when pasted on another domain.
+$origin = rtrim($this->serverUrl(false), '/');
+
+// The reusable resize listener the snippet pairs with each iframe. Emitted
+// once per host page (guarded), so embedding several blocks stays one copy.
+$resizeScript = "<script>\n"
+    . "(function(){if(window.__iwacEmbedResize)return;window.__iwacEmbedResize=1;\n"
+    . "window.addEventListener('message',function(e){\n"
+    . "  if(!e.data||e.data.type!=='iwac-embed-height')return;\n"
+    . "  var f=document.getElementsByTagName('iframe');\n"
+    . "  for(var i=0;i<f.length;i++){if(f[i].contentWindow===e.source){f[i].style.height=e.data.height+'px';}}\n"
+    . "});})();\n"
+    . "</script>";
+?>
+<style>
+    /* All colours / spacing / type resolve through the IWAC theme tokens;
+       the fallbacks match IWAC-theme/docs/DESIGN-SYSTEM.md so the page is
+       faithful even when the compiled theme CSS isn't on this route. */
+    .iwac-embed-gallery {
+        color: var(--ink, #2c2f37);
+        background: var(--background, #f7f7f6);
+        font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+        font-size: 1rem;
+        line-height: var(--line-height-relaxed, 1.6);
+        padding: var(--space-2xl, 3rem) var(--space-md, 1rem) var(--space-3xl, 4rem);
+    }
+    .iwac-embed-wrap { max-width: var(--measure-wide, 72.5rem); margin: 0 auto; }
+    .iwac-embed-gallery h1 {
+        font-family: var(--font-headings, "Besley", "Noto Serif", Georgia, serif);
+        font-size: var(--text-3xl, 1.9rem);
+        font-weight: 600;
+        letter-spacing: var(--tracking-tight, -0.011em);
+        color: var(--ink-strong, #1c1f27);
+        margin: 0 0 var(--space-xs, 0.25rem);
+    }
+    .iwac-embed-gallery .lede {
+        color: var(--ink-light, #535862);
+        max-width: var(--measure-base, 52.5rem);
+        margin: 0 0 var(--space-2xl, 3rem);
+    }
+    .iwac-embed-card {
+        border: 1px solid var(--border, #d4d6da);
+        border-radius: var(--radius-md, 0.5rem);
+        background: var(--surface, #fdfdfd);
+        box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(28, 31, 39, 0.08));
+        margin-bottom: var(--space-xl, 2rem);
+        overflow: hidden;
+    }
+    .iwac-embed-card > header {
+        display: flex; align-items: baseline; justify-content: space-between;
+        gap: var(--space-md, 1rem);
+        padding: var(--space-md, 1rem) var(--space-lg, 1.5rem);
+        border-bottom: 1px solid var(--border-light, #e6e7eb);
+        background: var(--surface-raised, #fafaf9);
+    }
+    .iwac-embed-card h2 {
+        font-family: var(--font-headings, "Besley", "Noto Serif", Georgia, serif);
+        font-size: var(--text-xl, 1.2rem);
+        font-weight: 600;
+        color: var(--ink-strong, #1c1f27);
+        margin: 0;
+    }
+    /* Slug chip — the theme's resource-tag pill look. */
+    .iwac-embed-card .slug {
+        font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+        font-size: var(--text-xs, 0.75rem);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted, #767880);
+        border: 1px solid var(--border, #d4d6da);
+        border-radius: var(--radius-full, 9999px);
+        padding: 0.15em 0.7em;
+        white-space: nowrap;
+    }
+    .iwac-embed-preview {
+        width: 100%; border: 0; height: 460px; display: block;
+        background: var(--surface-sunken, #f3f3f1);
+    }
+    .iwac-embed-code { position: relative; }
+    .iwac-embed-code pre {
+        margin: 0;
+        padding: var(--space-md, 1rem) var(--space-lg, 1.5rem);
+        overflow-x: auto;
+        font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+        font-size: var(--text-xs, 0.8125rem);
+        line-height: 1.55;
+        color: var(--ink, #2c2f37);
+        background: var(--surface-sunken, #f3f3f1);
+        white-space: pre-wrap; word-break: break-all;
+    }
+    .iwac-embed-copy {
+        position: absolute; top: var(--space-sm, 0.5rem); right: var(--space-sm, 0.5rem);
+        cursor: pointer;
+        font-family: var(--font-body, "Public Sans", system-ui, sans-serif);
+        font-size: var(--text-xs, 0.75rem); font-weight: 600;
+        letter-spacing: var(--tracking-wide, 0.02em); text-transform: uppercase;
+        padding: 0.5em 0.85em;
+        border: 1px solid var(--border, #d4d6da);
+        border-radius: var(--radius-sm, 0.375rem);
+        background: var(--surface, #fdfdfd);
+        color: var(--ink-light, #535862);
+        transition: background var(--transition-fast, 150ms) var(--ease-out-quart, ease),
+                    color var(--transition-fast, 150ms) var(--ease-out-quart, ease);
+    }
+    .iwac-embed-copy:hover { background: var(--surface-sunken, #f3f3f1); color: var(--ink-strong, #1c1f27); }
+    .iwac-embed-copy:focus-visible { outline: none; box-shadow: var(--ring-focus, 0 0 0 3px var(--focus-ring, rgba(230, 74, 25, 0.4))); }
+    /* Confirmation is the one sanctioned use of --primary here: state, not chrome. */
+    .iwac-embed-copy.copied {
+        background: color-mix(in oklab, var(--primary, #e64a19) var(--accent-mix-medium, 40%), var(--surface, #fdfdfd));
+        border-color: var(--primary, #e64a19);
+        color: var(--ink-strong, #1c1f27);
+    }
+    .iwac-embed-note {
+        font-size: var(--text-sm, 0.9rem); color: var(--ink-light, #535862);
+        margin: var(--space-xl, 2rem) 0 0;
+    }
+    .iwac-embed-note code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.85em;
+        background: var(--surface-sunken, #f3f3f1);
+        border: 1px solid var(--border-light, #e6e7eb);
+        padding: 0.1em 0.4em; border-radius: var(--radius-sm, 0.375rem);
+    }
+</style>
+
+<div class="iwac-embed-wrap">
+    <h1><?= $escapeHtml($this->translate('Embed IWAC visualizations')) ?></h1>
+    <p class="lede"><?= $escapeHtml($this->translate(
+        'Copy a snippet below to embed any visualization on another website. Each iframe loads live from this site and resizes itself to fit.'
+    )) ?></p>
+
+    <?php foreach ($blocks as $slug => $label): ?>
+        <?php
+        $src = $origin . $this->url('site/iwac-embed/block', [
+            'site-slug' => $siteSlug,
+            'block'     => $slug,
+        ]);
+        $snippet = '<iframe src="' . $src . '"'
+            . ' title="' . $label . '" loading="lazy" scrolling="no"'
+            . ' style="width:100%;border:0;height:600px"></iframe>' . "\n"
+            . $resizeScript;
+        ?>
+        <section class="iwac-embed-card">
+            <header>
+                <h2><?= $escapeHtml($this->translate($label)) ?></h2>
+                <span class="slug"><?= $escapeHtml($slug) ?></span>
+            </header>
+            <iframe class="iwac-embed-preview" src="<?= $escapeAttr($src) ?>"
+                    title="<?= $escapeAttr($label) ?>" loading="lazy"></iframe>
+            <div class="iwac-embed-code">
+                <button type="button" class="iwac-embed-copy"
+                        data-snippet="<?= $escapeAttr($snippet) ?>">
+                    <?= $escapeHtml($this->translate('Copy')) ?>
+                </button>
+                <pre><code><?= $escapeHtml($snippet) ?></code></pre>
+            </div>
+        </section>
+    <?php endforeach; ?>
+
+    <p class="iwac-embed-note"><?= $this->translate(
+        'Tip: append <code>?theme=dark</code> to force dark mode (otherwise the embed follows the viewer&rsquo;s system preference), or <code>?primary=2b6cb0</code> to override the accent colour.'
+    ) ?></p>
+</div>
+
+<script>
+(function () {
+    var copyLabel = <?= json_encode($this->translate('Copy')) ?>;
+    var doneLabel = <?= json_encode($this->translate('Copied!')) ?>;
+    document.querySelectorAll('.iwac-embed-copy').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var text = btn.getAttribute('data-snippet');
+            var done = function () {
+                btn.textContent = doneLabel;
+                btn.classList.add('copied');
+                setTimeout(function () { btn.textContent = copyLabel; btn.classList.remove('copied'); }, 1600);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, done);
+            } else {
+                var ta = document.createElement('textarea');
+                ta.value = text; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta); done();
+            }
+        });
+    });
+})();
+</script>

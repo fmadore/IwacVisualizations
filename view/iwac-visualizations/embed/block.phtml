@@ -1,0 +1,14 @@
+<?php
+/**
+ * Embed content view — renders a single IWAC page block.
+ *
+ * The block-layout partials are zero-configuration: they read the current
+ * site + base path (for the data-* hooks the JS orchestrators consume) and
+ * never touch `$block`, so rendering one here produces the exact same
+ * markup, assets, and behaviour as on a normal site page. `$block => null`
+ * is passed only to keep the partial's documented variable defined.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var string $slug  Validated block slug (also the partial name).
+ */
+echo $this->partial('common/block-layout/' . $slug, ['block' => null]);

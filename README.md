@@ -32,6 +32,17 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.14.0 — Embeddable page blocks (iframe)
+
+Every page block can now be embedded on a third-party site through a standalone iframe endpoint — no Omeka, theme, or data copy required on the host page.
+
+- **Embed route** — a controller (`src/Controller/Site/EmbedController.php`) renders any single page block on a bare page, nested under Omeka's `site` route so the current site / public theme resolve:
+  - `…/s/<site-slug>/iwac-embed` — a snippet gallery listing all 12 blocks with a live preview and a copy-paste `<iframe>` + auto-resize snippet.
+  - `…/s/<site-slug>/iwac-embed/<block>` — one block, bare. Optional `?theme=light|dark` (else follows the viewer's OS preference) and `?primary=RRGGBB` (accent override).
+- **Why an iframe** — the page blocks are zero-configuration (they read only the current site + base path, never `$block`), so an iframe loading from this same origin keeps the relative `asset/data/` fetches, the module CSS, and the theme tokens resolving exactly as on a normal site page — no CORS, no cross-origin data copy, no stylesheet collision with the host. The bare layout (`view/iwac-visualizations/layout/embed.phtml`) posts its document height to the parent so the host iframe auto-resizes.
+- **Theme-faithful tooling** — the snippet gallery consumes the IWAC theme design tokens (cool near-white surfaces, ink greys, `--primary` reserved for state) with the canonical fallbacks from `IWAC-theme/docs/DESIGN-SYSTEM.md`, so the helper reads as part of the same research instrument. New UI strings are translated (en/fr).
+- **Access** — `Module::onBootstrap()` grants public ACL access to the embed controller so anonymous visitors (and the embedding site) can load it.
+
 ### v1.13.0 — Country Focus folded into Spatial Exploration
 
 - **Administrative choropleth mode added to Spatial Exploration** — the retained Country Focus view from [`IWAC-spatial-overview`](https://github.com/fmadore/IWAC-spatial-overview) now lives inside the existing map panel. The mode selector switches between place bubbles, six-country choropleth and administrative choropleth.
