@@ -12,6 +12,16 @@ off as the work lands, with the commit hash noted inline. Versions are
 assigned at release time (one minor bump per phase-sized milestone, per
 the module's cache-busting convention).
 
+## Dashboard migration status
+
+The deprecated [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard)
+migration is **complete as of v1.12.0**. All retained dashboard
+visualizations are represented in Omeka S page/resource blocks. The final
+dashboard-only gap, Sources Map, is integrated into Collection Overview as
+Source locations. `KnowledgeGraph` and `TopicNetwork` are deliberate
+non-ports: do not add their generators, routes, UI, data contracts, i18n
+strings, or Svelte/Sigma/Graphology dependency chain.
+
 ## Data source
 
 - Hugging Face dataset: [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) — 6 subsets, ~19,420 rows.
@@ -26,11 +36,13 @@ the module's cache-busting convention).
 
 ## Precompute reference
 
-**`iwac-dashboard/scripts/`** — sibling SvelteKit dashboard with ~3,200
-lines of working Python reading the same HF dataset. Reuse its patterns
-before writing new generators. `iwac_utils.py` has been ported into
-`scripts/`. See `scripts/README.md`. Always confirm field names against
-the `iwac-dataset` skill / `DATA_NOTES.md` before coding.
+**Historical note:** `iwac-dashboard/scripts/` was the sibling SvelteKit
+dashboard whose generators seeded several early module scripts. The
+dashboard is now deprecated and no longer a migration backlog. This
+module's `scripts/` directory is the source of truth; `iwac-dashboard`
+should be consulted only as historical provenance when explaining an
+already-ported visualization. Always confirm field names against the
+`iwac-dataset` skill / `DATA_NOTES.md` before coding.
 
 ---
 
@@ -278,10 +290,13 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       it, then the block disappears — acceptable, but if it bothers,
       the fix is a server-side corpus-name allowlist exported into the
       phtml at precompute time.
-- [x] **6.5 References Overview enhancements** — already shipped
-      pre-evaluation (discovered during Phase 1): the block carries a
-      co-authorship force network and a country → type treemap since the
-      v1.x precompute migration. No further work needed.
+- [x] **6.5 References Overview enhancements.** The block carries the
+      v1.x co-authorship force network and country → type treemap, plus
+      the dashboard-deprecation slice for references: top publishers,
+      country-faceted publisher rankings in the JSON contract,
+      provenance-map empty-state/geocoding contract, and subject
+      co-occurrence chord data. `KnowledgeGraph` and `TopicNetwork` are
+      intentionally not ported.
 - [x] **6.6 Spatial Exploration + Entity Networks page blocks
       (v1.7.0)** — port of the standalone IWAC-spatial-overview
       dashboard's world map / country focus / entity drill-down and
@@ -300,6 +315,18 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       ECharts graph (canvas roam jank at 7k+ edges, client-side force
       cost) or Sigma.js (second graph dependency duplicating MapLibre's
       WebGL + collision + popup + theming infrastructure).
+- [x] **6.7 Sources Map + dashboard migration closure (v1.12.0).**
+      The last retained `iwac-dashboard` visualization without an Omeka
+      equivalent, `/spatial/sources`, is ported into Collection Overview.
+      `generate_collection_overview.py` now writes `sources_map` into
+      `collection-overview.json` using content-subset `source` fields,
+      exact IWAC index coordinate joins, and the old dashboard's curated
+      coordinate overrides for repositories/platforms not geocoded as
+      authority records. `collection-overview/sources-map.js` renders a
+      MapLibre bubble map plus ranked source table using shared popup,
+      map, table, and i18n helpers. With this, dashboard deprecation is
+      closed except for the explicit non-ports `KnowledgeGraph` and
+      `TopicNetwork`.
 
 The June 2026 CSS audit found **zero violations** of the IWAC theme
 v2.0.0 rules — this phase is consolidation, not correction.

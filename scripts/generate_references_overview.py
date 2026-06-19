@@ -24,8 +24,12 @@ Payload shape (top-level keys):
                                  so the JS can call P.t('lang_<x>'))
     countries                  — top-N country histogram
     authors                    — top-N author histogram
+    publishers                 — top-N publisher histogram
+    publisher_countries        — country-faceted publisher rankings
     subjects                   — top-N subject histogram
     treemap                    — country -> type breakdown
+    provenance_map             — geocoded reference-origin points
+    subject_cooccurrence       — { nodes, edges, meta } subject graph
     author_collaborations      — { nodes, edges } graph of co-authoring +
                                  author-editor links, used by the new
                                  ``Author collaborations`` network panel
@@ -43,6 +47,7 @@ Environment
 from __future__ import annotations
 
 import argparse
+import hashlib
 import logging
 import os
 from collections import Counter, defaultdict
@@ -60,6 +65,7 @@ from iwac_utils import (
     extract_year,
     is_unknown,
     load_dataset_safe,
+    parse_coordinates,
     parse_pipe_separated,
     save_json,
 )
@@ -73,11 +79,19 @@ TOP_N_SUBJECTS = 15
 TOP_N_LANGUAGES = 10
 TOP_N_COUNTRIES = 10
 TOP_N_TYPES = 10
+TOP_N_PUBLISHERS = 15
 
 # Network filter — only keep authors who appear in at least this many edges.
 # 864 rows produces a long tail of one-off co-authors that bloats the graph
 # without adding any analytical value. Tunable via --network-min-degree.
 DEFAULT_NETWORK_MIN_DEGREE = 2
+
+# Subject co-occurrence edge filter. The references subset is small, so the
+# default keeps one-off pairings visible; consumers can tune upward.
+DEFAULT_SUBJECT_NETWORK_MIN_WEIGHT = 1
+
+PROVENANCE_PUBLICATION_LIMIT = 50
+PROVENANCE_COLUMNS = ("provenance", "Provenance", "place", "Place", "lieu", "Lieu")
 
 
 # Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
@@ -88,10 +102,78 @@ def _clean_list(values: List[str]) -> List[str]:
     return [v for v in (s.strip() for s in values) if v and not _is_unknown(v)]
 
 
+def _clean_text(value: Any) -> str:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    text = str(value).strip()
+    return "" if _is_unknown(text) else text
+
+
+def _clean_unique_list(values: List[str]) -> List[str]:
+    seen: set = set()
+    result: List[str] = []
+    for value in _clean_list(values):
+        if value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result
+
+
 def _ref_type(row: pd.Series) -> str:
     raw = row.get("o:resource_class") or row.get("type") or ""
     raw = str(raw).strip()
     return raw or "Unknown"
+
+
+def _reference_id(row: pd.Series, fallback_index: Any) -> str:
+    for field in ("o:id", "identifier", "id"):
+        value = _clean_text(row.get(field))
+        if value:
+            return value
+    return f"ref:{fallback_index}"
+
+
+def _reference_title(row: pd.Series) -> str:
+    for field in ("title", "o:title"):
+        value = _clean_text(row.get(field))
+        if value:
+            return value
+    return "Untitled"
+
+
+def _first_pipe_value(row: pd.Series, field: str) -> str:
+    values = _clean_unique_list(parse_pipe_separated(row.get(field)))
+    return values[0] if values else ""
+
+
+def _lookup_key(value: Any) -> str:
+    return " ".join(str(value or "").strip().lower().split())
+
+
+def _subject_id(label: str) -> str:
+    digest = hashlib.sha1(label.encode("utf-8")).hexdigest()[:10]
+    return f"subject:{digest}"
+
+
+def _publication_record(row: pd.Series, fallback_index: Any) -> Dict[str, Any]:
+    record: Dict[str, Any] = {
+        "id": _reference_id(row, fallback_index),
+        "title": _reference_title(row),
+        "type": _ref_type(row),
+    }
+    o_id = _clean_text(row.get("o:id"))
+    if o_id:
+        record["o_id"] = o_id
+    date = _clean_text(row.get("pub_date"))
+    if date:
+        record["date"] = date
+    publisher = _first_pipe_value(row, "publisher")
+    if publisher:
+        record["publisher"] = publisher
+    authors = _clean_unique_list(parse_pipe_separated(row.get("author")))
+    if authors:
+        record["authors"] = authors[:5]
+    return record
 
 
 # ---------------------------------------------------------------------------
@@ -194,6 +276,68 @@ def compute_type_distribution(rows: pd.DataFrame, n: int) -> List[Dict[str, Any]
     ]
 
 
+def compute_publisher_rankings(
+    rows: pd.DataFrame,
+    n: int,
+    country_filter: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """Top publishers, optionally limited to references tagged with a country."""
+    publisher_refs: Dict[str, set] = defaultdict(set)
+    publisher_types: Dict[str, Counter] = defaultdict(Counter)
+    publisher_years: Dict[str, List[int]] = defaultdict(list)
+
+    for fallback_index, row in rows.iterrows():
+        if country_filter:
+            countries = set(_clean_unique_list(parse_pipe_separated(row.get("country"))))
+            if country_filter not in countries:
+                continue
+
+        publishers = _clean_unique_list(parse_pipe_separated(row.get("publisher")))
+        if not publishers:
+            continue
+
+        ref_id = _reference_id(row, fallback_index)
+        ref_type = _ref_type(row)
+        year = extract_year(row.get("pub_date"))
+        for publisher in publishers:
+            if ref_id in publisher_refs[publisher]:
+                continue
+            publisher_refs[publisher].add(ref_id)
+            publisher_types[publisher][ref_type] += 1
+            if year is not None:
+                publisher_years[publisher].append(year)
+
+    entries: List[Dict[str, Any]] = []
+    for publisher, ref_ids in publisher_refs.items():
+        years = publisher_years.get(publisher, [])
+        entry: Dict[str, Any] = {
+            "name":  publisher,
+            "count": int(len(ref_ids)),
+            "types": [
+                {"name": name, "count": int(count)}
+                for name, count in publisher_types[publisher].most_common()
+            ],
+        }
+        if years:
+            entry["earliest_year"] = int(min(years))
+            entry["latest_year"] = int(max(years))
+        entries.append(entry)
+
+    entries.sort(key=lambda item: (-item["count"], item["name"]))
+    return entries[:n]
+
+
+def compute_publisher_countries(rows: pd.DataFrame, n: int) -> Dict[str, List[Dict[str, Any]]]:
+    countries: set = set()
+    for value in rows.get("country", []):
+        countries.update(_clean_unique_list(parse_pipe_separated(value)))
+
+    return {
+        country: compute_publisher_rankings(rows, n, country_filter=country)
+        for country in sorted(countries)
+    }
+
+
 def compute_treemap(rows: pd.DataFrame) -> Dict[str, Any]:
     """Country → type tree consumed by C.treemap."""
     by_country: Dict[str, Counter] = defaultdict(Counter)
@@ -215,6 +359,261 @@ def compute_treemap(rows: pd.DataFrame) -> Dict[str, Any]:
         })
     children.sort(key=lambda c: -c["value"])
     return {"name": "References", "children": children}
+
+
+# ---------------------------------------------------------------------------
+#  Provenance map
+# ---------------------------------------------------------------------------
+
+def _empty_provenance_map(reason: str, source_field: Optional[str] = None) -> Dict[str, Any]:
+    return {
+        "locations": [],
+        "bounds": None,
+        "meta": {
+            "totalLocations": 0,
+            "totalPublications": 0,
+            "matchedPublications": 0,
+            "maxCount": 0,
+            "sourceField": source_field,
+            "reason": reason,
+        },
+    }
+
+
+def build_coordinate_lookup(index_rows: Optional[pd.DataFrame]) -> Dict[str, Dict[str, Any]]:
+    if index_rows is None or index_rows.empty:
+        return {}
+
+    lookup: Dict[str, Dict[str, Any]] = {}
+    for _, row in index_rows.iterrows():
+        coordinates = parse_coordinates(row.get("Coordonnées"))
+        title = _clean_text(row.get("Titre") or row.get("title") or row.get("o:title"))
+        if not coordinates or not title:
+            continue
+
+        lat, lng = coordinates
+        entry: Dict[str, Any] = {
+            "name": title,
+            "lat": float(lat),
+            "lng": float(lng),
+        }
+        o_id = _clean_text(row.get("o:id"))
+        if o_id:
+            entry["o_id"] = o_id
+        entity_type = _clean_text(row.get("Type"))
+        if entity_type:
+            entry["type"] = entity_type
+
+        labels = [title] + _clean_unique_list(parse_pipe_separated(row.get("Titre alternatif")))
+        for label in labels:
+            key = _lookup_key(label)
+            if key and key not in lookup:
+                lookup[key] = entry
+
+    return lookup
+
+
+def compute_provenance_map(
+    rows: pd.DataFrame,
+    coord_lookup: Dict[str, Dict[str, Any]],
+    source_field: Optional[str],
+    publication_limit: int = PROVENANCE_PUBLICATION_LIMIT,
+) -> Dict[str, Any]:
+    if not source_field:
+        return _empty_provenance_map("missing_provenance_field")
+    if not coord_lookup:
+        return _empty_provenance_map("missing_coordinate_lookup", source_field)
+
+    aggregates: Dict[str, Dict[str, Any]] = {}
+    total_with_provenance = 0
+    matched_publications: set = set()
+    unmatched: Counter = Counter()
+
+    for fallback_index, row in rows.iterrows():
+        places = _clean_unique_list(parse_pipe_separated(row.get(source_field)))
+        if not places:
+            continue
+
+        total_with_provenance += 1
+        ref_id = _reference_id(row, fallback_index)
+        publication = _publication_record(row, fallback_index)
+        ref_type = _ref_type(row)
+        year = extract_year(row.get("pub_date"))
+        matched_row = False
+
+        for place in places:
+            match = coord_lookup.get(_lookup_key(place))
+            if not match:
+                unmatched[place] += 1
+                continue
+
+            matched_row = True
+            key = match["name"]
+            aggregate = aggregates.setdefault(key, {
+                "name": match["name"],
+                "lat": match["lat"],
+                "lng": match["lng"],
+                "o_id": match.get("o_id"),
+                "_pub_ids": set(),
+                "_types": Counter(),
+                "_years": [],
+                "publications": [],
+            })
+            if ref_id not in aggregate["_pub_ids"]:
+                aggregate["_pub_ids"].add(ref_id)
+                aggregate["_types"][ref_type] += 1
+                if year is not None:
+                    aggregate["_years"].append(year)
+                if len(aggregate["publications"]) < publication_limit:
+                    aggregate["publications"].append(publication)
+
+        if matched_row:
+            matched_publications.add(ref_id)
+
+    if not aggregates:
+        result = _empty_provenance_map("no_matching_coordinates", source_field)
+        result["meta"]["totalPublications"] = int(total_with_provenance)
+        result["meta"]["unmatchedLocations"] = [
+            {"name": name, "count": int(count)}
+            for name, count in unmatched.most_common(20)
+        ]
+        return result
+
+    locations: List[Dict[str, Any]] = []
+    for aggregate in aggregates.values():
+        years = aggregate["_years"]
+        location: Dict[str, Any] = {
+            "name": aggregate["name"],
+            "lat": aggregate["lat"],
+            "lng": aggregate["lng"],
+            "count": int(len(aggregate["_pub_ids"])),
+            "types": [
+                {"name": name, "count": int(count)}
+                for name, count in aggregate["_types"].most_common()
+            ],
+            "publications": aggregate["publications"],
+        }
+        if aggregate.get("o_id"):
+            location["o_id"] = aggregate["o_id"]
+        if years:
+            location["earliestYear"] = int(min(years))
+            location["latestYear"] = int(max(years))
+        locations.append(location)
+
+    locations.sort(key=lambda item: (-item["count"], item["name"]))
+    max_count = max(location["count"] for location in locations)
+    for location in locations:
+        location["countNorm"] = round(location["count"] / max_count, 4) if max_count else 0
+
+    bounds = {
+        "north": max(location["lat"] for location in locations),
+        "south": min(location["lat"] for location in locations),
+        "east": max(location["lng"] for location in locations),
+        "west": min(location["lng"] for location in locations),
+    }
+
+    return {
+        "locations": locations,
+        "bounds": bounds,
+        "meta": {
+            "totalLocations": int(len(locations)),
+            "totalPublications": int(total_with_provenance),
+            "matchedPublications": int(len(matched_publications)),
+            "maxCount": int(max_count),
+            "sourceField": source_field,
+            "unmatchedLocations": [
+                {"name": name, "count": int(count)}
+                for name, count in unmatched.most_common(20)
+            ],
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+#  Subject co-occurrence network
+# ---------------------------------------------------------------------------
+
+def compute_subject_cooccurrence(rows: pd.DataFrame, min_weight: int) -> Dict[str, Any]:
+    subject_counts: Counter = Counter()
+    edge_weights: Dict[Tuple[str, str], int] = defaultdict(int)
+    edge_refs: Dict[Tuple[str, str], List[str]] = defaultdict(list)
+
+    for fallback_index, row in rows.iterrows():
+        subjects = _clean_unique_list(parse_pipe_separated(row.get("subject")))
+        if not subjects:
+            continue
+
+        ref_id = _reference_id(row, fallback_index)
+        for subject in subjects:
+            subject_counts[subject] += 1
+
+        for source, target in combinations(sorted(subjects), 2):
+            key = (source, target)
+            edge_weights[key] += 1
+            if len(edge_refs[key]) < 100:
+                edge_refs[key].append(ref_id)
+
+    degree: Counter = Counter()
+    strength: Counter = Counter()
+    filtered_edges = {
+        key: weight
+        for key, weight in edge_weights.items()
+        if weight >= min_weight
+    }
+    for (source, target), weight in filtered_edges.items():
+        degree[source] += 1
+        degree[target] += 1
+        strength[source] += weight
+        strength[target] += weight
+
+    participating_subjects = set(degree)
+    sorted_subjects = sorted(
+        participating_subjects,
+        key=lambda subject: (-strength[subject], -subject_counts[subject], subject),
+    )
+    id_by_subject = {subject: _subject_id(subject) for subject in sorted_subjects}
+
+    nodes = [
+        {
+            "id": id_by_subject[subject],
+            "type": "subject",
+            "label": subject,
+            "name": subject,
+            "count": int(subject_counts[subject]),
+            "value": int(subject_counts[subject]),
+            "degree": int(degree[subject]),
+            "strength": int(strength[subject]),
+            "labelPriority": int(index),
+        }
+        for index, subject in enumerate(sorted_subjects)
+    ]
+
+    edges = [
+        {
+            "source": id_by_subject[source],
+            "target": id_by_subject[target],
+            "sourceLabel": source,
+            "targetLabel": target,
+            "type": "subject-subject",
+            "weight": int(weight),
+            "referenceIds": edge_refs[(source, target)],
+        }
+        for (source, target), weight in filtered_edges.items()
+        if source in id_by_subject and target in id_by_subject
+    ]
+    edges.sort(key=lambda edge: (-edge["weight"], edge["sourceLabel"], edge["targetLabel"]))
+
+    return {
+        "nodes": nodes,
+        "edges": edges,
+        "meta": {
+            "totalSubjects": int(len(subject_counts)),
+            "totalNodes": int(len(nodes)),
+            "totalEdges": int(len(edges)),
+            "minWeight": int(min_weight),
+            "maxWeight": int(max(filtered_edges.values()) if filtered_edges else 0),
+        },
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -334,10 +733,12 @@ def build_references_overview(
     token: Optional[str],
     top_n_authors: int,
     top_n_subjects: int,
+    top_n_publishers: int,
     top_n_languages: int,
     top_n_countries: int,
     top_n_types: int,
     network_min_degree: int,
+    subject_network_min_weight: int,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC references subset from %s", repo_id)
@@ -357,8 +758,35 @@ def build_references_overview(
     languages = _top_n_pipe(df, "language", top_n_languages)
     countries = _top_n_pipe(df, "country", top_n_countries)
     authors = _top_n_pipe(df, "author", top_n_authors)
+    publishers = compute_publisher_rankings(df, top_n_publishers)
+    publisher_countries = compute_publisher_countries(df, top_n_publishers)
     subjects = _top_n_pipe(df, "subject", top_n_subjects)
     treemap = compute_treemap(df)
+
+    provenance_field = next((field for field in PROVENANCE_COLUMNS if field in df.columns), None)
+    coord_lookup: Dict[str, Dict[str, Any]] = {}
+    if provenance_field:
+        logger.info("Loading IWAC index subset for provenance geocoding")
+        index_df = load_dataset_safe("index", repo_id=repo_id, token=token)
+        coord_lookup = build_coordinate_lookup(index_df)
+        logger.info("  %d geocoded authority labels available", len(coord_lookup))
+    else:
+        logger.info("No provenance field found in references subset; provenance map will use empty-state contract")
+    provenance_map = compute_provenance_map(df, coord_lookup, provenance_field)
+
+    logger.info(
+        "Building subject co-occurrence graph (min_weight=%d)",
+        subject_network_min_weight,
+    )
+    subject_cooccurrence = compute_subject_cooccurrence(
+        df,
+        min_weight=subject_network_min_weight,
+    )
+    logger.info(
+        "  subject graph: %d nodes, %d edges",
+        len(subject_cooccurrence["nodes"]),
+        len(subject_cooccurrence["edges"]),
+    )
 
     logger.info("Building author collaboration network (min_degree=%d)", network_min_degree)
     collaborations = compute_author_collaborations(df, min_degree=network_min_degree)
@@ -372,7 +800,7 @@ def build_references_overview(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_references_overview.py",
-        script_version="0.1.0",
+        script_version="0.2.0",
     )
 
     return {
@@ -383,8 +811,12 @@ def build_references_overview(
         "languages":             languages,
         "countries":             countries,
         "authors":               authors,
+        "publishers":            publishers,
+        "publisher_countries":    publisher_countries,
         "subjects":              subjects,
         "treemap":               treemap,
+        "provenance_map":         provenance_map,
+        "subject_cooccurrence":   subject_cooccurrence,
         "author_collaborations": collaborations,
     }
 
@@ -403,12 +835,19 @@ def main() -> None:
     )
     parser.add_argument("--top-n-authors",   type=int, default=TOP_N_AUTHORS)
     parser.add_argument("--top-n-subjects",  type=int, default=TOP_N_SUBJECTS)
+    parser.add_argument("--top-n-publishers", type=int, default=TOP_N_PUBLISHERS)
     parser.add_argument("--top-n-languages", type=int, default=TOP_N_LANGUAGES)
     parser.add_argument("--top-n-countries", type=int, default=TOP_N_COUNTRIES)
     parser.add_argument("--top-n-types",     type=int, default=TOP_N_TYPES)
     parser.add_argument(
         "--network-min-degree", type=int, default=DEFAULT_NETWORK_MIN_DEGREE,
         help="Drop authors whose total collaborators are below this number",
+    )
+    parser.add_argument(
+        "--subject-network-min-weight",
+        type=int,
+        default=DEFAULT_SUBJECT_NETWORK_MIN_WEIGHT,
+        help="Drop subject co-occurrence edges below this weight",
     )
     parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
                         default=False,
@@ -426,10 +865,12 @@ def main() -> None:
         token=token,
         top_n_authors=args.top_n_authors,
         top_n_subjects=args.top_n_subjects,
+        top_n_publishers=args.top_n_publishers,
         top_n_languages=args.top_n_languages,
         top_n_countries=args.top_n_countries,
         top_n_types=args.top_n_types,
         network_min_degree=args.network_min_degree,
+        subject_network_min_weight=args.subject_network_min_weight,
     )
 
     output_path = Path(args.output)

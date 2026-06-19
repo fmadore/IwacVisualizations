@@ -73,6 +73,32 @@
 
 
 /* =================================================================== */
+/*  Source locations — map + ranked source table                         */
+/* =================================================================== */
+
+.iwac-vis-sources-map .iwac-vis-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+.iwac-vis-source-map__meta {
+    margin: 0;
+    color: var(--muted, #767880);
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+.iwac-vis-source-map__map {
+    height: clamp(320px, 52vh, 500px);
+}
+
+.iwac-vis-source-map__table .iwac-vis-table__cell--number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =================================================================== */
 /*  Languages panel — log-scale caption                                  */
 /* =================================================================== */
 

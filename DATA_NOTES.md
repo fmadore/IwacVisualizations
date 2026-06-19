@@ -120,28 +120,31 @@ Alternative: write a **single sharded JSON** (e.g., `entities.json` keyed by `o:
 
 ## Provenance: iwac-dashboard (deprecated)
 
-`iwac-dashboard` was a sibling SvelteKit dashboard (static prerender) that read the same HF dataset; the generators and `iwac_utils.py` here were originally ported from it. **It is now deprecated** — this module's `scripts/` is self-contained and the source of truth, with no cross-repo sync constraint. The table below is retained only as historical context for where patterns came from, not as a live dependency.
+`iwac-dashboard` was a sibling SvelteKit dashboard (static prerender) that read the same HF dataset; the generators and `iwac_utils.py` here were originally ported from it. **It is now deprecated** — this module's `scripts/` is self-contained and the source of truth, with no cross-repo sync constraint. The table below is retained only as historical context for where reusable aggregation patterns came from, not as a live dependency.
 
 Relevant files in that project:
 
 | File | Lines | What it gives us |
 |---|---:|---|
-| `scripts/iwac_utils.py` | 598 | `normalize_country`, `extract_year`, `parse_pipe_separated`, `parse_coordinates`, `load_dataset_safe`, `save_json`, `configure_logging`, `DATASET_ID`, `SUBSETS`. Copy wholesale. |
+| `scripts/iwac_utils.py` | 598 | Original seed for `normalize_country`, `extract_year`, `parse_pipe_separated`, `parse_coordinates`, `load_dataset_safe`, `save_json`, `configure_logging`, `DATASET_ID`, `SUBSETS`; the module's current `scripts/iwac_utils.py` is now canonical. |
 | `scripts/generate_overview_stats.py` | 531 | Top-level collection aggregates — direct model for `collection-overview.json` |
 | `scripts/generate_index_entities.py` | 278 | Per-entity aggregation from the `index` subset — direct model for per-entity dashboards |
 | `scripts/generate_timeline.py` | 377 | Year bucketing for articles, stacked by country |
 | `scripts/generate_cooccurrence.py` | 569 | Subject/entity co-occurrence (parses pipe-separated `subject` field) |
-| `scripts/generate_knowledge_graph.py` | 889 | Knowledge graph JSON — if we want a KG block |
-| `scripts/generate_treemap.py`, `generate_wordcloud.py`, `generate_world_map.py`, `generate_topic_network.py`, etc. | | Chart-specific generators — mine for patterns |
+| `scripts/generate_treemap.py`, `generate_wordcloud.py`, `generate_world_map.py`, etc. | | Chart-specific generators — mine for focused aggregation patterns only |
 
-The output shape differs: iwac-dashboard writes **global** JSON files consumed by SvelteKit routes, while this module needs **per-item** JSON keyed by `o:id` for resource-page blocks. The loading, cleaning, and aggregation primitives are identical; only the fan-out at the end changes.
+`KnowledgeGraph` and `TopicNetwork` are intentionally not ported into `IwacVisualizations`: do not add their generators, routes, UI, data contracts, i18n strings, or Svelte/Sigma/Graphology dependency chain.
+
+The output shape differs: iwac-dashboard wrote **global** JSON files consumed by SvelteKit routes, while this module uses a mix of collection-level page-block bundles and per-item JSON keyed by `o:id` for resource-page blocks. The loading, cleaning, and aggregation primitives are reusable, but the module-side contracts are authoritative.
 
 Dependencies (from iwac-dashboard/scripts/requirements.txt): `datasets`, `pandas`, `pyarrow`, `huggingface-hub`, etc.
 
-## Remaining open questions
+## Historical open questions
 
-1. **Resource templates**: Which Omeka resource templates correspond to each HF subset? (e.g., "Article de presse" → `articles`, "Personnes" → `index` where `Type=Personnes`?) Determines which blocks attach to which item pages — can probably answer by inspecting islam.zmo.de directly.
-2. **Subject → index join**: Exact string match against `index.Titre`, or does `articles.subject` sometimes use `Titre alternatif`? `iwac-dashboard/scripts/generate_cooccurrence.py` likely already solves this — check there first.
-3. **v1 priority**: Collection-level overview page first? Per-entity dashboards? Per-article sentiment panels? My argument: **collection overview + per-entity dashboards** because `index` is already aggregated and the entity page is where users land after browsing.
-4. **Hosting**: Commit ~5k entity dashboard JSONs to git (simple, bloats repo), or generate into an Omeka volume at deploy time (cleaner, more infra)? Check how iwac-dashboard handles its ~similar volume in `static/data/`.
-5. **audiovisual (45) / documents (26)**: Too small for their own dashboards — fold into collection-level stats only?
+These are retained only as early-design provenance; they are no longer active roadmap items.
+
+1. **Resource templates**: Resolved in the module block/resource-page wiring and README status table.
+2. **Subject → index join**: Resolved by the current generator-specific exact-match and normalization patterns.
+3. **v1 priority**: Superseded — collection overview, per-entity, per-person, per-article, publication, and item-set dashboards are live.
+4. **Hosting**: Resolved — committed `asset/data/` bundles and fan-outs are the deployed contract.
+5. **audiovisual (45) / documents (26)**: Resolved — lightweight minimal-item dashboards plus collection-level stats.

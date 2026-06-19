@@ -10,8 +10,9 @@
  *
  * Panels: summary cards, period subtitle, references-by-type timeline,
  * reference types bar, languages pie, countries bar, top authors,
- * top subjects, country/type treemap, and the author collaboration
- * force-directed network (with a fullscreen toggle).
+ * top publishers, top subjects, country/type treemap, reference
+ * provenance map, subject co-occurrence chord, and the author
+ * collaboration force-directed network (with fullscreen toggles).
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
@@ -21,6 +22,7 @@ echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'needs' => [
             'chartOptions' => true,
+            'maplibre'     => true,
         ],
         'orchestrator' => 'references-overview',
     ],

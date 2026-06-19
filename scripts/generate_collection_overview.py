@@ -15,6 +15,7 @@ compact, covering:
     * content counts per country
     * content counts per language
     * top N entities per ``index`` type, sorted by ``frequency``
+    * source-origin map data for collection source/provenance points
 
 Follows the patterns from ``iwac-dashboard/scripts/generate_overview_stats.py``
 and shares its ``iwac_utils`` helpers.
@@ -48,8 +49,12 @@ from iwac_utils import (
     configure_logging,
     create_metadata_block,
     extract_year,
+    find_column,
+    is_unknown,
     load_dataset_safe,
+    normalize_location_name,
     parse_pipe_separated,
+    parse_coordinates,
     save_json,
 )
 
@@ -72,6 +77,29 @@ INDEX_TYPES = [
 # Subsets with a `newspaper` field (dcterms:publisher) — used for the
 # "newspaper coverage" panel.
 NEWSPAPER_SUBSETS = ["articles", "publications"]
+
+# Subsets with a `source` field — used for the source-origin map ported from
+# iwac-dashboard's `/spatial/sources` route.
+SOURCE_SUBSETS = {
+    "articles":     "article",
+    "publications": "publication",
+    "documents":    "document",
+    "audiovisual":  "audiovisual",
+}
+
+# Coordinate overrides for source labels that are not geocoded authority
+# records in the IWAC index. Ported from the deprecated dashboard's source-map
+# generator so the final missing migration slice preserves its coverage.
+CUSTOM_SOURCE_COORDINATES = {
+    "Wayback Machine": (37.782320470033035, -122.47163767055227),
+    "Centre de Recherche et d'Action pour la Paix": (5.33977337625783, -4.000600603778056),
+    "La Nation": (6.35690531508226, 2.4017090109401797),
+    "Frédérick Madore": (52.516667, 13.383333),
+    "Cercle d'Études, de Recherches et de Formation Islamiques": (12.359473717928248, -1.4978785755133803),
+    "Abdoulaye Sounaye": (52.427976, 13.202396),
+    "Louis Audet Gosselin": (45.503343, -73.586841),
+    "Le Pays": (12.36051671846299, -1.497256496296541),
+}
 
 # Mapping from HF subset names to human-readable document type labels used
 # in the treemap hierarchy (matches the convention from iwac-dashboard).
@@ -189,6 +217,13 @@ def _int_or_none(value: Any) -> Optional[int]:
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _clean_text(value: Any) -> str:
+    """Stringify a DataFrame cell, returning ``""`` for null-ish values."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    return str(value).strip()
 
 
 def compute_subset_summary(df: Optional[pd.DataFrame]) -> Dict[str, int]:
@@ -771,6 +806,171 @@ def compute_newspapers(
     }
 
 
+def _build_source_coordinate_lookups(
+    index_df: Optional[pd.DataFrame],
+) -> tuple[Dict[str, Dict[str, Any]], Dict[str, int]]:
+    """Build normalized source-name → coordinates / ID lookups from index."""
+    coord_lookup: Dict[str, Dict[str, Any]] = {}
+    id_lookup: Dict[str, int] = {}
+
+    if index_df is None or index_df.empty:
+        return coord_lookup, id_lookup
+
+    title_col = find_column(index_df, ["Titre", "title", "dcterms:title", "name"])
+    coord_col = find_column(index_df, ["Coordonnées", "coordinates", "coordonnees", "curation:coordinates"])
+    id_col = find_column(index_df, ["o:id", "o_id", "id", "ID"])
+
+    if not title_col:
+        return coord_lookup, id_lookup
+
+    for _, row in index_df.iterrows():
+        title = _clean_text(row.get(title_col))
+        if not title:
+            continue
+        normalized = normalize_location_name(title)
+
+        oid = _int_or_none(row.get(id_col)) if id_col else None
+        if oid is not None:
+            id_lookup[normalized] = oid
+
+        if not coord_col:
+            continue
+        coords = parse_coordinates(row.get(coord_col))
+        if coords:
+            coord_lookup[normalized] = {
+                "name": title,
+                "coordinates": coords,
+                "o_id": oid,
+            }
+
+    return coord_lookup, id_lookup
+
+
+def compute_sources_map(
+    dataframes: Dict[str, pd.DataFrame],
+    index_df: Optional[pd.DataFrame],
+) -> Dict[str, Any]:
+    """
+    Source-origin map/table data, ported from the deprecated dashboard's
+    `/spatial/sources` visualization.
+
+    Counts values from the `source` field across content subsets, joins exact
+    source labels to geocoded authority records in `index.Coordonnées`, and
+    applies a small curated override table for well-known source platforms or
+    repositories not represented as coordinate-bearing authority records.
+    """
+    coord_lookup, id_lookup = _build_source_coordinate_lookups(index_df)
+    custom_lookup = {
+        normalize_location_name(name): coords
+        for name, coords in CUSTOM_SOURCE_COORDINATES.items()
+    }
+
+    # source name -> aggregate
+    aggregates: Dict[str, Dict[str, Any]] = defaultdict(lambda: {
+        "count": 0,
+        "by_type": Counter(),
+        "countries": set(),
+    })
+
+    for subset, type_key in SOURCE_SUBSETS.items():
+        df = dataframes.get(subset)
+        if df is None or df.empty:
+            continue
+        source_col = find_column(df, ["source", "dcterms:source", "dcterms__source", "newspaper"])
+        if not source_col:
+            continue
+        country_col = find_column(df, ["country", "countries", "pays"])
+
+        for idx in range(len(df)):
+            sources = [
+                source.strip()
+                for source in parse_pipe_separated(df[source_col].iat[idx])
+                if source and not is_unknown(source.strip())
+            ]
+            if not sources:
+                continue
+
+            countries: List[str] = []
+            if country_col:
+                for country in parse_pipe_separated(df[country_col].iat[idx]):
+                    country = country.strip()
+                    if country and not is_unknown(country):
+                        countries.append(country)
+
+            for source in sources:
+                entry = aggregates[source]
+                entry["count"] += 1
+                entry["by_type"][type_key] += 1
+                for country in countries:
+                    entry["countries"].add(country)
+
+    sources_list: List[Dict[str, Any]] = []
+    sources_with_coordinates = 0
+    sources_without_coordinates = 0
+    total_items = 0
+    type_totals: Counter = Counter()
+    all_countries: set = set()
+
+    for source_name, data in aggregates.items():
+        normalized = normalize_location_name(source_name)
+        coord_data = coord_lookup.get(normalized)
+        custom_coords = custom_lookup.get(normalized)
+        count = int(data["count"])
+        total_items += count
+        type_totals.update(data["by_type"])
+        all_countries.update(data["countries"])
+
+        entry: Dict[str, Any] = {
+            "name": source_name,
+            "count": count,
+            "by_type": {
+                key: int(value)
+                for key, value in sorted(data["by_type"].items())
+            },
+            "countries": sorted(data["countries"]),
+        }
+
+        if coord_data:
+            lat, lng = coord_data["coordinates"]
+            entry["lat"] = lat
+            entry["lng"] = lng
+            if coord_data.get("o_id") is not None:
+                entry["o_id"] = coord_data["o_id"]
+            sources_with_coordinates += 1
+        elif custom_coords:
+            lat, lng = custom_coords
+            entry["lat"] = lat
+            entry["lng"] = lng
+            oid = id_lookup.get(normalized)
+            if oid is not None:
+                entry["o_id"] = oid
+            sources_with_coordinates += 1
+        else:
+            oid = id_lookup.get(normalized)
+            if oid is not None:
+                entry["o_id"] = oid
+            sources_without_coordinates += 1
+
+        sources_list.append(entry)
+
+    sources_list.sort(key=lambda item: (-item["count"], item["name"]))
+
+    return {
+        "sources": sources_list,
+        "metadata": {
+            "total_sources": len(sources_list),
+            "sources_with_coordinates": sources_with_coordinates,
+            "sources_without_coordinates": sources_without_coordinates,
+            "total_items": total_items,
+            "by_type": {
+                key: int(value)
+                for key, value in sorted(type_totals.items())
+            },
+            "countries": sorted(all_countries),
+        },
+    }
+
+
 def compute_treemap(
     dataframes: Dict[str, pd.DataFrame],
 ) -> Dict[str, Any]:
@@ -898,6 +1098,7 @@ def compute_summary(
     country_distribution: List[Dict[str, Any]],
     language_distribution: Any,
     newspapers: Dict[str, Any],
+    sources_map: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Top-level counters rendered in the summary cards row.
 
@@ -1007,7 +1208,10 @@ def compute_summary(
         "articles": counts.get("articles", 0),
         "index_entries": counts.get("index", 0),
         "total_words": int(total_words),
-        "unique_sources": len(sources),
+        "unique_sources": int(
+            ((sources_map or {}).get("metadata") or {}).get("total_sources")
+            or len(sources)
+        ),
         "document_types": len(doc_types),
         "audiovisual_minutes": int(av_minutes),
         "references_count": counts.get("references", 0),
@@ -1070,19 +1274,21 @@ def build_overview(
     recent = compute_recent_additions(dataframes, limit=100)
     # Keep legacy newspapers structure for the old bar chart fallback + summary count
     newspapers_legacy = compute_newspapers(dataframes, top_n=15, year_min=year_min, year_max=year_max)
+    sources_map = compute_sources_map(dataframes, dataframes.get("index"))
     # 50 entities per type (was 10) — enables client-side pagination
     top_entities = compute_top_entities(dataframes.get("index"), top_n=50)
     treemap = compute_treemap(dataframes)
     summary = compute_summary(
         subset_summaries, dataframes, timeline,
         country_distribution, languages, newspapers_legacy,
+        sources_map=sources_map,
     )
 
     metadata = create_metadata_block(
         total_records=summary.get("articles", 0) + summary.get("index_entries", 0),
         data_source=repo_id,
         script="generate_collection_overview.py",
-        script_version="0.3.0",
+        script_version="0.4.0",
         top_n=top_n,
     )
 
@@ -1098,6 +1304,7 @@ def build_overview(
             "coverage": newspaper_coverage["coverage"],
             "total": newspapers_legacy.get("total", 0),  # kept for summary card count
         },
+        "sources_map": sources_map,
         "top_entities": top_entities,
         "treemap": treemap,
         "recent_additions": recent,

@@ -17,9 +17,12 @@
  *   5. Languages represented — pie
  *   6. Countries studied — horizontal bar
  *   7. Top authors — horizontal bar (wide)
- *   8. Top subjects — horizontal bar (wide)
- *   9. References breakdown — treemap country → type (wide)
- *  10. Author collaborations — force-directed network (wide)
+ *   8. Top publishers — horizontal bar (wide)
+ *   9. Top subjects — horizontal bar (wide)
+ *  10. References breakdown — treemap country → type (wide)
+ *  11. Reference provenance — MapLibre bubble map (wide)
+ *  12. Subject co-occurrence — chord graph (wide)
+ *  13. Author collaborations — force-directed network (wide)
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
  */
@@ -64,6 +67,191 @@
         });
     }
 
+    function subjectGraphToChord(graph, limit) {
+        graph = graph || {};
+        var nodes = (graph.nodes || []).slice();
+        var edges = graph.edges || [];
+        if (nodes.length < 2 || edges.length === 0) {
+            return { names: [], matrix: [] };
+        }
+
+        nodes.sort(function (a, b) {
+            var aScore = (a.strength || 0) || (a.count || 0);
+            var bScore = (b.strength || 0) || (b.count || 0);
+            return bScore - aScore || (b.count || 0) - (a.count || 0);
+        });
+        nodes = nodes.slice(0, limit || 30);
+
+        var indexById = {};
+        var names = nodes.map(function (node, index) {
+            indexById[node.id] = index;
+            return node.label || node.name || node.id;
+        });
+        var matrix = names.map(function () {
+            return names.map(function () { return 0; });
+        });
+
+        edges.forEach(function (edge) {
+            var source = indexById[edge.source];
+            var target = indexById[edge.target];
+            if (source == null || target == null || source === target) return;
+            var weight = Number(edge.weight || 0);
+            matrix[source][target] += weight;
+            matrix[target][source] += weight;
+        });
+
+        return { names: names, matrix: matrix };
+    }
+
+    function hasChordEdges(chord) {
+        if (!chord || !Array.isArray(chord.matrix)) return false;
+        for (var i = 0; i < chord.matrix.length; i++) {
+            var row = chord.matrix[i] || [];
+            for (var j = 0; j < row.length; j++) {
+                if (i !== j && row[j] > 0) return true;
+            }
+        }
+        return false;
+    }
+
+    function renderProvenanceMap(panelEl, mapHost, provenanceMap, siteBase) {
+        var locations = (provenanceMap && provenanceMap.locations) || [];
+        if (!locations.length || !P.createIwacMap || !P.buildCountFeatures) {
+            mapHost.innerHTML = '';
+            mapHost.appendChild(P.buildEmptyState('No provenance locations available'));
+            if (panelEl) panelEl.setAttribute('data-iwac-no-panel-toolbar', '1');
+            return null;
+        }
+
+        mapHost.innerHTML = '';
+        var mapEl = P.el('div', 'iwac-vis-map iwac-vis-map--references-provenance');
+        mapHost.appendChild(mapEl);
+
+        var featureBundle = P.buildCountFeatures(locations, {
+            countKey: 'count',
+            minCount: 1,
+            toProps: function (location, index) {
+                return {
+                    locationIndex: index,
+                    name: location.name,
+                    count: location.count,
+                    o_id: location.o_id || '',
+                    earliestYear: location.earliestYear || '',
+                    latestYear: location.latestYear || ''
+                };
+            }
+        });
+        featureBundle.collection.features.forEach(function (feature, index) {
+            feature.id = index;
+        });
+
+        var sourceId = 'iwac-references-provenance';
+        var layerId = sourceId + '-bubbles';
+        var maxCount = Math.max(featureBundle.max || 1, (provenanceMap.meta && provenanceMap.meta.maxCount) || 1);
+
+        function addLayers(map) {
+            var tokens = ns.getChartTokens ? ns.getChartTokens() : {};
+            var primary = P.normalizeColorForMapLibre
+                ? P.normalizeColorForMapLibre(tokens.primary || '#e64a19')
+                : (tokens.primary || '#e64a19');
+            var surface = P.normalizeColorForMapLibre
+                ? P.normalizeColorForMapLibre(tokens.surface || '#ffffff')
+                : (tokens.surface || '#ffffff');
+
+            if (!map.getSource(sourceId)) {
+                map.addSource(sourceId, {
+                    type: 'geojson',
+                    data: featureBundle.collection
+                });
+            }
+            if (!map.getLayer(layerId)) {
+                map.addLayer({
+                    id: layerId,
+                    type: 'circle',
+                    source: sourceId,
+                    paint: {
+                        'circle-radius': [
+                            'interpolate', ['linear'], ['get', 'count'],
+                            1, 6,
+                            maxCount, 28
+                        ],
+                        'circle-color': primary,
+                        'circle-opacity': 0.7,
+                        'circle-stroke-color': surface,
+                        'circle-stroke-width': 1.5
+                    }
+                });
+            } else {
+                map.setPaintProperty(layerId, 'circle-color', primary);
+                map.setPaintProperty(layerId, 'circle-stroke-color', surface);
+            }
+
+            if (!map._iwacReferencesProvenanceHandlers) {
+                map._iwacReferencesProvenanceHandlers = true;
+                map.on('mouseenter', layerId, function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseleave', layerId, function () {
+                    map.getCanvas().style.cursor = '';
+                });
+                map.on('click', layerId, function (event) {
+                    var feature = event.features && event.features[0];
+                    if (!feature) return;
+                    var props = feature.properties || {};
+                    var location = locations[Number(props.locationIndex)] || {};
+                    var subtitle = [];
+                    subtitle.push(P.t('references_count', { count: P.formatNumber(location.count || 0) }));
+                    if (location.earliestYear && location.latestYear) {
+                        subtitle.push(String(location.earliestYear) + '–' + String(location.latestYear));
+                    }
+                    var popup = P.createIwacPopup && P.createIwacPopup();
+                    if (!popup) return;
+                    popup
+                        .setLngLat(feature.geometry.coordinates)
+                        .setDOMContent(P.buildMapPopup({
+                            title: location.name || props.name,
+                            titleHref: location.o_id && siteBase ? siteBase + '/item/' + location.o_id : '',
+                            subtitleLines: subtitle,
+                            articles: location.publications || [],
+                            siteBase: siteBase || '',
+                            pageSize: 5
+                        }))
+                        .addTo(map);
+                });
+            }
+        }
+
+        var map = P.createIwacMap(mapEl, {
+            center: [0, 10],
+            zoom: 2.2,
+            globe: false,
+            onStyleReady: addLayers
+        });
+
+        if (map && provenanceMap.bounds) {
+            map.once('load', function () {
+                var bounds = provenanceMap.bounds;
+                if (locations.length === 1) {
+                    map.setCenter([locations[0].lng, locations[0].lat]);
+                    map.setZoom(5);
+                } else {
+                    map.fitBounds(
+                        [[bounds.west, bounds.south], [bounds.east, bounds.north]],
+                        { padding: 42, maxZoom: 7, duration: 0 }
+                    );
+                }
+            });
+        }
+        if (map && P.addFullscreenButton && panelEl) {
+            P.addFullscreenButton(panelEl, {
+                onResize: function () {
+                    setTimeout(function () { map.resize(); }, 50);
+                }
+            });
+        }
+        return map;
+    }
+
     /* ----------------------------------------------------------------- */
     /*  Layout composition                                                */
     /* ----------------------------------------------------------------- */
@@ -93,11 +281,23 @@
         var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages represented'));
         var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Content by country'));
         var authorsPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top authors'));
+        var publishersPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top publishers'));
         var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Top subjects'));
         var treemapPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Collection breakdown'));
         // Nested treemap (country › source) — give it room past the 320px
         // floor, matching the collection-overview breakdown panel.
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
+        var provenancePanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Reference provenance'),
+            P.t('references_provenance_desc')
+        );
+        var subjectCooccurrencePanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Subject co-occurrence'),
+            P.t('references_subject_cooccurrence_desc')
+        );
+        subjectCooccurrencePanel.chart.classList.add('iwac-vis-chord-host');
         var networkPanel   = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Author collaborations'));
         // The collaboration network needs the same breathing room as
         // the entity-dashboard graph host so labels on the outer ring
@@ -109,8 +309,11 @@
         grid.appendChild(languagesPanel.panel);
         grid.appendChild(countriesPanel.panel);
         grid.appendChild(authorsPanel.panel);
+        grid.appendChild(publishersPanel.panel);
         grid.appendChild(subjectsPanel.panel);
         grid.appendChild(treemapPanel.panel);
+        grid.appendChild(provenancePanel.panel);
+        grid.appendChild(subjectCooccurrencePanel.panel);
         grid.appendChild(networkPanel.panel);
 
         return {
@@ -119,8 +322,13 @@
             languages: languagesPanel.chart,
             countries: countriesPanel.chart,
             authors:   authorsPanel.chart,
+            publishers: publishersPanel.chart,
             subjects:  subjectsPanel.chart,
             treemap:   treemapPanel.chart,
+            provenance: provenancePanel,
+            provenanceChart: provenancePanel.chart,
+            subjectCooccurrence: subjectCooccurrencePanel,
+            subjectCooccurrenceChart: subjectCooccurrencePanel.chart,
             network:   networkPanel,
             networkChart: networkPanel.chart
         };
@@ -175,8 +383,12 @@
             languages:              translateEntries(data.languages, translateLang),
             countries:              data.countries || [],
             authors:                data.authors || [],
+            publishers:             data.publishers || [],
+            publisher_countries:     data.publisher_countries || {},
             subjects:               data.subjects || [],
             treemap:                localizedTreemap,
+            provenance_map:          data.provenance_map || { locations: [] },
+            subject_cooccurrence:    data.subject_cooccurrence || { nodes: [], edges: [], meta: {} },
             author_collaborations:  data.author_collaborations || { nodes: [], edges: [] }
         };
     }
@@ -190,6 +402,7 @@
         if (loadingLabel) loadingLabel.textContent = P.t('Loading references overview') + '\u2026';
 
         var basePath = container.getAttribute('data-base-path') || '';
+        var siteBase = container.getAttribute('data-site-base') || '';
         var url = basePath + '/modules/IwacVisualizations/asset/data/references-overview.json';
 
         P.fetchJSON(url)
@@ -238,21 +451,50 @@
                     });
                 }
 
-                // 6. Top subjects
+                // 6. Top publishers
+                if (data.publishers.length > 0) {
+                    ns.registerChart(h.publishers, function (el, chart) {
+                        chart.setOption(C.horizontalBar(data.publishers));
+                    });
+                }
+
+                // 7. Top subjects
                 if (data.subjects.length > 0) {
                     ns.registerChart(h.subjects, function (el, chart) {
                         chart.setOption(C.horizontalBar(data.subjects));
                     });
                 }
 
-                // 7. Treemap country → type
+                // 8. Treemap country → type
                 if (data.treemap.children && data.treemap.children.length > 0) {
                     ns.registerChart(h.treemap, function (el, chart) {
                         chart.setOption(C.treemap(data.treemap));
                     });
                 }
 
-                // 8. Author collaboration network
+                // 9. Reference provenance map
+                renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
+
+                // 10. Subject co-occurrence chord
+                var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
+                if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
+                    var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
+                        instance.setOption(C.chord(subjectChord, { minWeight: 1 }), true);
+                    });
+                    if (subjectChart && P.addFullscreenButton) {
+                        P.addFullscreenButton(h.subjectCooccurrence.panel, {
+                            onResize: function () {
+                                var live = ns.getLiveChart && ns.getLiveChart(h.subjectCooccurrenceChart);
+                                if (live) live.resize();
+                            }
+                        });
+                    }
+                } else {
+                    h.subjectCooccurrenceChart.appendChild(P.buildEmptyState('No subject co-occurrence available'));
+                    h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+                }
+
+                // 11. Author collaboration network
                 var graph = data.author_collaborations;
                 if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
                     var chart = ns.registerChart(h.networkChart, function (el, instance) {

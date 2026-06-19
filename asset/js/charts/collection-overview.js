@@ -18,7 +18,8 @@
  *  10. Collection breakdown                (inline, C.treemap with fix)
  *  11. French word cloud                   → wordcloud.js (lazy sidecar)
  *  12. World map                           → map.js (lazy sidecar)
- *  13. Recent additions table              → recent-additions.js (last)
+ *  13. Source locations                    → sources-map.js
+ *  14. Recent additions table              → recent-additions.js (last)
  */
 (function () {
     'use strict';
@@ -77,6 +78,11 @@
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
         var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-panel--wordcloud', P.t('French word cloud'));
         var mapPanel       = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('World map'));
+        var sourcesPanel   = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide iwac-vis-sources-map',
+            P.t('Source locations'),
+            P.t('source_locations_desc')
+        );
         var recentPanel    = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide iwac-vis-recent-additions',
                                           P.t('Recent additions'));
 
@@ -84,7 +90,7 @@
             timelinePanel, typesPanel, growthPanel, ganttPanel,
             countryPanel, languagePanel,
             entitiesPanel, treemapPanel,
-            wordcloudPanel, mapPanel,
+            wordcloudPanel, mapPanel, sourcesPanel,
             recentPanel
         ].forEach(function (p) { grid.appendChild(p.panel); });
 
@@ -103,7 +109,8 @@
             entities:  entitiesPanel,
             treemap:   treemapPanel,
             wordcloud: wordcloudPanel,
-            map:       mapPanel
+            map:       mapPanel,
+            sources:   sourcesPanel
         };
     }
 
@@ -147,6 +154,7 @@
         if (co.entities)       co.entities.render(h.entities, data, ctx);
         if (co.wordcloud)      co.wordcloud.render(h.wordcloud, data, ctx);
         if (co.map)            co.map.render(h.map, data, ctx);
+        if (co.sourcesMap)     co.sourcesMap.render(h.sources, data, ctx);
     }
 
     function initOverview(container) {
