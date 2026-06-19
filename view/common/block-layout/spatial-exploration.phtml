@@ -1,11 +1,12 @@
 <?php
 /**
- * Spatial Exploration block — world map + country focus + entity picker.
+ * Spatial Exploration block — world map + country/admin focus + entity picker.
  *
  * The orchestrator fetches asset/data/spatial-exploration.json (places,
- * pickers, country counts/bounds) and, on entity selection, the existing
- * person-dashboards/{id}.json / entity-dashboards/{id}.json fan-out for
- * the entity's locations and per-location article lists.
+ * pickers, country counts/bounds and admin-focus metadata) plus lazy
+ * admin-boundary GeoJSON when needed. On entity selection, it fetches
+ * the existing person-dashboards/{id}.json / entity-dashboards/{id}.json
+ * fan-out for the entity's locations and per-location article lists.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block

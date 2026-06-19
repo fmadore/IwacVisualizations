@@ -206,10 +206,51 @@
     color: var(--ink-light, #4a5766);
 }
 
+.iwac-vis-spatial-toolbar__select {
+    max-width: min(14rem, 100vw);
+}
+
 .iwac-vis-spatial-toolbar__status {
     margin-left: auto;
     font-size: var(--text-sm, 0.9375rem);
     color: var(--muted, #767880);
+}
+
+.iwac-vis-spatial-admin-legend {
+    position: absolute;
+    right: var(--space-3, 0.75rem);
+    bottom: var(--space-8, 2rem);
+    z-index: 2;
+    min-width: 9rem;
+    max-width: min(13rem, calc(100% - 1.5rem));
+    padding: var(--space-2, 0.5rem);
+    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #d4d6da);
+    border-radius: var(--radius-md, 0.5rem);
+    box-shadow: var(--shadow-sm, 0 2px 4px 0 var(--iwac-vis-shadow-soft));
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--ink, #2c2f37);
+    pointer-events: none;
+}
+
+.iwac-vis-spatial-admin-legend__title {
+    margin-bottom: var(--space-1, 0.25rem);
+    font-weight: 600;
+    color: var(--ink-strong, #1f2328);
+}
+
+.iwac-vis-spatial-admin-legend__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1, 0.25rem);
+    line-height: 1.35;
+}
+
+.iwac-vis-spatial-admin-legend__swatch {
+    width: 0.9rem;
+    height: 0.9rem;
+    flex: 0 0 auto;
+    border: 1px solid var(--border-light, #e6e7eb);
 }
 
 /* Hover-popup "click for more" hint line. */

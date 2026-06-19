@@ -7,7 +7,7 @@
  * `asset/js/charts/spatial-exploration/`:
  *
  *   - picker.js — entity type tabs, search, selection, top places
- *   - map.js    — bubbles, country focus, popups, choropleth
+ *   - map.js    — bubbles, country/admin focus, popups, choropleths
  *
  * Entity selections hydrate from the per-entity dashboard fan-outs
  * (person-dashboards/{id}.json / entity-dashboards/{id}.json) that the

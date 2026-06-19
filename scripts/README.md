@@ -186,6 +186,12 @@ python3 scripts/generate_spatial_exploration.py --no-minify -v
   content subsets (choropleth fill in collection mode).
 - `country_bounds` — `[w, s, e, n]` per IWAC country, read from the
   committed `asset/data/iwac-countries.geojson`.
+- `country_focus` — administrative Country Focus data ported into the
+  block: available countries/levels, per-region or per-prefecture
+  counts, per-level bounds, and lazy GeoJSON paths under
+  `asset/data/admin-boundaries/`. Counts are derived from the same
+  geocoded `locations` rows so rerunning this generator refreshes both
+  bubble and administrative choropleth data.
 
 ### `generate_entity_networks.py`
 
