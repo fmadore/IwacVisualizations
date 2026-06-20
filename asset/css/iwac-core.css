@@ -999,11 +999,16 @@
     flex-shrink: 0;
 }
 
-.iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--primary, #e64a19); }
-.iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--secondary, #394f68); }
-.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--warning, #ea580c); }
-.iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--info, #4a90c8); }
-.iwac-vis-badge--reference   { --iwac-vis-badge-dot: var(--muted, #767880); }
+/* Category colour from the theme's single-source --type-* map (IWAC-theme
+   docs/DESIGN-SYSTEM.md §3); hex is the degraded-mode fallback. Keeps this in
+   lockstep with IwacSearch's result chips — the mapping lives in the theme, so
+   the document-badge fallback can no longer drift from IwacSearch's, as it
+   previously had. */
+.iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--type-article, #e64a19); }
+.iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--type-publication, #394f68); }
+.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--type-document, #e89c4a); }
+.iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--type-audiovisual, #4a90c8); }
+.iwac-vis-badge--reference   { --iwac-vis-badge-dot: var(--type-reference, #767880); }
 
 
 /* =================================================================== */
