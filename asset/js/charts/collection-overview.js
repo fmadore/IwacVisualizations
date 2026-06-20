@@ -39,20 +39,19 @@
 
         var summary = data.summary || {};
 
-        // 1. Summary cards — headline "Total items" + the rest of the facets.
-        //    `featured: true` marks the card rendered as the primary masthead
-        //    stat (see .iwac-vis-summary-card--featured in iwac-core.css).
+        // 1. Summary cards — corpus-depth facets. The homepage hero (IWAC-theme
+        //    banner) now server-renders the headline counts (Items, Index,
+        //    References, Countries), so the overview drops those four to avoid
+        //    repeating the same data and leads instead with the corpus stats
+        //    the hero omits. `featured: true` marks the primary masthead stat
+        //    (see .iwac-vis-summary-card--featured in iwac-core.css).
         root.appendChild(P.buildSummaryCards([
-            { value: summary.total_items,          labelKey: 'Total items', featured: true },
-            { value: summary.index_entries,        labelKey: 'Index' },
-            { value: summary.total_words,          labelKey: 'Total words' },
+            { value: summary.total_words,          labelKey: 'Total words', featured: true },
             { value: summary.total_pages,          labelKey: 'Total pages' },
             { value: summary.scanned_pages,        labelKey: 'Scanned pages' },
             { value: summary.unique_sources,       labelKey: 'Unique sources' },
             { value: summary.document_types,       labelKey: 'Document types' },
             { value: summary.audiovisual_minutes,  labelKey: 'Audiovisual minutes' },
-            { value: summary.references_count,     labelKey: 'References count' },
-            { value: summary.countries,            labelKey: 'Countries' },
             { value: summary.languages,            labelKey: 'Languages' }
         ]));
 
