@@ -1,7 +1,6 @@
 <?php
 namespace IwacVisualizations;
 
-use IwacVisualizations\Controller\Site\EmbedController;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
@@ -138,7 +137,10 @@ class Module extends AbstractModule
     {
         parent::onBootstrap($event);
         $acl = $this->getServiceLocator()->get('Omeka\Acl');
-        $acl->allow(null, [EmbedController::class]);
+        // Use the registered controller service name (what Omeka adds as the
+        // ACL resource), NOT the class FQCN — passing the FQCN throws
+        // "Resource '...EmbedController' not found" and 500s the whole site.
+        $acl->allow(null, ['IwacVisualizations\Controller\Site\Embed']);
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
