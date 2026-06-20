@@ -1,8 +1,10 @@
 <?php
 namespace IwacVisualizations;
 
+use IwacVisualizations\Controller\Site\EmbedController;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
+use Laminas\Mvc\MvcEvent;
 use Omeka\Module\AbstractModule;
 
 /**
@@ -124,6 +126,19 @@ class Module extends AbstractModule
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    /**
+     * Grant public (unauthenticated and every role) access to the embed
+     * controller. Omeka denies access to module controllers by default,
+     * so the standalone iframe endpoint needs an explicit allow or it
+     * would 403 for anonymous site visitors.
+     */
+    public function onBootstrap(MvcEvent $event): void
+    {
+        parent::onBootstrap($event);
+        $acl = $this->getServiceLocator()->get('Omeka\Acl');
+        $acl->allow(null, [EmbedController::class]);
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void

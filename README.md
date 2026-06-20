@@ -32,6 +32,20 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.14.0 — Embeddable page blocks (iframe)
+
+Every page block can now be embedded on a third-party site through a standalone iframe endpoint — no Omeka, theme, or data copy required on the host page.
+
+- **Embed route** — a controller (`src/Controller/Site/EmbedController.php`) renders any single page block on a bare page, nested under Omeka's `site` route so the current site / public theme resolve:
+  - `…/s/<site-slug>/iwac-embed` — a snippet gallery listing all 12 blocks with a live preview and a copy-paste `<iframe>` + auto-resize snippet.
+  - `…/s/<site-slug>/iwac-embed/<block>` — one block, bare. Optional `?theme=light|dark` (else follows the viewer's OS preference) and `?primary=RRGGBB` (accent override).
+- **Why an iframe** — the page blocks are zero-configuration (they read only the current site + base path, never `$block`), so an iframe loading from this same origin keeps the relative `asset/data/` fetches, the module CSS, and the theme tokens resolving exactly as on a normal site page — no CORS, no cross-origin data copy, no stylesheet collision with the host. The bare layout (`view/iwac-visualizations/layout/embed.phtml`) posts its document height to the parent so the host iframe auto-resizes.
+- **Theme-faithful tooling** — the snippet gallery consumes the IWAC theme design tokens (cool near-white surfaces, ink greys, `--primary` reserved for state) with the canonical fallbacks from `IWAC-theme/docs/DESIGN-SYSTEM.md`, so the helper reads as part of the same research instrument. New UI strings are translated (en/fr).
+- **Live accent on the bare route** — the embed layout reads the theme's admin-set `primary_color` / `secondary_color` settings server-side and emits them as `:root` tokens (lightened in dark mode via `color-mix(in oklab, …)` the way the theme does), so an embedded block matches the site's accent even though the compiled theme CSS isn't on this route. `?primary=RRGGBB` still overrides.
+- **Access** — `Module::onBootstrap()` grants public ACL access to the embed controller so anonymous visitors (and the embedding site) can load it.
+
+**Theme-token guard.** `scripts/check-theme-tokens.js` (wired as `npm run lint:theme`, and run first by `npm run build`) fails the build on contract drift: removed tokens (`--primary-hue` / `--primary-sat`), `color-mix(in srgb …)`, or bare hex in CSS outside a `var(--token, #fallback)` slot. Sanctioned data-series colours opt out with a trailing `/* allow-hex */` marker.
+
 ### v1.13.0 — Country Focus folded into Spatial Exploration
 
 - **Administrative choropleth mode added to Spatial Exploration** — the retained Country Focus view from [`IWAC-spatial-overview`](https://github.com/fmadore/IWAC-spatial-overview) now lives inside the existing map panel. The mode selector switches between place bubbles, six-country choropleth and administrative choropleth.

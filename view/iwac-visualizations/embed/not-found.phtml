@@ -1,0 +1,40 @@
+<?php
+/**
+ * Embed 404 — shown when an unknown block slug is requested.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ */
+$escapeHtml = $this->plugin('escapeHtml');
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= $escapeHtml($this->translate('Visualization not found')) ?></title>
+    <style>
+        /* Token fallbacks match IWAC-theme/docs/DESIGN-SYSTEM.md. */
+        body {
+            margin: 0; min-height: 100vh;
+            display: grid; place-items: center;
+            background: var(--background, #f7f7f6);
+            color: var(--ink-light, #535862);
+            font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif);
+            font-size: 1rem; line-height: 1.5;
+        }
+        .iwac-embed-404 { text-align: center; padding: 2rem; }
+        .iwac-embed-404 h1 {
+            font-family: var(--font-headings, "Besley", "Noto Serif", Georgia, serif);
+            font-weight: 600; color: var(--ink-strong, #1c1f27);
+            letter-spacing: var(--tracking-tight, -0.011em);
+            margin: 0 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="iwac-embed-404">
+        <h1><?= $escapeHtml($this->translate('Visualization not found')) ?></h1>
+        <p><?= $escapeHtml($this->translate('No embeddable visualization matches this address.')) ?></p>
+    </div>
+</body>
+</html>

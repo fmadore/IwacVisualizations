@@ -76,9 +76,11 @@
      * the IWAC palette rather than brand colours so dark / light
      * themes stay legible. Feel free to override per-site if you want
      * to match the actual brand HSLs from each vendor. */
-    --iwac-vis-model-gemini:  #3b82f6;
-    --iwac-vis-model-chatgpt: #10a37f;
-    --iwac-vis-model-mistral: #f97316;
+    /* Per-model data-series accents (not theme chrome); each carries an
+     * allow-hex marker so the theme-token guard permits the literals. */
+    --iwac-vis-model-gemini:  #3b82f6; /* allow-hex */
+    --iwac-vis-model-chatgpt: #10a37f; /* allow-hex */
+    --iwac-vis-model-mistral: #f97316; /* allow-hex */
 
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on
