@@ -62,7 +62,7 @@
 
 .iwac-vis-sentiment__caption {
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-variant-numeric: tabular-nums;
 }
 
@@ -130,7 +130,7 @@
 }
 
 .iwac-vis-graph-toolbar__btn--pressed {
-    background: color-mix(in oklab, var(--primary, #e64a19) 18%, var(--surface, #fdfdfd));
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 60%, var(--border, #d4d6da));
-    color: var(--primary, #e64a19);
+    background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
+    color: var(--primary, #ce4115);
 }

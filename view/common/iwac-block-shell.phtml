@@ -40,6 +40,9 @@
  * @var string|null $heading       Optional <h3> text (already translated).
  * @var string|null $loading       Loading message (already translated).
  * @var string|null $loadingClass  Extra class on the loading div.
+ * @var string|null $prerendered   Server-rendered fallback HTML placed inside
+ *                                 the wrapper instead of the loading spinner
+ *                                 (the JS orchestrator replaces it on hydrate).
  * @var array|null  $data          Extra data attributes (key => value; the
  *                                 `data-` prefix is added automatically).
  * @var bool|null   $siteBase      Emit data-site-base (default true).
@@ -54,6 +57,7 @@ $heading      = isset($heading)      ? (string) $heading : '';
 $loading      = isset($loading)      ? (string) $loading : '';
 $loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
 $extraData    = isset($data)         ? (array) $data : [];
+$prerendered  = isset($prerendered)  ? (string) $prerendered : '';
 $withSiteBase = !isset($siteBase) || $siteBase;
 
 $basePath = $this->basePath();
@@ -79,9 +83,14 @@ $loadingCls   = trim('iwac-vis-loading ' . $loadingClass);
 
     <h3><?= $escapeHtml($heading) ?></h3>
 <?php endif; ?>
+<?php if ($prerendered !== ''): ?>
+
+    <?= $prerendered ?>
+<?php else: ?>
 
     <div class="<?= $escapeAttr($loadingCls) ?>">
         <div class="iwac-vis-spinner"></div>
         <span><?= $escapeHtml($loading) ?>&hellip;</span>
     </div>
+<?php endif; ?>
 </div>

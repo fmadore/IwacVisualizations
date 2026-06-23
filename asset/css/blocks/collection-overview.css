@@ -20,8 +20,44 @@
 
 .iwac-vis-overview-subtitle {
     margin: 0;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-size: var(--text-sm, 0.9375rem);
+}
+
+
+/* =================================================================== */
+/*  Server-rendered fallback — growth sparkline                          */
+/* =================================================================== */
+
+/* The headline series (cumulative collection growth) as a static SVG in
+ * the server-rendered fallback, so no-JS / slow clients and crawlers see
+ * the trend, not just the KPI figures. Replaced by the live ECharts
+ * dashboard on hydration. */
+.iwac-vis-overview-sparkline {
+    margin: 0;
+}
+
+.iwac-vis-overview-sparkline svg {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    color: var(--primary, #ce4115);
+}
+
+.iwac-vis-overview-sparkline polyline {
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    opacity: 0.9;
+}
+
+.iwac-vis-overview-sparkline figcaption {
+    margin-top: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
 }
 
 
@@ -67,7 +103,7 @@
 .iwac-vis-wordcloud-meta {
     margin-top: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     text-align: center;
 }
 
@@ -84,7 +120,7 @@
 
 .iwac-vis-source-map__meta {
     margin: 0;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-size: var(--text-sm, 0.9375rem);
 }
 
@@ -139,7 +175,7 @@
 
 .iwac-vis-recent-additions .iwac-vis-table__header {
     padding: 0.75rem 1rem;
-    background: var(--surface-raised, #fafaf9);
+    background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-recent-additions .iwac-vis-table__cell {

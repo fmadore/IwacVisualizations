@@ -25,8 +25,8 @@
 }
 
 .iwac-vis-networks-aside {
-    background: var(--panel-bg, var(--surface, #fdfdfd));
-    border: 1px solid var(--panel-border-color, var(--border, #d4d6da));
+    background: var(--panel-bg, var(--surface, #fdfcfb));
+    border: 1px solid var(--panel-border-color, var(--border, #ced1d6));
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-4, 1rem);
     box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
@@ -53,7 +53,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: color-mix(in oklab, var(--surface, #fdfdfd) 60%, transparent);
+    background: color-mix(in oklab, var(--surface, #fdfcfb) 60%, transparent);
     border-radius: var(--radius-md, 0.5rem);
 }
 
@@ -80,9 +80,9 @@
     align-items: center;
     gap: 0.4em;
     padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
-    background: color-mix(in oklab, var(--primary, #e64a19) 0%, var(--surface-raised, #fafaf9));
-    color: var(--ink, #2c2f37);
-    border: 1px solid var(--border, #d4d6da);
+    background: color-mix(in oklab, var(--primary, #ce4115) 0%, var(--surface-raised, #faf8f6));
+    color: var(--ink, #13161c);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-full, 9999px);
     font-family: inherit;
     font-size: var(--text-xs, 0.8125rem);
@@ -96,11 +96,11 @@
 }
 
 .iwac-vis-networks-typechip:hover {
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 40%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
 }
 
 .iwac-vis-networks-typechip:focus-visible {
-    outline: 2px solid var(--primary, #e64a19);
+    outline: 2px solid var(--primary, #ce4115);
     outline-offset: 2px;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .iwac-vis-networks-typechip--off .iwac-vis-networks-typechip__dot {
-    background: var(--muted, #767880) !important;
+    background: var(--muted, #66696e) !important;
 }
 
 .iwac-vis-networks-typechip__dot {
@@ -125,7 +125,7 @@
     gap: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
 }
 
 /* =================================================================== */
@@ -150,8 +150,8 @@
     z-index: 30;
     max-height: 16rem;
     overflow-y: auto;
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     box-shadow: var(--shadow-md, 0 4px 12px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-1, 0.25rem);
@@ -171,14 +171,14 @@
     border-radius: var(--radius-sm, 0.375rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     text-align: left;
     cursor: pointer;
 }
 
 .iwac-vis-networks-search__item:hover,
 .iwac-vis-networks-search__item:focus-visible {
-    background: var(--surface-raised, #fafaf9);
+    background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-networks-search__item-name {
@@ -191,7 +191,7 @@
 
 .iwac-vis-networks-search__item-count {
     flex: 0 0 auto;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
 }
@@ -209,7 +209,7 @@
 .iwac-vis-networks-details__label {
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide, 0.04em);
 }
@@ -223,14 +223,14 @@
 .iwac-vis-networks-details__title {
     font-size: var(--text-base, 1.0625rem);
     font-weight: 600;
-    color: var(--ink-strong, var(--ink, #2c2f37));
+    color: var(--ink-strong, var(--ink, #13161c));
 }
 
 .iwac-vis-networks-details__meta,
 .iwac-vis-networks-details__stats {
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
 }
 
 .iwac-vis-networks-details__note {
@@ -264,18 +264,18 @@
     border-radius: var(--radius-sm, 0.375rem);
     font-family: inherit;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     text-align: left;
     cursor: pointer;
     transition: background-color var(--transition-fast, 150ms ease);
 }
 
 .iwac-vis-networks-details__item:hover {
-    background: var(--surface-raised, #fafaf9);
+    background: var(--surface-raised, #faf8f6);
 }
 
 .iwac-vis-networks-details__item:focus-visible {
-    outline: 2px solid var(--primary, #e64a19);
+    outline: 2px solid var(--primary, #ce4115);
     outline-offset: 1px;
 }
 
@@ -289,7 +289,7 @@
 
 .iwac-vis-networks-details__item-count {
     flex: 0 0 auto;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
 }

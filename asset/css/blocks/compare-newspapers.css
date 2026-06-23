@@ -44,8 +44,8 @@
 }
 
 .iwac-vis-compare-picker {
-    background: var(--surface-raised, #fafaf9);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface-raised, #faf8f6);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-lg, 0.75rem);
     padding: var(--space-md, 1rem);
     display: flex;
@@ -62,11 +62,11 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="A"]::before {
-    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="B"]::before {
@@ -78,11 +78,11 @@
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-picker[data-side="A"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="B"] .iwac-vis-compare-picker__eyebrow {
@@ -104,17 +104,17 @@
 
 .iwac-vis-compare-picker__label {
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
     font-weight: 600;
 }
 
 .iwac-vis-compare-picker__select {
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.5rem 0.75rem;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     min-height: var(--size-control-md, 2.5rem);
     min-width: 0;
     max-width: 100%;
@@ -122,17 +122,17 @@
 }
 
 .iwac-vis-compare-picker__select:focus {
-    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
+    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
 .iwac-vis-compare-picker__type {
     display: flex;
     gap: 0;
-    border: 1px solid var(--border, #d4d6da);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
-    background: var(--surface, #fdfdfd);
+    background: var(--surface, #fdfcfb);
 }
 
 .iwac-vis-compare-picker__type button {
@@ -142,22 +142,22 @@
     border: none;
     cursor: pointer;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
     font-family: inherit;
     font-weight: 500;
     transition: background 150ms ease, color 150ms ease;
 }
 
 .iwac-vis-compare-picker__type button + button {
-    border-left: 1px solid var(--border, #d4d6da);
+    border-left: 1px solid var(--border, #ced1d6);
 }
 
 .iwac-vis-compare-picker__type button:hover {
-    background: color-mix(in oklab, var(--primary, #e64a19) 8%, transparent);
+    background: color-mix(in oklab, var(--primary, #ce4115) 8%, transparent);
 }
 
 .iwac-vis-compare-picker__type button[aria-pressed="true"] {
-    background: var(--primary, #e64a19);
+    background: var(--primary, #ce4115);
     color: var(--white, #fff);
 }
 
@@ -179,8 +179,8 @@
 }
 
 .iwac-vis-compare-metric {
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
     display: flex;
@@ -192,7 +192,7 @@
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-weight: 700;
 }
 
@@ -208,7 +208,7 @@
     font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
     font-weight: 600;
     line-height: 1.05;
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -245,7 +245,7 @@
 }
 
 .iwac-vis-compare-metric__value[data-side="A"]::before {
-    background: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-metric__value[data-side="B"]::before {
@@ -273,8 +273,8 @@
 }
 
 .iwac-vis-compare-grid .iwac-vis-panel {
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-md, 1rem);
     display: flex;
@@ -286,7 +286,7 @@
     margin: 0;
     font-size: var(--text-base, 1.0625rem);
     letter-spacing: var(--tracking-tight, -0.02em);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 
 .iwac-vis-compare-grid .iwac-vis-chart {
@@ -316,8 +316,8 @@
 }
 
 .iwac-vis-compare-overlap__col {
-    background: color-mix(in oklab, var(--surface-raised, #fafaf9) 70%, var(--surface, #fdfdfd));
-    border: 1px solid var(--border-light, #e6e7eb);
+    background: color-mix(in oklab, var(--surface-raised, #faf8f6) 70%, var(--surface, #fdfcfb));
+    border: 1px solid var(--border-light, #e2e5e8);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
     display: flex;
@@ -331,11 +331,11 @@
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__title {
@@ -344,7 +344,7 @@
 
 .iwac-vis-compare-overlap__count {
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-weight: 400;
     letter-spacing: 0;
     text-transform: none;
@@ -365,32 +365,32 @@
     gap: 0.25rem;
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-full, 9999px);
-    border: 1px solid var(--border, #d4d6da);
-    background: var(--surface, #fdfdfd);
+    border: 1px solid var(--border, #ced1d6);
+    background: var(--surface, #fdfcfb);
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
     line-height: 1.2;
 }
 
 .iwac-vis-compare-overlap__tag strong {
     font-weight: 700;
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     text-transform: none;
     letter-spacing: 0;
 }
 
 .iwac-vis-compare-overlap__col[data-kind="shared"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 35%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 35%, var(--border, #ced1d6));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-a, var(--primary, #e64a19)) 35%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--iwac-compare-color-a, var(--primary, #ce4115)) 35%, var(--border, #ced1d6));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-b, var(--secondary, #394f68)) 35%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--iwac-compare-color-b, var(--secondary, #394f68)) 35%, var(--border, #ced1d6));
 }
 
 
@@ -422,11 +422,11 @@
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-wordcloud[data-side="A"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-wordcloud[data-side="B"] .iwac-vis-compare-wordcloud__label {
@@ -452,7 +452,7 @@
     align-items: center;
     gap: var(--space-sm, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
 }
 
 
@@ -463,10 +463,10 @@
 .iwac-vis-compare-empty {
     text-align: center;
     padding: var(--space-xl, 2rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-size: var(--text-sm, 0.9375rem);
-    background: var(--surface-raised, #fafaf9);
-    border: 1px dashed var(--border, #d4d6da);
+    background: var(--surface-raised, #faf8f6);
+    border: 1px dashed var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
 }
 
@@ -483,7 +483,7 @@
      * system dark (prefers-color-scheme). The ECharts/MapLibre series read
      * these props in compare-newspapers.js, so charts match the CSS swatches
      * in both themes. */
-    --iwac-compare-color-a: var(--primary, #e64a19);
+    --iwac-compare-color-a: var(--primary, #ce4115);
     --iwac-compare-color-b: var(--secondary, #394f68);
 }
 
@@ -493,7 +493,7 @@
 /* =================================================================== */
 
 a.iwac-vis-compare-overlap__tag {
-    color: var(--ink-light, #4a5766);
+    color: var(--ink-light, #3f4349);
     text-decoration: none;
     cursor: pointer;
     transition:
@@ -504,12 +504,12 @@ a.iwac-vis-compare-overlap__tag {
 
 a.iwac-vis-compare-overlap__tag:hover,
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    background: color-mix(in oklab, var(--primary, #e64a19) 10%, var(--surface, #fdfdfd));
+    background: color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb));
     transform: translateY(-1px);
 }
 
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
+    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
@@ -532,7 +532,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     flex-wrap: wrap;
     margin-top: var(--space-sm, 0.5rem);
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-map-legend__swatch {
@@ -548,7 +548,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     opacity: 0.7;
 }
 
-.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #e64a19)); }
+.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #ce4115)); }
 .iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, var(--secondary, #394f68)); }
 
 
@@ -579,11 +579,11 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     font-weight: 700;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-a, var(--primary, #e64a19));
+    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-sentiment__col[data-side="B"] .iwac-vis-compare-sentiment__heading {
@@ -606,16 +606,16 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-weight: 700;
 }
 
 .iwac-vis-compare-sentiment__toolbar select {
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.35rem 0.6rem;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     font-family: inherit;
 }

@@ -57,8 +57,8 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     cursor: pointer;
     text-align: left;
@@ -70,13 +70,13 @@
 
 .iwac-vis-topic-card:hover,
 .iwac-vis-topic-card:focus-visible {
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 60%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
     box-shadow: var(--shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
     transform: translateY(-1px);
 }
 
 .iwac-vis-topic-card:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #e64a19));
+    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
@@ -92,12 +92,12 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
 }
 
 .iwac-vis-topic-card__count {
     font-size: 0.75rem;
-    color: var(--ink-light, #535862);
+    color: var(--ink-light, #3f4349);
     font-variant-numeric: tabular-nums;
 }
 
@@ -111,8 +111,8 @@
     font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #e64a19) 12%, var(--surface, #fdfdfd));
-    color: color-mix(in oklab, var(--primary, #e64a19) 70%, var(--ink-strong, var(--ink, #2c2f37)));
+    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface, #fdfcfb));
+    color: color-mix(in oklab, var(--primary, #ce4115) 70%, var(--ink-strong, var(--ink, #13161c)));
     line-height: 1.4;
     text-transform: lowercase;
     letter-spacing: 0.02em;
@@ -121,7 +121,7 @@
 
 .iwac-vis-topic-card__years {
     font-size: 0.75rem;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-variant-numeric: tabular-nums;
 }
 
@@ -134,8 +134,8 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
 }
 
@@ -150,7 +150,7 @@
 .iwac-vis-topic-detail__title {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--ink-strong, var(--ink, #2c2f37));
+    color: var(--ink-strong, var(--ink, #13161c));
     margin: 0;
 }
 
@@ -172,8 +172,8 @@
     font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border-radius: var(--radius-full, 9999px);
-    background: color-mix(in oklab, var(--primary, #e64a19) 14%, var(--surface, #fdfdfd));
-    color: color-mix(in oklab, var(--primary, #e64a19) 75%, var(--ink-strong, var(--ink, #2c2f37)));
+    background: color-mix(in oklab, var(--primary, #ce4115) 14%, var(--surface, #fdfcfb));
+    color: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--ink-strong, var(--ink, #13161c)));
     text-transform: lowercase;
     letter-spacing: 0.02em;
     white-space: nowrap;
@@ -184,12 +184,12 @@
     flex-wrap: wrap;
     gap: var(--space-3, 0.75rem);
     font-size: 0.8125rem;
-    color: var(--ink-light, #535862);
+    color: var(--ink-light, #3f4349);
     font-variant-numeric: tabular-nums;
 }
 
 .iwac-vis-topic-detail__meta strong {
-    color: var(--ink-strong, var(--ink, #2c2f37));
+    color: var(--ink-strong, var(--ink, #13161c));
     font-weight: 600;
 }
 

@@ -27,20 +27,23 @@
     /* ----------------------------------------------------------------- */
 
     // Used only if the IWAC theme is not the active Omeka theme and the CSS
-    // custom properties don't resolve. Mirrors _colors.scss defaults for
-    // IWAC theme v2.0.0 — OKLCH-based, cool-neutral surfaces (NOT cream),
-    // primary hex `#e64a19` matching layout.phtml's `--primary-base`.
+    // custom properties don't resolve. These mirror the theme's RESOLVED
+    // tokens (IWAC-theme/tokens.json, generated from _colors.scss) — OKLCH
+    // cool-neutral surfaces (NOT cream); `primary` is the working --primary
+    // (#ce4115 = seed #e64a19 darkened 8% in oklab), not the raw seed. The
+    // check-theme-tokens guard fails the build if any value drifts from
+    // tokens.json — keep them in sync via `npm run build:tokens` in the theme.
     var FALLBACK_LIGHT = {
-        primary:       '#e64a19',  // IWAC burnt orange (--primary-base seed)
-        secondary:     '#394f68',  // slate — shared 2nd categorical / data colour
-        ink:           '#2c2f37',  // ~oklch(20% 0.012 264)
-        inkLight:      '#535862',  // ~oklch(38% 0.012 260)
-        muted:         '#767880',  // ~oklch(54% 0.008 256)
-        surface:       '#fdfdfd',  // ~oklch(99.2% 0.002 60)  near-white, not cream
-        surfaceRaised: '#fafaf9',  // ~oklch(98.0% 0.003 60)
-        background:    '#f7f7f6',  // ~oklch(97.0% 0.003 60)
-        border:        '#d4d6da',  // ~oklch(86% 0.007 258) cool-neutral
-        borderLight:   '#e6e7eb'   // ~oklch(92% 0.005 258)
+        primary:       '#ce4115',  // --primary = mix(#e64a19, black 8%)
+        secondary:     '#394f68',  // --secondary = seed (slate; 2nd data colour)
+        ink:           '#13161c',  // oklch(20% 0.012 264)
+        inkLight:      '#3f4349',  // oklch(38% 0.012 260)
+        muted:         '#66696e',  // oklch(52% 0.008 256)
+        surface:       '#fdfcfb',  // oklch(99.2% 0.002 60)  near-white, not cream
+        surfaceRaised: '#faf8f6',  // oklch(98.0% 0.003 60)
+        background:    '#f7f5f3',  // oklch(97.0% 0.003 60)
+        border:        '#ced1d6',  // oklch(86% 0.007 258) cool-neutral
+        borderLight:   '#e2e5e8'   // oklch(92% 0.005 258)
     };
     var FALLBACK_DARK = {
         // Warm "lamplit reading room" dark set (theme v2.6 — hue ~70-80,
@@ -49,7 +52,7 @@
         secondary:     '#708093',  // mix(--secondary-base, white 30%) in oklab
         ink:           '#e7e4df',  // oklch(92% 0.008 78)
         inkLight:      '#b5b0aa',  // oklch(76% 0.010 75)
-        muted:         '#817c77',  // oklch(59% 0.010 70)
+        muted:         '#8a8580',  // oklch(62% 0.010 70)
         surface:       '#110c08',  // oklch(16% 0.012 70)
         surfaceRaised: '#1a1510',  // oklch(20% 0.013 70)
         background:    '#080503',  // oklch(12% 0.012 75)

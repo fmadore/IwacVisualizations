@@ -48,8 +48,8 @@
 .iwac-vis-article-card {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
     text-decoration: none;
@@ -61,7 +61,7 @@
 }
 .iwac-vis-article-card:hover,
 .iwac-vis-article-card:focus-visible {
-    border-color: color-mix(in oklab, var(--primary, #e64a19) 45%, var(--border, #d4d6da));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 45%, var(--border, #ced1d6));
     box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
     /*  Restrained 2px lift — matches the IWAC theme's --lift-xs token
      *  used on primary buttons / linked resource cards. Bigger lifts
@@ -75,7 +75,7 @@
 .iwac-vis-article-card__thumb {
     position: relative;
     aspect-ratio: 4 / 3;
-    background: color-mix(in oklab, var(--primary, #e64a19) 6%, var(--surface, #fdfdfd));
+    background: color-mix(in oklab, var(--primary, #ce4115) 6%, var(--surface, #fdfcfb));
     overflow: hidden;
     /* Stacking context for the similarity / shared-entity badges */
     isolation: isolate;
@@ -92,7 +92,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    color: color-mix(in oklab, var(--ink, #2c2f37) 35%, transparent);
+    color: color-mix(in oklab, var(--ink, #13161c) 35%, transparent);
 }
 
 /* --------------------------------------------------------------------
@@ -108,17 +108,17 @@
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     border-radius: var(--radius-full, 9999px);
-    color: var(--surface, #fdfdfd);
+    color: var(--surface, #fdfcfb);
     backdrop-filter: blur(4px);
 }
 .iwac-vis-article-card__sim {
     /* semantic similarity = primary accent */
-    background: color-mix(in oklab, var(--primary, #e64a19) 85%, transparent);
+    background: color-mix(in oklab, var(--primary, #ce4115) 85%, transparent);
 }
 .iwac-vis-article-card__shared {
     /* shared-entities = cool blue/info accent so the two badges
      * don't look like the same signal */
-    background: color-mix(in oklab, var(--info, #2563eb) 85%, transparent);
+    background: color-mix(in oklab, var(--info, #037ac0) 85%, transparent);
 }
 
 .iwac-vis-article-card__body {
@@ -131,7 +131,7 @@
 .iwac-vis-article-card__title {
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     line-height: 1.35;
     /* 2-line clamp so titles don't blow up the card height */
     display: -webkit-box;
@@ -141,7 +141,7 @@
 }
 .iwac-vis-article-card__meta {
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     font-variant-numeric: tabular-nums;
     /* Single-line clamp — newspaper · country · date is deliberately
      * one row so the meta stays glanceable. */
@@ -179,8 +179,8 @@
 .iwac-vis-sent-card {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfdfd);
-    border: 1px solid var(--border, #d4d6da);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     overflow: hidden;
 }
@@ -193,7 +193,7 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    border-bottom: 1px solid var(--border-light, var(--border, #d4d6da));
+    border-bottom: 1px solid var(--border-light, var(--border, #ced1d6));
 }
 .iwac-vis-sent-card__header::after {
     content: '';
@@ -202,7 +202,7 @@
     border-radius: 50%;
     margin-inline-start: auto;
     flex-shrink: 0;
-    background: var(--iwac-vis-sent-card-dot, var(--muted, #767880));
+    background: var(--iwac-vis-sent-card-dot, var(--muted, #66696e));
 }
 .iwac-vis-sent-card--gemini  { --iwac-vis-sent-card-dot: var(--iwac-vis-model-gemini,  #3b82f6); }
 .iwac-vis-sent-card--chatgpt { --iwac-vis-sent-card-dot: var(--iwac-vis-model-chatgpt, #10a37f); }
@@ -222,12 +222,12 @@
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     line-height: 1.2;
 }
 .iwac-vis-sent-card__org {
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     line-height: 1.2;
 }
 
@@ -248,7 +248,7 @@
 .iwac-vis-sent-row__label {
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide, 0.04em);
     margin: 0;
@@ -260,7 +260,7 @@
     align-items: center;
     gap: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 .iwac-vis-sent-row__value--inline {
     flex-wrap: nowrap;
@@ -283,7 +283,7 @@
     /* Foreground is picked to read against the chip background.
      * Polarity + subjectivity rules below override with the right
      * color for each variant. */
-    color: var(--surface, #fdfdfd);
+    color: var(--surface, #fdfcfb);
 }
 
 /* Polarity chip colours — aligned with the --iwac-vis-sent-* ramp
@@ -297,7 +297,7 @@
 .iwac-vis-chip--polarity-very-negative { background: var(--iwac-vis-sent-neg-strong); }
 .iwac-vis-chip--polarity-not-applicable {
     background: var(--iwac-vis-sent-na);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 
 /* Subjectivity chip colours — use the sequential --iwac-vis-subj-*
@@ -305,25 +305,25 @@
  * so the contrast with white text is weak — flip to dark ink instead. */
 .iwac-vis-chip--subjectivity-1 {
     background: var(--iwac-vis-subj-1);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 .iwac-vis-chip--subjectivity-2 {
     background: var(--iwac-vis-subj-2);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 .iwac-vis-chip--subjectivity-3 {
     background: var(--iwac-vis-subj-3);
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 .iwac-vis-chip--subjectivity-4 {
     background: var(--iwac-vis-subj-4);
     /* 75% --primary mix reads well against --surface, so stick with
      * light foreground at this level. */
-    color: var(--surface, #fdfdfd);
+    color: var(--surface, #fdfcfb);
 }
 .iwac-vis-chip--subjectivity-5 {
     background: var(--iwac-vis-subj-5);
-    color: var(--surface, #fdfdfd);
+    color: var(--surface, #fdfcfb);
 }
 
 
@@ -339,12 +339,12 @@
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    border: 1px solid var(--border, #d4d6da);
-    background: var(--border-light, var(--border, #d4d6da));
+    border: 1px solid var(--border, #ced1d6);
+    background: var(--border-light, var(--border, #ced1d6));
 }
 .iwac-vis-dot--on {
     background: var(--iwac-vis-cent-1);
-    border-color: color-mix(in oklab, var(--iwac-vis-cent-1) 70%, var(--ink, #2c2f37));
+    border-color: color-mix(in oklab, var(--iwac-vis-cent-1) 70%, var(--ink, #13161c));
 }
 
 
@@ -353,14 +353,14 @@
  * ------------------------------------------------------------------ */
 .iwac-vis-sent-card__justifications {
     padding: 0 var(--space-3, 0.75rem) var(--space-3, 0.75rem);
-    border-top: 1px solid var(--border-light, var(--border, #d4d6da));
+    border-top: 1px solid var(--border-light, var(--border, #ced1d6));
     margin-top: auto; /* push to card bottom when card taller than content */
 }
 .iwac-vis-sent-card__justifications > summary {
     cursor: pointer;
     padding: var(--space-2, 0.5rem) 0;
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     list-style: none;
     transition: color var(--transition-fast, 150ms ease);
 }
@@ -375,7 +375,7 @@
     transform: rotate(90deg);
 }
 .iwac-vis-sent-card__justifications > summary:hover {
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
 }
 
 .iwac-vis-sent-just {
@@ -389,14 +389,14 @@
 }
 .iwac-vis-sent-just__item strong {
     display: block;
-    color: var(--ink-light, var(--ink, #2c2f37));
+    color: var(--ink-light, var(--ink, #13161c));
     margin-bottom: 0.25rem;
 }
 .iwac-vis-sent-just__item p {
     margin: 0;
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     padding-left: var(--space-2, 0.5rem);
-    border-left: 2px solid var(--border-light, var(--border, #d4d6da));
+    border-left: 2px solid var(--border-light, var(--border, #ced1d6));
 }
 
 
@@ -408,15 +408,15 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem);
-    background: color-mix(in oklab, var(--primary, #e64a19) 3%, var(--surface, #fdfdfd));
-    border: 1px solid var(--border-light, var(--border, #d4d6da));
+    background: color-mix(in oklab, var(--primary, #ce4115) 3%, var(--surface, #fdfcfb));
+    border: 1px solid var(--border-light, var(--border, #ced1d6));
     border-radius: var(--radius-md, 0.5rem);
 }
 .iwac-vis-sent-radar__title {
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
-    color: var(--ink, #2c2f37);
+    color: var(--ink, #13161c);
     text-align: center;
 }
 .iwac-vis-sent-radar__chart {
@@ -431,7 +431,7 @@
 .iwac-vis-sent-radar__scale {
     margin: 0;
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     text-align: center;
     line-height: 1.5;
 }
@@ -458,7 +458,7 @@
 .iwac-vis-further__caption {
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
-    color: var(--muted, #767880);
+    color: var(--muted, #66696e);
     line-height: 1.5;
 }
 .iwac-vis-further__grid {

@@ -3,13 +3,13 @@
  * Theme-token contract guard.
  *
  * The IWAC module is built to consume the IWAC theme's design tokens
- * (IWAC-theme/docs/DESIGN-SYSTEM.md) rather than redefine them. This
- * linter fails the build when a source file drifts from that contract,
- * so the discipline the codebase already follows stays automatic as new
- * blocks land. It scans only hand-written sources (*.css / *.js, never
- * the generated *.min.* mirrors).
+ * (IWAC-theme/docs/DESIGN-SYSTEM.md) rather than redefine them. This linter
+ * fails the build when a source file drifts from that contract, so the
+ * discipline the codebase already follows stays automatic as new blocks land.
+ * It scans only hand-written sources (*.css / *.js, never the generated
+ * *.min.* mirrors).
  *
- * Rules:
+ * Rules (shape):
  *   1. No removed tokens — `--primary-hue` / `--primary-sat` were dropped
  *      in theme v2.0.0 (derive variants via color-mix from `--primary`).
  *   2. No `color-mix(in srgb …)` — sRGB mixing muddies mid-tones; the
@@ -17,17 +17,27 @@
  *   3. (CSS only) Every hex colour must sit in a `var(--token, #fallback)`
  *      fallback slot. Bare hex chrome is forbidden. Genuine exceptions
  *      (sanctioned data-series colours) opt out with a trailing
- *      `/* allow-hex *​/` marker on the same line.
+ *      `/​* allow-hex *​/` marker on the same line.
+ *
+ * Rules (value) — only when `tokens.json` is present (synced from the theme
+ * by IWAC-theme/scripts/build-tokens.js; the SINGLE SOURCE OF TRUTH):
+ *   4. Every `var(--token, #hex)` fallback must EQUAL the token's canonical
+ *      light value. A stale fallback (old brand orange, cream surface) is a
+ *      competing variable even if it never paints a pixel.
+ *   5. The runtime `FALLBACK_LIGHT` / `FALLBACK_DARK` objects (iwac-theme.js)
+ *      must equal the canonical light / dark values.
+ * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
  *
  * Usage: node scripts/check-theme-tokens.js
  * Exit code 1 on any violation (with file:line + reason), else 0.
  */
-const { readdirSync, readFileSync, statSync } = require('fs');
+const { readdirSync, readFileSync, statSync, existsSync } = require('fs');
 const { join, relative } = require('path');
 
 const ROOT = join(__dirname, '..');
 const CSS_DIR = join(ROOT, 'asset', 'css');
 const JS_DIR = join(ROOT, 'asset', 'js');
+const TOKENS_PATH = join(ROOT, 'tokens.json');
 
 function walk(dir, exts, out = []) {
     for (const entry of readdirSync(dir)) {
@@ -41,13 +51,49 @@ function walk(dir, exts, out = []) {
     return out;
 }
 
+/** Normalise #rgb / #rgba / #rrggbb / #rrggbbaa → lowercase #rrggbb. */
+function normHex(hex) {
+    let h = hex.replace('#', '').toLowerCase();
+    if (h.length === 3 || h.length === 4) h = h.slice(0, 3).split('').map((c) => c + c).join('');
+    return '#' + h.slice(0, 6);
+}
+
+// Single source of truth: generated tokens.json. Absent → value checks skip
+// (shape checks still run), so the guard degrades gracefully if a checkout
+// hasn't synced tokens yet.
+let TOKENS = null;
+if (existsSync(TOKENS_PATH)) {
+    try {
+        TOKENS = JSON.parse(readFileSync(TOKENS_PATH, 'utf8'));
+    } catch (e) {
+        console.warn('  ! tokens.json present but unparseable — value checks skipped\n');
+    }
+} else {
+    console.warn('  ! tokens.json not found — value checks skipped (run `npm run build:tokens` in IWAC-theme)\n');
+}
+
 const REMOVED_TOKEN = /--primary-(hue|sat)\b/;
 const SRGB_MIX = /color-mix\(\s*in\s+srgb\b/i;
 const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
+const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
 
 const violations = [];
 function flag(file, line, msg, snippet) {
     violations.push({ file: relative(ROOT, file), line, msg, snippet: snippet.trim() });
+}
+
+/** Rule 4: `var(--token, #hex)` fallbacks must equal canonical light value. */
+function checkVarFallbackValues(file, raw, n) {
+    if (!TOKENS || /allow-hex/.test(raw)) return;
+    let m;
+    VAR_FALLBACK.lastIndex = 0;
+    while ((m = VAR_FALLBACK.exec(raw)) !== null) {
+        const name = m[1];
+        const canon = TOKENS.light[name];
+        if (canon && normHex(m[2]) !== canon.toLowerCase()) {
+            flag(file, n, `fallback ${m[2]} for ${name} ≠ canonical light ${canon} (tokens.json)`, raw);
+        }
+    }
 }
 
 function scan(file, { hexCheck }) {
@@ -60,6 +106,7 @@ function scan(file, { hexCheck }) {
         if (SRGB_MIX.test(raw)) {
             flag(file, n, 'color-mix(in srgb …) — use `in oklab`', raw);
         }
+        checkVarFallbackValues(file, raw, n);
         if (!hexCheck || /allow-hex/.test(raw)) return;
 
         let m;
@@ -78,8 +125,32 @@ function scan(file, { hexCheck }) {
     });
 }
 
+/** Rule 5: FALLBACK_LIGHT / FALLBACK_DARK objects must equal canonical values. */
+const camelToVar = (k) => '--' + k.replace(/([A-Z])/g, '-$1').toLowerCase();
+function checkFallbackObjects(file) {
+    if (!TOKENS) return;
+    const src = readFileSync(file, 'utf8');
+    for (const [objName, theme] of [['FALLBACK_LIGHT', 'light'], ['FALLBACK_DARK', 'dark']]) {
+        const block = new RegExp(objName + '\\s*=\\s*\\{([\\s\\S]*?)\\}').exec(src);
+        if (!block) continue;
+        const startLine = src.slice(0, block.index).split('\n').length;
+        const entryRe = /(\w+)\s*:\s*'(#[0-9a-fA-F]{3,8})'/g;
+        let e;
+        while ((e = entryRe.exec(block[1])) !== null) {
+            const name = camelToVar(e[1]);
+            const canon = TOKENS[theme] && TOKENS[theme][name];
+            if (canon && normHex(e[2]) !== canon.toLowerCase()) {
+                const line = startLine + block[1].slice(0, e.index).split('\n').length - 1;
+                flag(file, line, `${objName}.${e[1]} ${e[2]} ≠ canonical ${theme} ${canon} (${name})`, e[0]);
+            }
+        }
+    }
+}
+
 walk(CSS_DIR, ['.css']).forEach((f) => scan(f, { hexCheck: true }));
-walk(JS_DIR, ['.js']).forEach((f) => scan(f, { hexCheck: false }));
+const jsFiles = walk(JS_DIR, ['.js']);
+jsFiles.forEach((f) => scan(f, { hexCheck: false }));
+jsFiles.forEach(checkFallbackObjects);
 
 if (violations.length) {
     console.error(`\n✗ theme-token guard: ${violations.length} violation(s)\n`);
@@ -87,7 +158,8 @@ if (violations.length) {
         console.error(`  ${v.file}:${v.line}  ${v.msg}`);
         console.error(`      ${v.snippet}`);
     }
-    console.error('\nSee CLAUDE.md → "Match the IWAC theme" and IWAC-theme/docs/DESIGN-SYSTEM.md.\n');
+    console.error('\nSee CLAUDE.md → "Match the IWAC theme" and IWAC-theme/docs/DESIGN-SYSTEM.md.');
+    console.error('Canonical values: tokens.json (regenerate with `npm run build:tokens` in IWAC-theme).\n');
     process.exit(1);
 }
 

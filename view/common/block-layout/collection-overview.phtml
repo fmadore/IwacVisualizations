@@ -20,6 +20,25 @@
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
  */
 
+// Server-render the headline summary from the precomputed snapshot so the
+// block's marquee data is in the initial HTML — crawlers and no-JS / slow
+// clients get real figures instead of a spinner, and the live ECharts
+// dashboard (collection-overview.js) replaces it on hydration. Best-effort:
+// any missing/unreadable/invalid snapshot falls back to the loading state,
+// never a fatal. The snapshot is the same file the JS fetches over HTTP,
+// read here from disk (committed under the module's asset/data/).
+$prerendered = '';
+$snapshotPath = dirname(__DIR__, 3) . '/asset/data/collection-overview.json';
+if (is_readable($snapshotPath)) {
+    $snapshot = json_decode((string) file_get_contents($snapshotPath), true);
+    if (is_array($snapshot) && !empty($snapshot['summary']) && is_array($snapshot['summary'])) {
+        $prerendered = $this->partial('common/block-layout/collection-overview-fallback', [
+            'summary' => $snapshot['summary'],
+            'growth'  => (isset($snapshot['growth']) && is_array($snapshot['growth'])) ? $snapshot['growth'] : null,
+        ]);
+    }
+}
+
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'collection-overview',
@@ -44,6 +63,7 @@ echo $this->partial('common/iwac-block-shell', [
         ],
         'orchestrator' => 'collection-overview',
     ],
-    'blockClass' => 'iwac-vis-overview',
-    'loading'    => $this->translate('Loading collection overview'),
+    'blockClass'  => 'iwac-vis-overview',
+    'loading'     => $this->translate('Loading collection overview'),
+    'prerendered' => $prerendered,
 ]);
