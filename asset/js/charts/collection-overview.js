@@ -39,27 +39,20 @@
 
         var summary = data.summary || {};
 
-        // 1. Summary cards — corpus-depth facets. The homepage hero (IWAC-theme
-        //    banner) now server-renders the headline counts (Items, Index,
-        //    References, Countries), so the overview drops those four to avoid
-        //    repeating the same data and leads instead with the corpus stats
-        //    the hero omits. `featured: true` marks the primary masthead stat
-        //    (see .iwac-vis-summary-card--featured in iwac-core.css).
-        root.appendChild(P.buildSummaryCards([
-            { value: summary.total_words,          labelKey: 'Total words', featured: true },
-            { value: summary.total_pages,          labelKey: 'Total pages' },
-            { value: summary.scanned_pages,        labelKey: 'Scanned pages' },
-            { value: summary.unique_sources,       labelKey: 'Unique sources' },
-            { value: summary.document_types,       labelKey: 'Document types' },
-            { value: summary.audiovisual_minutes,  labelKey: 'Audiovisual minutes' },
-            { value: summary.languages,            labelKey: 'Languages' }
-        ]));
+        // Summary cards were removed here: the headline counts AND the
+        // corpus-depth figures (words, pages, sources, document types,
+        // audiovisual minutes, languages) now live in the IWAC-theme homepage
+        // hero, which reads the same precomputed snapshot. Keeping a duplicate
+        // card row in this block would repeat the same numbers one scroll
+        // apart. The block leads straight into the period subtitle + charts.
+        // (P.buildSummaryCards stays in shared/panels.js — other dashboards
+        // still use it.)
 
-        // 2. Period subtitle
+        // 1. Period subtitle
         var subtitle = P.buildPeriodSubtitle(summary.year_min, summary.year_max);
         if (subtitle) root.appendChild(subtitle);
 
-        // 3–13. Charts grid (recent additions rendered last)
+        // 2–12. Charts grid (recent additions rendered last)
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 

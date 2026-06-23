@@ -2,13 +2,17 @@
 /**
  * Collection Overview — server-rendered fallback.
  *
- * Renders the headline KPI figures, the period covered, and a growth
- * sparkline from the precomputed snapshot, so crawlers and no-JS / slow
- * clients get real data instead of a "Loading…" spinner. The live ECharts
- * dashboard (collection-overview.js → buildLayout) clears the wrapper and
- * replaces this on hydration, so the markup deliberately mirrors the
- * client's buildSummaryCards() / buildPeriodSubtitle() output (same
- * classes, same card list, same number formatting) for a seamless swap.
+ * Renders the period covered and a growth sparkline from the precomputed
+ * snapshot, so crawlers and no-JS / slow clients get real data instead of a
+ * "Loading…" spinner. The live ECharts dashboard (collection-overview.js →
+ * buildLayout) clears the wrapper and replaces this on hydration, so the
+ * markup mirrors the client's buildPeriodSubtitle() output for a seamless
+ * swap.
+ *
+ * The headline KPI cards used to live here too, but those figures (counts +
+ * corpus-depth stats) now render in the IWAC-theme homepage hero, which reads
+ * the same snapshot — so this fallback (and buildLayout) no longer duplicate
+ * them.
  *
  * Any missing field is skipped; the caller only includes this partial when
  * the snapshot decoded to a summary, so this template assumes $summary is
@@ -21,38 +25,6 @@
 $escapeHtml = $this->plugin('escapeHtml');
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $translate  = $this->plugin('translate');
-
-// Locale → match the client's Intl.NumberFormat grouping (iwac-i18n.js):
-// fr-FR uses a narrow no-break space (U+202F), en-US a comma.
-$locale = 'en';
-try {
-    $locale = strtolower((string) $this->lang());
-} catch (\Throwable $e) {
-    // lang() helper unavailable — keep the English default.
-}
-$isFr = strpos($locale, 'fr') === 0;
-$fmt = function ($n) use ($isFr) {
-    if (!is_numeric($n)) {
-        return null;
-    }
-    return $isFr
-        ? number_format((float) $n, 0, ',', "\u{202F}")
-        : number_format((float) $n, 0, '.', ',');
-};
-
-// Mirror the card list in collection-overview.js buildLayout(): the homepage
-// hero already server-renders Items / Index / References / Countries, so the
-// overview leads with the corpus-depth stats the hero omits. Featured card =
-// total words (the masthead figure).
-$cards = [
-    ['value' => $summary['total_words'] ?? null,         'label' => $translate('Total words'), 'featured' => true],
-    ['value' => $summary['total_pages'] ?? null,         'label' => $translate('Total pages')],
-    ['value' => $summary['scanned_pages'] ?? null,       'label' => $translate('Scanned pages')],
-    ['value' => $summary['unique_sources'] ?? null,      'label' => $translate('Unique sources')],
-    ['value' => $summary['document_types'] ?? null,      'label' => $translate('Document types')],
-    ['value' => $summary['audiovisual_minutes'] ?? null, 'label' => $translate('Audiovisual minutes')],
-    ['value' => $summary['languages'] ?? null,           'label' => $translate('Languages')],
-];
 
 $yearMin = $summary['year_min'] ?? null;
 $yearMax = $summary['year_max'] ?? null;
@@ -81,15 +53,6 @@ if (is_array($growth) && isset($growth['cumulative_total']) && is_array($growth[
 }
 ?>
 <div class="iwac-vis-overview-root iwac-vis-overview-fallback" data-overview-fallback>
-    <div class="iwac-vis-overview-summary">
-        <?php foreach ($cards as $card): ?>
-            <?php $value = $fmt($card['value']); if ($value === null) { continue; } ?>
-        <div class="iwac-vis-summary-card<?= !empty($card['featured']) ? ' iwac-vis-summary-card--featured' : '' ?>">
-            <div class="iwac-vis-summary-card__label"><?= $escapeHtml($card['label']) ?></div>
-            <div class="iwac-vis-summary-card__value"><?= $escapeHtml($value) ?></div>
-        </div>
-        <?php endforeach; ?>
-    </div>
     <?php if ($yearMin && $yearMax): ?>
     <p class="iwac-vis-overview-subtitle"><?= $escapeHtml(sprintf($translate('Period covered: %1$s – %2$s'), $yearMin, $yearMax)) ?></p>
     <?php endif; ?>
