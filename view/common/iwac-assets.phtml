@@ -97,9 +97,10 @@ $headLink(['rel' => 'dns-prefetch', 'href' => 'https://cdn.jsdelivr.net'], 'PREP
 
 // -- Stylesheets (minified; regenerate with `npm run build:css`) --------
 $headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));
-if ($needMaplibre) {
-    $headLink->appendStylesheet($this->assetUrl('css/iwac-maplibre.min.css', $module));
-}
+// iwac-maplibre.min.css is intentionally NOT enqueued here: the map renders
+// on-view only and lives far below the fold, so its stylesheet rides the on-view
+// lazy loader (alongside the CDN maplibre.css) instead of render-blocking first
+// paint. See $lazyCss below.
 if ($blockCss) {
     $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $blockCss . '.min.css', $module));
 }
@@ -127,12 +128,14 @@ $scripts[] = $cdnEcharts;
 if ($needWordcloud) {
     $scripts[] = $cdnWordcloud;
 }
-$mapCss = null;
+$lazyCss = [];
 if ($needMaplibre) {
     $scripts[] = $cdnMaplibreJs;
-    // The map renders on-view only, so its stylesheet rides along with the
-    // loader instead of render-blocking the whole page from a CDN.
-    $mapCss = $cdnMaplibreCss;
+    // The map renders on-view only, so its stylesheets ride along with the loader
+    // instead of render-blocking the whole page: the CDN maplibre CSS plus the
+    // theme's map overrides (iwac-maplibre.min.css).
+    $lazyCss[] = $cdnMaplibreCss;
+    $lazyCss[] = $this->assetUrl('css/iwac-maplibre.min.css', $module);
 }
 
 // IWAC infrastructure (i18n → theme → dashboard-core).
@@ -199,16 +202,16 @@ if ($orchestrator) {
 // into the same window.IWACVisLazy queue at runtime and only the first arms
 // the IntersectionObserver. json_encode keeps slashes escaped so the inline
 // payload can never break out of the <script> element.
-$payload = json_encode(['scripts' => $scripts, 'mapCss' => $mapCss]);
+$payload = json_encode(['scripts' => $scripts, 'css' => $lazyCss]);
 $headScript->appendScript(
     '(function(){'
-    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:null,armed:false,done:false});'
+    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:[],armed:false,done:false});'
     . 'var p=' . $payload . ';'
     . 'p.scripts.forEach(function(u){if(S.q.indexOf(u)<0)S.q.push(u);});'
-    . 'if(p.mapCss&&!S.css)S.css=p.mapCss;'
+    . '(p.css||[]).forEach(function(u){if(S.css.indexOf(u)<0)S.css.push(u);});'
     . 'if(S.armed)return;S.armed=true;'
     . 'function load(){if(S.done)return;S.done=true;'
-    . 'if(S.css){var l=document.createElement("link");l.rel="stylesheet";l.href=S.css;document.head.appendChild(l);}'
+    . 'S.css.forEach(function(href){var l=document.createElement("link");l.rel="stylesheet";l.href=href;document.head.appendChild(l);});'
     . 'S.q.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});'
     . '}'
     . 'function arm(){var b=document.querySelectorAll(".iwac-vis-block");'
