@@ -73,9 +73,13 @@ if ($withSiteBase) {
 // module version bump, so stamp the last-sync time here. dashboard-core folds
 // it into the data-fetch ?v= so a fresh pull busts stale data caches. Absent
 // before the first sync — JS then falls back to the module version.
-$lastSync = $this->setting('iwacvis_last_sync');
-if (is_array($lastSync) && !empty($lastSync['time'])) {
-    $attrs['version'] = (string) $lastSync['time'];
+// Guard the `setting` view helper: this partial renders on every block, so a
+// missing helper here would break all of them. has() keeps it safe.
+if ($this->getHelperPluginManager()->has('setting')) {
+    $lastSync = $this->setting('iwacvis_last_sync');
+    if (is_array($lastSync) && !empty($lastSync['time'])) {
+        $attrs['version'] = (string) $lastSync['time'];
+    }
 }
 foreach ($extraData as $key => $value) {
     $attrs[$key] = $value;
