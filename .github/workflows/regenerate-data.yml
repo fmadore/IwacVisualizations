@@ -1,0 +1,123 @@
+name: Regenerate visualization data
+
+# Heavy Python precompute (UMAP / ForceAtlas2 / numpy kNN over the Hugging Face
+# dataset) runs HERE — never on the production Omeka server, which stays a plain
+# PHP box. The output is published as a single ZIP on the moving `data` release;
+# the module's "Pull latest data" admin Job downloads it and unpacks it into
+# files/iwac-visualizations/. See issue #7.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >-
+          Optional tag for an immutable, versioned snapshot release. Leave blank
+          to update the moving `data` release that the Sync Data job pulls by default.
+        required: false
+        default: ""
+  # The HF dataset is refreshed roughly monthly. Uncomment to rebuild on a schedule.
+  # schedule:
+  #   - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
+
+permissions:
+  contents: write   # required for `gh release create` / `gh release upload`
+
+# Never let two data builds publish to the same release at once.
+concurrency:
+  group: regenerate-data
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run generators
+        # The 20 HF-driven generators, with default flags (defaults already match
+        # the committed output shapes/minify). Static geojson is read from
+        # asset/geo/ (present from checkout). generate_sentiment_arbiter.py is
+        # deliberately excluded: it reads the sibling IWAC-sentiment-analysis repo,
+        # not HF, and sentiment-arbiter.json is committed + shipped in the archive
+        # from the checkout instead. Fail-fast so a partial build is never published.
+        run: |
+          set -euo pipefail
+          gens=(
+            collection_overview wordcloud world_map index_overview keyword_explorer
+            entity_networks lexical_metrics periodicals_overview references_overview
+            scary_terms semantic_landscape sentiment_atlas spatial_exploration
+            template_summary topic_explorer compare_newspapers
+            article_dashboards person_dashboards entity_dashboards publication_dashboards
+          )
+          for g in "${gens[@]}"; do
+            echo "::group::generate_${g}"
+            python "scripts/generate_${g}.py"
+            echo "::endgroup::"
+          done
+
+      - name: Write data manifest
+        # Build-stamp the archive so the client can cache-bust on each data sync
+        # (data refreshes no longer bump the module ?v=). The PHP job also records
+        # its own last-sync time; this is the in-archive provenance record.
+        run: |
+          python - <<'PY'
+          import datetime, json, os
+          manifest = {
+              "generatedAt": datetime.datetime.now(datetime.timezone.utc)
+                  .strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "buildId":   (os.environ.get("GITHUB_SHA", "") or "")[:12],
+              "runId":     os.environ.get("GITHUB_RUN_ID", ""),
+              "runNumber": os.environ.get("GITHUB_RUN_NUMBER", ""),
+          }
+          with open("asset/data/manifest.json", "w", encoding="utf-8") as fh:
+              json.dump(manifest, fh, ensure_ascii=False)
+          print(manifest)
+          PY
+
+      - name: Package archive
+        # Entries land at the zip ROOT (e.g. collection-overview.json,
+        # compare-newspapers/index.json) — the Sync Data job extracts the tree
+        # straight into files/iwac-visualizations/ and looks for that root marker.
+        run: |
+          set -euo pipefail
+          test -f asset/data/collection-overview.json   # sanity: generators ran
+          test -f asset/data/sentiment-arbiter.json      # committed, rode in from checkout
+          ( cd asset/data && zip -r -q -X "$GITHUB_WORKSPACE/iwac-data.zip" . )
+          echo "Archive size:"; ls -lh iwac-data.zip
+          echo "Entry count:"; unzip -l iwac-data.zip | tail -1
+
+      - name: Publish release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="${{ inputs.tag }}"
+          if [ -n "$TAG" ]; then
+            # Immutable, versioned snapshot — pull it explicitly with the Job's `tag` arg.
+            gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" \
+              --title "Precomputed visualization data ($TAG)" \
+              --notes "Automated data build from ${GITHUB_SHA:0:12} (run ${GITHUB_RUN_ID})." \
+              --latest=false
+            gh release upload "$TAG" iwac-data.zip --clobber
+          else
+            # Moving `data` release — the stable URL the Sync Data job downloads by default:
+            #   https://github.com/${{ github.repository }}/releases/download/data/iwac-data.zip
+            gh release view data >/dev/null 2>&1 || gh release create data \
+              --title "Precomputed visualization data (latest)" \
+              --notes "Moving release: the latest automated data build, refreshed by the regenerate-data workflow." \
+              --latest=false
+            gh release upload data iwac-data.zip --clobber
+          fi
+          echo "Published iwac-data.zip to release '${TAG:-data}'."
