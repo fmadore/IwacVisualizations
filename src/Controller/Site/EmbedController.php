@@ -12,7 +12,7 @@ use Laminas\View\Model\ViewModel;
  * never read `$block`. That lets us render any single block on its own
  * bare page, suitable for dropping into a third-party site via an
  * `<iframe>`. Because the iframe loads from this same origin, the
- * relative `asset/data/` fetches, the module CSS, and the theme tokens
+ * same-origin `files/iwac-visualizations/` data fetches, the module CSS, and the theme tokens
  * all resolve exactly as they do on a normal site page — no CORS, no
  * cross-origin data copy, no stylesheet collision with the host page.
  *
