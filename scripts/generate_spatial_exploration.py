@@ -21,7 +21,7 @@ behind the "Spatial Exploration" page block:
     * ``country_counts`` — items per canonical country across all five
       content subsets, for the choropleth fill in collection mode.
     * ``country_bounds`` — [w, s, e, n] per IWAC country, read from the
-      committed ``asset/data/iwac-countries.geojson``, for the
+      committed ``asset/geo/iwac-countries.geojson``, for the
       country-focus zoom control.
     * ``country_focus`` — administrative choropleth metadata for Bénin,
       Burkina Faso, Côte d'Ivoire and Togo. Counts are derived from the
@@ -430,10 +430,10 @@ def main() -> None:
 
     payload = build_locations_and_pickers(index_df)
     country_counts = build_country_counts(args.repo)
-    country_bounds = build_country_bounds(module_root / "asset/data/iwac-countries.geojson")
+    country_bounds = build_country_bounds(module_root / "asset/geo/iwac-countries.geojson")
     country_focus = build_country_focus(
         payload["locations"],
-        module_root / "asset/data/admin-boundaries",
+        module_root / "asset/geo/admin-boundaries",
     )
 
     result = {
