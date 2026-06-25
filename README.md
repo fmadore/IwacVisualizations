@@ -32,6 +32,10 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.15.0 — Data decoupled from git ([issue #7](https://github.com/fmadore/IwacVisualizations/issues/7))
+
+The 261 MB / 18k-file precomputed `asset/data/` tree is no longer committed. The Python generators run in **GitHub Actions** (`regenerate-data.yml`), publish `iwac-data.zip` to the moving **`data`** release, and a pure-PHP background job (**Admin → IWAC Visualizations → “Pull latest data”**) atomically unpacks it into `files/iwac-visualizations/`, logged in **Admin → Jobs**. The chart JS now fetches data same-origin from `files/`; static map geometry moved to a committed `asset/geo/` and is served from the module. See **[Data delivery](#data-delivery--built-in-ci-pulled-into-files-issue-7)**. The production server stays a plain PHP box — no Python, no compute.
+
 ### v1.14.0 — Embeddable page blocks (iframe)
 
 Every page block can now be embedded on a third-party site through a standalone iframe endpoint — no Omeka, theme, or data copy required on the host page.
@@ -171,7 +175,7 @@ The three resource-page-block orchestrators (Person, Entity, Article) are now de
 
 - **Choropleth toggle button** on every IWAC map. A single MapLibre control swaps between the existing point-bubble view and a 6-country choropleth fill (Bénin, Burkina Faso, Côte d'Ivoire, Niger, Nigeria, Togo). Theme-aware paint via the `--iwac-vis-heatmap-*` ramp the year × month and calendar heatmaps already use, so light/dark propagation is automatic. Wired on **Collection Overview's world map**, the **Index Overview Places map**, and the **Person / Entity locations map** (with role-faceted updates on the latter via `P.setMapTheme`'s sibling `choropleth.updateCounts`).
 - **`shared/choropleth.js` helper** — `P.attachChoroplethToggle(map, {countryCounts, bubbleLayers, basePath, labelKey})` returns a `{getMode, setMode, updateCounts, destroy}` handle. Lazy-loads the polygon GeoJSON once per page (cached across maps), re-adds the source + layers after `style.load` (theme swap), and gates same-mode toggles. ~330 lines.
-- **6-country polygon GeoJSON** at `asset/data/iwac-countries.geojson` (138 KB) — derived from the [`datasets/geo-countries`](https://github.com/datasets/geo-countries) repository (CC0/PDDL Natural Earth derivative), filtered to the 6 IWAC countries by ISO-3166 alpha-3, with property cleanup so each feature carries `iso_a3 / iso_a2 / name (canonical IWAC) / name_en`.
+- **6-country polygon GeoJSON** at `asset/geo/iwac-countries.geojson` (138 KB) — derived from the [`datasets/geo-countries`](https://github.com/datasets/geo-countries) repository (CC0/PDDL Natural Earth derivative), filtered to the 6 IWAC countries by ISO-3166 alpha-3, with property cleanup so each feature carries `iso_a3 / iso_a2 / name (canonical IWAC) / name_en`.
 - **Compare Projects block retired** — the orphan placeholder block layout (no orchestrator) was removed: only **Compare Newspapers** ships in this module. Removed: `src/Site/BlockLayout/CompareProjects.php`, `view/common/block-layout/compare-projects.phtml`, and the `compareProjects` registration in `module.config.php`.
 - **Compare Newspapers choropleth deferred** — the geographic-comparison map's data points lack a `country` property in the output of `generate_compare_newspapers.py`, so wiring its choropleth needs a generator change + ~300 JSON regeneration. Tracked as a follow-up in ROADMAP.md.
 
@@ -601,6 +605,32 @@ The module intentionally supports **two data paths**, chosen per-block based on 
 | **Precompute** | Heavy aggregations (the full `articles` subset is 12,287 rows × 47 cols including 768-dim embeddings), cross-subset joins, networks, per-entity dashboards. A Python script reads the HF dataset via the `datasets` lib and writes compact JSON into `asset/data/`. Run manually when the dataset updates (~monthly). | Collection Overview, Person dashboards, Entity dashboards, word cloud, world map | Yes |
 
 Rough decision rule: **precompute if fetching would take > 50 parallel HF requests OR the source rows carry large blobs (OCR, embeddings, images)**. Networks and semantic-neighbor computations also belong in precompute — they're expensive and stable between dataset updates.
+
+### Data delivery — built in CI, pulled into `files/` (issue #7)
+
+The precomputed JSON is **not committed to git** and is **not generated on the
+production server**. Three stages keep the repo lean and the ZMO host a plain
+PHP box:
+
+1. **Compute (GitHub Actions)** — `.github/workflows/regenerate-data.yml` runs
+   the Python generators on a runner (`workflow_dispatch`, optional monthly
+   cron), writes `asset/data/`, and zips it.
+2. **Publish (GitHub Release)** — the workflow uploads `iwac-data.zip` to the
+   moving **`data`** release. Stable URL:
+   `…/releases/download/data/iwac-data.zip`.
+3. **Deliver (admin pull)** — **Admin → IWAC Visualizations → “Pull latest
+   data”** dispatches the pure-PHP `IwacVisualizations\Job\SyncData`, which
+   downloads the archive and **atomically swaps** it into
+   `files/iwac-visualizations/`. Progress + logs appear in **Admin → Jobs**.
+
+The chart JS therefore fetches generated data same-origin from
+`{basePath}/files/iwac-visualizations/…`. The only data **still committed** to
+the module is `asset/geo/` (static map geometry the generators read as input and
+the client fetches from `{basePath}/modules/IwacVisualizations/asset/geo/…`) and
+the externally-sourced `asset/data/sentiment-arbiter.json` (regenerated by the
+curator from the sibling IWAC-sentiment-analysis study, then shipped in the
+archive). Before the first pull, blocks render a graceful “data not available
+yet” state instead of a 404 error.
 
 ## Installation
 

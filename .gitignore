@@ -11,3 +11,12 @@ __pycache__/
 .playwright-mcp/
 wordcloud-panel.png
 .worktrees/
+
+# Precomputed visualization data (issue #7): built in CI, published as the
+# `data` release asset, and delivered into files/iwac-visualizations/ by the
+# admin "Pull latest data" job — never committed. Static map geometry lives in
+# asset/geo/ (committed). The one exception is sentiment-arbiter.json, which is
+# externally sourced (sibling IWAC-sentiment-analysis study, not HF) and
+# committed by the curator so CI can ship it in the archive.
+/asset/data/*
+!/asset/data/sentiment-arbiter.json

@@ -2,14 +2,20 @@
 
 Python scripts that read the Hugging Face dataset
 [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)
-and write aggregated JSON files into `asset/data/`. The Omeka S module
-serves those JSONs statically, and the JavaScript charts fetch them at
-page load.
+and write aggregated JSON files into `asset/data/`.
+
+**Where the output is served from (issue #7).** `asset/data/` is **not committed
+to git** and is **not generated on the production server**. The
+`.github/workflows/regenerate-data.yml` workflow runs these generators on a
+GitHub runner, zips `asset/data/`, and publishes `iwac-data.zip` to the moving
+`data` release. The Omeka module's admin **“Pull latest data”** button then
+unpacks that archive into `files/iwac-visualizations/`, which the JavaScript
+charts fetch same-origin at page load. Static map geometry the generators read
+as input lives committed under `asset/geo/` (not regenerated here).
 
 This directory is **not touched at runtime** — Omeka never imports Python.
-It's a developer tool that runs on the curator's machine whenever the
-dataset changes (roughly monthly), or whenever the schema of a generator
-changes.
+The generators run in CI (or on the curator's machine) whenever the dataset
+changes (roughly monthly), or whenever the schema of a generator changes.
 
 ## Provenance
 
