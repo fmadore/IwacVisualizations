@@ -59,7 +59,7 @@
         });
     }
 
-    var DATA_BASE = '/modules/IwacVisualizations/asset/data/compare-newspapers/';
+    var DATA_BASE = '/files/iwac-visualizations/compare-newspapers/';
 
     function norm(s) {
         s = String(s || '').trim().toLowerCase();

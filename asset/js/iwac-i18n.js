@@ -63,6 +63,7 @@
             'Hide patterns': 'Hide patterns',
             'No data available': 'No data available',
             'Failed to load': 'Failed to load',
+            'Visualization data is not available yet.': 'Visualization data is not available yet.',
 
             // Chart axis / tooltip
             'Count': 'Count',
@@ -593,6 +594,7 @@
             'Hide patterns': 'Masquer les motifs',
             'No data available': 'Aucune donn\u00e9e disponible',
             'Failed to load': 'Le chargement a \u00e9chou\u00e9',
+            'Visualization data is not available yet.': 'Les donn\u00e9es de visualisation ne sont pas encore disponibles.',
 
             'Count': 'Nombre',
             'Year': 'Ann\u00e9e',

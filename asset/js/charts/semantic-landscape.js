@@ -168,7 +168,7 @@
     function initBlock(container) {
         var basePath = container.dataset.basePath || '';
         var siteBase = container.dataset.siteBase || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/semantic-landscape.json';
+        var url = basePath + '/files/iwac-visualizations/semantic-landscape.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -234,7 +234,7 @@
             .catch(function (err) {
                 console.error('IWACVis semantic landscape:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

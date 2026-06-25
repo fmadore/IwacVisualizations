@@ -154,7 +154,7 @@
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || ''
         };
-        var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/collection-overview.json';
+        var url = ctx.basePath + '/files/iwac-visualizations/collection-overview.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -165,7 +165,7 @@
             .catch(function (err) {
                 console.error('IWACVis collection overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

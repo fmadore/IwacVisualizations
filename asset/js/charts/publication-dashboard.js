@@ -102,7 +102,7 @@
         var itemId = container.dataset.itemId;
         if (!itemId) return;
         var basePath = container.dataset.basePath || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/publication-dashboards/'
+        var url = basePath + '/files/iwac-visualizations/publication-dashboards/'
             + itemId + '.json';
 
         P.fetchJSON(url)
@@ -139,7 +139,7 @@
                 console.error('IWACVis publication dashboard:', err);
                 var loading = container.querySelector('.iwac-vis-publication__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

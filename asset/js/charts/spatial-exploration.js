@@ -56,7 +56,7 @@
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || ''
         };
-        var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/spatial-exploration.json';
+        var url = ctx.basePath + '/files/iwac-visualizations/spatial-exploration.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -68,7 +68,7 @@
             .catch(function (err) {
                 console.error('IWACVis spatial exploration:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

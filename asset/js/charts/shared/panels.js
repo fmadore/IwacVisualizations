@@ -62,10 +62,10 @@
      * Shared JSON fetch for module data files — the single fetch path
      * every orchestrator / panel should use instead of bare fetch().
      *
-     * - Appends `?v=<asset version>` (when dashboard-core.js could parse
-     *   one off its own script URL) so regenerated asset/data/ JSON busts
-     *   browser caches in lockstep with the config/module.ini version,
-     *   exactly like the CSS/JS assets Omeka versions via assetUrl.
+     * - Appends `?v=<asset version>` (module version + last data-sync stamp,
+     *   resolved by dashboard-core.js) so data served from
+     *   files/iwac-visualizations/ busts browser caches whenever the module
+     *   updates OR a fresh data pull lands (issue #7).
      * - Sends same-origin credentials and a JSON Accept header.
      * - Rejects on non-2xx with the URL in the error message.
      *
@@ -163,6 +163,30 @@
     /** Error banner. Default key "Failed to load". */
     P.buildErrorState = function (messageKey) {
         return P.el('div', 'iwac-vis-error', P.t(messageKey || 'Failed to load'));
+    };
+
+    /**
+     * "No data yet" banner — distinct from buildEmptyState (an empty slice of
+     * an otherwise-loaded dataset). This one means the data file itself has not
+     * been published into files/iwac-visualizations/ yet, e.g. before the first
+     * "Pull latest data" sync (issue #7). Reuses the empty-state styling.
+     */
+    P.buildNoDataState = function (messageKey) {
+        return P.el('div', 'iwac-vis-empty iwac-vis-nodata',
+            P.t(messageKey || 'Visualization data is not available yet.'));
+    };
+
+    /**
+     * Pick the right banner for a failed P.fetchJSON. A 404 means the data tree
+     * has not been delivered into files/ yet → a graceful "no data yet" state;
+     * any other failure is a real error. Drop-in for buildErrorState() inside a
+     * fetch `.catch(function (err) { … })` — just pass the caught error.
+     */
+    P.buildFetchErrorState = function (err, messageKey) {
+        var msg = err && err.message ? String(err.message) : '';
+        return /\bHTTP 404\b/.test(msg)
+            ? P.buildNoDataState()
+            : P.buildErrorState(messageKey);
     };
 
     /**
@@ -455,7 +479,7 @@
                 siteBase: container.dataset.siteBase || '',
                 itemId:   itemId
             };
-            var url = ctx.basePath + '/modules/IwacVisualizations/asset/data/'
+            var url = ctx.basePath + '/files/iwac-visualizations/'
                 + opts.dataDir + '/' + itemId + '.json';
             var loadingSel = '.iwac-vis-' + opts.classToken + '__loading';
 
@@ -477,7 +501,7 @@
                     console.error(label + ':', err);
                     var loading = container.querySelector(loadingSel);
                     if (loading) loading.remove();
-                    container.appendChild(P.buildErrorState());
+                    container.appendChild(P.buildFetchErrorState(err));
                 });
         }
 

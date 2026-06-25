@@ -97,7 +97,7 @@
             var key = dir + '/' + id;
             if (cache.has(key)) return cache.get(key);
             var url = (ctx.basePath || '') +
-                '/modules/IwacVisualizations/asset/data/' + key + '.json';
+                '/files/iwac-visualizations/' + key + '.json';
             var promise = P.fetchJSON(url);
             cache.set(key, promise);
             promise.catch(function () { cache.delete(key); });

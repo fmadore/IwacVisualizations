@@ -394,7 +394,7 @@
             var key = relPath;
             if (adminGeoCache[key]) return Promise.resolve(adminGeoCache[key]);
             var url = (ctx.basePath || '') +
-                '/modules/IwacVisualizations/asset/data/' + relPath;
+                '/modules/IwacVisualizations/asset/geo/' + relPath;
             return P.fetchJSON(url).then(function (geo) {
                 adminGeoCache[key] = geo;
                 return geo;

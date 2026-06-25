@@ -185,7 +185,7 @@
         if (loadingLabel) loadingLabel.textContent = P.t('Loading press language metrics') + '…';
 
         var basePath = container.getAttribute('data-base-path') || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/lexical-metrics.json';
+        var url = basePath + '/files/iwac-visualizations/lexical-metrics.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -274,7 +274,7 @@
             .catch(function (err) {
                 console.error('IWACVis lexical metrics:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

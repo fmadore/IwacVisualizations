@@ -180,7 +180,7 @@
                 .catch(function (err) {
                     console.error('IWACVis index table:', err);
                     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
-                    h.indexPanel.chart.appendChild(P.buildErrorState());
+                    h.indexPanel.chart.appendChild(P.buildFetchErrorState(err));
                 });
         }
 
@@ -248,7 +248,7 @@
             .catch(function (err) {
                 console.error('IWACVis keyword explorer:', err);
                 if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
-                h.chartPanel.chart.appendChild(P.buildErrorState());
+                h.chartPanel.chart.appendChild(P.buildFetchErrorState(err));
             });
         }
 
@@ -273,7 +273,7 @@
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || ''
         };
-        var base = ctx.basePath + '/modules/IwacVisualizations/asset/data/';
+        var base = ctx.basePath + '/files/iwac-visualizations/';
 
         P.fetchJSON(base + 'index-overview.json')
             .then(function (dataA) {
@@ -284,7 +284,7 @@
             .catch(function (err) {
                 console.error('IWACVis index overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

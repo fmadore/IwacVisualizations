@@ -735,7 +735,7 @@
         if (loadingLabel) loadingLabel.textContent = P.t('Loading sentiment atlas') + '…';
 
         var basePath = container.getAttribute('data-base-path') || '';
-        var dataBase = basePath + '/modules/IwacVisualizations/asset/data/';
+        var dataBase = basePath + '/files/iwac-visualizations/';
 
         // Atlas is required; the arbiter bundle is optional (the sibling
         // study may not be deployed) — swallow its failure to null.
@@ -986,7 +986,7 @@
             .catch(function (err) {
                 console.error('IWACVis sentiment atlas:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

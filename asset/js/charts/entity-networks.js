@@ -70,7 +70,7 @@
             basePath: container.dataset.basePath || '',
             siteBase: container.dataset.siteBase || ''
         };
-        var base = ctx.basePath + '/modules/IwacVisualizations/asset/data/';
+        var base = ctx.basePath + '/files/iwac-visualizations/';
 
         P.fetchJSON(base + 'entity-networks-global.json')
             .then(function (payload) {
@@ -79,7 +79,7 @@
             .catch(function (err) {
                 console.error('IWACVis entity networks:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

@@ -55,7 +55,7 @@
         if (_geojsonCache) return Promise.resolve(_geojsonCache);
         if (_geojsonInflight) return _geojsonInflight;
         var url = (basePath || '') +
-            '/modules/IwacVisualizations/asset/data/iwac-countries.geojson';
+            '/modules/IwacVisualizations/asset/geo/iwac-countries.geojson';
         _geojsonInflight = P.fetchJSON(url)
             .then(function (geo) {
                 _geojsonCache = geo;

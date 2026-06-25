@@ -106,7 +106,7 @@
 
     function initOne(container) {
         var basePath = container.dataset.basePath || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/topic-explorer.json';
+        var url = basePath + '/files/iwac-visualizations/topic-explorer.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -116,7 +116,7 @@
                 console.error('IWACVis topic explorer:', err);
                 var loading = container.querySelector('.iwac-vis-topic-explorer__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

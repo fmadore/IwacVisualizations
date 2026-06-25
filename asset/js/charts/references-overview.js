@@ -403,7 +403,7 @@
 
         var basePath = container.getAttribute('data-base-path') || '';
         var siteBase = container.getAttribute('data-site-base') || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/references-overview.json';
+        var url = basePath + '/files/iwac-visualizations/references-overview.json';
 
         P.fetchJSON(url)
             .then(function (raw) {
@@ -517,7 +517,7 @@
             .catch(function (err) {
                 console.error('IWACVis references overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

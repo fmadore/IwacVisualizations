@@ -77,7 +77,7 @@
             return;
         }
 
-        var url = basePath + '/modules/IwacVisualizations/asset/data/template-summary.json';
+        var url = basePath + '/files/iwac-visualizations/template-summary.json';
 
         P.fetchJSON(url)
             .then(function (bundle) {
@@ -130,7 +130,7 @@
                 console.error('IWACVis minimal-item dashboard:', err);
                 var loading = container.querySelector('.iwac-vis-minimal-item__loading');
                 if (loading) loading.remove();
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

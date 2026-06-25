@@ -59,11 +59,11 @@
     /* ----------------------------------------------------------------- */
 
     function indexUrl(basePath) {
-        return basePath + '/modules/IwacVisualizations/asset/data/compare-newspapers/index.json';
+        return basePath + '/files/iwac-visualizations/compare-newspapers/index.json';
     }
 
     function corpusUrl(basePath, type, scope, slug) {
-        return basePath + '/modules/IwacVisualizations/asset/data/compare-newspapers/'
+        return basePath + '/files/iwac-visualizations/compare-newspapers/'
             + type + '/' + scope + '-' + slug + '.json';
     }
 
@@ -197,7 +197,7 @@
                         }).catch(function (err) {
                             console.error('IWACVis compare-newspapers:', err);
                             resultsRoot.innerHTML = '';
-                            resultsRoot.appendChild(P.buildErrorState());
+                            resultsRoot.appendChild(P.buildFetchErrorState(err));
                         });
                     };
                 }
@@ -215,7 +215,7 @@
             .catch(function (err) {
                 console.error('IWACVis compare-newspapers index:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

@@ -77,7 +77,7 @@
 
     function initBlock(container) {
         var basePath = container.dataset.basePath || '';
-        var dataBase = basePath + '/modules/IwacVisualizations/asset/data/';
+        var dataBase = basePath + '/files/iwac-visualizations/';
 
         Promise.all([
             fetchJSON(dataBase + DATA_FILES.metadata),
@@ -99,7 +99,7 @@
         }).catch(function (err) {
             console.error('IWACVis.scaryTerms:', err);
             container.innerHTML = '';
-            container.appendChild(P.buildErrorState());
+            container.appendChild(P.buildFetchErrorState(err));
         });
     }
 

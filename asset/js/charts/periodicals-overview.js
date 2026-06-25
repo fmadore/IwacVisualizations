@@ -133,7 +133,7 @@
         if (loadingLabel) loadingLabel.textContent = P.t('Loading periodicals overview') + '…';
 
         var basePath = container.getAttribute('data-base-path') || '';
-        var url = basePath + '/modules/IwacVisualizations/asset/data/periodicals-overview.json';
+        var url = basePath + '/files/iwac-visualizations/periodicals-overview.json';
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -197,7 +197,7 @@
             .catch(function (err) {
                 console.error('IWACVis periodicals overview:', err);
                 container.innerHTML = '';
-                container.appendChild(P.buildErrorState());
+                container.appendChild(P.buildFetchErrorState(err));
             });
     }
 

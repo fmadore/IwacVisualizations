@@ -17,16 +17,27 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
 
-    // Module asset version, parsed from this script's own URL — Omeka's
-    // assetUrl appends `?v=<config/module.ini version>` to every module
-    // asset. P.fetchJSON (shared/panels.js) re-appends it to asset/data/
-    // JSON requests so regenerated data busts browser caches in lockstep
-    // with code. document.currentScript is set during execution of classic
-    // scripts, including ones the on-view lazy loader injects async=false.
+    // Cache-buster appended by P.fetchJSON (shared/panels.js) to every data
+    // request. It combines two versions:
+    //   1. the module version, parsed from this script's own `?v=` (Omeka's
+    //      assetUrl appends `?v=<config/module.ini version>` to module assets);
+    //   2. the data version — the last Sync Data time, stamped on every
+    //      .iwac-vis-block as `data-version` by iwac-block-shell.phtml.
+    // Data now lives in files/iwac-visualizations/ and is refreshed by the
+    // admin Sync Data job WITHOUT a module bump (issue #7), so folding in the
+    // data version is what busts stale data caches on a fresh pull. Either may
+    // be absent (no `?v=`, or pre-first-sync) — we use whichever exist.
+    // document.currentScript is set during execution of classic scripts,
+    // including ones the on-view lazy loader injects async=false.
     (function () {
         var el = document.currentScript;
         var m = el && el.src ? /[?&]v=([^&#]+)/.exec(el.src) : null;
-        ns.assetVersion = m ? decodeURIComponent(m[1]) : '';
+        var moduleV = m ? decodeURIComponent(m[1]) : '';
+        var block = document.querySelector('.iwac-vis-block[data-version]');
+        var dataV = block ? block.getAttribute('data-version') : '';
+        ns.assetVersion = dataV
+            ? (moduleV ? moduleV + '-' + dataV : dataV)
+            : moduleV;
     })();
 
     function debounce(fn, ms) {

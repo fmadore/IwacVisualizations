@@ -27,8 +27,8 @@
 
     function render(panelEl, data, ctx) {
         var basePath = ctx && ctx.basePath ? ctx.basePath : '';
-        var dataUrl = basePath + '/modules/IwacVisualizations/asset/data/collection-map.json';
-        var geoUrl = basePath + '/modules/IwacVisualizations/asset/data/world_countries_simple.geojson';
+        var dataUrl = basePath + '/files/iwac-visualizations/collection-map.json';
+        var geoUrl = basePath + '/modules/IwacVisualizations/asset/geo/world_countries_simple.geojson';
 
         if (typeof maplibregl === 'undefined') {
             panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
@@ -49,7 +49,7 @@
                 .catch(function (err) {
                     console.error('IWACVis map:', err);
                     panelEl.chart.innerHTML = '';
-                    panelEl.chart.appendChild(P.buildErrorState());
+                    panelEl.chart.appendChild(P.buildFetchErrorState(err));
                 });
         }
 

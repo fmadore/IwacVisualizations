@@ -69,6 +69,14 @@ $attrs = ['base-path' => $basePath];
 if ($withSiteBase) {
     $attrs['site-base'] = $basePath . '/s/' . $siteSlug;
 }
+// Data cache-buster (issue #7): the Sync Data job refreshes files/ WITHOUT a
+// module version bump, so stamp the last-sync time here. dashboard-core folds
+// it into the data-fetch ?v= so a fresh pull busts stale data caches. Absent
+// before the first sync — JS then falls back to the module version.
+$lastSync = $this->setting('iwacvis_last_sync');
+if (is_array($lastSync) && !empty($lastSync['time'])) {
+    $attrs['version'] = (string) $lastSync['time'];
+}
 foreach ($extraData as $key => $value) {
     $attrs[$key] = $value;
 }
