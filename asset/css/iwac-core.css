@@ -624,7 +624,7 @@
     font-weight: 600;
     color: var(--ink-strong, var(--ink, #13161c));
     line-height: 1.05;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-display, -0.01em);
     font-variant-numeric: lining-nums;
     margin-top: auto;
     min-width: 0;
@@ -1026,7 +1026,7 @@
     font-weight: 700;
     color: var(--ink-strong, var(--ink, #13161c));
     line-height: 1.2;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-display, -0.01em);
     /*  Newspaper section head: 2px ink rule ABOVE the title (matches the
      *  theme's h1.title grammar), no rule below. */
     padding-top: var(--space-2, 0.5rem);

@@ -43,7 +43,7 @@
     font-weight: 600;
     color: var(--ink-strong, var(--ink, #13161c));
     line-height: 1.15;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-display, -0.01em);
 }
 
 .iwac-vis-scary-desc {
