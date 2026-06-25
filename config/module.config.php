@@ -27,10 +27,51 @@ return [
     'controllers' => [
         'invokables' => [
             'IwacVisualizations\Controller\Site\Embed' => Controller\Site\EmbedController::class,
+            'IwacVisualizations\Controller\Admin\Data' => Controller\Admin\DataController::class,
+        ],
+    ],
+    'navigation' => [
+        // Left-sidebar admin entry → /admin/iwac-visualizations. The `resource`
+        // must equal the controller service name above and be ACL-allowed in
+        // Module::onBootstrap, or the link is hidden / 403s.
+        'AdminModule' => [
+            [
+                'label' => 'IWAC Visualizations', // @translate
+                'route' => 'admin/iwac-visualizations',
+                'resource' => 'IwacVisualizations\Controller\Admin\Data',
+            ],
         ],
     ],
     'router' => [
         'routes' => [
+            // Admin data-sync page, merged into Omeka's core `admin` route tree:
+            //   /admin/iwac-visualizations        → DataController::indexAction
+            //   /admin/iwac-visualizations/sync   → DataController::syncAction (POST)
+            'admin' => [
+                'child_routes' => [
+                    'iwac-visualizations' => [
+                        'type' => \Laminas\Router\Http\Literal::class,
+                        'options' => [
+                            'route' => '/iwac-visualizations',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'IwacVisualizations\Controller\Admin',
+                                'controller' => 'Data',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'sync' => [
+                                'type' => \Laminas\Router\Http\Literal::class,
+                                'options' => [
+                                    'route' => '/sync',
+                                    'defaults' => ['action' => 'sync'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             // Nested under Omeka's `site` route so the full path is
             // /s/:site-slug/iwac-embed[/...] and the `__SITE__` default is
             // inherited — that flag is what makes Omeka resolve the current

@@ -353,3 +353,55 @@ msgstr "Visualisation introuvable"
 #. Embed snippet gallery
 msgid "No embeddable visualization matches this address."
 msgstr "Aucune visualisation intégrable ne correspond à cette adresse."
+
+# Admin data sync page (issue #7)
+msgid "IWAC Visualizations"
+msgstr "Visualisations IWAC"
+
+msgid "Download the latest precomputed visualization data and unpack it into the site files. The heavy generation runs in GitHub Actions, off this server; this only pulls the published archive. Progress and any errors are logged under Admin → Jobs."
+msgstr "Téléchargez les dernières données de visualisation précalculées et décompressez-les dans les fichiers du site. La génération lourde s’exécute dans GitHub Actions, hors de ce serveur ; cette page ne fait que récupérer l’archive publiée. La progression et les éventuelles erreurs sont consignées dans Admin → Tâches."
+
+msgid "A data sync is currently running."
+msgstr "Une synchronisation des données est en cours."
+
+msgid "View its progress"
+msgstr "Voir sa progression"
+
+msgid "Current data"
+msgstr "Données actuelles"
+
+msgid "Last synced"
+msgstr "Dernière synchronisation"
+
+msgid "Files"
+msgstr "Fichiers"
+
+msgid "Archive size"
+msgstr "Taille de l’archive"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "No data has been pulled yet. Use the button below to fetch it."
+msgstr "Aucune donnée n’a encore été récupérée. Utilisez le bouton ci-dessous pour la récupérer."
+
+msgid "Pull data"
+msgstr "Récupérer les données"
+
+msgid "Pull latest data"
+msgstr "Récupérer les dernières données"
+
+msgid "Release tag (optional)"
+msgstr "Étiquette de version (facultatif)"
+
+msgid "Leave blank to pull the latest build from the moving “data” release."
+msgstr "Laissez vide pour récupérer la dernière version depuis la publication « data » mobile."
+
+msgid "Invalid or expired form submission. Please try again."
+msgstr "Soumission du formulaire invalide ou expirée. Veuillez réessayer."
+
+msgid "A data sync is already running."
+msgstr "Une synchronisation des données est déjà en cours."
+
+msgid "Data sync started. Watch its progress below."
+msgstr "Synchronisation des données lancée. Suivez sa progression ci-dessous."

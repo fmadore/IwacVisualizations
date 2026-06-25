@@ -141,6 +141,13 @@ class Module extends AbstractModule
         // ACL resource), NOT the class FQCN — passing the FQCN throws
         // "Resource '...EmbedController' not found" and 500s the whole site.
         $acl->allow(null, ['IwacVisualizations\Controller\Site\Embed']);
+        // Admin data-sync page (issue #7): restricted to administrators. The
+        // resource name must match config `navigation.resource` and the
+        // controller service name, same service-name rule as above.
+        $acl->allow(
+            ['global_admin', 'site_admin'],
+            ['IwacVisualizations\Controller\Admin\Data']
+        );
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void

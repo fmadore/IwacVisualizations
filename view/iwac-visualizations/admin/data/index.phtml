@@ -1,0 +1,67 @@
+<?php
+/**
+ * Admin → IWAC Visualizations: pull the precomputed data into files/.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Laminas\Form\Form $form
+ * @var array|null $lastSync   ['time','count','bytes','tag'] of the last successful sync, or null.
+ * @var \Omeka\Api\Representation\JobRepresentation|null $running  An active sync job, or null.
+ */
+$escape    = $this->plugin('escapeHtml');
+$translate = $this->plugin('translate');
+$form->prepare();
+?>
+<?= $this->pageTitle($translate('IWAC Visualizations')) ?>
+
+<div id="content" class="iwac-data-admin">
+
+    <p>
+        <?= $escape($translate(
+            'Download the latest precomputed visualization data and unpack it into '
+            . 'the site files. The heavy generation runs in GitHub Actions, off this '
+            . 'server; this only pulls the published archive. Progress and any errors '
+            . 'are logged under Admin → Jobs.'
+        )) ?>
+    </p>
+
+    <?php if ($running): ?>
+    <div class="iwac-data-running">
+        <p>
+            <strong><?= $escape($translate('A data sync is currently running.')) ?></strong>
+            <a href="<?= $escape($this->url('admin/id', [
+                'controller' => 'job', 'action' => 'show', 'id' => $running->id(),
+            ])) ?>"><?= $escape($translate('View its progress')) ?></a>
+        </p>
+    </div>
+    <?php endif; ?>
+
+    <h3><?= $escape($translate('Current data')) ?></h3>
+    <?php if ($lastSync && !empty($lastSync['time'])): ?>
+    <dl class="iwac-data-status">
+        <dt><?= $escape($translate('Last synced')) ?></dt>
+        <dd><?= $escape($lastSync['time']) ?></dd>
+        <dt><?= $escape($translate('Files')) ?></dt>
+        <dd><?= $escape(number_format((int) ($lastSync['count'] ?? 0))) ?></dd>
+        <dt><?= $escape($translate('Archive size')) ?></dt>
+        <dd><?= $escape(number_format(((int) ($lastSync['bytes'] ?? 0)) / 1048576, 1)) ?> MB</dd>
+        <dt><?= $escape($translate('Source')) ?></dt>
+        <dd><?= $escape($lastSync['tag'] ?? 'data') ?></dd>
+    </dl>
+    <?php else: ?>
+    <p class="iwac-data-empty">
+        <?= $escape($translate('No data has been pulled yet. Use the button below to fetch it.')) ?>
+    </p>
+    <?php endif; ?>
+
+    <h3><?= $escape($translate('Pull data')) ?></h3>
+    <?= $this->form()->openTag($form) ?>
+        <?= $this->formRow($form->get('tag')) ?>
+        <?= $this->formHidden($form->get('sync_token')) ?>
+        <div class="iwac-data-actions">
+            <button type="submit" class="button"<?= $running ? ' disabled aria-disabled="true"' : '' ?>>
+                <?= $escape($translate('Pull latest data')) ?>
+            </button>
+        </div>
+    <?= $this->form()->closeTag() ?>
+
+</div>
