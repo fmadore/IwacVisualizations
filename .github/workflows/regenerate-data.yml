@@ -15,9 +15,21 @@ on:
           to update the moving `data` release that the Sync Data job pulls by default.
         required: false
         default: ""
-  # The HF dataset is refreshed roughly monthly. Uncomment to rebuild on a schedule.
-  # schedule:
-  #   - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
+  # Auto-rebuild when the GENERATOR CODE changes — the only kind of push that
+  # changes the data output. Deliberately NOT triggered on every push: PHP/JS/CSS/
+  # docs/version-bump commits produce identical data, and a 30-min HF-downloading
+  # build on each of those would be pure waste. (`scripts/*.py` covers the
+  # generators + iwac_utils + dashboard_aggregator; .js build scripts / README are
+  # excluded by the .py filter.)
+  push:
+    branches: [main]
+    paths:
+      - "scripts/*.py"
+      - "scripts/requirements.txt"
+  # The other driver of data changes is the HF dataset itself (refreshed roughly
+  # monthly), which leaves no signal in this repo — so rebuild on a schedule too.
+  schedule:
+    - cron: "0 4 1 * *"   # 04:00 UTC on the 1st of each month
 
 permissions:
   contents: write   # required for `gh release create` / `gh release upload`
