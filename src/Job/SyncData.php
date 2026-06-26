@@ -199,15 +199,22 @@ class SyncData extends AbstractJob
             $errNo  = curl_errno($ch);
             $errMsg = curl_error($ch);
             $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-            curl_close($ch);
+            // No curl_close(): the CurlHandle is freed by GC when it goes out of
+            // scope. curl_close() is a deprecated no-op since PHP 8.0 (warns on 8.5).
             fclose($fp);
+            // Check the HTTP status first so a 4xx yields a clear message rather
+            // than the cryptic "curl 22" that CURLOPT_FAILONERROR produces.
+            if ($status >= 400) {
+                @unlink($dest);
+                $hint = $status === 404
+                    ? ' — release asset not found. Run the regenerate-data workflow to'
+                      . ' publish iwac-data.zip to the `data` release, then retry.'
+                    : '';
+                throw new \RuntimeException('Download failed: HTTP ' . $status . $hint);
+            }
             if ($ok === false || $errNo !== 0) {
                 @unlink($dest);
                 throw new \RuntimeException(sprintf('Download failed (curl %d): %s', $errNo, $errMsg ?: 'unknown error'));
-            }
-            if ($status >= 400) {
-                @unlink($dest);
-                throw new \RuntimeException('Download failed: HTTP ' . $status);
             }
             return;
         }
