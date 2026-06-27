@@ -6,9 +6,11 @@
  * @var \Laminas\Form\Form $form
  * @var array|null $lastSync   ['time','count','bytes','tag'] of the last successful sync, or null.
  * @var \Omeka\Api\Representation\JobRepresentation|null $running  An active sync job, or null.
+ * @var \Omeka\Api\Representation\SiteRepresentation[] $sites
  */
-$escape    = $this->plugin('escapeHtml');
-$translate = $this->plugin('translate');
+$escape     = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+$translate  = $this->plugin('translate');
 $form->prepare();
 ?>
 <?= $this->pageTitle($translate('IWAC Visualizations')) ?>
@@ -63,5 +65,30 @@ $form->prepare();
             </button>
         </div>
     <?= $this->form()->closeTag() ?>
+
+    <h3><?= $escape($translate('Iframe embeds')) ?></h3>
+    <p>
+        <?= $escape($translate(
+            'Open a site-specific embed gallery to preview each page-block visualization and copy its iframe snippet.'
+        )) ?>
+    </p>
+    <?php if (!empty($sites)): ?>
+    <ul class="iwac-embed-sites">
+        <?php foreach ($sites as $site): ?>
+        <?php $embedUrl = $this->url('site/iwac-embed', ['site-slug' => $site->slug()]); ?>
+        <li>
+            <strong><?= $escape($site->title()) ?></strong>
+            <code>/s/<?= $escape($site->slug()) ?>/iwac-embed</code>
+            <a class="button" href="<?= $escapeAttr($embedUrl) ?>" target="_blank" rel="noopener">
+                <?= $escape($translate('Open embed gallery')) ?>
+            </a>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php else: ?>
+    <p class="iwac-data-empty">
+        <?= $escape($translate('No sites are available yet. Create a site before using iframe embeds.')) ?>
+    </p>
+    <?php endif; ?>
 
 </div>

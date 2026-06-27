@@ -29,6 +29,7 @@ class DataController extends AbstractActionController
             'form'     => $this->getSyncForm(),
             'lastSync' => $this->settings()->get(SyncData::SETTING_LAST_SYNC),
             'running'  => $running,
+            'sites'    => $this->api()->search('sites')->getContent(),
         ]);
         $view->setTemplate('iwac-visualizations/admin/data/index');
         return $view;
