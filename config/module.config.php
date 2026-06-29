@@ -101,6 +101,27 @@ return [
                                         'action' => 'block',
                                     ],
                                 ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    // Single panel from a multi-panel block, e.g.
+                                    // /iwac-embed/collection-overview/panel-3.
+                                    // The panel slug is enumerated client-side
+                                    // (asset/js/charts/shared/embed.js), so any
+                                    // [a-z0-9.-] token is accepted here; an
+                                    // unknown one quietly renders nothing.
+                                    'panel' => [
+                                        'type' => \Laminas\Router\Http\Segment::class,
+                                        'options' => [
+                                            'route' => '/:panel',
+                                            'constraints' => [
+                                                'panel' => '[a-zA-Z0-9._-]+',
+                                            ],
+                                            'defaults' => [
+                                                'action' => 'block',
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],

@@ -46,6 +46,12 @@
  * @var array|null  $data          Extra data attributes (key => value; the
  *                                 `data-` prefix is added automatically).
  * @var bool|null   $siteBase      Emit data-site-base (default true).
+ * @var string|null $embedSlug     EmbedController::BLOCKS slug for this block.
+ *                                 When set, emits data-embed-slug (which opts
+ *                                 the block into on-page copy-embed buttons,
+ *                                 see embed.js) plus data-embed-base — the
+ *                                 site root the embed URL is built from,
+ *                                 emitted even when $siteBase is false.
  */
 
 echo $this->partial('common/iwac-assets', isset($assets) ? (array) $assets : []);
@@ -59,6 +65,7 @@ $loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
 $extraData    = isset($data)         ? (array) $data : [];
 $prerendered  = isset($prerendered)  ? (string) $prerendered : '';
 $withSiteBase = !isset($siteBase) || $siteBase;
+$embedSlug    = isset($embedSlug)    ? (string) $embedSlug : '';
 
 $basePath = $this->basePath();
 $siteSlug = $this->currentSite()->slug();
@@ -80,6 +87,14 @@ if ($this->getHelperPluginManager()->has('setting')) {
     if (is_array($lastSync) && !empty($lastSync['time'])) {
         $attrs['version'] = (string) $lastSync['time'];
     }
+}
+// Embed opt-in: data-embed-slug marks the block embeddable (embed.js adds the
+// per-panel copy buttons); data-embed-base is the site root the embed URL is
+// built from, emitted independently of data-site-base so blocks that disable
+// site-base (e.g. scary-terms) still produce valid embed URLs.
+if ($embedSlug !== '') {
+    $attrs['embed-slug'] = $embedSlug;
+    $attrs['embed-base'] = $basePath . '/s/' . $siteSlug;
 }
 foreach ($extraData as $key => $value) {
     $attrs[$key] = $value;

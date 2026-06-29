@@ -518,6 +518,53 @@
     cursor: not-allowed;
 }
 
+
+/* =================================================================== */
+/*  Embed: copy-embed buttons + single-panel framing                    */
+/* =================================================================== */
+
+/*  The "copy embed code" button (asset/js/charts/shared/embed.js). The
+ *  glyph-only form rides the panel toolbar next to Download / Fullscreen;
+ *  the labelled form is reserved for a whole-block button. Both inherit the
+ *  shared `.iwac-vis-btn` skin, so they follow the theme like every control. */
+
+.iwac-vis-embed-btn {
+    width: var(--iwac-vis-icon-btn, 32px);
+    height: var(--iwac-vis-icon-btn, 32px);
+    padding: 0;
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+}
+
+.iwac-vis-embed-btn__glyph {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-weight: 600;
+}
+
+.iwac-vis-embed-btn--labeled {
+    width: auto;
+    height: auto;
+    gap: var(--space-1, 0.25rem);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+/* Confirmation tint — the sanctioned use of --primary here is state, not chrome. */
+.iwac-vis-embed-btn--copied {
+    background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
+    color: var(--primary, #ce4115);
+}
+
+/*  Single-panel embed (/iwac-embed/:block/:panel). embed.js hides every panel
+ *  but the requested one and marks the survivor; here it spans the full grid
+ *  width and sits flush at the top of the frame. */
+.iwac-vis-block--single-panel .iwac-vis-panel[data-iwac-panel-active] {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
 .iwac-vis-btn:disabled:hover {
     background: transparent;
     border-color: var(--border, #ced1d6);

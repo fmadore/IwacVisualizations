@@ -21,20 +21,16 @@ $escapeHtml = $this->plugin('escapeHtml');
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 
 $this->headLink()->appendStylesheet($this->assetUrl('css/iwac-core.min.css', 'IwacVisualizations'));
+// Shared embed helpers (snippet builder + resize listener + clipboard + panel
+// enumeration) — the single home for the embed format. The gallery builds every
+// snippet through these so nothing is restated here. embed.js self-inits to a
+// no-op on this page (it detects the iwac-embed-body and skips the on-page
+// buttons / single-panel logic).
+$this->headScript()->appendFile($this->assetUrl('js/charts/shared/embed.min.js', 'IwacVisualizations'));
 
-// Absolute origin so the generated snippet works when pasted on another domain.
-$origin = rtrim($this->serverUrl(false), '/');
-
-// The reusable resize listener the snippet pairs with each iframe. Emitted
-// once per host page (guarded), so embedding several blocks stays one copy.
-$resizeScript = "<script>\n"
-    . "(function(){if(window.__iwacEmbedResize)return;window.__iwacEmbedResize=1;\n"
-    . "window.addEventListener('message',function(e){\n"
-    . "  if(!e.data||e.data.type!=='iwac-embed-height')return;\n"
-    . "  var f=document.getElementsByTagName('iframe');\n"
-    . "  for(var i=0;i<f.length;i++){if(f[i].contentWindow===e.source){f[i].style.height=e.data.height+'px';}}\n"
-    . "});})();\n"
-    . "</script>";
+// Site root the embed URLs are built from; the absolute origin is added
+// client-side (window.location.origin) so a copied snippet works off-site.
+$siteBase = $this->basePath() . '/s/' . $siteSlug;
 ?>
 <style>
     /* All colours / spacing / type resolve through the IWAC theme tokens;
@@ -145,6 +141,29 @@ $resizeScript = "<script>\n"
         border: 1px solid var(--border-light, #e6e7eb);
         padding: 0.1em 0.4em; border-radius: var(--radius-sm, 0.375rem);
     }
+    /* Per-panel snippet list (populated client-side for multi-panel blocks). */
+    .iwac-embed-panels {
+        padding: var(--space-md, 1rem) var(--space-lg, 1.5rem);
+        border-top: 1px solid var(--border-light, #e6e7eb);
+        background: var(--surface, #fdfdfd);
+    }
+    .iwac-embed-panels-label {
+        margin: 0 0 var(--space-sm, 0.5rem);
+        font-size: var(--text-xs, 0.75rem);
+        text-transform: uppercase;
+        letter-spacing: var(--tracking-wider, 0.08em);
+        color: var(--muted, #767880);
+    }
+    .iwac-embed-panel-list { list-style: none; margin: 0; padding: 0; }
+    .iwac-embed-panel-list li {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: var(--space-md, 1rem);
+        padding: var(--space-xs, 0.25rem) 0;
+        border-bottom: 1px solid var(--border-light, #e6e7eb);
+    }
+    .iwac-embed-panel-list li:last-child { border-bottom: 0; }
+    .iwac-embed-panel-name { font-size: var(--text-sm, 0.9rem); color: var(--ink, #2c2f37); }
+    .iwac-embed-copy--sm { position: static; padding: 0.35em 0.7em; }
 </style>
 
 <div class="iwac-embed-wrap">
@@ -155,58 +174,117 @@ $resizeScript = "<script>\n"
 
     <?php foreach ($blocks as $slug => $label): ?>
         <?php
-        $src = $origin . $this->url('site/iwac-embed/block', [
+        // Preview loads same-origin (relative path); the copy snippet is built
+        // client-side with an absolute URL via IWACVis.embed.
+        $previewSrc = $this->url('site/iwac-embed/block', [
             'site-slug' => $siteSlug,
             'block'     => $slug,
         ]);
-        $snippet = '<iframe src="' . $src . '"'
-            . ' title="' . $label . '" loading="lazy" scrolling="no"'
-            . ' style="width:100%;border:0;height:600px"></iframe>' . "\n"
-            . $resizeScript;
         ?>
-        <section class="iwac-embed-card">
+        <section class="iwac-embed-card" data-slug="<?= $escapeAttr($slug) ?>"
+                 data-site-base="<?= $escapeAttr($siteBase) ?>"
+                 data-label="<?= $escapeAttr($this->translate($label)) ?>">
             <header>
                 <h2><?= $escapeHtml($this->translate($label)) ?></h2>
                 <span class="slug"><?= $escapeHtml($slug) ?></span>
             </header>
-            <iframe class="iwac-embed-preview" src="<?= $escapeAttr($src) ?>"
+            <iframe class="iwac-embed-preview" src="<?= $escapeAttr($previewSrc) ?>"
                     title="<?= $escapeAttr($label) ?>" loading="lazy"></iframe>
             <div class="iwac-embed-code">
-                <button type="button" class="iwac-embed-copy"
-                        data-snippet="<?= $escapeAttr($snippet) ?>">
+                <button type="button" class="iwac-embed-copy" data-embed-block>
                     <?= $escapeHtml($this->translate('Copy')) ?>
                 </button>
-                <pre><code><?= $escapeHtml($snippet) ?></code></pre>
+                <pre><code class="iwac-embed-snippet"></code></pre>
+            </div>
+            <div class="iwac-embed-panels" hidden>
+                <p class="iwac-embed-panels-label"><?= $escapeHtml($this->translate('Embed a single panel')) ?></p>
+                <ul class="iwac-embed-panel-list"></ul>
             </div>
         </section>
     <?php endforeach; ?>
 
     <p class="iwac-embed-note"><?= $this->translate(
-        'Tip: append <code>?theme=dark</code> to force dark mode (otherwise the embed follows the viewer&rsquo;s system preference), or <code>?primary=2b6cb0</code> to override the accent colour.'
+        'Tip: embeds render in light mode by default; append <code>?theme=dark</code> for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour.'
     ) ?></p>
 </div>
 
 <script>
 (function () {
+    var E = (window.IWACVis && window.IWACVis.embed) || null;
     var copyLabel = <?= json_encode($this->translate('Copy')) ?>;
     var doneLabel = <?= json_encode($this->translate('Copied!')) ?>;
-    document.querySelectorAll('.iwac-embed-copy').forEach(function (btn) {
+    if (!E) return; // embed.js missing — leave the live previews as-is
+
+    function wireCopy(btn, getText) {
         btn.addEventListener('click', function () {
-            var text = btn.getAttribute('data-snippet');
-            var done = function () {
+            E.copyToClipboard(getText()).then(function () {
                 btn.textContent = doneLabel;
                 btn.classList.add('copied');
                 setTimeout(function () { btn.textContent = copyLabel; btn.classList.remove('copied'); }, 1600);
-            };
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(done, done);
-            } else {
-                var ta = document.createElement('textarea');
-                ta.value = text; document.body.appendChild(ta); ta.select();
-                try { document.execCommand('copy'); } catch (e) {}
-                document.body.removeChild(ta); done();
-            }
+            });
         });
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.iwac-embed-card'), function (card) {
+        var slug = card.getAttribute('data-slug');
+        var siteBase = card.getAttribute('data-site-base') || '';
+        var label = card.getAttribute('data-label') || slug;
+        var blockSnippet = E.snippet(E.url(siteBase, slug), label, 600);
+
+        // Whole-block snippet → the <pre> + its Copy button.
+        var code = card.querySelector('.iwac-embed-snippet');
+        if (code) code.textContent = blockSnippet;
+        var blockBtn = card.querySelector('[data-embed-block]');
+        if (blockBtn) wireCopy(blockBtn, function () { return blockSnippet; });
+
+        // Per-panel snippets: read the live preview (same origin) once it has
+        // rendered, then enumerate its panels exactly as the embed route will,
+        // so the panel-<n> slugs line up. Only shown for multi-panel blocks.
+        var iframe = card.querySelector('.iwac-embed-preview');
+        var panelsBox = card.querySelector('.iwac-embed-panels');
+        var list = card.querySelector('.iwac-embed-panel-list');
+        if (!iframe || !panelsBox || !list) return;
+
+        function renderPanels(panels) {
+            list.textContent = '';
+            panels.forEach(function (info) {
+                var title = info.title || info.slug;
+                var snippet = E.snippet(E.url(siteBase, slug, info.slug), label + ' — ' + title, 520);
+                var li = document.createElement('li');
+                var name = document.createElement('span');
+                name.className = 'iwac-embed-panel-name';
+                name.textContent = title;
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'iwac-embed-copy iwac-embed-copy--sm';
+                btn.textContent = copyLabel;
+                wireCopy(btn, function () { return snippet; });
+                li.appendChild(name);
+                li.appendChild(btn);
+                list.appendChild(li);
+            });
+            panelsBox.hidden = false;
+        }
+
+        function tryEnumerate(attemptsLeft) {
+            var doc;
+            try { doc = iframe.contentDocument; } catch (e) { return; } // cross-origin guard
+            var block = doc && doc.querySelector('.iwac-vis-block');
+            var panels = block ? E.enumeratePanels(block) : [];
+            if (panels.length > 1) {
+                renderPanels(panels);
+            } else if (attemptsLeft > 0) {
+                setTimeout(function () { tryEnumerate(attemptsLeft - 1); }, 400);
+            }
+        }
+
+        iframe.addEventListener('load', function () { tryEnumerate(12); });
+        // Already loaded (cache) before the listener attached.
+        try {
+            if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+                tryEnumerate(12);
+            }
+        } catch (e) { /* cross-origin — ignore */ }
     });
 })();
 </script>

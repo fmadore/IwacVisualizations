@@ -370,6 +370,11 @@
         return bar;
     }
 
+    // Exposed so the shared embed helpers (embed.js) can drop their
+    // "copy embed code" button into the same floating toolbar as the
+    // Download / Fullscreen buttons, instead of re-implementing it.
+    P.ensureToolbar = ensureToolbar;
+
     /**
      * Public helper: add a Download button to the toolbar for the given
      * chart container. Idempotent — calling it a second time on the

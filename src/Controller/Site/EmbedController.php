@@ -19,11 +19,12 @@ use Laminas\View\Model\ViewModel;
  * Routes (children of Omeka's `site` route, so `__SITE__` is inherited
  * and the current site / public theme are set):
  *
- *   /s/:site-slug/iwac-embed            → indexAction  (snippet gallery)
- *   /s/:site-slug/iwac-embed/:block     → blockAction  (one bare block)
+ *   /s/:site-slug/iwac-embed                 → indexAction (snippet gallery)
+ *   /s/:site-slug/iwac-embed/:block          → blockAction (one bare block)
+ *   /s/:site-slug/iwac-embed/:block/:panel   → blockAction (one bare panel)
  *
  * Query params honoured by blockAction (all optional):
- *   ?theme=light|dark   force the colour mode (else follows OS pref)
+ *   ?theme=light|dark   force the colour mode (default: light)
  *   ?primary=RRGGBB     override the brand accent (else module default)
  */
 class EmbedController extends AbstractActionController
@@ -79,9 +80,17 @@ class EmbedController extends AbstractActionController
             return $view;
         }
 
-        // Colour mode: only stamp body[data-theme] when forced, so an
-        // unspecified embed follows the viewer's OS preference (the theme
-        // JS falls back to prefers-color-scheme when the attribute is absent).
+        // Single-panel request: an optional :panel segment pins one panel of
+        // a multi-panel block. The slug is opaque here (enumerated client-side
+        // by embed.js); the route constraint is the only validation. Empty
+        // string means a whole-block embed.
+        $panel = (string) $this->params()->fromRoute('panel', '');
+
+        // Colour mode: embeds render LIGHT by default, for predictability — an
+        // iframe can't read its host page's colour scheme, and the viewer's OS
+        // preference is a poor proxy for it (a dark-OS viewer on a light host
+        // would otherwise get a dark widget on a light page). ?theme=dark opts
+        // into dark; the layout treats anything but 'dark' as light.
         $theme = strtolower((string) $this->params()->fromQuery('theme', ''));
         if ($theme !== 'light' && $theme !== 'dark') {
             $theme = '';
@@ -95,10 +104,16 @@ class EmbedController extends AbstractActionController
             $primary = '';
         }
 
+        $title = self::BLOCKS[$slug];
+        if ($panel !== '') {
+            $title .= ' — ' . $panel;
+        }
+
         $this->layout()->setTemplate('iwac-visualizations/layout/embed');
         $this->layout()->setVariable('embedTheme', $theme);
         $this->layout()->setVariable('embedPrimary', $primary);
-        $this->layout()->setVariable('embedTitle', self::BLOCKS[$slug]);
+        $this->layout()->setVariable('embedTitle', $title);
+        $this->layout()->setVariable('embedPanel', $panel);
 
         $view = new ViewModel(['slug' => $slug]);
         $view->setTemplate('iwac-visualizations/embed/block');

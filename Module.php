@@ -148,6 +148,59 @@ class Module extends AbstractModule
             ['global_admin', 'site_admin'],
             ['IwacVisualizations\Controller\Admin\Data']
         );
+
+        // Allow the embed widget to be framed cross-origin (slides, project
+        // sites, blog posts, …). On the /iwac-embed routes only, swap the
+        // site's X-Frame-Options for a permissive CSP frame-ancestors:
+        // X-Frame-Options only understands DENY / SAMEORIGIN — it cannot
+        // allowlist origins — so a SAMEORIGIN hardening default (common in
+        // nginx) renders the embed iframe blank on every other origin.
+        // Modern browsers honour CSP frame-ancestors over X-Frame-Options.
+        // See relaxEmbedFraming(). Attached on the *application* event
+        // manager (not the shared one) because MvcEvent::FINISH is an
+        // application lifecycle event.
+        $event->getApplication()->getEventManager()->attach(
+            MvcEvent::EVENT_FINISH,
+            [$this, 'relaxEmbedFraming'],
+            100
+        );
+    }
+
+    /**
+     * Replace X-Frame-Options with a permissive `Content-Security-Policy:
+     * frame-ancestors *` on the /iwac-embed routes, so the public,
+     * read-only embed can be framed on any origin.
+     *
+     * Scoped by matched route name prefix `site/iwac-embed`, so normal site
+     * pages keep whatever framing policy the site/reverse proxy sets.
+     *
+     * Effective only for the header set by Omeka/PHP. If the reverse proxy
+     * (nginx) adds `X-Frame-Options ... always`, that overrides PHP and must
+     * be relaxed for the /iwac-embed path at the proxy too — but this CSP is
+     * then already in place, so only the X-Frame-Options removal is left to
+     * do there.
+     */
+    public function relaxEmbedFraming(MvcEvent $event): void
+    {
+        $match = $event->getRouteMatch();
+        if (!$match || strpos((string) $match->getMatchedRouteName(), 'site/iwac-embed') !== 0) {
+            return;
+        }
+        $response = $event->getResponse();
+        if (!$response instanceof \Laminas\Http\Response) {
+            return;
+        }
+        $headers = $response->getHeaders();
+        $xfo = $headers->get('X-Frame-Options');
+        if ($xfo) {
+            foreach (($xfo instanceof \Traversable ? iterator_to_array($xfo) : [$xfo]) as $header) {
+                $headers->removeHeader($header);
+            }
+        }
+        // Public read-only widget — any parent may frame it. Swap in an
+        // explicit allowlist (e.g. "frame-ancestors 'self' https://slides.example")
+        // here if embedding should ever be restricted.
+        $headers->addHeaderLine('Content-Security-Policy', 'frame-ancestors *');
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void

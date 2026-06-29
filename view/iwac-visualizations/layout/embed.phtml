@@ -14,9 +14,10 @@
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var string $content
- * @var string|null $embedTheme    'light' | 'dark' | '' (follow OS pref)
+ * @var string|null $embedTheme    'light' | 'dark' | '' (default: light)
  * @var string|null $embedPrimary  '#rrggbb' accent override, or ''
  * @var string|null $embedTitle    Block label, for <title>
+ * @var string|null $embedPanel    Panel slug for a single-panel embed, or ''
  * @var bool|null   $isGallery      True on the snippet-gallery page
  */
 $escapeAttr = $this->plugin('escapeHtmlAttr');
@@ -29,7 +30,21 @@ $locale = substr($locale, 0, 2) ?: 'en';
 $embedTheme   = isset($embedTheme)   ? (string) $embedTheme : '';
 $embedPrimary = isset($embedPrimary) ? (string) $embedPrimary : '';
 $embedTitle   = isset($embedTitle)   ? (string) $embedTitle : 'IWAC Visualizations';
+$embedPanel   = isset($embedPanel)   ? (string) $embedPanel : '';
 $isGallery    = !empty($isGallery);
+
+// Embeds render LIGHT by default (see EmbedController): an iframe can't read
+// its host page's colour scheme, so a fixed light mode is the predictable
+// choice. ?theme=dark opts into dark. Stamp data-theme on BOTH <html> and
+// <body> so the IWAC theme's prefers-color-scheme path can't override it.
+$mode      = ($embedTheme === 'dark') ? 'dark' : 'light';
+$themeAttr = ' data-theme="' . $escapeAttr($mode) . '"';
+
+// Provenance link shown on every embedded block (not the gallery): a quiet
+// "Source: <site>" back to the site this data lives on.
+$site        = $this->currentSite();
+$sourceUrl   = $site ? $site->siteUrl(null, true) : rtrim((string) $this->serverUrl(false), '/');
+$sourceLabel = $this->translate('Source') . ': ' . ($site ? $site->title() : 'Islam West Africa Collection');
 
 // Pull the live brand accent so the embed matches the site instead of the
 // module's generic fallback. `?primary=` (already validated upstream) wins;
@@ -45,7 +60,7 @@ $primary   = $embedPrimary !== '' ? $embedPrimary : $hex($this->themeSetting('pr
 $secondary = $hex($this->themeSetting('secondary_color', ''));
 ?>
 <!doctype html>
-<html lang="<?= $escapeAttr($locale) ?>">
+<html lang="<?= $escapeAttr($locale) ?>"<?= $themeAttr ?>>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,29 +72,42 @@ $secondary = $hex($this->themeSetting('secondary_color', ''));
         body.iwac-embed-body { -webkit-text-size-adjust: 100%; }
         /* The block already self-paces; keep it edge-to-edge in the frame. */
         .iwac-embed-body .iwac-vis-block { margin: 0 auto; }
+        /* Source-attribution footer. Styled inline (with token fallbacks) so it
+           reads correctly even on this bare route before iwac-core.css lands. */
+        .iwac-embed-source {
+            margin: 0;
+            padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+            text-align: right;
+            font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+            font-size: var(--text-xs, 0.8125rem);
+            border-top: 1px solid var(--border-light, #e6e7eb);
+            background: var(--surface, #fdfdfd);
+        }
+        .iwac-embed-source a { color: var(--ink-light, #535862); text-decoration: none; }
+        .iwac-embed-source a:hover { color: var(--primary, #e64a19); text-decoration: underline; }
     </style>
     <?php if ($primary !== '' || $secondary !== ''): ?>
     <style>
         :root {<?php if ($primary !== ''): ?> --primary: <?= $escapeAttr($primary) ?>;<?php endif;
             if ($secondary !== ''): ?> --secondary: <?= $escapeAttr($secondary) ?>;<?php endif; ?> }
         /* Match the theme's dark-mode habit of lightening the accent
-           (e.g. #e64a19 → #ec653f) rather than carrying the light value. */
+           (e.g. #e64a19 → #ec653f) rather than carrying the light value.
+           The mode is always pinned via data-theme on this route (embeds
+           default to light), so this is the only dark branch we need. */
         body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $escapeAttr($primary) ?>, white 12%);<?php endif;
             if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $escapeAttr($secondary) ?>, white 14%);<?php endif; ?> }
-        /* Same lightening when the mode follows the viewer's OS preference
-           (no forced data-theme attribute), matching the theme JS fallback. */
-        @media (prefers-color-scheme: dark) {
-            body:not([data-theme]) {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $escapeAttr($primary) ?>, white 12%);<?php endif;
-                if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $escapeAttr($secondary) ?>, white 14%);<?php endif; ?> }
-        }
     </style>
     <?php endif; ?>
     <?= $this->headScript() ?>
 </head>
-<body class="iwac-embed-body<?= $isGallery ? ' iwac-embed-gallery' : '' ?>"<?php
-    if ($embedTheme === 'light' || $embedTheme === 'dark'): ?> data-theme="<?= $escapeAttr($embedTheme) ?>"<?php endif; ?>>
+<body class="iwac-embed-body<?= $isGallery ? ' iwac-embed-gallery' : '' ?><?php
+    echo $embedPanel !== '' ? ' iwac-embed-single' : ''; ?>"<?= $themeAttr ?><?php
+    if ($embedPanel !== ''): ?> data-embed-panel="<?= $escapeAttr($embedPanel) ?>"<?php endif; ?>>
 <?= $content ?>
 <?php if (!$isGallery): ?>
+<footer class="iwac-embed-source">
+    <a href="<?= $escapeAttr($sourceUrl) ?>" target="_blank" rel="noopener"><?= $escapeHtml($sourceLabel) ?></a>
+</footer>
 <script>
 /* iframe height reporter — posts the document height to the parent on load,
    resize, and DOM mutations (charts populate asynchronously). The host page

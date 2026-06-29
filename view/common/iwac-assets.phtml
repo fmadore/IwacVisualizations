@@ -148,6 +148,11 @@ $scripts[] = $this->assetUrl('js/dashboard-core.min.js', $module);
 // feature-specific primitives are opt-in via $needs.
 $scripts[] = $this->assetUrl('js/charts/shared/panels.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
+// embed.js: adds the per-panel "copy embed code" buttons on the live site and
+// drives single-panel selection inside an /iwac-embed/:block/:panel frame. It
+// self-inits and no-ops where neither applies, so it's universally enqueued
+// (after panel-toolbar, whose toolbar container it reuses).
+$scripts[] = $this->assetUrl('js/charts/shared/embed.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/responsive.min.js', $module);
 if ($needChartOpts) {
     // chart-options core must load before its four family builders, which
