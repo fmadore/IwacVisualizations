@@ -4,7 +4,8 @@ huggingface-hub
 pyarrow
 hf_xet
 numpy
-# generate_semantic_landscape.py only — 2-D projection of embeddings
+# generate_semantic_landscape.py + generate_periodicals_landscape.py —
+# 2-D UMAP projection of the article / publication embeddings
 umap-learn
 # generate_entity_networks.py only - ForceAtlas2 layout for the entity graph
 networkx

@@ -15,8 +15,9 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | References Overview | page block | **Live** — 13 panels | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
-| Periodicals Overview | page block | **Live** — 6 panels: runs gantt, issues/year, languages, countries, top subjects | Precompute (`generate_periodicals_overview.py`) |
+| Periodicals Overview | page block | **Live** — 7 panels: runs gantt, issues/year, languages & countries donuts, top subjects, word cloud | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets | Precompute (`generate_semantic_landscape.py`) |
+| Periodicals Semantic Landscape | page block | **Live** — zoomable UMAP scatter of periodical issues by table-of-contents embedding, Country/Decade facets | Precompute (`generate_periodicals_landscape.py`) |
 | Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, centralité-by-country heatmap, extreme-article keywords, cross-model agreement + Gemini 3 Pro arbiter | Precompute (`generate_sentiment_atlas.py` + `generate_sentiment_arbiter.py`) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
@@ -31,6 +32,12 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.17.0 — Periodicals semantic landscape + Periodicals Overview polish
+
+- **Periodicals Semantic Landscape page block** — a zoomable UMAP scatter of periodical **issues** placed by their 768-dim Gemini `embedding_tableOfContents` (the publications counterpart to the article Semantic Landscape). The `publications` subset has no LDA topics, so its facets are **Country / Decade** only. It reuses the article landscape's `semantic-landscape.js` orchestrator, parameterized by block class (`iwac-vis-periodicals-landscape`). `embedding_tableOfContents` exists only for issues that have a table of contents (~325 of 1,501), so the map plots that subset. New generator `generate_periodicals_landscape.py` (needs `umap-learn`); embeddable via the `periodicals-landscape` slug.
+- **Periodicals Overview** — Languages and Countries now render as **donuts** (matching References Overview) instead of a log-scaled bar and a bar, and a new **word cloud** panel shows the most frequent lemmatized terms (`lemma_nostop`) across every issue's full text.
+- **Gantt year-axis fix** — years on every Gantt (newspaper coverage, index activity) were rendered with locale thousand separators ("1,961"). Fixed centrally in `C.gantt`: a `'{value}'` string template still runs ECharts' number formatter on a value axis, so the axis now uses a function formatter returning the raw integer. Removed the now-redundant `withYearFormatter` workaround in `activity-gantt.js`.
 
 ### v1.16.0 — Embed parity with DREVisualizations ([issue #9](https://github.com/fmadore/IwacVisualizations/issues/9))
 
@@ -342,11 +349,15 @@ The 3-layer network is built client-side in `network.js` from the precomputed `e
 
 ### Periodicals Overview (page block)
 
-Corpus-level view of the Islamic press (`publications` subset, 1,501 issues across 25 periodicals, 1981–2024). Backed by `asset/data/periodicals-overview.json` (4.6 KB, `generate_periodicals_overview.py`): summary cards, a periodical-runs gantt (first → last issue per title, colored by country), issues-per-year stacked by country, languages on a log axis (Français is 99.9 % of issues), countries, and top subjects.
+Corpus-level view of the Islamic press (`publications` subset, 1,501 issues across 25 periodicals, 1981–2024). Backed by `asset/data/periodicals-overview.json` (`generate_periodicals_overview.py`): summary cards, a periodical-runs gantt (first → last issue per title, colored by country), issues-per-year stacked by country, languages and countries as donuts, top subjects, and a word cloud of the most frequent lemmatized terms across every issue's full text (`lemma_nostop`).
 
 ### Semantic Landscape (page block)
 
 The "map of everything": a zoomable scatter of all 12,286 articles placed by UMAP over their 768-dim Gemini `embedding_OCR` (cosine metric, fixed seed). Color facets: Country / Decade / Topic (top-12 LDA topics + Other). Axes are hidden — only proximity means anything, and the panel description says so plainly. Click any point to open the article. Backed by `asset/data/semantic-landscape.json` (columnar, ~1 MB minified / ~300 KB gzipped — the heaviest single bundle in the module, loaded on-view only on pages carrying the block; `generate_semantic_landscape.py`, requires `umap-learn`).
+
+### Periodicals Semantic Landscape (page block)
+
+The publications counterpart to the Semantic Landscape: a zoomable UMAP scatter of periodical **issues** placed by their 768-dim Gemini `embedding_tableOfContents` (cosine metric, fixed seed). The `publications` subset carries no LDA topics, so color facets are **Country / Decade only**. Click any point to open the issue. Backed by `asset/data/periodicals-landscape.json` (`generate_periodicals_landscape.py`, requires `umap-learn`) and rendered by the shared `semantic-landscape.js` orchestrator (publications variant, selected from the `iwac-vis-periodicals-landscape` block class). Note: `embedding_tableOfContents` only exists for issues that have a table of contents (~325 of 1,501), so the map plots that subset.
 
 ### Sentiment Atlas (page block)
 
@@ -770,6 +781,7 @@ python3 scripts/generate_publication_dashboards.py  # → asset/data/publication
 # Corpus-level blocks added in v1.6.0
 python3 scripts/generate_periodicals_overview.py            # → asset/data/periodicals-overview.json
 python3 scripts/generate_semantic_landscape.py   --minify   # → asset/data/semantic-landscape.json (needs umap-learn)
+python3 scripts/generate_periodicals_landscape.py --minify  # → asset/data/periodicals-landscape.json (needs umap-learn)
 python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
 python3 scripts/generate_sentiment_arbiter.py    --minify   # → asset/data/sentiment-arbiter.json (reads ../IWAC-sentiment-analysis)
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json

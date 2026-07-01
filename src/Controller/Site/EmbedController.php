@@ -41,6 +41,7 @@ class EmbedController extends AbstractActionController
         'scary-terms'          => 'Scary Terms',
         'topic-explorer'       => 'Topic Explorer',
         'periodicals-overview' => 'Periodicals Overview',
+        'periodicals-landscape' => 'Periodicals Semantic Landscape',
         'semantic-landscape'   => 'Semantic Landscape',
         'sentiment-atlas'      => 'Sentiment Atlas',
         'lexical-metrics'      => 'Press Language',

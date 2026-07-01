@@ -25,6 +25,9 @@ Payload shape (top-level keys):
                         call P.t('lang_<x>') at render time)
     top_subjects      — top-N subject histogram
     countries         — country histogram
+    wordcloud         — top-N [word, count] pairs from the issues'
+                        lemmatized full text (lemma_nostop), shaped for
+                        the C.wordcloud builder
 
 Usage
 -----
@@ -53,10 +56,12 @@ from iwac_utils import (
     configure_logging,
     create_metadata_block,
     extract_year,
+    find_column,
     is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
     save_json,
+    tokenize,
 )
 
 SUBSET = "publications"
@@ -64,6 +69,12 @@ SUBSET = "publications"
 # Top-N cap for the subjects ranking panel. Languages and countries are tiny
 # closed sets for this subset (a handful of values each) so they ship in full.
 TOP_N_SUBJECTS = 20
+
+# Word-cloud panel: top-N most frequent lemmas across every issue's full text.
+# Matches generate_wordcloud.py's article defaults so the two clouds read at a
+# comparable density.
+WORDCLOUD_MAX_WORDS = 150
+WORDCLOUD_MIN_FREQUENCY = 5
 
 
 def _str_or_none(value: Any) -> Optional[str]:
@@ -223,6 +234,39 @@ def _top_n_pipe(rows: pd.DataFrame, field: str, n: Optional[int]) -> List[Dict[s
     ]
 
 
+def compute_wordcloud(
+    rows: pd.DataFrame, max_words: int, min_frequency: int,
+) -> List[List[Any]]:
+    """Top-N ``[word, count]`` pairs from the issues' lemmatized full text.
+
+    Prefers ``lemma_nostop`` — the HF dataset's spaCy lemmas of ``OCR``,
+    already stop-filtered — then falls back to ``lemma_text`` and raw
+    ``OCR`` for the ~48 issues whose ``OCR`` (hence lemmas) is blank. The
+    shared ``tokenize`` lowercases, length-filters (< 4 chars), and drops
+    the generic French/editorial stopword set; it does **not** touch
+    Islamic-domain research terms, which are core vocabulary here.
+
+    Emits the ECharts word-cloud shape (``[[word, count], ...]``) that the
+    ``C.wordcloud`` builder consumes directly.
+    """
+    text_col = find_column(rows, ["lemma_nostop", "lemma_text", "OCR"])
+    if text_col is None:
+        logging.getLogger(__name__).warning(
+            "  no lemma/OCR column found — word cloud will be empty"
+        )
+        return []
+
+    counter: Counter = Counter()
+    for value in rows[text_col]:
+        counter.update(tokenize(value))
+
+    return [
+        [word, int(count)]
+        for word, count in counter.most_common(max_words)
+        if count >= min_frequency
+    ]
+
+
 # ---------------------------------------------------------------------------
 #  Top-level builder
 # ---------------------------------------------------------------------------
@@ -231,6 +275,8 @@ def build_periodicals_overview(
     repo_id: str,
     token: Optional[str],
     top_n_subjects: int,
+    wordcloud_max_words: int,
+    wordcloud_min_frequency: int,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC publications subset from %s", repo_id)
@@ -250,20 +296,22 @@ def build_periodicals_overview(
     languages = _top_n_pipe(df, "language", None)
     top_subjects = _top_n_pipe(df, "subject", top_n_subjects)
     countries = _top_n_pipe(df, "country", None)
+    wordcloud = compute_wordcloud(df, wordcloud_max_words, wordcloud_min_frequency)
 
     logger.info(
-        "  %d periodical runs, %d timeline years, %d languages, %d countries",
+        "  %d periodical runs, %d timeline years, %d languages, %d countries, %d cloud terms",
         len(runs),
         len(issues_per_year["years"]),
         len(languages),
         len(countries),
+        len(wordcloud),
     )
 
     metadata = create_metadata_block(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_periodicals_overview.py",
-        script_version="0.1.0",
+        script_version="0.2.0",
     )
 
     return {
@@ -274,6 +322,7 @@ def build_periodicals_overview(
         "languages":       languages,
         "top_subjects":    top_subjects,
         "countries":       countries,
+        "wordcloud":       wordcloud,
     }
 
 
@@ -294,6 +343,14 @@ def main() -> None:
         help="Number of subjects to keep in the ranking (default: %(default)s)",
     )
     parser.add_argument(
+        "--wordcloud-max-words", type=int, default=WORDCLOUD_MAX_WORDS,
+        help="Max terms in the word cloud (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--wordcloud-min-frequency", type=int, default=WORDCLOUD_MIN_FREQUENCY,
+        help="Drop word-cloud terms below this count (default: %(default)s)",
+    )
+    parser.add_argument(
         "--minify",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -308,6 +365,8 @@ def main() -> None:
         repo_id=args.repo,
         token=os.getenv("HF_TOKEN"),
         top_n_subjects=args.top_n_subjects,
+        wordcloud_max_words=args.wordcloud_max_words,
+        wordcloud_min_frequency=args.wordcloud_min_frequency,
     )
 
     output_path = Path(args.output)

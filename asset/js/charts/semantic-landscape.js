@@ -7,6 +7,14 @@
  * (`asset/data/semantic-landscape.json`). Nearby points are articles
  * whose full text is semantically similar; clusters are themes.
  *
+ * This same orchestrator also drives the "Periodicals semantic landscape"
+ * block (class `iwac-vis-periodicals-landscape`), which maps the
+ * `publications` subset from `embedding_tableOfContents`
+ * (`periodicals-landscape.json`, built by
+ * `scripts/generate_periodicals_landscape.py`). That subset carries no LDA
+ * topics, so its variant offers Country / Decade facets only. The active
+ * variant is chosen from the block's modifier class (see VARIANTS).
+ *
  * UI:
  *   - "Color by" facet — Country / Decade / Topic (top-N LDA topics,
  *     long tail folded into "Other"). Each category renders as its own
@@ -41,7 +49,10 @@
             'Topic': 'Topic',
             'Other': 'Other',
             'Unknown year': 'Unknown year',
-            'landscape_points': '{count} articles placed'
+            'landscape_points': '{count} articles placed',
+            'Periodicals semantic landscape': 'Periodicals semantic landscape',
+            'desc_periodicals_landscape': 'Every Islamic-periodical issue in the collection, placed by the semantic similarity of its table of contents (UMAP projection of AI text embeddings — axes have no meaning, only proximity does). Drag to pan, scroll to zoom, click a point to open the issue.',
+            'landscape_points_issues': '{count} issues placed'
         });
         ns.addTranslations('fr', {
             'Loading semantic landscape': 'Chargement du paysage sémantique',
@@ -52,11 +63,41 @@
             'Topic': 'Thème',
             'Other': 'Autre',
             'Unknown year': 'Année inconnue',
-            'landscape_points': '{count} articles positionnés'
+            'landscape_points': '{count} articles positionnés',
+            'Periodicals semantic landscape': 'Paysage sémantique des périodiques',
+            'desc_periodicals_landscape': 'Chaque numéro de périodique islamique de la collection, positionné selon la similarité sémantique de sa table des matières (projection UMAP des plongements de texte IA — les axes n’ont pas de sens, seule la proximité compte). Glissez pour déplacer, molette pour zoomer, cliquez sur un point pour ouvrir le numéro.',
+            'landscape_points_issues': '{count} numéros positionnés'
         });
     }
 
-    var ALL_FACETS = ['country', 'decade', 'topic'];
+    // Two page blocks share this orchestrator: the article "Semantic
+    // landscape" (embedding_OCR, coloured by country / decade / LDA topic)
+    // and the "Periodicals semantic landscape" (embedding_tableOfContents,
+    // no LDA topics → country / decade only). The block's modifier class
+    // picks the variant; everything downstream is data-driven.
+    var VARIANTS = {
+        articles: {
+            bundle:   'semantic-landscape.json',
+            titleKey: 'Semantic landscape',
+            descKey:  'desc_semantic_landscape',
+            countKey: 'landscape_points',
+            facets:   ['country', 'decade', 'topic']
+        },
+        publications: {
+            bundle:   'periodicals-landscape.json',
+            titleKey: 'Periodicals semantic landscape',
+            descKey:  'desc_periodicals_landscape',
+            countKey: 'landscape_points_issues',
+            facets:   ['country', 'decade']
+        }
+    };
+
+    var FACET_LABEL = { country: 'Country', decade: 'Decade', topic: 'Topic' };
+
+    function variantFor(el) {
+        return el.classList.contains('iwac-vis-periodicals-landscape')
+            ? 'publications' : 'articles';
+    }
 
     /** Group point indices into named buckets for the active facet. */
     function buildGroups(data, facet) {
@@ -141,8 +182,9 @@
                     var c = pts.country[i];
                     if (c >= 0) bits.push(countries[c]);
                     if (pts.year[i]) bits.push(String(pts.year[i]));
-                    var t = pts.topic[i];
-                    if (t >= 0) bits.push(topics[t].label);
+                    // Publications bundles omit the topic array entirely.
+                    var t = pts.topic ? pts.topic[i] : -1;
+                    if (t >= 0 && topics[t]) bits.push(topics[t].label);
                     return '<strong>' + P.escapeHtml(pts.title[i] || '') + '</strong>'
                         + (bits.length ? '<br>' + P.escapeHtml(bits.join(' · ')) : '');
                 }
@@ -165,10 +207,10 @@
         };
     }
 
-    function initBlock(container) {
+    function initBlock(container, cfg) {
         var basePath = container.dataset.basePath || '';
         var siteBase = container.dataset.siteBase || '';
-        var url = basePath + '/files/iwac-visualizations/semantic-landscape.json';
+        var url = basePath + '/files/iwac-visualizations/' + cfg.bundle;
 
         P.fetchJSON(url)
             .then(function (data) {
@@ -179,8 +221,8 @@
 
                 var panel = P.buildPanel(
                     'iwac-vis-panel iwac-vis-panel--wide',
-                    P.t('Semantic landscape'),
-                    P.t('desc_semantic_landscape')
+                    P.t(cfg.titleKey),
+                    P.t(cfg.descKey)
                 );
                 // The landscape needs height — reuse the graph-host
                 // reservation (640px) instead of the default 320px.
@@ -189,25 +231,26 @@
 
                 var count = ((data.points || {}).o_id || []).length;
                 var caption = P.el('p', 'iwac-vis-overview-subtitle',
-                    P.t('landscape_points', { count: P.formatNumber(count) }));
+                    P.t(cfg.countKey, { count: P.formatNumber(count) }));
                 panel.panel.insertBefore(caption, panel.chart);
 
-                var state = { facet: 'country' };
+                // Only offer the facets this variant supports (publications
+                // carry no LDA topics, so their bundle drops the topic facet).
+                var subFacets = {};
+                cfg.facets.forEach(function (f) { subFacets[f] = P.t(FACET_LABEL[f]); });
+
+                var state = { facet: cfg.facets[0] };
                 var facetBar = P.buildFacetButtons({
                     facets: [{
                         key: 'facet',
                         label: P.t('Color by'),
-                        subFacets: {
-                            country: P.t('Country'),
-                            decade:  P.t('Decade'),
-                            topic:   P.t('Topic')
-                        },
+                        subFacets: subFacets,
                         renderAs: 'buttons'
                     }],
                     activeKey: 'facet',
                     onChange: function (evt) {
-                        var f = evt.subFacet || 'country';
-                        if (ALL_FACETS.indexOf(f) === -1) f = 'country';
+                        var f = evt.subFacet || cfg.facets[0];
+                        if (cfg.facets.indexOf(f) === -1) f = cfg.facets[0];
                         state.facet = f;
                         if (chart && !chart.isDisposed()) {
                             chart.setOption(buildOption(data, state.facet), true);
@@ -243,9 +286,10 @@
             console.warn('IWACVis semantic landscape: ECharts not loaded');
             return;
         }
-        var containers = document.querySelectorAll('.iwac-vis-semantic-landscape');
+        var containers = document.querySelectorAll(
+            '.iwac-vis-semantic-landscape, .iwac-vis-periodicals-landscape');
         for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
+            initBlock(containers[i], VARIANTS[variantFor(containers[i])]);
         }
     }
 

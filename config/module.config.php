@@ -9,6 +9,7 @@ return [
             'entityNetworks' => Site\BlockLayout\EntityNetworks::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'lexicalMetrics' => Site\BlockLayout\LexicalMetrics::class,
+            'periodicalsLandscape' => Site\BlockLayout\PeriodicalsLandscape::class,
             'periodicalsOverview' => Site\BlockLayout\PeriodicalsOverview::class,
             'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,
             'scaryTerms' => Site\BlockLayout\ScaryTerms::class,

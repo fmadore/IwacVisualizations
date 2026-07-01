@@ -1,0 +1,29 @@
+<?php
+/**
+ * Periodicals Semantic Landscape page block.
+ *
+ * One zoomable scatter of the Islamic-periodical corpus: every issue
+ * placed by UMAP over its 768-dim Gemini `embedding_tableOfContents`,
+ * color-faceted by country / decade. Loads a single precomputed columnar
+ * bundle from `files/iwac-visualizations/periodicals-landscape.json`
+ * (built by `scripts/generate_periodicals_landscape.py`).
+ *
+ * Rendered by the shared `semantic-landscape` orchestrator, which selects
+ * the publications variant from the `iwac-vis-periodicals-landscape` class
+ * (publications carry no LDA topics → Country / Decade facets only).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'facetButtons' => true,
+        ],
+        'orchestrator' => 'semantic-landscape',
+    ],
+    'blockClass' => 'iwac-vis-periodicals-landscape',
+    'embedSlug'  => 'periodicals-landscape',
+    'loading'    => $this->translate('Loading semantic landscape'),
+]);

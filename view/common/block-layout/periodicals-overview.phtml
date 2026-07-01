@@ -9,8 +9,8 @@
  * dashboard — no runtime calls to the Hugging Face datasets-server.
  *
  * Panels: summary cards, period subtitle, periodical-runs Gantt, issues
- * per year stacked by country, languages bar, countries bar, and top
- * subjects bar.
+ * per year stacked by country, languages donut, countries donut, top
+ * subjects bar, and a word cloud of the most frequent lemmatized terms.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
@@ -20,6 +20,7 @@ echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'needs' => [
             'chartOptions' => true,
+            'wordcloud'    => true,
         ],
         'orchestrator' => 'periodicals-overview',
     ],

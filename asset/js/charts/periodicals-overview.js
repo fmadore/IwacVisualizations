@@ -12,9 +12,10 @@
  *   2. "Period covered" subtitle
  *   3. Periodical runs — Gantt of each periodical's publication span (wide)
  *   4. Issues per year — stacked bar by country (wide)
- *   5. Languages — log-scaled horizontal bar
- *   6. Countries — horizontal bar
+ *   5. Languages — donut
+ *   6. Countries — donut
  *   7. Top subjects — horizontal bar (wide)
+ *   8. Most frequent terms — word cloud over lemmatized text (wide)
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
  */
@@ -45,7 +46,9 @@
             'periodicals.runs_title':             'Periodical runs',
             'periodicals.runs_desc':              'Publication span of each periodical, from its first to its last issue in the collection, colored by country.',
             'periodicals.issues_per_year_title':  'Issues per year',
-            'periodicals.subjects_title':         'Top subjects'
+            'periodicals.subjects_title':         'Top subjects',
+            'periodicals.wordcloud_title':        'Most frequent terms',
+            'periodicals.wordcloud_desc':         'The most frequent words across every issue’s full text (lemmatized, with common function words removed).'
         });
         ns.addTranslations('fr', {
             'Loading periodicals overview':       'Chargement des périodiques',
@@ -54,7 +57,9 @@
             'periodicals.runs_title':             'Parutions des périodiques',
             'periodicals.runs_desc':              'Période de parution de chaque périodique, du premier au dernier numéro conservé dans la collection, colorée par pays.',
             'periodicals.issues_per_year_title':  'Numéros par année',
-            'periodicals.subjects_title':         'Principaux sujets'
+            'periodicals.subjects_title':         'Principaux sujets',
+            'periodicals.wordcloud_title':        'Termes les plus fréquents',
+            'periodicals.wordcloud_desc':         'Les mots les plus fréquents dans le texte intégral de tous les numéros (lemmatisés, mots outils retirés).'
         });
     }
 
@@ -107,20 +112,25 @@
         var languagesPanel = P.buildPanel('iwac-vis-panel', P.t('Languages'));
         var countriesPanel = P.buildPanel('iwac-vis-panel', P.t('Countries'));
         var subjectsPanel  = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.subjects_title'));
+        var wordcloudPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('periodicals.wordcloud_title'), P.t('periodicals.wordcloud_desc'));
+        // Word clouds need vertical room — reuse the shared 400px host
+        // reservation instead of the default 320px chart height.
+        wordcloudPanel.chart.classList.add('iwac-vis-wordcloud-host');
 
         grid.appendChild(runsPanel.panel);
         grid.appendChild(perYearPanel.panel);
         grid.appendChild(languagesPanel.panel);
         grid.appendChild(countriesPanel.panel);
         grid.appendChild(subjectsPanel.panel);
+        grid.appendChild(wordcloudPanel.panel);
 
         return {
             runs:           runsPanel.chart,
             perYear:        perYearPanel.chart,
             languages:      languagesPanel.chart,
-            languagesPanel: languagesPanel.panel,
             countries:      countriesPanel.chart,
-            subjects:       subjectsPanel.chart
+            subjects:       subjectsPanel.chart,
+            wordcloud:      wordcloudPanel.chart
         };
     }
 
@@ -161,28 +171,22 @@
                     });
                 }
 
-                // 3. Languages — log scale: French is ~99.9% of the
-                // issues, so a linear bar collapses Arabic to an
-                // invisible sliver (same rationale as the collection
-                // overview's languages panel).
+                // 3. Languages — donut (matches the references-overview
+                // languages panel). French dominates the issue count, so
+                // the labelled slices stay readable while the tooltip
+                // carries the exact share for the long tail.
                 var languages = localizeLanguages(data.languages);
                 if (languages.length > 0) {
                     ns.registerChart(h.languages, function (el, chart) {
-                        chart.setOption(C.horizontalBar(languages, {
-                            filterUnknown: false,
-                            log: true
-                        }));
+                        chart.setOption(C.pie(languages));
                     });
-                    h.languagesPanel.appendChild(
-                        P.el('p', 'iwac-vis-muted iwac-vis-lang-note', P.t('Logarithmic scale'))
-                    );
                 }
 
-                // 4. Countries
+                // 4. Countries — donut
                 var countries = data.countries || [];
                 if (countries.length > 0) {
                     ns.registerChart(h.countries, function (el, chart) {
-                        chart.setOption(C.horizontalBar(countries));
+                        chart.setOption(C.pie(countries));
                     });
                 }
 
@@ -191,6 +195,16 @@
                 if (subjects.length > 0) {
                     ns.registerChart(h.subjects, function (el, chart) {
                         chart.setOption(C.horizontalBar(subjects));
+                    });
+                }
+
+                // 6. Word cloud — most frequent lemmas across all issues.
+                // C.wordcloud falls back to a bar chart when the
+                // echarts-wordcloud extension isn't available.
+                var wordcloud = data.wordcloud || [];
+                if (wordcloud.length > 0) {
+                    ns.registerChart(h.wordcloud, function (el, chart) {
+                        chart.setOption(C.wordcloud(wordcloud));
                     });
                 }
             })

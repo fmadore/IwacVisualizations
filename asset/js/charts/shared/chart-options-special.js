@@ -371,7 +371,12 @@
                 min: yearMin,
                 max: yearMax + 1,
                 interval: Math.max(1, Math.ceil((yearMax - yearMin) / 10)),
-                axisLabel: { formatter: '{value}' },
+                // Years must render as "1961", not "1,961". A '{value}'
+                // string template still runs ECharts' number formatter,
+                // which applies locale thousand separators on a value
+                // axis; a function returning the raw integer is the only
+                // reliable override.
+                axisLabel: { formatter: function (v) { return String(Math.round(v)); } },
                 name: t('Year'),
                 nameLocation: 'middle',
                 nameGap: 28
