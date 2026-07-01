@@ -264,9 +264,23 @@
         var probe = _getColorProbe();
         if (!probe) return trimmed;
         try {
-            probe.style.color = '';
+            // Two-sentinel invalid-value guard. When `trimmed` is NOT a colour
+            // the browser can parse, `style.color = trimmed` is silently
+            // ignored and the probe keeps its previous value. A valid colour
+            // overrides BOTH sentinels to the same resolved rgb(); an invalid
+            // one leaves the two distinct sentinels untouched. In that case we
+            // return '' so the CALLER's `|| fallback` fires — instead of
+            // handing back the probe's default rgb(0,0,0), which is what made
+            // a single corrupted CSS var (e.g. an embed that mis-escaped
+            // `--primary` to `&#x23`) render every chart series solid black.
+            probe.style.color = 'rgb(1, 1, 1)';
             probe.style.color = trimmed;
-            var resolved = getComputedStyle(probe).color;
+            var r1 = getComputedStyle(probe).color;
+            probe.style.color = 'rgb(2, 2, 2)';
+            probe.style.color = trimmed;
+            var r2 = getComputedStyle(probe).color;
+            if (r1 !== r2) return '';           // unparseable — let caller fall back
+            var resolved = r1;
             if (!resolved) return trimmed;
             if (/^rgba?\(/i.test(resolved)) return resolved;
             // Modern Chromium can emit oklab() / oklch() / color(srgb)

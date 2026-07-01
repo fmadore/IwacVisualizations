@@ -70,8 +70,14 @@ $secondary = $hex($this->themeSetting('secondary_color', ''));
     <style>
         html, body { margin: 0; padding: 0; background: transparent; }
         body.iwac-embed-body { -webkit-text-size-adjust: 100%; }
-        /* The block already self-paces; keep it edge-to-edge in the frame. */
-        .iwac-embed-body .iwac-vis-block { margin: 0 auto; }
+        /* A little breathing room so the block isn't crammed against the
+           iframe edges. box-sizing keeps the padding inside the width so it
+           can never trigger a horizontal scrollbar on the host page. */
+        .iwac-embed-body .iwac-vis-block {
+            margin: 0 auto;
+            padding: var(--space-md, 1rem);
+            box-sizing: border-box;
+        }
         /* Source-attribution footer. Styled inline (with token fallbacks) so it
            reads correctly even on this bare route before iwac-core.css lands. */
         .iwac-embed-source {
@@ -88,14 +94,23 @@ $secondary = $hex($this->themeSetting('secondary_color', ''));
     </style>
     <?php if ($primary !== '' || $secondary !== ''): ?>
     <style>
-        :root {<?php if ($primary !== ''): ?> --primary: <?= $escapeAttr($primary) ?>;<?php endif;
-            if ($secondary !== ''): ?> --secondary: <?= $escapeAttr($secondary) ?>;<?php endif; ?> }
+        /* NOTE: $primary / $secondary are emitted RAW here — deliberately not
+           through escapeHtmlAttr(). This is a CSS context, not an HTML
+           attribute: escapeHtmlAttr() rewrites the leading `#` to the entity
+           `&#x23;`, whose embedded `;` truncates the declaration, leaving
+           `--primary: &#x23`. iwac-theme.js then reads that non-empty garbage
+           (so its `|| fallback` never fires) and the colour probe resolves it
+           to rgb(0,0,0) — every series renders black. Both values are already
+           strictly validated to `#` + 3/6/8 hex digits (EmbedController + the
+           $hex() closure above), so raw output carries no injection risk. */
+        :root {<?php if ($primary !== ''): ?> --primary: <?= $primary ?>;<?php endif;
+            if ($secondary !== ''): ?> --secondary: <?= $secondary ?>;<?php endif; ?> }
         /* Match the theme's dark-mode habit of lightening the accent
            (e.g. #e64a19 → #ec653f) rather than carrying the light value.
            The mode is always pinned via data-theme on this route (embeds
            default to light), so this is the only dark branch we need. */
-        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $escapeAttr($primary) ?>, white 12%);<?php endif;
-            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $escapeAttr($secondary) ?>, white 14%);<?php endif; ?> }
+        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $primary ?>, white 12%);<?php endif;
+            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $secondary ?>, white 14%);<?php endif; ?> }
     </style>
     <?php endif; ?>
     <?= $this->headScript() ?>
