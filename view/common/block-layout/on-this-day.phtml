@@ -1,0 +1,26 @@
+<?php
+/**
+ * On This Day page block.
+ *
+ * The module's one deliberate engagement hook: items published on
+ * today's date (visitor-local) across the collection's decades —
+ * newspaper articles and periodical issues with full publication dates.
+ * Fetches the tiny per-day file
+ * `files/iwac-visualizations/on-this-day/{MM-DD}.json` (built by
+ * `scripts/generate_on_this_day.py`, ~1 KB) and removes itself silently
+ * when the file is absent (e.g. before the first data sync) — an
+ * engagement hook must never render an error banner.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'on-this-day',
+        'orchestrator' => 'on-this-day',
+    ],
+    'blockClass' => 'iwac-vis-on-this-day',
+    'embedSlug'  => 'on-this-day',
+    'loading'    => $this->translate('Loading on this day'),
+]);

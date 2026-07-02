@@ -48,6 +48,7 @@ class EmbedController extends AbstractActionController
         'spatial-exploration'  => 'Spatial Exploration',
         'entity-networks'      => 'Entity Networks',
         'compare-newspapers'   => 'Compare Newspapers',
+        'on-this-day'          => 'On This Day',
     ];
 
     /**
