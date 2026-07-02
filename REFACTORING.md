@@ -325,11 +325,15 @@ documented at the end so a future cleanup pass doesn't trip on them.
   `index-overview.js` — one more than the audit counted). All now call the
   one-shot `P.lazyInit` helper in `shared/panels.js`; per-site `rootMargin`
   overrides preserved (`400px 0px` on the index-overview gates).
-- [ ] **Deterministic edge iteration in `generate_entity_networks.py`** —
-  8 bare `.items()` loops (lines 180, 209, 244, 250, 284, 322, 327, 351)
-  iterate dicts whose order depends on upstream set/dict churn; `sorted(...)`
-  at those sites makes regenerated output stable without the
-  `PYTHONHASHSEED=0` crutch discovered in ROADMAP 3.2.
+- [x] **Deterministic edge iteration in `generate_entity_networks.py`** —
+  **DONE (2026-07-02)**, more surgically than the audit's "8 bare `.items()`
+  loops" framing: most of those loops are commutative sums where order
+  can't matter. The order actually leaks at two points, now fixed — the
+  `pruned` dicts are built from `sorted(edge_weights.items())` (their
+  insertion order steers the layout graph's edge order, hence ForceAtlas2's
+  numeric path, and the equal-weight ties in the output), and the output
+  edge sorts gained a total-order key `(-w, src, tgt)`. Output verification
+  against live data belongs to the next CI regeneration.
 - [ ] **Block-local i18n extraction ×6** — `scary-terms/i18n.js` is the
   established pattern, but six orchestrators still inline their en/fr
   dictionaries: `sentiment-atlas.js` (~57 entries — also the first step of

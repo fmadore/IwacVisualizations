@@ -241,7 +241,11 @@ def build_global_network(
                 for b in by_type.get(type_b, ()):
                     edge_weights[(a, b) if a < b else (b, a)] += 1
 
-    pruned = {pair: w for pair, w in edge_weights.items() if w >= weight_min}
+    # Sorted at the pruning step so everything downstream is deterministic
+    # across Python builds: the layout graph's edge-insertion order (which
+    # steers ForceAtlas2's numeric path) and the equal-weight ties in the
+    # output edge sort both follow this dict's insertion order.
+    pruned = {pair: w for pair, w in sorted(edge_weights.items()) if w >= weight_min}
     logger.info("Global edges: %d raw, %d at weight >= %d",
                 len(edge_weights), len(pruned), weight_min)
 
@@ -282,7 +286,7 @@ def build_global_network(
 
     edges = sorted(
         ([index_of[a], index_of[b], w] for (a, b), w in pruned.items()),
-        key=lambda e: -e[2],
+        key=lambda e: (-e[2], e[0], e[1]),  # total order: weight desc, then indices
     )
 
     type_counts = Counter(TYPE_ORDER[n[2]] for n in nodes)
@@ -319,7 +323,8 @@ def build_spatial_network(agg: NetworkAggregator, weight_min: int) -> Dict[str, 
             for j in range(i + 1, len(geo)):
                 edge_weights[(geo[i], geo[j])] += 1
 
-    pruned = {pair: w for pair, w in edge_weights.items() if w >= weight_min}
+    # Sorted for the same determinism reason as the global network.
+    pruned = {pair: w for pair, w in sorted(edge_weights.items()) if w >= weight_min}
     logger.info("Spatial edges: %d raw, %d at weight >= %d",
                 len(edge_weights), len(pruned), weight_min)
 
@@ -349,7 +354,7 @@ def build_spatial_network(agg: NetworkAggregator, weight_min: int) -> Dict[str, 
 
     edges = sorted(
         ([index_of[a], index_of[b], w] for (a, b), w in pruned.items()),
-        key=lambda e: -e[2],
+        key=lambda e: (-e[2], e[0], e[1]),  # total order: weight desc, then indices
     )
 
     logger.info("Spatial network: %d nodes, %d edges", len(nodes), len(edges))
