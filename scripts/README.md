@@ -233,6 +233,24 @@ python3 scripts/generate_entity_networks.py --pairs "personnes-organisations,lie
    keeps them at ~180 KB / ~145 KB versus the 2–4 MB equivalents in the
    standalone app
 
+### `generate_on_this_day.py`
+
+Fans out `asset/data/on-this-day/{MM-DD}.json` (366 files, ~1 KB each) for
+the On This Day page block: every fully-dated (`YYYY-MM-DD`) article and
+periodical issue, bucketed by calendar day as compact
+`[year, o_id, title, source, type]` rows. A dir-level `metadata.json`
+carries provenance. Standard flags (`--repo`, `--output-dir`,
+`--minify/--no-minify`, `-v`).
+
+### `generate_press_bylines.py`
+
+Writes `asset/data/press-bylines.json` (~6 KB) for the Press Bylines page
+block: byline coverage summary, per-year signed/total counts, and the top
+`--top-n` (default 25) bylines with active span, top newspapers, frequent
+subjects, and the `Personnes` authority `o_id` where the name resolves
+(`Titre` + `Titre alternatif`, both sides through
+`normalize_location_name`). Extra flag: `--prolific-min` (default 10).
+
 ## Shared helpers — `iwac_utils.py`
 
 Functions to use instead of rewriting. The **v0.9.0 refactor** promoted

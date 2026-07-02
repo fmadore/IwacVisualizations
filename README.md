@@ -22,6 +22,8 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
+| On This Day | page block | **Live** — almanac panel of items published on today's date across the decades; deterministic daily picks; removes itself silently without data | Precompute (`generate_on_this_day.py`, 366-file fan-out) |
+| Press Bylines | page block | **Live** — byline-coverage cards, signed-share-over-time, top-25 bylines with authority click-through | Precompute (`generate_press_bylines.py`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
@@ -32,6 +34,14 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.19.0 — On This Day + Press Bylines page blocks
+
+Two new page blocks from the ROADMAP Phase 9 proposals, both data-verified against the live dataset before building:
+
+- **On This Day** (ROADMAP 9.12) — the module's one deliberate engagement hook: a quiet almanac panel listing items published on today's date (visitor-local) across the collection's decades, each linking to its item page. `generate_on_this_day.py` fans out `on-this-day/{MM-DD}.json` (366 files, ~1 KB each — 13,422 fully-dated articles + periodical issues; every calendar day has 5–91 items). The client picks a deterministic spread across the decades (same picks for every visitor on a given date, changing daily) and **removes the whole block silently** when data is missing — an engagement hook never shows an error banner, so it is safe on a homepage.
+- **Press Bylines** (ROADMAP 9.11) — who signed the press. Coverage verified first: **78.7 %** of articles carry an `author` byline (9,664 / 12,287), 2,463 distinct names, 225 with ≥ 10 articles — and 184 of the top 200 match a `Personnes` authority record. `generate_press_bylines.py` → `press-bylines.json` (5.9 KB): summary cards, the share of signed articles per year (the rise of the byline vs unsigned copy), and the top-25 bylines (journalists *and* press agencies) with active spans, newspapers and frequent subjects in the tooltip — bars click through to the byline's authority page where one resolves (24 of 25 do).
+- Both registered as embeddable slugs; both generators added to the CI list; `fr.po`/`fr.mo` extended (99 entries).
 
 ### v1.18.0 — follow-up audit: quick wins + accessibility pass
 
@@ -387,6 +397,14 @@ The polarity/centrality/subjectivity/correlation/heatmap/extremes cuts all recom
 ### Entity Networks (page block)
 
 Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry for why not ECharts/Sigma). *Entities* mode draws the cross-type graph — persons↔organizations plus events as connective tissue to every other type — on a blank theme-aware canvas, with positions precomputed by ForceAtlas2 at generation time (`generate_entity_networks.py`, 1,554 nodes / 7,356 edges at co-occurrence ≥ 2). *Places* mode draws co-mentioned places over the basemap (508 nodes / 11,030 edges, lazily fetched). Node color = entity type (module palette), size = items mentioning it; labels collide via symbol layers with a hubs-first priority rank. Type chips, a min-link-strength select, and node search filter the view; clicking a node highlights its neighborhood and lists its strongest co-occurrences in the details sidebar.
+
+### On This Day (page block)
+
+The module's one deliberate engagement hook: a quiet almanac panel listing newspaper articles and periodical issues published on today's date (visitor-local) across the collection's decades — a 1970 Togo-Presse graduation piece next to a 2019 Ramadan report. Each row links to its item page. Backed by the `asset/data/on-this-day/{MM-DD}.json` fan-out (`generate_on_this_day.py`, 366 files ~1 KB each; only fully-dated items participate — ~99 % of articles). The client makes a deterministic daily selection spread across the decades (identical for every visitor on a given date) and silently removes the whole block when the day file is missing, so it can sit on a homepage before the first data sync without ever showing an error.
+
+### Press Bylines (page block)
+
+Who signed the West African press. Summary cards (signed articles, share of the corpus, distinct bylines, prolific bylines), the share of each year's articles carrying a byline (the remainder ran unsigned), and the top-25 bylines — journalists and press agencies alike — with active spans, top newspapers and frequent subjects in the tooltip. Bars click through to the byline's `Personnes` authority record where the generator resolved one (byline ↔ `index.Titre` + `Titre alternatif`, both sides NFC-normalized). Backed by `asset/data/press-bylines.json` (`generate_press_bylines.py`, ~6 KB).
 
 ### Item Set Dashboard (resource-page block)
 
@@ -797,6 +815,10 @@ python3 scripts/generate_periodicals_landscape.py --minify  # → asset/data/per
 python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
 python3 scripts/generate_sentiment_arbiter.py    --minify   # → asset/data/sentiment-arbiter.json (reads ../IWAC-sentiment-analysis)
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
+
+# v1.19.0 blocks
+python3 scripts/generate_on_this_day.py                     # → asset/data/on-this-day/{MM-DD}.json (366 files)
+python3 scripts/generate_press_bylines.py                   # → asset/data/press-bylines.json
 ```
 
 `--minify` strips indentation and whitespace from the JSON output. Use it on the heavier bundles (`collection-overview`, `index-overview`, `keyword-explorer-*`) — it typically halves file size with no downside, since the JSON is only ever consumed by JS, not read by humans. Per-entity dashboards are individually small enough that pretty-printed output stays below a few KB each.

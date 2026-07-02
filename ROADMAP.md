@@ -450,15 +450,25 @@ view, split heavy bundles).
       the Sync Data admin page: ToC embeddings (~325/1,501 issues),
       geocoded places, sentiment/embedding coverage, partial dates per
       subset. Curator-facing; steers upstream pipeline priorities.
-- [ ] **9.11 (gated) Bylines / journalists panel.** Top authors, active
-      spans, subject specialties — gated on verifying `articles.author`
-      coverage first (the HF statistics endpoint was 500-ing on
-      2026-07-02).
+- [x] **9.11 Press Bylines page block** — **DONE (v1.19.0)**. The gate
+      passed decisively: 78.7 % of articles carry an `author` byline
+      (9,664 / 12,287; verified by column-selective parquet read after
+      the HF statistics endpoint kept 500-ing), 2,463 distinct names,
+      225 with ≥ 10 articles — and 184 of the top 200 match a
+      `Personnes` authority record, so the block's bars click through to
+      the existing person dashboards. `generate_press_bylines.py` →
+      `press-bylines.json` (5.9 KB): coverage cards, signed-share per
+      year, top-25 bylines with span / newspapers / subjects tooltips.
+- [x] **9.12 On This Day page block** — **DONE (v1.19.0)**. Originally
+      parked as editorial-register; the owner opted in as the module's
+      one deliberate engagement hook. `generate_on_this_day.py` fans out
+      `on-this-day/{MM-DD}.json` (366 files; 13,422 fully-dated items,
+      5–91 per day). Deterministic daily picks spread across the
+      decades; the block removes itself silently when data is absent, so
+      it is homepage-safe.
 - **Won't do (unchanged):** KnowledgeGraph, TopicNetwork, globe
   projection. A Compare Countries block is unnecessary — the Compare
-  Newspapers picker already has a whole-country scope. An "On this day"
-  widget was considered and parked: editorial-product register, against
-  the research-instrument philosophy.
+  Newspapers picker already has a whole-country scope.
 
 ---
 
