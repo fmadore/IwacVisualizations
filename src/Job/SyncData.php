@@ -119,6 +119,23 @@ class SyncData extends AbstractJob
                 $zip->close();
                 throw new \RuntimeException('Archive is missing the expected entry "' . self::MARKER_ENTRY . '".');
             }
+            // Zip-slip guard: refuse any entry whose path could escape the
+            // staging dir (absolute, drive-letter, backslash, or `..`
+            // segments). The archive comes from this repo's own release, so
+            // this is defense-in-depth rather than a live threat — but the
+            // job writes into files/, so hostile-archive hygiene is cheap.
+            for ($i = 0; $i < $count; $i++) {
+                $name = (string) $zip->getNameIndex($i);
+                if ($name === ''
+                    || $name[0] === '/'
+                    || strpos($name, '\\') !== false
+                    || preg_match('#(?:^|/)\.\.(?:/|$)#', $name)
+                    || preg_match('#^[A-Za-z]:#', $name)
+                ) {
+                    $zip->close();
+                    throw new \RuntimeException('Archive contains an unsafe entry path: ' . $name);
+                }
+            }
             $this->rrmdir($stageDir);
             if (!@mkdir($stageDir, 0775, true) && !is_dir($stageDir)) {
                 $zip->close();

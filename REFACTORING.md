@@ -311,12 +311,13 @@ documented at the end so a future cleanup pass doesn't trip on them.
   itself; `spatial-exploration/state.js:101` already routes through
   `P.fetchJSON` and `selectEntity` has a proper `.catch` →
   `status: 'error'` path (`state.js:131`). Nothing to do.
-- [ ] **Zip-slip guard in `SyncData.php`** — the stage-extract step calls
-  `ZipArchive::extractTo()` without validating entry paths; a hostile archive
-  could escape the stage dir via `../` entries. Risk is LOW (the zip comes
-  from the module's own GitHub release), but a `getNameIndex()` validation
-  loop rejecting `..` / absolute / drive-letter entries is ~10 lines of
-  defense-in-depth for a job that writes into `files/`.
+- [x] **Zip-slip guard in `SyncData.php`** — **DONE (2026-07-02)**. The
+  stage-extract step now validates every entry via `getNameIndex()` before
+  `extractTo()`, rejecting empty / absolute / drive-letter / backslash /
+  `..`-segment paths. Risk was LOW (the zip comes from the module's own
+  GitHub release) — defense-in-depth for a job that writes into `files/`.
+  (`php -l` unavailable in this env, per the June note; change follows the
+  file's existing idiom.)
 - [x] **`P.lazyInit(el, render, opts)`** — **DONE (2026-07-02)**. The
   IntersectionObserver arm-render-disconnect boilerplate was copy-pasted
   across 6 sites (`collection-overview/{map,sources-map,wordcloud}.js`,
