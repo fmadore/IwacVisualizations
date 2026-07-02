@@ -33,6 +33,17 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.18.0 — follow-up audit: quick wins + accessibility pass
+
+Implements the build-verifiable slice of the 2026-07 follow-up audit (REFACTORING.md **Tier 4** + ROADMAP **Phase 8**; Phase 9 lists the audit's new-visualization proposals):
+
+- **Reduced motion** — `prefers-reduced-motion` now disables ECharts animation **at theme level** (`iwac-theme.js::buildTheme`, applied at init so initial render animations are covered; option builders never set `animation: true`, so the single switch silences initial + update motion everywhere — including the user-initiated scary-terms race, whose frames snap instead of easing). The ResizeObserver resize animation honors it, a matchMedia `change` listener rebuilds themes on mid-session preference flips, and `iwac-core.css` zeroes module transitions under the query (the spinner keeps its deliberate slow-spin override).
+- **Focus + touch targets** — all 15 focus outlines now consume `--focus-color`, the token the theme actually defines (six sites referenced a phantom `--focus-ring` and silently fell through to `--primary`; dark mode now gets the theme's dedicated lighter focus colour). Scary Terms playback buttons meet the 44 px WCAG tap target via `--size-control-lg`.
+- **`P.lazyInit()`** — one-shot on-view helper in `shared/panels.js` replaces six copy-pasted IntersectionObserver blocks (collection-overview map / sources-map / wordcloud, index-overview places-map + both deferred-fetch gates).
+- **Block i18n extraction** — sentiment-atlas, semantic-landscape (shared by both landscape blocks), periodicals-overview and lexical-metrics now load their en/fr string tables from `<block>/i18n.js` (the scary-terms pattern); every table verified byte-identical against the removed original.
+- **SyncData zip-slip guard** — archive entry paths are validated before extraction (defense-in-depth; the zip is the repo's own release asset).
+- **Deterministic network output** — `generate_entity_networks.py` builds its pruned edge dicts from sorted items and gives edge sorts a total-order key, so regenerated JSON is stable across Python builds.
+
 ### v1.17.0 — Periodicals semantic landscape + Periodicals Overview polish
 
 - **Periodicals Semantic Landscape page block** — a zoomable UMAP scatter of periodical **issues** placed by their 768-dim Gemini `embedding_tableOfContents` (the publications counterpart to the article Semantic Landscape). The `publications` subset has no LDA topics, so its facets are **Country / Decade** only. It reuses the article landscape's `semantic-landscape.js` orchestrator, parameterized by block class (`iwac-vis-periodicals-landscape`). `embedding_tableOfContents` exists only for issues that have a table of contents (~325 of 1,501), so the map plots that subset. New generator `generate_periodicals_landscape.py` (needs `umap-learn`); embeddable via the `periodicals-landscape` slug.

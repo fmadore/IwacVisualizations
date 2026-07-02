@@ -20,6 +20,8 @@ stack, `SyncData`, the periodicals landscape — plus cross-block consistency.
 New findings live in **Tier 4** below; June items the follow-up merely
 re-confirmed stay in their original tiers. Accessibility/visual work and new
 visualizations from the same audit are tracked in ROADMAP.md Phases 8–9.
+The Tier 4 **quick wins** + ROADMAP **8.1–8.3** shipped as **v1.18.0**
+(2026-07-02); the remaining Tier 4 items are open.
 
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
