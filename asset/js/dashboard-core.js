@@ -113,9 +113,11 @@
         if (typeof ResizeObserver !== 'undefined') {
             var ro = new ResizeObserver(debounce(function () {
                 if (entry.instance && !entry.instance.isDisposed()) {
-                    entry.instance.resize({
-                        animation: { duration: 200, easing: 'cubicOut' }
-                    });
+                    entry.instance.resize(
+                        ns.prefersReducedMotion && ns.prefersReducedMotion()
+                            ? undefined
+                            : { animation: { duration: 200, easing: 'cubicOut' } }
+                    );
                 }
             }, 150));
             ro.observe(el.parentElement || el);
@@ -290,6 +292,12 @@
         if (window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
                 if (!document.body.getAttribute('data-theme')) handleThemeChange();
+            });
+            // Reduced-motion is baked into the ECharts theme at build time
+            // (iwac-theme.js buildTheme → `animation`), so a mid-session
+            // preference flip needs a theme rebuild + re-render to apply.
+            window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', function () {
+                ns.applyThemeToCharts();
             });
         }
     }

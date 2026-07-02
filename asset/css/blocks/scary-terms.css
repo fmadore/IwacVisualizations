@@ -152,7 +152,7 @@
 }
 
 .iwac-vis-scary-view-btn:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
@@ -194,8 +194,10 @@
 }
 
 .iwac-vis-scary-ctrl-btn {
-    width: 2rem;
-    height: 2rem;
+    /* Primary playback controls — WCAG tap target (theme --size-control-lg,
+       44px), not the 32px icon-button size secondary affordances use. */
+    width: var(--size-control-lg, 2.75rem);
+    height: var(--size-control-lg, 2.75rem);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -219,7 +221,7 @@
 }
 
 .iwac-vis-scary-ctrl-btn:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 

@@ -391,6 +391,18 @@
         return [tokens.primary, tokens.secondary].concat(PALETTE_REST.slice(1));
     }
 
+    /**
+     * Live check of the visitor's reduced-motion preference. Exposed on
+     * the namespace so dashboard-core (resize animation) and block code
+     * share one definition. Queried at theme-build time — dashboard-core
+     * listens for mid-session preference flips and rebuilds the themes.
+     */
+    function prefersReducedMotion() {
+        return !!(window.matchMedia
+            && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+    ns.prefersReducedMotion = prefersReducedMotion;
+
     /** Build an ECharts theme object from the IWAC tokens. */
     function buildTheme(tokens) {
         var palette = buildPalette(tokens);
@@ -401,6 +413,14 @@
             // Accessibility — ECharts generates an aria-label summary of
             // every chart unless a caller explicitly disables it.
             aria: { enabled: true },
+            // Motion accessibility (ROADMAP 8.1) — under a reduced-motion
+            // preference, disable ECharts animation at theme level. Option
+            // builders only ever set durations/easings (never
+            // `animation: true`), so this single switch silences initial
+            // AND update animations everywhere; the scary-terms bar race —
+            // user-initiated, never autoplay — then snaps between frames
+            // instead of easing.
+            animation: !prefersReducedMotion(),
             textStyle: {
                 color: tokens.ink,
                 fontFamily: tokens.fontFamily

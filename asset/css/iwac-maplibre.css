@@ -262,7 +262,7 @@ a.iwac-vis-map-popup__item-title:hover {
 }
 
 .iwac-vis-map .maplibregl-ctrl-group button:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: -2px;
     z-index: 1;
 }
@@ -345,7 +345,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 }
 
 .iwac-choropleth-ctrl__btn:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: -2px;
 }
 
@@ -416,7 +416,7 @@ body[data-theme="dark"] .iwac-vis-map .maplibregl-ctrl-attrib {
 }
 
 .iwac-compare-choropleth-ctrl__btn:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: -2px;
     z-index: 1;
 }

@@ -360,26 +360,35 @@ The 2026-07-02 follow-up audit found one real accessibility hole and two
 smaller ones. The code-hygiene siblings from the same audit live in
 REFACTORING.md **Tier 4**.
 
-- [ ] **8.1 `prefers-reduced-motion` support.** Today only the loading
-      spinner respects it; every ECharts animation, 30+ CSS transitions and
-      the Scary Terms bar-race autoplay ignore it. Plan: (a) read
-      `matchMedia('(prefers-reduced-motion: reduce)')` centrally and merge
-      `animation: false` into every tracked chart the same way
-      `ns._applyAria` merges aria (survives notMerge renders + theme
-      swaps); (b) start the Scary Terms race paused under the query (the
-      manual slider keeps working); (c) a module-scoped CSS block zeroing
-      `.iwac-vis-*` transition/animation durations (keep the spinner's
-      existing slow-spin override). Closes the motion half of 7.2 without
-      waiting for the live session.
-- [ ] **8.2 Touch targets.** The Scary Terms playback buttons are 32px
-      (`scary-terms.css`), below the theme's own `--size-control-lg` 44px
-      WCAG target — and they are primary controls on that block.
-      Panel-toolbar icons (32px) are secondary affordances and may stay,
-      documented.
-- [ ] **8.3 Focus-ring consistency.** ~15 sites hand-write
-      `outline: 2px solid var(--primary, …)`; route them through the theme
-      focus token (as `compare-newspapers.css` already does) so focus
-      colour is themeable in one place.
+- [x] **8.1 `prefers-reduced-motion` support** — **DONE (2026-07-02)**,
+      with a better mechanism than planned: instead of a post-render merge
+      (which cannot suppress the *initial* render animation — it is
+      already in flight by merge time), `iwac-theme.js::buildTheme` bakes
+      `animation: !prefersReducedMotion()` into the ECharts theme itself,
+      applied at `init`. Option builders only ever set durations/easings,
+      never `animation: true`, so the single theme switch silences initial
+      AND update animation everywhere. Plus: the ResizeObserver resize
+      animation honors it; a `change` listener rebuilds themes on a
+      mid-session preference flip; and `iwac-core.css` zeroes
+      `.iwac-vis-*` transitions under the query (spinner keeps its
+      deliberate slow-spin override). **Audit correction:** the Scary
+      Terms race has NO autoplay — `play()` is wired only to the Play
+      button — so there was nothing to gate; under reduced motion its
+      user-initiated frames now snap instead of easing, which is the
+      correct behaviour.
+- [x] **8.2 Touch targets** — **DONE (2026-07-02)**. Scary Terms playback
+      buttons went 32px → `var(--size-control-lg, 2.75rem)` (44px WCAG
+      target) — they are primary controls on that block. Panel-toolbar
+      icons stay 32px as documented secondary affordances
+      (`iwac-core.css` icon-button token comment).
+- [x] **8.3 Focus-ring consistency** — **DONE (2026-07-02)**, and it
+      uncovered a phantom token (the `--ink-muted` class of bug): six
+      sites referenced `--focus-ring`, which the theme never defines — the
+      canonical token per `tokens.json` is `--focus-color` (light
+      `#ce4115`, dark `#ec653f`). All 15 focus outlines now share
+      `outline: 2px solid var(--focus-color, var(--primary, #ce4115))`,
+      so dark mode gets the theme's dedicated lighter focus colour
+      instead of silently falling through to `--primary`.
 - [ ] **8.4 Colour-blind / decal review** — unchanged from 7.2, still gated
       on the 4.8 live-site session.
 - [ ] **8.5 Dark-mode spot checks (live session):** Scary Terms slider

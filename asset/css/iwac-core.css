@@ -196,6 +196,23 @@
     .iwac-vis-spinner { animation-duration: 2s; }
 }
 
+/* Reduced motion — kill decorative transitions module-wide (card lifts,
+   chip hovers, toolbar fades). !important is the sanctioned a11y override:
+   it must beat every block sheet's own transition declarations. Durations
+   go near-zero rather than `none` so anything styled via transition still
+   reaches its end state. Animations are NOT blanket-zeroed: the spinner
+   above deliberately slows instead of freezing into a broken-looking ring,
+   and chart motion is disabled centrally in the ECharts theme
+   (iwac-theme.js). */
+@media (prefers-reduced-motion: reduce) {
+    [class*="iwac-vis-"],
+    [class*="iwac-vis-"]::before,
+    [class*="iwac-vis-"]::after {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+    }
+}
+
 
 /* =================================================================== */
 /*  Chart panel — container for a single ECharts instance                */
@@ -509,7 +526,7 @@
 }
 
 .iwac-vis-btn:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
@@ -741,7 +758,7 @@
 .iwac-vis-pagination__btn:focus-visible,
 .iwac-vis-facets__btn:focus-visible,
 .iwac-vis-facets__sub-btn:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 
@@ -919,7 +936,7 @@
 .iwac-vis-spatial-toolbar__select:focus-visible,
 .iwac-vis-networks-toolbar__select:focus-visible,
 .iwac-vis-networks-search__input:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
     border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
 }
@@ -1218,7 +1235,7 @@
 }
 
 .iwac-vis-similar-card:focus-visible {
-    outline: 2px solid var(--focus-ring, var(--primary, #ce4115));
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
 }
 

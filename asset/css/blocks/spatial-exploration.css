@@ -124,7 +124,7 @@
 }
 
 .iwac-vis-spatial-picker__item:focus-visible {
-    outline: 2px solid var(--primary, #ce4115);
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 1px;
 }
 
