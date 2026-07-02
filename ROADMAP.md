@@ -328,6 +328,8 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
       closed except for the explicit non-ports `KnowledgeGraph` and
       `TopicNetwork`.
 
+## Phase 7 — Theme & i18n consolidation
+
 The June 2026 CSS audit found **zero violations** of the IWAC theme
 v2.0.0 rules — this phase is consolidation, not correction.
 
@@ -351,6 +353,103 @@ v2.0.0 rules — this phase is consolidation, not correction.
       gettext on this machine — the README documents both compile
       paths). Also fixed `ReferencesOverview`'s stale "fetched live
       from Hugging Face" admin description while extracting it.
+
+## Phase 8 — Accessibility & motion (2026-07 audit)
+
+The 2026-07-02 follow-up audit found one real accessibility hole and two
+smaller ones. The code-hygiene siblings from the same audit live in
+REFACTORING.md **Tier 4**.
+
+- [ ] **8.1 `prefers-reduced-motion` support.** Today only the loading
+      spinner respects it; every ECharts animation, 30+ CSS transitions and
+      the Scary Terms bar-race autoplay ignore it. Plan: (a) read
+      `matchMedia('(prefers-reduced-motion: reduce)')` centrally and merge
+      `animation: false` into every tracked chart the same way
+      `ns._applyAria` merges aria (survives notMerge renders + theme
+      swaps); (b) start the Scary Terms race paused under the query (the
+      manual slider keeps working); (c) a module-scoped CSS block zeroing
+      `.iwac-vis-*` transition/animation durations (keep the spinner's
+      existing slow-spin override). Closes the motion half of 7.2 without
+      waiting for the live session.
+- [ ] **8.2 Touch targets.** The Scary Terms playback buttons are 32px
+      (`scary-terms.css`), below the theme's own `--size-control-lg` 44px
+      WCAG target — and they are primary controls on that block.
+      Panel-toolbar icons (32px) are secondary affordances and may stay,
+      documented.
+- [ ] **8.3 Focus-ring consistency.** ~15 sites hand-write
+      `outline: 2px solid var(--primary, …)`; route them through the theme
+      focus token (as `compare-newspapers.css` already does) so focus
+      colour is themeable in one place.
+- [ ] **8.4 Colour-blind / decal review** — unchanged from 7.2, still gated
+      on the 4.8 live-site session.
+- [ ] **8.5 Dark-mode spot checks (live session):** Scary Terms slider
+      track on dark surfaces; the similarity badge over article thumbnails
+      (`article-dashboard.css`) is contrast-risky.
+
+## Phase 9 — New corpus visualizations, round 2 (2026-07 audit)
+
+Checked against every existing panel and the explicit non-ports
+(KnowledgeGraph / TopicNetwork / globe stay out). Ranked by research value
+÷ effort. Payload discipline per Phase 5 applies (minify, lazy-load on
+view, split heavy bundles).
+
+- [ ] **9.1 Topic dynamics over time.** The single biggest analytic gap:
+      nothing shows how corpus attention shifted across the 30 LDA topics
+      over six decades. ECharts `themeRiver` (or 100%-stacked area) of
+      topic share per year, top-12 + Other, country facet.
+      `generate_topic_explorer.py` already computes per-topic year×day
+      cells — summing to years is a ~10 KB addition to the existing
+      bundle. New overview panel in Topic Explorer.
+- [ ] **9.2 Sentiment × topic.** Which LDA topics carry negative/positive
+      framing, per model — one extra groupby in
+      `generate_sentiment_atlas.py`, one diverging-bar panel in the Atlas.
+      The extremes-keywords panel hints at this question; nothing answers
+      it.
+- [ ] **9.3 Sentiment by newspaper.** The Atlas has polarity by country
+      but not by outlet; diverging stacked hbar for the ≥50-article
+      newspapers (same threshold Press Language uses). Pairs with Press
+      Language's per-newspaper rankings as an "editorial profile" story.
+- [ ] **9.4 Periodical holdings matrix.** The runs gantt shows spans but
+      hides density: a periodical × year heatmap of issue counts makes run
+      gaps visible (for researchers and acquisition priorities). Small
+      aggregation in `generate_periodicals_overview.py`; natural pilot for
+      the deferred 4.6 `matrix` coordinate system.
+- [ ] **9.5 Semantic Landscape cluster labels.** Precompute per-topic UMAP
+      centroids and overlay toggleable topic-label text at the centroids —
+      the "map of everything" is currently decodable only via the legend.
+      ~30 rows of extra data in `semantic-landscape.json`.
+- [ ] **9.6 Term-trends explorer ("IWAC Ngram viewer").** Generalize Scary
+      Terms from a curated list to *any* term: per-year document frequency
+      for the top ~3–5k lemmas (`lemma_nostop`, articles first), search +
+      multi-select overlay reusing the Keyword Explorer UI. Distinct from
+      both existing tools (Keyword Explorer counts item *tagging*; Scary
+      Terms counts a *fixed vocabulary*). Keyword-explorer-scale payload,
+      lazy-loaded / sharded. New page block + generator.
+- [ ] **9.7 Rising/falling subjects bump chart** — rank of top subjects
+      per decade from the existing keyword-explorer series; answers "what
+      replaced what" in a way the line charts don't.
+- [ ] **9.8 Geographic attention over time** — year slider / small
+      multiples on the choropleth; per-country×year data already exists in
+      `keyword-explorer-spatial.json`.
+- [ ] **9.9 Reprint / wire-copy detector.** Near-duplicate article pairs
+      (embedding cosine ≥ ~0.97, different newspapers) surface syndicated
+      agency copy (PANA/AFP) circulating between outlets — novel for press
+      historians. Prototype thresholds in a notebook first (OCR noise);
+      precompute pairs, render table + small network. Depends on the
+      Tier-4 `iwac_embeddings.py` extraction.
+- [ ] **9.10 Corpus-health dashboard (admin).** Coverage meters next to
+      the Sync Data admin page: ToC embeddings (~325/1,501 issues),
+      geocoded places, sentiment/embedding coverage, partial dates per
+      subset. Curator-facing; steers upstream pipeline priorities.
+- [ ] **9.11 (gated) Bylines / journalists panel.** Top authors, active
+      spans, subject specialties — gated on verifying `articles.author`
+      coverage first (the HF statistics endpoint was 500-ing on
+      2026-07-02).
+- **Won't do (unchanged):** KnowledgeGraph, TopicNetwork, globe
+  projection. A Compare Countries block is unnecessary — the Compare
+  Newspapers picker already has a whole-country scope. An "On this day"
+  widget was considered and parked: editorial-product register, against
+  the research-instrument philosophy.
 
 ---
 

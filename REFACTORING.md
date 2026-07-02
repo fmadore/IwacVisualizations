@@ -14,6 +14,13 @@ heatmap **color rendering** that needs live Playwright verification. (The Python
 tier is now **unblocked** — `iwac-dashboard` is deprecated, so `iwac_utils.py` has
 no sync constraint.)
 
+**2026-07-02 follow-up:** a second four-way audit (JS · Python · PHP/templates ·
+CSS) covering the code that post-dates the June pass — the v1.14–v1.17 embed
+stack, `SyncData`, the periodicals landscape — plus cross-block consistency.
+New findings live in **Tier 4** below; June items the follow-up merely
+re-confirmed stay in their original tiers. Accessibility/visual work and new
+visualizations from the same audit are tracked in ROADMAP.md Phases 8–9.
+
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
 (shared JS infra · per-block JS · CSS/theme tokens · PHP/templates · Python),
@@ -287,6 +294,123 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `metadata`). And relative `--output` resolves to module-root in 5 generators but
   is used raw in 7. Add a `resolve_output_path(arg, module_root)` helper;
   standardize `--output` (single file) vs `--output-dir` (fan-out).
+
+---
+
+## Tier 4 — 2026-07 follow-up audit (new findings)
+
+Second repo-wide pass (2026-07-02). Focus: code that post-dates the June
+audit (the v1.14–v1.17 embed stack, `SyncData`, periodicals landscape) and
+cross-block consistency the June pass missed. Two **false positives** are
+documented at the end so a future cleanup pass doesn't trip on them.
+
+### Quick wins (build-verifiable, low blast radius)
+
+- [ ] **spatial-exploration fetch hygiene** — `spatial-exploration/state.js`
+  and `spatial-exploration/map.js` still use raw `fetch()` (they post-date the
+  v1.3.0 `P.fetchJSON` migration), and the state loader has **no catch
+  handler**: a failed sidecar fetch leaves the block spinning forever instead
+  of rendering `P.buildErrorState`. Migrate both to `P.fetchJSON` + wire the
+  error state.
+- [ ] **Zip-slip guard in `SyncData.php`** — the stage-extract step calls
+  `ZipArchive::extractTo()` without validating entry paths; a hostile archive
+  could escape the stage dir via `../` entries. Risk is LOW (the zip comes
+  from the module's own GitHub release), but a `getNameIndex()` validation
+  loop rejecting `..` / absolute / drive-letter entries is ~10 lines of
+  defense-in-depth for a job that writes into `files/`.
+- [ ] **`P.lazyInit(el, render, opts)`** — the IntersectionObserver
+  arm-render-disconnect boilerplate is copy-pasted ×5:
+  `collection-overview/{map,sources-map,wordcloud}.js`,
+  `index-overview/places-map.js`, `index-overview.js` (Section B gate). One
+  shared helper in `shared/panels.js`; keep per-site `rootMargin` overrides.
+- [ ] **Deterministic edge iteration in `generate_entity_networks.py`** —
+  8 bare `.items()` loops (lines 180, 209, 244, 250, 284, 322, 327, 351)
+  iterate dicts whose order depends on upstream set/dict churn; `sorted(...)`
+  at those sites makes regenerated output stable without the
+  `PYTHONHASHSEED=0` crutch discovered in ROADMAP 3.2.
+- [ ] **Block-local i18n extraction ×6** — `scary-terms/i18n.js` is the
+  established pattern, but six orchestrators still inline their en/fr
+  dictionaries: `sentiment-atlas.js` (~57 entries — also the first step of
+  the Tier 3 split), `semantic-landscape.js`, `periodicals-overview.js`,
+  `lexical-metrics.js`, `item-set-dashboard.js`, `topic-explorer.js`.
+  Extract each to a sibling `<block>/i18n.js` loaded via the phtml `panels`
+  list. (semantic-landscape's dictionary serves two blocks — update both
+  `semantic-landscape.phtml` and `periodicals-landscape.phtml`.)
+
+### JS consistency
+
+- [ ] **Tooltip formatter helpers** — count+percent / label:value formatters
+  are re-rolled inline in 8+ files (sentiment-atlas, references-overview,
+  topic-explorer, …). Two or three canonical builders on `chart-options.js`
+  would drop ~200 lines and unify tooltip typography.
+- [ ] **Document the two bootstrap idioms** — ~8 older blocks boot through
+  `P.setupOnView()` (the on-view lazy contract from `iwac-assets.phtml`);
+  newer ones query-select and init eagerly. **Investigate before unifying** —
+  the eager blocks may be deliberate. Deliverable is a decision + README
+  note, not a blind migration.
+- [ ] **Hardcoded UI grays in shared JS** — `choropleth.js` (`#fff`, `#ddd`),
+  `maplibre.js` (`#999`, `#333`), `spatial-exploration/map.js`
+  (`rgba(200,200,200,.3)`). `check-theme-tokens.js` polices CSS hex, not
+  arbitrary JS literals, so these slip the lint. Verify each is a token-first
+  fallback (the sanctioned pattern) and convert the ones that aren't;
+  scary-terms' literals are already tracked in Tier 3.
+
+### Python consolidation (beyond the June items)
+
+- [ ] **`iwac_utils.add_standard_args(parser)` + run helper** — the June
+  audit tracked a CLI harness for the two dashboard fan-outs only; in fact
+  all 22 generators repeat the same ~20–30-line argparse /
+  `configure_logging` prologue (~400–600 lines total). Pure plumbing,
+  output-identical, `py_compile`-safe.
+- [ ] **`build_timeline_series(df, …)`** — the year×country timeline
+  aggregation is re-implemented in `generate_collection_overview.py`
+  (`_build_timeline`), `dashboard_aggregator.py` (`compute_timeline`),
+  references-overview and ~5 more. Largest single Python dedup not on the
+  June list (~200 lines).
+- [ ] **`build_wordcloud_series(df, text_col, …)`** — global / by-country /
+  by-year Counter aggregation duplicated between `generate_wordcloud.py` and
+  the periodicals word-cloud path; extract next to the June-tracked
+  `iwac_text.py` stopwords/tokenize move.
+- **June item upgraded:** `iwac_embeddings.py` — the kNN stack is now
+  copy-pasted **×4** (v1.17's `generate_periodicals_landscape.py` added a
+  fourth copy to the three the June audit counted).
+
+### PHP / embed stack (first audit of the v1.14–v1.16 code)
+
+- [ ] **SRI hashes on the pinned CDN assets** — optional; versions are
+  already exact-pinned, so `integrity=` is a one-time lookup per bump.
+  Decide together with ROADMAP 5.4 (self-hosting would make SRI moot).
+- [x] **Everything else clean** — verified 2026-07-02: escaping/XSS (none
+  found, again), EmbedController `?theme`/`?primary` whitelist validation,
+  DataController CSRF, atomic swap + restore-on-failure in `SyncData`,
+  module.ini ↔ package.json version lockstep, zero dead templates/classes.
+
+### CSS (new clusters beyond the June aside/pill/eyebrow items)
+
+- [ ] **Toggle/segmented-button family promotion** — `scary-view-btn` +
+  `scary-ctrl-btn` (scary-terms.css), `networks-typechip`
+  (entity-networks.css), compare-picker type buttons
+  (compare-newspapers.css) all re-implement `.iwac-vis-tab` mechanics
+  (~120 lines across 3 sheets).
+- [ ] **Core purity pass** — ~350 block-specific lines have accreted into
+  `iwac-core.css` (e.g. `.iwac-vis-publication__body`; the sparkline /
+  similar-items sections are defensible as shared renderers). Extract so
+  core stays "shared only" as the README promises.
+- [ ] **Table header padding** — three divergent paddings (core,
+  collection-overview.css + its mobile override) → one `clamp()` rule.
+- [ ] **compare-newspapers empty state** re-implements the core empty state
+  with different sizing → fold into core.
+- [ ] **Drop the lone `!important`** (`entity-networks.css`, off-state chip
+  dot) — switch to an `aria-disabled` / custom-property override instead.
+
+### False positives — do NOT "fix" these
+
+- **`generate_template_summary.py` is not dead code** — its output
+  `template-summary.json` is fetched by `minimal-item-dashboard.js:80`.
+- **`hf_xet` in `requirements.txt` is not unused** — it is auto-detected by
+  `huggingface_hub` to accelerate Xet-backed dataset downloads; nothing
+  imports it directly, and removing it would slow every generator's
+  `load_dataset` against the (Xet-hosted) IWAC dataset.
 
 ---
 
