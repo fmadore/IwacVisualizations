@@ -1,0 +1,12 @@
+/* =================================================================== */
+/*  Press Bylines — block-specific styles                                */
+/* =================================================================== */
+/*                                                                       */
+/*  Everything else rides iwac-core.css (summary cards, panels, grid).   */
+/* =================================================================== */
+
+/*  The prolific-bylines bar chart draws 25 category rows — give its
+ *  chart host more vertical room than the shared 320px reservation. */
+.iwac-vis-bylines-top .iwac-vis-chart {
+    min-height: 680px;
+}

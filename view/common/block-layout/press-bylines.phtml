@@ -1,0 +1,28 @@
+<?php
+/**
+ * Press Bylines page block.
+ *
+ * Who signed the West African press: summary cards (byline coverage),
+ * the share of signed articles per year, and the most prolific bylines
+ * (journalists and press agencies) with active spans, newspapers and
+ * frequent subjects — each bar linking to the byline's Personnes
+ * authority record where one exists. Loads a single precomputed bundle
+ * from `files/iwac-visualizations/press-bylines.json` (built by
+ * `scripts/generate_press_bylines.py`).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'press-bylines',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'press-bylines',
+    ],
+    'blockClass' => 'iwac-vis-press-bylines',
+    'embedSlug'  => 'press-bylines',
+    'loading'    => $this->translate('Loading press bylines'),
+]);

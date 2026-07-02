@@ -49,6 +49,7 @@ class EmbedController extends AbstractActionController
         'entity-networks'      => 'Entity Networks',
         'compare-newspapers'   => 'Compare Newspapers',
         'on-this-day'          => 'On This Day',
+        'press-bylines'        => 'Press Bylines',
     ];
 
     /**
