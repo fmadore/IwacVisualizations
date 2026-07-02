@@ -306,23 +306,24 @@ documented at the end so a future cleanup pass doesn't trip on them.
 
 ### Quick wins (build-verifiable, low blast radius)
 
-- [ ] **spatial-exploration fetch hygiene** — `spatial-exploration/state.js`
-  and `spatial-exploration/map.js` still use raw `fetch()` (they post-date the
-  v1.3.0 `P.fetchJSON` migration), and the state loader has **no catch
-  handler**: a failed sidecar fetch leaves the block spinning forever instead
-  of rendering `P.buildErrorState`. Migrate both to `P.fetchJSON` + wire the
-  error state.
+- [x] ~~spatial-exploration fetch hygiene~~ — **false positive, verified
+  2026-07-02**: the only bare `fetch()` in the tree is inside `P.fetchJSON`
+  itself; `spatial-exploration/state.js:101` already routes through
+  `P.fetchJSON` and `selectEntity` has a proper `.catch` →
+  `status: 'error'` path (`state.js:131`). Nothing to do.
 - [ ] **Zip-slip guard in `SyncData.php`** — the stage-extract step calls
   `ZipArchive::extractTo()` without validating entry paths; a hostile archive
   could escape the stage dir via `../` entries. Risk is LOW (the zip comes
   from the module's own GitHub release), but a `getNameIndex()` validation
   loop rejecting `..` / absolute / drive-letter entries is ~10 lines of
   defense-in-depth for a job that writes into `files/`.
-- [ ] **`P.lazyInit(el, render, opts)`** — the IntersectionObserver
-  arm-render-disconnect boilerplate is copy-pasted ×5:
-  `collection-overview/{map,sources-map,wordcloud}.js`,
-  `index-overview/places-map.js`, `index-overview.js` (Section B gate). One
-  shared helper in `shared/panels.js`; keep per-site `rootMargin` overrides.
+- [x] **`P.lazyInit(el, render, opts)`** — **DONE (2026-07-02)**. The
+  IntersectionObserver arm-render-disconnect boilerplate was copy-pasted
+  across 6 sites (`collection-overview/{map,sources-map,wordcloud}.js`,
+  `index-overview/places-map.js`, and the two deferred-fetch gates in
+  `index-overview.js` — one more than the audit counted). All now call the
+  one-shot `P.lazyInit` helper in `shared/panels.js`; per-site `rootMargin`
+  overrides preserved (`400px 0px` on the index-overview gates).
 - [ ] **Deterministic edge iteration in `generate_entity_networks.py`** —
   8 bare `.items()` loops (lines 180, 209, 244, 250, 284, 322, 327, 351)
   iterate dicts whose order depends on upstream set/dict churn; `sorted(...)`

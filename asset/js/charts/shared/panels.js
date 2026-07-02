@@ -95,6 +95,47 @@
     };
 
     /* ----------------------------------------------------------------- */
+    /*  On-view lazy init                                                 */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Run `render` exactly once, the first time `target` nears the
+     * viewport (IntersectionObserver with a rootMargin pre-trigger).
+     * Falls back to an immediate call when IntersectionObserver is
+     * unavailable. Replaces the arm-render-disconnect boilerplate that
+     * was copy-pasted across the map / wordcloud / deferred-fetch panels.
+     *
+     * @param {Element}  target  element to observe
+     * @param {Function} render  called exactly once
+     * @param {Object}   [opts]  { rootMargin: '200px' }
+     * @returns {Function} trigger — call to force the render immediately
+     *                     (still one-shot)
+     */
+    P.lazyInit = function (target, render, opts) {
+        var fired = false;
+        function fire() {
+            if (fired) return;
+            fired = true;
+            render();
+        }
+        if (typeof IntersectionObserver === 'undefined') {
+            fire();
+            return fire;
+        }
+        var observer = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    observer.disconnect();
+                    fire();
+                    return;
+                }
+            }
+        }, { rootMargin: (opts && opts.rootMargin) || '200px' });
+        observer.observe(target);
+        return fire;
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  i18n + number formatting shortcuts                                */
     /* ----------------------------------------------------------------- */
 

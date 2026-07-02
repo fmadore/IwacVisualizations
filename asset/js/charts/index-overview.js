@@ -168,10 +168,7 @@
         var spinner = P.buildLoadingState();
         h.indexPanel.chart.appendChild(spinner);
 
-        var requested = false;
-        function load() {
-            if (requested) return;
-            requested = true;
+        P.lazyInit(h.indexPanel.panel, function () {
             P.fetchJSON(base + 'index-overview-table.json')
                 .then(function (tableData) {
                     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
@@ -182,22 +179,7 @@
                     if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
                     h.indexPanel.chart.appendChild(P.buildFetchErrorState(err));
                 });
-        }
-
-        if (!('IntersectionObserver' in window)) {
-            load();
-            return;
-        }
-        var obs = new IntersectionObserver(function (entries) {
-            for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isIntersecting) {
-                    obs.disconnect();
-                    load();
-                    return;
-                }
-            }
         }, { rootMargin: '400px 0px' });
-        obs.observe(h.indexPanel.panel);
     }
 
     function wireSectionB(h, datasets) {
@@ -228,10 +210,7 @@
         var spinner = P.buildLoadingState();
         h.chartPanel.chart.appendChild(spinner);
 
-        var requested = false;
-        function load() {
-            if (requested) return;
-            requested = true;
+        P.lazyInit(h.sectionB, function () {
             Promise.all([
                 P.fetchJSON(base + 'keyword-explorer-subjects.json'),
                 P.fetchJSON(base + 'keyword-explorer-spatial.json'),
@@ -250,22 +229,7 @@
                 if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
                 h.chartPanel.chart.appendChild(P.buildFetchErrorState(err));
             });
-        }
-
-        if (!('IntersectionObserver' in window)) {
-            load();
-            return;
-        }
-        var io = new IntersectionObserver(function (entries) {
-            for (var i = 0; i < entries.length; i++) {
-                if (entries[i].isIntersecting) {
-                    io.disconnect();
-                    load();
-                    return;
-                }
-            }
         }, { rootMargin: '400px 0px' });
-        io.observe(h.sectionB);
     }
 
     function initBlock(container) {

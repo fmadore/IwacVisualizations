@@ -37,10 +37,7 @@
 
         panelEl.chart.appendChild(P.buildLoadingState());
 
-        var loaded = false;
-        function loadAndRender() {
-            if (loaded) return;
-            loaded = true;
+        P.lazyInit(panelEl.panel, function () {
             P.fetchJSON(dataUrl)
                 .then(function (mapData) {
                     panelEl.chart.innerHTML = '';
@@ -51,21 +48,7 @@
                     panelEl.chart.innerHTML = '';
                     panelEl.chart.appendChild(P.buildFetchErrorState(err));
                 });
-        }
-
-        if (typeof IntersectionObserver !== 'undefined') {
-            var observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        loadAndRender();
-                        observer.disconnect();
-                    }
-                });
-            }, { rootMargin: '200px' });
-            observer.observe(panelEl.panel);
-        } else {
-            loadAndRender();
-        }
+        });
     }
 
     // Map raw country spellings to their accented/unaccented twin so the

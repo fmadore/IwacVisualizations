@@ -47,27 +47,10 @@
         var loading = P.buildLoadingState();
         panelEl.chart.appendChild(loading);
 
-        var built = false;
-        function buildWhenVisible() {
-            if (built) return;
-            built = true;
+        P.lazyInit(panelEl.panel, function () {
             panelEl.chart.removeChild(loading);
             build(panelEl, places, mentions, ctx);
-        }
-
-        if (typeof IntersectionObserver !== 'undefined') {
-            var observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        buildWhenVisible();
-                        observer.disconnect();
-                    }
-                });
-            }, { rootMargin: '200px' });
-            observer.observe(panelEl.panel);
-        } else {
-            buildWhenVisible();
-        }
+        });
     }
 
     function build(panelEl, places, mentions, ctx) {
