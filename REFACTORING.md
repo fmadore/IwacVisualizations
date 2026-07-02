@@ -334,14 +334,16 @@ documented at the end so a future cleanup pass doesn't trip on them.
   numeric path, and the equal-weight ties in the output), and the output
   edge sorts gained a total-order key `(-w, src, tgt)`. Output verification
   against live data belongs to the next CI regeneration.
-- [ ] **Block-local i18n extraction ×6** — `scary-terms/i18n.js` is the
-  established pattern, but six orchestrators still inline their en/fr
-  dictionaries: `sentiment-atlas.js` (~57 entries — also the first step of
-  the Tier 3 split), `semantic-landscape.js`, `periodicals-overview.js`,
-  `lexical-metrics.js`, `item-set-dashboard.js`, `topic-explorer.js`.
-  Extract each to a sibling `<block>/i18n.js` loaded via the phtml `panels`
-  list. (semantic-landscape's dictionary serves two blocks — update both
-  `semantic-landscape.phtml` and `periodicals-landscape.phtml`.)
+- [x] **Block-local i18n extraction** — **DONE (2026-07-02)** for the four
+  real cases: `sentiment-atlas/i18n.js` (~75 entries/locale — also the
+  first step of the Tier 3 split), `semantic-landscape/i18n.js` (serves
+  both landscape blocks; both phtml templates load it),
+  `periodicals-overview/i18n.js`, `lexical-metrics/i18n.js`. Every table
+  verified byte-identical against the removed original. Two audit-listed
+  candidates were deliberately NOT extracted: `topic-explorer.js` has no
+  inline table at all (audit miscount), and `item-set-dashboard.js`'s
+  6-key table is smaller than the extra script request it would cost —
+  left inline by design.
 
 ### JS consistency
 

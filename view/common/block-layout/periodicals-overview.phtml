@@ -22,6 +22,9 @@ echo $this->partial('common/iwac-block-shell', [
             'chartOptions' => true,
             'wordcloud'    => true,
         ],
+        'panels' => [
+            'periodicals-overview/i18n',
+        ],
         'orchestrator' => 'periodicals-overview',
     ],
     'blockClass' => 'iwac-vis-periodicals-overview',
