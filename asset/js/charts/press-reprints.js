@@ -1,0 +1,264 @@
+/**
+ * IWAC Visualizations — Press Reprints page block (orchestrator)
+ *
+ * Near-duplicate article pairs across different newspapers (ROADMAP
+ * 9.9): syndicated wire copy, shared communiqués, straight reprints.
+ * Loads `press-reprints.json` (built by `scripts/generate_reprints.py`
+ * via embedding cosine similarity — see the AI-provenance note in the
+ * block description) and renders:
+ *
+ *   - summary cards — published pairs, newspapers involved, median
+ *     day gap, articles scanned
+ *   - circulation network — newspapers as nodes (country-colored),
+ *     edge width = number of shared texts
+ *   - the pair table — similarity, day gap, both articles linked to
+ *     their IWAC items
+ *
+ * Load order: after shared/panels.js + chart-options*.js + table.js.
+ */
+(function () {
+    'use strict';
+
+    var ns = window.IWACVis;
+    if (!ns || !ns.panels || !ns.chartOptions) {
+        console.warn('IWACVis press reprints: missing panels or chartOptions — check script load order');
+        return;
+    }
+    var P = ns.panels;
+    var C = ns.chartOptions;
+
+    if (ns.addTranslations) {
+        ns.addTranslations('en', {
+            'Loading press reprints':  'Loading press reprints',
+            'reprints.title':          'Press reprints & wire copy',
+            'reprints.description':    'Article pairs published by different newspapers with near-identical text — press-agency dispatches (PANA, AFP), shared communiqués, and straight reprints. Pairs are detected computationally: two articles appear here when their text embeddings agree at ≥ {threshold} cosine similarity, so treat borderline pairs as leads to verify, not facts.',
+            'reprints.card_pairs':     'Reprint pairs',
+            'reprints.card_papers':    'Newspapers involved',
+            'reprints.card_gap':       'Median gap (days)',
+            'reprints.card_scanned':   'Articles compared',
+            'reprints.network_title':  'Circulation network',
+            'reprints.network_desc':   'Line width is the number of near-identical texts two outlets share; node size is the outlet’s total. Colors follow the outlet’s country.',
+            'reprints.network_tip':    '{a} ↔ {b}: {n} shared texts',
+            'reprints.node_tip':       '{name}: {n} shared texts',
+            'reprints.table_title':    'Reprint pairs',
+            'reprints.table_desc':     'Sorted by similarity. A gap of 0–2 days is the wire-copy signature; longer gaps suggest deliberate reprints.',
+            'reprints.col_sim':        'Similarity',
+            'reprints.col_gap':        'Gap (days)',
+            'reprints.col_article_a':  'Article A',
+            'reprints.col_paper_a':    'Newspaper A',
+            'reprints.col_article_b':  'Article B',
+            'reprints.col_paper_b':    'Newspaper B',
+            'reprints.truncated':      'Showing the {n} strongest pairs — the full set continues below the threshold.'
+        });
+        ns.addTranslations('fr', {
+            'Loading press reprints':  'Chargement des reprises de presse',
+            'reprints.title':          'Reprises de presse et dépêches',
+            'reprints.description':    'Paires d’articles publiés par des journaux différents avec un texte quasi identique — dépêches d’agence (PANA, AFP), communiqués partagés et reprises. La détection est computationnelle : deux articles apparaissent ici quand leurs plongements textuels concordent à ≥ {threshold} de similarité cosinus ; considérez les paires limites comme des pistes à vérifier, pas des faits.',
+            'reprints.card_pairs':     'Paires de reprises',
+            'reprints.card_papers':    'Journaux concernés',
+            'reprints.card_gap':       'Écart médian (jours)',
+            'reprints.card_scanned':   'Articles comparés',
+            'reprints.network_title':  'Réseau de circulation',
+            'reprints.network_desc':   'L’épaisseur du lien correspond au nombre de textes quasi identiques partagés par deux journaux ; la taille du nœud au total du journal. Les couleurs suivent le pays du journal.',
+            'reprints.network_tip':    '{a} ↔ {b} : {n} textes partagés',
+            'reprints.node_tip':       '{name} : {n} textes partagés',
+            'reprints.table_title':    'Paires de reprises',
+            'reprints.table_desc':     'Triées par similarité. Un écart de 0 à 2 jours est la signature des dépêches ; un écart plus long suggère une reprise délibérée.',
+            'reprints.col_sim':        'Similarité',
+            'reprints.col_gap':        'Écart (jours)',
+            'reprints.col_article_a':  'Article A',
+            'reprints.col_paper_a':    'Journal A',
+            'reprints.col_article_b':  'Article B',
+            'reprints.col_paper_b':    'Journal B',
+            'reprints.truncated':      'Affichage des {n} paires les plus fortes — l’ensemble continue sous le seuil.'
+        });
+    }
+
+    function initBlock(container) {
+        var ctx = {
+            basePath: container.dataset.basePath || '',
+            siteBase: container.dataset.siteBase || ''
+        };
+        P.fetchJSON(ctx.basePath + '/files/iwac-visualizations/press-reprints.json')
+            .then(function (data) { buildLayout(container, data, ctx); })
+            .catch(function (err) {
+                console.error('IWACVis press reprints:', err);
+                container.innerHTML = '';
+                container.appendChild(P.buildFetchErrorState(err));
+            });
+    }
+
+    function buildLayout(container, data, ctx) {
+        container.innerHTML = '';
+        var root = P.el('div', 'iwac-vis-overview-root iwac-vis-reprints-root');
+        container.appendChild(root);
+
+        var header = P.el('div', 'iwac-vis-reprints-header');
+        header.appendChild(P.el('h3', 'iwac-vis-reprints-title', P.t('reprints.title')));
+        header.appendChild(P.el('p', 'iwac-vis-reprints-desc',
+            P.t('reprints.description', { threshold: data.threshold || 0.97 })));
+        root.appendChild(header);
+
+        var s = data.stats || {};
+        root.appendChild(P.buildSummaryCards([
+            { value: s.published_pairs,           labelKey: 'reprints.card_pairs' },
+            { value: s.newspapers_involved,       labelKey: 'reprints.card_papers' },
+            { value: s.median_day_gap,            labelKey: 'reprints.card_gap' },
+            { value: s.articles_with_embeddings,  labelKey: 'reprints.card_scanned' }
+        ]));
+
+        var grid = P.buildChartsGrid();
+        root.appendChild(grid);
+
+        var networkPanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide iwac-vis-reprints-network',
+            P.t('reprints.network_title'), P.t('reprints.network_desc'));
+        grid.appendChild(networkPanel.panel);
+
+        var tablePanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('reprints.table_title'), P.t('reprints.table_desc'));
+        grid.appendChild(tablePanel.panel);
+
+        renderNetwork(networkPanel, data);
+        renderTable(tablePanel, data, ctx);
+    }
+
+    /* --------------------------------------------------------------- */
+    /*  Circulation network — newspapers as nodes, shared-text edges     */
+    /* --------------------------------------------------------------- */
+
+    function renderNetwork(panel, data) {
+        var papers = data.newspapers || [];
+        var links = data.links || [];
+        if (!papers.length || !links.length) {
+            panel.chart.appendChild(P.buildEmptyState());
+            return;
+        }
+        var maxPairs = Math.max.apply(null, papers.map(function (p) { return p.pairs || 1; }));
+        var maxLink = Math.max.apply(null, links.map(function (l) { return l[2] || 1; }));
+
+        ns.registerChart(panel.chart, function (el, chart) {
+            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+            var nodes = papers.map(function (p) {
+                return {
+                    id: p.name,
+                    name: p.name,
+                    value: p.pairs,
+                    symbolSize: 12 + Math.sqrt((p.pairs || 1) / maxPairs) * 30,
+                    itemStyle: { color: C._countryColor(p.country || '') },
+                    label: { show: true, position: 'right', fontSize: 11 }
+                };
+            });
+            var edges = links.map(function (l) {
+                return {
+                    source: l[0],
+                    target: l[1],
+                    value: l[2],
+                    lineStyle: {
+                        width: 1 + (l[2] / maxLink) * 6,
+                        color: tokens.border || '#d4d6da',
+                        curveness: 0.15
+                    }
+                };
+            });
+            chart.setOption({
+                tooltip: {
+                    confine: true,
+                    formatter: function (p) {
+                        if (p.dataType === 'edge') {
+                            return P.t('reprints.network_tip', {
+                                a: P.escapeHtml(p.data.source),
+                                b: P.escapeHtml(p.data.target),
+                                n: P.formatNumber(p.data.value || 0)
+                            });
+                        }
+                        return P.t('reprints.node_tip', {
+                            name: P.escapeHtml(p.data.name || ''),
+                            n: P.formatNumber(p.data.value || 0)
+                        });
+                    }
+                },
+                series: [{
+                    type: 'graph',
+                    layout: 'force',
+                    data: nodes,
+                    links: edges,
+                    roam: true,
+                    force: {
+                        repulsion: 260,
+                        edgeLength: [60, 140],
+                        gravity: 0.12,
+                        layoutAnimation: false
+                    },
+                    emphasis: {
+                        focus: 'adjacency',
+                        lineStyle: { width: 8 }
+                    },
+                    labelLayout: { hideOverlap: true }
+                }]
+            }, true);
+        });
+    }
+
+    /* --------------------------------------------------------------- */
+    /*  Pair table                                                       */
+    /* --------------------------------------------------------------- */
+
+    function renderTable(panel, data, ctx) {
+        var pairs = data.pairs || [];
+        if (!pairs.length) {
+            panel.chart.appendChild(P.buildEmptyState());
+            return;
+        }
+        var rows = pairs.map(function (p) {
+            return {
+                // Pre-formatted: the shared number renderer would show a
+                // missing day gap as "0", which reads as same-day.
+                sim: (p.similarity != null) ? p.similarity.toFixed(3) : '',
+                gap: (p.day_gap != null) ? String(p.day_gap) : '—',
+                titleA: p.a.title || ('#' + p.a.o_id),
+                hrefA: ctx.siteBase ? ctx.siteBase + '/item/' + p.a.o_id : null,
+                paperA: p.a.newspaper,
+                titleB: p.b.title || ('#' + p.b.o_id),
+                hrefB: ctx.siteBase ? ctx.siteBase + '/item/' + p.b.o_id : null,
+                paperB: p.b.newspaper
+            };
+        });
+        var table = P.buildTable({
+            columns: [
+                { key: 'sim',    label: P.t('reprints.col_sim'),       width: '6rem' },
+                { key: 'gap',    label: P.t('reprints.col_gap'),       width: '6rem' },
+                { key: 'titleA', label: P.t('reprints.col_article_a'), render: 'link', linkKey: 'hrefA' },
+                { key: 'paperA', label: P.t('reprints.col_paper_a') },
+                { key: 'titleB', label: P.t('reprints.col_article_b'), render: 'link', linkKey: 'hrefB' },
+                { key: 'paperB', label: P.t('reprints.col_paper_b') }
+            ],
+            rows: rows,
+            pageSize: 10
+        });
+        panel.chart.classList.add('iwac-vis-reprints-tablehost');
+        panel.chart.appendChild(table);
+        if (data.truncated) {
+            panel.panel.appendChild(P.el('p', 'iwac-vis-reprints-note',
+                P.t('reprints.truncated', { n: P.formatNumber(pairs.length) })));
+        }
+    }
+
+    function init() {
+        if (typeof echarts === 'undefined') {
+            console.warn('IWACVis press reprints: ECharts not loaded');
+            return;
+        }
+        var containers = document.querySelectorAll('.iwac-vis-reprints');
+        for (var i = 0; i < containers.length; i++) {
+            initBlock(containers[i]);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

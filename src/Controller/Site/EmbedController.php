@@ -52,6 +52,7 @@ class EmbedController extends AbstractActionController
         'press-bylines'        => 'Press Bylines',
         'org-cooccurrence'     => 'Islamic Organisations Co-occurrence',
         'term-trends'          => 'Term Trends',
+        'press-reprints-detector' => 'Press Reprints',
     ];
 
     /**

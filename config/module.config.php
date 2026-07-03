@@ -14,6 +14,7 @@ return [
             'periodicalsLandscape' => Site\BlockLayout\PeriodicalsLandscape::class,
             'periodicalsOverview' => Site\BlockLayout\PeriodicalsOverview::class,
             'pressBylines' => Site\BlockLayout\PressBylines::class,
+            'pressReprints' => Site\BlockLayout\PressReprints::class,
             'referencesOverview' => Site\BlockLayout\ReferencesOverview::class,
             'scaryTerms' => Site\BlockLayout\ScaryTerms::class,
             'semanticLandscape' => Site\BlockLayout\SemanticLandscape::class,

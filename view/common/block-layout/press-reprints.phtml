@@ -1,0 +1,27 @@
+<?php
+/**
+ * Press Reprints page block.
+ *
+ * Near-duplicate article pairs across different newspapers (embedding
+ * cosine similarity ≥ threshold): summary cards, a newspaper circulation
+ * network, and the paginated pair table with item links. Loads a single
+ * precomputed bundle from `files/iwac-visualizations/press-reprints.json`
+ * (built by `scripts/generate_reprints.py`).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'press-reprints',
+        'needs' => [
+            'chartOptions' => true,
+            'table'        => true,
+        ],
+        'orchestrator' => 'press-reprints',
+    ],
+    'blockClass' => 'iwac-vis-reprints',
+    'embedSlug'  => 'press-reprints-detector',
+    'loading'    => $this->translate('Loading press reprints'),
+]);
