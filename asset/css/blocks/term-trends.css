@@ -1,0 +1,146 @@
+/* =================================================================== */
+/*  Term Trends ("Ngram viewer") — block-specific styles                 */
+/* =================================================================== */
+/*                                                                       */
+/*  Layout: header → controls (search + mode tabs) → term chips →       */
+/*  line-chart panel. Depends on iwac-core.css for tokens, panel, tabs, */
+/*  chips, buttons, and form controls.                                   */
+/* =================================================================== */
+
+.iwac-vis-ngram {
+    min-height: 420px;
+}
+
+.iwac-vis-ngram-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1rem);
+}
+
+.iwac-vis-ngram-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-ngram-title {
+    margin: 0;
+    font-family: var(--font-headings, "Besley", Georgia, serif);
+    font-size: var(--text-2xl, 1.875rem);
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #13161c));
+    line-height: 1.15;
+    letter-spacing: var(--tracking-display, -0.01em);
+}
+
+.iwac-vis-ngram-desc {
+    margin: 0;
+    color: var(--ink-subtle, var(--muted, #66696e));
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    max-width: var(--measure-narrow, 44rem);
+}
+
+.iwac-vis-ngram-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3, 0.75rem);
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Search box + anchored suggestion dropdown */
+
+.iwac-vis-ngram-search {
+    position: relative;
+    flex: 1 1 18rem;
+    max-width: 28rem;
+}
+
+.iwac-vis-ngram-search__input {
+    width: 100%;
+}
+
+.iwac-vis-ngram-search__dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    max-height: 20rem;
+    overflow-y: auto;
+    background: var(--surface-raised, #faf8f6);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    box-shadow: var(--shadow-md, 0 4px 10px var(--iwac-vis-shadow-soft));
+    display: flex;
+    flex-direction: column;
+}
+
+.iwac-vis-ngram-search__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3, 0.75rem);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink, #13161c);
+    cursor: pointer;
+    transition: background-color var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-ngram-search__item:hover {
+    background: color-mix(in oklab, var(--primary, #ce4115) 8%, var(--surface-raised, #faf8f6));
+}
+
+.iwac-vis-ngram-search__item:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: -2px;
+}
+
+.iwac-vis-ngram-search__term {
+    font-weight: 600;
+}
+
+.iwac-vis-ngram-search__count {
+    color: var(--muted, #66696e);
+    font-size: var(--text-xs, 0.8125rem);
+    white-space: nowrap;
+}
+
+.iwac-vis-ngram-search__empty {
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    color: var(--muted, #66696e);
+    font-size: var(--text-sm, 0.9375rem);
+}
+
+/* Selected-term chips row */
+
+.iwac-vis-ngram-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    min-height: 2rem;
+}
+
+.iwac-vis-ngram-chips__label {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--muted, #66696e);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.06em);
+}
+
+.iwac-vis-ngram-chart {
+    width: 100%;
+    min-height: 460px;
+}
+
+@media (max-width: 600px) { /* sm */
+    .iwac-vis-ngram-chart { min-height: 380px; }
+}

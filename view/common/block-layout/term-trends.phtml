@@ -1,0 +1,27 @@
+<?php
+/**
+ * Term Trends page block — the "IWAC Ngram viewer".
+ *
+ * Per-year document frequency of any frequent lemma in the articles
+ * subset: search box + suggestion dropdown, removable term chips,
+ * share-of-articles vs absolute-count toggle, multi-line chart.
+ * Loads `files/iwac-visualizations/term-trends-index.json` up front and
+ * the per-letter shards under `term-trends/` lazily per selected term
+ * (both built by `scripts/generate_term_trends.py`).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'term-trends',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'term-trends',
+    ],
+    'blockClass' => 'iwac-vis-ngram',
+    'embedSlug'  => 'term-trends',
+    'loading'    => $this->translate('Loading term trends'),
+]);

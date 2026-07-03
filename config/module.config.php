@@ -19,6 +19,7 @@ return [
             'semanticLandscape' => Site\BlockLayout\SemanticLandscape::class,
             'sentimentAtlas' => Site\BlockLayout\SentimentAtlas::class,
             'spatialExploration' => Site\BlockLayout\SpatialExploration::class,
+            'termTrends' => Site\BlockLayout\TermTrends::class,
             'topicExplorer' => Site\BlockLayout\TopicExplorer::class,
         ],
     ],

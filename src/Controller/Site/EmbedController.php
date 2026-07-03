@@ -51,6 +51,7 @@ class EmbedController extends AbstractActionController
         'on-this-day'          => 'On This Day',
         'press-bylines'        => 'Press Bylines',
         'org-cooccurrence'     => 'Islamic Organisations Co-occurrence',
+        'term-trends'          => 'Term Trends',
     ];
 
     /**
