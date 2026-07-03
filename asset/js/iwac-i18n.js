@@ -448,6 +448,9 @@
             'desc_topic_countries':         'Distribution of articles in this topic by country of publication.',
             'desc_topic_newspapers':        'Newspapers and periodicals where this topic appears most often.',
             'desc_topic_top_articles':      'Articles whose text the LDA model attached most strongly to this topic, ranked by topic probability.',
+            'topics_over_time_title':       'Topics over time',
+            'topics_over_time_desc':        'How the press’s attention shifted across themes: each band is a topic’s share of that year’s classified articles (largest 12 topics; the rest fold into “Other topics”). Click a band to drill into the topic.',
+            'topic_other':                  'Other topics',
 
             // Shared renderer labels (calendar heatmap, chord, radar,
             // sibling sparkline, similar-items strip, sunburst, treemap)
@@ -973,6 +976,9 @@
             'desc_topic_countries':         'R\u00e9partition des articles de ce th\u00e8me par pays de publication.',
             'desc_topic_newspapers':        'Journaux et p\u00e9riodiques o\u00f9 ce th\u00e8me appara\u00eet le plus souvent.',
             'desc_topic_top_articles':      'Articles que le mod\u00e8le LDA a rattach\u00e9s le plus fortement \u00e0 ce th\u00e8me, class\u00e9s par probabilit\u00e9 d\u2019appartenance.',
+            'topics_over_time_title':       'Th\u00e8mes au fil du temps',
+            'topics_over_time_desc':        'Comment l\u2019attention de la presse s\u2019est d\u00e9plac\u00e9e entre les th\u00e8mes : chaque bande repr\u00e9sente la part d\u2019un th\u00e8me dans les articles class\u00e9s de l\u2019ann\u00e9e (les 12 principaux th\u00e8mes ; le reste est regroup\u00e9 dans \u00ab Autres th\u00e8mes \u00bb). Cliquez sur une bande pour explorer le th\u00e8me.',
+            'topic_other':                  'Autres th\u00e8mes',
 
             // Shared renderer labels \u2014 French
             'Calendar heatmap':         'Calendrier thermique',

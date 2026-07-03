@@ -208,6 +208,9 @@
             });
         }
 
+        // Topics over time — share-of-attention stacked area (ROADMAP 9.1)
+        renderTopicRiver(grid, data, onTopicSelected);
+
         // Topic cards grid — every topic, click drills in
         var listLabel = P.el('h3', 'iwac-vis-section-heading', P.t('All topics'));
         host.appendChild(listLabel);
@@ -222,6 +225,127 @@
             });
             topicGrid.appendChild(card);
         });
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Topics over time — 100%-stacked share of classified articles      */
+    /* ----------------------------------------------------------------- */
+    //
+    // Built entirely from the per-topic `year_distribution` arrays the
+    // bundle already carries — no extra data. Shares are computed against
+    // the year's classified total (top-12 topics + an "Other topics"
+    // remainder, so every year sums to 100%). A 100%-stacked area was
+    // chosen over ECharts' themeRiver: standard cartesian axes + dataZoom
+    // read as research instrument, not editorial flourish, and the share
+    // encoding factors out six decades of corpus growth.
+
+    function renderTopicRiver(grid, data, onTopicSelected) {
+        var C = ns.chartOptions;
+        var topics = (data.topics || []).slice()
+            .sort(function (a, b) { return b.article_count - a.article_count; });
+        if (!topics.length) return;
+
+        // Union year axis across every topic's distribution.
+        var yearSet = {};
+        topics.forEach(function (t) {
+            (t.year_distribution || []).forEach(function (e) { yearSet[e.name] = true; });
+        });
+        var years = Object.keys(yearSet).sort();
+        if (years.length < 2) return;
+
+        function countsFor(t) {
+            var m = {};
+            (t.year_distribution || []).forEach(function (e) { m[e.name] = e.value; });
+            return years.map(function (y) { return m[y] || 0; });
+        }
+
+        var TOP = 12;
+        var seriesDefs = topics.slice(0, TOP).map(function (t) {
+            var nameBits = (t.top_words || []).slice(0, 2);
+            return {
+                topicId: t.id,
+                name: nameBits.length ? nameBits.join(' · ')
+                                      : (t.label || (P.t('Topic') + ' ' + t.id)),
+                counts: countsFor(t)
+            };
+        });
+        var tail = topics.slice(TOP);
+        if (tail.length) {
+            var other = years.map(function () { return 0; });
+            tail.forEach(function (t) {
+                countsFor(t).forEach(function (v, i) { other[i] += v; });
+            });
+            seriesDefs.push({ topicId: null, name: P.t('topic_other'), counts: other });
+        }
+
+        var totals = years.map(function (_, i) {
+            return seriesDefs.reduce(function (s, d) { return s + d.counts[i]; }, 0);
+        });
+
+        var panel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('topics_over_time_title'),
+            P.t('topics_over_time_desc')
+        );
+        grid.appendChild(panel.panel);
+
+        var instance = ns.registerChart(panel.chart, function (_e, chart) {
+            chart.setOption({
+                grid: C._grid({ left: 48, top: 40, bottom: 56 }),
+                legend: { type: 'scroll', top: 0 },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        if (!params || !params.length) return '';
+                        var i = params[0].dataIndex;
+                        var rows = params.slice().sort(function (a, b) {
+                            return (b.value || 0) - (a.value || 0);
+                        });
+                        var lines = ['<strong>' + P.escapeHtml(params[0].axisValue) + '</strong>'];
+                        rows.forEach(function (p) {
+                            var def = seriesDefs[p.seriesIndex];
+                            if (!def || !def.counts[i]) return;
+                            lines.push(p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
+                                + p.value + ' % (' + P.formatNumber(def.counts[i]) + ')');
+                        });
+                        return lines.join('<br>');
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: years,
+                    boundaryGap: false,
+                    name: P.t('Year')
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 0,
+                    max: 100,
+                    axisLabel: { formatter: function (v) { return v + ' %'; } }
+                },
+                dataZoom: C._dataZoom(years.length),
+                series: seriesDefs.map(function (d) {
+                    return {
+                        name: d.name,
+                        type: 'line',
+                        stack: 'share',
+                        areaStyle: { opacity: 0.85 },
+                        lineStyle: { width: 0.5 },
+                        symbol: 'none',
+                        emphasis: { focus: 'series' },
+                        data: d.counts.map(function (v, i) {
+                            return totals[i] ? Math.round(1000 * v / totals[i]) / 10 : 0;
+                        })
+                    };
+                })
+            }, true);
+        });
+        if (instance) {
+            instance.on('click', function (params) {
+                var def = seriesDefs[params.seriesIndex];
+                if (def && def.topicId != null) onTopicSelected(def.topicId);
+            });
+        }
     }
 
     function buildTopicCard(topic) {
