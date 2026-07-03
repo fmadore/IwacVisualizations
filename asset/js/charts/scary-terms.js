@@ -2,20 +2,32 @@
  * IWAC Visualizations — Scary Terms block (orchestrator)
  *
  * Self-contained controller for the Scary Terms page block. Fetches the
- * four precomputed JSON files in `asset/data/`, builds the DOM (metric
- * cards + controls + chart + term definitions), and drives a horizontal
- * bar chart with three view modes:
+ * precomputed JSON files in `files/iwac-visualizations/`, builds the DOM
+ * (metric cards + controls + chart/map + term definitions), and drives
+ * the view modes:
  *
- *   - race    animated year-by-year "bar chart race" (1961–2025)
- *   - country top families for a single selected country
- *   - global  top families across the whole collection
+ *   - race      animated year-by-year "bar chart race" (1961–2025)
+ *   - trends    per-family time series with historical-event annotations
+ *   - country   top families for a single selected country
+ *   - global    top families across the whole collection
+ *   - matrix    term × term co-occurrence heatmap
+ *   - wordcloud vocabulary of matching articles (echarts-wordcloud)
+ *   - map       MapLibre bubble map of tagged places (lazy data fetch)
  *
  * Term family colors come from the registered IWAC ECharts palette so
  * dark / light modes + admin-configured primary colors flow through.
  *
+ * Data fetch strategy: the four original bundles + the small trends /
+ * events sidecars load up front (missing files resolve to null so the
+ * block degrades gracefully on deploys whose data predates them); the
+ * heavier wordcloud / places bundles are fetched only when their view
+ * first activates.
+ *
  * Dependencies (in load order before this file):
- *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js →
- *   panels.js → responsive.js → chart-options.js
+ *   echarts → echarts-wordcloud → maplibre-gl → iwac-i18n.js →
+ *   iwac-theme.js → dashboard-core.js → panels.js → responsive.js →
+ *   chart-options.js → facet-buttons.js → maplibre.js → map-popup.js →
+ *   scary-terms/{i18n,helpers,trends,wordcloud,map}.js
  */
 (function () {
     'use strict';
@@ -29,9 +41,9 @@
     var C = ns.chartOptions;
 
     // Stateless builders + i18n strings live in companion files
-    // (scary-terms/helpers.js, scary-terms/i18n.js), loaded before this
-    // orchestrator. Alias the builders locally so the call sites below
-    // read exactly as they did before the split.
+    // (scary-terms/helpers.js, i18n.js, trends.js, wordcloud.js, map.js),
+    // loaded before this orchestrator. Alias the builders locally so the
+    // call sites below read exactly as they did before the split.
     var SH = ns.scaryTerms || {};
     var buildTermColorMap = SH.buildTermColorMap;
     var buildMetricCards = SH.buildMetricCards;
@@ -43,7 +55,11 @@
         temporal:     'scary-terms-temporal.json',
         countries:    'scary-terms-countries.json',
         global:       'scary-terms-global.json',
-        cooccurrence: 'scary-terms-cooccurrence.json'
+        cooccurrence: 'scary-terms-cooccurrence.json',
+        trends:       'scary-terms-trends.json',
+        events:       'scary-terms-events.json',
+        wordcloud:    'scary-terms-wordcloud.json',
+        places:       'scary-terms-places.json'
     };
 
     var TOP_N = 10;
@@ -79,23 +95,30 @@
         var basePath = container.dataset.basePath || '';
         var dataBase = basePath + '/files/iwac-visualizations/';
 
+        function optional(name) {
+            // Optional bundles — older deploys may not have them yet.
+            // Fall back to null so the orchestrator degrades the view.
+            return fetchJSON(dataBase + DATA_FILES[name]).catch(function () { return null; });
+        }
+
         Promise.all([
             fetchJSON(dataBase + DATA_FILES.metadata),
             fetchJSON(dataBase + DATA_FILES.temporal),
             fetchJSON(dataBase + DATA_FILES.countries),
             fetchJSON(dataBase + DATA_FILES.global),
-            // Co-occurrence is optional — older deploys may not have it
-            // yet. Fall back to null so the orchestrator can hide the
-            // matrix view button when the bundle is missing.
-            fetchJSON(dataBase + DATA_FILES.cooccurrence).catch(function () { return null; })
+            optional('cooccurrence'),
+            optional('trends'),
+            optional('events')
         ]).then(function (results) {
             render(container, {
                 metadata:     results[0],
                 temporal:     results[1],
                 countries:    results[2],
                 global:       results[3],
-                cooccurrence: results[4]
-            });
+                cooccurrence: results[4],
+                trends:       results[5],
+                events:       results[6]
+            }, dataBase);
         }).catch(function (err) {
             console.error('IWACVis.scaryTerms:', err);
             container.innerHTML = '';
@@ -113,12 +136,14 @@
     //  Layout
     // ---------------------------------------------------------------------
 
-    function render(container, bundle) {
+    function render(container, bundle, dataBase) {
         var metadata     = bundle.metadata     || {};
         var temporal     = bundle.temporal     || {};
         var countries    = bundle.countries    || {};
         var globalData   = bundle.global       || {};
         var cooccurrence = bundle.cooccurrence || null;
+        var trendsData   = bundle.trends       || null;
+        var eventsData   = bundle.events       || null;
 
         var families = metadata.term_families || [];
         var termColors = buildTermColorMap(families);
@@ -148,7 +173,8 @@
         var controlsEl = P.el('div', 'iwac-vis-scary-controls');
         root.appendChild(controlsEl);
 
-        // 4. Chart panel
+        // 4. Chart panel — ECharts host + MapLibre host (map view only)
+        //    + the per-view <details> fallback host.
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-scary-panel');
         var chartHeader = P.el('div', 'iwac-vis-scary-chart-header');
         var chartTitle = P.el('h4', 'iwac-vis-scary-chart-title');
@@ -158,6 +184,11 @@
         panel.appendChild(chartHeader);
         var chartEl = P.el('div', 'iwac-vis-chart iwac-vis-scary-chart');
         panel.appendChild(chartEl);
+        var mapEl = P.el('div', 'iwac-vis-map iwac-vis-scary-map');
+        mapEl.setAttribute('aria-label', P.t('scary.map_chart_title'));
+        panel.appendChild(mapEl);
+        var detailsHost = P.el('div', 'iwac-vis-scary-details-host');
+        panel.appendChild(detailsHost);
         root.appendChild(panel);
 
         // 5. Term definitions
@@ -174,15 +205,33 @@
         var matrixCountries = cooccurrence && cooccurrence.countries
             ? Object.keys(cooccurrence.countries).sort()
             : [];
+        var trendsCountries = trendsData && trendsData.by_country
+            ? Object.keys(trendsData.by_country).sort()
+            : [];
 
         var state = {
             view: 'race',
             country: availableCountries[0] || null,
-            matrixCountry: null,  // null = global; otherwise one of matrixCountries
+            matrixCountry: null,   // null = global; otherwise one of matrixCountries
+            trendsCountry: null,   // null = global
+            showEvents: true,
+            wcFacet: 'global',
+            wcSub: null,
+            mapFamily: '',         // '' = all families
+            mapCountry: '',        // '' = all countries (article country)
             yearIdx: 0,
             isPlaying: false,
             timer: null
         };
+
+        // Lazy bundles: undefined = not requested, null = failed / absent,
+        // object = loaded. Fetch flags stop duplicate requests.
+        var wordcloudData;
+        var placesData;
+        var wordcloudRequested = false;
+        var placesRequested = false;
+        var mapController = null;
+        var mapCountries = [];
 
         // Holds the CURRENT ECharts instance. dashboard-core re-runs this
         // render callback with a fresh instance on every theme swap
@@ -198,11 +247,14 @@
 
         function draw() {
             if (!currentInstance || currentInstance.isDisposed()) return;
-            // Toggle a view-specific modifier class on the panel so
-            // CSS can bump the chart min-height for dense views (e.g.
-            // the 12×12 co-occurrence matrix) without affecting the
-            // bar-chart race / country / global layouts.
+            // Toggle view-specific modifier classes on the panel so CSS
+            // can bump the chart min-height for dense views (the 12×12
+            // matrix) and swap the ECharts host for the MapLibre host.
             panel.classList.toggle('iwac-vis-scary-panel--matrix', state.view === 'matrix');
+            panel.classList.toggle('iwac-vis-scary-panel--map', state.view === 'map');
+            currentInstance.hideLoading();
+            detailsHost.innerHTML = '';
+
             var option = null;
             if (state.view === 'race') {
                 var year = years[state.yearIdx];
@@ -211,7 +263,7 @@
                     entries: yearData,
                     termColors: termColors
                 });
-                chartTitle.textContent = P.t('scary.chart_title') + ' \u2014 ' + year;
+                chartTitle.textContent = P.t('scary.chart_title') + ' — ' + year;
                 topBadge.textContent = yearData[0]
                     ? P.t('scary.top_term') + ': ' + yearData[0][0]
                     : '';
@@ -236,6 +288,14 @@
                 topBadge.textContent = slice && slice.total_articles
                     ? P.t('scary.matrix_articles', { count: P.formatNumber(slice.total_articles) })
                     : '';
+            } else if (state.view === 'trends') {
+                option = drawTrends();
+            } else if (state.view === 'wordcloud') {
+                option = drawWordcloud();
+            } else if (state.view === 'map') {
+                drawMap();
+                chartTitle.textContent = P.t('scary.map_chart_title');
+                topBadge.textContent = '';
             } else {
                 var gData = globalData.data || [];
                 option = C.scaryTerms({
@@ -248,6 +308,180 @@
                     : '';
             }
             if (option) currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
+        }
+
+        // -----------------------------------------------------------------
+        //  Trends view (issue #2)
+        //
+        //  Line chart per family. Global series derive from the trends
+        //  bundle when present, else from the temporal bundle (so the view
+        //  works on deploys whose data predates scary-terms-trends.json —
+        //  minus the per-country scope). Event annotations come from the
+        //  hand-curated events sidecar.
+        // -----------------------------------------------------------------
+
+        function resolveTrendsSeries() {
+            if (trendsData && trendsData.years && trendsData.years.length) {
+                var series = state.trendsCountry
+                    ? (trendsData.by_country || {})[state.trendsCountry]
+                    : trendsData.global;
+                return {
+                    years: trendsData.years,
+                    families: trendsData.families || families,
+                    series: series || {}
+                };
+            }
+            return {
+                years: years,
+                families: families,
+                series: SH.buildTrendsSeriesFromTemporal(temporal, years, families)
+            };
+        }
+
+        function drawTrends() {
+            var tr = resolveTrendsSeries();
+            chartTitle.textContent = state.trendsCountry
+                ? P.t('scary.trends_country_chart_title', { country: state.trendsCountry })
+                : P.t('scary.trends_chart_title');
+            topBadge.textContent = '';
+            if (eventsData) {
+                var details = SH.buildEventsDetails(eventsData, state.trendsCountry);
+                if (details) detailsHost.appendChild(details);
+            }
+            return SH.buildTrendsOption({
+                years: tr.years,
+                families: tr.families,
+                series: tr.series,
+                termColors: termColors,
+                events: eventsData,
+                showEvents: state.showEvents,
+                country: state.trendsCountry,
+                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 640
+            });
+        }
+
+        // -----------------------------------------------------------------
+        //  Word cloud view (issue #4) — lazy bundle
+        // -----------------------------------------------------------------
+
+        function loadWordcloud() {
+            if (wordcloudRequested) return;
+            wordcloudRequested = true;
+            if (currentInstance && !currentInstance.isDisposed()) {
+                currentInstance.showLoading();
+            }
+            fetchJSON(dataBase + DATA_FILES.wordcloud)
+                .then(function (d) { wordcloudData = d; })
+                .catch(function (err) {
+                    console.warn('IWACVis.scaryTerms: wordcloud bundle unavailable', err);
+                    wordcloudData = null;
+                })
+                .then(function () {
+                    if (state.view === 'wordcloud') {
+                        renderControls();
+                        draw();
+                    }
+                });
+        }
+
+        function drawWordcloud() {
+            chartTitle.textContent = P.t('scary.wordcloud_chart_title');
+            if (wordcloudData === undefined) {
+                topBadge.textContent = '';
+                loadWordcloud();
+                if (currentInstance && !currentInstance.isDisposed()
+                    && wordcloudData === undefined) {
+                    currentInstance.showLoading();
+                }
+                return null;
+            }
+            if (wordcloudData === null) {
+                topBadge.textContent = '';
+                return P.emptyChartOption('Visualization data is not available yet.');
+            }
+            var slice = SH.wordcloudSlice(wordcloudData, state.wcFacet, state.wcSub);
+            topBadge.textContent = slice.total_articles
+                ? P.t('scary.matrix_articles', { count: P.formatNumber(slice.total_articles) })
+                : '';
+            if (!slice.data || !slice.data.length) {
+                return P.emptyChartOption();
+            }
+            var details = SH.buildWordListDetails(slice);
+            if (details) detailsHost.appendChild(details);
+            return C.wordcloud(slice.data);
+        }
+
+        // -----------------------------------------------------------------
+        //  Map view (issue #3) — lazy bundle + persistent MapLibre instance
+        // -----------------------------------------------------------------
+
+        function mapFilter() {
+            return {
+                family: state.mapFamily || null,
+                country: state.mapCountry || null
+            };
+        }
+
+        function loadPlaces() {
+            if (placesRequested) return;
+            placesRequested = true;
+            mapEl.innerHTML = '';
+            mapEl.appendChild(P.buildLoadingState());
+            fetchJSON(dataBase + DATA_FILES.places)
+                .then(function (d) { placesData = d; })
+                .catch(function (err) {
+                    console.warn('IWACVis.scaryTerms: places bundle unavailable', err);
+                    placesData = null;
+                })
+                .then(function () {
+                    if (placesData) {
+                        var seen = {};
+                        (placesData.places || []).forEach(function (p) {
+                            Object.keys(p.by_country || {}).forEach(function (cc) {
+                                seen[cc] = true;
+                            });
+                        });
+                        mapCountries = Object.keys(seen).sort();
+                    }
+                    if (state.view === 'map') {
+                        renderControls();
+                        draw();
+                    }
+                });
+        }
+
+        function drawMap() {
+            if (placesData === undefined) {
+                loadPlaces();
+                return;
+            }
+            if (placesData === null) {
+                mapEl.innerHTML = '';
+                mapEl.appendChild(P.buildNoDataState());
+                return;
+            }
+            if (!mapController) {
+                mapEl.innerHTML = '';
+                mapController = SH.createScaryMap(mapEl, placesData, {
+                    getFilter: mapFilter,
+                    termColors: termColors,
+                    siteBase: container.dataset.siteBase
+                        || container.dataset.embedBase || ''
+                });
+                if (!mapController) {
+                    mapEl.appendChild(P.buildErrorState());
+                    return;
+                }
+            } else {
+                mapController.update();
+            }
+            // The container was display:none until this view activated —
+            // MapLibre needs an explicit resize to fill it.
+            window.setTimeout(function () {
+                if (mapController) mapController.resize();
+            }, 0);
+            var details = SH.buildPlacesDetails(placesData, mapFilter());
+            if (details) detailsHost.appendChild(details);
         }
 
         // -----------------------------------------------------------------
@@ -404,8 +638,9 @@
         //  Controls rendering
         //
         //  Re-renders the controls row whenever the view mode changes so
-        //  the country dropdown / playback bar / slider appear only for
-        //  the relevant view. The chart itself is not reinitialized.
+        //  the country dropdown / playback bar / slider / facet bar appear
+        //  only for the relevant view. The chart itself is not
+        //  reinitialized.
         // -----------------------------------------------------------------
 
         function renderControls() {
@@ -422,9 +657,81 @@
                 row.appendChild(buildMatrixCountrySelect());
             }
             if (state.view === 'matrix') {
-                var desc = P.el('p', 'iwac-vis-scary-matrix-desc',
-                    P.t('scary.matrix_description'));
-                controlsEl.appendChild(desc);
+                controlsEl.appendChild(buildViewDesc('scary.matrix_description'));
+            }
+            if (state.view === 'trends') {
+                if (trendsCountries.length) {
+                    row.appendChild(buildSelectGroup(
+                        P.t('scary.country'),
+                        [{ value: '', label: P.t('scary.all_countries') }].concat(
+                            trendsCountries.map(function (cc) {
+                                return { value: cc, label: cc };
+                            })),
+                        state.trendsCountry || '',
+                        function (value) {
+                            state.trendsCountry = value || null;
+                            draw();
+                        }
+                    ));
+                }
+                if (eventsData) {
+                    row.appendChild(buildEventsToggle());
+                }
+                controlsEl.appendChild(buildViewDesc('scary.trends_description'));
+            }
+            if (state.view === 'wordcloud') {
+                controlsEl.appendChild(buildViewDesc('scary.wordcloud_description'));
+                if (wordcloudData && P.buildFacetButtons) {
+                    var facetBar = P.buildFacetButtons({
+                        facets: SH.buildWordcloudFacets(wordcloudData),
+                        activeKey: state.wcFacet,
+                        onChange: function (evt) {
+                            state.wcFacet = evt.facet;
+                            state.wcSub = evt.subFacet || null;
+                            draw();
+                        }
+                    });
+                    controlsEl.appendChild(facetBar.root);
+                }
+            }
+            if (state.view === 'map') {
+                if (placesData) {
+                    // Family and country filters are mutually exclusive —
+                    // the bundle has per-family and per-country splits,
+                    // not their cross product. Selecting one resets the
+                    // other.
+                    row.appendChild(buildSelectGroup(
+                        P.t('scary.map_family'),
+                        [{ value: '', label: P.t('scary.all_families') }].concat(
+                            families.map(function (f) {
+                                return { value: f, label: f };
+                            })),
+                        state.mapFamily,
+                        function (value) {
+                            state.mapFamily = value;
+                            if (value) state.mapCountry = '';
+                            renderControls();
+                            draw();
+                        }
+                    ));
+                    if (mapCountries.length) {
+                        row.appendChild(buildSelectGroup(
+                            P.t('scary.country'),
+                            [{ value: '', label: P.t('scary.all_countries') }].concat(
+                                mapCountries.map(function (cc) {
+                                    return { value: cc, label: cc };
+                                })),
+                            state.mapCountry,
+                            function (value) {
+                                state.mapCountry = value;
+                                if (value) state.mapFamily = '';
+                                renderControls();
+                                draw();
+                            }
+                        ));
+                    }
+                }
+                controlsEl.appendChild(buildViewDesc('scary.map_description'));
             }
             if (state.view === 'race' && years.length) {
                 row.appendChild(buildPlaybackGroup());
@@ -432,19 +739,28 @@
             }
         }
 
+        function buildViewDesc(key) {
+            return P.el('p', 'iwac-vis-scary-matrix-desc', P.t(key));
+        }
+
         function buildViewToggle() {
             var group = P.el('div', 'iwac-vis-scary-view-toggle');
             group.appendChild(P.el('span', 'iwac-vis-scary-label', P.t('scary.view_mode') + ':'));
             var views = [
                 { key: 'race',    label: P.t('scary.bar_race') },
+                { key: 'trends',  label: P.t('scary.trends') },
                 { key: 'country', label: P.t('scary.by_country') },
                 { key: 'global',  label: P.t('scary.global_view') }
             ];
             // The matrix view is only offered when the cooccurrence
-            // bundle is present — older deploys won't have it yet.
+            // bundle is present — older deploys won't have it yet. The
+            // wordcloud / map views fetch lazily and show the shared
+            // "no data yet" state when their bundle is missing.
             if (cooccurrence) {
                 views.push({ key: 'matrix', label: P.t('scary.matrix') });
             }
+            views.push({ key: 'wordcloud', label: P.t('scary.wordcloud') });
+            views.push({ key: 'map', label: P.t('scary.map') });
             views.forEach(function (v) {
                 var btn = P.el('button', 'iwac-vis-scary-view-btn', v.label);
                 btn.type = 'button';
@@ -464,6 +780,50 @@
                 group.appendChild(btn);
             });
             return group;
+        }
+
+        /**
+         * Generic labelled <select> control — used by the trends country
+         * scope and the map view's family / country filters.
+         *
+         * @param {string} labelText already-translated label
+         * @param {Array<{value: string, label: string}>} options
+         * @param {string} current   currently-selected value
+         * @param {function(string)} onChange
+         */
+        function buildSelectGroup(labelText, options, current, onChange) {
+            var group = P.el('div', 'iwac-vis-scary-country-group');
+            var label = P.el('label', 'iwac-vis-scary-label', labelText + ':');
+            var select = P.el('select', 'iwac-vis-scary-select');
+            var selectId = 'iwac-vis-scary-sel-' + Math.random().toString(36).slice(2, 8);
+            select.id = selectId;
+            label.htmlFor = selectId;
+            options.forEach(function (o) {
+                var opt = P.el('option', null, o.label);
+                opt.value = o.value;
+                if (o.value === current) opt.selected = true;
+                select.appendChild(opt);
+            });
+            select.addEventListener('change', function () {
+                onChange(select.value);
+            });
+            group.appendChild(label);
+            group.appendChild(select);
+            return group;
+        }
+
+        function buildEventsToggle() {
+            var label = P.el('label', 'iwac-vis-scary-check');
+            var cb = P.el('input');
+            cb.type = 'checkbox';
+            cb.checked = state.showEvents;
+            cb.addEventListener('change', function () {
+                state.showEvents = cb.checked;
+                draw();
+            });
+            label.appendChild(cb);
+            label.appendChild(P.el('span', null, P.t('scary.show_events')));
+            return label;
         }
 
         function buildCountrySelect() {
@@ -522,10 +882,10 @@
 
         function buildPlaybackGroup() {
             var group = P.el('div', 'iwac-vis-scary-playback');
-            group.appendChild(ctrlButton('\u25C0', P.t('scary.previous'), stepBackward));
+            group.appendChild(ctrlButton('◀', P.t('scary.previous'), stepBackward));
             var isAtEnd = state.yearIdx >= years.length - 1;
             var playBtn = ctrlButton(
-                state.isPlaying ? '\u23F8' : '\u25B6',
+                state.isPlaying ? '⏸' : '▶',
                 state.isPlaying ? P.t('scary.pause') : P.t('scary.play'),
                 state.isPlaying ? pause : play
             );
@@ -534,8 +894,8 @@
                 // Allow pressing play at the end — it will rewind.
             }
             group.appendChild(playBtn);
-            group.appendChild(ctrlButton('\u25B6', P.t('scary.next'), stepForward));
-            group.appendChild(ctrlButton('\u21BA', P.t('scary.reset'), reset));
+            group.appendChild(ctrlButton('▶', P.t('scary.next'), stepForward));
+            group.appendChild(ctrlButton('↺', P.t('scary.reset'), reset));
             var yearLabel = P.el('span', 'iwac-vis-scary-year-label',
                                  String(years[state.yearIdx] || ''));
             group.appendChild(yearLabel);

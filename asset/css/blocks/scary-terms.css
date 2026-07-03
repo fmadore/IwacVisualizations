@@ -431,10 +431,106 @@
     min-height: 600px;
 }
 
+/*  Map view (issue #3): the MapLibre host replaces the ECharts host.
+ *  Both live in the panel permanently; the --map modifier flips which
+ *  one is displayed so the ECharts instance survives view switches. */
+.iwac-vis-scary-map {
+    display: none;
+    width: 100%;
+    height: 500px;
+    border-radius: var(--radius-sm, 0.375rem);
+    overflow: hidden;
+}
+
+.iwac-vis-scary-panel--map .iwac-vis-scary-chart { display: none; }
+.iwac-vis-scary-panel--map .iwac-vis-scary-map   { display: block; }
+
 @media (max-width: 600px) { /* sm */
     .iwac-vis-scary-chart { min-height: 380px; }
     .iwac-vis-scary-panel--matrix .iwac-vis-scary-chart { min-height: 480px; }
+    .iwac-vis-scary-map { height: 380px; }
     .iwac-vis-scary-chart-header { padding-right: 0; }
+}
+
+
+/* =================================================================== */
+/*  Events toggle (trends view)                                          */
+/* =================================================================== */
+
+.iwac-vis-scary-check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-light, #3f4349);
+    cursor: pointer;
+}
+
+.iwac-vis-scary-check input {
+    accent-color: var(--primary, #ce4115);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.iwac-vis-scary-check input:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+
+/* =================================================================== */
+/*  <details> fallbacks (events list, word list, places list)            */
+/* =================================================================== */
+
+.iwac-vis-scary-details-host:empty { display: none; }
+
+.iwac-vis-scary-details {
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    padding-top: var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-scary-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted, #66696e);
+    font-size: var(--text-xs, 0.8125rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.06em);
+}
+
+.iwac-vis-scary-details summary:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+.iwac-vis-scary-details-list {
+    margin: var(--space-2, 0.5rem) 0 0;
+    padding-left: var(--space-5, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-scary-details-table {
+    margin-top: var(--space-2, 0.5rem);
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-scary-details-table th,
+.iwac-vis-scary-details-table td {
+    text-align: left;
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem) var(--space-1, 0.25rem) 0;
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-scary-details-table th {
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+    font-weight: 600;
 }
 
 

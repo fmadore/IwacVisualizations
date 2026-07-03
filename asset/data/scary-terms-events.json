@@ -1,0 +1,117 @@
+{
+  "_comment": "Hand-curated historical event annotations for the Scary Terms trends view (GitHub issue #2). Committed to git (gitignore exception, like sentiment-arbiter.json) and shipped into the CI data archive from the checkout — generate_scary_terms.py does NOT write this file. scope 'global' events always render; scope 'country' events render only when the trends view is filtered to that country (canonical IWAC country names). 'source' is a provenance pointer for editorial audit; the UI does not render it.",
+  "point_events": [
+    {
+      "year": 1979,
+      "label_en": "Iranian Revolution",
+      "label_fr": "Révolution iranienne",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Iranian_revolution"
+    },
+    {
+      "year": 1991,
+      "label_en": "Start of Algerian Civil War",
+      "label_fr": "Début de la guerre civile algérienne",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Algerian_Civil_War"
+    },
+    {
+      "year": 2001,
+      "label_en": "9/11 attacks",
+      "label_fr": "Attentats du 11 septembre",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/September_11_attacks"
+    },
+    {
+      "year": 2002,
+      "label_en": "End of Algerian Civil War",
+      "label_fr": "Fin de la guerre civile algérienne",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Algerian_Civil_War"
+    },
+    {
+      "year": 2011,
+      "label_en": "Arab Spring; fall of Gaddafi",
+      "label_fr": "Printemps arabe ; chute de Kadhafi",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Arab_Spring"
+    },
+    {
+      "year": 2012,
+      "label_en": "Start of Mali War",
+      "label_fr": "Début de la guerre au Mali",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Mali_War"
+    },
+    {
+      "year": 2013,
+      "label_en": "French Operation Serval (Mali)",
+      "label_fr": "Opération Serval (Mali)",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Operation_Serval"
+    },
+    {
+      "year": 2015,
+      "label_en": "Emergence of ISGS; Bamako and Ouagadougou attacks",
+      "label_fr": "Émergence de l'EIGS ; attentats de Bamako et Ouagadougou",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Islamic_State_%E2%80%93_Sahel_Province"
+    },
+    {
+      "year": 2016,
+      "label_en": "Grand-Bassam attack",
+      "label_fr": "Attentat de Grand-Bassam",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/2016_Grand-Bassam_shootings"
+    },
+    {
+      "year": 2016,
+      "label_en": "Burkina Faso security crisis begins",
+      "label_fr": "Début de la crise sécuritaire burkinabè",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "source": "https://en.wikipedia.org/wiki/Jihadist_insurgency_in_Burkina_Faso"
+    },
+    {
+      "year": 2017,
+      "label_en": "Formation of JNIM",
+      "label_fr": "Création du JNIM",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Jama%27at_Nasr_al-Islam_wal_Muslimin"
+    },
+    {
+      "year": 2019,
+      "label_en": "Kafolo and northern-border attacks escalate",
+      "label_fr": "Escalade des attaques à la frontière nord",
+      "scope": "country",
+      "country": "Bénin",
+      "source": "https://en.wikipedia.org/wiki/Jihadist_insurgency_in_Benin"
+    },
+    {
+      "year": 2020,
+      "label_en": "Mali coup d'état",
+      "label_fr": "Coup d'État au Mali",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/2020_Malian_coup_d%27%C3%A9tat"
+    },
+    {
+      "year": 2022,
+      "label_en": "Burkina Faso coups d'état",
+      "label_fr": "Coups d'État au Burkina Faso",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "source": "https://en.wikipedia.org/wiki/September_2022_Burkina_Faso_coup_d%27%C3%A9tat"
+    }
+  ],
+  "period_events": [
+    {
+      "start": 1991,
+      "end": 2002,
+      "label_en": "Algerian Civil War",
+      "label_fr": "Guerre civile algérienne",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Algerian_Civil_War"
+    }
+  ]
+}
