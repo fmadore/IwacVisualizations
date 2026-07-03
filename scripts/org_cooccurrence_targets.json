@@ -1,0 +1,74 @@
+{
+  "_comment": "Curated target surface forms for generate_org_cooccurrence.py (GitHub issue #1). Matching is case-insensitive whole-word over lowercased article OCR; multi-word phrases are joined into pseudo-tokens before the window scan. o_id values were verified against the IWAC index (Type = Organisations) on 2026-07-03; the generator cross-checks them against index.Titre at run time and warns on drift. Edit this file to tune aliases — no code change needed. Deliberately EXCLUDED acronyms: 'cni' (in Ivorian press usually carte nationale d'identité) and 'csi' (collides with Conseil Supérieur de l'Information) — both produce more noise than signal; the spelled-out forms carry the discursive neighbourhood.",
+  "orgs": [
+    {
+      "id": "uib",
+      "name": "Union Islamique du Bénin",
+      "acronym": "UIB",
+      "country": "Bénin",
+      "o_id": 765,
+      "targets": [
+        "uib",
+        "union islamique du bénin",
+        "union islamique du benin"
+      ]
+    },
+    {
+      "id": "cni",
+      "name": "Conseil National Islamique",
+      "acronym": "CNI",
+      "country": "Côte d'Ivoire",
+      "o_id": 653,
+      "targets": [
+        "conseil national islamique"
+      ]
+    },
+    {
+      "id": "cosim",
+      "name": "Conseil Supérieur des Imams, des Mosquées et des Affaires islamiques",
+      "acronym": "COSIM",
+      "country": "Côte d'Ivoire",
+      "o_id": 662,
+      "targets": [
+        "cosim",
+        "conseil supérieur des imams",
+        "conseil supérieur des imans"
+      ]
+    },
+    {
+      "id": "csi",
+      "name": "Conseil Supérieur Islamique",
+      "acronym": "CSI",
+      "country": "Côte d'Ivoire",
+      "o_id": 23601,
+      "targets": [
+        "conseil supérieur islamique"
+      ]
+    },
+    {
+      "id": "faib",
+      "name": "Fédération des Associations Islamiques du Burkina",
+      "acronym": "FAIB",
+      "country": "Burkina Faso",
+      "o_id": 572,
+      "targets": [
+        "faib",
+        "fédération des associations islamiques du burkina",
+        "fédération des associations islamique du burkina"
+      ]
+    },
+    {
+      "id": "umt",
+      "name": "Union Musulmane du Togo",
+      "acronym": "UMT",
+      "country": "Togo",
+      "o_id": 830,
+      "targets": [
+        "umt",
+        "union musulmane du togo",
+        "union musulmane togolaise",
+        "union des musulmans du togo"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<?php
+/**
+ * Islamic Organisations Co-occurrence page block.
+ *
+ * Term × term co-occurrence heatmap for a selectable Islamic organisation:
+ * matrix cell (a, b) counts the articles where both context words appeared
+ * within a ±50-token window around the organisation's name. Rendered by
+ * the shared C.heatmapMatrix builder; data comes from
+ * `files/iwac-visualizations/org-cooccurrence.json` (built by
+ * `scripts/generate_org_cooccurrence.py`, orgs + aliases curated in
+ * `scripts/org_cooccurrence_targets.json`).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'org-cooccurrence',
+        'needs' => [
+            'chartOptions' => true,
+        ],
+        'orchestrator' => 'org-cooccurrence',
+    ],
+    'blockClass' => 'iwac-vis-orgcooc',
+    'embedSlug'  => 'org-cooccurrence',
+    'loading'    => $this->translate('Loading organisation co-occurrences'),
+]);

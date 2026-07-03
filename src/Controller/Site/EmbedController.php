@@ -50,6 +50,7 @@ class EmbedController extends AbstractActionController
         'compare-newspapers'   => 'Compare Newspapers',
         'on-this-day'          => 'On This Day',
         'press-bylines'        => 'Press Bylines',
+        'org-cooccurrence'     => 'Islamic Organisations Co-occurrence',
     ];
 
     /**

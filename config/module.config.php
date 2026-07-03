@@ -10,6 +10,7 @@ return [
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'lexicalMetrics' => Site\BlockLayout\LexicalMetrics::class,
             'onThisDay' => Site\BlockLayout\OnThisDay::class,
+            'orgCooccurrence' => Site\BlockLayout\OrgCooccurrence::class,
             'periodicalsLandscape' => Site\BlockLayout\PeriodicalsLandscape::class,
             'periodicalsOverview' => Site\BlockLayout\PeriodicalsOverview::class,
             'pressBylines' => Site\BlockLayout\PressBylines::class,
