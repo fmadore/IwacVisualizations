@@ -311,6 +311,13 @@
 .iwac-vis-panel > .iwac-vis-chart.iwac-vis-wordcloud-host {
     min-height: 400px;
 }
+
+/*  Same 400px reservation under a purpose-neutral name, for any dense
+ *  non-wordcloud host (first consumer: the periodicals holdings matrix,
+ *  25 category rows). */
+.iwac-vis-panel > .iwac-vis-chart.iwac-vis-chart--tall {
+    min-height: 400px;
+}
 @media (max-width: 600px) { /* sm */
     .iwac-vis-panel > .iwac-vis-chart.iwac-vis-wordcloud-host {
         min-height: 320px;

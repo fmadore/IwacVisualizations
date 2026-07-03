@@ -857,4 +857,119 @@
             }]
         };
     };
+
+    /**
+     * Generic label × label count/intensity matrix on the shared
+     * sequential ramp (--iwac-vis-heatmap-0..4). Unlike C.heatmap (the
+     * year × month calendar above), both axes take arbitrary label
+     * arrays; cells are sparse [xIdx, yIdx, value] rows and the first
+     * y label renders at the TOP (inverse category axis). The ROADMAP
+     * 4.6 matrix-coordinate rewrite can absorb both variants later.
+     *
+     * First consumer: the Periodicals Overview holdings matrix
+     * (periodical × year issue counts). The sentiment atlas's two
+     * bespoke heatmap builders are migration candidates (REFACTORING
+     * Tier 3) once the live-verification session can check them.
+     *
+     * @param {{xLabels:Array, yLabels:Array, cells:Array}} data
+     * @param {Object} [opts]
+     *   tooltipFormatter — ECharts formatter; default "y · x — value"
+     *   visualMin/visualMax — visualMap range (default 0..max(cell))
+     *   yLabelWidth — truncation width for long y labels (default 140)
+     */
+    C.heatmapMatrix = function (data, opts) {
+        opts = opts || {};
+        var xLabels = (data && data.xLabels) || [];
+        var yLabels = (data && data.yLabels) || [];
+        var cells = (data && data.cells) || [];
+
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var resolve = ns.resolveCssVar || function () { return ''; };
+        var muted = resolve('--muted') || tokens.muted;
+        var border = resolve('--border') || tokens.border;
+        var heatStops = [
+            resolve('--iwac-vis-heatmap-0'),
+            resolve('--iwac-vis-heatmap-1'),
+            resolve('--iwac-vis-heatmap-2'),
+            resolve('--iwac-vis-heatmap-3'),
+            resolve('--iwac-vis-heatmap-4')
+        ].filter(Boolean);
+        if (heatStops.length < 2) {
+            heatStops = [
+                resolve('--surface') || tokens.surface,
+                resolve('--primary') || tokens.primary
+            ].filter(Boolean);
+        }
+
+        var max = opts.visualMax;
+        if (max == null) {
+            max = 1;
+            cells.forEach(function (c) {
+                var v = c && c.value ? c.value[2] : (c ? c[2] : 0);
+                if (v > max) max = v;
+            });
+        }
+
+        var esc = (ns.panels && ns.panels.escapeHtml) || function (s) { return s; };
+        var fmt = ns.formatNumber || String;
+
+        return {
+            tooltip: {
+                position: 'top',
+                confine: true,
+                formatter: opts.tooltipFormatter || function (p) {
+                    var v = p.value || [];
+                    return esc(String(yLabels[v[1]] || '')) + ' · '
+                        + esc(String(xLabels[v[0]] || '')) + ' — ' + fmt(v[2]);
+                }
+            },
+            grid: { left: 8, right: 24, top: 12, bottom: 64, containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: xLabels.map(String),
+                axisLabel: { interval: 'auto', fontSize: 10, color: muted },
+                axisLine: { lineStyle: { color: border } },
+                axisTick: { show: false },
+                splitArea: { show: false }
+            },
+            yAxis: {
+                type: 'category',
+                data: yLabels.slice(),
+                inverse: true,
+                axisLabel: {
+                    interval: 0,
+                    fontSize: 10,
+                    color: muted,
+                    width: opts.yLabelWidth || 140,
+                    overflow: 'truncate'
+                },
+                axisLine: { lineStyle: { color: border } },
+                axisTick: { show: false },
+                splitArea: { show: false }
+            },
+            visualMap: {
+                min: opts.visualMin != null ? opts.visualMin : 0,
+                max: max,
+                calculable: true,
+                orient: 'horizontal',
+                left: 'center',
+                bottom: 4,
+                itemWidth: 14,
+                itemHeight: 120,
+                textStyle: { color: muted },
+                inRange: { color: heatStops }
+            },
+            series: [{
+                type: 'heatmap',
+                data: cells,
+                label: { show: false },
+                emphasis: {
+                    itemStyle: {
+                        borderColor: tokens.ink || '#2c2f37',
+                        borderWidth: 2
+                    }
+                }
+            }]
+        };
+    };
 })();

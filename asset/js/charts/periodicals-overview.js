@@ -84,7 +84,15 @@
         // reservation instead of the default 320px chart height.
         wordcloudPanel.chart.classList.add('iwac-vis-wordcloud-host');
 
+        // Holdings matrix (ROADMAP 9.4) — 25 periodical rows need the
+        // 400px reservation too. The controller removes the panel when
+        // the deployed bundle predates the holdings section.
+        var holdingsPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+            P.t('periodicals.holdings_title'), P.t('periodicals.holdings_desc'));
+        holdingsPanel.chart.classList.add('iwac-vis-chart--tall');
+
         grid.appendChild(runsPanel.panel);
+        grid.appendChild(holdingsPanel.panel);
         grid.appendChild(perYearPanel.panel);
         grid.appendChild(languagesPanel.panel);
         grid.appendChild(countriesPanel.panel);
@@ -93,6 +101,8 @@
 
         return {
             runs:           runsPanel.chart,
+            holdings:       holdingsPanel.chart,
+            holdingsPanel:  holdingsPanel.panel,
             perYear:        perYearPanel.chart,
             languages:      languagesPanel.chart,
             countries:      countriesPanel.chart,
@@ -128,6 +138,32 @@
                     ns.registerChart(h.runs, function (el, chart) {
                         chart.setOption(C.gantt(runs));
                     });
+                }
+
+                // 1b. Holdings matrix — periodical × year issue counts
+                //     (ROADMAP 9.4). Rows keep the Gantt's ordering; a
+                //     blank cell inside a run is a collection gap. Elides
+                //     when the deployed bundle predates the section.
+                var holdings = data.holdings || {};
+                if (holdings.cells && holdings.cells.length && C.heatmapMatrix) {
+                    ns.registerChart(h.holdings, function (el, chart) {
+                        chart.setOption(C.heatmapMatrix({
+                            xLabels: holdings.years || [],
+                            yLabels: holdings.periodicals || [],
+                            cells: holdings.cells
+                        }, {
+                            tooltipFormatter: function (p) {
+                                var v = p.value || [];
+                                return P.t('periodicals.holdings_tip', {
+                                    name: P.escapeHtml((holdings.periodicals || [])[v[1]] || ''),
+                                    year: (holdings.years || [])[v[0]],
+                                    count: P.formatNumber(v[2])
+                                });
+                            }
+                        }), true);
+                    });
+                } else if (h.holdingsPanel && h.holdingsPanel.parentNode) {
+                    h.holdingsPanel.parentNode.removeChild(h.holdingsPanel);
                 }
 
                 // 2. Issues per year, stacked by country

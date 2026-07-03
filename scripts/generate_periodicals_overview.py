@@ -19,6 +19,10 @@ Payload shape (top-level keys):
     runs              — per-periodical publication run, shaped for the
                         C.gantt builder: { name, country, year_min,
                         year_max, total }, sorted by first year
+    holdings          — periodical × year issue counts for the holdings
+                        matrix (C.heatmapMatrix): { years, periodicals,
+                        cells: [[yearIdx, periodicalIdx, count], …] };
+                        rows keep the runs ordering
     issues_per_year   — per-year × country matrix shaped for C.timeline:
                         { years, countries, series }
     languages         — language histogram (raw French keys so the JS can
@@ -185,6 +189,43 @@ def compute_runs(rows: pd.DataFrame) -> List[Dict[str, Any]]:
     return runs
 
 
+def compute_holdings(rows: pd.DataFrame, runs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Periodical × year issue counts, shaped to feed C.heatmapMatrix.
+
+    Rows reuse the runs list's ordering (first year, then name) so the
+    matrix reads in visual correspondence with the Gantt above it. The
+    year axis is the contiguous corpus span — the gaps ARE the point: a
+    blank cell inside a run is a year with no held issue (a collection
+    gap, not necessarily a publication gap). Cells are sparse
+    ``[yearIdx, periodicalIdx, count]`` rows.
+    """
+    counts: Counter = Counter()
+    for _, row in rows.iterrows():
+        name = _str_or_none(row.get("newspaper"))
+        if name is None or _is_unknown(name):
+            continue
+        year = extract_year(row.get("pub_date"))
+        if year is None:
+            continue
+        counts[(name, int(year))] += 1
+
+    if not runs or not counts:
+        return {"years": [], "periodicals": [], "cells": []}
+
+    year_min = min(r["year_min"] for r in runs)
+    year_max = max(r["year_max"] for r in runs)
+    years = list(range(int(year_min), int(year_max) + 1))
+    periodicals = [r["name"] for r in runs]
+    p_idx = {n: i for i, n in enumerate(periodicals)}
+    y_idx = {y: i for i, y in enumerate(years)}
+    cells = [
+        [y_idx[y], p_idx[n], int(c)]
+        for (n, y), c in sorted(counts.items())
+        if n in p_idx and y in y_idx
+    ]
+    return {"years": years, "periodicals": periodicals, "cells": cells}
+
+
 def compute_issues_per_year(rows: pd.DataFrame) -> Dict[str, Any]:
     """Per-year × country matrix shaped to feed C.timeline directly.
 
@@ -298,26 +339,30 @@ def build_periodicals_overview(
     countries = _top_n_pipe(df, "country", None)
     wordcloud = compute_wordcloud(df, wordcloud_max_words, wordcloud_min_frequency)
 
+    holdings = compute_holdings(df, runs)
+
     logger.info(
-        "  %d periodical runs, %d timeline years, %d languages, %d countries, %d cloud terms",
+        "  %d periodical runs, %d timeline years, %d languages, %d countries, %d cloud terms, %d holdings cells",
         len(runs),
         len(issues_per_year["years"]),
         len(languages),
         len(countries),
         len(wordcloud),
+        len(holdings["cells"]),
     )
 
     metadata = create_metadata_block(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_periodicals_overview.py",
-        script_version="0.2.0",
+        script_version="0.3.0",
     )
 
     return {
         "metadata":        metadata,
         "summary":         summary,
         "runs":            runs,
+        "holdings":        holdings,
         "issues_per_year": issues_per_year,
         "languages":       languages,
         "top_subjects":    top_subjects,
