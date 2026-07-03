@@ -7,11 +7,15 @@
  * @var array|null $lastSync   ['time','count','bytes','tag'] of the last successful sync, or null.
  * @var \Omeka\Api\Representation\JobRepresentation|null $running  An active sync job, or null.
  * @var \Omeka\Api\Representation\SiteRepresentation[] $sites
+ * @var array|null $health     Decoded corpus-health.json (ROADMAP 9.10), or null before the
+ *                             first sync that ships it. Metric labels are English-only by
+ *                             design (curator tooling; see generate_corpus_health.py).
  */
 $escape     = $this->plugin('escapeHtml');
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $translate  = $this->plugin('translate');
 $form->prepare();
+$health = isset($health) ? $health : null;
 ?>
 <?= $this->pageTitle($translate('IWAC Visualizations')) ?>
 
@@ -53,6 +57,59 @@ $form->prepare();
     <p class="iwac-data-empty">
         <?= $escape($translate('No data has been pulled yet. Use the button below to fetch it.')) ?>
     </p>
+    <?php endif; ?>
+
+    <?php if ($health): ?>
+    <h3><?= $escape($translate('Corpus health')) ?></h3>
+    <p>
+        <?= $escape($translate(
+            'Coverage of the upstream enrichment pipelines, computed from the Hugging Face '
+            . 'dataset at data-build time. Use these meters to steer digitization and '
+            . 'annotation priorities; they refresh with every data pull.'
+        )) ?>
+        <?php if (!empty($health['generated_at'])): ?>
+        <em>(<?= $escape($translate('Computed')) ?> <?= $escape($health['generated_at']) ?>)</em>
+        <?php endif; ?>
+    </p>
+    <style>
+        /* Admin-only meters — scoped here because the admin UI is Omeka's
+           own chrome, not the IWAC public theme (no token contract). */
+        .iwac-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 24px; }
+        .iwac-health__subset { border: 1px solid #dfdfdf; border-radius: 4px; padding: 12px 16px; }
+        .iwac-health__subset h4 { margin: 0 0 8px; text-transform: capitalize; }
+        .iwac-health__row { margin: 6px 0; font-size: 13px; }
+        .iwac-health__row-head { display: flex; justify-content: space-between; gap: 8px; }
+        .iwac-health__pct { font-variant-numeric: tabular-nums; color: #555; }
+        .iwac-health__track { height: 6px; border-radius: 3px; background: #e7e7e7; overflow: hidden; margin-top: 3px; }
+        .iwac-health__fill { height: 100%; border-radius: 3px; background: #7b9c68; }
+        .iwac-health__fill--low { background: #c88a3d; }
+    </style>
+    <div class="iwac-health">
+        <?php foreach ($health['subsets'] as $subsetName => $subset): ?>
+        <div class="iwac-health__subset">
+            <h4><?= $escape($subsetName) ?> · <?= $escape(number_format((int) ($subset['total'] ?? 0))) ?></h4>
+            <?php foreach (($subset['metrics'] ?? []) as $m):
+                $total   = max(1, (int) ($m['total'] ?? 0));
+                $covered = (int) ($m['covered'] ?? 0);
+                $pct     = min(100, round(100 * $covered / $total, 1));
+            ?>
+            <div class="iwac-health__row">
+                <div class="iwac-health__row-head">
+                    <span><?= $escape($m['label'] ?? '') ?></span>
+                    <span class="iwac-health__pct">
+                        <?= $escape(number_format($covered)) ?> / <?= $escape(number_format((int) ($m['total'] ?? 0))) ?>
+                        (<?= $escape($pct) ?> %)
+                    </span>
+                </div>
+                <div class="iwac-health__track">
+                    <div class="iwac-health__fill<?= $pct < 50 ? ' iwac-health__fill--low' : '' ?>"
+                         style="width: <?= $escapeAttr($pct) ?>%"></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
     <?php endif; ?>
 
     <h3><?= $escape($translate('Pull data')) ?></h3>

@@ -33,7 +33,13 @@ return [
     'controllers' => [
         'invokables' => [
             'IwacVisualizations\Controller\Site\Embed' => Controller\Site\EmbedController::class,
-            'IwacVisualizations\Controller\Admin\Data' => Controller\Admin\DataController::class,
+        ],
+        'factories' => [
+            // Service NAME unchanged (the ACL grant in Module::onBootstrap and
+            // the admin navigation `resource` reference it) — only the
+            // instantiation moved to a factory so the file store can be
+            // injected for the corpus-health read (ROADMAP 9.10).
+            'IwacVisualizations\Controller\Admin\Data' => Service\Controller\Admin\DataControllerFactory::class,
         ],
     ],
     'navigation' => [

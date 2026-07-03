@@ -21,6 +21,14 @@ class DataController extends AbstractActionController
     /** Job statuses that mean a sync is still active. */
     const ACTIVE_STATUSES = ['starting', 'in_progress'];
 
+    /** @var \Omeka\File\Store\StoreInterface */
+    protected $store;
+
+    public function __construct($store)
+    {
+        $this->store = $store;
+    }
+
     public function indexAction()
     {
         $running = $this->findRunningSync();
@@ -30,9 +38,30 @@ class DataController extends AbstractActionController
             'lastSync' => $this->settings()->get(SyncData::SETTING_LAST_SYNC),
             'running'  => $running,
             'sites'    => $this->api()->search('sites')->getContent(),
+            'health'   => $this->loadCorpusHealth(),
         ]);
         $view->setTemplate('iwac-visualizations/admin/data/index');
         return $view;
+    }
+
+    /**
+     * Read the synced corpus-health.json (ROADMAP 9.10) from the file
+     * store, if a data pull has delivered one. Returns the decoded
+     * bundle or null — the view renders the meters only when present,
+     * so pre-9.10 archives degrade to the old page silently.
+     */
+    private function loadCorpusHealth(): ?array
+    {
+        if (!$this->store || !method_exists($this->store, 'getLocalPath')) {
+            return null;
+        }
+        $path = rtrim((string) $this->store->getLocalPath(''), '/\\')
+            . '/' . SyncData::STORE_SUBDIR . '/corpus-health.json';
+        if (!is_readable($path)) {
+            return null;
+        }
+        $decoded = json_decode((string) file_get_contents($path), true);
+        return (is_array($decoded) && !empty($decoded['subsets'])) ? $decoded : null;
     }
 
     public function syncAction()
