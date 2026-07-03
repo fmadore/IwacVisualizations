@@ -113,6 +113,24 @@
         var tablePanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('All keywords'));
         keywordsMain.appendChild(tablePanel.panel);
 
+        // Derived Section B panels (ROADMAP 9.7 / 9.8) — both feed off
+        // the same deferred keyword bundles, so they render in
+        // wireSectionB with no extra fetch. Full-width, below the
+        // sidebar+chart layout.
+        var bumpPanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide iwac-vis-keywords-bump-panel',
+            P.t('Rising and falling subjects'),
+            P.t('desc_subjects_bump')
+        );
+        sectionB.appendChild(bumpPanel.panel);
+
+        var attentionPanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide iwac-vis-keywords-attention-panel',
+            P.t('Geographic attention over time'),
+            P.t('desc_geo_attention')
+        );
+        sectionB.appendChild(attentionPanel.panel);
+
         root.appendChild(sectionB);
 
         return {
@@ -126,7 +144,9 @@
             sectionB:       sectionB,
             filtersHost:    filtersHost,
             chartPanel:     chartPanel,
-            tablePanel:     tablePanel
+            tablePanel:     tablePanel,
+            bumpPanel:      bumpPanel,
+            attentionPanel: attentionPanel
         };
     }
 
@@ -182,7 +202,7 @@
         }, { rootMargin: '400px 0px' });
     }
 
-    function wireSectionB(h, datasets) {
+    function wireSectionB(h, datasets, ctx) {
         var io = ns.indexOverview || {};
         if (!io.keywordsState || !io.keywordsFilters || !io.keywordsChart || !io.keywordsTable) {
             console.warn('IWACVis index overview: keyword explorer modules missing');
@@ -195,6 +215,11 @@
         // panel.chart collapses the ECharts canvas to 0px height).
         io.keywordsChart.render(h.chartPanel, state);
         io.keywordsTable.render(h.tablePanel.chart, state);
+        // Derived panels — decade bump chart (9.7) + choropleth year
+        // slider (9.8); both are pure client-side transforms of the
+        // bundles fetched above.
+        if (io.keywordsBump) io.keywordsBump.render(h.bumpPanel, datasets.subjects);
+        if (io.keywordsAttention) io.keywordsAttention.render(h.attentionPanel, datasets.spatial, ctx);
     }
 
     /**
@@ -206,7 +231,7 @@
      * lands. Falls back to an immediate load when IntersectionObserver
      * is unavailable.
      */
-    function armSectionB(h, base) {
+    function armSectionB(h, base, ctx) {
         var spinner = P.buildLoadingState();
         h.chartPanel.chart.appendChild(spinner);
 
@@ -222,7 +247,7 @@
                     subjects: payloads[0],
                     spatial:  payloads[1],
                     metadata: payloads[2]
-                });
+                }, ctx);
             })
             .catch(function (err) {
                 console.error('IWACVis keyword explorer:', err);
@@ -243,7 +268,7 @@
             .then(function (dataA) {
                 var h = buildLayout(container, dataA);
                 wireSectionA(h, dataA, ctx, base);
-                armSectionB(h, base);
+                armSectionB(h, base, ctx);
             })
             .catch(function (err) {
                 console.error('IWACVis index overview:', err);

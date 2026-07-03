@@ -150,12 +150,19 @@
         // Sequential: caller can override the ramp with a single
         // accentColor (e.g. corpus colour); otherwise the default
         // IWAC heatmap ramp tied to --iwac-vis-heatmap-* tokens.
+        // `paintConfig.fixedMax` pins the scale top instead of the
+        // current counts' max — required when updateCounts() cycles a
+        // time slider and colors must stay comparable across years.
         var stops = (paintConfig && paintConfig.accentColor)
             ? buildAccentRamp(paintConfig.accentColor)
             : resolveRamp();
         var maxCount = 1;
-        for (var w = 0; w < values.length; w++) {
-            if (values[w] > maxCount) maxCount = values[w];
+        if (paintConfig && paintConfig.fixedMax > 0) {
+            maxCount = paintConfig.fixedMax;
+        } else {
+            for (var w = 0; w < values.length; w++) {
+                if (values[w] > maxCount) maxCount = values[w];
+            }
         }
         var expr = ['interpolate', ['linear'], ['get', '_iwac_count']];
         for (var i = 0; i < stops.length; i++) {

@@ -534,6 +534,14 @@
             'Filtered by newspaper: {newspaper}': 'Filtered by newspaper: {newspaper}',
             'All data (global)':         'All data (global)',
             'Select keywords to compare': 'Select keywords to compare',
+
+            // Keyword Explorer — derived panels (ROADMAP 9.7 / 9.8)
+            'Rising and falling subjects': 'Rising and falling subjects',
+            'desc_subjects_bump':        'Rank of the leading subjects per decade — a climbing line took attention away from a sinking one. A line breaks where the subject drops out of the decade top 8; hover a decade for ranks and counts.',
+            'Geographic attention over time': 'Geographic attention over time',
+            'desc_geo_attention':        'How the press corpus’s spatial coverage of each IWAC country shifts over time. Drag the year slider or press play; color intensity is pinned to the all-years maximum, so shades stay comparable across years.',
+            'Play':                      'Play',
+            'Pause':                     'Pause',
             // Spatial Exploration block
             'Entity type':               'Entity type',
             'Pick an entity':            'Pick an entity',
@@ -1060,6 +1068,14 @@
             'Filtered by newspaper: {newspaper}': 'Filtr\u00e9 par journal : {newspaper}',
             'All data (global)':         'Toutes les donn\u00e9es (global)',
             'Select keywords to compare': 'S\u00e9lectionnez des mots-cl\u00e9s \u00e0 comparer',
+
+            // Keyword Explorer \u2014 derived panels (ROADMAP 9.7 / 9.8)
+            'Rising and falling subjects': 'Sujets montants et descendants',
+            'desc_subjects_bump':        'Rang des principaux sujets par d\u00e9cennie \u2014 une ligne qui monte prend l\u2019attention d\u2019une ligne qui descend. Une ligne s\u2019interrompt quand le sujet sort du top 8 de la d\u00e9cennie ; survolez une d\u00e9cennie pour les rangs et les comptes.',
+            'Geographic attention over time': 'Attention g\u00e9ographique au fil du temps',
+            'desc_geo_attention':        'Comment la couverture spatiale de chaque pays IWAC \u00e9volue dans le temps. Faites glisser le curseur ou lancez la lecture ; l\u2019intensit\u00e9 des couleurs est cal\u00e9e sur le maximum toutes ann\u00e9es confondues, donc les teintes restent comparables d\u2019une ann\u00e9e \u00e0 l\u2019autre.',
+            'Play':                      'Lecture',
+            'Pause':                     'Pause',
             // Spatial Exploration block
             'Entity type':               'Type d\u2019entit\u00e9',
             'Pick an entity':            'Choisir une entit\u00e9',
