@@ -113,6 +113,71 @@
         return { groups: groups, order: order };
     }
 
+    /**
+     * Cluster labels (ROADMAP 9.5): one quiet text label at each major
+     * topic's densest region, computed client-side from the points the
+     * bundle already carries (median x/y per topic — medians resist the
+     * stray points UMAP throws far from their cluster). Rendered as a
+     * silent zero-symbol scatter series in EVERY facet — the labels are
+     * the map's place names, useful whichever coloring is active.
+     * Publications bundles carry no per-point topic array, so this
+     * returns null and the landscape stays unlabelled there.
+     */
+    function buildLabelSeries(data) {
+        var pts = data.points || {};
+        var topics = data.topics || [];
+        if (!pts.topic || !topics.length) return null;
+
+        var acc = topics.map(function () { return { xs: [], ys: [] }; });
+        var n = (pts.o_id || []).length;
+        for (var i = 0; i < n; i++) {
+            var t = pts.topic[i];
+            if (t >= 0 && acc[t]) {
+                acc[t].xs.push(pts.x[i]);
+                acc[t].ys.push(pts.y[i]);
+            }
+        }
+        function median(arr) {
+            if (!arr.length) return null;
+            var s = arr.slice().sort(function (a, b) { return a - b; });
+            var mid = s.length >> 1;
+            return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+        }
+
+        var labelPoints = [];
+        topics.forEach(function (t, idx) {
+            var mx = median(acc[idx].xs);
+            var my = median(acc[idx].ys);
+            if (mx == null || my == null) return;
+            var name = String(t.label || '').split(' - ').slice(0, 2).join(' · ').trim();
+            if (!name) return;
+            labelPoints.push({ value: [mx, my], name: name });
+        });
+        if (!labelPoints.length) return null;
+
+        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        return {
+            name: '__topic_labels__',
+            type: 'scatter',
+            silent: true,
+            symbolSize: 0,
+            legendHoverLink: false,
+            tooltip: { show: false },
+            z: 10,
+            data: labelPoints,
+            label: {
+                show: true,
+                formatter: function (p) { return p.name; },
+                fontSize: 11,
+                fontWeight: 600,
+                color: tokens.inkLight || tokens.ink,
+                textBorderColor: tokens.surface,
+                textBorderWidth: 2
+            },
+            labelLayout: { hideOverlap: true }
+        };
+    }
+
     function buildOption(data, facet) {
         var pts = data.points;
         var grouped = buildGroups(data, facet);
@@ -135,12 +200,18 @@
             };
         });
 
+        var labelSeries = buildLabelSeries(data);
+        if (labelSeries) series.push(labelSeries);
+
         return {
             legend: {
                 type: 'scroll',
                 bottom: 0,
                 itemWidth: 12,
-                itemHeight: 10
+                itemHeight: 10,
+                // Restrict to the point buckets so the silent
+                // topic-label overlay never grows a legend entry.
+                data: grouped.order.slice()
             },
             tooltip: {
                 trigger: 'item',

@@ -18,7 +18,7 @@
         ns.addTranslations('en', {
             'Loading semantic landscape': 'Loading semantic landscape',
             'Semantic landscape': 'Semantic landscape',
-            'desc_semantic_landscape': 'Every article in the collection, placed by the semantic similarity of its full text (UMAP projection of AI text embeddings — axes have no meaning, only proximity does). Drag to pan, scroll to zoom, click a point to open the article.',
+            'desc_semantic_landscape': 'Every article in the collection, placed by the semantic similarity of its full text (UMAP projection of AI text embeddings — axes have no meaning, only proximity does). Quiet labels mark each major topic’s densest region. Drag to pan, scroll to zoom, click a point to open the article.',
             'Color by': 'Color by',
             'Decade': 'Decade',
             'Topic': 'Topic',
@@ -32,7 +32,7 @@
         ns.addTranslations('fr', {
             'Loading semantic landscape': 'Chargement du paysage sémantique',
             'Semantic landscape': 'Paysage sémantique',
-            'desc_semantic_landscape': 'Chaque article de la collection, positionné selon la similarité sémantique de son texte intégral (projection UMAP des plongements de texte IA — les axes n’ont pas de sens, seule la proximité compte). Glissez pour déplacer, molette pour zoomer, cliquez sur un point pour ouvrir l’article.',
+            'desc_semantic_landscape': 'Chaque article de la collection, positionné selon la similarité sémantique de son texte intégral (projection UMAP des plongements de texte IA — les axes n’ont pas de sens, seule la proximité compte). Des libellés discrets marquent la zone la plus dense de chaque grand thème. Glissez pour déplacer, molette pour zoomer, cliquez sur un point pour ouvrir l’article.',
             'Color by': 'Colorer par',
             'Decade': 'Décennie',
             'Topic': 'Thème',
