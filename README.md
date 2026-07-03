@@ -14,11 +14,11 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 13 panels | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
-| Topic Explorer | page block | **Live** — LDA-30 overview + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
-| Periodicals Overview | page block | **Live** — 7 panels: runs gantt, issues/year, languages & countries donuts, top subjects, word cloud | Precompute (`generate_periodicals_overview.py`) |
-| Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets | Precompute (`generate_semantic_landscape.py`) |
+| Topic Explorer | page block | **Live** — LDA-30 overview (treemap + topics-over-time share area) + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
+| Periodicals Overview | page block | **Live** — 8 panels: runs gantt, issue-holdings matrix, issues/year, languages & countries donuts, top subjects, word cloud | Precompute (`generate_periodicals_overview.py`) |
+| Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets, topic cluster labels | Precompute (`generate_semantic_landscape.py`) |
 | Periodicals Semantic Landscape | page block | **Live** — zoomable UMAP scatter of periodical issues by table-of-contents embedding, Country/Decade facets | Precompute (`generate_periodicals_landscape.py`) |
-| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, centralité-by-country heatmap, extreme-article keywords, cross-model agreement + Gemini 3 Pro arbiter | Precompute (`generate_sentiment_atlas.py` + `generate_sentiment_arbiter.py`) |
+| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, polarity by country / topic / newspaper, centralité-by-country heatmap, extreme-article keywords, cross-model agreement + Gemini 3 Pro arbiter | Precompute (`generate_sentiment_atlas.py` + `generate_sentiment_arbiter.py`) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
@@ -34,6 +34,16 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.20.0 — Phase 9 wave: topic dynamics, sentiment cuts, holdings matrix, landscape labels
+
+Four ROADMAP Phase 9 items in one release — every new panel lives inside an existing block:
+
+- **Topics over time** (Topic Explorer) — the audit's single biggest analytic gap: a 100%-stacked area of each LDA topic's share of the year's classified articles (top-12 + "Other topics"), tooltip sorted by share, click a band to drill into the topic. Built entirely from the `year_distribution` arrays the bundle already carried — no generator change. A stacked area was chosen over `themeRiver`: cartesian axes + dataZoom read as research instrument, and the share encoding factors out six decades of corpus growth.
+- **Polarity by topic + by newspaper** (Sentiment Atlas) — two new breakdown panels on the global model facet: how each model's polarity ratings distribute across the 30 LDA topics (categories show each topic's two top words) and across the 31 newspapers with ≥ 50 articles. `generate_sentiment_atlas.py` 0.3.0 adds the sections; both panels self-elide when the deployed bundle predates them.
+- **Issue holdings by year** (Periodicals Overview) — a periodical × year heatmap under the runs gantt, same row order: cell intensity is issues held, so a blank cell inside a run reads as a collection gap. Introduces the generic **`C.heatmapMatrix`** shared builder (arbitrary label × label matrices on the `--iwac-vis-heatmap-*` ramp) and the purpose-neutral `.iwac-vis-chart--tall` 400px host alias.
+- **Semantic Landscape cluster labels** — quiet text labels at each major topic's densest region turn the unlabelled point cloud into an actual map. Computed client-side (median x/y of each topic's points — medians resist UMAP's stray points), rendered as a silent overlay with `labelLayout.hideOverlap` in every facet; the publications landscape carries no topic array and stays unlabelled automatically.
+- Docs: the focus-token name in CLAUDE.md/AGENTS.md corrected to `--focus-color` (`--focus-ring`/`--ring-focus` were phantom names); ROADMAP open question 2 closed — the current dataset ships **0** LDA outliers.
 
 ### v1.19.0 — On This Day + Press Bylines page blocks
 

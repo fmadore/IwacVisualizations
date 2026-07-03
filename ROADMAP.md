@@ -402,31 +402,44 @@ Checked against every existing panel and the explicit non-ports
 ÷ effort. Payload discipline per Phase 5 applies (minify, lazy-load on
 view, split heavy bundles).
 
-- [ ] **9.1 Topic dynamics over time.** The single biggest analytic gap:
-      nothing shows how corpus attention shifted across the 30 LDA topics
-      over six decades. ECharts `themeRiver` (or 100%-stacked area) of
-      topic share per year, top-12 + Other, country facet.
-      `generate_topic_explorer.py` already computes per-topic year×day
-      cells — summing to years is a ~10 KB addition to the existing
-      bundle. New overview panel in Topic Explorer.
-- [ ] **9.2 Sentiment × topic.** Which LDA topics carry negative/positive
-      framing, per model — one extra groupby in
-      `generate_sentiment_atlas.py`, one diverging-bar panel in the Atlas.
-      The extremes-keywords panel hints at this question; nothing answers
-      it.
-- [ ] **9.3 Sentiment by newspaper.** The Atlas has polarity by country
-      but not by outlet; diverging stacked hbar for the ≥50-article
-      newspapers (same threshold Press Language uses). Pairs with Press
-      Language's per-newspaper rankings as an "editorial profile" story.
-- [ ] **9.4 Periodical holdings matrix.** The runs gantt shows spans but
-      hides density: a periodical × year heatmap of issue counts makes run
-      gaps visible (for researchers and acquisition priorities). Small
-      aggregation in `generate_periodicals_overview.py`; natural pilot for
-      the deferred 4.6 `matrix` coordinate system.
-- [ ] **9.5 Semantic Landscape cluster labels.** Precompute per-topic UMAP
-      centroids and overlay toggleable topic-label text at the centroids —
-      the "map of everything" is currently decodable only via the legend.
-      ~30 rows of extra data in `semantic-landscape.json`.
+- [x] **9.1 Topic dynamics over time** — **DONE (v1.20.0)**, cheaper than
+      planned: the bundle's per-topic `year_distribution` arrays already
+      carried everything, so it is a pure client-side panel (no generator
+      change, no payload growth). 100%-stacked area (not themeRiver —
+      cartesian axes + dataZoom read as research instrument, and the
+      share encoding factors out corpus growth) of top-12 + "Other
+      topics", tooltip sorted by share with raw counts, click a band to
+      drill into the topic. Share math smoke-tested against the live
+      bundle.
+- [x] **9.2 Sentiment × topic** — **DONE (v1.20.0)**. "Polarity by
+      topic" panel in the Atlas breakdown section, driven by the global
+      model facet; categories show each topic's two top words.
+      `generate_sentiment_atlas.py` 0.3.0 adds `polarity_by_topic` +
+      the `topics` axis.
+- [x] **9.3 Sentiment by newspaper** — **DONE (v1.20.0)**. "Polarity by
+      newspaper" panel for the 31 outlets ≥ 50 articles (threshold
+      shipped as `newspaper_min`, interpolated into the description).
+      Both 9.2/9.3 panels self-elide when the deployed bundle predates
+      their generator sections, so code ships safely ahead of the next
+      data pull.
+- [x] **9.4 Periodical holdings matrix** — **DONE (v1.20.0)**.
+      Periodical × year issue-count heatmap under the runs gantt, same
+      row order, so a blank cell inside a run reads as a collection gap.
+      Regenerated bundle verified (44 years × 25 periodicals, 132 cells
+      summing to exactly 1,501 issues). Introduces the generic
+      `C.heatmapMatrix` builder the June audit wanted (Tier 3) —
+      new-code-only; migrating the atlas's two bespoke heatmaps onto it
+      stays gated on the live session. 4.6's matrix-coordinate rewrite
+      can absorb it later.
+- [x] **9.5 Semantic Landscape cluster labels** — **DONE (v1.20.0)**,
+      with zero data change: per-topic label positions are computed
+      client-side as the median x/y of each topic's points (the bundle
+      already carries per-point topic indices; medians resist UMAP's
+      stray points). Silent zero-symbol scatter overlay with
+      `labelLayout.hideOverlap`, excluded from the legend, shown in
+      every facet — the labels are the map's place names. Publications
+      bundles carry no topic array, so their landscape stays unlabelled
+      automatically.
 - [ ] **9.6 Term-trends explorer ("IWAC Ngram viewer").** Generalize Scary
       Terms from a curated list to *any* term: per-year document frequency
       for the top ~3–5k lemmas (`lemma_nostop`, articles first), search +
@@ -476,8 +489,10 @@ view, split heavy bundles).
 
 1. **`audiovisual` (45) / `documents` (26)** are tiny — keep
    minimal-item only, or fold into collection-level stats entirely?
-2. **Topic Explorer outliers** — `lda_topic_id == -1` rows (~2 %)
-   hidden today; show as a 31st pseudo-topic?
+2. ~~Topic Explorer outliers~~ — **moot (2026-07-03)**: the current
+   dataset ships **0** `lda_topic_id == -1` rows (upstream now assigns
+   every article a topic). The outlier-handling code stays as a guard
+   for future dataset versions.
 3. **Phase 5.4** self-host vs CDN — owner decision (GDPR vs edge
    latency).
 
