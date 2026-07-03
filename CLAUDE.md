@@ -29,7 +29,7 @@ This module is built to drop into the **[IWAC theme](https://github.com/fmadore/
 
 **Token budget** — read these from the theme at runtime via `iwac-theme.js::readTokens()`; never hardcode equivalents:
 
-- **Colors** — `--primary` (admin-overridable hex; do NOT redeclare), `--ink-strong`, `--ink`, `--ink-light`, `--ink-subtle`, `--muted`, `--surface`, `--surface-raised`, `--surface-sunken`, `--background`, `--border`, `--border-light`, `--border-strong`, `--focus-ring`. The theme owns dark/light derivations via Sass mixins; do not consume `--primary-hue` / `--primary-sat` (those HSL components were removed in v2.0.0 — derive variants from `--primary` via `color-mix(in oklab, ...)` instead).
+- **Colors** — `--primary` (admin-overridable hex; do NOT redeclare), `--ink-strong`, `--ink`, `--ink-light`, `--ink-subtle`, `--muted`, `--surface`, `--surface-raised`, `--surface-sunken`, `--background`, `--border`, `--border-light`, `--border-strong`, `--focus-color`. The theme owns dark/light derivations via Sass mixins; do not consume `--primary-hue` / `--primary-sat` (those HSL components were removed in v2.0.0 — derive variants from `--primary` via `color-mix(in oklab, ...)` instead). When these docs and `tokens.json` disagree about a token name, `tokens.json` is the ground truth (`npm run lint:theme` enforces it).
 - **Spacing** — `--space-{xs,sm,md,lg,xl,2xl,3xl}` (0.25 / 0.5 / 1 / 1.5 / 2 / 3 / 4 rem).
 - **Radii** — `--radius-{sm,md,lg,xl,full}` (0.375 → 1 rem; `--radius-full = 9999px` for pills). Note: `--radius-md` was tightened from 12px → 8px in v2.0.0 for an institutional register.
 - **Control sizing** — `--size-control-{xs,sm,md,lg,xl}` (28 → 48 px). `lg` (44px) is the WCAG tap target.
@@ -47,7 +47,7 @@ This module is built to drop into the **[IWAC theme](https://github.com/fmadore/
 - **Resource tag pills** — `border-radius: var(--radius-full)`, `text-transform: uppercase`, `letter-spacing: 0.06em`. The theme rule lives at `base/elements/_resource-tag.scss`; reuse the look on any chip / tag in chart UI.
 - **Section headings** — `--tracking-tight` for display titles; small-caps + `--tracking-wide` for metadata labels. Default h2 color is `--ink-strong`, NOT `--primary` (theme v2.0.0 reserves brand color for state, not section markers).
 - **Hover affordances** — fast purposeful transitions (150-200 ms). No bouncing / elastic curves. No card lift > 2px.
-- **Focus** — visible focus rings via `--ring-focus`; never `outline: none` without a replacement.
+- **Focus** — visible focus rings via `--focus-color` (light `#ce4115`, dark `#ec653f` — the dark value deliberately differs from `--primary`; the canonical pattern is `outline: 2px solid var(--focus-color, var(--primary, #ce4115))`). `--focus-ring` / `--ring-focus` do NOT exist — phantom names from older docs. Never `outline: none` without a replacement.
 - **Side-stripe borders** — `border-left/right` ≥ 2px is allowed ONLY for structural data-marker affordances (e.g. multi-color sentiment-card model indicator, compare-corpus A/B). Never as a decorative accent on cards or callouts.
 - **AI-generated values** — when surfacing model output (sentiment scores, generated labels, summaries) give it explicit visual treatment (sparkle / badge / tinted block) so readers can distinguish computational artefacts from human-authored archival metadata. The theme's `.property--ai` block (resource-show) is the reference pattern.
 
