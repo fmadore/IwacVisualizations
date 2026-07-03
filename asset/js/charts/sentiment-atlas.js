@@ -135,6 +135,52 @@
         });
     }
 
+    /** First two topic words make a readable category label — the same
+     *  ' - ' split the Topic Explorer treemap derives its cell names from. */
+    function topicShortLabel(label, id) {
+        var name = String(label || '').split(' - ').slice(0, 2).join(' · ').trim();
+        return name || (P.t('Topic') + ' ' + id);
+    }
+
+    /** 30-topic / 31-newspaper category axes need slanted labels.
+     *  stackedBar may return a media-wrapped option ({baseOption, media}),
+     *  so mutate whichever object actually carries the xAxis. */
+    function rotateCategoryLabels(opt, deg) {
+        var root = opt.baseOption || opt;
+        root.xAxis = root.xAxis || {};
+        root.xAxis.axisLabel = Object.assign(
+            { rotate: deg, hideOverlap: true },
+            root.xAxis.axisLabel || {}
+        );
+        return opt;
+    }
+
+    function buildPolarityByTopic(data, modelKey) {
+        var model = data.models[modelKey] || {};
+        return rotateCategoryLabels(C.stackedBar({
+            categories: (data.topics || []).map(function (t) {
+                return topicShortLabel(t.label, t.id);
+            }),
+            stackKeys: stackOrderWithoutNA(data.polarity_order),
+            series: model.polarity_by_topic || {}
+        }, {
+            labelFor: function (k) { return P.t(k); },
+            valueName: P.t('Articles')
+        }), 40);
+    }
+
+    function buildPolarityByNewspaper(data, modelKey) {
+        var model = data.models[modelKey] || {};
+        return rotateCategoryLabels(C.stackedBar({
+            categories: data.newspapers || [],
+            stackKeys: stackOrderWithoutNA(data.polarity_order),
+            series: model.polarity_by_newspaper || {}
+        }, {
+            labelFor: function (k) { return P.t(k); },
+            valueName: P.t('Articles')
+        }), 40);
+    }
+
     /**
      * Polarity × subjectivity: for the selected model, each subjectivité
      * level (1–5) is a stacked bar of how its polarity ratings split.
@@ -559,6 +605,24 @@
         breakdownGrid.appendChild(correlationPanel.panel);
         breakdownGrid.appendChild(cenHeatPanel.panel);
 
+        // Polarity by topic / by newspaper (ROADMAP 9.2 / 9.3). Both elide
+        // when the deployed bundle predates their generator sections, so
+        // code can ship ahead of the next data pull.
+        var topicPanel = null;
+        if ((data.topics || []).length) {
+            topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'));
+            breakdownGrid.appendChild(topicPanel.panel);
+        }
+        var newspaperPanel = null;
+        if ((data.newspapers || []).length) {
+            newspaperPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
+                P.t('sentiment.polarity_newspaper_title'),
+                P.t('sentiment.polarity_newspaper_desc', { min: data.newspaper_min || 50 })
+                    + ' ' + P.t('sentiment.ai_note'));
+            breakdownGrid.appendChild(newspaperPanel.panel);
+        }
+
         // -- Section: extreme-article keywords -------------------------
         root.appendChild(sectionHeading(P.t('sentiment.sec_extremes')));
         var extremesGrid = P.buildChartsGrid();
@@ -594,6 +658,8 @@
             countryPanel:      countryPanel,
             correlationPanel:  correlationPanel,
             cenHeatPanel:      cenHeatPanel,
+            topicPanel:        topicPanel,
+            newspaperPanel:    newspaperPanel,
             extremesPanel:     extremesPanel,
             extremesControls:  extremesControls,
             extremesNote:      extremesNote,
@@ -686,13 +752,16 @@
                         onChange: function (evt) {
                             state.model = evt.subFacet || MODELS[0].key;
                             updateNaNote();
-                            [
+                            var faceted = [
                                 [h.polarityPanel.chart,    buildPolarityByYear],
                                 [h.centralityPanel.chart,  buildCentralityByYear],
                                 [h.countryPanel.chart,     buildPolarityByCountry],
                                 [h.correlationPanel.chart, buildCorrelation],
                                 [h.cenHeatPanel.chart,     buildCentralityHeatmap]
-                            ].forEach(function (pair) {
+                            ];
+                            if (h.topicPanel)     faceted.push([h.topicPanel.chart,     buildPolarityByTopic]);
+                            if (h.newspaperPanel) faceted.push([h.newspaperPanel.chart, buildPolarityByNewspaper]);
+                            faceted.forEach(function (pair) {
                                 var live = ns.getLiveChart ? ns.getLiveChart(pair[0]) : null;
                                 if (live) live.setOption(pair[1](data, state.model), true);
                             });
@@ -718,6 +787,16 @@
                 ns.registerChart(h.cenHeatPanel.chart, function (el, chart) {
                     chart.setOption(buildCentralityHeatmap(data, state.model), true);
                 });
+                if (h.topicPanel) {
+                    ns.registerChart(h.topicPanel.chart, function (el, chart) {
+                        chart.setOption(buildPolarityByTopic(data, state.model), true);
+                    });
+                }
+                if (h.newspaperPanel) {
+                    ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
+                        chart.setOption(buildPolarityByNewspaper(data, state.model), true);
+                    });
+                }
 
                 // -- Subjectivity trend (all models at once) ---------------
                 ns.registerChart(h.subjectivityPanel.chart, function (el, chart) {

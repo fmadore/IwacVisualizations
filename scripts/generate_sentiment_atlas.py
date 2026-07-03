@@ -35,9 +35,17 @@ Payload shape (top-level keys):
                         below is aligned to this axis
     countries         — country list ordered by total rated mentions;
                         every per-country series is aligned to it
+    topics            — [{id, label}] LDA topics ordered by article
+                        count (outliers excluded); per-model
+                        polarity_by_topic aligns to this list
+    newspapers        — newspapers with ≥ newspaper_min articles,
+                        ordered by article count; per-model
+                        polarity_by_newspaper aligns to this list
+    newspaper_min     — the article threshold used for `newspapers`
     models            — per model: rated / not_applicable counts,
                         polarity_by_year, centrality_by_year,
                         polarity_by_country (label → aligned counts),
+                        polarity_by_topic, polarity_by_newspaper,
                         subjectivity_by_year {mean, n}, correlation
                         (polarity label → counts at subjectivité 1..5),
                         centrality_heatmap (sparse [countryIdx, yearIdx,
@@ -139,6 +147,12 @@ EXTREME_CATEGORIES: Tuple[str, ...] = (
 # Keep the top-N keywords per (model, category, kind); enough for a bar
 # panel while keeping the payload small.
 EXTREME_TOP_N = 25
+
+# Newspapers below this article count are dropped from the per-newspaper
+# polarity panel (same threshold Press Language uses). If you change it,
+# update the block copy in sentiment-atlas/i18n.js (the description
+# interpolates the payload's `newspaper_min`).
+MIN_NEWSPAPER_ARTICLES = 50
 
 # Drop keyword tokens shorter than this (matches the sibling's len > 2).
 _MIN_KEYWORD_LEN = 3
@@ -244,6 +258,12 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
     # model → label → Counter(country)
     pol_country: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
     country_totals: Counter = Counter()
+    # model → label → Counter(topic_id) / Counter(newspaper)  (ROADMAP 9.2/9.3)
+    pol_topic: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    pol_newspaper: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    topic_articles: Counter = Counter()
+    topic_labels: Dict[int, str] = {}
+    newspaper_articles: Counter = Counter()
     # model → year → [sum, n]
     subj_year: Dict[str, Dict[int, List[float]]] = {
         m: defaultdict(lambda: [0.0, 0]) for m in MODELS
@@ -284,6 +304,19 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         subject_kw = _clean_keywords(row.get("subject"))
         spatial_kw = _clean_keywords(row.get("spatial"))
 
+        raw_topic = clean_float(row.get("lda_topic_id"))
+        topic_id = int(raw_topic) if raw_topic is not None and raw_topic >= 0 else None
+        if topic_id is not None:
+            topic_articles[topic_id] += 1
+            if topic_id not in topic_labels:
+                topic_labels[topic_id] = clean_str(row.get("lda_topic_label"))
+
+        newspaper = clean_str(row.get("newspaper"))
+        if newspaper and not _is_unknown(newspaper):
+            newspaper_articles[newspaper] += 1
+        else:
+            newspaper = ""
+
         row_pol: Dict[str, Optional[str]] = {}
         for m in MODELS:
             pol = _label(row.get(pol_cols[m]))
@@ -297,6 +330,10 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
                     for c in countries:
                         pol_country[m][pol][c] += 1
                         country_totals[c] += 1
+                    if topic_id is not None:
+                        pol_topic[m][pol][topic_id] += 1
+                    if newspaper:
+                        pol_newspaper[m][pol][newspaper] += 1
                 else:
                     stray_labels[f"{m}:{pol}"] += 1
 
@@ -353,6 +390,11 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
 
     # -- Shape the payload ---------------------------------------------------
     countries_sorted = [c for c, _ in country_totals.most_common()]
+    topics_sorted = [t for t, _ in topic_articles.most_common()]
+    newspapers_sorted = [
+        n for n, c in newspaper_articles.most_common()
+        if c >= MIN_NEWSPAPER_ARTICLES
+    ]
 
     models_payload: Dict[str, Any] = {}
     for m in MODELS:
@@ -369,6 +411,14 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
             },
             "polarity_by_country": {
                 label: [int(pol_country[m][label].get(c, 0)) for c in countries_sorted]
+                for label in POLARITY_ORDER
+            },
+            "polarity_by_topic": {
+                label: [int(pol_topic[m][label].get(t, 0)) for t in topics_sorted]
+                for label in POLARITY_ORDER
+            },
+            "polarity_by_newspaper": {
+                label: [int(pol_newspaper[m][label].get(n, 0)) for n in newspapers_sorted]
                 for label in POLARITY_ORDER
             },
             "subjectivity_by_year": {
@@ -429,7 +479,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         total_records=total_loaded,
         data_source=repo_id,
         script="generate_sentiment_atlas.py",
-        script_version="0.2.0",
+        script_version="0.3.0",
         excludedNoYear=excluded_no_year,
     )
 
@@ -442,6 +492,11 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         "extreme_categories": list(EXTREME_CATEGORIES),
         "years": years,
         "countries": countries_sorted,
+        "topics": [
+            {"id": t, "label": topic_labels.get(t, "")} for t in topics_sorted
+        ],
+        "newspapers": newspapers_sorted,
+        "newspaper_min": MIN_NEWSPAPER_ARTICLES,
         "models": models_payload,
         "agreement": agreement,
     }
