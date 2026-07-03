@@ -440,29 +440,44 @@ view, split heavy bundles).
       every facet — the labels are the map's place names. Publications
       bundles carry no topic array, so their landscape stays unlabelled
       automatically.
-- [ ] **9.6 Term-trends explorer ("IWAC Ngram viewer").** Generalize Scary
-      Terms from a curated list to *any* term: per-year document frequency
-      for the top ~3–5k lemmas (`lemma_nostop`, articles first), search +
-      multi-select overlay reusing the Keyword Explorer UI. Distinct from
-      both existing tools (Keyword Explorer counts item *tagging*; Scary
-      Terms counts a *fixed vocabulary*). Keyword-explorer-scale payload,
-      lazy-loaded / sharded. New page block + generator.
-- [ ] **9.7 Rising/falling subjects bump chart** — rank of top subjects
-      per decade from the existing keyword-explorer series; answers "what
-      replaced what" in a way the line charts don't.
-- [ ] **9.8 Geographic attention over time** — year slider / small
-      multiples on the choropleth; per-country×year data already exists in
-      `keyword-explorer-spatial.json`.
-- [ ] **9.9 Reprint / wire-copy detector.** Near-duplicate article pairs
-      (embedding cosine ≥ ~0.97, different newspapers) surface syndicated
-      agency copy (PANA/AFP) circulating between outlets — novel for press
-      historians. Prototype thresholds in a notebook first (OCR noise);
-      precompute pairs, render table + small network. Depends on the
-      Tier-4 `iwac_embeddings.py` extraction.
-- [ ] **9.10 Corpus-health dashboard (admin).** Coverage meters next to
-      the Sync Data admin page: ToC embeddings (~325/1,501 issues),
-      geocoded places, sentiment/embedding coverage, partial dates per
-      subset. Curator-facing; steers upstream pipeline priorities.
+- [x] **9.6 Term-trends explorer ("IWAC Ngram viewer")** — **DONE
+      (2026-07-03)**. `generate_term_trends.py` → frequency-sorted search
+      index (83 KB: 5,000 lemmas, per-year article totals for the
+      share-of-articles normalization) + 25 lazy per-letter shards (max
+      87 KB) keyed by ASCII-folded initial (shard_key mirrored in JS).
+      New `term-trends` page block: search + suggestion dropdown, term
+      chips (max 8), share/count toggle. Counting via the shared
+      `tokenize` vocabulary so numbers agree with the collection
+      word cloud.
+- [x] **9.7 Rising/falling subjects bump chart** — **DONE (2026-07-03)**,
+      pure client-side from the already-deferred keyword-explorer
+      subjects bundle (no new precompute): decade top-8 ranks, lines
+      break when a subject drops off, empty decades (stray 1910s rows)
+      dropped. Verified: Coopération/Tabaski lead the 1960s;
+      Paix/Prière/Terrorisme the 2010s; Covid-19 tops the 2020s.
+- [x] **9.8 Geographic attention over time** — **DONE (2026-07-03)**.
+      Always-on 6-country choropleth + year slider/play in the Keyword
+      Explorer section, from the spatial bundle. `choropleth.js` gained
+      `paint.fixedMax` so the ramp pins to the all-years max (honest
+      cross-year comparison). Caveat: Nigeria sits outside the top-100
+      spatial pool (no Nigerian press corpus) and renders as zero.
+- [x] **9.9 Reprint / wire-copy detector** — **DONE (2026-07-03)** as the
+      Press Reprints block. `iwac_embeddings.py` extracted (Tier 4) with
+      `generate_reprints.py` as first consumer; the generator logs a
+      0.90–0.99 similarity histogram on every build (the prototyped-
+      thresholds evidence) and publishes cross-newspaper pairs ≥ 0.97.
+      Verified live: 58 pairs / 13 newspapers, **median day gap 1** (the
+      wire-copy signature); strongest circuits L'Observateur Paalga ↔
+      Le Pays and LeFaso.net ↔ Sidwaya. The ≥ 0.99 bucket is dominated
+      by same-newspaper duplicates (52 vs 8 cross) — excluded by design.
+- [x] **9.10 Corpus-health dashboard (admin)** — **DONE (2026-07-03)**.
+      `generate_corpus_health.py` → 1.7 KB bundle; the Sync Data admin
+      page renders server-side meters from the synced copy (no JS,
+      degrades silently pre-sync). Live numbers: ToC embeddings now
+      **473/1,501 (31.5 %)**, Lieux geocoded 555/683 (81.3 %), articles
+      sentiment/embeddings ~100 %, references full dates 8 %.
+      DataController moved to a factory (file-store injection; ACL
+      service name unchanged).
 - [x] **9.11 Press Bylines page block** — **DONE (v1.19.0)**. The gate
       passed decisively: 78.7 % of articles carry an `author` byline
       (9,664 / 12,287; verified by column-selective parquet read after
@@ -482,6 +497,72 @@ view, split heavy bundles).
 - **Won't do (unchanged):** KnowledgeGraph, TopicNetwork, globe
   projection. A Compare Countries block is unnecessary — the Compare
   Newspapers picker already has a whole-country scope.
+
+## Phase 10 — GitHub-issue backlog (triaged 2026-07-03)
+
+All five open issues (#1–#5) were checked against the codebase on
+2026-07-03; 10.1–10.4 shipped the same day (issues #1–#4 close on
+merge). The issues predated the data decoupling (issue #7), so their
+"commit JSON under `asset/data/`" instructions were read as the CI →
+`data` release → SyncData pipeline.
+
+- [x] **10.1 Scary Terms "Trends" view + event annotations
+      ([#2](https://github.com/fmadore/IwacVisualizations/issues/2))** —
+      **DONE (2026-07-03)**. Fifth view mode: line chart per family with
+      `markLine` point events + `markArea` period band from the
+      hand-curated `scary-terms-events.json` (**committed**, gitignore
+      exception like sentiment-arbiter.json: 14 events + Algerian Civil
+      War band, en/fr labels, provenance URLs; country-scoped events
+      render only under that country's filter). The issue's claim that
+      `scary-terms-temporal.json` was per-country was wrong — the
+      generator now also emits `scary-terms-trends.json` (11 KB) with
+      per-country series; the view falls back to the temporal bundle
+      (global only) on deploys that predate it. Events toggle,
+      `<details>` events list, label-free markers under 640 px.
+- [x] **10.2 Scary Terms "Word cloud" view
+      ([#4](https://github.com/fmadore/IwacVisualizations/issues/4))** —
+      **DONE (2026-07-03)**. `scary-terms-wordcloud.json` (85 KB,
+      lazy-fetched on first activation): document-frequency slices
+      global / by family / by country / 5-year buckets over
+      `lemma_nostop`, with the scary variants themselves excluded (they
+      are the selection criterion). Renders through the shared
+      `C.wordcloud` (hbar fallback included); facet bar via
+      `P.buildFacetButtons` — single-select per module convention
+      rather than the issue's multi-select chips. `<details>` word
+      table with per-slice percentages. The stop-list was already
+      shared (`iwac_utils.STOPWORDS`) — the issue's lift-request was
+      satisfied back in v1.x.
+- [x] **10.3 Scary Terms "Map" view
+      ([#3](https://github.com/fmadore/IwacVisualizations/issues/3))** —
+      **DONE (2026-07-03)**. `scary-terms-places.json` (107 KB, lazy):
+      `articles.spatial` → geocoded `Lieux` joins (verified live: 295
+      places ≥ 3 articles; 52 unresolved names logged). MapLibre bubble
+      map on the shared stack (theme basemap swap, feature-state hover,
+      canvas-normalized paint colors), family / article-country filters
+      (mutually exclusive — the bundle has both splits, not their cross
+      product), popups with item links, `<details>` places table.
+      Deferred from the issue spec: the year-range slider (per-year
+      data already ships in the bundle, so it lands later without a
+      data change).
+- [x] **10.4 Islamic organisations co-occurrence matrix
+      ([#1](https://github.com/fmadore/IwacVisualizations/issues/1))** —
+      **DONE (2026-07-03)**. `generate_org_cooccurrence.py` (±50-token
+      window kernel from the issue) + editable
+      `org_cooccurrence_targets.json` sidecar (six orgs, o_ids verified
+      against the live index: UIB 765, CNI 653, COSIM 662, CSI 23601,
+      FAIB 572, UMT 830; `cni`/`csi` acronyms deliberately excluded as
+      matching targets — identity-card / media-regulator collisions —
+      and each org's own acronym excluded from its context vocabulary).
+      New page block renders through the shared `C.heatmapMatrix`
+      (the prerequisite the issue demanded — landed as 9.4). Verified
+      live: COSIM 876 articles (fofana, imam…), CNI 649 (idriss,
+      koudouss…). Migrating Scary Terms' own matrix onto
+      `C.heatmapMatrix` stays gated on the 4.8 live session (per 9.4).
+- **10.5 Theme-aware timeline block
+      ([#5](https://github.com/fmadore/IwacVisualizations/issues/5)) —
+      DROPPED (owner decision, 2026-07-03).** The Knight Lab TimelineJS
+      iframes stay as they are; the issue remains open as reference if
+      the decision is ever revisited.
 
 ---
 

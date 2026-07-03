@@ -58,12 +58,14 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Run generators
-        # The 23 HF-driven generators, with default flags (defaults already match
+        # The 27 HF-driven generators, with default flags (defaults already match
         # the committed output shapes/minify). Static geojson is read from
         # asset/geo/ (present from checkout). generate_sentiment_arbiter.py is
         # deliberately excluded: it reads the sibling IWAC-sentiment-analysis repo,
         # not HF, and sentiment-arbiter.json is committed + shipped in the archive
-        # from the checkout instead. Fail-fast so a partial build is never published.
+        # from the checkout instead — as is the hand-curated
+        # scary-terms-events.json (issue #2). Fail-fast so a partial build is
+        # never published.
         run: |
           set -euo pipefail
           gens=(
@@ -72,6 +74,7 @@ jobs:
             press_bylines references_overview scary_terms semantic_landscape sentiment_atlas
             spatial_exploration template_summary topic_explorer compare_newspapers
             article_dashboards person_dashboards entity_dashboards publication_dashboards
+            org_cooccurrence term_trends reprints corpus_health
           )
           for g in "${gens[@]}"; do
             echo "::group::generate_${g}"

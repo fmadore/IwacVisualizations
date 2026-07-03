@@ -24,6 +24,9 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
 | On This Day | page block | **Live** — almanac panel of items published on today's date across the decades; deterministic daily picks; removes itself silently without data | Precompute (`generate_on_this_day.py`, 366-file fan-out) |
 | Press Bylines | page block | **Live** — byline-coverage cards, signed-share-over-time, top-25 bylines with authority click-through | Precompute (`generate_press_bylines.py`) |
+| Islamic Organisations Co-occurrence | page block | **Live** — sliding-window context matrix per organisation (UIB / CNI / COSIM / CSI / FAIB / UMT) on the shared `C.heatmapMatrix` | Precompute (`generate_org_cooccurrence.py` + curated targets sidecar) |
+| Term Trends | page block | **Live** — the "IWAC Ngram viewer": search any of 5,000 lemmas, overlay up to 8, share-of-articles vs counts | Precompute (`generate_term_trends.py`; per-letter shards fetched lazily) |
+| Press Reprints | page block | **Live** — cross-newspaper near-duplicate pairs (wire copy / reprints), circulation network + pair table | Precompute (`generate_reprints.py` over `embedding_OCR`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
@@ -34,6 +37,19 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.21.0 — Phase 9/10 wave: issue backlog cleared + five new research tools
+
+Ten roadmap items in one release — the GitHub-issue backlog (#1–#4) plus the remaining Phase 9 visualizations (9.6–9.10). Issue #5 (TimelineJS replacement) was dropped by owner decision.
+
+- **Scary Terms grows from four view modes to seven** (closes [#2](https://github.com/fmadore/IwacVisualizations/issues/2), [#3](https://github.com/fmadore/IwacVisualizations/issues/3), [#4](https://github.com/fmadore/IwacVisualizations/issues/4)): **Trends** — per-family lines with hand-curated historical-event annotations from the committed `scary-terms-events.json` (14 events + the Algerian Civil War band, en/fr, provenance URLs; the second committed exception under `asset/data/` after sentiment-arbiter.json); **Word cloud** — document-frequency vocabulary of the ~1,800 matching articles, faceted global / family / country / 5-year period; **Map** — MapLibre bubbles for the 295 geocoded places tagged on matching articles. The generator now runs ONE corpus scan (was four) and emits seven bundles; wordcloud + places fetch lazily on first activation and degrade to the shared no-data state on old deploys.
+- **Islamic Organisations Co-occurrence page block** (closes [#1](https://github.com/fmadore/IwacVisualizations/issues/1)) — ±50-token sliding-window context matrices for UIB / CNI / COSIM / CSI / FAIB / UMT on the shared `C.heatmapMatrix`; orgs + aliases in an editable JSON sidecar with index-verified `o_id`s; ambiguous acronyms (`cni`, `csi`) deliberately excluded from matching, and every org's own acronym excluded from its context vocabulary.
+- **Term Trends page block** (ROADMAP 9.6) — the "IWAC Ngram viewer": per-year document frequency of the top 5,000 lemmas, searchable with a frequency-ranked dropdown, up to 8 overlaid terms, share-of-articles vs absolute counts. Frequency-sorted 83 KB index + 25 lazy per-letter shards.
+- **Rising and falling subjects + Geographic attention over time** (ROADMAP 9.7 / 9.8) — two derived Keyword Explorer panels with zero new precompute: a decade bump chart of subject ranks, and an always-on 6-country choropleth with year slider/play (`choropleth.js` gained `paint.fixedMax` so shades stay comparable across years).
+- **Press Reprints page block** (ROADMAP 9.9) — cross-newspaper near-duplicate pairs over `embedding_OCR` (58 pairs ≥ 0.97 across 13 newspapers, median day gap 1 — the wire-copy signature), with a country-colored circulation network and a paginated item-linked pair table. Ships `scripts/iwac_embeddings.py`, the Tier-4 shared kNN/similarity module, as its first consumer; the build logs a 0.90–0.99 similarity histogram each run so the threshold stays evidence-tunable.
+- **Corpus-health meters on the admin Sync Data page** (ROADMAP 9.10) — per-subset enrichment coverage (OCR / embeddings / sentiment / LDA / bylines / spatial tags / ToC / geocoding / date precision) rendered server-side from the synced `corpus-health.json`; refreshes with every data pull. Live: ToC embeddings 473/1,501 (31.5 %), Lieux geocoded 81.3 %.
+- **Embeds:** the three new page blocks are registered in the gallery (`org-cooccurrence`, `term-trends`, `press-reprints-detector`). Existing blocks' panel slugs are unchanged except **Index Overview**, which appends its two new Section B panels at the end (no index shifts).
+- CI now runs 27 generators (`org_cooccurrence`, `term_trends`, `reprints`, `corpus_health` added); every new bundle was verified against the live dataset before landing.
 
 ### v1.20.0 — Phase 9 wave: topic dynamics, sentiment cuts, holdings matrix, landscape labels
 
@@ -301,6 +317,8 @@ Two complementary sections bundled in one block.
 - View modes: **Top frequent** (3 / 5 / 10) and **Compare** (search + multi-select up to 10 keywords)
 - Multi-series line chart with adaptive tick density (≤ 10 years every year, ≤ 20 every 2nd, ≤ 40 every 5th, otherwise every 10th), bisect-x tooltip, subject-to-surface halo on labels
 - All-keywords table with client search and 20-row pagination; each row has an Add → compare-mode action
+- **Rising and falling subjects** (v1.21.0) — bump chart of the decade top-8 subject ranks derived client-side from the subjects bundle; lines break where a subject drops off the chart
+- **Geographic attention over time** (v1.21.0) — always-on 6-country choropleth with year slider + play, from the spatial bundle; the color ramp is pinned to the all-years maximum so shades compare honestly across years
 - Counts reflect **item-level tagging**, not text occurrence: a document tagged with "Terrorisme" contributes exactly one mention per year regardless of how often the word appears in the body. The section subheading says so.
 
 Section A is backed by `asset/data/index-overview.json` (chart aggregates, **186 KB** minified) plus `index-overview-table.json` (the 4,385 table rows, **567 KB**, fetched only when the table panel nears the viewport) — both written by `scripts/generate_index_overview.py` since the v1.6.0 split. Section B is backed by three files — `keyword-explorer-subjects.json`, `keyword-explorer-spatial.json`, `keyword-explorer-metadata.json` — generated by `scripts/generate_keyword_explorer.py` (~1 MB total minified), fetched on-view when the Keyword Explorer section approaches (v1.3.0). Net effect: the block's eager payload dropped from ~1.9 MB to ~190 KB. State is in-memory only; filters reset on reload (page blocks can be embedded anywhere, so hijacking the page URL for block-local state is explicitly avoided).
@@ -323,16 +341,20 @@ The deprecated dashboard’s `KnowledgeGraph` and `TopicNetwork` visualizations 
 
 ### Scary Terms (page block)
 
-Tracks the frequency of a curated set of "scary" term families (terrorisme, extrémisme, djihadisme, intégrisme, …) across the IWAC corpus from 1961–2025:
+Tracks the frequency of a curated set of "scary" term families (terrorisme, extrémisme, djihadisme, intégrisme, …) across the IWAC corpus from 1961–2025. Seven view modes since v1.21.0:
 
 - **Metric row** — total matching articles, term families, variants, total occurrences
-- **View mode switcher** — Bar-chart race / By country / Global
+- **View mode switcher** — Bar-chart race / Trends / By country / Global / Co-occurrence matrix / Word cloud / Map
 - **Animated bar-chart race** — horizontal bars animated one year at a time (1 s per frame), term families cycled through IWAC palette colors
+- **Trends** (issue #2) — per-family time series with hand-curated historical-event annotations (`markLine` verticals + the Algerian Civil War `markArea` band from the committed `scary-terms-events.json`; country-scoped events appear only under that country's filter), events toggle, `<details>` events list
 - **Country view** — per-country breakdown selectable via dropdown
 - **Global view** — single time-series of total occurrences
+- **Co-occurrence matrix** — term × term heatmap, global or per-country
+- **Word cloud** (issue #4) — document-frequency vocabulary of matching articles (global / by family / by country / 5-year buckets; the scary variants themselves excluded), with the shared hbar fallback and a `<details>` word table
+- **Map** (issue #3) — MapLibre bubble map of the geocoded places tagged on matching articles (295 places ≥ 3 articles), family / article-country filters, item-linked popups, `<details>` places table
 - **Term definitions table** — each family with its variants, for provenance
 
-Backed by four precomputed JSONs (`scary-terms-metadata.json`, `scary-terms-temporal.json`, `scary-terms-countries.json`, `scary-terms-global.json`) generated by `scripts/generate_scary_terms.py`.
+Backed by seven precomputed JSONs from `scripts/generate_scary_terms.py` (metadata / temporal / countries / global / cooccurrence eagerly; the trends sidecar small and eager with graceful fallback; wordcloud + places lazy-fetched on first view activation) plus the committed `scary-terms-events.json` annotation sidecar.
 
 ### Topic Explorer (page block)
 

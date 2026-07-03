@@ -195,11 +195,15 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   extra_args=None)` + `run_dashboard(generator_cls, args)` in
   `dashboard_aggregator.py`. `generate_person_dashboards.py:274-333` and
   `generate_entity_dashboards.py:212-277` are near-identical CLI/`main`/`generate_all`.
-- [ ] **`iwac_embeddings.py`** — `coerce_embedding`, `build_normalized_matrix`,
-  `top_k_cosine(X, valid, k, batch_size=None)`. De-dups ~250 lines:
+- [ ] **`iwac_embeddings.py`** — module **created 2026-07-03** (ROADMAP 9.9)
+  with `coerce_embedding`, `build_normalized_matrix`,
+  `top_k_cosine(X, valid, k, batch_size=None)` + `pairs_above_threshold`;
+  first consumer `generate_reprints.py`. Remaining: migrate the legacy
+  copies one at a time with output-diff checks —
   `generate_article_dashboards.py:331-513`,
   `generate_publication_dashboards.py:207-334`,
-  `generate_semantic_landscape.py:67-160`.
+  `generate_semantic_landscape.py:67-160`,
+  `generate_periodicals_landscape.py` (the ×4 copy the July audit flagged).
 - [ ] **`ArticleDashboardGenerator` subclass `DashboardAggregator`** (or extract a
   free `build_entity_index(index_df)`) — `generate_article_dashboards.py:171-226`
   is a forked copy of `dashboard_aggregator.py:305-376` `build_entity_lookup`;

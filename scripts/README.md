@@ -251,6 +251,69 @@ subjects, and the `Personnes` authority `o_id` where the name resolves
 (`Titre` + `Titre alternatif`, both sides through
 `normalize_location_name`). Extra flag: `--prolific-min` (default 10).
 
+### `generate_scary_terms.py` (extended — issues #2/#3/#4)
+
+One corpus scan now feeds seven bundles: the original four
+(`metadata` / `temporal` / `countries` / `global` + `cooccurrence`)
+plus `scary-terms-trends.json` (aligned per-year series, global +
+per-country), `scary-terms-wordcloud.json` (document-frequency
+vocabulary of matching articles: global / by family / by country /
+5-year buckets — family variants excluded), and
+`scary-terms-places.json` (geocoded `Lieux` joins via
+`articles.spatial`). The hand-curated `scary-terms-events.json`
+annotation sidecar is **committed**, not generated (gitignore
+exception, like `sentiment-arbiter.json`). Extra flags: `--max-words`
+(200), `--min-frequency` (5), `--min-place-articles` (3).
+
+### `generate_org_cooccurrence.py`
+
+Writes `asset/data/org-cooccurrence.json` (~22 KB) for the Islamic
+Organisations Co-occurrence block (issue #1): a ±`--window-size` (50)
+token window around each organisation's curated surface forms over the
+articles OCR; matrix cell (a, b) counts articles where both context
+words share the window. Organisations + aliases live in the editable
+sidecar `scripts/org_cooccurrence_targets.json` (o_ids cross-checked
+against the index at build time). Extra flags: `--top-n-terms` (30),
+`--min-cooccurrence` (2), `--targets`.
+
+### `generate_term_trends.py`
+
+The Term Trends ("Ngram viewer") data: `term-trends-index.json`
+(frequency-sorted search index + per-year article totals) plus lazy
+per-letter shards `term-trends/{a..z,0}.json` with per-year document
+frequency over `lemma_nostop` via the shared `tokenize` vocabulary.
+The ASCII-folded `shard_key` logic is mirrored client-side in
+`asset/js/charts/term-trends.js`. Extra flags: `--max-terms` (5000),
+`--min-total` (25).
+
+### `generate_reprints.py`
+
+Writes `asset/data/press-reprints.json` (~24 KB) for the Press Reprints
+block: batched upper-triangle cosine scan over `embedding_OCR`
+(via `iwac_embeddings.py`), logging a similarity histogram from
+`--scan-threshold` (0.90) on every build and publishing cross-newspaper
+pairs ≥ `--threshold` (0.97), capped at `--max-pairs` (500). The
+histogram ships in the bundle so the threshold stays tunable with
+evidence.
+
+### `generate_corpus_health.py`
+
+Writes `asset/data/corpus-health.json` (~2 KB) — curator-facing
+coverage meters (OCR / embeddings / sentiment / LDA / bylines /
+spatial tags / ToC / geocoding / date precision per subset) rendered
+server-side on the admin Sync Data page. Labels are English-only by
+design (internal tooling).
+
+## Shared embedding helpers — `iwac_embeddings.py`
+
+The coerce → normalize → batched-cosine stack (REFACTORING.md Tier 4):
+`coerce_embedding`, `build_normalized_matrix`, `top_k_cosine`,
+`pairs_above_threshold`. First consumer: `generate_reprints.py`; the
+four older embedding generators (`article_dashboards`,
+`publication_dashboards`, `semantic_landscape`,
+`periodicals_landscape`) still carry local copies and should migrate
+one at a time with output-diff checks.
+
 ## Shared helpers — `iwac_utils.py`
 
 Functions to use instead of rewriting. The **v0.9.0 refactor** promoted
@@ -335,6 +398,10 @@ Block-specific extras (partial list):
 | `--top-k-semantic` | `article-dashboards` | Semantic-neighbour cap per article. Default 10. |
 | `--top-k-related` | `article-dashboards` | Related-by-entities cap per article. Default 20. |
 | `--min-country-articles` | `scary-terms` | Drop countries with fewer than N articles from the country view. Default 5. |
+| `--max-words`, `--min-frequency`, `--min-place-articles` | `scary-terms` | Word-cloud slice cap (200) / document-frequency floor (5) / map place floor (3) for the issue #2–#4 bundles. |
+| `--window-size`, `--top-n-terms`, `--min-cooccurrence`, `--targets` | `org-cooccurrence` | Sliding-window half-width (50), matrix vocabulary (30), weak-pair floor (2), sidecar path. |
+| `--max-terms`, `--min-total` | `term-trends` | Ngram vocabulary cap (5000) and total-document-frequency floor (25). |
+| `--threshold`, `--scan-threshold`, `--max-pairs` | `reprints` | Publication cosine cut-off (0.97), histogram scan floor (0.90), published-pair cap (500). |
 
 ## Adding a new generator
 
