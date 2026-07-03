@@ -1,9 +1,9 @@
 <?php
 namespace IwacVisualizations\Service\Controller\Admin;
 
-use Interop\Container\ContainerInterface;
 use IwacVisualizations\Controller\Admin\DataController;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Injects the Omeka file store so the admin page can read the synced
