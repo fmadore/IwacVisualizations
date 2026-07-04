@@ -539,7 +539,7 @@
             'Rising and falling subjects': 'Rising and falling subjects',
             'desc_subjects_bump':        'Rank of the leading subjects per decade — a climbing line took attention away from a sinking one. A line breaks where the subject drops out of the decade top 8; hover a decade for ranks and counts.',
             'Geographic attention over time': 'Geographic attention over time',
-            'desc_geo_attention':        'How the press corpus’s spatial coverage of each IWAC country shifts over time. Drag the year slider or press play; color intensity is pinned to the all-years maximum, so shades stay comparable across years.',
+            'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage — whatever year you are viewing.',
             'Play':                      'Play',
             'Pause':                     'Pause',
             // Spatial Exploration block
@@ -1073,7 +1073,7 @@
             'Rising and falling subjects': 'Sujets montants et descendants',
             'desc_subjects_bump':        'Rang des principaux sujets par d\u00e9cennie \u2014 une ligne qui monte prend l\u2019attention d\u2019une ligne qui descend. Une ligne s\u2019interrompt quand le sujet sort du top 8 de la d\u00e9cennie ; survolez une d\u00e9cennie pour les rangs et les comptes.',
             'Geographic attention over time': 'Attention g\u00e9ographique au fil du temps',
-            'desc_geo_attention':        'Comment la couverture spatiale de chaque pays IWAC \u00e9volue dans le temps. Faites glisser le curseur ou lancez la lecture ; l\u2019intensit\u00e9 des couleurs est cal\u00e9e sur le maximum toutes ann\u00e9es confondues, donc les teintes restent comparables d\u2019une ann\u00e9e \u00e0 l\u2019autre.',
+            'desc_geo_attention':        'L\u2019attention accord\u00e9e par la presse \u00e0 chaque pays au fil du temps, mesur\u00e9e par la fr\u00e9quence \u00e0 laquelle les articles ont \u00e9t\u00e9 catalogu\u00e9s comme le concernant. Faites glisser le curseur ou lancez la lecture. L\u2019\u00e9chelle de couleurs est identique chaque ann\u00e9e : un pays plus sombre signifie toujours une couverture plus forte, quelle que soit l\u2019ann\u00e9e affich\u00e9e.',
             'Play':                      'Lecture',
             'Pause':                     'Pause',
             // Spatial Exploration block

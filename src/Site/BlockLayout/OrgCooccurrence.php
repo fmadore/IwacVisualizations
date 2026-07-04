@@ -10,7 +10,7 @@ class OrgCooccurrence extends AbstractIwacBlockLayout
 
     protected function description(): string
     {
-        return 'Term co-occurrence heatmap for the discursive neighbourhood of major West African Islamic organisations (UIB, CNI, COSIM, CSI, FAIB, UMT): which concepts appear together near the organisation\'s name in the press. Data is precomputed from the IWAC articles subset with a sliding-window scan. No configuration needed.'; // @translate
+        return 'A heatmap of the ideas that cluster around each major West African Islamic organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen organisation, which pairs of words keep turning up together near its name. Data is precomputed from the IWAC articles. No configuration needed.'; // @translate
     }
 
     protected function templateViewScript(): string

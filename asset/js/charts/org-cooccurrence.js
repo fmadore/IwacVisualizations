@@ -30,7 +30,7 @@
         ns.addTranslations('en', {
             'Loading organisation co-occurrences': 'Loading organisation co-occurrences',
             'orgcooc.title':        'Islamic organisations — discursive neighbourhoods',
-            'orgcooc.description':  'Which concepts travel together around an organisation’s name in the West African press. A cell counts the articles where both words appeared within ±{window} words of the organisation’s name or acronym. Darker = more shared articles; the diagonal is hidden.',
+            'orgcooc.description':  'Which ideas cluster around an organisation in the West African press. For the chosen organisation we gather the words that appear near its name (within about {window} words), then count how often each pair of those words turns up together in the same article. Darker cells are pairs that recur across many articles — the recurring threads in how the press writes about the group. The diagonal is blank, since pairing a word with itself says nothing.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Sort',
             'orgcooc.sort_freq':    'Frequency',
@@ -47,7 +47,7 @@
         ns.addTranslations('fr', {
             'Loading organisation co-occurrences': 'Chargement des co-occurrences',
             'orgcooc.title':        'Organisations islamiques — voisinages discursifs',
-            'orgcooc.description':  'Quels concepts circulent ensemble autour du nom d’une organisation dans la presse ouest-africaine. Une cellule compte les articles où les deux mots apparaissent à ±{window} mots du nom ou du sigle de l’organisation. Plus sombre = plus d’articles partagés ; la diagonale est masquée.',
+            'orgcooc.description':  'Quelles idées se regroupent autour d’une organisation dans la presse ouest-africaine. Pour l’organisation choisie, on rassemble les mots qui apparaissent près de son nom (à environ {window} mots), puis on compte combien de fois chaque paire de ces mots se retrouve ensemble dans un même article. Les cellules plus sombres sont les paires qui reviennent dans de nombreux articles — les fils récurrents de la manière dont la presse traite le groupe. La diagonale est vide, car associer un mot à lui-même n’apporte rien.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Tri',
             'orgcooc.sort_freq':    'Fréquence',

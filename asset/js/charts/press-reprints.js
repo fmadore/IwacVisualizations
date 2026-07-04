@@ -31,7 +31,7 @@
         ns.addTranslations('en', {
             'Loading press reprints':  'Loading press reprints',
             'reprints.title':          'Press reprints & wire copy',
-            'reprints.description':    'Article pairs published by different newspapers with near-identical text — press-agency dispatches (PANA, AFP), shared communiqués, and straight reprints. Pairs are detected computationally: two articles appear here when their text embeddings agree at ≥ {threshold} cosine similarity, so treat borderline pairs as leads to verify, not facts.',
+            'reprints.description':    'Pairs of articles from different newspapers whose text is almost the same — the traces of press-agency dispatches (PANA, AFP), shared communiqués, and outright reprints passing between titles. The pairing is done by software that measures how closely two articles are worded; a very close match usually means one was copied from the other, or both ran the same agency dispatch. Because a computer proposes these matches rather than a person confirming them, treat each pair as a lead to check, not a settled fact.',
             'reprints.card_pairs':     'Reprint pairs',
             'reprints.card_papers':    'Newspapers involved',
             'reprints.card_gap':       'Median gap (days)',
@@ -53,7 +53,7 @@
         ns.addTranslations('fr', {
             'Loading press reprints':  'Chargement des reprises de presse',
             'reprints.title':          'Reprises de presse et dépêches',
-            'reprints.description':    'Paires d’articles publiés par des journaux différents avec un texte quasi identique — dépêches d’agence (PANA, AFP), communiqués partagés et reprises. La détection est computationnelle : deux articles apparaissent ici quand leurs plongements textuels concordent à ≥ {threshold} de similarité cosinus ; considérez les paires limites comme des pistes à vérifier, pas des faits.',
+            'reprints.description':    'Des paires d’articles de journaux différents dont le texte est presque identique — les traces de dépêches d’agence (PANA, AFP), de communiqués partagés et de reprises passant d’un titre à l’autre. L’appariement est réalisé par un logiciel qui mesure à quel point deux articles sont rédigés de la même façon ; une correspondance très proche signifie généralement que l’un a été copié sur l’autre, ou que les deux reprennent la même dépêche d’agence. Comme c’est un ordinateur qui propose ces rapprochements, et non une personne qui les confirme, considérez chaque paire comme une piste à vérifier, et non comme un fait établi.',
             'reprints.card_pairs':     'Paires de reprises',
             'reprints.card_papers':    'Journaux concernés',
             'reprints.card_gap':       'Écart médian (jours)',

@@ -38,6 +38,10 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.21.1 — plain-language methodology descriptions
+
+Copy-only pass over the v1.21.0 blocks so every visualization explains its method to a general scholarly reader without ML jargon (matching the Sentiment Atlas standard). The Press Reprints, Term Trends, Organisations Co-occurrence, Scary Terms word-cloud/map, and Geographic-attention descriptions dropped "cosine similarity" / "text embeddings" / "curated spatial metadata" / "pinned to the all-years maximum" etc. in favour of plain equivalents — and the computed ones (reprints especially) now state, in the description itself, that a computer proposes the result and pairs should be verified, not taken as fact. Both EN and FR. No behavioural or data change.
+
 ### v1.21.0 — Phase 9/10 wave: issue backlog cleared + five new research tools
 
 Ten roadmap items in one release — the GitHub-issue backlog (#1–#4) plus the remaining Phase 9 visualizations (9.6–9.10). Issue #5 (TimelineJS replacement) was dropped by owner decision.
