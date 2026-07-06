@@ -182,13 +182,26 @@
                 series: [{
                     type: 'graph',
                     layout: 'force',
+                    top: 16,
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
                     data: nodes,
                     links: edges,
                     roam: true,
+                    draggable: true,
+                    scaleLimit: { min: 0.25, max: 5 },
                     force: {
-                        repulsion: 260,
+                        // initLayout seeds node positions on a circle;
+                        // without it a frozen (layoutAnimation:false) force
+                        // layout has no starting coordinates and ECharts 6
+                        // crashes ("can't access property 0, e is null").
+                        // Every other IWAC force graph seeds this way.
+                        initLayout: 'circular',
+                        repulsion: 220,
                         edgeLength: [60, 140],
-                        gravity: 0.12,
+                        gravity: 0.1,
+                        friction: 0.6,
                         layoutAnimation: false
                     },
                     emphasis: {
@@ -238,7 +251,7 @@
             pageSize: 10
         });
         panel.chart.classList.add('iwac-vis-reprints-tablehost');
-        panel.chart.appendChild(table);
+        panel.chart.appendChild(table.root);
         if (data.truncated) {
             panel.panel.appendChild(P.el('p', 'iwac-vis-reprints-note',
                 P.t('reprints.truncated', { n: P.formatNumber(pairs.length) })));
