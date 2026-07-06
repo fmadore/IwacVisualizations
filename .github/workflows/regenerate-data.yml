@@ -66,6 +66,12 @@ jobs:
         # from the checkout instead — as is the hand-curated
         # scary-terms-events.json (issue #2). Fail-fast so a partial build is
         # never published.
+        env:
+          # The IWAC dataset moved to a PRIVATE full mirror
+          # (fmadore/islam-west-africa-collection-full); `datasets` reads this
+          # env var automatically. Fine-grained read-only token scoped to that
+          # one dataset repo.
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           set -euo pipefail
           gens=(

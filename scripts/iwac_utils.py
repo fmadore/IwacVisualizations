@@ -50,8 +50,16 @@ except ImportError:
 # Constants
 # =============================================================================
 
-DATASET_ID = "fmadore/islam-west-africa-collection"
-"""Default Hugging Face dataset ID for IWAC."""
+DATASET_ID = "fmadore/islam-west-africa-collection-full"
+"""Default Hugging Face dataset ID for IWAC.
+
+Since 2026-07 this is the PRIVATE full mirror (it carries the OCR /
+lemma_nostop / embedding columns the generators need; the public repo is a
+projection without the full-text columns). Reading it requires a Hugging
+Face token: `datasets` picks up the ``HF_TOKEN`` environment variable
+automatically — set as a repo secret in CI, or locally via
+``$env:HF_TOKEN`` / ``hf auth login``.
+"""
 
 SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]
 """Available subsets in the IWAC dataset."""
