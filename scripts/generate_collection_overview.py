@@ -1117,10 +1117,12 @@ def compute_summary(
     )
 
     # Total words — sum `nb_mots` across every subset that carries it.
-    # Articles dominate, but publications / documents / references also expose
-    # word counts for their full-text-OCR'd items on the Hugging Face dataset.
+    # Articles dominate, but publications / documents / references / audiovisual
+    # also expose word counts for their full-text-OCR'd items on the Hugging
+    # Face dataset (audiovisual `nb_mots` comes from transcriptions, present
+    # since 2026-07). Keep this list aligned with the `nb_pages` sweep below.
     total_words = 0
-    for subset in ("articles", "publications", "documents", "references"):
+    for subset in ("articles", "publications", "documents", "audiovisual", "references"):
         df = dataframes.get(subset)
         if df is None or df.empty or "nb_mots" not in df.columns:
             continue
