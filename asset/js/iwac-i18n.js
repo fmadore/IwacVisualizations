@@ -231,6 +231,7 @@
             'item_type_document':    'Document',
             'item_type_audiovisual': 'Audio-visual recording',
             'item_type_reference':   'Reference',
+            'item_type_image':       'Photograph',
 
             // Person dashboard — labels + panels
             'Mentions': 'Mentions',
@@ -771,6 +772,7 @@
             'item_type_document':    'Document',
             'item_type_audiovisual': 'Enregistrement audio-visuel',
             'item_type_reference':   'R\u00e9f\u00e9rence',
+            'item_type_image':       'Photographie',
 
             // Person dashboard — labels + panels
             'Mentions': 'Mentions',

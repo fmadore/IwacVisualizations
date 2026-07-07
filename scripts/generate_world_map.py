@@ -76,6 +76,7 @@ def build_map(repo_id: str) -> Dict[str, Any]:
         "documents":    "document",
         "audiovisual":  "audiovisual",
         "references":   "reference",
+        "images":       "image",
     }
     country_totals: Dict[str, Counter] = defaultdict(Counter)
     for subset, type_key in subset_to_type.items():

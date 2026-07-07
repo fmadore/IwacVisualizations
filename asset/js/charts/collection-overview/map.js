@@ -72,7 +72,7 @@
     function build(panelEl, mapData, geoUrl, basePath) {
         var locations = mapData.locations || [];
         var countryData = mapData.country_counts || {};
-        var TYPE_KEYS = ['article', 'publication', 'document', 'audiovisual', 'reference'];
+        var TYPE_KEYS = ['article', 'publication', 'document', 'audiovisual', 'reference', 'image'];
 
         // Per-country counts for the choropleth fill. ALL_KEY uses each
         // country's grand total; a specific type reads from its by_type

@@ -79,8 +79,9 @@ INDEX_TYPES = [
 
 # Subsets that carry content items with dct:spatial mentions. Used to
 # build the "real" place-mentions bubble layer on the map, alongside
-# authority pins from the index.
-CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "references"]
+# authority pins from the index. ``images`` (photographs) carry spatial
+# place tags too, so a photographed place counts as a real mention.
+CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images", "references"]
 
 
 def _int_or_none(value: Any) -> Optional[int]:

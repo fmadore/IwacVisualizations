@@ -11,7 +11,7 @@ compact, covering:
       audiovisual, references, index_entries)
     * total counts for countries / languages / words
     * timeline of content items per year, stacked by country
-      (articles + publications + documents + audiovisual)
+      (articles + publications + documents + audiovisual + photographs)
     * content counts per country
     * content counts per language
     * top N entities per ``index`` type, sorted by ``frequency``
@@ -60,8 +60,11 @@ from iwac_utils import (
 
 # Subsets that carry dated content items. The ``index`` subset is handled
 # separately (authority records, no ``pub_date``); ``references`` are
-# bibliographic metadata and are excluded from the timeline.
-CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual"]
+# bibliographic metadata and are excluded from the timeline. ``images``
+# (photographs, added 2026-07) carry ``pub_date`` + ``country`` for all 30
+# rows, so they belong in the timeline and per-country distribution alongside
+# the other content types.
+CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images"]
 
 
 # Entity types in the ``index`` subset — keyed by the French label used in
@@ -108,6 +111,7 @@ SUBSET_TO_DOC_TYPE = {
     "publications": "P\u00e9riodique islamique",
     "documents":    "Document",
     "audiovisual":  "Enregistrement audio-visuel",
+    "images":       "Photographie",
 }
 
 # Candidate column names for "document type" / "resource class" on content
@@ -450,7 +454,7 @@ def compute_growth(
         }
     """
     monthly: Counter = Counter()
-    subsets_for_growth = ["articles", "publications", "documents", "audiovisual", "references"]
+    subsets_for_growth = ["articles", "publications", "documents", "audiovisual", "images", "references"]
     for subset in subsets_for_growth:
         df = dataframes.get(subset)
         if df is None or df.empty or "added_date" not in df.columns:
@@ -502,6 +506,7 @@ def compute_types_over_time(
         "documents":    "document",
         "audiovisual":  "audiovisual",
         "references":   "reference",
+        "images":       "image",
     }
     types = list(subset_to_type.values())
 
@@ -653,6 +658,7 @@ def compute_recent_additions(
         "documents":    "document",
         "audiovisual":  "audiovisual",
         "references":   "reference",
+        "images":       "image",
     }
     rows: List[Dict[str, Any]] = []
     for subset, type_key in subset_to_type.items():
@@ -1109,11 +1115,12 @@ def compute_summary(
     counts = {s: subset_summaries.get(s, {}).get("total_records", 0) for s in subset_summaries}
 
     # Total items — sum of every content record across articles, documents,
-    # publications, audiovisual, and references. This is the headline figure
-    # for the collection as a whole (what we used to show as "Articles").
+    # publications, audiovisual, references, and photographs (images). This is
+    # the headline figure for the collection as a whole (what we used to show
+    # as "Articles").
     total_items = sum(
         counts.get(s, 0)
-        for s in ("articles", "publications", "documents", "audiovisual", "references")
+        for s in ("articles", "publications", "documents", "audiovisual", "references", "images")
     )
 
     # Total words — sum `nb_mots` across every subset that carries it.
@@ -1164,7 +1171,7 @@ def compute_summary(
     # Th\u00e8se, etc.), so the final count reflects both the content catalog
     # and the bibliography.
     doc_types: set = set()
-    for subset in ("articles", "publications", "documents", "audiovisual"):
+    for subset in ("articles", "publications", "documents", "audiovisual", "images"):
         df = dataframes.get(subset)
         if df is None or df.empty:
             continue
@@ -1217,6 +1224,7 @@ def compute_summary(
         "document_types": len(doc_types),
         "audiovisual_minutes": int(av_minutes),
         "references_count": counts.get("references", 0),
+        "photographs": counts.get("images", 0),
         "newspapers": newspapers.get("total", 0),
         "countries": len(country_distribution),
         "languages": _count_languages(language_distribution),

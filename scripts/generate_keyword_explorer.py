@@ -61,7 +61,9 @@ from iwac_utils import (
 
 # Every content subset we scan for dct:subject + dct:spatial mentions.
 # ``index`` is excluded — it's the authority file, not content.
-CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "references"]
+# ``images`` (photographs) carry subject + spatial tags (no newspaper —
+# the per-newspaper facet is column-guarded, so they're skipped there).
+CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images", "references"]
 
 # Size caps — the full matrix (every keyword × every year × every facet)
 # is a few MB, so we trim per-facet to what a human actually interacts

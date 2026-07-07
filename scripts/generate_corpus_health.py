@@ -118,6 +118,19 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
                 if parse_coordinates(lieux["Coordonnées"].iat[i]) is not None
             )
             metrics.append(metric("Lieux geocoded", geocoded, len(lieux)))
+    elif name == "images":
+        if col("embedding_image") is not None:
+            metrics.append(metric("Multimodal embeddings", _embeddings(df["embedding_image"]), n))
+        if col("coordinates") is not None:
+            geocoded = sum(
+                1 for i in range(n)
+                if parse_coordinates(df["coordinates"].iat[i]) is not None
+            )
+            metrics.append(metric("Geocoded (coordinates)", geocoded, n))
+        if col("subject") is not None:
+            metrics.append(metric("Subject tags", _nonempty(df["subject"]), n))
+        if col("pub_date") is not None:
+            metrics.append(metric("Full dates (YYYY-MM-DD)", _full_dates(df["pub_date"]), n))
     else:
         if col("OCR") is not None:
             metrics.append(metric("OCR text", _nonempty(df["OCR"]), n))
@@ -162,7 +175,7 @@ def main() -> None:
 
     subsets: Dict[str, Any] = {}
     for name in ("articles", "publications", "index", "documents",
-                 "audiovisual", "references"):
+                 "audiovisual", "references", "images"):
         health = subset_health(name, args.repo)
         if health is not None:
             subsets[name] = health

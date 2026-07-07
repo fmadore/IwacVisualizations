@@ -65,8 +65,9 @@ ENTITY_TYPES = ["Personnes", "Organisations", "Événements", "Sujets", "Lieux"]
 # spellings the choropleth helper keys on.
 FOCUS_COUNTRIES = ["Bénin", "Burkina Faso", "Côte d'Ivoire", "Niger", "Nigeria", "Togo"]
 
-# All content subsets contribute to the per-country item counts.
-CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "references"]
+# All content subsets contribute to the per-country item counts —
+# photographs (``images``) included: all 30 carry a canonical ``country``.
+CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images", "references"]
 
 # Administrative boundaries ported from IWAC-spatial-overview. Côte
 # d'Ivoire has no prefecture file in the retained dashboard contract.
