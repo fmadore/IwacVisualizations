@@ -1,12 +1,12 @@
 # IWAC Visualizations
 
-An [Omeka S](https://omeka.org/s/) module that adds interactive visualizations to the [Islam West Africa Collection (IWAC)](https://islam.zmo.de/) digital archive at ZMO. Charts are powered by [ECharts 6](https://echarts.apache.org/) and [MapLibre GL](https://maplibre.org/); the underlying data is either fetched live from the public Hugging Face dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/`.
+An [Omeka S](https://omeka.org/s/) module that adds interactive visualizations to the [Islam West Africa Collection (IWAC)](https://islam.zmo.de/) digital archive at ZMO. Charts are powered by [ECharts 6](https://echarts.apache.org/) and [MapLibre GL](https://maplibre.org/); the underlying data is either fetched live from the public Hugging Face dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/` (the precompute pipeline reads the **private** full mirror `fmadore/islam-west-africa-collection-full` and requires an `HF_TOKEN` — see `scripts/README.md`).
 
 The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It reads the theme's CSS custom properties at runtime so chart colours and type track the site's configured `--primary` / `--ink` / `--surface` colours and `--font-headings` / `--font-body` stacks, it respects the light/dark toggle via a `MutationObserver` on `body[data-theme]`, and it follows the Internationalisation module's language switching (English / French).
 
 ## Status
 
-Every registered block is wired end-to-end with live data — twelve page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — eighteen page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
@@ -22,6 +22,7 @@ Every registered block is wired end-to-end with live data — twelve page blocks
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
+| Compare Newspapers | page block | **Live** — side-by-side comparison of two corpora (whole country or single newspaper): timeline, subjects, sentiment, word clouds, split-corpus choropleth | Precompute (`generate_compare_newspapers.py` per-corpus bundles) |
 | On This Day | page block | **Live** — almanac panel of items published on today's date across the decades; deterministic daily picks; removes itself silently without data | Precompute (`generate_on_this_day.py`, 366-file fan-out) |
 | Press Bylines | page block | **Live** — byline-coverage cards, signed-share-over-time, top-25 bylines with authority click-through | Precompute (`generate_press_bylines.py`) |
 | Islamic Organisations Co-occurrence | page block | **Live** — sliding-window context matrix per organisation (UIB / CNI / COSIM / CSI / FAIB / UMT) on the shared `C.heatmapMatrix` | Precompute (`generate_org_cooccurrence.py` + curated targets sidecar) |

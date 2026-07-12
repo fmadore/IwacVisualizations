@@ -1,8 +1,10 @@
 # IWAC Visualizations — precompute pipeline
 
 Python scripts that read the Hugging Face dataset
-[`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)
-and write aggregated JSON files into `asset/data/`.
+`fmadore/islam-west-africa-collection-full` — the **private** full mirror of
+the public [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)
+— and write aggregated JSON files into `asset/data/`. Reading it requires an
+`HF_TOKEN` with access to the mirror (see below).
 
 **Where the output is served from (issue #7).** `asset/data/` is **not committed
 to git** and is **not generated on the production server**. The
@@ -44,11 +46,11 @@ pip install -r scripts/requirements.txt
 python3 scripts/generate_collection_overview.py
 ```
 
-Optional environment variables:
+Environment variables:
 
 | Variable | Purpose |
 |---|---|
-| `HF_TOKEN` | Hugging Face access token. Not required — the dataset is public. |
+| `HF_TOKEN` | Hugging Face access token. **Required** — the default dataset (`fmadore/islam-west-africa-collection-full`) is a private mirror. `datasets` picks the token up from the environment (or `huggingface-cli login`) automatically. In CI it comes from the `HF_TOKEN` repository secret. |
 
 ## Available generators
 
@@ -344,7 +346,8 @@ classic `"lat, lng"` form.
 | `generate_timestamp()` | ISO UTC timestamp with `Z` suffix. |
 | `configure_logging(level)` | Standard `%(asctime)s [%(levelname)s] %(message)s` format. Pass `logging.DEBUG` when `--verbose` is set. |
 
-Constants: `DATASET_ID = "fmadore/islam-west-africa-collection"` and
+Constants: `DATASET_ID = "fmadore/islam-west-africa-collection-full"` (the
+private full mirror; `--repo` on every generator overrides it) and
 `SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]`.
 
 ## Shared dashboard core — `dashboard_aggregator.py`
@@ -424,8 +427,10 @@ Block-specific extras (partial list):
 
 ## Troubleshooting
 
-- **"Error loading subset 'articles'"** — the dataset is public but
-  large (~185 MB download for `articles`). Check network and disk.
+- **"Error loading subset 'articles'"** — first check `HF_TOKEN`: the
+  default dataset is a **private** mirror, so a missing or unscoped token
+  surfaces as a generic 401/403 load error. The dataset is also large
+  (~185 MB download for `articles`), so check network and disk too.
   The HF cache defaults to `~/.cache/huggingface/datasets/`.
 - **"Required column not found"** — the dataset schema may have changed.
   Check the current schema at the HF dataset page and update the
