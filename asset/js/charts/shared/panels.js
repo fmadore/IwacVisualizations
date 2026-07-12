@@ -43,6 +43,19 @@
     };
 
     /**
+     * Accent-insensitive, case-insensitive search folding — NFD
+     * decomposition with the combining diacritical marks (U+0300–U+036F)
+     * stripped, so "Bénin" matches "benin". The canonical fold for every
+     * search box / picker in the module.
+     */
+    P.foldAccents = function (str) {
+        return String(str || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    };
+
+    /**
      * Defensive filter for "Unknown" values. The Python generator already
      * skips empty / unknown countries, but the JSON could be stale and the
      * live-fetched references subset can still produce them, so every
@@ -519,6 +532,113 @@
         group.appendChild(label);
         group.appendChild(select);
         return group;
+    };
+
+    /**
+     * Debounced search input + anchored suggestion dropdown — the widget
+     * term-trends and the entity-networks toolbar each hand-rolled.
+     * Matching/ranking stays at the call site via `getMatches`; the
+     * helper owns the shared mechanics: 120 ms debounce, empty state,
+     * item buttons (label + optional detail), Enter-picks-first,
+     * Escape-closes, and a SELF-CLEANING document-level outside-click
+     * close (it removes itself once the widget leaves the DOM, so block
+     * re-inits can't stack listeners).
+     *
+     * NOT for filterable list boxes (spatial-exploration's picker keeps
+     * its always-visible role=listbox — different widget).
+     *
+     * @param {Object} cfg
+     * @param {string} cfg.placeholder  translated placeholder + aria-label
+     * @param {function(string):Array<{label:string, detail?:string}>} cfg.getMatches
+     *   Query (trimmed, non-empty) → ranked matches, already capped.
+     *   Extra properties on a match ride through to onPick untouched.
+     * @param {function(Object):void} cfg.onPick  chosen match (input is
+     *   cleared and the dropdown closed before this fires)
+     * @param {string} [cfg.emptyText]  "no matches" row (default t('No matches'))
+     * @param {boolean} [cfg.openOnFocus=false]  re-open on input focus
+     * @param {Object} cfg.classes  per-block class names so existing CSS
+     *   keeps working: { root, input, dropdown, item, name, count, empty }
+     * @returns {{root:HTMLElement, input:HTMLInputElement,
+     *            close:function():void, clear:function():void}}
+     */
+    P.buildSearchDropdown = function (cfg) {
+        var classes = cfg.classes || {};
+        var wrap = P.el('div', classes.root);
+        var input = P.el('input', classes.input);
+        input.type = 'search';
+        input.placeholder = cfg.placeholder;
+        input.setAttribute('aria-label', cfg.placeholder);
+        var dropdown = P.el('div', classes.dropdown);
+        dropdown.style.display = 'none';
+        wrap.appendChild(input);
+        wrap.appendChild(dropdown);
+
+        function close() { dropdown.style.display = 'none'; }
+
+        function renderResults() {
+            var query = (input.value || '').trim();
+            dropdown.innerHTML = '';
+            if (!query) {
+                close();
+                return;
+            }
+            var matches = cfg.getMatches(query) || [];
+            if (!matches.length) {
+                dropdown.appendChild(P.el('div', classes.empty || 'iwac-vis-muted',
+                    cfg.emptyText || P.t('No matches')));
+                dropdown.style.display = '';
+                return;
+            }
+            matches.forEach(function (m) {
+                var item = P.el('button', classes.item);
+                item.type = 'button';
+                item.appendChild(P.el('span', classes.name, m.label));
+                if (m.detail != null) {
+                    item.appendChild(P.el('span', classes.count, m.detail));
+                }
+                item.addEventListener('click', function () {
+                    input.value = '';
+                    close();
+                    cfg.onPick(m);
+                });
+                dropdown.appendChild(item);
+            });
+            dropdown.style.display = '';
+        }
+
+        var timer = null;
+        input.addEventListener('input', function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(renderResults, 120);
+        });
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                var first = dropdown.querySelector('button');
+                if (first) first.click();
+            } else if (e.key === 'Escape') {
+                close();
+            }
+        });
+        if (cfg.openOnFocus) input.addEventListener('focus', renderResults);
+
+        document.addEventListener('click', function onDocClick(e) {
+            if (!document.body.contains(wrap)) {
+                document.removeEventListener('click', onDocClick);
+                return;
+            }
+            if (!wrap.contains(e.target)) close();
+        });
+
+        return {
+            root: wrap,
+            input: input,
+            close: close,
+            clear: function () {
+                input.value = '';
+                close();
+            }
+        };
     };
 
     /**

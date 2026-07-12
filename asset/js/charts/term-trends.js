@@ -120,16 +120,47 @@
         var controls = P.el('div', 'iwac-vis-ngram-controls');
         root.appendChild(controls);
 
-        var searchWrap = P.el('div', 'iwac-vis-ngram-search');
-        var searchInput = P.el('input', 'iwac-vis-ngram-search__input');
-        searchInput.type = 'search';
-        searchInput.placeholder = P.t('ngram.search');
-        searchInput.setAttribute('aria-label', P.t('ngram.search'));
-        searchWrap.appendChild(searchInput);
-        var dropdown = P.el('div', 'iwac-vis-ngram-search__dropdown');
-        dropdown.style.display = 'none';
-        searchWrap.appendChild(dropdown);
-        controls.appendChild(searchWrap);
+        var search = P.buildSearchDropdown({
+            placeholder: P.t('ngram.search'),
+            emptyText: P.t('ngram.no_matches'),
+            classes: {
+                root:     'iwac-vis-ngram-search',
+                input:    'iwac-vis-ngram-search__input',
+                dropdown: 'iwac-vis-ngram-search__dropdown',
+                item:     'iwac-vis-ngram-search__item',
+                name:     'iwac-vis-ngram-search__term',
+                count:    'iwac-vis-ngram-search__count',
+                empty:    'iwac-vis-ngram-search__empty'
+            },
+            getMatches: function (query) {
+                query = query.toLowerCase();
+                // Prefix matches first, then substring matches; the index
+                // is frequency-sorted so both groups come out
+                // most-frequent-first.
+                var prefix = [];
+                var infix = [];
+                for (var i = 0; i < terms.length
+                        && prefix.length + infix.length < SUGGESTION_LIMIT * 3; i++) {
+                    var t = terms[i][0];
+                    var pos = t.indexOf(query);
+                    if (pos === 0) prefix.push(terms[i]);
+                    else if (pos > 0) infix.push(terms[i]);
+                }
+                return prefix.concat(infix).slice(0, SUGGESTION_LIMIT)
+                    .map(function (pair) {
+                        return {
+                            label: pair[0],
+                            detail: P.t('ngram.in_articles',
+                                { count: P.formatNumber(pair[1]) })
+                        };
+                    });
+            },
+            onPick: function (m) {
+                addTerm(m.label);
+                search.input.focus();
+            }
+        });
+        controls.appendChild(search.root);
 
         var modeTabs = P.el('div', 'iwac-vis-tabs iwac-vis-ngram-mode');
         var modeButtons = {};
@@ -204,67 +235,6 @@
             renderChips();
             draw();
         }
-
-        // --- Search dropdown ------------------------------------------------
-        function renderDropdown() {
-            var query = (searchInput.value || '').trim().toLowerCase();
-            dropdown.innerHTML = '';
-            if (!query) {
-                dropdown.style.display = 'none';
-                return;
-            }
-            // Prefix matches first, then substring matches; the index is
-            // frequency-sorted so both groups come out most-frequent-first.
-            var prefix = [];
-            var infix = [];
-            for (var i = 0; i < terms.length
-                    && prefix.length + infix.length < SUGGESTION_LIMIT * 3; i++) {
-                var t = terms[i][0];
-                var pos = t.indexOf(query);
-                if (pos === 0) prefix.push(terms[i]);
-                else if (pos > 0) infix.push(terms[i]);
-            }
-            var matches = prefix.concat(infix).slice(0, SUGGESTION_LIMIT);
-            if (!matches.length) {
-                dropdown.appendChild(P.el('div', 'iwac-vis-ngram-search__empty',
-                    P.t('ngram.no_matches')));
-                dropdown.style.display = '';
-                return;
-            }
-            matches.forEach(function (pair) {
-                var item = P.el('button', 'iwac-vis-ngram-search__item');
-                item.type = 'button';
-                item.appendChild(P.el('span', 'iwac-vis-ngram-search__term', pair[0]));
-                item.appendChild(P.el('span', 'iwac-vis-ngram-search__count',
-                    P.t('ngram.in_articles', { count: P.formatNumber(pair[1]) })));
-                item.addEventListener('click', function () {
-                    addTerm(pair[0]);
-                    searchInput.value = '';
-                    dropdown.style.display = 'none';
-                    searchInput.focus();
-                });
-                dropdown.appendChild(item);
-            });
-            dropdown.style.display = '';
-        }
-
-        var searchTimer = null;
-        searchInput.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(renderDropdown, 120);
-        });
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                var first = dropdown.querySelector('.iwac-vis-ngram-search__item');
-                if (first) first.click();
-            } else if (e.key === 'Escape') {
-                dropdown.style.display = 'none';
-            }
-        });
-        document.addEventListener('click', function (e) {
-            if (!searchWrap.contains(e.target)) dropdown.style.display = 'none';
-        });
 
         // --- Chips -----------------------------------------------------------
         function renderChips() {
