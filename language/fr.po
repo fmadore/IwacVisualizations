@@ -3,10 +3,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: IwacVisualizations 1.7.0\n"
+"Project-Id-Version: IwacVisualizations 1.22.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-12 00:00+0000\n"
-"PO-Revision-Date: 2026-06-12 00:00+0000\n"
+"PO-Revision-Date: 2026-07-12 00:00+0000\n"
 "Last-Translator: Frédérick Madore\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -342,11 +342,12 @@ msgstr "Intégrer un seul panneau"
 
 #. Embed snippet gallery
 msgid ""
-"Tip: embeds render in light mode by default; append <code>?theme=dark</code> "
-"for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour."
+"Tip: embeds render in light mode by default; append <code>?theme=dark</code>"
+" for dark mode, or <code>?primary=2b6cb0</code> to override the accent "
+"colour."
 msgstr ""
-"Astuce : les intégrations s’affichent en mode clair par défaut ; "
-"ajoutez <code>?theme=dark</code> pour le mode sombre, ou "
+"Astuce : les intégrations s’affichent en mode clair par défaut ; ajoutez "
+"<code>?theme=dark</code> pour le mode sombre, ou "
 "<code>?primary=2b6cb0</code> pour remplacer la couleur d’accent."
 
 #. Embed snippet gallery
@@ -361,8 +362,17 @@ msgstr "Aucune visualisation intégrable ne correspond à cette adresse."
 msgid "IWAC Visualizations"
 msgstr "Visualisations IWAC"
 
-msgid "Download the latest precomputed visualization data and unpack it into the site files. The heavy generation runs in GitHub Actions, off this server; this only pulls the published archive. Progress and any errors are logged under Admin → Jobs."
-msgstr "Téléchargez les dernières données de visualisation précalculées et décompressez-les dans les fichiers du site. La génération lourde s’exécute dans GitHub Actions, hors de ce serveur ; cette page ne fait que récupérer l’archive publiée. La progression et les éventuelles erreurs sont consignées dans Admin → Tâches."
+msgid ""
+"Download the latest precomputed visualization data and unpack it into the "
+"site files. The heavy generation runs in GitHub Actions, off this server; "
+"this only pulls the published archive. Progress and any errors are logged "
+"under Admin → Jobs."
+msgstr ""
+"Téléchargez les dernières données de visualisation précalculées et "
+"décompressez-les dans les fichiers du site. La génération lourde s’exécute "
+"dans GitHub Actions, hors de ce serveur ; cette page ne fait que récupérer "
+"l’archive publiée. La progression et les éventuelles erreurs sont consignées"
+" dans Admin → Tâches."
 
 msgid "A data sync is currently running."
 msgstr "Une synchronisation des données est en cours."
@@ -386,7 +396,9 @@ msgid "Source"
 msgstr "Source"
 
 msgid "No data has been pulled yet. Use the button below to fetch it."
-msgstr "Aucune donnée n’a encore été récupérée. Utilisez le bouton ci-dessous pour la récupérer."
+msgstr ""
+"Aucune donnée n’a encore été récupérée. Utilisez le bouton ci-dessous pour "
+"la récupérer."
 
 msgid "Pull data"
 msgstr "Récupérer les données"
@@ -397,20 +409,28 @@ msgstr "Récupérer les dernières données"
 msgid "Iframe embeds"
 msgstr "Intégrations iframe"
 
-msgid "Open a site-specific embed gallery to preview each page-block visualization and copy its iframe snippet."
-msgstr "Ouvrez une galerie d’intégration propre à un site pour prévisualiser chaque visualisation de bloc de page et copier son extrait iframe."
+msgid ""
+"Open a site-specific embed gallery to preview each page-block visualization "
+"and copy its iframe snippet."
+msgstr ""
+"Ouvrez une galerie d’intégration propre à un site pour prévisualiser chaque "
+"visualisation de bloc de page et copier son extrait iframe."
 
 msgid "Open embed gallery"
 msgstr "Ouvrir la galerie d’intégration"
 
 msgid "No sites are available yet. Create a site before using iframe embeds."
-msgstr "Aucun site n’est encore disponible. Créez un site avant d’utiliser les intégrations iframe."
+msgstr ""
+"Aucun site n’est encore disponible. Créez un site avant d’utiliser les "
+"intégrations iframe."
 
 msgid "Release tag (optional)"
 msgstr "Étiquette de version (facultatif)"
 
 msgid "Leave blank to pull the latest build from the moving “data” release."
-msgstr "Laissez vide pour récupérer la dernière version depuis la publication « data » mobile."
+msgstr ""
+"Laissez vide pour récupérer la dernière version depuis la publication « data"
+" » mobile."
 
 msgid "Invalid or expired form submission. Please try again."
 msgstr "Soumission du formulaire invalide ou expirée. Veuillez réessayer."
@@ -425,8 +445,18 @@ msgstr "Synchronisation des données lancée. Suivez sa progression ci-dessous."
 msgid "On This Day"
 msgstr "Ce jour-là"
 
-msgid "Items published on today's date across the collection's decades — newspaper articles and periodical issues with full publication dates. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset. No configuration needed."
-msgstr "Documents publiés à la date du jour au fil des décennies de la collection — articles de presse et numéros de périodiques datés au jour près. Le bloc disparaît silencieusement quand aucune donnée n’est disponible ; il peut donc figurer sans risque sur une page d’accueil. Données précalculées à partir du jeu de données IWAC. Aucune configuration requise."
+msgid ""
+"Items published on today's date across the collection's decades — newspaper "
+"articles and periodical issues with full publication dates. The block "
+"removes itself silently when no data is available, so it is safe on a "
+"homepage. Data is precomputed from the IWAC dataset. No configuration "
+"needed."
+msgstr ""
+"Documents publiés à la date du jour au fil des décennies de la collection — "
+"articles de presse et numéros de périodiques datés au jour près. Le bloc "
+"disparaît silencieusement quand aucune donnée n’est disponible ; il peut "
+"donc figurer sans risque sur une page d’accueil. Données précalculées à "
+"partir du jeu de données IWAC. Aucune configuration requise."
 
 msgid "Loading on this day"
 msgstr "Chargement de « ce jour-là »"
@@ -434,9 +464,138 @@ msgstr "Chargement de « ce jour-là »"
 msgid "Press Bylines"
 msgstr "Signatures de presse"
 
-msgid "Who signed the press: byline coverage over time and the most prolific journalists and press agencies, with active spans and frequent subjects, linked to their authority records where they exist. Data is precomputed from the IWAC articles subset. No configuration needed."
-msgstr "Qui signait la presse : la part des articles signés au fil du temps et les journalistes et agences de presse les plus prolifiques, avec leurs périodes d’activité et leurs sujets fréquents, reliés à leurs notices d’autorité lorsqu’elles existent. Données précalculées à partir du sous-ensemble « articles » de l’IWAC. Aucune configuration requise."
+msgid ""
+"Who signed the press: byline coverage over time and the most prolific "
+"journalists and press agencies, with active spans and frequent subjects, "
+"linked to their authority records where they exist. Data is precomputed from"
+" the IWAC articles subset. No configuration needed."
+msgstr ""
+"Qui signait la presse : la part des articles signés au fil du temps et les "
+"journalistes et agences de presse les plus prolifiques, avec leurs périodes "
+"d’activité et leurs sujets fréquents, reliés à leurs notices d’autorité "
+"lorsqu’elles existent. Données précalculées à partir du sous-ensemble « "
+"articles » de l’IWAC. Aucune configuration requise."
 
 msgid "Loading press bylines"
 msgstr "Chargement des signatures de presse"
 
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Term Trends"
+msgstr "Tendances des termes"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"The IWAC \"Ngram viewer\": plot the per-year share of articles whose full "
+"text contains any frequent term. Search the vocabulary, overlay up to eight "
+"terms, switch between share and absolute counts. Data is precomputed from "
+"the articles subset. No configuration needed."
+msgstr ""
+"Le « visualiseur Ngram » de l’IWAC : tracez, année par année, la part des "
+"articles dont le texte intégral contient un terme fréquent. Cherchez dans le"
+" vocabulaire, superposez jusqu’à huit termes, basculez entre part et "
+"décomptes absolus. Données précalculées à partir du sous-ensemble « articles"
+" ». Aucune configuration nécessaire."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading term trends"
+msgstr "Chargement des tendances des termes"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Islamic Organisations Co-occurrence"
+msgstr "Cooccurrences des organisations islamiques"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"A heatmap of the ideas that cluster around each major West African Islamic "
+"organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen "
+"organisation, which pairs of words keep turning up together near its name. "
+"Data is precomputed from the IWAC articles. No configuration needed."
+msgstr ""
+"Une carte thermique des idées qui gravitent autour de chaque grande "
+"organisation islamique ouest-africaine (UIB, CNI, COSIM, CSI, FAIB, UMT) "
+"dans la presse : pour une organisation choisie, quelles paires de mots "
+"reviennent ensemble près de son nom. Données précalculées à partir des "
+"articles de l’IWAC. Aucune configuration nécessaire."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading organisation co-occurrences"
+msgstr "Chargement des cooccurrences d’organisations"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Press Reprints"
+msgstr "Reprises de presse"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Pairs of near-identical articles printed by different newspapers — "
+"syndicated wire copy (PANA, AFP), shared communiqués and reprints — found by"
+" comparing how closely articles are worded. Shows which outlets circulated "
+"the same copy, with the full pair list. Data is precomputed from the IWAC "
+"articles. No configuration needed."
+msgstr ""
+"Paires d’articles quasi identiques publiés par des journaux différents — "
+"dépêches d’agence (PANA, AFP), communiqués partagés et reprises — repérées "
+"en comparant la proximité de leur formulation. Montre quels titres ont fait "
+"circuler la même copie, avec la liste complète des paires. Données "
+"précalculées à partir des articles de l’IWAC. Aucune configuration "
+"nécessaire."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading press reprints"
+msgstr "Chargement des reprises de presse"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Periodicals Semantic Landscape"
+msgstr "Paysage sémantique des périodiques"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Zoomable map of the Islamic-periodical corpus: every issue placed by the "
+"semantic similarity of its table of contents (UMAP over AI embeddings), "
+"color-faceted by country or decade. Data is precomputed. No configuration "
+"needed."
+msgstr ""
+"Carte zoomable du corpus des périodiques islamiques : chaque numéro "
+"positionné selon la similarité sémantique de sa table des matières (UMAP sur"
+" plongements d’IA), coloré par pays ou décennie. Données précalculées. "
+"Aucune configuration nécessaire."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Radical / extremism-related terms across the IWAC collection in seven views:"
+" an animated bar-chart race, time trends with historical-event markers, by "
+"country, global, a co-occurrence matrix, a word cloud of the surrounding "
+"vocabulary, and a map of the places mentioned. No configuration needed."
+msgstr ""
+"Les termes liés au radicalisme et à l’extrémisme dans la collection IWAC en "
+"sept vues : course de barres animée, tendances temporelles avec repères "
+"d’événements historiques, vue par pays, vue globale, matrice de "
+"cooccurrences, nuage de mots du vocabulaire environnant et carte des lieux "
+"mentionnés. Aucune configuration nécessaire."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Corpus health"
+msgstr "Santé du corpus"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Coverage of the upstream enrichment pipelines, computed from the Hugging "
+"Face dataset at data-build time. Use these meters to steer digitization and "
+"annotation priorities; they refresh with every data pull."
+msgstr ""
+"Couverture des chaînes d’enrichissement en amont, calculée à partir du jeu "
+"de données Hugging Face au moment de la génération des données. Utilisez ces"
+" jauges pour orienter les priorités de numérisation et d’annotation ; elles "
+"se rafraîchissent à chaque récupération des données."
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Computed"
+msgstr "Calculé le"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Collection growth over time"
+msgstr "Croissance de la collection au fil du temps"
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Period covered: %1$s – %2$s"
+msgstr "Période couverte : %1$s – %2$s"
