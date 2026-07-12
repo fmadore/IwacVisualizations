@@ -151,7 +151,7 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `#d97706…` fallback arrays in `chart-options-graph.js` (`:57,343,450`) now mirror
   the module palette (`#e64a19, #394f68, …`), so a theme-JS-missing fallback render
   stays on-brand.
-- [ ] **`C._forceGraphBase()`** — **deferred (assessed).** Read both builders: the
+- [x] **`C._forceGraphBase()`** — **DONE (v1.22.0)** (reversing the June deferral: press-reprints added the cross-file copy the assessment said was missing). All three frozen-force skeletons now compose the shared base, option-for-option identical. Read both builders: the
   genuinely-shared `series` skeleton is only ~15 lines, it's a single-file *internal*
   dedup (no cross-file reuse), and extracting it means restructuring a large option
   literal in core graph rendering that the terser build can't validate. Low value
@@ -192,7 +192,7 @@ liability (PHP 8.4) and the most material theme gap (breakpoints).
   `P.translateKeyed(prefix, name)` in `shared/panels.js` (covers `lang_*` *and*
   `ref_type_*`); the locals in `references-overview.js` / `periodicals-overview.js`
   are now 1-line delegates, so the key-fallback logic lives in one place.
-- [ ] **Promote accent-`fold()`** (`spatial-exploration/picker.js:27`) → shared util.
+- [x] **Promote accent-`fold()`** — **DONE (v1.22.0)** as `P.foldAccents`; entity-networks + spatial-exploration/picker alias it.
 
 > **The unchecked JS items above are deliberately deferred** to a focused pass with
 > live Playwright verification on `islam.zmo.de`. Most touch map / graph / heatmap
@@ -444,7 +444,12 @@ documented at the end so a future cleanup pass doesn't trip on them.
 
 Third repo-wide pass. Focus: everything that post-dates v1.18.0 — the six new
 page blocks, the Phase 9/10 panels, the private-HF-repo move — plus a status
-check on the open Tier 2–4 items. Five parallel deep dives; the highest-stakes
+check on the open Tier 2–4 items.
+
+**Implementation status: shipped as v1.22.0 (2026-07-12).** Every Tier 5
+item below is either DONE or carries an explicit assessed-out note. Items
+the implementation pass deliberately did NOT do (with reasons) are marked
+*assessed*; they are decisions, not leftovers. Five parallel deep dives; the highest-stakes
 findings below were independently re-verified against the tree before being
 recorded. Overall: the wave is **unusually disciplined** (token lint passes
 with 0 violations, theme-swap compliance is clean, CI covers every generator,
@@ -453,7 +458,7 @@ clusters instead of consuming the helpers that shipped alongside it.
 
 ### Bugs / user-facing (fix first)
 
-- [ ] **Press Reprints embed route is broken** — `EmbedController.php:55`
+- [x] **Press Reprints embed route is broken** — **DONE (v1.22.0)**: slug renamed to `press-reprints` in `EmbedController::BLOCKS` + `press-reprints.phtml`. — `EmbedController.php:55`
   registers the slug `'press-reprints-detector'`, and the embed contract
   (EmbedController docblock; `embed/block.phtml:14`) resolves the partial as
   `common/block-layout/<slug>` — but the template is `press-reprints.phtml`.
@@ -463,7 +468,7 @@ clusters instead of consuming the helpers that shipped alongside it.
   `press-reprints.phtml:25` propagates the bad slug as `data-embed-slug`.
   Fix (simplest, no working snippet exists to break): rename the slug to
   `'press-reprints'` in both places. **Effort S.**
-- [ ] **`template.pot` / `fr.po` never re-extracted after v1.19** — the
+- [x] **`template.pot` / `fr.po` never re-extracted after v1.19** — **DONE (v1.22.0)**: 17 msgids added + translated, `fr.mo` rebuilt, all 116 entries verified via gettext load. — the
   catalogue (100 msgids, POT-Creation-Date 2026-06-12, header still says
   1.7.0) contains **zero** of the v1.20+ strings: `Term Trends`,
   `Press Reprints`, `Islamic Organisations Co-occurrence`,
@@ -472,7 +477,7 @@ clusters instead of consuming the helpers that shipped alongside it.
   (`admin/data/index.phtml:63-69`). All render English on
   `/s/afrique_ouest/`. The source strings are correctly `@translate`-marked —
   only extraction+translation is missing (~12 msgids). **Effort M.**
-- [ ] **`embed/index.phtml:192`** — iframe `title` uses the raw untranslated
+- [x] **`embed/index.phtml:192`** — **DONE (v1.22.0)**: iframe title now translated. — iframe `title` uses the raw untranslated
   `$label` while the sibling `<h2>` (`:188`) translates it; the preview
   iframe's accessible name stays English under a French locale. **Effort S.**
 
@@ -488,19 +493,19 @@ local contributor following them would hit an unexplained 401.
   dataset link, stale `DATASET_ID` constant value, "dataset is public but
   large" troubleshooting entry), `CLAUDE.md:7,13`, `DATA_NOTES.md` header,
   `README.md:3`, plus the `README.md` block-table gaps (see below).
-- [ ] **Generator docstrings still say public** —
+- [x] **Generator docstrings still say public** — **DONE (v1.22.0)**: all 11 docstrings + the 4 runtime 'anonymous access (public dataset)' log lines swept. —
   `generate_on_this_day.py:44`, `generate_press_bylines.py:38`,
   `generate_scary_terms.py:44-45` ("the dataset is public, so this is
   usually unnecessary"). Code-side, so left for a scripts commit (pushes to
   `main` touching `scripts/*.py` trigger the 30-min regeneration workflow —
   batch these with the next real generator change). **Effort S.**
-- [ ] **`load_dataset_safe` swallows the 401** (`iwac_utils.py:669-671`) —
+- [x] **`load_dataset_safe` swallows the 401** — **DONE (v1.22.0)**: targeted 401/403 hint + a `columns=` projection parameter (see efficiency item below). (`iwac_utils.py:669-671`) —
   a tokenless local run gets a generic "Error loading subset" with no hint
   that `HF_TOKEN` is now required. Add a targeted 401/403 message. **Effort S.**
-- [ ] **`SUBSETS` constant stale** (`iwac_utils.py:64`) — omits `"images"`,
+- [x] **`SUBSETS` constant stale** — **DONE (v1.22.0)**. (`iwac_utils.py:64`) — omits `"images"`,
   which `collection_overview` / `world_map` / `corpus_health` all load.
   Harmless (nothing validates against it) but misleading. **Effort S.**
-- [ ] **`generate_scary_terms.py:6` docstring off-by-one** — says "the seven
+- [x] **`generate_scary_terms.py:6` docstring off-by-one** — **DONE (v1.22.0)**. — says "the seven
   JSON files", then lists and writes eight. **Effort S.**
 
 ### README coverage (fixed 2026-07-12)
@@ -514,51 +519,51 @@ local contributor following them would hit an unexplained 401.
 
 ### JS — the new-block wave
 
-- [ ] **`scary-terms.js:507-635` re-rolls the heatmap `C.heatmapMatrix` now
-  owns** — 128 hand-built lines (tooltip/grid/axes/visualMap/series) shipped
+- [x] **`scary-terms.js:507-635` re-rolls the heatmap `C.heatmapMatrix` now
+  owns** — **DONE (v1.22.0)**: composes the shared helper, which gained `cellLabels` / `cellBorder` / `xLabelRotate`; ramp + emphasis converge on the shared style (deliberate unification). — 128 hand-built lines (tooltip/grid/axes/visualMap/series) shipped
   in the same v1.20 wave as the shared helper; `org-cooccurrence.js:213` and
   `periodicals-overview.js:150` adopted it, scary-terms is the lone holdout
   and forks the heatmap look. Replace with a `C.heatmapMatrix` call (needs
   only the existing diagonal-skip cell filter). **Effort M.**
-- [ ] **`press-reprints.js:131-215` is a 4th copy of the force-graph build
-  and skips the shared graph toolbar** — hand-rolls the `layout:'force'`
+- [x] **`press-reprints.js:131-215` is a 4th copy of the force-graph build
+  and skips the shared graph toolbar** — **DONE (v1.22.0)**: `C._forceGraphBase` extracted and adopted by all three in-tree copies; press-reprints gains the shared toolbar (new `legendToggle:false` opt; click-through stays off — nodes are newspapers, not items). — hand-rolls the `layout:'force'`
   series skeleton (the Tier 2 `C._forceGraphBase` candidate, which now has
   the cross-file justification it previously lacked — upgrade that item from
   "deferred") and never calls `P.buildGraphPanelToolbar` /
   `P.attachGraphClickThrough`, so this is the only IWAC network view with no
   download / legend / fullscreen / zoom controls. **Effort M.**
-- [ ] **Labelled-`<select>` builder ×4** — `org-cooccurrence.js:234-251`
+- [x] **Labelled-`<select>` builder ×4** — **DONE (v1.22.0)**: `P.buildSelectControl`; org-cooccurrence delegates, the three scary-terms copies collapsed into `scary-terms/controls.js`. — `org-cooccurrence.js:234-251`
   `buildSelect`, `scary-terms.js:794-813` `buildSelectGroup`, plus
   `scary-terms.js:829-849` and `:851-881` (two more copies inside the same
   file). One `P.buildSelectControl(label, options, current, onChange)` in
   `shared/panels.js` collapses all four. **Effort M.**
-- [ ] **`term-trends.js:123-267` hand-rolls the debounced search + suggestion
-  dropdown** — a 3rd implementation of the pattern Tier 3 already flags for
+- [x] **`term-trends.js:123-267` hand-rolls the debounced search + suggestion
+  dropdown** — **DONE (v1.22.0)**: `P.buildSearchDropdown` + `P.foldAccents` (the Tier 2 fold item); term-trends + entity-networks migrated. The spatial-exploration picker was **assessed out** — it is an always-visible filterable listbox, not a dropdown. — a 3rd implementation of the pattern Tier 3 already flags for
   entity-networks + spatial-exploration/picker (and `term-trends.css:54-119`
   is the matching 3rd CSS copy). Bundle into one `P.buildSearchDropdown`
   extraction covering all three. **Effort M.**
-- [ ] **Tier 4 tooltip-formatter item grew +5 copies** — the sort-desc /
+- [x] **Tier 4 tooltip-formatter item grew +5 copies** — **DONE (v1.22.0)**: `C.sortedAxisTooltip` on chart-options.js; 4 sites migrated with exact sort/skip semantics. press-bylines was a **false positive** — single-series, not the sorted-multi pattern; left as-is. — the sort-desc /
   drop-zero / bold-header axis formatter is re-rolled fresh at
   `press-bylines.js:85-95`, `term-trends.js:331-350`,
   `scary-terms/trends.js:131-142`, `topic-explorer.js:298-312`,
   `index-overview/keywords-bump.js:131-145`. The canonical
   `C.sortedAxisTooltip()` builder is now worth ~200 lines. **Effort M.**
-- [ ] **Playback controller ×2** — `scary-terms.js:883-1023` (slider +
+- [x] **Playback controller ×2** — **DONE (v1.22.0)** as `P.createPlaybackTimer` (the interval state machine only); both consumers migrated. Full DOM unification **assessed out** — the two control shells are deliberately different UX. Bonus fix: switching views mid-race no longer leaves a phantom pause button. — `scary-terms.js:883-1023` (slider +
   play/pause + fill sync + interval) and
   `index-overview/keywords-attention.js:62-150` are independent
   implementations of the same animated-year control →
   `P.buildPlaybackControl({length, onFrame, tickMs})`. **Effort M.**
-- [ ] **`topicShortLabel` ×2** — identical
+- [x] **`topicShortLabel` ×2** — **DONE (v1.22.0)**: `P.topicShortLabel`. — identical
   `split(' - ').slice(0,2).join(' · ')` derivation at
   `sentiment-atlas.js:141` and `semantic-landscape.js:152`. **Effort S.**
-- [ ] **Tier 3 scary-terms de-monolith is now more urgent** — the file grew
+- [x] **Tier 3 scary-terms de-monolith is now more urgent** — **DONE (v1.22.0)**: `scary-terms/controls.js` extracted (orchestrator 1030 → 607 lines), `fetchJSON` passthrough dropped, dead `isAtEnd`/empty-`if` gone. The view toggle stays hand-rolled (**assessed**): it carries its own visual identity (`scary-view-btn`), and a `P.buildFacetButtons` conversion is a visual change needing live verification. — the file grew
   552 → 1030 lines (`render()` alone ~889 lines, `:139-1028`) while every
   Tier 3 sub-item stayed open: view toggle still not `P.buildFacetButtons`
   (`:746-783`), `fetchJSON` passthrough still present (`:131-133`), the
   empty-`if` + dead `isAtEnd` var still there (`:886-895`). Extract
   `scary-terms/controls.js` + `scary-terms/playback.js` and land the
   heatmap swap above. **Effort L.**
-- [ ] **JS hygiene smalls** — `scary-terms.js:359` compact-mode threshold
+- [x] **JS hygiene smalls** — **DONE (v1.22.0)**: 640→600 threshold, dead `{threshold}` arg, unused `dataA`, and the document listener is now self-cleaning inside `P.buildSearchDropdown`. — `scary-terms.js:359` compact-mode threshold
   still `< 640` (CSS snapped to 600 in Tier 1; last 640 literal left);
   `press-reprints.js:99` passes a `{threshold}` interpolation no i18n string
   uses; `index-overview.js:38` `buildLayout(container, dataA)` — `dataA`
@@ -567,13 +572,13 @@ local contributor following them would hit an unexplained 401.
 
 ### Python — the new generators
 
-- [ ] **Tier 4 argparse-prologue item grew +8 copies** — every new generator
+- [x] **Tier 4 argparse-prologue item grew +8 copies** — **DONE for the 8 new generators (v1.22.0)**: `iwac_utils.add_standard_args` + `parse_standard_args`. The 14 older generators keep bespoke help texts — the original Tier 4 item stays open for them. — every new generator
   re-hand-rolls the ~25-line CLI/`configure_logging` block
   (`on_this_day:120-131`, `press_bylines:89-104`, `term_trends:148-194`,
   `org_cooccurrence:283-333`, `reprints:193-240`, `corpus_health:146-173`,
   `scary_terms:813-864`, `world_map:116-127`). The planned
   `iwac_utils.add_standard_args(parser)` is now worth ~600 lines. **Effort M.**
-- [ ] **Tier 3 metadata/output-path drift grew** — four coexisting metadata
+- [ ] **Tier 3 metadata/output-path drift grew** — **partially done (v1.22.0)**: `world_map` now emits `generate_timestamp()` (the `+00:00` outlier is gone). Full standardization is **deferred**: unifying the metadata key names changes output shapes the JS reads, so it needs a coordinated generator+JS pass verified against live data. — four coexisting metadata
   strategies after the wave: `{"metadata": create_metadata_block(…)}`
   (`press_bylines:171`), `{"_meta": …}` (`on_this_day:144`), inline
   `{"generated_at": …}` dicts with no helper (`term_trends:136`,
@@ -583,56 +588,56 @@ local contributor following them would hit an unexplained 401.
   the convention's `Z`; switch it to `generate_timestamp()`). `reprints` /
   `org_cooccurrence` / `corpus_health` also take `--output-dir` for
   single-file output. **Effort M.**
-- [ ] **Column projection in `load_dataset_safe`** — `on_this_day` and
+- [x] **Column projection in `load_dataset_safe`** — **DONE (v1.22.0)**: `columns=` via `select_columns` before `to_pandas`; on-this-day + press-bylines opt in (4 scalar columns each instead of OCR + 768-dim embeddings). — `on_this_day` and
   `press_bylines` need 4 string columns but materialize the full `articles`
   frame including `OCR` and the 768-dim `embedding_OCR` (hundreds of MB),
   because `load_dataset_safe` (`iwac_utils.py:636`) has no `columns=`
   passthrough. Adding one is the single biggest generator-efficiency win.
   **Effort M.**
-- [ ] **New shared-helper candidates** — full-date regex ×3
+- [x] **New shared-helper candidates** — `is_full_date`/`FULL_DATE_RE` **DONE (v1.22.0)** (on-this-day migrated; corpus-health keeps its looser prefix match deliberately — it measures date *precision* coverage). The Lieux-lookup and pair-matrix extractions were **assessed out**: the three Lieux consumers differ materially (aliases + coords vs frequency counts vs picker payloads) and the two pair kernels filter differently — a shared helper would be output-risky for little reuse. — full-date regex ×3
   (`on_this_day:66`, `corpus_health:43`, collection_overview's third
   notion → `iwac_utils.is_full_date()`); the Lieux geocoding join ×3
   (`scary_terms:649-673`, `world_map:40-70`, spatial_exploration →
   `build_lieux_lookup(index_df)`); the symmetric pair-matrix accumulation ×2
   (`org_cooccurrence:133-152`, `scary_terms:440-445`). **Effort S–M each.**
-- [ ] **Efficiency smalls** — `org_cooccurrence.py:236-240` re-scans the full
+- [x] **Efficiency smalls** — on-this-day + press-bylines `iterrows()` → column-wise `zip` **DONE (v1.22.0)**. The org-cooccurrence OCR re-scan rework is **deferred** — it touches matching semantics and needs a live-data output diff before landing. — `org_cooccurrence.py:236-240` re-scans the full
   lowercased OCR per (article × org × target) before tokenizing; a single
   tokenize-per-article + token-set membership avoids the repeated passes.
   `iterrows()` on 12–14k-row frames at `on_this_day:97`,
   `press_bylines:70,120`, `scary_terms:280`, `org_cooccurrence:192`
   (`itertuples()`/`.iat[]` as `term_trends:92` already does). **Effort S–M.**
-- [ ] **Determinism defense-in-depth** — output is deterministic today (fixed
+- [x] **Determinism defense-in-depth** — **DONE (v1.22.0)**: name tie-breaks at all four flagged sites; scary-terms country slices emit alphabetically. First CI regeneration may reorder count ties once. — output is deterministic today (fixed
   input + Counter insertion order) but not total-ordered: add name tiebreaks
   at `press_bylines:164-165`, `reprints:181-184`, and sort
   `scary_terms:735` (`out_places`) / `:471` (`finalized_countries`) like
   `build_countries` does. **Effort S.**
-- [ ] **Dead imports** — `Optional` (`org_cooccurrence:50`), `Any`
+- [x] **Dead imports** — **DONE (v1.22.0)**, plus a pyflakes sweep that caught 5 more pre-existing items tree-wide (article-dashboards, compare-newspapers, index-overview, wordcloud, entity-networks' dead `pair_set`). pyflakes now exits clean. — `Optional` (`org_cooccurrence:50`), `Any`
   (`term_trends:42`). **Effort S.**
 
 ### CSS — the new sheets
 
-- [ ] **NEW cluster: block header/title/desc ×4** — byte-identical modulo
+- [x] **NEW cluster: block header/title/desc ×4** — **DONE (v1.22.0)**: `.iwac-vis-block-header/__title/__desc` in iwac-core; the four sheets keep only residuals (press-reprints' margin-bottom). — byte-identical modulo
   prefix at `press-reprints.css:14-31`, `term-trends.css:20-36`,
   `org-cooccurrence.css:21-37`, `scary-terms.css:30-49` (~24 lines each:
   flex-column header, font-headings `--text-2xl` title, muted
   `--measure-narrow` desc). Promote `.iwac-vis-block-header/__title/__desc`
   into `iwac-core.css` and reduce the four sheets to markup-only. **Effort M.**
-- [ ] **Known aside/surface-card cluster grew** —
+- [x] **Known aside/surface-card cluster grew** — **DONE (v1.22.0)**: the Tier 2 `.iwac-vis-aside` promotion landed with five consumers (entity-networks, spatial-exploration, keyword-explorer sidebar, org-cooccurrence controls); block sheets keep layout residuals only. —
   `org-cooccurrence.css:45-55` (`-controls`) is one more copy of the
   panel-bg + `--border` + `--radius-md` + `--shadow-xs` shell; fold into the
   pending Tier 2 `.iwac-vis-aside` promotion. **Effort S.**
-- [ ] **Cosmetic** — `on-this-day.css:68` raw `margin-top: 2px` (the only
+- [x] **Cosmetic** — **DONE (v1.22.0)**: on-this-day margin on the spacing scale; Besley fallback stacks unified. — `on-this-day.css:68` raw `margin-top: 2px` (the only
   non-tokenized length in the wave); the four new title rules use a
   `"Besley", Georgia, serif` fallback stack while `compare-newspapers.css:207`
   adds `"Times New Roman"` — pick one. **Effort S.**
 
 ### CI / infra (optional hardening)
 
-- [ ] **No JS/CSS CI** — the only workflow is data regeneration;
+- [x] **No JS/CSS CI** — **DONE (v1.22.0)**: `.github/workflows/build-check.yml` (token guard + stale-`.min` detection, narrow path triggers). — the only workflow is data regeneration;
   `npm run build` (token lint + minify freshness) is enforced purely
   locally. A lightweight push-triggered check would catch a forgotten
   `.min` rebuild or token violation. **Effort M.**
-- [ ] **Actions pinned to major tags** (`checkout@v7`, `setup-python@v6`),
+- [ ] **Actions pinned to major tags** — still open (optional hardening); SHA pinning needs the real commit SHAs verified against upstream, which the implementation environment could not reach. (`checkout@v7`, `setup-python@v6`),
   not commit SHAs — fine for this repo's risk profile; SHA-pinning is the
   hardening move if wanted. **Effort S.**
 
