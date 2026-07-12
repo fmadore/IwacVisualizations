@@ -55,7 +55,6 @@ from iwac_utils import (
     clean_float,
     clean_str,
     configure_logging,
-    extract_year,
     find_column,
     load_dataset_safe,
     normalize_country,
