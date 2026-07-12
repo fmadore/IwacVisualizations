@@ -41,7 +41,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN   Optional Hugging Face access token (public dataset).
+    HF_TOKEN   Hugging Face access token — required, the default dataset is
+               the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 
@@ -88,7 +89,8 @@ def collect_days(repo_id: str) -> Dict[str, List[List[Any]]]:
     days: Dict[str, List[List[Any]]] = defaultdict(list)
     for subset, type_flag in SOURCES:
         logger.info("Loading %s subset...", subset)
-        df = load_dataset_safe(subset, repo_id=repo_id)
+        df = load_dataset_safe(subset, repo_id=repo_id,
+                               columns=["pub_date", "o:id", "title", "newspaper"])
         if df is None or df.empty:
             raise RuntimeError(f"Could not load the {subset} subset")
         logger.info("  %d rows", len(df))

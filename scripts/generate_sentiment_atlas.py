@@ -65,7 +65,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN   Optional Hugging Face access token (public dataset).
+    HF_TOKEN   Hugging Face access token — required, the default dataset
+               is the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 

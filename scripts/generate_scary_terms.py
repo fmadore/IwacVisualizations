@@ -3,7 +3,7 @@
 generate_scary_terms.py
 ========================
 
-Generate the seven JSON files consumed by the IwacVisualizations "Scary Terms"
+Generate the eight JSON files consumed by the IwacVisualizations "Scary Terms"
 page block:
 
     asset/data/scary-terms-metadata.json
@@ -41,8 +41,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN    Optional Hugging Face access token (the dataset is public,
-                so this is usually unnecessary).
+    HF_TOKEN    Hugging Face access token — required, the default dataset is
+                the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 

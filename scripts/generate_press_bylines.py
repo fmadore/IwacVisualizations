@@ -35,7 +35,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN   Optional Hugging Face access token (public dataset).
+    HF_TOKEN   Hugging Face access token — required, the default dataset is
+               the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 
@@ -62,7 +63,8 @@ logger = logging.getLogger(__name__)
 
 def build_personnes_lookup(repo_id: str) -> Dict[str, int]:
     """Normalized Personnes name (Titre + alternatives) -> authority o:id."""
-    df = load_dataset_safe("index", repo_id=repo_id)
+    df = load_dataset_safe("index", repo_id=repo_id,
+                           columns=["Type", "o:id", "Titre", "Titre alternatif"])
     if df is None or df.empty:
         raise RuntimeError("Could not load the index subset")
     alt_col = "Titre alternatif" if "Titre alternatif" in df.columns else None
@@ -104,7 +106,8 @@ def main() -> None:
     configure_logging(logging.DEBUG if args.verbose else logging.INFO)
 
     logger.info("Loading articles subset...")
-    df = load_dataset_safe("articles", repo_id=args.repo)
+    df = load_dataset_safe("articles", repo_id=args.repo,
+                           columns=["pub_date", "author", "newspaper", "subject"])
     if df is None or df.empty:
         raise RuntimeError("Could not load the articles subset")
     logger.info("  %d rows", len(df))

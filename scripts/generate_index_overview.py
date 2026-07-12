@@ -40,7 +40,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN   Optional Hugging Face access token (public dataset).
+    HF_TOKEN   Hugging Face access token — required, the default dataset
+               is the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 
@@ -605,7 +606,7 @@ def main() -> None:
 
     token = os.getenv("HF_TOKEN") or None
     if token is None:
-        logger.info("No HF_TOKEN set; using anonymous access (public dataset).")
+        logger.warning("No HF_TOKEN set — the default dataset is a private mirror; anonymous access will 401 unless --repo points at a public repo.")
 
     payload = build_index_overview(
         repo_id=args.repo,

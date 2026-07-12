@@ -39,7 +39,7 @@ import logging
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from iwac_utils import (
     DATASET_ID,

@@ -16,13 +16,13 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
 from iwac_utils import (
     DATASET_ID,
     configure_logging,
+    generate_timestamp,
     load_dataset_safe,
     parse_coordinates,
     parse_pipe_separated,
@@ -105,7 +105,7 @@ def build_map(repo_id: str) -> Dict[str, Any]:
         "locations": locations,
         "country_counts": country_counts,
         "metadata": {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": generate_timestamp(),
             "source": "index subset where Type == 'Lieux', filtered to valid coordinates",
             "total_locations": len(locations),
             "total_countries": len(country_counts),

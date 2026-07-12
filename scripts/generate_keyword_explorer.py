@@ -381,7 +381,7 @@ def main() -> None:
 
     token = os.getenv("HF_TOKEN") or None
     if token is None:
-        logger.info("No HF_TOKEN set; using anonymous access (public dataset).")
+        logger.warning("No HF_TOKEN set — the default dataset is a private mirror; anonymous access will 401 unless --repo points at a public repo.")
 
     logger.info("Loading content subsets from %s", args.repo)
     dataframes: Dict[str, pd.DataFrame] = {}
