@@ -685,6 +685,8 @@
      * @param {ECharts} chart  the registered chart instance
      * @param {Object} [opts]
      * @param {string} [opts.downloadName='iwac-chart.png']  PNG filename
+     * @param {boolean} [opts.legendToggle=true]  pass false for graphs
+     *   without a legend (the button would only shift the series bounds)
      * @returns {{el: HTMLElement, isLegendVisible: function():boolean}}
      */
     P.buildGraphPanelToolbar = function (panelEl, chart, opts) {
@@ -724,16 +726,18 @@
             if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
         }));
 
-        var legendBtn = btn('▤', P.t('Toggle legend'), function () {
-            if (chart.isDisposed()) return;
-            legendVisible = !legendVisible;
-            chart.setOption({
-                legend: [{ show: legendVisible }],
-                series: [{ bottom: legendVisible ? 56 : 16 }]
+        if (opts.legendToggle !== false) {
+            var legendBtn = btn('▤', P.t('Toggle legend'), function () {
+                if (chart.isDisposed()) return;
+                legendVisible = !legendVisible;
+                chart.setOption({
+                    legend: [{ show: legendVisible }],
+                    series: [{ bottom: legendVisible ? 56 : 16 }]
+                });
+                legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
             });
-            legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
-        });
-        bar.appendChild(legendBtn);
+            bar.appendChild(legendBtn);
+        }
 
         // Look the live instance up through ns.getLiveChart so we never
         // call getDataURL on an instance disposed by a theme swap.
