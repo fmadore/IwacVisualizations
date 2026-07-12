@@ -47,14 +47,14 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Set
 
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
     clean_str,
-    configure_logging,
     create_metadata_block,
     extract_year,
     load_dataset_safe,
     normalize_location_name,
     parse_pipe_separated,
+    parse_standard_args,
     save_json,
 )
 
@@ -67,19 +67,21 @@ def build_personnes_lookup(repo_id: str) -> Dict[str, int]:
                            columns=["Type", "o:id", "Titre", "Titre alternatif"])
     if df is None or df.empty:
         raise RuntimeError("Could not load the index subset")
-    alt_col = "Titre alternatif" if "Titre alternatif" in df.columns else None
     lookup: Dict[str, int] = {}
-    for _, row in df.iterrows():
-        if clean_str(row.get("Type")) != "Personnes":
+
+    def col(name):
+        return df[name] if name in df.columns else [None] * len(df)
+
+    for type_raw, oid_raw, titre, alt_raw in zip(
+            col("Type"), col("o:id"), col("Titre"), col("Titre alternatif")):
+        if clean_str(type_raw) != "Personnes":
             continue
-        o_id = row.get("o:id")
         try:
-            o_id = int(o_id)
+            o_id = int(oid_raw)
         except (TypeError, ValueError):
             continue
-        names = [clean_str(row.get("Titre"))]
-        if alt_col:
-            names.extend(parse_pipe_separated(row.get(alt_col)))
+        names = [clean_str(titre)]
+        names.extend(parse_pipe_separated(alt_raw))
         for name in names:
             key = normalize_location_name(name)
             if key:
@@ -90,20 +92,14 @@ def build_personnes_lookup(repo_id: str) -> Dict[str, int]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[2])
-    parser.add_argument("--repo", default=DATASET_ID,
-                        help="Hugging Face dataset repo id")
     parser.add_argument("--output", default="asset/data/press-bylines.json",
                         help="Output path (default: asset/data/press-bylines.json)")
     parser.add_argument("--top-n", type=int, default=25,
                         help="Bylines in the ranked list (default: 25)")
     parser.add_argument("--prolific-min", type=int, default=10,
                         help="Article threshold for the 'prolific' summary count (default: 10)")
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
-                        default=True, help="Compact JSON output (default: on)")
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Debug logging")
-    args = parser.parse_args()
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
 
     logger.info("Loading articles subset...")
     df = load_dataset_safe("articles", repo_id=args.repo,
@@ -120,13 +116,17 @@ def main() -> None:
     year_signed: Counter = Counter()
     signed_rows = 0
 
-    for _, row in df.iterrows():
-        year = extract_year(row.get("pub_date"))
+    def col(name):
+        return df[name] if name in df.columns else [None] * len(df)
+
+    for pub_date, author, newspaper_raw, subject in zip(
+            col("pub_date"), col("author"), col("newspaper"), col("subject")):
+        year = extract_year(pub_date)
         if year:
             year_total[year] += 1
 
         names = [" ".join(part.split())
-                 for part in parse_pipe_separated(row.get("author"))]
+                 for part in parse_pipe_separated(author)]
         names = [n for n in names if n]
         if not names:
             continue
@@ -134,8 +134,8 @@ def main() -> None:
         if year:
             year_signed[year] += 1
 
-        newspaper = clean_str(row.get("newspaper"))
-        subjects = parse_pipe_separated(row.get("subject"))
+        newspaper = clean_str(newspaper_raw)
+        subjects = parse_pipe_separated(subject)
         for name in names:
             counts[name] += 1
             if year:
@@ -164,8 +164,11 @@ def main() -> None:
             "first": min(years) if years else None,
             "last": max(years) if years else None,
             "o_id": o_id,
-            "newspapers": [n for n, _ in newspapers_by_name[name].most_common(3)],
-            "subjects": [s for s, _ in subjects_by_name[name].most_common(5)],
+            # Name tiebreaks so regenerated output stays order-stable.
+            "newspapers": [n for n, _ in sorted(newspapers_by_name[name].items(),
+                                                key=lambda kv: (-kv[1], kv[0]))[:3]],
+            "subjects": [s for s, _ in sorted(subjects_by_name[name].items(),
+                                              key=lambda kv: (-kv[1], kv[0]))[:5]],
         })
 
     years_axis = sorted(year_total)

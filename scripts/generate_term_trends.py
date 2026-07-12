@@ -42,11 +42,11 @@ from pathlib import Path
 from typing import Dict, List
 
 from iwac_utils import (
-    DATASET_ID,
-    configure_logging,
+    add_standard_args,
     extract_year,
     generate_timestamp,
     load_dataset_safe,
+    parse_standard_args,
     save_json,
     tokenize,
 )
@@ -150,11 +150,6 @@ def main() -> None:
         description="Generate the Term Trends (Ngram viewer) data bundles."
     )
     parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID (default: %(default)s)",
-    )
-    parser.add_argument(
         "--output-dir",
         default="asset/data",
         help="Where to write the bundles (default: asset/data).",
@@ -171,20 +166,8 @@ def main() -> None:
         default=25,
         help="Drop terms appearing in fewer articles overall (default: %(default)s).",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
     generate(
         repo_id=args.repo,
         output_dir=Path(args.output_dir),

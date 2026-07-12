@@ -28,6 +28,7 @@ Functions:
 
 from __future__ import annotations
 
+import argparse
 import json
 import logging
 import re
@@ -84,6 +85,54 @@ def configure_logging(level: int = logging.INFO) -> logging.Logger:
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
     return logging.getLogger(__name__)
+
+
+# =============================================================================
+# Shared CLI plumbing
+# =============================================================================
+
+def add_standard_args(
+    parser: "argparse.ArgumentParser",
+    minify_default: bool = True,
+) -> "argparse.ArgumentParser":
+    """
+    Attach the CLI flags every generator shares: ``--repo``, ``--minify``
+    (BooleanOptionalAction) and ``-v/--verbose``. Generator-specific flags
+    stay at the call site; pair with :func:`parse_standard_args` to
+    collapse the whole copy-pasted prologue.
+
+    Args:
+        parser: The generator's ArgumentParser.
+        minify_default: Default for ``--minify`` (heavy fan-outs keep True).
+
+    Returns:
+        The same parser, for chaining.
+    """
+    parser.add_argument(
+        "--repo",
+        default=DATASET_ID,
+        help="Hugging Face dataset repository ID (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=minify_default,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
+    return parser
+
+
+def parse_standard_args(parser: "argparse.ArgumentParser") -> "argparse.Namespace":
+    """``parse_args()`` + ``configure_logging`` keyed on ``-v`` — the
+    shared epilogue of every generator's ``main()``."""
+    args = parser.parse_args()
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    return args
 
 
 # =============================================================================
@@ -236,6 +285,20 @@ def normalize_location_name(name: str) -> str:
 # =============================================================================
 # Date Extraction
 # =============================================================================
+
+FULL_DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
+"""Strict ISO full date (YYYY-MM-DD, anchored) with year/month/day groups."""
+
+
+def is_full_date(value: Any) -> bool:
+    """True when a cell is a complete, day-precise ISO date.
+
+    Strict: rejects year-only / year-month values and anything with a
+    time suffix. (corpus-health's coverage metric deliberately keeps its
+    looser prefix match — see generate_corpus_health.py.)
+    """
+    return bool(FULL_DATE_RE.match(clean_str(value)))
+
 
 def extract_year(
     value: Any,

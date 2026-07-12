@@ -43,11 +43,11 @@ import pandas as pd
 
 from iwac_embeddings import build_normalized_matrix, pairs_above_threshold
 from iwac_utils import (
-    DATASET_ID,
+    add_standard_args,
     clean_str,
-    configure_logging,
     generate_timestamp,
     load_dataset_safe,
+    parse_standard_args,
     save_json,
 )
 
@@ -174,14 +174,18 @@ def generate(
             str(e): {"all": int(hist_all[e]), "cross": int(hist_cross[e])}
             for e in hist_edges
         },
+        # (-count, name) ordering + name tiebreak on the dominant country
+        # so regenerated output stays order-stable under count ties.
         "newspapers": [
             {
                 "name": n,
                 "pairs": int(c),
-                "country": (paper_country[n].most_common(1)[0][0]
+                "country": (min(paper_country[n].items(),
+                                key=lambda kv: (-kv[1], kv[0]))[0]
                             if paper_country[n] else None),
             }
-            for n, c in paper_counts.most_common()
+            for n, c in sorted(paper_counts.items(),
+                               key=lambda kv: (-kv[1], kv[0]))
         ],
         "links": links,
         "pairs": published,
@@ -193,11 +197,6 @@ def generate(
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Detect near-duplicate cross-newspaper article pairs (wire copy / reprints)."
-    )
-    parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID (default: %(default)s)",
     )
     parser.add_argument(
         "--output-dir",
@@ -222,20 +221,8 @@ def main() -> None:
         default=500,
         help="Cap on published pairs, by similarity (default: %(default)s).",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
     if args.scan_threshold > args.threshold:
         parser.error("--scan-threshold must be ≤ --threshold")
     generate(
