@@ -29,14 +29,16 @@ echo $this->partial('common/iwac-block-shell', [
             'maplibre'     => true,
         ],
         // Companion modules: i18n strings + stateless builders + the three
-        // view modules. All must load before the orchestrator (which
-        // aliases the builders and reads the registered translations).
+        // view modules + the controls row. All must load before the
+        // orchestrator (which aliases the builders and reads the
+        // registered translations).
         'panels' => [
             'scary-terms/i18n',
             'scary-terms/helpers',
             'scary-terms/trends',
             'scary-terms/wordcloud',
             'scary-terms/map',
+            'scary-terms/controls',
         ],
         'orchestrator' => 'scary-terms',
     ],

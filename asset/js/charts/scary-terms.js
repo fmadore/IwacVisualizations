@@ -27,7 +27,7 @@
  *   echarts → echarts-wordcloud → maplibre-gl → iwac-i18n.js →
  *   iwac-theme.js → dashboard-core.js → panels.js → responsive.js →
  *   chart-options.js → facet-buttons.js → maplibre.js → map-popup.js →
- *   scary-terms/{i18n,helpers,trends,wordcloud,map}.js
+ *   scary-terms/{i18n,helpers,trends,wordcloud,map,controls}.js
  */
 (function () {
     'use strict';
@@ -98,14 +98,14 @@
         function optional(name) {
             // Optional bundles — older deploys may not have them yet.
             // Fall back to null so the orchestrator degrades the view.
-            return fetchJSON(dataBase + DATA_FILES[name]).catch(function () { return null; });
+            return P.fetchJSON(dataBase + DATA_FILES[name]).catch(function () { return null; });
         }
 
         Promise.all([
-            fetchJSON(dataBase + DATA_FILES.metadata),
-            fetchJSON(dataBase + DATA_FILES.temporal),
-            fetchJSON(dataBase + DATA_FILES.countries),
-            fetchJSON(dataBase + DATA_FILES.global),
+            P.fetchJSON(dataBase + DATA_FILES.metadata),
+            P.fetchJSON(dataBase + DATA_FILES.temporal),
+            P.fetchJSON(dataBase + DATA_FILES.countries),
+            P.fetchJSON(dataBase + DATA_FILES.global),
             optional('cooccurrence'),
             optional('trends'),
             optional('events')
@@ -124,12 +124,6 @@
             container.innerHTML = '';
             container.appendChild(P.buildFetchErrorState(err));
         });
-    }
-
-    // Delegates to the shared helper (same-origin credentials + `?v=`
-    // cache-busting come from P.fetchJSON since v1.3.0).
-    function fetchJSON(url) {
-        return P.fetchJSON(url);
     }
 
     // ---------------------------------------------------------------------
@@ -220,8 +214,7 @@
             mapFamily: '',         // '' = all families
             mapCountry: '',        // '' = all countries (article country)
             yearIdx: 0,
-            isPlaying: false,
-            timer: null
+            isPlaying: false
         };
 
         // Lazy bundles: undefined = not requested, null = failed / absent,
@@ -370,7 +363,7 @@
             if (currentInstance && !currentInstance.isDisposed()) {
                 currentInstance.showLoading();
             }
-            fetchJSON(dataBase + DATA_FILES.wordcloud)
+            P.fetchJSON(dataBase + DATA_FILES.wordcloud)
                 .then(function (d) { wordcloudData = d; })
                 .catch(function (err) {
                     console.warn('IWACVis.scaryTerms: wordcloud bundle unavailable', err);
@@ -378,7 +371,7 @@
                 })
                 .then(function () {
                     if (state.view === 'wordcloud') {
-                        renderControls();
+                        controls.render();
                         draw();
                     }
                 });
@@ -427,7 +420,7 @@
             placesRequested = true;
             mapEl.innerHTML = '';
             mapEl.appendChild(P.buildLoadingState());
-            fetchJSON(dataBase + DATA_FILES.places)
+            P.fetchJSON(dataBase + DATA_FILES.places)
                 .then(function (d) { placesData = d; })
                 .catch(function (err) {
                     console.warn('IWACVis.scaryTerms: places bundle unavailable', err);
@@ -444,7 +437,7 @@
                         mapCountries = Object.keys(seen).sort();
                     }
                     if (state.view === 'map') {
-                        renderControls();
+                        controls.render();
                         draw();
                     }
                 });
@@ -505,24 +498,12 @@
         }
 
         function buildMatrixOption(slice) {
-            // Resolve every color through CSS custom properties so the
-            // matrix tracks the IWAC theme's --primary / --surface /
-            // --ink / --muted tokens on light/dark swap. Fallbacks are
-            // only consulted when the theme isn't installed. Never
-            // hardcode hex values in chart code.
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var primaryResolved = (ns.resolveCssVar && ns.resolveCssVar('--primary'))
-                || tokens.primary || '#e64a19';
-            var surfaceResolved = (ns.resolveCssVar && ns.resolveCssVar('--surface-raised'))
-                || tokens.surfaceRaised || tokens.surface || '#fafaf9';
-            var inkResolved = (ns.resolveCssVar && ns.resolveCssVar('--ink'))
-                || tokens.ink || '#2c2f37';
-            var mutedResolved = (ns.resolveCssVar && ns.resolveCssVar('--muted'))
-                || tokens.muted || '#767880';
-            var borderResolved = (ns.resolveCssVar && ns.resolveCssVar('--border'))
-                || tokens.border || '#d4d6da';
-
             if (!cooccurrence || !slice) {
+                // Themed "no data" note — the matrix view can be offered
+                // while a per-country slice is missing.
+                var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+                var mutedResolved = (ns.resolveCssVar && ns.resolveCssVar('--muted'))
+                    || tokens.muted || '#767880';
                 return {
                     graphic: [{
                         type: 'text',
@@ -539,491 +520,87 @@
             }
             var terms = (cooccurrence.terms || []).slice();
             var matrix = slice.matrix || [];
-            var maxVal = Math.max(1, slice.max_cooccurrence || 1);
 
             // Flatten to [xIdx, yIdx, value] triples. The diagonal is
-            // left as 0 because self-co-occurrence is meaningless —
-            // the tooltip covers the per-term totals via term_counts.
-            var data = [];
+            // left out because self-co-occurrence is meaningless — the
+            // tooltip covers the per-term totals via term_counts. Zero
+            // cells stay in so the full grid paints on the ramp base.
+            var cells = [];
             for (var i = 0; i < terms.length; i++) {
                 for (var j = 0; j < terms.length; j++) {
                     if (i === j) continue;
-                    var v = (matrix[i] && matrix[i][j]) || 0;
-                    data.push([i, j, v]);
+                    cells.push([i, j, (matrix[i] && matrix[i][j]) || 0]);
                 }
             }
 
-            return {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function (p) {
-                        var x = terms[p.value[0]];
-                        var y = terms[p.value[1]];
-                        var count = p.value[2];
+            return C.heatmapMatrix(
+                { xLabels: terms, yLabels: terms, cells: cells },
+                {
+                    visualMax: Math.max(1, slice.max_cooccurrence || 1),
+                    cellLabels: true,
+                    cellBorder: true,
+                    xLabelRotate: 45,
+                    tooltipFormatter: function (p) {
                         return P.t('scary.matrix_pair_tooltip', {
-                            a: x,
-                            b: y,
-                            count: P.formatNumber(count || 0)
+                            a: terms[p.value[0]],
+                            b: terms[p.value[1]],
+                            count: P.formatNumber(p.value[2] || 0)
                         });
                     }
-                },
-                grid: {
-                    left: 120,
-                    right: 24,
-                    top: 30,
-                    bottom: 70,
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'category',
-                    data: terms,
-                    axisLabel: {
-                        rotate: 45,
-                        interval: 0,
-                        color: mutedResolved
-                    },
-                    axisLine:  { lineStyle: { color: borderResolved } },
-                    splitArea: { show: false },
-                    axisTick:  { show: false }
-                },
-                yAxis: {
-                    type: 'category',
-                    data: terms.slice(),
-                    inverse: true,
-                    axisLabel: { interval: 0, color: mutedResolved },
-                    axisLine:  { lineStyle: { color: borderResolved } },
-                    splitArea: { show: false },
-                    axisTick:  { show: false }
-                },
-                visualMap: {
-                    min: 0,
-                    max: maxVal,
-                    calculable: true,
-                    orient: 'horizontal',
-                    left: 'center',
-                    bottom: 4,
-                    itemWidth: 14,
-                    itemHeight: 140,
-                    textStyle: { color: mutedResolved },
-                    inRange: {
-                        color: [surfaceResolved, primaryResolved]
-                    }
-                },
-                series: [{
-                    type: 'heatmap',
-                    data: data,
-                    label: {
-                        show: true,
-                        formatter: function (p) {
-                            var v = p.value[2];
-                            return v > 0 ? v : '';
-                        },
-                        color: inkResolved,
-                        fontSize: 11
-                    },
-                    itemStyle: { borderColor: surfaceResolved, borderWidth: 1 },
-                    emphasis: {
-                        itemStyle: {
-                            borderColor: primaryResolved,
-                            borderWidth: 2
-                        }
-                    },
-                    progressive: 0,
-                    animation: false
-                }]
-            };
-        }
-
-        // -----------------------------------------------------------------
-        //  Controls rendering
-        //
-        //  Re-renders the controls row whenever the view mode changes so
-        //  the country dropdown / playback bar / slider / facet bar appear
-        //  only for the relevant view. The chart itself is not
-        //  reinitialized.
-        // -----------------------------------------------------------------
-
-        function renderControls() {
-            controlsEl.innerHTML = '';
-            var row = P.el('div', 'iwac-vis-scary-controls-row');
-            controlsEl.appendChild(row);
-
-            row.appendChild(buildViewToggle());
-
-            if (state.view === 'country' && availableCountries.length) {
-                row.appendChild(buildCountrySelect());
-            }
-            if (state.view === 'matrix' && matrixCountries.length) {
-                row.appendChild(buildMatrixCountrySelect());
-            }
-            if (state.view === 'matrix') {
-                controlsEl.appendChild(buildViewDesc('scary.matrix_description'));
-            }
-            if (state.view === 'trends') {
-                if (trendsCountries.length) {
-                    row.appendChild(buildSelectGroup(
-                        P.t('scary.country'),
-                        [{ value: '', label: P.t('scary.all_countries') }].concat(
-                            trendsCountries.map(function (cc) {
-                                return { value: cc, label: cc };
-                            })),
-                        state.trendsCountry || '',
-                        function (value) {
-                            state.trendsCountry = value || null;
-                            draw();
-                        }
-                    ));
                 }
-                if (eventsData) {
-                    row.appendChild(buildEventsToggle());
-                }
-                controlsEl.appendChild(buildViewDesc('scary.trends_description'));
-            }
-            if (state.view === 'wordcloud') {
-                controlsEl.appendChild(buildViewDesc('scary.wordcloud_description'));
-                if (wordcloudData && P.buildFacetButtons) {
-                    var facetBar = P.buildFacetButtons({
-                        facets: SH.buildWordcloudFacets(wordcloudData),
-                        activeKey: state.wcFacet,
-                        onChange: function (evt) {
-                            state.wcFacet = evt.facet;
-                            state.wcSub = evt.subFacet || null;
-                            draw();
-                        }
-                    });
-                    controlsEl.appendChild(facetBar.root);
-                }
-            }
-            if (state.view === 'map') {
-                if (placesData) {
-                    // Family and country filters are mutually exclusive —
-                    // the bundle has per-family and per-country splits,
-                    // not their cross product. Selecting one resets the
-                    // other.
-                    row.appendChild(buildSelectGroup(
-                        P.t('scary.map_family'),
-                        [{ value: '', label: P.t('scary.all_families') }].concat(
-                            families.map(function (f) {
-                                return { value: f, label: f };
-                            })),
-                        state.mapFamily,
-                        function (value) {
-                            state.mapFamily = value;
-                            if (value) state.mapCountry = '';
-                            renderControls();
-                            draw();
-                        }
-                    ));
-                    if (mapCountries.length) {
-                        row.appendChild(buildSelectGroup(
-                            P.t('scary.country'),
-                            [{ value: '', label: P.t('scary.all_countries') }].concat(
-                                mapCountries.map(function (cc) {
-                                    return { value: cc, label: cc };
-                                })),
-                            state.mapCountry,
-                            function (value) {
-                                state.mapCountry = value;
-                                if (value) state.mapFamily = '';
-                                renderControls();
-                                draw();
-                            }
-                        ));
-                    }
-                }
-                controlsEl.appendChild(buildViewDesc('scary.map_description'));
-            }
-            if (state.view === 'race' && years.length) {
-                row.appendChild(buildPlaybackGroup());
-                controlsEl.appendChild(buildSliderRow());
-            }
-        }
-
-        function buildViewDesc(key) {
-            return P.el('p', 'iwac-vis-scary-matrix-desc', P.t(key));
-        }
-
-        function buildViewToggle() {
-            var group = P.el('div', 'iwac-vis-scary-view-toggle');
-            group.appendChild(P.el('span', 'iwac-vis-scary-label', P.t('scary.view_mode') + ':'));
-            var views = [
-                { key: 'race',    label: P.t('scary.bar_race') },
-                { key: 'trends',  label: P.t('scary.trends') },
-                { key: 'country', label: P.t('scary.by_country') },
-                { key: 'global',  label: P.t('scary.global_view') }
-            ];
-            // The matrix view is only offered when the cooccurrence
-            // bundle is present — older deploys won't have it yet. The
-            // wordcloud / map views fetch lazily and show the shared
-            // "no data yet" state when their bundle is missing.
-            if (cooccurrence) {
-                views.push({ key: 'matrix', label: P.t('scary.matrix') });
-            }
-            views.push({ key: 'wordcloud', label: P.t('scary.wordcloud') });
-            views.push({ key: 'map', label: P.t('scary.map') });
-            views.forEach(function (v) {
-                var btn = P.el('button', 'iwac-vis-scary-view-btn', v.label);
-                btn.type = 'button';
-                if (state.view === v.key) {
-                    btn.classList.add('iwac-vis-scary-view-btn--active');
-                }
-                btn.addEventListener('click', function () {
-                    if (state.view === v.key) return;
-                    pauseTimer();
-                    state.view = v.key;
-                    if (v.key === 'country' && !state.country && availableCountries.length) {
-                        state.country = availableCountries[0];
-                    }
-                    renderControls();
-                    draw();
-                });
-                group.appendChild(btn);
-            });
-            return group;
-        }
-
-        /**
-         * Generic labelled <select> control — used by the trends country
-         * scope and the map view's family / country filters.
-         *
-         * @param {string} labelText already-translated label
-         * @param {Array<{value: string, label: string}>} options
-         * @param {string} current   currently-selected value
-         * @param {function(string)} onChange
-         */
-        function buildSelectGroup(labelText, options, current, onChange) {
-            var group = P.el('div', 'iwac-vis-scary-country-group');
-            var label = P.el('label', 'iwac-vis-scary-label', labelText + ':');
-            var select = P.el('select', 'iwac-vis-scary-select');
-            var selectId = 'iwac-vis-scary-sel-' + Math.random().toString(36).slice(2, 8);
-            select.id = selectId;
-            label.htmlFor = selectId;
-            options.forEach(function (o) {
-                var opt = P.el('option', null, o.label);
-                opt.value = o.value;
-                if (o.value === current) opt.selected = true;
-                select.appendChild(opt);
-            });
-            select.addEventListener('change', function () {
-                onChange(select.value);
-            });
-            group.appendChild(label);
-            group.appendChild(select);
-            return group;
-        }
-
-        function buildEventsToggle() {
-            var label = P.el('label', 'iwac-vis-scary-check');
-            var cb = P.el('input');
-            cb.type = 'checkbox';
-            cb.checked = state.showEvents;
-            cb.addEventListener('change', function () {
-                state.showEvents = cb.checked;
-                draw();
-            });
-            label.appendChild(cb);
-            label.appendChild(P.el('span', null, P.t('scary.show_events')));
-            return label;
-        }
-
-        function buildCountrySelect() {
-            var group = P.el('div', 'iwac-vis-scary-country-group');
-            var label = P.el('label', 'iwac-vis-scary-label', P.t('scary.country') + ':');
-            var select = P.el('select', 'iwac-vis-scary-select');
-            var selectId = 'iwac-vis-scary-country-' + Math.random().toString(36).slice(2, 8);
-            select.id = selectId;
-            label.htmlFor = selectId;
-            availableCountries.forEach(function (c) {
-                var opt = P.el('option', null, c);
-                opt.value = c;
-                if (c === state.country) opt.selected = true;
-                select.appendChild(opt);
-            });
-            select.addEventListener('change', function () {
-                state.country = select.value;
-                draw();
-            });
-            group.appendChild(label);
-            group.appendChild(select);
-            return group;
-        }
-
-        function buildMatrixCountrySelect() {
-            // Separate from buildCountrySelect so the two views keep
-            // independent selections (the matrix has an "All countries"
-            // choice and a different available-country list — only
-            // slices with enough data are emitted).
-            var group = P.el('div', 'iwac-vis-scary-country-group');
-            var label = P.el('label', 'iwac-vis-scary-label', P.t('scary.country') + ':');
-            var select = P.el('select', 'iwac-vis-scary-select');
-            var selectId = 'iwac-vis-scary-matrix-country-' + Math.random().toString(36).slice(2, 8);
-            select.id = selectId;
-            label.htmlFor = selectId;
-
-            var allOpt = P.el('option', null, P.t('scary.all_countries'));
-            allOpt.value = '';
-            if (!state.matrixCountry) allOpt.selected = true;
-            select.appendChild(allOpt);
-
-            matrixCountries.forEach(function (c) {
-                var opt = P.el('option', null, c);
-                opt.value = c;
-                if (c === state.matrixCountry) opt.selected = true;
-                select.appendChild(opt);
-            });
-            select.addEventListener('change', function () {
-                state.matrixCountry = select.value || null;
-                draw();
-            });
-            group.appendChild(label);
-            group.appendChild(select);
-            return group;
-        }
-
-        function buildPlaybackGroup() {
-            var group = P.el('div', 'iwac-vis-scary-playback');
-            group.appendChild(ctrlButton('◀', P.t('scary.previous'), stepBackward));
-            var isAtEnd = state.yearIdx >= years.length - 1;
-            var playBtn = ctrlButton(
-                state.isPlaying ? '⏸' : '▶',
-                state.isPlaying ? P.t('scary.pause') : P.t('scary.play'),
-                state.isPlaying ? pause : play
             );
-            playBtn.classList.add('iwac-vis-scary-play-btn');
-            if (isAtEnd && !state.isPlaying) {
-                // Allow pressing play at the end — it will rewind.
-            }
-            group.appendChild(playBtn);
-            group.appendChild(ctrlButton('▶', P.t('scary.next'), stepForward));
-            group.appendChild(ctrlButton('↺', P.t('scary.reset'), reset));
-            var yearLabel = P.el('span', 'iwac-vis-scary-year-label',
-                                 String(years[state.yearIdx] || ''));
-            group.appendChild(yearLabel);
-            return group;
-        }
-
-        function buildSliderRow() {
-            var sliderRow = P.el('div', 'iwac-vis-scary-slider-row');
-            sliderRow.appendChild(P.el('span', 'iwac-vis-scary-slider-edge',
-                                       String(years[0])));
-            var slider = P.el('input', 'iwac-vis-scary-slider');
-            slider.type = 'range';
-            slider.min = '0';
-            slider.max = String(years.length - 1);
-            slider.value = String(state.yearIdx);
-            slider.step = '1';
-            slider.setAttribute('aria-label', P.t('Year'));
-            syncSliderFill(slider);
-            slider.addEventListener('input', function () {
-                pauseTimer();
-                state.isPlaying = false;
-                state.yearIdx = parseInt(slider.value, 10) || 0;
-                syncSliderFill(slider);
-                // Reach into the sibling year label without re-rendering
-                // the whole controls block (cheaper; avoids slider focus loss).
-                var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
-                if (yearLabel) yearLabel.textContent = String(years[state.yearIdx]);
-                draw();
-            });
-            sliderRow.appendChild(slider);
-            sliderRow.appendChild(P.el('span', 'iwac-vis-scary-slider-edge',
-                                       String(years[years.length - 1])));
-            return sliderRow;
-        }
-
-        /**
-         * Paint the left-side progress fill of a range input by writing
-         * the ``--iwac-vis-scary-fill`` CSS variable. Called on slider
-         * build, on user input, and on every playback tick so the
-         * gradient stops match the current yearIdx.
-         */
-        function syncSliderFill(slider) {
-            var max = parseFloat(slider.max) || 1;
-            var val = parseFloat(slider.value) || 0;
-            var pct = max > 0 ? (val / max) * 100 : 0;
-            slider.style.setProperty('--iwac-vis-scary-fill', pct + '%');
-        }
-
-        function ctrlButton(glyph, title, handler) {
-            var btn = P.el('button', 'iwac-vis-scary-ctrl-btn', glyph);
-            btn.type = 'button';
-            btn.title = title;
-            btn.setAttribute('aria-label', title);
-            btn.addEventListener('click', handler);
-            return btn;
         }
 
         // -----------------------------------------------------------------
-        //  Playback
+        //  Controls + playback
+        //
+        //  The controls row (view toggle, per-view selects, playback bar,
+        //  slider) lives in scary-terms/controls.js; the race timer's
+        //  state machine is the shared P.createPlaybackTimer. `controls`
+        //  is referenced from the timer callbacks — safe, the timer only
+        //  fires after a user clicks play, long after both exist.
         // -----------------------------------------------------------------
 
-        function pauseTimer() {
-            if (state.timer) {
-                window.clearInterval(state.timer);
-                state.timer = null;
-            }
-        }
-
-        function play() {
-            if (state.view !== 'race' || !years.length) return;
-            if (state.yearIdx >= years.length - 1) state.yearIdx = 0;
-            state.isPlaying = true;
-            pauseTimer();
-            state.timer = window.setInterval(function () {
-                if (state.yearIdx >= years.length - 1) {
-                    pause();
-                    return;
-                }
+        var controls;
+        var playback = P.createPlaybackTimer({
+            tickMs: RACE_TICK_MS,
+            isAtEnd: function () { return state.yearIdx >= years.length - 1; },
+            rewind: function () { state.yearIdx = 0; },
+            advance: function () {
                 state.yearIdx++;
-                syncSliderPosition();
+                controls.syncSliderPosition();
                 draw();
-            }, RACE_TICK_MS);
-            renderControls();
-            draw();
-        }
-
-        function pause() {
-            pauseTimer();
-            state.isPlaying = false;
-            renderControls();
-        }
-
-        function stepBackward() {
-            pauseTimer();
-            state.isPlaying = false;
-            if (state.yearIdx > 0) state.yearIdx--;
-            renderControls();
-            draw();
-        }
-
-        function stepForward() {
-            pauseTimer();
-            state.isPlaying = false;
-            if (state.yearIdx < years.length - 1) state.yearIdx++;
-            renderControls();
-            draw();
-        }
-
-        function reset() {
-            pauseTimer();
-            state.isPlaying = false;
-            state.yearIdx = 0;
-            renderControls();
-            draw();
-        }
-
-        function syncSliderPosition() {
-            var slider = controlsEl.querySelector('.iwac-vis-scary-slider');
-            if (slider) {
-                slider.value = String(state.yearIdx);
-                syncSliderFill(slider);
+            },
+            onPlay: function () {
+                state.isPlaying = true;
+                controls.render();
+                draw();
+            },
+            onStop: function () {
+                state.isPlaying = false;
+                controls.render();
             }
-            var yearLabel = controlsEl.querySelector('.iwac-vis-scary-year-label');
-            if (yearLabel) yearLabel.textContent = String(years[state.yearIdx]);
-        }
+        });
+
+        controls = SH.createScaryControls({
+            controlsEl: controlsEl,
+            state: state,
+            years: years,
+            availableCountries: availableCountries,
+            matrixCountries: matrixCountries,
+            trendsCountries: trendsCountries,
+            families: families,
+            hasCooccurrence: !!cooccurrence,
+            hasEvents: !!eventsData,
+            getWordcloudData: function () { return wordcloudData; },
+            getPlacesData: function () { return placesData; },
+            getMapCountries: function () { return mapCountries; },
+            draw: draw,
+            playback: playback
+        });
 
         // Initial paint
-        renderControls();
+        controls.render();
         draw();
     }
 

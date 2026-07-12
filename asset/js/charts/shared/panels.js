@@ -521,6 +521,56 @@
         return group;
     };
 
+    /**
+     * Interval state machine for year-scrubbing playback (bar-chart race,
+     * animated choropleth). Owns only the timer semantics the panels kept
+     * re-implementing — rewind-at-end on play, auto-stop at the last
+     * frame, silent vs announced stops. The DOM (buttons, slider, labels)
+     * stays per-panel: the two consumers ship deliberately different
+     * control shells.
+     *
+     * @param {Object} cfg
+     * @param {number}   cfg.tickMs    interval between frames
+     * @param {function():boolean} cfg.isAtEnd   true when on the last frame
+     * @param {function():void}    cfg.rewind    jump back to frame 0
+     * @param {function():void}    cfg.advance   step one frame (called per tick)
+     * @param {function():void}    [cfg.onPlay]  after the interval starts
+     * @param {function():void}    [cfg.onStop]  after an ANNOUNCED stop —
+     *   skipped by stop(true), which panels use mid-scrub so re-rendering
+     *   controls doesn't steal the slider's focus.
+     * @returns {{playing():boolean, play():void, stop(silent?:boolean):void,
+     *            toggle():void}}
+     */
+    P.createPlaybackTimer = function (cfg) {
+        var timer = null;
+        var api = {
+            playing: function () { return timer != null; },
+            stop: function (silent) {
+                if (timer) {
+                    window.clearInterval(timer);
+                    timer = null;
+                }
+                if (!silent && cfg.onStop) cfg.onStop();
+            },
+            play: function () {
+                if (cfg.isAtEnd()) cfg.rewind();
+                if (timer) window.clearInterval(timer);
+                timer = window.setInterval(function () {
+                    if (cfg.isAtEnd()) {
+                        api.stop();
+                        return;
+                    }
+                    cfg.advance();
+                }, cfg.tickMs);
+                if (cfg.onPlay) cfg.onPlay();
+            },
+            toggle: function () {
+                if (timer) api.stop(); else api.play();
+            }
+        };
+        return api;
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Per-item resource-page dashboard boot                             */
     /* ----------------------------------------------------------------- */
