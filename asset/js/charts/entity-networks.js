@@ -88,7 +88,7 @@
 
         var layout = P.el('div', 'iwac-vis-networks-layout');
         var main = P.el('div', 'iwac-vis-networks-main');
-        var aside = P.el('aside', 'iwac-vis-networks-aside');
+        var aside = P.el('aside', 'iwac-vis-aside iwac-vis-networks-aside');
         layout.appendChild(main);
         layout.appendChild(aside);
 

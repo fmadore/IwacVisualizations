@@ -27,32 +27,8 @@
 /*  Header                                                               */
 /* =================================================================== */
 
-.iwac-vis-scary-header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
-}
-
-/*  Block title — serif display, tight tracking, matches theme h1/h2
- *  editorial treatment so the "Scary Terms" block reads as a genuine
- *  section header rather than a dashboard widget title. */
-.iwac-vis-scary-title {
-    margin: 0;
-    font-family: var(--font-headings, "Besley", Georgia, serif);
-    font-size: var(--text-2xl, 1.875rem);
-    font-weight: 600;
-    color: var(--ink-strong, var(--ink, #13161c));
-    line-height: 1.15;
-    letter-spacing: var(--tracking-display, -0.01em);
-}
-
-.iwac-vis-scary-desc {
-    margin: 0;
-    color: var(--ink-subtle, var(--muted, #66696e));
-    font-size: var(--text-sm, 0.9375rem);
-    line-height: 1.55;
-    max-width: var(--measure-narrow, 44rem);
-}
+/*  Header/title/desc use the shared .iwac-vis-block-header component
+ *  (iwac-core.css) since v1.22.0. */
 
 
 /* =================================================================== */

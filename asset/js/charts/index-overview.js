@@ -101,7 +101,7 @@
         sectionB.appendChild(keywordsLayout);
 
         // Two-column: filters sidebar + chart + table
-        var filtersHost = P.el('div', 'iwac-vis-keywords-sidebar');
+        var filtersHost = P.el('div', 'iwac-vis-aside iwac-vis-keywords-sidebar');
         keywordsLayout.appendChild(filtersHost);
 
         var keywordsMain = P.el('div', 'iwac-vis-keywords-main');

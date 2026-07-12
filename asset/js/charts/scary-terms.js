@@ -155,9 +155,9 @@
         container.appendChild(root);
 
         // 1. Header
-        var header = P.el('div', 'iwac-vis-scary-header');
-        header.appendChild(P.el('h3', 'iwac-vis-scary-title', P.t('scary.title')));
-        header.appendChild(P.el('p', 'iwac-vis-scary-desc', P.t('scary.description')));
+        var header = P.el('div', 'iwac-vis-block-header iwac-vis-scary-header');
+        header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('scary.title')));
+        header.appendChild(P.el('p', 'iwac-vis-block-header__desc', P.t('scary.description')));
         root.appendChild(header);
 
         // 2. Metric cards

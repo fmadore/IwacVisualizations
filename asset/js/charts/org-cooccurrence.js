@@ -90,16 +90,16 @@
         var root = P.el('div', 'iwac-vis-orgcooc-root');
         container.appendChild(root);
 
-        var header = P.el('div', 'iwac-vis-orgcooc-header');
-        header.appendChild(P.el('h3', 'iwac-vis-orgcooc-title', P.t('orgcooc.title')));
-        header.appendChild(P.el('p', 'iwac-vis-orgcooc-desc',
+        var header = P.el('div', 'iwac-vis-block-header iwac-vis-orgcooc-header');
+        header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('orgcooc.title')));
+        header.appendChild(P.el('p', 'iwac-vis-block-header__desc',
             P.t('orgcooc.description', { window: data.window_size || 50 })));
         root.appendChild(header);
 
         var state = { orgId: orgs[0].id, sort: 'freq' };
 
         // Controls: organisation select + sort select
-        var controls = P.el('div', 'iwac-vis-orgcooc-controls');
+        var controls = P.el('div', 'iwac-vis-aside iwac-vis-orgcooc-controls');
         controls.appendChild(buildSelect(
             P.t('orgcooc.organisation'),
             orgs.map(function (o) {

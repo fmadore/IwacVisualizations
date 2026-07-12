@@ -93,9 +93,9 @@
         var root = P.el('div', 'iwac-vis-overview-root iwac-vis-reprints-root');
         container.appendChild(root);
 
-        var header = P.el('div', 'iwac-vis-reprints-header');
-        header.appendChild(P.el('h3', 'iwac-vis-reprints-title', P.t('reprints.title')));
-        header.appendChild(P.el('p', 'iwac-vis-reprints-desc',
+        var header = P.el('div', 'iwac-vis-block-header iwac-vis-reprints-header');
+        header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('reprints.title')));
+        header.appendChild(P.el('p', 'iwac-vis-block-header__desc',
             P.t('reprints.description')));
         root.appendChild(header);
 

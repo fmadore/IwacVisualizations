@@ -103,9 +103,9 @@
         var root = P.el('div', 'iwac-vis-ngram-root');
         container.appendChild(root);
 
-        var header = P.el('div', 'iwac-vis-ngram-header');
-        header.appendChild(P.el('h3', 'iwac-vis-ngram-title', P.t('ngram.title')));
-        header.appendChild(P.el('p', 'iwac-vis-ngram-desc',
+        var header = P.el('div', 'iwac-vis-block-header iwac-vis-ngram-header');
+        header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('ngram.title')));
+        header.appendChild(P.el('p', 'iwac-vis-block-header__desc',
             P.t('ngram.description', { n: P.formatNumber(terms.length) })));
         root.appendChild(header);
 

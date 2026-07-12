@@ -477,6 +477,54 @@
 
 
 /* =================================================================== */
+/*  Block header + aside shells (shared)                                */
+/* =================================================================== */
+
+/*  Block header — serif display title + muted description. Matches the
+ *  theme h1/h2 editorial treatment so a block reads as a genuine section
+ *  header rather than a dashboard widget title. Promoted from the four
+ *  byte-identical copies the v1.20/v1.21 blocks shipped (scary-terms,
+ *  term-trends, org-cooccurrence, press-reprints). */
+.iwac-vis-block-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-block-header__title {
+    margin: 0;
+    font-family: var(--font-headings, "Besley", Georgia, serif);
+    font-size: var(--text-2xl, 1.875rem);
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #13161c));
+    line-height: 1.15;
+    letter-spacing: var(--tracking-display, -0.01em);
+}
+
+.iwac-vis-block-header__desc {
+    margin: 0;
+    color: var(--ink-subtle, var(--muted, #66696e));
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    max-width: var(--measure-narrow, 44rem);
+}
+
+/*  Aside / sidebar surface card — the raised-panel shell shared by the
+ *  entity-networks aside, the spatial-exploration sidebar, the Keyword
+ *  Explorer sidebar and the org-cooccurrence controls row. Blocks add
+ *  their own class alongside for layout residuals (flex direction,
+ *  custom padding). */
+.iwac-vis-aside {
+    background: var(--panel-bg, var(--surface, #fdfcfb));
+    border: 1px solid var(--panel-border-color, var(--border, #ced1d6));
+    border-radius: var(--radius-md, 0.5rem);
+    padding: var(--space-4, 1rem);
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    align-self: start;
+}
+
+
+/* =================================================================== */
 /*  Dashboard layout — generic 2-column grid used by most blocks         */
 /* =================================================================== */
 
