@@ -35,7 +35,7 @@
     }
     var P = ns.panels;
 
-    function buildLayout(container, dataA) {
+    function buildLayout(container) {
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-overview-root iwac-vis-index-overview-root');
         container.appendChild(root);
@@ -266,7 +266,7 @@
 
         P.fetchJSON(base + 'index-overview.json')
             .then(function (dataA) {
-                var h = buildLayout(container, dataA);
+                var h = buildLayout(container);
                 wireSectionA(h, dataA, ctx, base);
                 armSectionB(h, base, ctx);
             })

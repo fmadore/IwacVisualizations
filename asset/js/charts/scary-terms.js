@@ -356,7 +356,7 @@
                 events: eventsData,
                 showEvents: state.showEvents,
                 country: state.trendsCountry,
-                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 640
+                compact: chartEl.clientWidth > 0 && chartEl.clientWidth < 600 /* sm */
             });
         }
 

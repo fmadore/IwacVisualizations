@@ -328,26 +328,18 @@
                 tooltip: {
                     trigger: 'axis',
                     confine: true,
-                    formatter: function (params) {
-                        if (!params || !params.length) return '';
-                        var i = params[0].dataIndex;
-                        var total = totals[i] || 0;
-                        var lines = ['<strong>'
-                            + P.escapeHtml(String(params[0].axisValue)) + '</strong>'];
-                        params.slice().sort(function (a, b) {
-                            return (b.value || 0) - (a.value || 0);
-                        }).forEach(function (p) {
-                            if (p.value == null) return;
-                            lines.push(p.marker + ' ' + P.escapeHtml(p.seriesName) + ': '
+                    formatter: C.sortedAxisTooltip({
+                        row: function (p, i) {
+                            var total = totals[i] || 0;
+                            return p.marker + ' ' + P.escapeHtml(p.seriesName) + ': '
                                 + (share
                                     ? P.t('ngram.tip_share', {
                                         pct: p.value, total: P.formatNumber(total) })
                                     : P.t('ngram.tip_count', {
                                         count: P.formatNumber(p.value),
-                                        total: P.formatNumber(total) })));
-                        });
-                        return lines.join('<br>');
-                    }
+                                        total: P.formatNumber(total) }));
+                        }
+                    })
                 },
                 xAxis: {
                     type: 'category',

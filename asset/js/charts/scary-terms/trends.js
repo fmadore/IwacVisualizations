@@ -126,20 +126,18 @@
                 trigger: 'axis',
                 confine: true,
                 axisPointer: { type: 'line' },
-                // Sort per-year values desc and drop zero rows so the
-                // 12-family tooltip stays scannable.
-                formatter: function (params) {
-                    if (!params || !params.length) return '';
-                    var lines = ['<strong>' + P.escapeHtml(String(params[0].axisValue)) + '</strong>'];
-                    params.slice().sort(function (a, b) {
-                        return (b.value || 0) - (a.value || 0);
-                    }).forEach(function (p) {
-                        if (!p.value) return;
-                        lines.push(p.marker + ' ' + P.escapeHtml(p.seriesName)
-                            + ': <strong>' + P.formatNumber(p.value) + '</strong>');
-                    });
-                    return lines.join('<br>');
-                }
+                // Drop zero rows so the 12-family tooltip stays scannable
+                // (default ECharts tooltip if chart-options is absent, in
+                // line with this file's other guarded fallbacks).
+                formatter: (ns.chartOptions && ns.chartOptions.sortedAxisTooltip)
+                    ? ns.chartOptions.sortedAxisTooltip({
+                        skip: function (p) { return !p.value; },
+                        row: function (p) {
+                            return p.marker + ' ' + P.escapeHtml(p.seriesName)
+                                + ': <strong>' + P.formatNumber(p.value) + '</strong>';
+                        }
+                    })
+                    : undefined
             },
             xAxis: {
                 type: 'category',

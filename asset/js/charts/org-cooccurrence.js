@@ -231,23 +231,18 @@
         }
     }
 
+    /** Thin delegate to the shared control, pinning this block's classes. */
     function buildSelect(labelText, options, current, onChange) {
-        var group = P.el('div', 'iwac-vis-orgcooc-select-group');
-        var label = P.el('label', 'iwac-vis-orgcooc-label', labelText + ':');
-        var select = P.el('select', 'iwac-vis-orgcooc-select');
-        var selectId = 'iwac-vis-orgcooc-' + Math.random().toString(36).slice(2, 8);
-        select.id = selectId;
-        label.htmlFor = selectId;
-        options.forEach(function (o) {
-            var opt = P.el('option', null, o.label);
-            opt.value = o.value;
-            if (o.value === current) opt.selected = true;
-            select.appendChild(opt);
+        return P.buildSelectControl({
+            label: labelText,
+            options: options,
+            current: current,
+            onChange: onChange,
+            groupClass: 'iwac-vis-orgcooc-select-group',
+            labelClass: 'iwac-vis-orgcooc-label',
+            selectClass: 'iwac-vis-orgcooc-select',
+            idPrefix: 'iwac-vis-orgcooc-'
         });
-        select.addEventListener('change', function () { onChange(select.value); });
-        group.appendChild(label);
-        group.appendChild(select);
-        return group;
     }
 
     function init() {

@@ -159,6 +159,46 @@
         };
     };
 
+    /**
+     * Axis-trigger tooltip formatter for multi-series charts: a bold,
+     * escaped axis-value header, then one line per series row, sorted by
+     * value (desc by default) with empty rows dropped — so a 12-series
+     * tooltip stays scannable. Only the per-row text is chart-specific;
+     * callers supply it via `row(p, dataIndex)` and typically compose
+     * `p.marker + ' ' + esc(p.seriesName) + …`.
+     *
+     * @param {object} opts
+     * @param {function(object, number): string} opts.row
+     *   Renders one series line. Receives the ECharts param object and the
+     *   shared dataIndex; its return value is used verbatim (caller escapes).
+     * @param {function(object, number): boolean} [opts.skip]
+     *   Drop predicate; defaults to `p.value == null`.
+     * @param {'asc'|'desc'} [opts.order='desc']
+     *   'asc' for rank-style series where 1 is best (bump charts).
+     * @param {number} [opts.missingValue=0]
+     *   Stand-in used when comparing rows whose value is null/0 — pass a
+     *   large number with order:'asc' so missing ranks sink to the bottom.
+     * @returns {function} an ECharts `tooltip.formatter`
+     */
+    C.sortedAxisTooltip = function (opts) {
+        var order = opts.order === 'asc' ? 1 : -1;
+        var missing = opts.missingValue != null ? opts.missingValue : 0;
+        var skip = opts.skip || function (p) { return p.value == null; };
+        return function (params) {
+            if (!params || !params.length) return '';
+            var i = params[0].dataIndex;
+            var lines = ['<strong>'
+                + esc(String(params[0].axisValue)) + '</strong>'];
+            params.slice().sort(function (a, b) {
+                return order * ((a.value || missing) - (b.value || missing));
+            }).forEach(function (p) {
+                if (skip(p, i)) return;
+                lines.push(opts.row(p, i));
+            });
+            return lines.join('<br>');
+        };
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Country color map                                                 */
     /*                                                                    */

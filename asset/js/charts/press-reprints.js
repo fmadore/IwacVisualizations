@@ -96,7 +96,7 @@
         var header = P.el('div', 'iwac-vis-reprints-header');
         header.appendChild(P.el('h3', 'iwac-vis-reprints-title', P.t('reprints.title')));
         header.appendChild(P.el('p', 'iwac-vis-reprints-desc',
-            P.t('reprints.description', { threshold: data.threshold || 0.97 })));
+            P.t('reprints.description')));
         root.appendChild(header);
 
         var s = data.stats || {};

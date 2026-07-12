@@ -184,6 +184,19 @@
         return translated === key ? name : translated;
     };
 
+    /**
+     * Derive a short display label from an LDA topic's ' - '-joined word
+     * list: the first two words joined with a middle dot — the same split
+     * the Topic Explorer treemap derives its cell names from. Falls back
+     * to "Topic <id>" when the label is empty and an id is supplied, else
+     * to '' so callers can skip unlabeled topics.
+     */
+    P.topicShortLabel = function (label, id) {
+        var name = String(label || '').split(' - ').slice(0, 2).join(' · ').trim();
+        if (name) return name;
+        return id != null ? (P.t('Topic') + ' ' + id) : '';
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Status banners (loading / empty / error)                          */
     /* ----------------------------------------------------------------- */
@@ -465,6 +478,47 @@
      */
     P.buildChartsGrid = function () {
         return P.el('div', 'iwac-vis-overview-grid');
+    };
+
+    /**
+     * Labelled `<select>` control: `<div><label>text:</label><select>…</select></div>`
+     * with a generated id wiring the label to the select. Replaces the
+     * near-identical builders that org-cooccurrence and the three
+     * scary-terms selectors each hand-rolled. Class names stay caller-
+     * supplied because each block's stylesheet targets its own tokens.
+     *
+     * @param {Object} cfg
+     * @param {string} cfg.label   already-translated label (rendered "label:")
+     * @param {Array<{value:string, label:string}>} cfg.options
+     * @param {string} [cfg.current]   option value to preselect
+     * @param {function(string):void} cfg.onChange  fires with the new value
+     * @param {string} [cfg.groupClass='iwac-vis-select-group']
+     * @param {string} [cfg.labelClass='iwac-vis-select-label']
+     * @param {string} [cfg.selectClass='iwac-vis-select']
+     * @param {string} [cfg.idPrefix='iwac-vis-sel-']  select-id prefix
+     * @returns {HTMLElement} the group element
+     */
+    P.buildSelectControl = function (cfg) {
+        var group = P.el('div', cfg.groupClass || 'iwac-vis-select-group');
+        var label = P.el('label', cfg.labelClass || 'iwac-vis-select-label',
+            cfg.label + ':');
+        var select = P.el('select', cfg.selectClass || 'iwac-vis-select');
+        var selectId = (cfg.idPrefix || 'iwac-vis-sel-')
+            + Math.random().toString(36).slice(2, 8);
+        select.id = selectId;
+        label.htmlFor = selectId;
+        (cfg.options || []).forEach(function (o) {
+            var opt = P.el('option', null, o.label);
+            opt.value = o.value;
+            if (o.value === cfg.current) opt.selected = true;
+            select.appendChild(opt);
+        });
+        select.addEventListener('change', function () {
+            cfg.onChange(select.value);
+        });
+        group.appendChild(label);
+        group.appendChild(select);
+        return group;
     };
 
     /* ----------------------------------------------------------------- */
