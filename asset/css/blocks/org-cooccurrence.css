@@ -18,40 +18,17 @@
     gap: var(--space-5, 1.25rem);
 }
 
-.iwac-vis-orgcooc-header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
-}
+/*  Header/title/desc use the shared .iwac-vis-block-header component
+ *  (iwac-core.css) since v1.22.0. */
 
-.iwac-vis-orgcooc-title {
-    margin: 0;
-    font-family: var(--font-headings, "Besley", Georgia, serif);
-    font-size: var(--text-2xl, 1.875rem);
-    font-weight: 600;
-    color: var(--ink-strong, var(--ink, #13161c));
-    line-height: 1.15;
-    letter-spacing: var(--tracking-display, -0.01em);
-}
-
-.iwac-vis-orgcooc-desc {
-    margin: 0;
-    color: var(--ink-subtle, var(--muted, #66696e));
-    font-size: var(--text-sm, 0.9375rem);
-    line-height: 1.55;
-    max-width: var(--measure-narrow, 44rem);
-}
-
+/*  Shell comes from the shared .iwac-vis-aside (iwac-core.css); only the
+ *  row layout + tighter vertical padding stay block-local. */
 .iwac-vis-orgcooc-controls {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4, 1rem);
     align-items: center;
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, var(--surface, #fdfcfb));
-    border: 1px solid var(--panel-border-color, var(--border, #ced1d6));
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
 }
 
 .iwac-vis-orgcooc-select-group {

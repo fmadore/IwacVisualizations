@@ -28,6 +28,7 @@ Functions:
 
 from __future__ import annotations
 
+import argparse
 import json
 import logging
 import re
@@ -61,7 +62,7 @@ automatically — set as a repo secret in CI, or locally via
 ``$env:HF_TOKEN`` / ``hf auth login``.
 """
 
-SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]
+SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]
 """Available subsets in the IWAC dataset."""
 
 
@@ -84,6 +85,54 @@ def configure_logging(level: int = logging.INFO) -> logging.Logger:
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
     return logging.getLogger(__name__)
+
+
+# =============================================================================
+# Shared CLI plumbing
+# =============================================================================
+
+def add_standard_args(
+    parser: "argparse.ArgumentParser",
+    minify_default: bool = True,
+) -> "argparse.ArgumentParser":
+    """
+    Attach the CLI flags every generator shares: ``--repo``, ``--minify``
+    (BooleanOptionalAction) and ``-v/--verbose``. Generator-specific flags
+    stay at the call site; pair with :func:`parse_standard_args` to
+    collapse the whole copy-pasted prologue.
+
+    Args:
+        parser: The generator's ArgumentParser.
+        minify_default: Default for ``--minify`` (heavy fan-outs keep True).
+
+    Returns:
+        The same parser, for chaining.
+    """
+    parser.add_argument(
+        "--repo",
+        default=DATASET_ID,
+        help="Hugging Face dataset repository ID (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--minify",
+        action=argparse.BooleanOptionalAction,
+        default=minify_default,
+        help="Produce compact JSON (no indentation) (default: %(default)s)",
+    )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Set log level to DEBUG",
+    )
+    return parser
+
+
+def parse_standard_args(parser: "argparse.ArgumentParser") -> "argparse.Namespace":
+    """``parse_args()`` + ``configure_logging`` keyed on ``-v`` — the
+    shared epilogue of every generator's ``main()``."""
+    args = parser.parse_args()
+    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    return args
 
 
 # =============================================================================
@@ -236,6 +285,20 @@ def normalize_location_name(name: str) -> str:
 # =============================================================================
 # Date Extraction
 # =============================================================================
+
+FULL_DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
+"""Strict ISO full date (YYYY-MM-DD, anchored) with year/month/day groups."""
+
+
+def is_full_date(value: Any) -> bool:
+    """True when a cell is a complete, day-precise ISO date.
+
+    Strict: rejects year-only / year-month values and anything with a
+    time suffix. (corpus-health's coverage metric deliberately keeps its
+    looser prefix match — see generate_corpus_health.py.)
+    """
+    return bool(FULL_DATE_RE.match(clean_str(value)))
+
 
 def extract_year(
     value: Any,
@@ -636,7 +699,8 @@ def tokenize(text: Any) -> List[str]:
 def load_dataset_safe(
     config_name: str,
     repo_id: str = DATASET_ID,
-    token: Optional[str] = None
+    token: Optional[str] = None,
+    columns: Optional[List[str]] = None,
 ) -> Optional[pd.DataFrame]:
     """
     Load a HuggingFace dataset subset with error handling.
@@ -645,12 +709,21 @@ def load_dataset_safe(
         config_name: Name of the dataset subset/configuration
         repo_id: HuggingFace dataset repository ID
         token: Optional HuggingFace API token
+        columns: Optional column projection. When set, only these columns are
+            materialized into the pandas frame — pass it whenever a generator
+            needs a handful of scalar fields, so the OCR text and the 768-dim
+            embedding columns never get converted to Python objects (the
+            pandas conversion, not the download, is where the memory goes).
+            Requested columns missing from the subset are skipped with a
+            warning rather than failing, so callers can share one list across
+            subsets whose schemas differ slightly.
 
     Returns:
         Pandas DataFrame of the dataset, or None if loading fails
 
     Examples:
         >>> df = load_dataset_safe("articles")
+        >>> df = load_dataset_safe("articles", columns=["o:id", "title", "pub_date"])
         >>> df = load_dataset_safe("index", repo_id="fmadore/islam-west-africa-collection")
     """
     logger = logging.getLogger(__name__)
@@ -662,12 +735,29 @@ def load_dataset_safe(
             kwargs["token"] = token
 
         dataset = hf_load_dataset(**kwargs)
-        df = dataset["train"].to_pandas()
+        data = dataset["train"]
+        if columns:
+            keep = [c for c in columns if c in data.column_names]
+            missing = sorted(set(columns) - set(keep))
+            if missing:
+                logger.warning(
+                    f"Subset '{config_name}' lacks requested column(s): {missing}"
+                )
+            data = data.select_columns(keep)
+        df = data.to_pandas()
         logger.info(f"Loaded {len(df)} records from '{config_name}'")
         return df
 
     except Exception as e:
         logger.error(f"Error loading subset '{config_name}': {e}")
+        msg = str(e).lower()
+        if any(hint in msg for hint in ("401", "403", "unauthorized", "gated", "authentication")):
+            logger.error(
+                f"'{repo_id}' is a PRIVATE dataset (since 2026-07) — a missing "
+                "or unscoped token surfaces exactly like this. Set the HF_TOKEN "
+                "environment variable (or run `hf auth login`) with a token "
+                "that can read the private mirror."
+            )
         return None
 
 

@@ -50,7 +50,7 @@
             return;
         }
 
-        var state = { yearIdx: 0, timer: null };
+        var state = { yearIdx: 0 };
 
         function countsAt(idx) {
             var out = {};
@@ -118,34 +118,30 @@
             }
         }
 
-        function stop() {
-            if (state.timer) {
-                window.clearInterval(state.timer);
-                state.timer = null;
-            }
-            playBtn.textContent = '▶';
-            playBtn.setAttribute('aria-label', P.t('Play'));
-        }
-
-        function play() {
-            if (state.yearIdx >= years.length - 1) setYear(0);
-            playBtn.textContent = '⏸';
-            playBtn.setAttribute('aria-label', P.t('Pause'));
-            state.timer = window.setInterval(function () {
-                if (state.yearIdx >= years.length - 1) {
-                    stop();
-                    return;
-                }
+        // Timer semantics (rewind-at-end, auto-stop on the last frame)
+        // come from the shared playback state machine; this panel keeps
+        // only its play-button glyph wiring.
+        var playback = P.createPlaybackTimer({
+            tickMs: TICK_MS,
+            isAtEnd: function () { return state.yearIdx >= years.length - 1; },
+            rewind: function () { setYear(0); },
+            advance: function () {
                 slider.value = String(state.yearIdx + 1);
                 setYear(state.yearIdx + 1, true);
-            }, TICK_MS);
-        }
-
-        playBtn.addEventListener('click', function () {
-            if (state.timer) stop(); else play();
+            },
+            onPlay: function () {
+                playBtn.textContent = '⏸';
+                playBtn.setAttribute('aria-label', P.t('Pause'));
+            },
+            onStop: function () {
+                playBtn.textContent = '▶';
+                playBtn.setAttribute('aria-label', P.t('Play'));
+            }
         });
+
+        playBtn.addEventListener('click', function () { playback.toggle(); });
         slider.addEventListener('input', function () {
-            stop();
+            playback.stop();
             setYear(parseInt(slider.value, 10) || 0);
         });
     }

@@ -149,7 +149,7 @@
             var mx = median(acc[idx].xs);
             var my = median(acc[idx].ys);
             if (mx == null || my == null) return;
-            var name = String(t.label || '').split(' - ').slice(0, 2).join(' · ').trim();
+            var name = P.topicShortLabel(t.label);
             if (!name) return;
             labelPoints.push({ value: [mx, my], name: name });
         });

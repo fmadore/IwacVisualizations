@@ -35,7 +35,7 @@
         var layout = P.el('div', 'iwac-vis-spatial-layout');
         root.appendChild(layout);
 
-        var sidebar = P.el('aside', 'iwac-vis-spatial-sidebar');
+        var sidebar = P.el('aside', 'iwac-vis-aside iwac-vis-spatial-sidebar');
         layout.appendChild(sidebar);
 
         var main = P.el('div', 'iwac-vis-spatial-main');

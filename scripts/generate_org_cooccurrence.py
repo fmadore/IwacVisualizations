@@ -47,16 +47,16 @@ import logging
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Set
 
 from iwac_utils import (
-    DATASET_ID,
-    STOPWORDS,
-    configure_logging,
+    add_standard_args,
     extract_year,
     generate_timestamp,
     load_dataset_safe,
+    parse_standard_args,
     save_json,
+    STOPWORDS,
 )
 
 DEFAULT_TARGETS_FILE = Path(__file__).parent / "org_cooccurrence_targets.json"
@@ -285,11 +285,6 @@ def main() -> None:
         description="Generate the Islamic organisations co-occurrence matrix bundle."
     )
     parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID (default: %(default)s)",
-    )
-    parser.add_argument(
         "--targets",
         default=str(DEFAULT_TARGETS_FILE),
         help="Curated org/alias sidecar (default: %(default)s)",
@@ -317,20 +312,8 @@ def main() -> None:
         default=2,
         help="Zero out matrix cells below this pair count (default: %(default)s).",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
     generate(
         repo_id=args.repo,
         targets_file=Path(args.targets),

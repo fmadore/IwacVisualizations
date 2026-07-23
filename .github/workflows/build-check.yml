@@ -1,0 +1,65 @@
+name: Build check (JS/CSS)
+
+# The repo commits both sources and their .min siblings, and the
+# theme-token guard runs only locally by convention — so a forgotten
+# `npm run build` (stale .min.js/.min.css) or a token violation used to
+# reach main unnoticed. This check rebuilds everything and fails when
+# the committed minified assets don't match the sources, or when
+# check-theme-tokens.js reports a violation (it runs first inside
+# `npm run build`).
+#
+# Deliberately narrow triggers: data regeneration has its own workflow
+# (regenerate-data.yml); Python/PHP-only pushes don't need a node build.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "asset/**"
+      - "scripts/build-js.js"
+      - "scripts/build-css.js"
+      - "scripts/check-theme-tokens.js"
+      - "tokens.json"
+      - "package.json"
+      - "package-lock.json"
+  pull_request:
+    paths:
+      - "asset/**"
+      - "scripts/build-js.js"
+      - "scripts/build-css.js"
+      - "scripts/check-theme-tokens.js"
+      - "tokens.json"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install pinned build tooling
+        run: npm ci
+
+      - name: Token guard + rebuild minified assets
+        run: npm run build
+
+      - name: Committed .min files must match the sources
+        run: |
+          if ! git diff --exit-code; then
+            echo "::error::Minified assets are stale — run 'npm run build' and commit the .min siblings."
+            exit 1
+          fi

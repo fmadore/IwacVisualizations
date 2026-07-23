@@ -128,21 +128,16 @@
                 tooltip: {
                     trigger: 'axis',
                     confine: true,
-                    formatter: function (params) {
-                        if (!params || !params.length) return '';
-                        var di = params[0].dataIndex;
-                        var lines = ['<strong>'
-                            + P.escapeHtml(String(params[0].axisValue)) + '</strong>'];
-                        params.slice().sort(function (a, b) {
-                            return (a.value || 99) - (b.value || 99);
-                        }).forEach(function (p) {
-                            if (p.value == null) return;
-                            lines.push(p.marker + ' #' + p.value + ' '
+                    // Ranks sort ascending (#1 first); missing ranks sink.
+                    formatter: ns.chartOptions.sortedAxisTooltip({
+                        order: 'asc',
+                        missingValue: 99,
+                        row: function (p, di) {
+                            return p.marker + ' #' + p.value + ' '
                                 + P.escapeHtml(p.seriesName) + ' ('
-                                + P.formatNumber(totals[p.seriesName][di]) + ')');
-                        });
-                        return lines.join('<br>');
-                    }
+                                + P.formatNumber(totals[p.seriesName][di]) + ')';
+                        }
+                    })
                 },
                 xAxis: {
                     type: 'category',

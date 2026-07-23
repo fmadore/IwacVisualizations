@@ -41,29 +41,28 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN   Optional Hugging Face access token (public dataset).
+    HF_TOKEN   Hugging Face access token — required, the default dataset is
+               the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 
 import argparse
 import logging
-import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List
 
 from iwac_utils import (
-    DATASET_ID,
+    FULL_DATE_RE,
+    add_standard_args,
     clean_str,
-    configure_logging,
     create_metadata_block,
     load_dataset_safe,
+    parse_standard_args,
     save_json,
 )
 
 logger = logging.getLogger(__name__)
-
-FULL_DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
 
 # Subset name -> (single-char type flag, source column). Both subsets carry
 # a clean `newspaper` column (for publications it is the periodical title).
@@ -88,28 +87,36 @@ def collect_days(repo_id: str) -> Dict[str, List[List[Any]]]:
     days: Dict[str, List[List[Any]]] = defaultdict(list)
     for subset, type_flag in SOURCES:
         logger.info("Loading %s subset...", subset)
-        df = load_dataset_safe(subset, repo_id=repo_id)
+        df = load_dataset_safe(subset, repo_id=repo_id,
+                               columns=["pub_date", "o:id", "title", "newspaper"])
         if df is None or df.empty:
             raise RuntimeError(f"Could not load the {subset} subset")
         logger.info("  %d rows", len(df))
 
         kept = 0
-        for _, row in df.iterrows():
-            m = FULL_DATE_RE.match(clean_str(row.get("pub_date")))
+        # Column-wise zip instead of iterrows: no per-row Series build on
+        # a 12k-row frame. The projection above guarantees only existing
+        # columns land in the frame, so guard each with a None fallback.
+        def col(name):
+            return df[name] if name in df.columns else [None] * len(df)
+
+        for pub_date, oid_raw, title_raw, newspaper_raw in zip(
+                col("pub_date"), col("o:id"), col("title"), col("newspaper")):
+            m = FULL_DATE_RE.match(clean_str(pub_date))
             if not m:
                 continue
             year, month, day = int(m.group(1)), int(m.group(2)), int(m.group(3))
             if not valid_day(year, month, day):
                 continue
-            o_id = clean_str(row.get("o:id"))
-            title = clean_str(row.get("title"))
+            o_id = clean_str(oid_raw)
+            title = clean_str(title_raw)
             if not o_id or not title:
                 continue
             days[f"{month:02d}-{day:02d}"].append([
                 year,
                 int(o_id) if o_id.isdigit() else o_id,
                 title,
-                clean_str(row.get("newspaper")),
+                clean_str(newspaper_raw),
                 type_flag,
             ])
             kept += 1
@@ -119,16 +126,10 @@ def collect_days(repo_id: str) -> Dict[str, List[List[Any]]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[2])
-    parser.add_argument("--repo", default=DATASET_ID,
-                        help="Hugging Face dataset repo id")
     parser.add_argument("--output-dir", default="asset/data/on-this-day",
                         help="Fan-out directory (default: asset/data/on-this-day)")
-    parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
-                        default=True, help="Compact JSON output (default: on)")
-    parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Debug logging")
-    args = parser.parse_args()
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
 
     days = collect_days(args.repo)
     out_dir = Path(args.output_dir)

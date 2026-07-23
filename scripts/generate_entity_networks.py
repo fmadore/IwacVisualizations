@@ -225,8 +225,6 @@ def build_global_network(
     pairs: List[Tuple[str, str]],
     weight_min: int,
 ) -> Dict[str, Any]:
-    pair_set = {frozenset(p) for p in pairs}
-
     edge_weights: Dict[Tuple[int, int], int] = Counter()
     for refs in agg.item_entities.values():
         if len(refs) < 2:

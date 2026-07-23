@@ -27,13 +27,7 @@
 
     var SEARCH_CAP = 10;
 
-    function fold(str) {
-        return String(str || '')
-            .toLowerCase()
-            .normalize('NFD')
-            // Strip combining diacritical marks (U+0300–U+036F)
-            .replace(/[\u0300-\u036f]/g, '');
-    }
+    var fold = P.foldAccents;
 
     /** Decode the generator's compact node rows into objects. */
     function decodeGlobal(payload) {
@@ -94,7 +88,7 @@
 
         var layout = P.el('div', 'iwac-vis-networks-layout');
         var main = P.el('div', 'iwac-vis-networks-main');
-        var aside = P.el('aside', 'iwac-vis-networks-aside');
+        var aside = P.el('aside', 'iwac-vis-aside iwac-vis-networks-aside');
         layout.appendChild(main);
         layout.appendChild(aside);
 
@@ -305,61 +299,39 @@
             activeGraph().setWeightMin(parseInt(weightSelect.value, 10) || 0);
         });
 
-        // --- Node search -----------------------------------------------
-        var searchWrap = P.el('div', 'iwac-vis-networks-search');
-        var searchInput = P.el('input', 'iwac-vis-networks-search__input');
-        searchInput.type = 'search';
-        searchInput.placeholder = P.t('Find in network');
-        searchInput.setAttribute('aria-label', P.t('Find in network'));
-        var searchResults = P.el('div', 'iwac-vis-networks-search__results');
-        searchResults.style.display = 'none';
-        searchWrap.appendChild(searchInput);
-        searchWrap.appendChild(searchResults);
-        toolbar.appendChild(searchWrap);
-
-        function renderSearchResults() {
-            var query = fold(searchInput.value.trim());
-            searchResults.innerHTML = '';
-            if (!query) {
-                searchResults.style.display = 'none';
-                return;
-            }
-            var data = activeData();
-            if (!data) return;
-            var shown = 0;
-            for (var i = 0; i < data.nodes.length && shown < SEARCH_CAP; i++) {
-                if (fold(data.nodes[i].label).indexOf(query) === -1) continue;
-                shown++;
-                (function (index, node) {
-                    var btn = P.el('button', 'iwac-vis-networks-search__item');
-                    btn.type = 'button';
-                    btn.appendChild(P.el('span', 'iwac-vis-networks-search__item-name', node.label));
-                    btn.appendChild(P.el('span', 'iwac-vis-networks-search__item-count',
-                        P.formatNumber(node.count)));
-                    btn.addEventListener('click', function () {
-                        searchInput.value = '';
-                        searchResults.style.display = 'none';
-                        activeGraph().focusNode(index);
+        // --- Node search (shared debounced dropdown) ---------------------
+        var search = P.buildSearchDropdown({
+            placeholder: P.t('Find in network'),
+            openOnFocus: true,
+            classes: {
+                root:     'iwac-vis-networks-search',
+                input:    'iwac-vis-networks-search__input',
+                dropdown: 'iwac-vis-networks-search__results',
+                item:     'iwac-vis-networks-search__item',
+                name:     'iwac-vis-networks-search__item-name',
+                count:    'iwac-vis-networks-search__item-count',
+                empty:    'iwac-vis-muted'
+            },
+            getMatches: function (query) {
+                query = fold(query);
+                var data = activeData();
+                if (!data) return [];
+                var out = [];
+                for (var i = 0; i < data.nodes.length && out.length < SEARCH_CAP; i++) {
+                    if (fold(data.nodes[i].label).indexOf(query) === -1) continue;
+                    out.push({
+                        label: data.nodes[i].label,
+                        detail: P.formatNumber(data.nodes[i].count),
+                        index: i
                     });
-                    searchResults.appendChild(btn);
-                })(i, data.nodes[i]);
+                }
+                return out;
+            },
+            onPick: function (m) {
+                activeGraph().focusNode(m.index);
             }
-            if (shown === 0) {
-                searchResults.appendChild(P.el('div', 'iwac-vis-muted', P.t('No matches')));
-            }
-            searchResults.style.display = '';
-        }
-
-        var searchTimer = null;
-        searchInput.addEventListener('input', function () {
-            if (searchTimer) clearTimeout(searchTimer);
-            searchTimer = setTimeout(renderSearchResults, 120);
         });
-        searchInput.addEventListener('blur', function () {
-            // Delay so result clicks land before the dropdown hides.
-            setTimeout(function () { searchResults.style.display = 'none'; }, 200);
-        });
-        searchInput.addEventListener('focus', renderSearchResults);
+        toolbar.appendChild(search.root);
 
         function syncToolbar() {
             chipsWrap.style.display = mode === 'entities' ? '' : 'none';
@@ -367,8 +339,7 @@
             // The select was just reset to the base weight — keep the
             // newly shown graph honest about it.
             activeGraph().setWeightMin(parseInt(weightSelect.value, 10) || 0);
-            searchResults.style.display = 'none';
-            searchInput.value = '';
+            search.clear();
         }
 
         fillWeightOptions();

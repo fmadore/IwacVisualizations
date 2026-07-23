@@ -1,9 +1,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: IwacVisualizations 1.7.0\n"
+"Project-Id-Version: IwacVisualizations 1.22.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-12 00:00+0000\n"
+"POT-Creation-Date: 2026-07-12 00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,8 +271,9 @@ msgstr ""
 
 #. Embed snippet gallery
 msgid ""
-"Tip: embeds render in light mode by default; append <code>?theme=dark</code> "
-"for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour."
+"Tip: embeds render in light mode by default; append <code>?theme=dark</code>"
+" for dark mode, or <code>?primary=2b6cb0</code> to override the accent "
+"colour."
 msgstr ""
 
 #. Embed snippet gallery
@@ -356,7 +357,12 @@ msgstr ""
 msgid "On This Day"
 msgstr ""
 
-msgid "Items published on today's date across the collection's decades — newspaper articles and periodical issues with full publication dates. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset. No configuration needed."
+msgid ""
+"Items published on today's date across the collection's decades — newspaper "
+"articles and periodical issues with full publication dates. The block "
+"removes itself silently when no data is available, so it is safe on a "
+"homepage. Data is precomputed from the IWAC dataset. No configuration "
+"needed."
 msgstr ""
 
 msgid "Loading on this day"
@@ -365,9 +371,104 @@ msgstr ""
 msgid "Press Bylines"
 msgstr ""
 
-msgid "Who signed the press: byline coverage over time and the most prolific journalists and press agencies, with active spans and frequent subjects, linked to their authority records where they exist. Data is precomputed from the IWAC articles subset. No configuration needed."
+msgid ""
+"Who signed the press: byline coverage over time and the most prolific "
+"journalists and press agencies, with active spans and frequent subjects, "
+"linked to their authority records where they exist. Data is precomputed from"
+" the IWAC articles subset. No configuration needed."
 msgstr ""
 
 msgid "Loading press bylines"
 msgstr ""
 
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Term Trends"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"The IWAC \"Ngram viewer\": plot the per-year share of articles whose full "
+"text contains any frequent term. Search the vocabulary, overlay up to eight "
+"terms, switch between share and absolute counts. Data is precomputed from "
+"the articles subset. No configuration needed."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading term trends"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Islamic Organisations Co-occurrence"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"A heatmap of the ideas that cluster around each major West African Islamic "
+"organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen "
+"organisation, which pairs of words keep turning up together near its name. "
+"Data is precomputed from the IWAC articles. No configuration needed."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading organisation co-occurrences"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Press Reprints"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Pairs of near-identical articles printed by different newspapers — "
+"syndicated wire copy (PANA, AFP), shared communiqués and reprints — found by"
+" comparing how closely articles are worded. Shows which outlets circulated "
+"the same copy, with the full pair list. Data is precomputed from the IWAC "
+"articles. No configuration needed."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Loading press reprints"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Periodicals Semantic Landscape"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Zoomable map of the Islamic-periodical corpus: every issue placed by the "
+"semantic similarity of its table of contents (UMAP over AI embeddings), "
+"color-faceted by country or decade. Data is precomputed. No configuration "
+"needed."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Radical / extremism-related terms across the IWAC collection in seven views:"
+" an animated bar-chart race, time trends with historical-event markers, by "
+"country, global, a co-occurrence matrix, a word cloud of the surrounding "
+"vocabulary, and a map of the places mentioned. No configuration needed."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Corpus health"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid ""
+"Coverage of the upstream enrichment pipelines, computed from the Hugging "
+"Face dataset at data-build time. Use these meters to steer digitization and "
+"annotation priorities; they refresh with every data pull."
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Computed"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Collection growth over time"
+msgstr ""
+
+#. v1.22.0 — third-audit catalogue refresh
+msgid "Period covered: %1$s – %2$s"
+msgstr ""

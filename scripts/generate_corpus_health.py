@@ -32,11 +32,11 @@ import pandas as pd
 
 from iwac_embeddings import coerce_embedding
 from iwac_utils import (
-    DATASET_ID,
-    configure_logging,
+    add_standard_args,
     generate_timestamp,
     load_dataset_safe,
     parse_coordinates,
+    parse_standard_args,
     save_json,
 )
 
@@ -148,29 +148,12 @@ def main() -> None:
         description="Generate curator-facing corpus coverage meters for the admin page."
     )
     parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID (default: %(default)s)",
-    )
-    parser.add_argument(
         "--output-dir",
         default="asset/data",
         help="Where to write corpus-health.json (default: asset/data).",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser)
+    args = parse_standard_args(parser)
     logger = logging.getLogger(__name__)
 
     subsets: Dict[str, Any] = {}

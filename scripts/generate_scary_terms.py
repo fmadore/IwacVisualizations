@@ -3,7 +3,7 @@
 generate_scary_terms.py
 ========================
 
-Generate the seven JSON files consumed by the IwacVisualizations "Scary Terms"
+Generate the eight JSON files consumed by the IwacVisualizations "Scary Terms"
 page block:
 
     asset/data/scary-terms-metadata.json
@@ -41,8 +41,8 @@ Usage
 
 Environment
 -----------
-    HF_TOKEN    Optional Hugging Face access token (the dataset is public,
-                so this is usually unnecessary).
+    HF_TOKEN    Hugging Face access token — required, the default dataset is
+                the private full mirror (see iwac_utils.DATASET_ID).
 """
 from __future__ import annotations
 
@@ -58,7 +58,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
-    configure_logging,
+    add_standard_args,
     extract_year,
     generate_timestamp,
     load_dataset_safe,
@@ -66,6 +66,7 @@ from iwac_utils import (
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    parse_standard_args,
     save_json,
     tokenize,
 )
@@ -467,8 +468,11 @@ class ScaryTermsGenerator:
         # Drop countries under the min_country_articles threshold so
         # the per-country view only ever lists slices with enough data
         # to be meaningful — matches the behaviour of build_countries.
+        # Alphabetical key order so regenerated output is byte-stable
+        # regardless of corpus scan order.
         finalized_countries: Dict[str, Any] = {}
-        for country, slice_ in country_slices.items():
+        for country in sorted(country_slices):
+            slice_ = country_slices[country]
             if slice_["articles"] < self.min_country_articles:
                 continue
             finalized_countries[country] = finalize(slice_)
@@ -732,7 +736,7 @@ class ScaryTermsGenerator:
                                           key=lambda kv: kv[1], reverse=True)),
                 "by_year": {str(y): c for y, c in sorted(st["by_year"].items())},
             })
-        out_places.sort(key=lambda p: p["total"], reverse=True)
+        out_places.sort(key=lambda p: (-p["total"], p["name"]))
 
         self.logger.info(
             f"Places bundle: {len(out_places)} places ≥ {self.min_place_articles} articles")
@@ -815,11 +819,6 @@ def main() -> None:
         description="Generate scary terms JSON data for the IwacVisualizations block."
     )
     parser.add_argument(
-        "--repo",
-        default=DATASET_ID,
-        help="Hugging Face dataset repository ID (default: %(default)s)",
-    )
-    parser.add_argument(
         "--output-dir",
         default="asset/data",
         help="Where to write the JSON files (default: asset/data).",
@@ -848,20 +847,8 @@ def main() -> None:
         default=3,
         help="Drop map places with fewer matching articles (default: %(default)s).",
     )
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Set log level to DEBUG",
-    )
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser, minify_default=False)
+    args = parse_standard_args(parser)
     ScaryTermsGenerator(
         output_dir=Path(args.output_dir),
         min_country_articles=args.min_country_articles,

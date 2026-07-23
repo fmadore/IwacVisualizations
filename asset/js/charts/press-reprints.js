@@ -93,10 +93,10 @@
         var root = P.el('div', 'iwac-vis-overview-root iwac-vis-reprints-root');
         container.appendChild(root);
 
-        var header = P.el('div', 'iwac-vis-reprints-header');
-        header.appendChild(P.el('h3', 'iwac-vis-reprints-title', P.t('reprints.title')));
-        header.appendChild(P.el('p', 'iwac-vis-reprints-desc',
-            P.t('reprints.description', { threshold: data.threshold || 0.97 })));
+        var header = P.el('div', 'iwac-vis-block-header iwac-vis-reprints-header');
+        header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('reprints.title')));
+        header.appendChild(P.el('p', 'iwac-vis-block-header__desc',
+            P.t('reprints.description')));
         root.appendChild(header);
 
         var s = data.stats || {};
@@ -138,7 +138,12 @@
         var maxPairs = Math.max.apply(null, papers.map(function (p) { return p.pairs || 1; }));
         var maxLink = Math.max.apply(null, links.map(function (l) { return l[2] || 1; }));
 
-        ns.registerChart(panel.chart, function (el, chart) {
+        // The shared graph toolbar replaces the generic panel toolbar.
+        if (panel.panel && panel.panel.setAttribute) {
+            panel.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+        }
+
+        var chart = ns.registerChart(panel.chart, function (el, chart) {
             var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
             var nodes = papers.map(function (p) {
                 return {
@@ -179,39 +184,32 @@
                         });
                     }
                 },
-                series: [{
-                    type: 'graph',
-                    layout: 'force',
-                    top: 16,
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                    data: nodes,
-                    links: edges,
-                    roam: true,
-                    draggable: true,
-                    scaleLimit: { min: 0.25, max: 5 },
-                    force: {
-                        // initLayout seeds node positions on a circle;
-                        // without it a frozen (layoutAnimation:false) force
-                        // layout has no starting coordinates and ECharts 6
-                        // crashes ("can't access property 0, e is null").
-                        // Every other IWAC force graph seeds this way.
-                        initLayout: 'circular',
-                        repulsion: 220,
-                        edgeLength: [60, 140],
-                        gravity: 0.1,
-                        friction: 0.6,
-                        layoutAnimation: false
-                    },
-                    emphasis: {
-                        focus: 'adjacency',
-                        lineStyle: { width: 8 }
-                    },
-                    labelLayout: { hideOverlap: true }
-                }]
+                series: [Object.assign(
+                    // The shared frozen-force skeleton owns the circular
+                    // seed + layoutAnimation:false pairing (load-bearing —
+                    // see C._forceGraphBase).
+                    C._forceGraphBase({ gravity: 0.1 }),
+                    {
+                        data: nodes,
+                        links: edges,
+                        emphasis: {
+                            focus: 'adjacency',
+                            lineStyle: { width: 8 }
+                        }
+                    }
+                )]
             }, true);
         });
+
+        // Shared graph chrome (zoom / reset / PNG download / fullscreen);
+        // no legend toggle — this graph has no legend — and no
+        // click-through: nodes are newspapers, not linkable items.
+        if (chart) {
+            P.buildGraphPanelToolbar(panel, chart, {
+                downloadName: 'iwac-press-reprints-network.png',
+                legendToggle: false
+            });
+        }
     }
 
     /* --------------------------------------------------------------- */

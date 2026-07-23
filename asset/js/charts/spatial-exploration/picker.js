@@ -23,14 +23,8 @@
     var LIST_CAP = 60;
     var TOP_PLACES = 10;
 
-    /** Accent-insensitive, case-insensitive search folding. */
-    function fold(str) {
-        return String(str || '')
-            .toLowerCase()
-            .normalize('NFD')
-            // Strip combining diacritical marks (U+0300–U+036F)
-            .replace(/[\u0300-\u036f]/g, '');
-    }
+    /** Accent-insensitive, case-insensitive search folding (shared). */
+    var fold = P.foldAccents;
 
     function render(host, state) {
         var root = P.el('div', 'iwac-vis-spatial-picker');

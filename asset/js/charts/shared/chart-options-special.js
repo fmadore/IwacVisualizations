@@ -876,6 +876,11 @@
      *   tooltipFormatter — ECharts formatter; default "y · x — value"
      *   visualMin/visualMax — visualMap range (default 0..max(cell))
      *   yLabelWidth — truncation width for long y labels (default 140)
+     *   cellLabels — render each non-zero value inside its cell (small
+     *     square matrices only; the default off suits dense year axes)
+     *   cellBorder — 1px surface-colored separator between cells
+     *   xLabelRotate — rotate the x labels (deg) and force interval 0,
+     *     for term axes where every label must stay readable
      */
     C.heatmapMatrix = function (data, opts) {
         opts = opts || {};
@@ -927,7 +932,9 @@
             xAxis: {
                 type: 'category',
                 data: xLabels.map(String),
-                axisLabel: { interval: 'auto', fontSize: 10, color: muted },
+                axisLabel: opts.xLabelRotate
+                    ? { interval: 0, rotate: opts.xLabelRotate, fontSize: 10, color: muted }
+                    : { interval: 'auto', fontSize: 10, color: muted },
                 axisLine: { lineStyle: { color: border } },
                 axisTick: { show: false },
                 splitArea: { show: false }
@@ -962,7 +969,23 @@
             series: [{
                 type: 'heatmap',
                 data: cells,
-                label: { show: false },
+                label: opts.cellLabels
+                    ? {
+                        show: true,
+                        formatter: function (p) {
+                            var v = p.value && p.value[2];
+                            return v > 0 ? v : '';
+                        },
+                        color: tokens.ink || '#2c2f37',
+                        fontSize: 11
+                    }
+                    : { show: false },
+                itemStyle: opts.cellBorder
+                    ? {
+                        borderColor: resolve('--surface') || tokens.surface || '#fdfdfd',
+                        borderWidth: 1
+                    }
+                    : undefined,
                 emphasis: {
                     itemStyle: {
                         borderColor: tokens.ink || '#2c2f37',

@@ -135,11 +135,9 @@
         });
     }
 
-    /** First two topic words make a readable category label — the same
-     *  ' - ' split the Topic Explorer treemap derives its cell names from. */
+    /** Delegate to the shared derivation (panels.js). */
     function topicShortLabel(label, id) {
-        var name = String(label || '').split(' - ').slice(0, 2).join(' · ').trim();
-        return name || (P.t('Topic') + ' ' + id);
+        return P.topicShortLabel(label, id);
     }
 
     /** 30-topic / 31-newspaper category axes need slanted labels.

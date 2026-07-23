@@ -24,6 +24,58 @@
     var R = ns.responsive;
 
     /* ----------------------------------------------------------------- */
+    /*  Shared frozen-force series skeleton                               */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * The roam/drag/zoom-clamped, circular-seeded, layoutAnimation:false
+     * base every IWAC force graph builds on (C.network,
+     * C.collaborationNetwork, press-reprints). Two of its choices are
+     * load-bearing, not stylistic:
+     *
+     * - `initLayout: 'circular'` seeds node positions — a frozen
+     *   (layoutAnimation:false) force layout with no starting coordinates
+     *   crashes ECharts 6 ("can't access property 0, e is null").
+     * - `layoutAnimation: false` runs the simulation once, synchronously,
+     *   and freezes the positions, so resize / fullscreen / merge-mode
+     *   setOption never re-animates the edges.
+     *
+     * Callers `Object.assign` their data / links / categories / emphasis
+     * / cursor on top; only the knobs that actually differ between the
+     * in-tree graphs are parameterized.
+     *
+     * @param {Object} [opts]
+     * @param {number} [opts.bottom=16]     56 when a bottom legend shows
+     * @param {number} [opts.repulsion=220]
+     * @param {number} [opts.gravity=0.08]
+     */
+    C._forceGraphBase = function (opts) {
+        opts = opts || {};
+        return {
+            type: 'graph',
+            layout: 'force',
+            top: 16,
+            bottom: opts.bottom != null ? opts.bottom : 16,
+            left: 16,
+            right: 16,
+            roam: true,
+            draggable: true,
+            // Per ECharts docs: clamp zoom so roam button overlays can't
+            // scale the graph into oblivion.
+            scaleLimit: { min: 0.25, max: 5 },
+            labelLayout: { hideOverlap: true },
+            force: {
+                initLayout: 'circular',
+                repulsion: opts.repulsion != null ? opts.repulsion : 220,
+                edgeLength: [60, 140],
+                gravity: opts.gravity != null ? opts.gravity : 0.08,
+                friction: 0.6,
+                layoutAnimation: false
+            }
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
     /*  Entity neighbor network (force-directed graph)                    */
     /* ----------------------------------------------------------------- */
 
@@ -207,61 +259,33 @@
                     textStyle: { fontSize: 12, color: tokens.inkLight || tokens.ink }
                 }];
             })() : [],
-            series: [{
-                type: 'graph',
-                layout: 'force',
-                // Reserve room for the bottom legend only when it is
-                // actually visible; otherwise the force layout gets the
-                // whole panel below the top padding.
-                top: 16,
-                bottom: opts.showLegend !== false ? 56 : 16,
-                left: 16,
-                right: 16,
-                roam: true,
-                draggable: true,
-                // Per ECharts docs: clamp zoom so roam button overlays
-                // can't scale the graph into oblivion, and shrink node
-                // symbols gently as the user zooms in so labels stay
-                // readable.
-                scaleLimit: { min: 0.25, max: 5 },
-                nodeScaleRatio: 0.6,
-                focusNodeAdjacency: true,
-                labelLayout: { hideOverlap: true },
-                // Categories drive the legend. Each entry's name must
-                // match the legend.data entries (which we built from
-                // the same array), so clicks on the legend toggle the
-                // corresponding category without the panel JS having
-                // to rebuild the whole option.
-                categories: categories,
-                emphasis: {
-                    focus: 'adjacency',
-                    lineStyle: { width: 4 },
-                    scale: true,
-                    scaleSize: 3
-                },
-                force: {
-                    // Circular seed gives force a symmetric starting
-                    // point; without it, the jittered random initial
-                    // positions + a pinned centre produced asymmetric
-                    // layouts that auto-fit couldn't recover from.
-                    initLayout: 'circular',
-                    repulsion: 220,
-                    edgeLength: [60, 140],
-                    gravity: 0.08,
-                    friction: 0.6,
-                    // Disabled so the force simulation runs once,
-                    // synchronously, and the final positions are
-                    // frozen. Without this the graph re-animates on
-                    // every resize / fullscreen / merge-mode setOption
-                    // — unsettling edge jumps the user complained
-                    // about. ECharts docs explicitly recommend
-                    // disabling layoutAnimation for larger graphs.
-                    layoutAnimation: false
-                },
-                data: graphNodes,
-                links: graphEdges,
-                cursor: 'pointer'
-            }],
+            // Reserve room for the bottom legend only when it is actually
+            // visible; otherwise the force layout gets the whole panel
+            // below the top padding.
+            series: [Object.assign(
+                C._forceGraphBase({ bottom: opts.showLegend !== false ? 56 : 16 }),
+                {
+                    // Shrink node symbols gently as the user zooms in so
+                    // labels stay readable.
+                    nodeScaleRatio: 0.6,
+                    focusNodeAdjacency: true,
+                    // Categories drive the legend. Each entry's name must
+                    // match the legend.data entries (which we built from
+                    // the same array), so clicks on the legend toggle the
+                    // corresponding category without the panel JS having
+                    // to rebuild the whole option.
+                    categories: categories,
+                    emphasis: {
+                        focus: 'adjacency',
+                        lineStyle: { width: 4 },
+                        scale: true,
+                        scaleSize: 3
+                    },
+                    data: graphNodes,
+                    links: graphEdges,
+                    cursor: 'pointer'
+                }
+            )],
             animationDuration: 600,
             animationEasing: 'cubicOut'
         };
@@ -550,40 +574,25 @@
                 }
             },
             legend: legend,
-            series: [{
-                type: 'graph',
-                layout: 'force',
-                top: 16,
-                bottom: opts.showLegend !== false ? 56 : 16,
-                left: 16,
-                right: 16,
-                roam: true,
-                draggable: true,
-                scaleLimit: { min: 0.25, max: 5 },
-                nodeScaleRatio: 0.6,
-                focusNodeAdjacency: true,
-                labelLayout: { hideOverlap: true },
-                emphasis: {
-                    focus: 'adjacency',
-                    lineStyle: { width: 4, opacity: 0.9 },
-                    label: { show: true },
-                    scale: true
-                },
-                force: {
-                    initLayout: 'circular',
-                    repulsion: 200,
-                    edgeLength: [60, 140],
-                    gravity: 0.08,
-                    friction: 0.6,
-                    // Disabled so the simulation runs once and freezes —
-                    // the same trick C.network uses to avoid edge jumps
-                    // on every resize / fullscreen toggle.
-                    layoutAnimation: false
-                },
-                data: graphNodes,
-                links: graphEdges,
-                cursor: 'pointer'
-            }],
+            series: [Object.assign(
+                C._forceGraphBase({
+                    bottom: opts.showLegend !== false ? 56 : 16,
+                    repulsion: 200
+                }),
+                {
+                    nodeScaleRatio: 0.6,
+                    focusNodeAdjacency: true,
+                    emphasis: {
+                        focus: 'adjacency',
+                        lineStyle: { width: 4, opacity: 0.9 },
+                        label: { show: true },
+                        scale: true
+                    },
+                    data: graphNodes,
+                    links: graphEdges,
+                    cursor: 'pointer'
+                }
+            )],
             animationDuration: 600,
             animationEasing: 'cubicOut'
         };

@@ -4,13 +4,13 @@ Guidance for Claude Code when working in this repository.
 
 ## What this module is
 
-Omeka S module that adds interactive visualizations to the [Islam West Africa Collection](https://islam.zmo.de/) at ZMO. Charts via [ECharts 6](https://echarts.apache.org/) + [MapLibre GL](https://maplibre.org/). Data is either fetched live from the public HF dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/`.
+Omeka S module that adds interactive visualizations to the [Islam West Africa Collection](https://islam.zmo.de/) at ZMO. Charts via [ECharts 6](https://echarts.apache.org/) + [MapLibre GL](https://maplibre.org/). Data is either fetched live from the public HF dataset [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection) or precomputed via Python scripts under `scripts/`. **The precompute scripts read the private full mirror `fmadore/islam-west-africa-collection-full`** (`iwac_utils.DATASET_ID`) and require an `HF_TOKEN`; in CI it comes from the repo secret.
 
 For the architectural overview — block layouts, asset partial, data strategy, theming, i18n, mobile UX — read [README.md](README.md) first. For the dataset shape consumed by the precompute scripts, see [DATA_NOTES.md](DATA_NOTES.md).
 
 ## Always use the `iwac-dataset` skill
 
-When writing or modifying any Python that reads the HF dataset (anything under `scripts/generate_*.py`, anything that calls `load_dataset("fmadore/islam-west-africa-collection", …)`, or any new generator added next to them), invoke the **`iwac-dataset` skill** before touching code. It carries:
+When writing or modifying any Python that reads the HF dataset (anything under `scripts/generate_*.py`, anything that calls `load_dataset(…)` on the IWAC dataset or its `-full` mirror, or any new generator added next to them), invoke the **`iwac-dataset` skill** before touching code. It carries:
 
 - Verified per-subset schema (field names, types, `embedding_OCR` vs `embedding_tableOfContents`, the three-model AI sentiment shape, `lda_topic_*` columns, etc.)
 - Conventions: pipe-separated multi-values, ISO dates, `lda_topic_id == -1` outliers, country canonicalization

@@ -295,21 +295,17 @@
                 legend: { type: 'scroll', top: 0 },
                 tooltip: {
                     trigger: 'axis',
-                    formatter: function (params) {
-                        if (!params || !params.length) return '';
-                        var i = params[0].dataIndex;
-                        var rows = params.slice().sort(function (a, b) {
-                            return (b.value || 0) - (a.value || 0);
-                        });
-                        var lines = ['<strong>' + P.escapeHtml(params[0].axisValue) + '</strong>'];
-                        rows.forEach(function (p) {
+                    formatter: C.sortedAxisTooltip({
+                        skip: function (p, i) {
                             var def = seriesDefs[p.seriesIndex];
-                            if (!def || !def.counts[i]) return;
-                            lines.push(p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
-                                + p.value + ' % (' + P.formatNumber(def.counts[i]) + ')');
-                        });
-                        return lines.join('<br>');
-                    }
+                            return !def || !def.counts[i];
+                        },
+                        row: function (p, i) {
+                            return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
+                                + p.value + ' % ('
+                                + P.formatNumber(seriesDefs[p.seriesIndex].counts[i]) + ')';
+                        }
+                    })
                 },
                 xAxis: {
                     type: 'category',

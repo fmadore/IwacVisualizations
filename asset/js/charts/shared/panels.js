@@ -43,6 +43,19 @@
     };
 
     /**
+     * Accent-insensitive, case-insensitive search folding — NFD
+     * decomposition with the combining diacritical marks (U+0300–U+036F)
+     * stripped, so "Bénin" matches "benin". The canonical fold for every
+     * search box / picker in the module.
+     */
+    P.foldAccents = function (str) {
+        return String(str || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    };
+
+    /**
      * Defensive filter for "Unknown" values. The Python generator already
      * skips empty / unknown countries, but the JSON could be stale and the
      * live-fetched references subset can still produce them, so every
@@ -182,6 +195,19 @@
         var key = prefix + name;
         var translated = P.t(key);
         return translated === key ? name : translated;
+    };
+
+    /**
+     * Derive a short display label from an LDA topic's ' - '-joined word
+     * list: the first two words joined with a middle dot — the same split
+     * the Topic Explorer treemap derives its cell names from. Falls back
+     * to "Topic <id>" when the label is empty and an id is supplied, else
+     * to '' so callers can skip unlabeled topics.
+     */
+    P.topicShortLabel = function (label, id) {
+        var name = String(label || '').split(' - ').slice(0, 2).join(' · ').trim();
+        if (name) return name;
+        return id != null ? (P.t('Topic') + ' ' + id) : '';
     };
 
     /* ----------------------------------------------------------------- */
@@ -467,6 +493,204 @@
         return P.el('div', 'iwac-vis-overview-grid');
     };
 
+    /**
+     * Labelled `<select>` control: `<div><label>text:</label><select>…</select></div>`
+     * with a generated id wiring the label to the select. Replaces the
+     * near-identical builders that org-cooccurrence and the three
+     * scary-terms selectors each hand-rolled. Class names stay caller-
+     * supplied because each block's stylesheet targets its own tokens.
+     *
+     * @param {Object} cfg
+     * @param {string} cfg.label   already-translated label (rendered "label:")
+     * @param {Array<{value:string, label:string}>} cfg.options
+     * @param {string} [cfg.current]   option value to preselect
+     * @param {function(string):void} cfg.onChange  fires with the new value
+     * @param {string} [cfg.groupClass='iwac-vis-select-group']
+     * @param {string} [cfg.labelClass='iwac-vis-select-label']
+     * @param {string} [cfg.selectClass='iwac-vis-select']
+     * @param {string} [cfg.idPrefix='iwac-vis-sel-']  select-id prefix
+     * @returns {HTMLElement} the group element
+     */
+    P.buildSelectControl = function (cfg) {
+        var group = P.el('div', cfg.groupClass || 'iwac-vis-select-group');
+        var label = P.el('label', cfg.labelClass || 'iwac-vis-select-label',
+            cfg.label + ':');
+        var select = P.el('select', cfg.selectClass || 'iwac-vis-select');
+        var selectId = (cfg.idPrefix || 'iwac-vis-sel-')
+            + Math.random().toString(36).slice(2, 8);
+        select.id = selectId;
+        label.htmlFor = selectId;
+        (cfg.options || []).forEach(function (o) {
+            var opt = P.el('option', null, o.label);
+            opt.value = o.value;
+            if (o.value === cfg.current) opt.selected = true;
+            select.appendChild(opt);
+        });
+        select.addEventListener('change', function () {
+            cfg.onChange(select.value);
+        });
+        group.appendChild(label);
+        group.appendChild(select);
+        return group;
+    };
+
+    /**
+     * Debounced search input + anchored suggestion dropdown — the widget
+     * term-trends and the entity-networks toolbar each hand-rolled.
+     * Matching/ranking stays at the call site via `getMatches`; the
+     * helper owns the shared mechanics: 120 ms debounce, empty state,
+     * item buttons (label + optional detail), Enter-picks-first,
+     * Escape-closes, and a SELF-CLEANING document-level outside-click
+     * close (it removes itself once the widget leaves the DOM, so block
+     * re-inits can't stack listeners).
+     *
+     * NOT for filterable list boxes (spatial-exploration's picker keeps
+     * its always-visible role=listbox — different widget).
+     *
+     * @param {Object} cfg
+     * @param {string} cfg.placeholder  translated placeholder + aria-label
+     * @param {function(string):Array<{label:string, detail?:string}>} cfg.getMatches
+     *   Query (trimmed, non-empty) → ranked matches, already capped.
+     *   Extra properties on a match ride through to onPick untouched.
+     * @param {function(Object):void} cfg.onPick  chosen match (input is
+     *   cleared and the dropdown closed before this fires)
+     * @param {string} [cfg.emptyText]  "no matches" row (default t('No matches'))
+     * @param {boolean} [cfg.openOnFocus=false]  re-open on input focus
+     * @param {Object} cfg.classes  per-block class names so existing CSS
+     *   keeps working: { root, input, dropdown, item, name, count, empty }
+     * @returns {{root:HTMLElement, input:HTMLInputElement,
+     *            close:function():void, clear:function():void}}
+     */
+    P.buildSearchDropdown = function (cfg) {
+        var classes = cfg.classes || {};
+        var wrap = P.el('div', classes.root);
+        var input = P.el('input', classes.input);
+        input.type = 'search';
+        input.placeholder = cfg.placeholder;
+        input.setAttribute('aria-label', cfg.placeholder);
+        var dropdown = P.el('div', classes.dropdown);
+        dropdown.style.display = 'none';
+        wrap.appendChild(input);
+        wrap.appendChild(dropdown);
+
+        function close() { dropdown.style.display = 'none'; }
+
+        function renderResults() {
+            var query = (input.value || '').trim();
+            dropdown.innerHTML = '';
+            if (!query) {
+                close();
+                return;
+            }
+            var matches = cfg.getMatches(query) || [];
+            if (!matches.length) {
+                dropdown.appendChild(P.el('div', classes.empty || 'iwac-vis-muted',
+                    cfg.emptyText || P.t('No matches')));
+                dropdown.style.display = '';
+                return;
+            }
+            matches.forEach(function (m) {
+                var item = P.el('button', classes.item);
+                item.type = 'button';
+                item.appendChild(P.el('span', classes.name, m.label));
+                if (m.detail != null) {
+                    item.appendChild(P.el('span', classes.count, m.detail));
+                }
+                item.addEventListener('click', function () {
+                    input.value = '';
+                    close();
+                    cfg.onPick(m);
+                });
+                dropdown.appendChild(item);
+            });
+            dropdown.style.display = '';
+        }
+
+        var timer = null;
+        input.addEventListener('input', function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(renderResults, 120);
+        });
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                var first = dropdown.querySelector('button');
+                if (first) first.click();
+            } else if (e.key === 'Escape') {
+                close();
+            }
+        });
+        if (cfg.openOnFocus) input.addEventListener('focus', renderResults);
+
+        document.addEventListener('click', function onDocClick(e) {
+            if (!document.body.contains(wrap)) {
+                document.removeEventListener('click', onDocClick);
+                return;
+            }
+            if (!wrap.contains(e.target)) close();
+        });
+
+        return {
+            root: wrap,
+            input: input,
+            close: close,
+            clear: function () {
+                input.value = '';
+                close();
+            }
+        };
+    };
+
+    /**
+     * Interval state machine for year-scrubbing playback (bar-chart race,
+     * animated choropleth). Owns only the timer semantics the panels kept
+     * re-implementing — rewind-at-end on play, auto-stop at the last
+     * frame, silent vs announced stops. The DOM (buttons, slider, labels)
+     * stays per-panel: the two consumers ship deliberately different
+     * control shells.
+     *
+     * @param {Object} cfg
+     * @param {number}   cfg.tickMs    interval between frames
+     * @param {function():boolean} cfg.isAtEnd   true when on the last frame
+     * @param {function():void}    cfg.rewind    jump back to frame 0
+     * @param {function():void}    cfg.advance   step one frame (called per tick)
+     * @param {function():void}    [cfg.onPlay]  after the interval starts
+     * @param {function():void}    [cfg.onStop]  after an ANNOUNCED stop —
+     *   skipped by stop(true), which panels use mid-scrub so re-rendering
+     *   controls doesn't steal the slider's focus.
+     * @returns {{playing():boolean, play():void, stop(silent?:boolean):void,
+     *            toggle():void}}
+     */
+    P.createPlaybackTimer = function (cfg) {
+        var timer = null;
+        var api = {
+            playing: function () { return timer != null; },
+            stop: function (silent) {
+                if (timer) {
+                    window.clearInterval(timer);
+                    timer = null;
+                }
+                if (!silent && cfg.onStop) cfg.onStop();
+            },
+            play: function () {
+                if (cfg.isAtEnd()) cfg.rewind();
+                if (timer) window.clearInterval(timer);
+                timer = window.setInterval(function () {
+                    if (cfg.isAtEnd()) {
+                        api.stop();
+                        return;
+                    }
+                    cfg.advance();
+                }, cfg.tickMs);
+                if (cfg.onPlay) cfg.onPlay();
+            },
+            toggle: function () {
+                if (timer) api.stop(); else api.play();
+            }
+        };
+        return api;
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Per-item resource-page dashboard boot                             */
     /* ----------------------------------------------------------------- */
@@ -581,6 +805,8 @@
      * @param {ECharts} chart  the registered chart instance
      * @param {Object} [opts]
      * @param {string} [opts.downloadName='iwac-chart.png']  PNG filename
+     * @param {boolean} [opts.legendToggle=true]  pass false for graphs
+     *   without a legend (the button would only shift the series bounds)
      * @returns {{el: HTMLElement, isLegendVisible: function():boolean}}
      */
     P.buildGraphPanelToolbar = function (panelEl, chart, opts) {
@@ -620,16 +846,18 @@
             if (!chart.isDisposed()) chart.dispatchAction({ type: 'restore' });
         }));
 
-        var legendBtn = btn('▤', P.t('Toggle legend'), function () {
-            if (chart.isDisposed()) return;
-            legendVisible = !legendVisible;
-            chart.setOption({
-                legend: [{ show: legendVisible }],
-                series: [{ bottom: legendVisible ? 56 : 16 }]
+        if (opts.legendToggle !== false) {
+            var legendBtn = btn('▤', P.t('Toggle legend'), function () {
+                if (chart.isDisposed()) return;
+                legendVisible = !legendVisible;
+                chart.setOption({
+                    legend: [{ show: legendVisible }],
+                    series: [{ bottom: legendVisible ? 56 : 16 }]
+                });
+                legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
             });
-            legendBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', !legendVisible);
-        });
-        bar.appendChild(legendBtn);
+            bar.appendChild(legendBtn);
+        }
 
         // Look the live instance up through ns.getLiveChart so we never
         // call getDataURL on an instance disposed by a theme swap.

@@ -16,16 +16,16 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
 from iwac_utils import (
-    DATASET_ID,
-    configure_logging,
+    add_standard_args,
+    generate_timestamp,
     load_dataset_safe,
     parse_coordinates,
     parse_pipe_separated,
+    parse_standard_args,
     save_json,
 )
 
@@ -105,7 +105,7 @@ def build_map(repo_id: str) -> Dict[str, Any]:
         "locations": locations,
         "country_counts": country_counts,
         "metadata": {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": generate_timestamp(),
             "source": "index subset where Type == 'Lieux', filtered to valid coordinates",
             "total_locations": len(locations),
             "total_countries": len(country_counts),
@@ -115,18 +115,9 @@ def build_map(repo_id: str) -> Dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", default=DATASET_ID)
     parser.add_argument("--output", default="asset/data/collection-map.json")
-    parser.add_argument(
-        "--minify",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Produce compact JSON (no indentation) (default: %(default)s)",
-    )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Set log level to DEBUG")
-    args = parser.parse_args()
-
-    configure_logging(logging.DEBUG if args.verbose else logging.INFO)
+    add_standard_args(parser, minify_default=False)
+    args = parse_standard_args(parser)
 
     result = build_map(repo_id=args.repo)
     save_json(result, Path(args.output), minify=args.minify)

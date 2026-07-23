@@ -189,7 +189,7 @@ $siteBase = $this->basePath() . '/s/' . $siteSlug;
                 <span class="slug"><?= $escapeHtml($slug) ?></span>
             </header>
             <iframe class="iwac-embed-preview" src="<?= $escapeAttr($previewSrc) ?>"
-                    title="<?= $escapeAttr($label) ?>" loading="lazy"></iframe>
+                    title="<?= $escapeAttr($this->translate($label)) ?>" loading="lazy"></iframe>
             <div class="iwac-embed-code">
                 <button type="button" class="iwac-embed-copy" data-embed-block>
                     <?= $escapeHtml($this->translate('Copy')) ?>

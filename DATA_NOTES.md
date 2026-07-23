@@ -3,9 +3,15 @@
 Source: https://huggingface.co/datasets/fmadore/islam-west-africa-collection
 License: CC-BY-NC-SA-4.0 · Languages: fr, en · Total rows: ~19,420
 
+> **Note (2026-07):** the precompute pipeline now reads the **private** full
+> mirror `fmadore/islam-west-africa-collection-full` (see
+> `scripts/iwac_utils.py::DATASET_ID`); loading it requires an `HF_TOKEN`.
+> The public URL above remains the user-facing collection this schema
+> snapshot describes.
+
 ```python
 from datasets import load_dataset
-ds = load_dataset("fmadore/islam-west-africa-collection", name="articles")
+ds = load_dataset("fmadore/islam-west-africa-collection-full", name="articles")  # needs HF_TOKEN
 ```
 
 ## Subsets at a glance
