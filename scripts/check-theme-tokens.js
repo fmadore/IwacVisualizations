@@ -26,6 +26,14 @@
  *      competing variable even if it never paints a pixel.
  *   5. The runtime `FALLBACK_LIGHT` / `FALLBACK_DARK` objects (iwac-theme.js)
  *      must equal the canonical light / dark values.
+ *   6. Every `var(--…)` must NAME a token that exists: one published in
+ *      `tokens.json`'s `names` (the theme's full vocabulary), one this module
+ *      declares itself, or one in the module-owned `--iwac-` namespace.
+ *      Rules 3-4 only ever checked hex *values*, so a reference to a token the
+ *      theme never defined — or has since removed — passed cleanly while
+ *      rendering from its fallback forever, silently decoupled from the scale
+ *      it appeared to track. `--panel-border-color` sat here undetected that
+ *      way until the theme published `names` (IWAC-theme 2.9.1).
  * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
  *
  * Usage: node scripts/check-theme-tokens.js
@@ -76,6 +84,10 @@ const REMOVED_TOKEN = /--primary-(hue|sat)\b/;
 const SRGB_MIX = /color-mix\(\s*in\s+srgb\b/i;
 const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
 const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
+const VAR_USE = /var\(\s*(--[\w-]+)/g;
+const DECL = /(--[\w-]+)\s*:/g;
+// Module-owned namespace: data-series colours and properties set at runtime.
+const MODULE_PREFIX = /^--iwac-/;
 
 const violations = [];
 function flag(file, line, msg, snippet) {
@@ -96,6 +108,44 @@ function checkVarFallbackValues(file, raw, n) {
     }
 }
 
+/**
+ * Every custom property this module declares itself. Collected up front so
+ * rule 6 can tell a module-owned property from a reference to a theme token
+ * that does not exist.
+ */
+const moduleOwned = new Set();
+function collectModuleOwned(files) {
+    for (const file of files) {
+        const src = readFileSync(file, 'utf8');
+        let m;
+        DECL.lastIndex = 0;
+        while ((m = DECL.exec(src)) !== null) moduleOwned.add(m[1]);
+    }
+}
+
+/**
+ * Rule 6: every `var(--…)` must name a token that actually exists.
+ *
+ * Rules 3-4 check hex *values*; nothing checked the *names*, so a reference to
+ * a token the theme never defined (or has since removed) passed cleanly while
+ * rendering from its fallback forever — silently decoupled from the scale it
+ * appears to track. `--panel-border-color` (deleted from the theme) and
+ * `--space-2xs` (never existed) both lived here undetected for exactly that
+ * reason. `names` in tokens.json is the theme's published vocabulary.
+ */
+function checkVarNames(file, raw, n) {
+    if (!TOKENS || !Array.isArray(TOKENS.names)) return;
+    let m;
+    VAR_USE.lastIndex = 0;
+    while ((m = VAR_USE.exec(raw)) !== null) {
+        const name = m[1];
+        if (MODULE_PREFIX.test(name) || moduleOwned.has(name) || TOKENS.names.includes(name)) {
+            continue;
+        }
+        flag(file, n, `unknown token ${name} — not a theme token (tokens.json names), not module-owned (--iwac-*)`, raw);
+    }
+}
+
 function scan(file, { hexCheck }) {
     const lines = readFileSync(file, 'utf8').split('\n');
     lines.forEach((raw, i) => {
@@ -107,6 +157,7 @@ function scan(file, { hexCheck }) {
             flag(file, n, 'color-mix(in srgb …) — use `in oklab`', raw);
         }
         checkVarFallbackValues(file, raw, n);
+        checkVarNames(file, raw, n);
         if (!hexCheck || /allow-hex/.test(raw)) return;
 
         let m;
@@ -147,8 +198,14 @@ function checkFallbackObjects(file) {
     }
 }
 
-walk(CSS_DIR, ['.css']).forEach((f) => scan(f, { hexCheck: true }));
+const cssFiles = walk(CSS_DIR, ['.css']);
 const jsFiles = walk(JS_DIR, ['.js']);
+
+// Rule 6 needs the module's own vocabulary before any file is scanned — a
+// property declared in one file is legitimately consumed from another.
+collectModuleOwned(cssFiles.concat(jsFiles));
+
+cssFiles.forEach((f) => scan(f, { hexCheck: true }));
 jsFiles.forEach((f) => scan(f, { hexCheck: false }));
 jsFiles.forEach(checkFallbackObjects);
 

@@ -221,17 +221,20 @@
 .iwac-vis-panel {
     position: relative;
     background: var(--panel-bg, var(--surface, #fdfcfb));
-    /* Use `--panel-border-color` directly rather than the composite
-     * `--panel-border` shorthand. The composite in older IWAC theme
-     * builds (v1.7.0 and below) declared `--panel-border: 1px solid
-     * var(--panel-border-color)` only at :root, which meant the inner
-     * var() got frozen at the root cascade and ignored the override
-     * in `body[data-theme="light"]` — producing a dark blue-grey
-     * "black line" on light-mode cards when the user's system
-     * prefers dark. The unrolled form below re-resolves on every
-     * element that inherits it, so every chart panel reads as a
-     * distinct warm-grey card regardless of theme version. */
-    border: 1px solid var(--panel-border-color, var(--border, #ced1d6));
+    /* Use `--border` directly rather than the composite `--panel-border`
+     * shorthand. A composite wrapping another var() can freeze that inner
+     * substitution at the cascade block where it is declared: older IWAC
+     * theme builds (v1.7.0 and below) declared `--panel-border` only at
+     * :root, so it ignored the override in `body[data-theme="light"]` and
+     * painted a dark blue-grey "black line" on light-mode cards whenever the
+     * user's system preferred dark. The unrolled form re-resolves on every
+     * element that inherits it, so panels read as warm-grey cards on any
+     * theme version.
+     *
+     * This named `--panel-border-color` until the theme removed that token,
+     * after which the declaration had been rendering from its `--border`
+     * fallback anyway. Naming --border directly is what it already did. */
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--panel-radius, var(--radius-md, 0.5rem));
     box-shadow: var(--shadow-sm, 0 1px 3px 0 var(--iwac-vis-shadow-soft));
     padding: var(--space-4, 1rem);
@@ -516,7 +519,7 @@
  *  custom padding). */
 .iwac-vis-aside {
     background: var(--panel-bg, var(--surface, #fdfcfb));
-    border: 1px solid var(--panel-border-color, var(--border, #ced1d6));
+    border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-4, 1rem);
     box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
