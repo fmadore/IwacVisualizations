@@ -33,6 +33,17 @@ Headline: one user-facing regression (the Press Reprints embed slug), stale
 `fr.po`/`template.pot` for the v1.20+ blocks, and docs that still call the now-
 private dataset "public".
 
+**2026-07-25 fourth pass:** a **top-down** audit of v1.22.0 — where the module
+stores the same fact twice, where coupling points the wrong way, and what the
+existing tooling doesn't cover — rather than another sweep for duplicated code
+blocks (Tiers 1–5 already own those). New findings live in **Tier 6** below.
+Headline: article dashboards never receive the issue-#7 data cache-buster (stale
+JSON after every sync); 38 pre-v2.0.0 token fallbacks in the embed templates,
+which the theme linter cannot see because it never scans `view/`; a block is
+declared in four unreconciled places (the Tier 5 press-reprints regression was
+that failure mode); and `P.bootBlock` — the page-block twin of the shipped
+`bootPerItemDashboard` — is worth ~500 lines across 18 orchestrators.
+
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
 (shared JS infra · per-block JS · CSS/theme tokens · PHP/templates · Python),
@@ -695,6 +706,246 @@ local contributor following them would hit an unexplained 401.
 - **`on_this_day.valid_day` accepting Feb 29 every year is intentional**
   (366 MM-DD bucket slots), though a malformed `2001-02-29` passes; document
   rather than "fix".
+
+---
+
+## Tier 6 — 2026-07-25 fourth audit (structural / single-source-of-truth pass)
+
+Fourth repo-wide pass, run against `main` at v1.22.0. Tiers 1–5 worked
+bottom-up (duplicated blocks of code → shared helper). This pass deliberately
+looked **top-down** instead: where does the module keep the *same fact* in more
+than one place, where does the coupling point the wrong way, and what does the
+existing tooling not cover. Findings are therefore mostly new rather than
+re-counts of the duplication clusters the earlier tiers track.
+
+**Verified during this pass:** `php -l` clean across all 33 PHP/PHTML files;
+99 exported shared-JS functions, only 2 unreferenced; slug ↔ filename ↔
+`embedSlug` consistent across all 18 blocks (the Tier 5 press-reprints
+regression stays fixed); `EmbedController::BLOCKS` labels all have matching
+`@translate`-marked msgids via the block-layout classes.
+
+### Correctness (fix first)
+
+- [ ] **Article dashboards miss the data cache-buster** — `dashboard-core.js:36`
+  reads the sync stamp from `.iwac-vis-block[data-version]`, which
+  `iwac-block-shell.phtml:85-90` emits. `article.phtml:139-142` hand-rolls its
+  wrapper and emits only `item-id` / `base-path` / `site-base` — no
+  `data-version`. On an article item page that block is the only IWAC block, so
+  `ns.assetVersion` degrades to the module version alone and
+  `article-dashboards/{id}.json` keeps its old `?v=` after a "Pull latest data"
+  run. Article dashboards therefore serve **stale JSON from cache until the next
+  module bump** — exactly the failure issue #7's stamp exists to prevent. Fixed
+  for free by the `iwac-block-shell` migration below. **Effort S.**
+- [ ] **`article.phtml:56-58` enqueues the unminified sheet** —
+  `css/blocks/article-dashboard.css` (466 lines, 14 KB) while
+  `article-dashboard.min.css` is built and committed. Every other block loads
+  `.min.css` through `iwac-assets`. Also the only raw `headLink` left in a block
+  template, against the CLAUDE.md rule ("declare needs through
+  `view/common/iwac-assets.phtml` — do not write raw headScript/headLink").
+  Root cause: `iwac-assets.phtml:104-106` accepts a single `blockCss` string, so
+  a block needing two sheets has no declarative option. **Fix:** let `blockCss`
+  accept a string *or* an array, then pass
+  `['person-dashboard', 'article-dashboard']`. **Effort S.**
+- [ ] **38 stale theme-token fallbacks in the embed views** — and these are the
+  routes where fallbacks actually paint. `layout/embed.phtml` deliberately ships
+  no compiled theme CSS ("faithful even when the compiled theme CSS isn't on
+  this route"), so every `var(--x, #hex)` in the embed chrome renders **from the
+  fallback**. All of them are pre-v2.0.0 values: `--primary` `#e64a19` (canonical
+  `#ce4115`), `--ink` `#2c2f37` (`#13161c`), `--surface` `#fdfdfd` (`#fdfcfb`),
+  `--background` `#f7f7f6` (`#f7f5f3`), `--border` `#d4d6da` (`#ced1d6`),
+  `--ink-light` `#535862` (`#3f4349`), `--muted`, `--surface-raised`,
+  `--surface-sunken`, `--border-light`, `--ink-strong`. Counts:
+  `embed/index.phtml` ×31, `layout/embed.phtml` ×4, `embed/not-found.phtml` ×3.
+  Meanwhile `iwac-theme.js`'s `FALLBACK_LIGHT` **is** current (lint rule 5
+  covers it), so on the bare embed route the *charts* paint the new palette
+  while the *page chrome around them* paints the old one — a visible mismatch
+  on the snippet gallery (link hover `#e64a19` next to series `#ce4115`).
+  **Effort S** (mechanical value swap), and see the lint-coverage item below for
+  why it went unnoticed. **Verified against `tokens.json` this pass.**
+
+### The linter's blind spot (root cause of the item above)
+
+- [ ] **`check-theme-tokens.js` scans `asset/css` + `asset/js` only** (`:46-47`),
+  never `view/`. The module keeps ~217 lines of inline `<style>` in four
+  templates — `embed/index.phtml` (133), `layout/embed.phtml` (34+19),
+  `not-found.phtml` (18), `admin/data/index.phtml` (13) — all consuming theme
+  tokens with hex fallbacks, none linted. Two options, not exclusive:
+  1. **Add `view/**/*.phtml` to the walker** (rules 1/2/4/6 apply verbatim to a
+     `<style>` block; rule 3's "bare hex" check needs the `<style>`-block
+     extraction so PHP string literals aren't scanned). Cheapest, catches the
+     class permanently.
+  2. **Move the gallery CSS to `asset/css/blocks/embed-gallery.css`** — it then
+     gets minified, cached across gallery visits, and linted for free. The
+     `layout/embed.phtml` critical-CSS block is a legitimate inline (it must
+     apply before any stylesheet lands on the bare route); keep that one inline
+     and lint it in place. **Effort M.**
+
+### Single source of truth — the block registry
+
+- [ ] **One block is declared in four places, none authoritative.** Adding a page
+  block today means editing: `module.config.php` (invokable name →
+  class), the `BlockLayout` subclass (label + description + partial path),
+  `EmbedController::BLOCKS` (slug → label — a *second* copy of the label), and
+  the template's `embedSlug` / `blockCss` / `orchestrator` strings. Nothing
+  cross-checks them; the Tier 5 press-reprints regression (slug ≠ filename, every
+  embed 500ing) is precisely this class of failure, and it survived two audits.
+  **Fix:** one `Site\BlockRegistry` class holding
+  `slug => [label, description, embeddable]`, consumed by
+  `EmbedController::BLOCKS` (derive), by the block classes (label/description
+  lookup), and asserted against the config invokables. **Effort M.**
+- [ ] **18 BlockLayout classes × 20 lines are pure declaration** — each supplies
+  only `label()` / `description()` / `templateViewScript()`, and the template
+  path is always `common/block-layout/<slug>`. With the registry above they
+  collapse to one `ConfiguredBlockLayout` registered through a factory keyed by
+  slug (`'factories' => array_map(...)` over the registry), deleting ~360 lines
+  of files that exist only to hold two strings. **Assess before doing:** the
+  per-class form is greppable and matches Omeka convention; the registry item
+  above delivers most of the safety benefit on its own. **Effort M, optional.**
+
+### JS — the boot epilogue (largest remaining duplication cluster)
+
+- [ ] **`P.bootBlock()` — ~500 lines across 18 orchestrators.** Every page-block
+  orchestrator ends with the identical scaffold: guard `typeof echarts`,
+  `querySelectorAll(selector)` loop, build `ctx` from
+  `container.dataset.{basePath,siteBase}`, `P.fetchJSON(basePath +
+  '/files/iwac-visualizations/<file>')`, `.catch` → `console.error` +
+  `innerHTML = ''` + `P.buildFetchErrorState(err)`, then the
+  `document.readyState === 'loading'` two-branch boot. Measured: 14–19 lines of
+  epilogue × 18 files plus a 12–15-line `initBlock` each. `P.bootPerItemDashboard`
+  (`panels.js:726`) is the proven precedent — the same extraction for
+  *page* blocks was never done. Signature:
+  `P.bootBlock({selector, dataFile, warnLabel, requireECharts, render})`, each
+  orchestrator reduced to one call. Side benefits: the literal
+  `'/files/iwac-visualizations/'` (25 source files today) gets one home, and the
+  `container.innerHTML = ''` error path stops being re-derived per file.
+  **Effort M, mechanical, output-identical.**
+- [ ] **`person-dashboard.js` ≈ `entity-dashboard.js`** — structurally identical
+  layout registrations (same nine slots, same renderer keys, same
+  `DL.fullSlice` accessors) plus three byte-identical predicates
+  (`hasNewspapersData` / `hasTopicsData` / `hasSentimentData`), diverging only
+  in the description i18n keys (`desc_*` vs `desc_entity_*`) and the person-only
+  facet header. ~90 lines duplicated, and a slot added to one silently diverges
+  from the other. **Fix:** shared `buildDashboardSlots(descPrefix)` +
+  shared predicates; register `'person'` and `'entity'` from it. The differing
+  copy stays (verified: 4 of the 5 `desc_entity_*` strings are genuinely
+  reworded for entities — only `desc_entity_countries_covered` is byte-identical
+  to its person twin and could collapse). **Effort S–M.**
+- [ ] **`panels.js` is a 941-line grab-bag** — DOM helpers, i18n proxies, status
+  banners, GeoJSON/feature-state map helpers, panel + summary-card builders,
+  select/search-dropdown controls, a playback timer, the per-item dashboard
+  bootstrapper, and the force-graph toolbar. The module already established the
+  split pattern for exactly this (`chart-options.js` → 5 files). Split along the
+  existing section comments: `panels.js` (core DOM + states) ·
+  `panels-controls.js` (select / search / playback) · `panels-map.js` (feature
+  state, count features, map theme) · `panels-boot.js` (`bootPerItemDashboard` +
+  the new `bootBlock`). No load-order risk — all four extend the same `P`
+  namespace and `iwac-assets` already emits `panels.min.js` unconditionally.
+  **Effort M.**
+- [ ] **Dead exports:** `DL.hasRenderer` (`dashboard-layout.js:105`) and
+  `DL.listRenderers` (`:338`) have zero call sites — the only two of 99 exported
+  shared functions that do. Keep if intended as a debugging API (say so in the
+  docblock), else delete. **Effort S.**
+
+### Assets shipped to every page
+
+- [ ] **~11 KB of `iwac-i18n.min.js` (23% of 48 KB) is an identity table.** 299
+  of the 428 `en` entries map a key to itself, and `ns.t()` (`:1145`) *already*
+  falls back to the key when no entry exists — so deleting them is
+  provably behavior-identical (the `fr` lookup is tried first and unaffected;
+  `DICTIONARY.en[key] !== undefined ? … : key` returns the same string either
+  way). `iwac-i18n.min.js` is the module's **largest asset**, bigger than
+  `iwac-core.min.css` (22 KB), and loads on every page with any block.
+  **Trade-off to weigh:** the `en` table doubles as the discoverable list of
+  valid keys. Keep the 129 non-identity entries (the `desc_*` sentences,
+  `ref_type_*` maps, interpolated strings) and consider a comment block or a
+  build-time check listing the identity keys instead. **Effort S, measure after.**
+- [ ] **`iwac-core.css:960-996` enumerates block-specific class names.** The
+  shared form-control rule lists `.iwac-vis-keywords-filters__select`,
+  `.iwac-vis-index-table-search`, `.iwac-vis-scary-select`,
+  `.iwac-vis-spatial-picker__search`, `.iwac-vis-networks-toolbar__select`, … —
+  the coupling points backwards: core has to learn every block's private class
+  names, and the section comment admits it ("Add new selectors to the list below
+  when a new form control is introduced"). Now that `P.buildSelectControl` and
+  `P.buildSearchDropdown` (v1.22.0) construct these elements centrally, the fix
+  is nearly free: have the builders add a shared `.iwac-vis-control` class and
+  collapse the selector list to one. This also finishes part of the Tier 4 "core
+  purity" item (`.iwac-vis-publication__body:693` and the
+  `.iwac-vis-badge--publication:1130` remain). **Effort S–M.**
+
+### Accessibility
+
+- [ ] **Loading and error states are silent for screen readers.** The shared
+  spinner (`iwac-block-shell.phtml:118-121`, `P.buildLoadingState`
+  `panels.js:217`) and every banner from `buildErrorState` / `buildNoDataState` /
+  `buildEmptyState` are plain `<div>`s: no `role="status"`, no
+  `aria-live="polite"`, no `aria-busy` on the block wrapper. Dashboards fetch for
+  1–3 s and then swap the spinner for content, so a screen-reader user hears
+  nothing at either end. The module is otherwise disciplined here (ECharts
+  `aria.enabled` in `dashboard-core.js:79`, `:focus-visible` everywhere,
+  `aria-live` on the pagination indicator `pagination.js:54`) — this is the one
+  gap, and it is two attributes in two shared places covering all 20 blocks.
+  **Effort S.**
+
+### CI / tooling
+
+- [ ] **No PHP or Python check runs anywhere.** `build-check.yml` covers JS/CSS
+  only; `regenerate-data.yml` executes the generators but doesn't lint them. A
+  PHP syntax error in a template reaches production and 500s the site — the
+  earlier audits noted `php -l` was simply unavailable in their environment.
+  Add a `lint.yml` with `php -l` over `src/ view/ Module.php config/` (paths
+  filter `**/*.php`, `**/*.phtml`) and `pyflakes scripts/*.py` (which Tier 5
+  already got to a clean state manually, so it starts green). Both are seconds
+  of runtime. **Effort S.** *(Confirmed clean this pass: `php -l` passes on all
+  33 files.)*
+- [ ] **`.min` freshness is only checked on `main` pushes and PRs touching
+  `asset/**`** — correct today, but a PR that edits only `view/` while relying on
+  a stale committed `.min` slips through. Minor; note rather than fix.
+
+### PHP smalls
+
+- [ ] **`SentimentExtractor::fromItem` reads each property twice** — `polarite`
+  and `centralite` each go through `linkedItemId()` *and* `linkedItemLabel()`,
+  and both call `firstValue()` → `$item->value(…, ['all' => true])` inside its
+  own try/catch. That's 4 redundant `value()` calls per model, 12 per article.
+  Fold to one `firstValueResource()` per property and read `id()` + `displayTitle()`
+  off it. Behavior-identical; the try/catch stays. **Effort S.**
+
+### Docs drift (mechanical, fix while nearby)
+
+- [ ] **`Module.php:11-19` describes an asset strategy that no longer exists** —
+  "every block partial in this module enqueues its own stylesheet, CDN
+  libraries, and JS dependencies via `$this->headLink` / `headScript`". Since
+  v1.13 they declare needs through `common/iwac-assets`; the docblock's "mirror
+  the asset-enqueueing pattern from `…/person.phtml`" (`:31-33`) now points at a
+  file that enqueues nothing directly. A contributor following it writes exactly
+  the template CLAUDE.md forbids. **Effort S.**
+- [ ] **`dashboard-core.js:9`** — "Load order (set by Module.php)"; it is set by
+  `view/common/iwac-assets.phtml`. **Effort S.**
+- **Tier 4 "Document the two bootstrap idioms" is moot — close it.** `P.setupOnView`
+  no longer exists anywhere in the tree; all 20 orchestrators use the single
+  `DOMContentLoaded` idiom (on-view deferral moved into the `iwac-assets` lazy
+  loader). Superseded by the `P.bootBlock` item above.
+- **Tier 5 verification note is stale in one line:** `truncateLabel` /
+  `buildDataZoom` / `addClickHandler` are no longer *defined* either — they were
+  removed, not just callerless.
+
+### False positives — do NOT "fix" these (Tier 6 additions)
+
+- **`'Year × day calendar'` is not an i18n key mismatch.** `iwac-i18n.js:442`
+  writes the key with a literal `×`, `:979` writes it as the `\u00d7` escape —
+  the same string at runtime. A naive source-text diff of the two tables reports
+  it as an `fr`-only key; it isn't.
+- **`P.foldAccents` is not dead.** It has no direct call sites because both
+  consumers alias it first (`var fold = P.foldAccents` — `entity-networks.js:30`,
+  `spatial-exploration/picker.js:27`).
+- **Raw `$primary` / `$secondary` output in `layout/embed.phtml:115-122` is
+  correct**, and the existing comment explains why (CSS context; `escapeHtmlAttr`
+  would emit `&#x23;` and truncate the declaration). Both values are hex-validated
+  twice. Do not "fix" the escaping.
+- **`$blockCss` is not sanitized like `$needs['renderers']` is** — deliberate
+  asymmetry, not an oversight: renderer names come from a per-block array that a
+  future caller might build dynamically, `blockCss` is a literal in a template.
+  If `blockCss` gains array support (item above), keep it literal-only.
 
 ---
 
