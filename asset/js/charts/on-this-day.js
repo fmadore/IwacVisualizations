@@ -51,14 +51,6 @@
 
     /** Remove the whole block (incl. server-rendered heading) — the
      *  silent-skip rule shared with the Item Set Dashboard. */
-    function removeBlock(container) {
-        var block = container.closest ? container.closest('.iwac-vis-block') : null;
-        if (block && block.parentNode) {
-            block.parentNode.removeChild(block);
-        } else {
-            container.innerHTML = '';
-        }
-    }
 
     function pad2(n) {
         var s = String(n);
@@ -108,7 +100,7 @@
     function render(container, data, ctx) {
         var items = (data && data.items) || [];
         if (!items.length) {
-            removeBlock(container);
+            P.removeBlock(container);
             return;
         }
         container.innerHTML = '';
@@ -154,28 +146,17 @@
         }
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        var url = ctx.basePath + '/files/iwac-visualizations/on-this-day/'
-            + todayKey() + '.json';
-        P.fetchJSON(url)
-            .then(function (data) { render(container, data, ctx); })
-            .catch(function () { removeBlock(container); });
-    }
-
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-on-this-day');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    // `onError: 'remove'` is the engagement-hook contract: before the first data
+    // sync there is no per-day file, and a homepage block must vanish rather
+    // than render an error banner.
+    P.bootBlock({
+        selector:       '.iwac-vis-on-this-day',
+        warnLabel:      'IWACVis on this day',
+        requireECharts: false,
+        load:           function (ctx) {
+            return P.fetchJSON(ctx.dataBase + 'on-this-day/' + todayKey() + '.json');
+        },
+        render:         render,
+        onError:        'remove'
+    });
 })();

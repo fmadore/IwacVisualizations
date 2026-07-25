@@ -9,14 +9,16 @@ use Omeka\Module\AbstractModule;
 /**
  * IWAC Visualizations module.
  *
- * Asset loading: every block partial in this module enqueues its own
- * stylesheet, CDN libraries, and JS dependencies via $this->headLink /
- * headScript. We deliberately do NOT attach a controller listener that
- * blanket-loads ECharts/MapLibre on every Item and ItemSet view —
- * doing so cost ~600 KB of unused JavaScript on every Article page,
- * even when no Visualizations block was configured. Per-partial
- * loading keeps the cost contained to pages that actually render a
- * block.
+ * Asset loading: a block template declares WHAT it needs through
+ * `view/common/iwac-assets.phtml` (stylesheets, CDN libraries, shared JS
+ * modules, panels, orchestrator) and that partial emits them — templates
+ * never call $this->headLink / headScript themselves. We deliberately do
+ * NOT attach a controller listener that blanket-loads ECharts/MapLibre on
+ * every Item and ItemSet view — doing so cost ~600 KB of unused JavaScript
+ * on every Article page, even when no Visualizations block was configured.
+ * Per-block declaration keeps the cost contained to pages that actually
+ * render a block, and the on-view lazy loader in that partial defers even
+ * those until a block nears the viewport.
  *
  * Sentiment properties: the article dashboard renders its AI sentiment
  * panel from Omeka item metadata (iwac:<model><Axis>) rather than the
@@ -28,9 +30,12 @@ use Omeka\Module\AbstractModule;
  * `src/Site/ResourcePageBlockLayout/SentimentExtractor.php` for the
  * mapping from the controlled-vocabulary item IDs to display labels.
  *
- * If you add a new block, mirror the asset-enqueueing pattern from
- * `view/common/resource-page-block-layout/visualizations/person.phtml`
- * or `view/common/block-layout/collection-overview.phtml`.
+ * If you add a new block: register it in `IwacVisualizations\Site\BlockRegistry`
+ * (slug, label, description), add a `BlockLayout` subclass declaring that
+ * slug, wire the invokable in config/module.config.php, and model the
+ * template on `view/common/block-layout/press-bylines.phtml` — a call to
+ * `common/iwac-block-shell` with an `assets` array. `npm run lint:blocks`
+ * checks those four sites still agree.
  */
 class Module extends AbstractModule
 {

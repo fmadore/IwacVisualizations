@@ -1,20 +1,11 @@
 <?php
 namespace IwacVisualizations\Site\BlockLayout;
 
+/**
+ * Periodicals Overview page block. Label, description and template all resolve from
+ * `IwacVisualizations\Site\BlockRegistry::BLOCKS['periodicals-overview']`.
+ */
 class PeriodicalsOverview extends AbstractIwacBlockLayout
 {
-    protected function label(): string
-    {
-        return 'Periodicals Overview'; // @translate
-    }
-
-    protected function description(): string
-    {
-        return 'Islamic periodicals overview: publication runs, issues per year by country, languages, countries, and top subjects. Data is precomputed from the IWAC publications subset. No configuration needed.'; // @translate
-    }
-
-    protected function templateViewScript(): string
-    {
-        return 'common/block-layout/periodicals-overview';
-    }
+    const SLUG = 'periodicals-overview';
 }

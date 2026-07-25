@@ -102,7 +102,7 @@
         var itemId = container.dataset.itemId;
         if (!itemId) return;
         var basePath = container.dataset.basePath || '';
-        var url = basePath + '/files/iwac-visualizations/publication-dashboards/'
+        var url = basePath + P.DATA_BASE + 'publication-dashboards/'
             + itemId + '.json';
 
         P.fetchJSON(url)

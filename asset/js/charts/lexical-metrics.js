@@ -137,122 +137,99 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function initLexicalMetrics(container) {
-        var loadingLabel = container.querySelector('.iwac-vis-loading span');
-        if (loadingLabel) loadingLabel.textContent = P.t('Loading press language metrics') + '…';
-
-        var basePath = container.getAttribute('data-base-path') || '';
-        var url = basePath + '/files/iwac-visualizations/lexical-metrics.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                if (!data || !data.summary || !data.summary.articles) {
-                    container.innerHTML = '';
-                    container.appendChild(P.buildEmptyState());
-                    return;
-                }
-
-                var h = buildLayout(container, data.summary);
-                var byYear = data.by_year || { years: [] };
-                var minArticles = (data.metadata && data.metadata.minArticlesPerNewspaper) || 50;
-                var rankParams = { min: minArticles, top: TOP_N_NEWSPAPERS };
-
-                // 1-3. The three trend lines.
-                var trends = [
-                    {
-                        metric: 'readability',
-                        cls: 'iwac-vis-panel iwac-vis-panel--wide',
-                        title: 'lexical.readability_title',
-                        desc: 'lexical.readability_desc',
-                        labelKey: 'lexical.mean_readability',
-                        valueName: P.t('lexical.axis_readability')
-                    },
-                    {
-                        metric: 'richness',
-                        cls: 'iwac-vis-panel',
-                        title: 'lexical.richness_title',
-                        desc: 'lexical.richness_desc',
-                        labelKey: 'lexical.mean_richness',
-                        valueName: P.t('lexical.axis_richness')
-                    },
-                    {
-                        metric: 'words',
-                        cls: 'iwac-vis-panel',
-                        title: 'lexical.words_title',
-                        desc: 'lexical.words_desc',
-                        labelKey: 'lexical.mean_words',
-                        valueName: P.t('Words')
-                    }
-                ];
-                trends.forEach(function (def) {
-                    var panel = P.buildPanel(def.cls, P.t(def.title), P.t(def.desc));
-                    h.grid.appendChild(panel.panel);
-                    if (!byYear.years || !byYear.years.length) {
-                        panel.chart.appendChild(
-                            P.buildEmptyState());
-                        return;
-                    }
-                    ns.registerChart(panel.chart, function (el, chart) {
-                        chart.setOption(trendLineOption(byYear, def.metric, {
-                            metricLabel: P.t(def.labelKey),
-                            valueName: def.valueName
-                        }));
-                    });
-                });
-
-                // 4-5. Newspaper rankings.
-                var rankings = [
-                    {
-                        metric: 'readability',
-                        title: 'lexical.np_read_title',
-                        desc: 'lexical.np_read_desc'
-                    },
-                    {
-                        metric: 'richness',
-                        title: 'lexical.np_rich_title',
-                        desc: 'lexical.np_rich_desc'
-                    }
-                ];
-                rankings.forEach(function (def) {
-                    var entries = rankNewspapers(data.newspapers, def.metric);
-                    if (!entries.length) return;
-                    var panel = P.buildPanel('iwac-vis-panel',
-                        P.t(def.title), P.t(def.desc, rankParams));
-                    h.grid.appendChild(panel.panel);
-                    ns.registerChart(panel.chart, function (el, chart) {
-                        chart.setOption(C.horizontalBar(entries, {
-                            nameKey: 'name',
-                            valueKey: def.metric,
-                            filterUnknown: false
-                        }));
-                    });
-                });
-            })
-            .catch(function (err) {
-                console.error('IWACVis lexical metrics:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Auto-init                                                         */
-    /* ----------------------------------------------------------------- */
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis lexical metrics: ECharts not loaded');
+    function render(container, data) {
+        if (!data || !data.summary || !data.summary.articles) {
+            container.innerHTML = '';
+            container.appendChild(P.buildEmptyState());
             return;
         }
-        var containers = document.querySelectorAll('.iwac-vis-lexical-metrics');
-        for (var i = 0; i < containers.length; i++) {
-            initLexicalMetrics(containers[i]);
-        }
+
+        var h = buildLayout(container, data.summary);
+        var byYear = data.by_year || { years: [] };
+        var minArticles = (data.metadata && data.metadata.minArticlesPerNewspaper) || 50;
+        var rankParams = { min: minArticles, top: TOP_N_NEWSPAPERS };
+
+        // 1-3. The three trend lines.
+        var trends = [
+            {
+                metric: 'readability',
+                cls: 'iwac-vis-panel iwac-vis-panel--wide',
+                title: 'lexical.readability_title',
+                desc: 'lexical.readability_desc',
+                labelKey: 'lexical.mean_readability',
+                valueName: P.t('lexical.axis_readability')
+            },
+            {
+                metric: 'richness',
+                cls: 'iwac-vis-panel',
+                title: 'lexical.richness_title',
+                desc: 'lexical.richness_desc',
+                labelKey: 'lexical.mean_richness',
+                valueName: P.t('lexical.axis_richness')
+            },
+            {
+                metric: 'words',
+                cls: 'iwac-vis-panel',
+                title: 'lexical.words_title',
+                desc: 'lexical.words_desc',
+                labelKey: 'lexical.mean_words',
+                valueName: P.t('Words')
+            }
+        ];
+        trends.forEach(function (def) {
+            var panel = P.buildPanel(def.cls, P.t(def.title), P.t(def.desc));
+            h.grid.appendChild(panel.panel);
+            if (!byYear.years || !byYear.years.length) {
+                panel.chart.appendChild(
+                    P.buildEmptyState());
+                return;
+            }
+            ns.registerChart(panel.chart, function (el, chart) {
+                chart.setOption(trendLineOption(byYear, def.metric, {
+                    metricLabel: P.t(def.labelKey),
+                    valueName: def.valueName
+                }));
+            });
+        });
+
+        // 4-5. Newspaper rankings.
+        var rankings = [
+            {
+                metric: 'readability',
+                title: 'lexical.np_read_title',
+                desc: 'lexical.np_read_desc'
+            },
+            {
+                metric: 'richness',
+                title: 'lexical.np_rich_title',
+                desc: 'lexical.np_rich_desc'
+            }
+        ];
+        rankings.forEach(function (def) {
+            var entries = rankNewspapers(data.newspapers, def.metric);
+            if (!entries.length) return;
+            var panel = P.buildPanel('iwac-vis-panel',
+                P.t(def.title), P.t(def.desc, rankParams));
+            h.grid.appendChild(panel.panel);
+            ns.registerChart(panel.chart, function (el, chart) {
+                chart.setOption(C.horizontalBar(entries, {
+                    nameKey: 'name',
+                    valueKey: def.metric,
+                    filterUnknown: false
+                }));
+            });
+        });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-lexical-metrics',
+        warnLabel:      'IWACVis lexical metrics',
+        requireECharts: true,
+        dataFile:       'lexical-metrics.json',
+        beforeLoad:     function (container) {
+            var loadingLabel = container.querySelector('.iwac-vis-loading span');
+            if (loadingLabel) loadingLabel.textContent = P.t('Loading press language metrics') + '…';
+        },
+        render:         render
+    });
 })();

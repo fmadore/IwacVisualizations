@@ -102,6 +102,12 @@
         DL.renderers[chartKey] = fn;
     };
 
+    /**
+     * Whether a renderer key is registered. Deliberately unreferenced in
+     * tree — a console aid for checking, on a live page, that a panel module
+     * loaded before its orchestrator (`IWACVis.dashboardLayout.hasRenderer(
+     * 'iwacTimeline')`). Keep; it is not dead code awaiting a sweep.
+     */
     DL.hasRenderer = function (chartKey) {
         return typeof DL.renderers[chartKey] === 'function';
     };
@@ -334,7 +340,11 @@
     /*  Convenience: list registered renderers                            */
     /* ----------------------------------------------------------------- */
 
-    /** Return the keys of every registered renderer. Useful for debug. */
+    /**
+     * Every registered renderer key, sorted. Like `hasRenderer` above, a
+     * console aid rather than a consumed API — the counterpart for "what DID
+     * load?". Deliberately unreferenced in tree.
+     */
     DL.listRenderers = function () {
         return Object.keys(DL.renderers).sort();
     };

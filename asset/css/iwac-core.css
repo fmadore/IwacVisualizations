@@ -951,20 +951,19 @@
 /*  Shared form controls (selects + text inputs)                         */
 /* =================================================================== */
 
-/*  Every <select> and text-<input> in the module should match this
- *  shape: radius-md, surface background, primary focus ring. Per-panel
- *  overrides are layout-only (widths / flex). Add new selectors to the
- *  list below when a new form control is introduced. */
+/*  Every <select> and text-<input> in the module carries
+ *  `.iwac-vis-control` and matches this shape: radius-md, surface
+ *  background, primary focus ring. A block class may follow it for layout
+ *  only (widths / flex).
+ *
+ *  Until v1.23.0 this rule enumerated each block's private control class
+ *  instead — `.iwac-vis-scary-select`, `.iwac-vis-networks-search__input`,
+ *  … — so the shared sheet had to learn every block's internals and adding
+ *  a control meant editing core (the old comment here said exactly that).
+ *  The class is applied centrally by `P.buildSelectControl` /
+ *  `P.buildSearchDropdown` and at the handful of hand-built sites. */
 
-.iwac-vis-facets__select,
-.iwac-vis-keywords-filters__select,
-.iwac-vis-index-table-search,
-.iwac-vis-keywords-compare__search,
-.iwac-vis-scary-select,
-.iwac-vis-spatial-picker__search,
-.iwac-vis-spatial-toolbar__select,
-.iwac-vis-networks-toolbar__select,
-.iwac-vis-networks-search__input {
+.iwac-vis-control {
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     background: var(--surface, #fdfcfb);
     color: var(--ink, #13161c);
@@ -977,23 +976,15 @@
         box-shadow var(--transition-fast, 150ms ease);
 }
 
-.iwac-vis-facets__select:hover,
-.iwac-vis-keywords-filters__select:hover,
-.iwac-vis-scary-select:hover,
-.iwac-vis-spatial-toolbar__select:hover,
-.iwac-vis-networks-toolbar__select:hover {
+/*  Hover tint on selects only — a text input signals affordance by its
+ *  caret, and tinting it on hover reads as a state change that isn't one.
+ *  (Element-qualified so the single class keeps the distinction the old
+ *  hand-maintained selector lists drew.) */
+select.iwac-vis-control:hover {
     border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
 }
 
-.iwac-vis-facets__select:focus-visible,
-.iwac-vis-keywords-filters__select:focus-visible,
-.iwac-vis-index-table-search:focus-visible,
-.iwac-vis-keywords-compare__search:focus-visible,
-.iwac-vis-scary-select:focus-visible,
-.iwac-vis-spatial-picker__search:focus-visible,
-.iwac-vis-spatial-toolbar__select:focus-visible,
-.iwac-vis-networks-toolbar__select:focus-visible,
-.iwac-vis-networks-search__input:focus-visible {
+.iwac-vis-control:focus-visible {
     outline: 2px solid var(--focus-color, var(--primary, #ce4115));
     outline-offset: 2px;
     border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));

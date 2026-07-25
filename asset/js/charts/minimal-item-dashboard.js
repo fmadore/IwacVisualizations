@@ -77,7 +77,7 @@
             return;
         }
 
-        var url = basePath + '/files/iwac-visualizations/template-summary.json';
+        var url = basePath + P.DATA_BASE + 'template-summary.json';
 
         P.fetchJSON(url)
             .then(function (bundle) {

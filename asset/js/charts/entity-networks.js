@@ -59,23 +59,6 @@
         };
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        var base = ctx.basePath + '/files/iwac-visualizations/';
-
-        P.fetchJSON(base + 'entity-networks-global.json')
-            .then(function (payload) {
-                build(container, ctx, base, decodeGlobal(payload));
-            })
-            .catch(function (err) {
-                console.error('IWACVis entity networks:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
 
     function build(container, ctx, base, globalData) {
         container.innerHTML = '';
@@ -276,7 +259,7 @@
         // --- Min-weight select ----------------------------------------
         var weightLabel = P.el('label', 'iwac-vis-networks-toolbar__label',
             P.t('Min. link strength'));
-        var weightSelect = P.el('select', 'iwac-vis-networks-toolbar__select');
+        var weightSelect = P.el('select', 'iwac-vis-control iwac-vis-networks-toolbar__select');
         weightLabel.appendChild(weightSelect);
         toolbar.appendChild(weightLabel);
 
@@ -305,7 +288,7 @@
             openOnFocus: true,
             classes: {
                 root:     'iwac-vis-networks-search',
-                input:    'iwac-vis-networks-search__input',
+                input:    'iwac-vis-control iwac-vis-networks-search__input',
                 dropdown: 'iwac-vis-networks-search__results',
                 item:     'iwac-vis-networks-search__item',
                 name:     'iwac-vis-networks-search__item-name',
@@ -345,16 +328,13 @@
         fillWeightOptions();
     }
 
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-networks');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
+    P.bootBlock({
+        selector:       '.iwac-vis-networks',
+        warnLabel:      'IWACVis entity networks',
+        requireECharts: false,
+        dataFile:       'entity-networks-global.json',
+        render:         function (container, data, ctx) {
+            build(container, ctx, ctx.dataBase, decodeGlobal(data));
         }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

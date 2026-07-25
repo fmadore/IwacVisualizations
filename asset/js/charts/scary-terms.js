@@ -70,46 +70,29 @@
     //  Boot
     // ---------------------------------------------------------------------
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis.scaryTerms: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-scary');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-
-    // ---------------------------------------------------------------------
-    //  Per-block initialization
-    // ---------------------------------------------------------------------
-
-    function initBlock(container) {
-        var basePath = container.dataset.basePath || '';
-        var dataBase = basePath + '/files/iwac-visualizations/';
-
-        function optional(name) {
-            // Optional bundles — older deploys may not have them yet.
-            // Fall back to null so the orchestrator degrades the view.
-            return P.fetchJSON(dataBase + DATA_FILES[name]).catch(function () { return null; });
-        }
-
-        Promise.all([
-            P.fetchJSON(dataBase + DATA_FILES.metadata),
-            P.fetchJSON(dataBase + DATA_FILES.temporal),
-            P.fetchJSON(dataBase + DATA_FILES.countries),
-            P.fetchJSON(dataBase + DATA_FILES.global),
-            optional('cooccurrence'),
-            optional('trends'),
-            optional('events')
-        ]).then(function (results) {
+    P.bootBlock({
+        selector:       '.iwac-vis-scary',
+        warnLabel:      'IWACVis.scaryTerms',
+        requireECharts: true,
+        // Four required bundles plus three optional ones — older deploys may
+        // not carry the latter, so they resolve to null and the orchestrator
+        // degrades the corresponding views.
+        load:           function (ctx) {
+            function optional(name) {
+                return P.fetchJSON(ctx.dataBase + DATA_FILES[name])
+                    .catch(function () { return null; });
+            }
+            return Promise.all([
+                P.fetchJSON(ctx.dataBase + DATA_FILES.metadata),
+                P.fetchJSON(ctx.dataBase + DATA_FILES.temporal),
+                P.fetchJSON(ctx.dataBase + DATA_FILES.countries),
+                P.fetchJSON(ctx.dataBase + DATA_FILES.global),
+                optional('cooccurrence'),
+                optional('trends'),
+                optional('events')
+            ]);
+        },
+        render:         function (container, results, ctx) {
             render(container, {
                 metadata:     results[0],
                 temporal:     results[1],
@@ -118,13 +101,9 @@
                 cooccurrence: results[4],
                 trends:       results[5],
                 events:       results[6]
-            }, dataBase);
-        }).catch(function (err) {
-            console.error('IWACVis.scaryTerms:', err);
-            container.innerHTML = '';
-            container.appendChild(P.buildFetchErrorState(err));
-        });
-    }
+            }, ctx.dataBase);
+        }
+    });
 
     // ---------------------------------------------------------------------
     //  Layout

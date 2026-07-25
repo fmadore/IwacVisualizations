@@ -23,41 +23,6 @@
 
 use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
 
-echo $this->partial('common/iwac-assets', [
-    // Base dashboard sheet (network toolbar, chord, map styling shared
-    // with person + entity views). Article-specific layout (card
-    // grids, sentiment cards) lives in css/blocks/article-dashboard.css
-    // which we enqueue below.
-    'blockCss' => 'person-dashboard',
-    'needs' => [
-        'maplibre'     => true,
-        'chartOptions' => true,
-        'facetButtons' => true,
-        'table'        => true,
-        'pagination'   => true,
-        'layout'       => true,
-    ],
-    // Self-registering IIFEs for the client-side panels. The sentiment
-    // panel is rendered server-side and is NOT included here — see
-    // the <section> further down for its static markup. The radar
-    // panel self-initialises from the inline JSON script we emit
-    // below. `dashboard-panels-bridge` MUST load after the per-panel
-    // IIFEs — it registers thin wrappers into IWACVis.dashboardLayout
-    // so the orchestrator can dispatch via declarative slot arrays.
-    'panels' => [
-        'article-dashboard/network',
-        'article-dashboard/further-reading',
-        'article-dashboard/radar',
-        'shared/dashboard-panels-bridge',
-    ],
-    'orchestrator' => 'article-dashboard',
-]);
-
-$this->headLink()->appendStylesheet(
-    $this->assetUrl('css/blocks/article-dashboard.css', 'IwacVisualizations')
-);
-
-$siteSlug   = $this->currentSite()->slug();
 $escapeAttr = $this->plugin('escapeHtmlAttr');
 $escapeHtml = $this->plugin('escapeHtml');
 $translate  = $this->plugin('translate');
@@ -67,29 +32,9 @@ $assetUrl   = $this->plugin('assetUrl');
 $sentiment    = SentimentExtractor::fromItem($resource);
 $hasSentiment = SentimentExtractor::hasAny($sentiment);
 
-// Per-model chrome: precise model names (with release / parameter
-// detail the user wants to see) + logos. Kept here, not in the
-// extractor, because it's presentation metadata not data.
-$modelInfo = [
-    'gemini' => [
-        'name'  => 'Gemini 3 Flash',
-        'org'   => 'Google',
-        'short' => 'Gemini',
-        'logo'  => 'Gemini_logo.svg',
-    ],
-    'chatgpt' => [
-        'name'  => 'GPT-5 mini',
-        'org'   => 'OpenAI',
-        'short' => 'GPT-5 mini',
-        'logo'  => 'ChatGPT_logo.svg',
-    ],
-    'mistral' => [
-        'name'  => 'Ministral 14B',
-        'org'   => 'Mistral AI',
-        'short' => 'Ministral 14B',
-        'logo'  => 'Mistral_AI_logo.svg',
-    ],
-];
+// Per-model chrome (name / org / short / logo) — single source of truth on
+// the extractor, so the cards below and the radar legend cannot drift apart.
+$modelInfo = SentimentExtractor::MODEL_INFO;
 
 // CSS-class slug used by the .iwac-vis-chip--polarity-<slug>
 // colouring rules. English "Very positive" → "very-positive".
@@ -134,21 +79,14 @@ foreach (SentimentExtractor::MODELS as $m) {
         'subjectiviteLabel' => $s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '',
     ];
 }
+
+// The AI sentiment panel is server-rendered (it reads Omeka item metadata, not
+// the precomputed bundle) and coexists with the async dashboard, so it rides
+// the shell's `append` slot rather than replacing the spinner. Buffer it here.
+$sentimentHtml = '';
+if ($hasSentiment) {
+    ob_start();
 ?>
-
-<div class="iwac-vis-block iwac-vis-article"
-     data-item-id="<?= $escapeAttr($resource->id()) ?>"
-     data-base-path="<?= $escapeAttr($this->basePath()) ?>"
-     data-site-base="<?= $escapeAttr($this->basePath() . '/s/' . $siteSlug) ?>">
-
-    <h3><?= $translate('Visualizations') ?></h3>
-
-    <div class="iwac-vis-loading iwac-vis-article__loading">
-        <div class="iwac-vis-spinner"></div>
-        <span><?= $translate('Loading dashboard') ?>&hellip;</span>
-    </div>
-
-    <?php if ($hasSentiment): ?>
     <section class="iwac-vis-panel iwac-vis-panel--wide iwac-vis-article__sentiment"
              data-iwac-no-panel-toolbar="1">
         <h4><?= $translate('AI sentiment') ?></h4>
@@ -257,5 +195,42 @@ foreach (SentimentExtractor::MODELS as $m) {
             </p>
         </div>
     </section>
-    <?php endif; ?>
-</div>
+<?php
+    $sentimentHtml = (string) ob_get_clean();
+}
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        // person-dashboard.css is the base dashboard sheet (network toolbar,
+        // chord, map styling shared with the person + entity views);
+        // article-dashboard.css layers the card grids + sentiment cards on top.
+        'blockCss' => ['person-dashboard', 'article-dashboard'],
+        'needs' => [
+            'maplibre'     => true,
+            'chartOptions' => true,
+            'facetButtons' => true,
+            'table'        => true,
+            'pagination'   => true,
+            'layout'       => true,
+        ],
+        // Self-registering IIFEs for the client-side panels. The sentiment
+        // panel is server-rendered and so has no entry here; the radar panel
+        // self-initialises from the inline JSON emitted above.
+        // `dashboard-panels-bridge` MUST load after the per-panel IIFEs — it
+        // registers thin wrappers into IWACVis.dashboardLayout so the
+        // orchestrator can dispatch via declarative slot arrays.
+        'panels' => [
+            'article-dashboard/network',
+            'article-dashboard/further-reading',
+            'article-dashboard/radar',
+            'shared/dashboard-panels-bridge',
+        ],
+        'orchestrator' => 'article-dashboard',
+    ],
+    'blockClass'   => 'iwac-vis-article',
+    'heading'      => $this->translate('Visualizations'),
+    'loading'      => $this->translate('Loading dashboard'),
+    'loadingClass' => 'iwac-vis-article__loading',
+    'data'         => ['item-id' => $resource->id()],
+    'append'       => $sentimentHtml,
+]);

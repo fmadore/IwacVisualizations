@@ -29,7 +29,7 @@
 
         var controls = P.el('div', 'iwac-vis-index-table-controls');
 
-        var searchInput = P.el('input', 'iwac-vis-index-table-search');
+        var searchInput = P.el('input', 'iwac-vis-control iwac-vis-index-table-search');
         searchInput.type = 'search';
         searchInput.placeholder = P.t('Search keywords');
         searchInput.setAttribute('aria-label', P.t('Search keywords'));

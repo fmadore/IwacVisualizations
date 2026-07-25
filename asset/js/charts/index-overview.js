@@ -257,40 +257,15 @@
         }, { rootMargin: '400px 0px' });
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        var base = ctx.basePath + '/files/iwac-visualizations/';
-
-        P.fetchJSON(base + 'index-overview.json')
-            .then(function (dataA) {
-                var h = buildLayout(container);
-                wireSectionA(h, dataA, ctx, base);
-                armSectionB(h, base, ctx);
-            })
-            .catch(function (err) {
-                console.error('IWACVis index overview:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis index overview: ECharts not loaded');
-            return;
+    P.bootBlock({
+        selector:       '.iwac-vis-index-overview',
+        warnLabel:      'IWACVis index overview',
+        requireECharts: true,
+        dataFile:       'index-overview.json',
+        render:         function (container, data, ctx) {
+            var h = buildLayout(container);
+            wireSectionA(h, data, ctx, ctx.dataBase);
+            armSectionB(h, ctx.dataBase, ctx);
         }
-        var containers = document.querySelectorAll('.iwac-vis-index-overview');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

@@ -190,30 +190,11 @@
         renderTop(topPanel, top, ctx);
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        P.fetchJSON(ctx.basePath + '/files/iwac-visualizations/press-bylines.json')
-            .then(function (data) { buildLayout(container, data, ctx); })
-            .catch(function (err) {
-                console.error('IWACVis press bylines:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-press-bylines');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-press-bylines',
+        warnLabel:      'IWACVis press bylines',
+        requireECharts: false,
+        dataFile:       'press-bylines.json',
+        render:         buildLayout
+    });
 })();

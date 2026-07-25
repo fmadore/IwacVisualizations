@@ -43,10 +43,17 @@
  * @var string|null $prerendered   Server-rendered fallback HTML placed inside
  *                                 the wrapper instead of the loading spinner
  *                                 (the JS orchestrator replaces it on hydrate).
+ * @var string|null $append        Server-rendered HTML placed AFTER the spinner /
+ *                                 prerendered slot, inside the wrapper. Unlike
+ *                                 $prerendered this is not a stand-in for the
+ *                                 async content — it is content of its own that
+ *                                 coexists with it (the article dashboard's AI
+ *                                 sentiment panel, read from Omeka metadata
+ *                                 rather than the precomputed bundle).
  * @var array|null  $data          Extra data attributes (key => value; the
  *                                 `data-` prefix is added automatically).
  * @var bool|null   $siteBase      Emit data-site-base (default true).
- * @var string|null $embedSlug     EmbedController::BLOCKS slug for this block.
+ * @var string|null $embedSlug     BlockRegistry slug for this block.
  *                                 When set, emits data-embed-slug (which opts
  *                                 the block into on-page copy-embed buttons,
  *                                 see embed.js) plus data-embed-base — the
@@ -64,6 +71,7 @@ $loading      = isset($loading)      ? (string) $loading : '';
 $loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
 $extraData    = isset($data)         ? (array) $data : [];
 $prerendered  = isset($prerendered)  ? (string) $prerendered : '';
+$append       = isset($append)       ? (string) $append : '';
 $withSiteBase = !isset($siteBase) || $siteBase;
 $embedSlug    = isset($embedSlug)    ? (string) $embedSlug : '';
 
@@ -115,9 +123,13 @@ $loadingCls   = trim('iwac-vis-loading ' . $loadingClass);
     <?= $prerendered ?>
 <?php else: ?>
 
-    <div class="<?= $escapeAttr($loadingCls) ?>">
-        <div class="iwac-vis-spinner"></div>
+    <div class="<?= $escapeAttr($loadingCls) ?>" role="status" aria-live="polite">
+        <div class="iwac-vis-spinner" aria-hidden="true"></div>
         <span><?= $escapeHtml($loading) ?>&hellip;</span>
     </div>
+<?php endif; ?>
+<?php if ($append !== ''): ?>
+
+    <?= $append ?>
 <?php endif; ?>
 </div>

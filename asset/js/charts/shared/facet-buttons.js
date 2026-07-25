@@ -118,7 +118,7 @@
             }
 
             // mode === 'select'
-            var select = P.el('select', 'iwac-vis-facets__select');
+            var select = P.el('select', 'iwac-vis-control iwac-vis-facets__select');
             keys.forEach(function (k) {
                 var opt = P.el('option', null, subFacets[k]);
                 opt.value = k;

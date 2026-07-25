@@ -45,6 +45,7 @@ const { join, relative } = require('path');
 const ROOT = join(__dirname, '..');
 const CSS_DIR = join(ROOT, 'asset', 'css');
 const JS_DIR = join(ROOT, 'asset', 'js');
+const VIEW_DIR = join(ROOT, 'view');
 const TOKENS_PATH = join(ROOT, 'tokens.json');
 
 function walk(dir, exts, out = []) {
@@ -57,6 +58,22 @@ function walk(dir, exts, out = []) {
         }
     }
     return out;
+}
+
+/**
+ * Blank out `/* … *\/` comment interiors, preserving every newline and the
+ * overall character count so file:line references stay exact.
+ *
+ * Without this, prose that merely *discusses* a colour trips the hex rule —
+ * `layout/embed.phtml`'s comment explaining the dark-mode accent shift
+ * ("#e64a19 → #ec653f") is a documented example, and any comment naming a
+ * removed token would fail rule 1 the same way. Comments are not CSS.
+ */
+function blankComments(text) {
+    // `/* allow-hex */` is itself a comment and IS load-bearing — the opt-out
+    // marker rules 3 and 4 look for. Leave those intact and blank the rest.
+    return text.replace(/\/\*[\s\S]*?\*\//g, (m) =>
+        /allow-hex/.test(m) ? m : m.replace(/[^\n]/g, ' '));
 }
 
 /** Normalise #rgb / #rgba / #rrggbb / #rrggbbaa → lowercase #rrggbb. */
@@ -146,10 +163,38 @@ function checkVarNames(file, raw, n) {
     }
 }
 
-function scan(file, { hexCheck }) {
-    const lines = readFileSync(file, 'utf8').split('\n');
-    lines.forEach((raw, i) => {
-        const n = i + 1;
+/**
+ * Extract the `<style>` regions of a .phtml template as [lineNumber, text]
+ * pairs, so template CSS is linted with real file:line references.
+ *
+ * Templates are scanned for the same reason asset CSS is — but they matter
+ * MORE than most sheets: the embed routes (`layout/embed.phtml` and friends)
+ * deliberately ship without the compiled theme CSS, so every `var(--x, #hex)`
+ * there renders FROM THE FALLBACK. A stale fallback in `asset/css` is a latent
+ * competing variable; a stale fallback in an embed template is the colour a
+ * visitor actually sees. Until this scan existed, 38 pre-v2.0.0 values sat in
+ * those three files while the linter reported the tree clean.
+ *
+ * Only the `<style>` interiors are scanned: PHP string literals and HTML
+ * attributes elsewhere in the file are not CSS, and a `#` in a URL fragment
+ * or a colour name in prose would produce noise.
+ */
+function templateStyleLines(file) {
+    const src = blankComments(readFileSync(file, 'utf8'));
+    const out = [];
+    const re = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
+    let m;
+    while ((m = re.exec(src)) !== null) {
+        const firstLine = src.slice(0, m.index).split('\n').length;
+        // +0 keeps the opening <style …> tag's own line out of the numbering:
+        // m[1] starts right after `>`, so its first line IS the <style> line.
+        m[1].split('\n').forEach((raw, i) => out.push([firstLine + i, raw]));
+    }
+    return out;
+}
+
+function scanLines(file, numbered, { hexCheck }) {
+    numbered.forEach(([n, raw]) => {
         if (REMOVED_TOKEN.test(raw)) {
             flag(file, n, 'removed token --primary-hue/--primary-sat (derive via color-mix from --primary)', raw);
         }
@@ -176,6 +221,12 @@ function scan(file, { hexCheck }) {
     });
 }
 
+function scan(file, opts) {
+    const numbered = blankComments(readFileSync(file, 'utf8'))
+        .split('\n').map((raw, i) => [i + 1, raw]);
+    scanLines(file, numbered, opts);
+}
+
 /** Rule 5: FALLBACK_LIGHT / FALLBACK_DARK objects must equal canonical values. */
 const camelToVar = (k) => '--' + k.replace(/([A-Z])/g, '-$1').toLowerCase();
 function checkFallbackObjects(file) {
@@ -200,14 +251,30 @@ function checkFallbackObjects(file) {
 
 const cssFiles = walk(CSS_DIR, ['.css']);
 const jsFiles = walk(JS_DIR, ['.js']);
+const viewFiles = walk(VIEW_DIR, ['.phtml']);
+// Templates carry CSS only inside <style>; pre-extract so both the
+// module-vocabulary collection and the scan see the same lines.
+const templateStyles = new Map(
+    viewFiles.map((f) => [f, templateStyleLines(f)]).filter(([, lines]) => lines.length)
+);
 
 // Rule 6 needs the module's own vocabulary before any file is scanned — a
 // property declared in one file is legitimately consumed from another.
 collectModuleOwned(cssFiles.concat(jsFiles));
+for (const lines of templateStyles.values()) {
+    for (const [, raw] of lines) {
+        DECL.lastIndex = 0;
+        let m;
+        while ((m = DECL.exec(raw)) !== null) moduleOwned.add(m[1]);
+    }
+}
 
 cssFiles.forEach((f) => scan(f, { hexCheck: true }));
 jsFiles.forEach((f) => scan(f, { hexCheck: false }));
 jsFiles.forEach(checkFallbackObjects);
+for (const [file, lines] of templateStyles) {
+    scanLines(file, lines, { hexCheck: true });
+}
 
 if (violations.length) {
     console.error(`\n✗ theme-token guard: ${violations.length} violation(s)\n`);

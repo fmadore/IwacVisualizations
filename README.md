@@ -132,7 +132,7 @@ Every page block can now be embedded on a third-party site through a standalone 
 - **Access** — `Module::onBootstrap()` grants public ACL access to the embed controller so anonymous visitors (and the embedding site) can load it.
 - **Admin shortcut** — **Admin → IWAC Visualizations** lists each site-specific embed gallery next to the data-sync controls, so editors can open the preview/snippet page without remembering `/s/<site-slug>/iwac-embed`.
 
-**Theme-token guard.** `scripts/check-theme-tokens.js` (wired as `npm run lint:theme`, and run first by `npm run build`) fails the build on contract drift: removed tokens (`--primary-hue` / `--primary-sat`), `color-mix(in srgb …)`, or bare hex in CSS outside a `var(--token, #fallback)` slot. Sanctioned data-series colours opt out with a trailing `/* allow-hex */` marker.
+**Theme-token guard.** `scripts/check-theme-tokens.js` (wired as `npm run lint:theme`, and run first by `npm run build`) fails the build on contract drift: removed tokens (`--primary-hue` / `--primary-sat`), `color-mix(in srgb …)`, or bare hex in CSS outside a `var(--token, #fallback)` slot. Since v1.23.0 it also reads `<style>` blocks in `view/**/*.phtml` — template CSS had drifted 38 fallbacks behind the theme precisely because nothing scanned it, and the embed routes render *from* those fallbacks (they ship no compiled theme CSS). Sanctioned data-series colours opt out with a trailing `/* allow-hex */` marker.
 
 ### v1.13.0 — Country Focus folded into Spatial Exploration
 
@@ -668,7 +668,8 @@ Consequences for contributors:
 - **When adding a new block**, write the template body (markup + data attributes) and call `$this->partial('common/iwac-assets', [...])` at the top. Don't write raw `$this->headScript()` calls — that's what the partial is for.
 - **Reference `.min.js`, not `.js`** — the partial already appends `.min.js`; pass panel paths without any extension.
 - Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.
-- If you need a truly new shared primitive, add it to `panels.js` (small additions) or a new `shared/<name>.js` file, add it as an opt-in flag in the partial, and document it in this README.
+- If you need a truly new shared primitive, add it to the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file, add it as an opt-in flag in the partial, and document it in this README.
+- **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes and the templates stop agreeing.
 
 ### Load order (runtime)
 
@@ -681,14 +682,16 @@ The shared partial enqueues scripts in this fixed order. All are deferred, so th
 5. **Panel modules** — self-registering IIFEs under `charts/<block>/` that attach to `IWACVis.<block>Dashboard.<panel>`
 6. **Orchestrator** — `charts/<block>.js` — waits for `DOMContentLoaded`, fetches JSON (or live HF data), builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
 
-### Shared JS helpers (`asset/js/charts/shared/panels.js`)
+### Shared JS helpers (`asset/js/charts/shared/panels*.js`)
 
-Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as `P`). Beyond the DOM primitives (`P.el`, `P.escapeHtml`, `P.buildPanel`, `P.buildSummaryCards`) there are a handful of helpers panel modules should reach for before rolling their own:
+Every panel module gets a small API hung off `window.IWACVis.panels` (aliased as `P`). Since v1.23.0 the namespace is assembled from four files — `panels.js` (DOM, fetch, lazy-init, i18n shortcuts, status banners, layout primitives), `panels-controls.js` (select / search dropdown / playback timer), `panels-map.js` (GeoJSON features, feature-state hover), `panels-boot.js` (`bootBlock`, `bootPerItemDashboard`, force-graph chrome) — following the same split as the chart-options family. They all extend the same `P` object and load unconditionally, so callers see one flat API. Beyond the DOM primitives (`P.el`, `P.escapeHtml`, `P.buildPanel`, `P.buildSummaryCards`) there are a handful of helpers panel modules should reach for before rolling their own:
 
 | Helper | What it does |
 |---|---|
 | `P.t(key, params)` / `P.formatNumber(n)` / `P.formatDate(iso, opts)` | i18n shortcuts. `formatDate` is locale-aware (fr-FR / en-US) and gracefully falls back to the ISO date slice on parse failure. |
-| `P.buildLoadingState(key)` / `P.buildEmptyState(key)` / `P.buildErrorState(key)` | Consistent spinner / "No data available" / "Failed to load" banners. Default keys translate to the obvious messages. |
+| `P.buildLoadingState(key)` / `P.buildEmptyState(key)` / `P.buildErrorState(key)` | Consistent spinner / "No data available" / "Failed to load" banners. Default keys translate to the obvious messages. Each is a `role="status"` / `aria-live="polite"` live region, so a screen reader announces the state change a sighted reader takes in at a glance. |
+| `P.bootBlock({ selector, dataFile \| load, render, … })` | The page-block boot contract: DOM-ready + ECharts guard, container sweep, `ctx` from the block's data-\* attributes, bundle fetch under `P.DATA_BASE`, error banner (or `onError: 'remove'` for blocks that must vanish rather than show an error). Every page-block orchestrator ends in one call to this. |
+| `P.bootPerItemDashboard({ selector, classToken, dataDir, layout, … })` | The same contract for resource-page dashboards: fetch `<dataDir>/<itemId>.json`, swap the spinner for a `__body` wrapper, mount an optional header, dispatch the grid through `dashboardLayout.render`. |
 | `P.buildCountFeatures(items, { countKey, minCount, toProps })` | Turns a list of `{lng, lat, count, …}` records into a GeoJSON `FeatureCollection` for MapLibre bubble maps, plus the max count for the radius interpolation. Used by every map panel in the module. |
 | `P.lazyInit(el, render, { rootMargin })` | Runs `render` exactly once when `el` first nears the viewport (IntersectionObserver with a pre-trigger margin; immediate fallback without IO support). Returns a one-shot trigger for forcing the render early. The shared pattern behind every lazy map / wordcloud / deferred data fetch. |
 | `P.buildFacetedChart(panelEl, { facet, getData, hasData, buildOption, emptyKey })` | Collapses the 30-line "register chart → subscribe to facet → re-setOption on change → show empty state" pattern into one call. Works with both external facet observers (person/entity dashboards) and locally-held state (collection-overview facet bars — use `ctrl.rerender()` from the button `onChange` handler). |

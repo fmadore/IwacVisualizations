@@ -124,4 +124,76 @@
      * don't each define their own.
      */
     DL.fullSlice = function (data) { return data; };
+
+    /* ----------------------------------------------------------------- */
+    /*  Person-like layout (person + entity)                              */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Empty-payload predicates for the three slots that can legitimately
+     * arrive empty. They read the precompute's `by_role.all` sections —
+     * the shape both the person and the entity generator emit (the entity
+     * one wraps everything in `by_role.all` precisely so these panels work
+     * unchanged with a no-op facet).
+     */
+    function hasNewspapersData(data) {
+        var all = data && data.newspapers && data.newspapers.by_role && data.newspapers.by_role.all;
+        return !!(all && all.length > 0);
+    }
+    function hasTopicsData(data) {
+        var all = data && data.topics && data.topics.by_role && data.topics.by_role.all;
+        return !!(all && all.length > 0);
+    }
+    function hasSentimentData(data) {
+        var all = data && data.sentiment && data.sentiment.by_role && data.sentiment.by_role.all;
+        if (!all || !all.by_model) return false;
+        var models = all.models || Object.keys(all.by_model);
+        for (var i = 0; i < models.length; i++) {
+            var m = all.by_model[models[i]];
+            if (m && m.polarite && m.polarite.length > 0) return true;
+        }
+        return false;
+    }
+
+    /**
+     * The nine-slot grid shared by the person and entity dashboards.
+     *
+     * The two layouts are structurally identical — same renderer keys, same
+     * `fullSlice` accessors, same predicates — and differ only in the wording
+     * of five descriptions ("this person appears" vs "this entity is named").
+     * They were maintained as two copies until v1.23.0, which meant a slot
+     * added to one silently diverged from the other.
+     *
+     * @param {string} [variant]  '' for the person wording, 'entity' for the
+     *                            entity wording. Applied to the five
+     *                            description keys that have a variant; the
+     *                            other four are shared verbatim.
+     */
+    DL.personLikeSlots = function (variant) {
+        var v = variant ? variant + '_' : '';
+        var ALL = DL.fullSlice;
+        return [
+            { chart: 'iwacTimeline',     wide: true, dataAccessor: ALL,
+              title: 'Mentions',                description: 'desc_' + v + 'mentions_timeline' },
+            { chart: 'iwacHeatmap',      wide: true, dataAccessor: ALL,
+              title: 'Year × month heatmap',    description: 'desc_year_month_heatmap' },
+            { chart: 'iwacNewspapers',               dataAccessor: ALL,
+              title: 'Top newspapers',          description: 'desc_' + v + 'top_newspapers',
+              hasData: hasNewspapersData },
+            { chart: 'iwacCountries',                dataAccessor: ALL,
+              title: 'Countries covered',       description: 'desc_' + v + 'countries_covered' },
+            { chart: 'iwacTopics',       wide: true, dataAccessor: ALL,
+              title: 'Top LDA topics',          description: 'desc_lda_topics',
+              hasData: hasTopicsData },
+            { chart: 'iwacSentiment',    wide: true, dataAccessor: ALL,
+              title: 'AI sentiment',            description: 'desc_ai_sentiment',
+              hasData: hasSentimentData },
+            { chart: 'iwacEntityNet',    wide: true, dataAccessor: ALL,
+              title: 'Associated entities',     description: 'desc_' + v + 'associated_entities' },
+            { chart: 'iwacCoOccurrence', wide: true, dataAccessor: ALL,
+              title: 'Subject co-occurrence',   description: 'desc_subject_cooccurrence' },
+            { chart: 'iwacEntityMap',    wide: true, dataAccessor: ALL,
+              title: 'Associated locations',    description: 'desc_' + v + 'associated_locations' }
+        ];
+    };
 })();

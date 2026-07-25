@@ -1,6 +1,7 @@
 <?php
 namespace IwacVisualizations\Controller\Site;
 
+use IwacVisualizations\Site\BlockRegistry;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
@@ -30,30 +31,20 @@ use Laminas\View\Model\ViewModel;
 class EmbedController extends AbstractActionController
 {
     /**
-     * Whitelist of embeddable page blocks: slug => human label. The slug
-     * doubles as the `common/block-layout/<slug>` partial name, so this
-     * map is also the directory traversal guard for the rendered partial.
+     * Whitelist of embeddable page blocks: slug => human label.
+     *
+     * Derived from `BlockRegistry`, which is also what the block classes and
+     * the block lint read — this used to be a hand-maintained second copy of
+     * every label, and the copy that drifted (v1.21's `press-reprints-detector`
+     * slug, which 500'd every embed of that block).
+     *
+     * The slug doubles as the `common/block-layout/<slug>` partial name, so
+     * this map is also the directory-traversal guard for the rendered partial.
      */
-    const BLOCKS = [
-        'collection-overview'  => 'Collection Overview',
-        'index-overview'       => 'Index Overview',
-        'references-overview'  => 'References Overview',
-        'scary-terms'          => 'Scary Terms',
-        'topic-explorer'       => 'Topic Explorer',
-        'periodicals-overview' => 'Periodicals Overview',
-        'periodicals-landscape' => 'Periodicals Semantic Landscape',
-        'semantic-landscape'   => 'Semantic Landscape',
-        'sentiment-atlas'      => 'Sentiment Atlas',
-        'lexical-metrics'      => 'Press Language',
-        'spatial-exploration'  => 'Spatial Exploration',
-        'entity-networks'      => 'Entity Networks',
-        'compare-newspapers'   => 'Compare Newspapers',
-        'on-this-day'          => 'On This Day',
-        'press-bylines'        => 'Press Bylines',
-        'org-cooccurrence'     => 'Islamic Organisations Co-occurrence',
-        'term-trends'          => 'Term Trends',
-        'press-reprints'       => 'Press Reprints',
-    ];
+    private static function blocks(): array
+    {
+        return BlockRegistry::embeddable();
+    }
 
     /**
      * Snippet gallery: lists every embeddable block with a live preview
@@ -65,7 +56,7 @@ class EmbedController extends AbstractActionController
         $this->layout()->setVariable('isGallery', true);
 
         $view = new ViewModel([
-            'blocks'   => self::BLOCKS,
+            'blocks'   => self::blocks(),
             'siteSlug' => $this->currentSite()->slug(),
         ]);
         $view->setTemplate('iwac-visualizations/embed/index');
@@ -78,7 +69,8 @@ class EmbedController extends AbstractActionController
     public function blockAction()
     {
         $slug = (string) $this->params()->fromRoute('block', '');
-        if (!isset(self::BLOCKS[$slug])) {
+        $blocks = self::blocks();
+        if (!isset($blocks[$slug])) {
             $this->getResponse()->setStatusCode(404);
             $view = new ViewModel();
             $view->setTerminal(true);
@@ -110,7 +102,7 @@ class EmbedController extends AbstractActionController
             $primary = '';
         }
 
-        $title = self::BLOCKS[$slug];
+        $title = $blocks[$slug];
         if ($panel !== '') {
             $title .= ' — ' . $panel;
         }

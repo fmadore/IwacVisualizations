@@ -59,7 +59,7 @@
         });
     }
 
-    var DATA_BASE = '/files/iwac-visualizations/compare-newspapers/';
+    var DATA_BASE = P.DATA_BASE + 'compare-newspapers/';
 
     function norm(s) {
         s = String(s || '').trim().toLowerCase();
@@ -91,14 +91,6 @@
 
     /** Remove the whole block (incl. server-rendered heading) — the
      *  silent-skip rule for item sets that map to no corpus. */
-    function removeBlock(container) {
-        var block = container.closest ? container.closest('.iwac-vis-block') : null;
-        if (block && block.parentNode) {
-            block.parentNode.removeChild(block);
-        } else {
-            container.innerHTML = '';
-        }
-    }
 
     function render(container, corpus) {
         var s = corpus.summary || {};
@@ -169,50 +161,40 @@
         }
     }
 
-    function initBlock(container) {
-        var title = container.dataset.itemSetTitle || '';
-        var basePath = container.dataset.basePath || '';
-        if (!title) {
-            removeBlock(container);
-            return;
-        }
-
-        P.fetchJSON(basePath + DATA_BASE + 'index.json')
+    // Two-step load: match the item set's title against the compare-newspapers
+    // index, then fetch that corpus. A miss resolves to null rather than
+    // rejecting — an item set with no matching corpus is an ordinary outcome.
+    function loadCorpus(ctx) {
+        var title = ctx.container.dataset.itemSetTitle || '';
+        if (!title) return Promise.resolve(null);
+        return P.fetchJSON(ctx.basePath + DATA_BASE + 'index.json')
             .then(function (index) {
                 var corpus = findCorpus(index, title);
-                if (!corpus) {
-                    removeBlock(container);
-                    return null;
-                }
+                if (!corpus) return null;
                 return P.fetchJSON(
-                    basePath + DATA_BASE + corpus.type + '/' + corpus.scope + '-' + corpus.slug + '.json'
+                    ctx.basePath + DATA_BASE + corpus.type + '/' + corpus.scope + '-' + corpus.slug + '.json'
                 );
-            })
-            .then(function (corpus) {
-                if (!corpus) return;
-                var loading = container.querySelector('.iwac-vis-item-set__loading');
-                if (loading) loading.remove();
-                render(container, corpus);
-            })
-            .catch(function (err) {
-                // Treat data errors like a non-match: this block is an
-                // opportunistic enhancement, never a broken banner on
-                // every collection page.
-                console.error('IWACVis item-set dashboard:', err);
-                removeBlock(container);
             });
     }
 
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-item-set');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-item-set',
+        warnLabel:      'IWACVis item-set dashboard',
+        requireECharts: false,
+        load:           loadCorpus,
+        render:         function (container, corpus) {
+            if (!corpus) {
+                P.removeBlock(container);
+                return;
+            }
+            var loading = container.querySelector('.iwac-vis-item-set__loading');
+            if (loading) loading.remove();
+            render(container, corpus);
+        },
+        // Treat data errors like a non-match: this block is an opportunistic
+        // enhancement, never a broken banner on every collection page. Same
+        // contract as On This Day, which is why it is safe to enable for ALL
+        // item sets.
+        onError:        'remove'
+    });
 })();

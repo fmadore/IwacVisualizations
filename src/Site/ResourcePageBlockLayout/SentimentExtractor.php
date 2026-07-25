@@ -25,6 +25,44 @@ class SentimentExtractor
     const MODELS = ['gemini', 'chatgpt', 'mistral'];
 
     /**
+     * Presentation chrome for the three rating models: the precise model
+     * name (release / parameter detail included — readers of a research
+     * instrument want to know exactly which model produced a rating), the
+     * organisation, a short form for chart legends, and the logo filename
+     * under `asset/img/ai-logos/`.
+     *
+     * Lives here rather than in the article partial so the sentiment cards
+     * and the radar legend cannot drift apart on a model rename. Not
+     * `@translate`-marked: these are proper nouns.
+     *
+     * NOTE: the JS side carries its own copy for the Sentiment Atlas block
+     * (`asset/js/charts/sentiment-atlas.js` MODELS and the
+     * `sentiment.rated_*` strings in `sentiment-atlas/i18n.js`) — PHP
+     * constants aren't reachable from a precomputed-JSON block. On a model
+     * rename, update this constant AND those two files together.
+     */
+    const MODEL_INFO = [
+        'gemini' => [
+            'name'  => 'Gemini 3 Flash',
+            'org'   => 'Google',
+            'short' => 'Gemini',
+            'logo'  => 'Gemini_logo.svg',
+        ],
+        'chatgpt' => [
+            'name'  => 'GPT-5 mini',
+            'org'   => 'OpenAI',
+            'short' => 'GPT-5 mini',
+            'logo'  => 'ChatGPT_logo.svg',
+        ],
+        'mistral' => [
+            'name'  => 'Ministral 14B',
+            'org'   => 'Mistral AI',
+            'short' => 'Ministral 14B',
+            'logo'  => 'Mistral_AI_logo.svg',
+        ],
+    ];
+
+    /**
      * Extract and return the `[$model => [...]]` sentiment bundle.
      *
      * Each model slice looks like:
@@ -52,12 +90,17 @@ class SentimentExtractor
     {
         $out = [];
         foreach (self::MODELS as $model) {
-            $polItemId = self::linkedItemId($item, "iwac:{$model}Polarite");
-            $cenItemId = self::linkedItemId($item, "iwac:{$model}Centralite");
-            $subItemId = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
+            // One lookup per property, reused for both the id and the display
+            // title. Reading them separately (linkedItemId + linkedItemLabel)
+            // ran `$item->value()` twice for polarity and twice for
+            // centrality — 4 redundant property reads per model, 12 per
+            // article, all resolving the same linked resource.
+            $polResource = self::firstValueResource($item, "iwac:{$model}Polarite");
+            $cenResource = self::firstValueResource($item, "iwac:{$model}Centralite");
+            $subItemId   = self::linkedItemId($item, "iwac:{$model}SubjectiviteScore");
 
-            $polLabel = Module::getPolariteLabel($polItemId);
-            $cenLabel = Module::getCentraliteLabel($cenItemId);
+            $polLabel = Module::getPolariteLabel($polResource ? $polResource->id() : null);
+            $cenLabel = Module::getCentraliteLabel($cenResource ? $cenResource->id() : null);
             $subInfo  = Module::getSubjectiviteInfo($subItemId);
 
             $out[$model] = [
@@ -73,8 +116,8 @@ class SentimentExtractor
                 // CSS colour palette (defined in iwac-core.css under
                 // --iwac-vis-sent-* / --iwac-vis-cent-*) is keyed on
                 // these, so we need them even when the locale is en.
-                'polarite_fr'           => self::linkedItemLabel($item, "iwac:{$model}Polarite"),
-                'centralite_fr'         => self::linkedItemLabel($item, "iwac:{$model}Centralite"),
+                'polarite_fr'           => $polResource ? (string) $polResource->displayTitle() : '',
+                'centralite_fr'         => $cenResource ? (string) $cenResource->displayTitle() : '',
 
                 // Numeric values feed the ECharts radar.
                 'polarite_numeric'      => Module::getPolariteNumeric($polLabel),
@@ -113,17 +156,6 @@ class SentimentExtractor
     {
         $resource = self::firstValueResource($item, $property);
         return $resource ? $resource->id() : null;
-    }
-
-    /**
-     * Pull the display title of the linked item — used to recover
-     * raw French category labels ("Positif", "Très central") that we
-     * key the colour palette on.
-     */
-    private static function linkedItemLabel(AbstractResourceEntityRepresentation $item, string $property): string
-    {
-        $resource = self::firstValueResource($item, $property);
-        return $resource ? (string) $resource->displayTitle() : '';
     }
 
     /**

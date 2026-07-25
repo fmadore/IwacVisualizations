@@ -62,7 +62,8 @@ This module is built to drop into the **[IWAC theme](https://github.com/fmadore/
 - **Output goes under `asset/data/`** as JSON (per-item fan-out `person-dashboards/{o_id}.json`, `entity-dashboards/{o_id}.json`, `article-dashboards/{o_id}.json`, etc.). Since **issue #7**, `asset/data/` is **gitignored**, **not committed**, and **not generated on the server**: the generators run in CI (`.github/workflows/regenerate-data.yml`) → publish `iwac-data.zip` to the `data` release → the admin **"Pull latest data"** job (`src/Job/SyncData.php`) unpacks it into `files/iwac-visualizations/`. The client fetches data from `files/`; static geojson lives committed in `asset/geo/`. The lone committed exception under `asset/data/` is `sentiment-arbiter.json` (externally sourced from the sibling IWAC-sentiment-analysis study, not HF). Use `--minify` on bundles > a few KB.
 - **No module version bump needed for a data refresh.** The data cache-buster is the Sync Data job's last-sync time (stamped on each block as `data-version`, folded into `?v=` by `dashboard-core.js`). Only bump `config/module.ini` (+ `package.json`) for **code/asset** changes — that still busts the CSS/JS `?v=`.
 - **JS sources mirror to `.min.js`** via `npm run build:js` (terser). Both source and `.min.js` are committed.
-- **Template references `.min.js` paths only.** When adding a new block, declare needs through `view/common/iwac-assets.phtml` — do not write raw `headScript`/`headLink` in templates.
+- **Template references `.min.js` paths only.** When adding a new block, declare needs through `view/common/iwac-assets.phtml` — do not write raw `headScript`/`headLink` in templates. `blockCss` accepts a list when a block layers its own sheet over a shared base.
+- **A block is declared once**, in `src/Site/BlockRegistry.php`; `npm run lint:blocks` fails the build if the registry, the config invokables, the `BlockLayout` classes and the templates stop agreeing. (v1.21 shipped a block whose embed slug didn't match its template filename, 500ing every embed of it — that class of drift is now a build failure.)
 
 ## Python environment
 
@@ -81,9 +82,10 @@ CPU-only environment (no GPU) — match the constraint when selecting models or 
 2. Model a new generator on the existing `scripts/generate_*.py`. (The `iwac-dashboard` project these were originally seeded from is deprecated — don't depend on it.)
 3. Decide live-fetch vs. precompute using the rule in README.md (precompute if > 50 parallel HF requests OR touches OCR/embeddings).
 4. Write `scripts/generate_<name>.py` following the existing CLI convention; reuse `iwac_utils.py`.
-5. Wire the JS panel and orchestrator under `asset/js/charts/` and the template under `view/common/block-layout/`.
-6. Add the partial-driven asset declaration (don't enqueue manually).
-7. Bump `config/module.ini` version; run `npm run build:js`; commit both source and minified JS.
+5. Register the block in `src/Site/BlockRegistry.php` (slug, label, description, `embeddable`) — that is the single source of truth for the label, the admin description, the partial name, the embed slug and the embed whitelist. Add a `BlockLayout` subclass whose whole body is `const SLUG = '<slug>';`, and the invokable in `config/module.config.php`.
+6. Wire the JS panel and orchestrator under `asset/js/charts/` and the template under `view/common/block-layout/<slug>.phtml` — the filename must equal the slug (the embed route resolves the partial by slug). End the orchestrator with a single `P.bootBlock({...})` call rather than a hand-rolled DOMContentLoaded/fetch/catch epilogue.
+7. Add the partial-driven asset declaration (don't enqueue manually) — the template calls `common/iwac-block-shell` with an `assets` array.
+8. Bump `config/module.ini` version (+ `package.json`); run `npm run build` — it runs `lint:theme` (theme tokens, now including `<style>` blocks in `view/`) and `lint:blocks` (registry ↔ config ↔ classes ↔ templates agree) before minifying. Commit both source and minified assets.
 
 ## What not to do
 

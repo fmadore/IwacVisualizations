@@ -49,90 +49,27 @@
     var DICTIONARY = {
         en: {
             // UI chrome
-            'Loading dashboard': 'Loading dashboard',
-            'Loading collection overview': 'Loading collection overview',
-            'Loading project comparison': 'Loading project comparison',
-            'Loading newspaper comparison': 'Loading newspaper comparison',
-            'Dashboard': 'Dashboard',
-            'Visualizations': 'Visualizations',
-            'Knowledge Graph': 'Knowledge Graph',
-            'Toggle fullscreen': 'Toggle fullscreen',
-            'Save as image': 'Save as image',
-            'Download chart': 'Download chart',
-            'Show patterns': 'Show patterns',
-            'Hide patterns': 'Hide patterns',
-            'No data available': 'No data available',
-            'Failed to load': 'Failed to load',
-            'Visualization data is not available yet.': 'Visualization data is not available yet.',
 
             // Chart axis / tooltip
-            'Count': 'Count',
-            'Year': 'Year',
-            'Total': 'Total',
-            'Logarithmic scale': 'Logarithmic scale',
 
             // Collection overview — summary labels
-            'Total items': 'Total items',
-            'Articles': 'Articles',
-            'Publications': 'Publications',
-            'Documents': 'Documents',
-            'Audiovisual': 'Audiovisual',
-            'References': 'References',
-            'Entities': 'Entities',
-            'Countries': 'Countries',
-            'Languages': 'Languages',
-            'Words': 'Words',
-            'Newspapers': 'Newspapers',
-            'Unknown': 'Unknown',
-            'Pages': 'Pages',
-            'Issue': 'Issue',
-            'Language': 'Language',
-            'Date': 'Date',
 
             // Publication (periodical issue) dashboard
-            'This issue in its periodical run': 'This issue in its periodical run',
             'desc_publication_run': 'Issues of this periodical per year — the dot marks this issue.',
-            'Similar issues': 'Similar issues',
             'desc_publication_similar': 'Closest issues by table-of-contents similarity (Gemini embeddings).',
-            'Most frequent words in this issue': 'Most frequent words in this issue',
             'desc_publication_wordcloud': 'The words that appear most often in this issue’s text.',
-            'Word cloud': 'Word cloud',
             'desc_word_cloud': 'Most frequent words, sized by how often they appear.',
 
             // Collection overview — chart titles
-            'Items per year, by country': 'Items per year, by country',
-            'Content by country': 'Content by country',
-            'Languages represented': 'Languages represented',
-            'Most-cited entities': 'Most-cited entities',
-            'Newspaper coverage': 'Newspaper coverage',
-            'Collection breakdown': 'Collection breakdown',
             'period_covered': 'Period covered: {min} – {max}',
             'coverage_range': '{min} – {max}',
 
             // Entity type tabs (must match INDEX_TYPES in the generator)
-            'Persons': 'Persons',
-            'Organizations': 'Organizations',
-            'Places': 'Places',
-            'Subjects': 'Subjects',
-            'Events': 'Events',
 
             // References overview
-            'Authors': 'Authors',
-            'Publishers': 'Publishers',
-            'Reference type': 'Reference type',
-            'Reference types': 'Reference types',
-            'References by type over time': 'References by type over time',
-            'Top authors': 'Top authors',
-            'Top publishers': 'Top publishers',
-            'Top subjects': 'Top subjects',
-            'Reference provenance': 'Reference provenance',
-            'Subject co-occurrence': 'Subject co-occurrence',
             'references_provenance_desc': 'Geocoded places linked to reference provenance metadata when the Hugging Face bundle exposes resolvable origins.',
             'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same bibliographic reference.',
-            'No provenance locations available': 'No provenance locations available',
-            'No subject co-occurrence available': 'No subject co-occurrence available',
             'Languages studied': 'Languages',
-            'Places studied': 'Places studied',
             'Fetching references…': 'Fetching references\u2026',
 
             // Reference type labels (values come from `o:resource_class` in French)
@@ -165,11 +102,6 @@
             'lang_N\u00e9erlandais': 'Dutch',
 
             // Author collaboration network (References Overview)
-            'Author collaborations': 'Author collaborations',
-            'Co-author':             'Co-author',
-            'Author / editor':       'Author / editor',
-            'Mixed':                 'Mixed',
-            'Shared references':     'Shared references',
 
             // Plural-ish
             'items_count': '{count} items',
@@ -179,51 +111,13 @@
             'mentions_count': '{count} mentions',
 
             // Collection overview v2 — summary cards
-            'Index': 'Index',
-            'Total words': 'Total words',
-            'Total pages': 'Total pages',
-            'Scanned pages': 'Scanned pages',
-            'Unique sources': 'Unique sources',
-            'Document types': 'Document types',
-            'Audiovisual minutes': 'Audiovisual minutes',
             'References count': 'References',
 
             // Collection overview v2 — new chart titles
-            'Recent additions': 'Recent additions',
-            'Collection growth over time': 'Collection growth over time',
-            'Items by type, over time': 'Items by type, over time',
-            'French word cloud': 'French word cloud',
-            'World map': 'World map',
-            'Source locations': 'Source locations',
             'source_locations_desc': 'Archives, repositories, web platforms and publication sources linked to collection items.',
             'source_map_summary': '{sources} sources · {mapped} mapped · {items} source-linked items',
-            'No mapped sources': 'No mapped sources',
 
             // Collection overview v2 — facet controls & misc UI
-            'Global': 'Global',
-            'By type': 'By type',
-            'By country': 'By country',
-            'By year': 'By year',
-            'All countries': 'All countries',
-            'All types': 'All types',
-            'Country': 'Country',
-            'Previous': 'Previous',
-            'Next': 'Next',
-            'Page': 'Page',
-            'Title': 'Title',
-            'Source': 'Source',
-            'Type': 'Type',
-            'Coordinates': 'Coordinates',
-            'Added': 'Added',
-            'Month': 'Month',
-            'Monthly': 'Monthly',
-            'Cumulative': 'Cumulative',
-            'Monthly additions': 'Monthly additions',
-            'Cumulative total': 'Cumulative total',
-            'No recent additions': 'No recent additions',
-            'Loading': 'Loading',
-            'unique words': 'unique words',
-            'Map library unavailable': 'Map library unavailable',
 
             // Item type badges (labels match user's preferred wording for the dataset)
             'item_type_article':     'News article',
@@ -234,20 +128,7 @@
             'item_type_image':       'Photograph',
 
             // Person dashboard — labels + panels
-            'Mentions': 'Mentions',
-            'Total mentions': 'Total mentions',
-            'All roles': 'All roles',
-            'As subject': 'As subject',
-            'As creator': 'As creator',
-            'As editor': 'As editor',
-            'Associated entities': 'Associated entities',
-            'Associated locations': 'Associated locations',
-            'Top newspapers': 'Top newspapers',
-            'Countries covered': 'Countries covered',
             'Period covered_short': 'Years',
-            'Distinctiveness score': 'Distinctiveness score',
-            'Affiliations': 'Affiliations',
-            'Wikidata': 'Wikidata',
 
             // Person dashboard — panel descriptions (subheaders)
             'desc_mentions_timeline':      'Articles, publications and references mentioning this person each year, stacked by country of publication.',
@@ -257,22 +138,12 @@
             'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
             // New shared panels (person + entity)
-            'Year × month heatmap':        'Year × month heatmap',
-            'Top LDA topics':              'Top LDA topics',
-            'AI sentiment':                'AI sentiment',
-            'Subject co-occurrence':       'Subject co-occurrence',
             'desc_year_month_heatmap':     'Mention counts per year and month, drawn only from items with a parseable YYYY-MM date. Cells stay blank when no date can be resolved.',
             'desc_lda_topics':             'Top 12 LDA-30 topic labels for items mentioning this entity, by article count. Topics come from the precomputed LDA model on the articles subset; publications and references contribute to mention counts but not to the topic mix.',
             'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, with a side-by-side comparison of the three AI raters (Gemini, ChatGPT, Mistral). The model picker switches between them; the bars update in place. Articles only — publications and references are not rated.',
             'desc_subject_cooccurrence':   'Pairwise co-occurrence among the top 15 entities mentioned alongside this one. Distinct from the Associated entities network: that one is ego-centric (this entity at the centre), this one is pair-wise (which neighbours always travel together?).',
 
             // AI sentiment — model + axis labels
-            'Gemini':       'Gemini',
-            'ChatGPT':      'ChatGPT',
-            'Mistral':      'Mistral',
-            'Polarity':     'Polarity',
-            'Centrality':   'Centrality',
-            'Subjectivity': 'Subjectivity',
 
             // AI sentiment — polarité category labels (data uses raw
             // French as the key; English locale maps them here while
@@ -286,9 +157,7 @@
 
             // AI sentiment — centralité category labels
             'Très central': 'Very central',
-            'Central':      'Central',
             'Secondaire':   'Secondary',
-            'Marginal':     'Marginal',
             'Non abordé':   'Not addressed',
 
             // AI sentiment — subjectivité bucket labels (1 = objective → 5 = very subjective)
@@ -306,11 +175,6 @@
             'desc_entity_associated_locations': 'Geographic places mentioned in the same items as this entity, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
             // Network panel toolbar
-            'Zoom in': 'Zoom in',
-            'Zoom out': 'Zoom out',
-            'Reset view': 'Reset view',
-            'Toggle legend': 'Toggle legend',
-            'Toggle fullscreen': 'Toggle fullscreen',
 
             // Entity type labels (used by C.network legend + tooltips)
             'entity_type_center': 'Center',
@@ -322,8 +186,6 @@
             'entity_type_article': 'Newspaper article',
 
             // Article dashboard — panel titles
-            'Context network':         'Context network',
-            'Further reading':         'Further reading',
 
             // Article dashboard — panel descriptions (written for a
             // general audience; no jargon like "cosine similarity" or
@@ -338,111 +200,37 @@
                 'Articles whose full text reads similarly to this one, even when they don\u2019t share any tags. The match is computed by an AI language model that turns each article into a numeric fingerprint (a \u201csemantic embedding\u201d) and compares them. The badge shows how close the match is.',
 
             // Article dashboard — card labels + tooltips
-            'Similarity':              'Similarity',
-            'Shares':                  'Shares',
             'shares_n_entities':       '{count} shared tags',
-            'No similar articles':     'No articles with similar content',
             'No related articles':     'No articles with shared tags',
-            'No further reading found':'No further reading found',
             'No entities tagged':      'No entities tagged on this article',
 
             // Further reading — toggle labels
-            'By shared tags':          'By shared tags',
-            'By similar content':      'By similar content',
 
             // Compare newspapers block
-            'Corpus A':                      'Corpus A',
-            'Corpus B':                      'Corpus B',
-            'Newspaper articles':            'Newspaper articles',
-            'Islamic publications':          'Islamic publications',
-            'Scope':                         'Scope',
-            'Selection':                     'Selection',
-            'Whole country':                 'Whole country',
-            'Single newspaper':              'Single newspaper',
-            'Choose two corpora to compare': 'Choose two corpora to compare',
-            'Subject overlap':               'Subject overlap',
-            'Spatial coverage overlap':      'Spatial coverage overlap',
-            'Timeline (items per year)':     'Timeline (items per year)',
-            'Top subjects (combined top 15)': 'Top subjects (combined top 15)',
-            'Most frequent words':           'Most frequent words',
-            'Newspapers within each corpus': 'Newspapers within each corpus',
-            'Shared':                        'Shared',
             'Only in A':                     'Only in {name}',
             'Only in B':                     'Only in {name}',
-            'No overlap':                    'No overlap',
-            'Places mentioned':              'Places mentioned',
-            'Unique subjects':               'Unique subjects',
-            'Period covered':                'Period covered',
-            'Single-newspaper corpus \u2014 no breakdown': 'Single-newspaper corpus \u2014 no breakdown',
-            'Geographic comparison':         'Geographic comparison',
             'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
                 'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.',
-            'mentions':                      'mentions',
-            'Open entity':                   'Open entity',
-            'AI sentiment comparison':       'AI sentiment comparison',
             'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
                 'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.',
-            'Axis':                          'Axis',
-            'Model':                         'Model',
-            'Sentiment only on articles':    'Sentiment only on articles',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
             // existing translation catalogues keep working.
-            'Model comparison':        'Model comparison',
-            'Show reasoning':          'Show reasoning',
-            'Not rated':               'Not rated',
             // Polarity
-            'Very positive':           'Very positive',
-            'Positive':                'Positive',
-            'Neutral':                 'Neutral',
-            'Negative':                'Negative',
-            'Very negative':           'Very negative',
-            'Not applicable':          'Not applicable',
             // Centrality
-            'Very central':            'Very central',
-            'Central':                 'Central',
-            'Secondary':               'Secondary',
-            'Marginal':                'Marginal',
-            'Not addressed':           'Not addressed',
             // Subjectivity
-            'Very objective':          'Very objective',
-            'Rather objective':        'Rather objective',
-            'Mixed':                   'Mixed',
-            'Rather subjective':       'Rather subjective',
-            'Very subjective':         'Very subjective',
             // Scale hint under the radar
             'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)':
                 'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)',
 
             // MapLibre choropleth toggle (shared/choropleth.js)
-            'Show choropleth':              'Show choropleth',
-            'Show bubbles':                 'Show bubbles',
-            'Toggle choropleth view':       'Toggle choropleth view',
-            'Bubbles':                      'Bubbles',
-            'Show point bubbles':           'Show point bubbles',
-            'Diverging A minus B':          'Diverging A minus B',
 
             // Minimal item dashboard (Audio / Video / Photograph)
-            'Loading visualizations':            'Loading visualizations',
-            'Activity over time':                'Activity over time',
-            'Other items in this collection':    'Other items in this collection',
             'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
             'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
 
             // Topic Explorer — labels + descriptions
-            'Loading Topic Explorer':       'Loading Topic Explorer',
-            'Topic distribution':           'Topic distribution',
-            'All topics':                   'All topics',
-            'Topic':                        'Topic',
-            'Topics':                       'Topics',
-            'Articles classified':          'Articles classified',
-            'Outliers':                     'Outliers',
-            'Back to all topics':           'Back to all topics',
-            'Year × day calendar':          'Year × day calendar',
-            'Top countries':                'Top countries',
-            'Most representative articles': 'Most representative articles',
-            'Top values':                   'Top values',
             'desc_horizontal_bar':          'Top values by count, ranked from highest to lowest.',
             'desc_topic_treemap':           'Each rectangle is one of the 30 LDA topics; the area scales with how many articles the model assigned to that topic. Click a rectangle to drill into the topic’s detail view.',
             'desc_topic_calendar':          'One cell per day, one row per year. Cell colour intensity scales with the number of articles classified into this topic on that day.',
@@ -455,15 +243,6 @@
 
             // Shared renderer labels (calendar heatmap, chord, radar,
             // sibling sparkline, similar-items strip, sunburst, treemap)
-            'Calendar heatmap':         'Calendar heatmap',
-            'Co-occurrence chord':      'Co-occurrence chord',
-            'Profile comparison':       'Profile comparison',
-            'Activity sparkline':       'Activity sparkline',
-            'Related articles':         'Related articles',
-            'Sunburst':                 'Sunburst',
-            'Treemap':                  'Treemap',
-            'Untitled':                 'Untitled',
-            'No similar articles':      'No similar articles',
             'desc_calendar_heatmap':    'One row per year, one cell per day. Cell colour intensity scales with mention count; the same theme palette as the year × month heatmap is used so the two read at a glance.',
             'desc_chord':               'Pairwise links between the top entities mentioned in this set, laid out in a circle. Edge thickness encodes co-occurrence weight; the layout caps at the 30 most central nodes so the chord stays legible.',
             'desc_radar_profile':       'Side-by-side comparison along three or more scaled axes. Each axis is rescaled independently so the shapes can be compared even when one metric dwarfs the others on absolute scale.',
@@ -473,19 +252,11 @@
             'desc_treemap':             'Hierarchical breakdown shown as nested rectangles. Click a parent to drill in; the breadcrumb at the bottom navigates back up.',
 
             // Index overview — block + section labels
-            'Loading index overview':    'Loading index overview',
-            'Entity Index Explorer':     'Entity Index Explorer',
-            'Keyword Explorer':          'Keyword Explorer',
             'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
                 'Prevalence of Dublin Core Subject and Spatial Coverage tags over time. Counts reflect item-level tagging, not text occurrence: an item tagged "Terrorism" contributes one mention to that year, no matter how many times the word appears in the body.',
 
             // Index overview — Section A panel titles
-            'Entities by type':          'Entities by type',
             'Top entities':              'Most frequent entities in Dublin Core Subject and Spatial Coverage',
-            'Lifespan \u00d7 frequency': 'Lifespan \u00d7 frequency',
-            'Places map':                'Places map',
-            'Temporal extent':           'Temporal extent',
-            'Index table':               'Index table',
 
             // Index overview — Section A panel descriptions
             'desc_top_entities':   'Authority records that appear most often in item-level Dublin Core Subject (dcterms:subject) and Spatial Coverage (dcterms:spatial) fields. Click a bar to open the entity\u2019s page.',
@@ -494,102 +265,34 @@
             'desc_places_map':     'Two complementary layers on the same map. Authority pins: every place in the IWAC authority index that has geographic coordinates. Mention bubbles: how often each place is tagged in an item\u2019s Dublin Core Spatial Coverage field, joined back to the authority pin by name. Click a pin to open the place\u2019s page.',
 
             // Index overview — summary cards + scatter axes
-            'Total entities':            'Total entities',
-            'With coordinates':          'With coordinates',
-            'Span (years)':              'Span (years)',
-            'Frequency':                 'Frequency',
 
             // Index overview — map layer facets + index table search
-            'Both layers':               'Both layers',
-            'Authority pins':            'Authority pins',
-            'Layer':                     'Layer',
-            'Search entities':           'Search entities',
 
             // Keyword Explorer — filters + tabs
-            'Spatial Coverage':          'Spatial Coverage',
-            'Field':                     'Field',
-            'Facet by':                  'Facet by',
-            'By newspaper':              'By newspaper',
-            'Newspaper':                 'Newspaper',
-            'All newspapers':            'All newspapers',
-            'View mode':                 'View mode',
-            'Top frequent':              'Top frequent',
-            'Compare':                   'Compare',
             'top_n_keywords':            '{count} keywords',
-            'Number to show':            'Number to show',
             'select_up_to_n':            'Select up to {count} keywords',
-            'Search keywords':           'Search keywords',
-            'No keywords selected':      'No keywords selected',
-            'Clear selection':           'Clear selection',
 
             // Keyword Explorer — chart + table
-            'Keywords over time':        'Keywords over time',
-            'All keywords':              'All keywords',
-            'Keyword':                   'Keyword',
-            'Occurrences':               'Occurrences',
-            'Add':                       'Add',
-            'Remove':                    'Remove',
             'top_n_over_time':           'Top {count} keywords over time',
-            'Keyword comparison':        'Keyword comparison',
-            'Filtered by country: {country}':     'Filtered by country: {country}',
-            'Filtered by newspaper: {newspaper}': 'Filtered by newspaper: {newspaper}',
-            'All data (global)':         'All data (global)',
-            'Select keywords to compare': 'Select keywords to compare',
 
             // Keyword Explorer — derived panels (ROADMAP 9.7 / 9.8)
-            'Rising and falling subjects': 'Rising and falling subjects',
             'desc_subjects_bump':        'Rank of the leading subjects per decade — a climbing line took attention away from a sinking one. A line breaks where the subject drops out of the decade top 8; hover a decade for ranks and counts.',
-            'Geographic attention over time': 'Geographic attention over time',
             'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage — whatever year you are viewing.',
-            'Play':                      'Play',
-            'Pause':                     'Pause',
             // Spatial Exploration block
-            'Entity type':               'Entity type',
-            'Pick an entity':            'Pick an entity',
-            'Search entities':           'Search entities',
-            'No matches':                'No matches',
             'spatial_pick_hint':         'Pick an entity to map the places mentioned alongside it. Without a selection, the map shows every place in the collection.',
             'places_count':              '{count} places',
-            'View item page':            'View item page',
-            'Top places':                'Top places',
-            'Map mode':                  'Map mode',
-            'Place bubbles':             'Place bubbles',
-            'Country choropleth':        'Country choropleth',
-            'Administrative choropleth': 'Administrative choropleth',
-            'Country focus':             'Country focus',
-            'Whole world':               'Whole world',
-            'Admin level':               'Admin level',
-            'Regions':                   'Regions',
-            'Region':                    'Region',
-            'Prefectures':               'Prefectures',
-            'Prefecture':                'Prefecture',
-            'Scale':                     'Scale',
-            'Quantile':                  'Quantile',
-            'Linear':                    'Linear',
-            'Square root':               'Square root',
-            'Places map':                'Places map',
             'spatial_map_description':   'Bubble size reflects how often a place is mentioned. Hover a place for a preview; click it for the full list of items.',
             'admin_units_count':         '{count} units',
-            'No administrative data':    'No administrative data',
-            'No mapped places':          'No mapped places',
-            'Click for details':         'Click for details',
             'more_items_click':          '{count} more \u2014 click for the full list',
-            'items':                     'items',
             // Entity Networks block
-            'Co-occurrence network':     'Co-occurrence network',
             'networks_description':      'Entities appearing in the same items, positioned by co-occurrence strength. Click a node to inspect its connections.',
-            'About this network':        'About this network',
             'network_select_hint':       'Click a node to see its strongest co-occurrences; click the background to clear.',
             'network_stats_entities':    '{nodes} entities \u00b7 {links} links',
             'network_stats_places':      '{nodes} places \u00b7 {links} links',
             'network_links_note':        'A link joins two entities that appear in the same item at least {count} times.',
-            'Strongest co-occurrences':  'Strongest co-occurrences',
             'cooccurrence_title':        'Co-occur in {count} items',
             'more_links_count':          '+{count} more links',
             'links_count':               '{count} links',
-            'Min. link strength':        'Min. link strength',
-            'All links':                 'All links',
-            'Find in network':           'Find in network',
         },
         fr: {
             'Loading dashboard': 'Chargement du tableau de bord',
@@ -599,7 +302,6 @@
             'Dashboard': 'Tableau de bord',
             'Visualizations': 'Visualisations',
             'Knowledge Graph': 'Graphe de connaissances',
-            'Toggle fullscreen': 'Basculer en plein \u00e9cran',
             'Save as image': 'Enregistrer comme image',
             'Download chart': 'T\u00e9l\u00e9charger le graphique',
             'Show patterns': 'Afficher les motifs',
@@ -668,7 +370,6 @@
             'Top publishers': '\u00c9diteurs les plus cit\u00e9s',
             'Top subjects': 'Sujets r\u00e9currents',
             'Reference provenance': 'Provenance des r\u00e9f\u00e9rences',
-            'Subject co-occurrence': 'Cooccurrence des sujets',
             'references_provenance_desc': 'Lieux g\u00e9ocod\u00e9s li\u00e9s aux m\u00e9tadonn\u00e9es de provenance des r\u00e9f\u00e9rences lorsque le jeu Hugging Face fournit des origines r\u00e9solvables.',
             'references_subject_cooccurrence_desc': 'Paires de sujets apparaissant ensemble sur une m\u00eame r\u00e9f\u00e9rence bibliographique.',
             'No provenance locations available': 'Aucun lieu de provenance disponible',
@@ -710,7 +411,6 @@
             'Author collaborations': 'Collaborations entre auteurs',
             'Co-author':             'Co-auteur',
             'Author / editor':       'Auteur / \u00e9diteur',
-            'Mixed':                 'Mixte',
             'Shared references':     'R\u00e9f\u00e9rences communes',
 
             'items_count': '{count} \u00e9l\u00e9ments',
@@ -832,9 +532,7 @@
 
             // AI sentiment — centralité category labels (pass-through in fr)
             'Très central': 'Tr\u00e8s central',
-            'Central':      'Central',
             'Secondaire':   'Secondaire',
-            'Marginal':     'Marginal',
             'Non abordé':   'Non abord\u00e9',
 
             // AI sentiment — subjectivité bucket labels (1..5)
@@ -878,7 +576,6 @@
             'Similarity':              'Similarit\u00e9',
             'Shares':                  'Partage',
             'shares_n_entities':       '{count} balises partag\u00e9es',
-            'No similar articles':     'Aucun article au contenu similaire',
             'No related articles':     'Aucun article avec des balises communes',
             'No further reading found':'Aucun autre article \u00e0 sugg\u00e9rer',
             'No entities tagged':      'Aucune entit\u00e9 associ\u00e9e \u00e0 cet article',
@@ -1018,7 +715,6 @@
             'Entities by type':          'Entit\u00e9s par type',
             'Top entities':              'Entit\u00e9s les plus fr\u00e9quentes dans les champs Sujet et Couverture spatiale (Dublin Core)',
             'Lifespan \u00d7 frequency': 'Dur\u00e9e de vie \u00d7 fr\u00e9quence',
-            'Places map':                'Carte des lieux',
             'Temporal extent':           '\u00c9tendue temporelle',
             'Index table':               'Table de l\u2019index',
 
@@ -1038,7 +734,6 @@
             'Both layers':               'Les deux couches',
             'Authority pins':            'Points d\u2019autorit\u00e9',
             'Layer':                     'Couche',
-            'Search entities':           'Rechercher des entit\u00e9s',
 
             // Keyword Explorer — filters + tabs
             'Spatial Coverage':          'Couverture spatiale',

@@ -247,95 +247,79 @@
         };
     }
 
-    function initBlock(container, cfg) {
-        var basePath = container.dataset.basePath || '';
-        var siteBase = container.dataset.siteBase || '';
-        var url = basePath + '/files/iwac-visualizations/' + cfg.bundle;
+    // Both landscape blocks share this renderer; the per-block variant (bundle,
+    // titles, colour dimension) is read off the container's modifier class.
+    function render(container, data, ctx) {
+        var cfg = VARIANTS[variantFor(container)];
+        var siteBase = ctx.siteBase;
+        container.innerHTML = '';
 
-        P.fetchJSON(url)
-            .then(function (data) {
-                container.innerHTML = '';
+        var root = P.el('div', 'iwac-vis-overview-root iwac-vis-landscape-root');
+        container.appendChild(root);
 
-                var root = P.el('div', 'iwac-vis-overview-root iwac-vis-landscape-root');
-                container.appendChild(root);
+        var panel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t(cfg.titleKey),
+            P.t(cfg.descKey)
+        );
+        // The landscape needs height — reuse the graph-host
+        // reservation (640px) instead of the default 320px.
+        panel.chart.classList.add('iwac-vis-graph-host');
+        root.appendChild(panel.panel);
 
-                var panel = P.buildPanel(
-                    'iwac-vis-panel iwac-vis-panel--wide',
-                    P.t(cfg.titleKey),
-                    P.t(cfg.descKey)
-                );
-                // The landscape needs height — reuse the graph-host
-                // reservation (640px) instead of the default 320px.
-                panel.chart.classList.add('iwac-vis-graph-host');
-                root.appendChild(panel.panel);
+        var count = ((data.points || {}).o_id || []).length;
+        var caption = P.el('p', 'iwac-vis-overview-subtitle',
+            P.t(cfg.countKey, { count: P.formatNumber(count) }));
+        panel.panel.insertBefore(caption, panel.chart);
 
-                var count = ((data.points || {}).o_id || []).length;
-                var caption = P.el('p', 'iwac-vis-overview-subtitle',
-                    P.t(cfg.countKey, { count: P.formatNumber(count) }));
-                panel.panel.insertBefore(caption, panel.chart);
+        // Only offer the facets this variant supports (publications
+        // carry no LDA topics, so their bundle drops the topic facet).
+        var subFacets = {};
+        cfg.facets.forEach(function (f) { subFacets[f] = P.t(FACET_LABEL[f]); });
 
-                // Only offer the facets this variant supports (publications
-                // carry no LDA topics, so their bundle drops the topic facet).
-                var subFacets = {};
-                cfg.facets.forEach(function (f) { subFacets[f] = P.t(FACET_LABEL[f]); });
-
-                var state = { facet: cfg.facets[0] };
-                var facetBar = P.buildFacetButtons({
-                    facets: [{
-                        key: 'facet',
-                        label: P.t('Color by'),
-                        subFacets: subFacets,
-                        renderAs: 'buttons'
-                    }],
-                    activeKey: 'facet',
-                    onChange: function (evt) {
-                        var f = evt.subFacet || cfg.facets[0];
-                        if (cfg.facets.indexOf(f) === -1) f = cfg.facets[0];
-                        state.facet = f;
-                        if (chart && !chart.isDisposed()) {
-                            chart.setOption(buildOption(data, state.facet), true);
-                        }
-                    }
-                });
-                panel.panel.insertBefore(facetBar.root, panel.chart);
-
-                var chart = ns.registerChart(panel.chart, function (el, instance) {
-                    instance.setOption(buildOption(data, state.facet), true);
-                });
-
-                if (chart && siteBase) {
-                    chart.on('click', function (params) {
-                        var i = params.data && params.data[2];
-                        if (i == null) return;
-                        var oId = data.points.o_id[i];
-                        if (oId != null) {
-                            window.location.href = siteBase + '/item/' + oId;
-                        }
-                    });
+        var state = { facet: cfg.facets[0] };
+        var facetBar = P.buildFacetButtons({
+            facets: [{
+                key: 'facet',
+                label: P.t('Color by'),
+                subFacets: subFacets,
+                renderAs: 'buttons'
+            }],
+            activeKey: 'facet',
+            onChange: function (evt) {
+                var f = evt.subFacet || cfg.facets[0];
+                if (cfg.facets.indexOf(f) === -1) f = cfg.facets[0];
+                state.facet = f;
+                if (chart && !chart.isDisposed()) {
+                    chart.setOption(buildOption(data, state.facet), true);
                 }
-            })
-            .catch(function (err) {
-                console.error('IWACVis semantic landscape:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
+            }
+        });
+        panel.panel.insertBefore(facetBar.root, panel.chart);
+
+        var chart = ns.registerChart(panel.chart, function (el, instance) {
+            instance.setOption(buildOption(data, state.facet), true);
+        });
+
+        if (chart && siteBase) {
+            chart.on('click', function (params) {
+                var i = params.data && params.data[2];
+                if (i == null) return;
+                var oId = data.points.o_id[i];
+                if (oId != null) {
+                    window.location.href = siteBase + '/item/' + oId;
+                }
             });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis semantic landscape: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll(
-            '.iwac-vis-semantic-landscape, .iwac-vis-periodicals-landscape');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i], VARIANTS[variantFor(containers[i])]);
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-semantic-landscape, .iwac-vis-periodicals-landscape',
+        warnLabel:      'IWACVis semantic landscape',
+        requireECharts: true,
+        load:           function (ctx) {
+            return P.fetchJSON(ctx.dataBase + VARIANTS[variantFor(ctx.container)].bundle);
+        },
+        render:         render
+    });
 })();

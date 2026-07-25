@@ -74,20 +74,6 @@
         });
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        P.fetchJSON(ctx.basePath + '/files/iwac-visualizations/press-reprints.json')
-            .then(function (data) { buildLayout(container, data, ctx); })
-            .catch(function (err) {
-                console.error('IWACVis press reprints:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
     function buildLayout(container, data, ctx) {
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-overview-root iwac-vis-reprints-root');
@@ -256,20 +242,11 @@
         }
     }
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis press reprints: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-reprints');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-reprints',
+        warnLabel:      'IWACVis press reprints',
+        requireECharts: true,
+        dataFile:       'press-reprints.json',
+        render:         buildLayout
+    });
 })();

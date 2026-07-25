@@ -47,7 +47,8 @@
  * asset is still emitted only once.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
- * @var string|null $blockCss
+ * @var string|array|null $blockCss  One sheet name under css/blocks/, or a list
+ *                                   of them in load order.
  * @var array|null  $needs
  * @var array|null  $panels
  * @var string|null $orchestrator
@@ -101,8 +102,15 @@ $headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));
 // on-view only and lives far below the fold, so its stylesheet rides the on-view
 // lazy loader (alongside the CDN maplibre.css) instead of render-blocking first
 // paint. See $lazyCss below.
-if ($blockCss) {
-    $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $blockCss . '.min.css', $module));
+// `blockCss` takes a single sheet name or a list, in load order. The list form
+// exists for blocks that layer a specialisation over a shared base sheet — the
+// article dashboard reuses person-dashboard.css and adds its own on top. Before
+// it existed that block reached for a raw headLink in its template, which is
+// how it ended up shipping the UNMINIFIED sheet for several releases.
+foreach ((array) $blockCss as $sheet) {
+    if ($sheet) {
+        $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $sheet . '.min.css', $module));
+    }
 }
 
 // -- Deferred, on-view asset loading -----------------------------------
@@ -146,7 +154,17 @@ $scripts[] = $this->assetUrl('js/dashboard-core.min.js', $module);
 // Shared primitives — panels is the base for every other primitive;
 // panel-toolbar + responsive are tiny and universally useful. Heavier or
 // feature-specific primitives are opt-in via $needs.
+//
+// panels.js was split into four files in v1.23.0 (DOM/fetch/i18n/status/layout
+// core, then controls, map helpers, boot helpers). They all extend the same
+// IWACVis.panels object and none reads another at load time, so only the core
+// has to come first. Kept unconditional: every block boots through
+// panels-boot, and the other two are small enough that gating them on $needs
+// would buy less than the extra branch costs in reasoning.
 $scripts[] = $this->assetUrl('js/charts/shared/panels.min.js', $module);
+$scripts[] = $this->assetUrl('js/charts/shared/panels-controls.min.js', $module);
+$scripts[] = $this->assetUrl('js/charts/shared/panels-map.min.js', $module);
+$scripts[] = $this->assetUrl('js/charts/shared/panels-boot.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
 // embed.js: adds the per-panel "copy embed code" buttons on the live site and
 // drives single-panel selection inside an /iwac-embed/:block/:panel frame. It

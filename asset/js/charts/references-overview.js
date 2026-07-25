@@ -397,148 +397,130 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function initReferencesOverview(container) {
-        var loadingLabel = container.querySelector('.iwac-vis-loading span');
-        if (loadingLabel) loadingLabel.textContent = P.t('Loading references overview') + '\u2026';
+    function render(container, raw, ctx) {
+        var siteBase = ctx.siteBase;
+        if (!raw || !raw.summary || raw.summary.total === 0) {
+            container.innerHTML = '';
+            container.appendChild(P.buildEmptyState());
+            return;
+        }
 
-        var basePath = container.getAttribute('data-base-path') || '';
-        var siteBase = container.getAttribute('data-site-base') || '';
-        var url = basePath + '/files/iwac-visualizations/references-overview.json';
+        var data = localizeData(raw);
+        var h = buildLayout(container, data.summary);
 
-        P.fetchJSON(url)
-            .then(function (raw) {
-                if (!raw || !raw.summary || raw.summary.total === 0) {
-                    container.innerHTML = '';
-                    container.appendChild(P.buildEmptyState());
-                    return;
-                }
-
-                var data = localizeData(raw);
-                var h = buildLayout(container, data.summary);
-
-                // 1. Timeline
-                if (data.timeline.years && data.timeline.years.length > 0) {
-                    ns.registerChart(h.timeline, function (el, chart) {
-                        chart.setOption(C.timeline(data.timeline));
-                    });
-                }
-
-                // 2. Reference types
-                if (data.types.length > 0) {
-                    ns.registerChart(h.types, function (el, chart) {
-                        chart.setOption(C.horizontalBar(data.types));
-                    });
-                }
-
-                // 3. Languages
-                if (data.languages.length > 0) {
-                    ns.registerChart(h.languages, function (el, chart) {
-                        chart.setOption(C.pie(data.languages));
-                    });
-                }
-
-                // 4. Countries
-                if (data.countries.length > 0) {
-                    ns.registerChart(h.countries, function (el, chart) {
-                        chart.setOption(C.horizontalBar(data.countries));
-                    });
-                }
-
-                // 5. Top authors
-                if (data.authors.length > 0) {
-                    ns.registerChart(h.authors, function (el, chart) {
-                        chart.setOption(C.horizontalBar(data.authors));
-                    });
-                }
-
-                // 6. Top publishers
-                if (data.publishers.length > 0) {
-                    ns.registerChart(h.publishers, function (el, chart) {
-                        chart.setOption(C.horizontalBar(data.publishers));
-                    });
-                }
-
-                // 7. Top subjects
-                if (data.subjects.length > 0) {
-                    ns.registerChart(h.subjects, function (el, chart) {
-                        chart.setOption(C.horizontalBar(data.subjects));
-                    });
-                }
-
-                // 8. Treemap country → type
-                if (data.treemap.children && data.treemap.children.length > 0) {
-                    ns.registerChart(h.treemap, function (el, chart) {
-                        chart.setOption(C.treemap(data.treemap));
-                    });
-                }
-
-                // 9. Reference provenance map
-                renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
-
-                // 10. Subject co-occurrence chord
-                var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
-                if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
-                    var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
-                        instance.setOption(C.chord(subjectChord, { minWeight: 1 }), true);
-                    });
-                    if (subjectChart && P.addFullscreenButton) {
-                        P.addFullscreenButton(h.subjectCooccurrence.panel, {
-                            onResize: function () {
-                                var live = ns.getLiveChart && ns.getLiveChart(h.subjectCooccurrenceChart);
-                                if (live) live.resize();
-                            }
-                        });
-                    }
-                } else {
-                    h.subjectCooccurrenceChart.appendChild(P.buildEmptyState('No subject co-occurrence available'));
-                    h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
-                }
-
-                // 11. Author collaboration network
-                var graph = data.author_collaborations;
-                if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
-                    var chart = ns.registerChart(h.networkChart, function (el, instance) {
-                        instance.setOption(C.collaborationNetwork(graph), true);
-                    });
-                    // Wire a fullscreen toggle so the network panel can
-                    // expand into the viewport for closer inspection,
-                    // matching the cooccurrence chord and entity network
-                    // panels on the person dashboard.
-                    if (chart && P.addFullscreenButton) {
-                        P.addFullscreenButton(h.network.panel, {
-                            onResize: function () {
-                                var live = ns.getLiveChart && ns.getLiveChart(h.networkChart);
-                                if (live) live.resize();
-                            }
-                        });
-                    }
-                }
-            })
-            .catch(function (err) {
-                console.error('IWACVis references overview:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
+        // 1. Timeline
+        if (data.timeline.years && data.timeline.years.length > 0) {
+            ns.registerChart(h.timeline, function (el, chart) {
+                chart.setOption(C.timeline(data.timeline));
             });
+        }
+
+        // 2. Reference types
+        if (data.types.length > 0) {
+            ns.registerChart(h.types, function (el, chart) {
+                chart.setOption(C.horizontalBar(data.types));
+            });
+        }
+
+        // 3. Languages
+        if (data.languages.length > 0) {
+            ns.registerChart(h.languages, function (el, chart) {
+                chart.setOption(C.pie(data.languages));
+            });
+        }
+
+        // 4. Countries
+        if (data.countries.length > 0) {
+            ns.registerChart(h.countries, function (el, chart) {
+                chart.setOption(C.horizontalBar(data.countries));
+            });
+        }
+
+        // 5. Top authors
+        if (data.authors.length > 0) {
+            ns.registerChart(h.authors, function (el, chart) {
+                chart.setOption(C.horizontalBar(data.authors));
+            });
+        }
+
+        // 6. Top publishers
+        if (data.publishers.length > 0) {
+            ns.registerChart(h.publishers, function (el, chart) {
+                chart.setOption(C.horizontalBar(data.publishers));
+            });
+        }
+
+        // 7. Top subjects
+        if (data.subjects.length > 0) {
+            ns.registerChart(h.subjects, function (el, chart) {
+                chart.setOption(C.horizontalBar(data.subjects));
+            });
+        }
+
+        // 8. Treemap country → type
+        if (data.treemap.children && data.treemap.children.length > 0) {
+            ns.registerChart(h.treemap, function (el, chart) {
+                chart.setOption(C.treemap(data.treemap));
+            });
+        }
+
+        // 9. Reference provenance map
+        renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
+
+        // 10. Subject co-occurrence chord
+        var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
+        if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
+            var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
+                instance.setOption(C.chord(subjectChord, { minWeight: 1 }), true);
+            });
+            if (subjectChart && P.addFullscreenButton) {
+                P.addFullscreenButton(h.subjectCooccurrence.panel, {
+                    onResize: function () {
+                        var live = ns.getLiveChart && ns.getLiveChart(h.subjectCooccurrenceChart);
+                        if (live) live.resize();
+                    }
+                });
+            }
+        } else {
+            h.subjectCooccurrenceChart.appendChild(P.buildEmptyState('No subject co-occurrence available'));
+            h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+        }
+
+        // 11. Author collaboration network
+        var graph = data.author_collaborations;
+        if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
+            var chart = ns.registerChart(h.networkChart, function (el, instance) {
+                instance.setOption(C.collaborationNetwork(graph), true);
+            });
+            // Wire a fullscreen toggle so the network panel can
+            // expand into the viewport for closer inspection,
+            // matching the cooccurrence chord and entity network
+            // panels on the person dashboard.
+            if (chart && P.addFullscreenButton) {
+                P.addFullscreenButton(h.network.panel, {
+                    onResize: function () {
+                        var live = ns.getLiveChart && ns.getLiveChart(h.networkChart);
+                        if (live) live.resize();
+                    }
+                });
+            }
+        }
     }
+
+    P.bootBlock({
+        selector:       '.iwac-vis-references-overview',
+        warnLabel:      'IWACVis references overview',
+        requireECharts: true,
+        dataFile:       'references-overview.json',
+        beforeLoad:     function (container) {
+            var loadingLabel = container.querySelector('.iwac-vis-loading span');
+            if (loadingLabel) loadingLabel.textContent = P.t('Loading references overview') + '\u2026';
+        },
+        render:         render
+    });
 
     /* ----------------------------------------------------------------- */
     /*  Auto-init                                                         */
     /* ----------------------------------------------------------------- */
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis references overview: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-references-overview');
-        for (var i = 0; i < containers.length; i++) {
-            initReferencesOverview(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
 })();

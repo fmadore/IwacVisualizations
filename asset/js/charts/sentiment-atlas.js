@@ -673,297 +673,276 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function initSentimentAtlas(container) {
-        var loadingLabel = container.querySelector('.iwac-vis-loading span');
-        if (loadingLabel) loadingLabel.textContent = P.t('Loading sentiment atlas') + '…';
+    function render(container, results) {
+        var data = results[0];
+        var arbiter = results[1];
 
-        var basePath = container.getAttribute('data-base-path') || '';
-        var dataBase = basePath + '/files/iwac-visualizations/';
-
-        // Atlas is required; the arbiter bundle is optional (the sibling
-        // study may not be deployed) — swallow its failure to null.
-        Promise.all([
-            P.fetchJSON(dataBase + 'sentiment-atlas.json'),
-            P.fetchJSON(dataBase + 'sentiment-arbiter.json').catch(function () { return null; })
-        ])
-            .then(function (results) {
-                var data = results[0];
-                var arbiter = results[1];
-
-                if (!data || !data.models || !data.summary || !data.summary.total) {
-                    container.innerHTML = '';
-                    container.appendChild(P.buildEmptyState());
-                    return;
-                }
-
-                var firstCat = (data.extreme_categories || ['subjectivity_high'])[0];
-                var state = { model: MODELS[0].key, pair: 0, exCategory: firstCat, exType: 'subject' };
-                var h = buildLayout(container, data);
-
-                // Friendly name for the arbiter model id (gemini-3-pro-preview).
-                var arbiterModelLabel = (arbiter && /pro/i.test(arbiter.arbiter_model || ''))
-                    ? 'Gemini 3 Pro'
-                    : (arbiter && arbiter.arbiter_model) || 'Gemini 3 Pro';
-
-                // Index arbiter pairs by their unordered model-id set so we
-                // can look one up from an agreement pair's [a, b] order.
-                var arbiterIndex = {};
-                if (arbiter && arbiter.pairs) {
-                    arbiter.pairs.forEach(function (entry) {
-                        var k = [entry.model_a, entry.model_b].slice().sort().join('|');
-                        arbiterIndex[k] = entry;
-                    });
-                }
-                function arbiterEntryFor(models) {
-                    return arbiterIndex[[].concat(models).sort().join('|')] || null;
-                }
-
-                function updateNaNote() {
-                    var model = data.models[state.model] || {};
-                    h.naNote.textContent = P.t('sentiment.na_note', {
-                        count: P.formatNumber(model.not_applicable || 0)
-                    });
-                }
-                updateNaNote();
-
-                function renderExtremes() {
-                    var live = ns.getLiveChart ? ns.getLiveChart(h.extremesPanel.chart) : null;
-                    if (live) live.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
-                    var bucket = ((data.models[state.model] || {}).extremes || {})[state.exCategory] || {};
-                    h.extremesNote.textContent = P.t('sentiment.extremes_n', {
-                        count: P.formatNumber(bucket.n || 0)
-                    });
-                }
-
-                // -- Global model facet (drives every single-model panel) --
-                if (P.buildFacetButtons) {
-                    var subFacets = {};
-                    MODELS.forEach(function (m) { subFacets[m.key] = m.label; });
-                    var facetBar = P.buildFacetButtons({
-                        facets: [{
-                            key: 'model',
-                            label: P.t('Model'),
-                            subFacets: subFacets,
-                            renderAs: 'buttons'
-                        }],
-                        activeKey: 'model',
-                        onChange: function (evt) {
-                            state.model = evt.subFacet || MODELS[0].key;
-                            updateNaNote();
-                            var faceted = [
-                                [h.polarityPanel.chart,    buildPolarityByYear],
-                                [h.centralityPanel.chart,  buildCentralityByYear],
-                                [h.countryPanel.chart,     buildPolarityByCountry],
-                                [h.correlationPanel.chart, buildCorrelation],
-                                [h.cenHeatPanel.chart,     buildCentralityHeatmap]
-                            ];
-                            if (h.topicPanel)     faceted.push([h.topicPanel.chart,     buildPolarityByTopic]);
-                            if (h.newspaperPanel) faceted.push([h.newspaperPanel.chart, buildPolarityByNewspaper]);
-                            faceted.forEach(function (pair) {
-                                var live = ns.getLiveChart ? ns.getLiveChart(pair[0]) : null;
-                                if (live) live.setOption(pair[1](data, state.model), true);
-                            });
-                            renderExtremes();
-                        }
-                    });
-                    h.modelFacetHost.appendChild(facetBar.root);
-                }
-
-                // -- Faceted single-model panels ---------------------------
-                ns.registerChart(h.polarityPanel.chart, function (el, chart) {
-                    chart.setOption(buildPolarityByYear(data, state.model), true);
-                });
-                ns.registerChart(h.centralityPanel.chart, function (el, chart) {
-                    chart.setOption(buildCentralityByYear(data, state.model), true);
-                });
-                ns.registerChart(h.countryPanel.chart, function (el, chart) {
-                    chart.setOption(buildPolarityByCountry(data, state.model), true);
-                });
-                ns.registerChart(h.correlationPanel.chart, function (el, chart) {
-                    chart.setOption(buildCorrelation(data, state.model), true);
-                });
-                ns.registerChart(h.cenHeatPanel.chart, function (el, chart) {
-                    chart.setOption(buildCentralityHeatmap(data, state.model), true);
-                });
-                if (h.topicPanel) {
-                    ns.registerChart(h.topicPanel.chart, function (el, chart) {
-                        chart.setOption(buildPolarityByTopic(data, state.model), true);
-                    });
-                }
-                if (h.newspaperPanel) {
-                    ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
-                        chart.setOption(buildPolarityByNewspaper(data, state.model), true);
-                    });
-                }
-
-                // -- Subjectivity trend (all models at once) ---------------
-                ns.registerChart(h.subjectivityPanel.chart, function (el, chart) {
-                    chart.setOption(buildSubjectivityOption(data), true);
-                });
-
-                // -- Extreme-article keyword facets ------------------------
-                if (P.buildFacetButtons) {
-                    var catFacets = {};
-                    (data.extreme_categories || []).forEach(function (cat) {
-                        catFacets[cat] = P.t('sentiment.cat_' + cat);
-                    });
-                    var catBar = P.buildFacetButtons({
-                        facets: [{ key: 'category', label: P.t('sentiment.extremes_category'), subFacets: catFacets }],
-                        activeKey: 'category',
-                        onChange: function (evt) {
-                            state.exCategory = evt.subFacet || firstCat;
-                            renderExtremes();
-                        }
-                    });
-                    var typeBar = P.buildFacetButtons({
-                        facets: [{
-                            key: 'type',
-                            label: P.t('sentiment.extremes_type'),
-                            subFacets: { subject: P.t('sentiment.kw_subject'), spatial: P.t('sentiment.kw_spatial') },
-                            renderAs: 'buttons'
-                        }],
-                        activeKey: 'type',
-                        onChange: function (evt) {
-                            state.exType = evt.subFacet || 'subject';
-                            renderExtremes();
-                        }
-                    });
-                    h.extremesControls.appendChild(catBar.root);
-                    h.extremesControls.appendChild(typeBar.root);
-                }
-                ns.registerChart(h.extremesPanel.chart, function (el, chart) {
-                    chart.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
-                });
-                renderExtremes();
-
-                // -- Comparison & arbitration section ----------------------
-                var agreement = data.agreement || [];
-                if (agreement.length === 0) {
-                    h.agreementPanel.chart.appendChild(
-                        P.buildEmptyState());
-                    return;
-                }
-
-                // Build the arbiter panels only when the bundle loaded.
-                var arbiterVerdictPanel = null;
-                var arbiterDimPanel = null;
-                var arbiterNote = null;
-                if (arbiter && arbiter.pairs && arbiter.pairs.length) {
-                    arbiterVerdictPanel = P.buildPanel('iwac-vis-panel',
-                        P.t('sentiment.arbiter_title'),
-                        P.t('sentiment.arbiter_desc', { model: arbiterModelLabel }));
-                    arbiterDimPanel = P.buildPanel('iwac-vis-panel',
-                        P.t('sentiment.arbiter_dim_title'),
-                        P.t('sentiment.arbiter_dim_desc', { model: arbiterModelLabel }));
-                    arbiterNote = P.el('p', 'iwac-vis-muted');
-                    arbiterVerdictPanel.panel.appendChild(arbiterNote);
-                    h.compareGrid.appendChild(arbiterVerdictPanel.panel);
-                    h.compareGrid.appendChild(arbiterDimPanel.panel);
-                }
-
-                function updateArbiterNote(entry) {
-                    if (!arbiterNote) return;
-                    var c = (entry && entry.confidence) || {};
-                    arbiterNote.textContent = (entry
-                        ? P.t('sentiment.arbiter_n', {
-                            count: P.formatNumber(entry.n || 0), model: arbiterModelLabel
-                        }) + ' '
-                        : '') + P.t('sentiment.arbiter_confidence', {
-                            high: P.formatNumber(c.high || 0),
-                            medium: P.formatNumber(c.medium || 0),
-                            low: P.formatNumber(c.low || 0)
-                        });
-                }
-
-                function renderComparison() {
-                    var entry = agreement[state.pair];
-                    if (!entry) return;
-                    h.matrixCaption.textContent = P.t('sentiment.matrix_caption', {
-                        a: modelLabel(entry.models[0]),
-                        b: modelLabel(entry.models[1])
-                    });
-                    var liveM = ns.getLiveChart ? ns.getLiveChart(h.agreementPanel.chart) : null;
-                    if (liveM) liveM.setOption(buildAgreementMatrix(data, entry), true);
-
-                    if (arbiterVerdictPanel) {
-                        var ae = arbiterEntryFor(entry.models);
-                        var liveV = ns.getLiveChart ? ns.getLiveChart(arbiterVerdictPanel.chart) : null;
-                        if (liveV) liveV.setOption(buildArbiterVerdict(ae), true);
-                        var liveD = ns.getLiveChart ? ns.getLiveChart(arbiterDimPanel.chart) : null;
-                        if (liveD) liveD.setOption(buildArbiterDimensions(ae), true);
-                        updateArbiterNote(ae);
-                    }
-                }
-
-                // Pairwise % cards (all pairs) + caption above the matrix.
-                h.agreementPanel.panel.insertBefore(
-                    buildAgreementCards(agreement), h.agreementPanel.chart);
-                h.agreementPanel.panel.insertBefore(h.matrixCaption, h.agreementPanel.chart);
-
-                // One pair facet drives the matrix AND the arbiter panels.
-                if (P.buildFacetButtons && agreement.length > 1) {
-                    var pairFacets = {};
-                    agreement.forEach(function (entry, idx) {
-                        pairFacets[String(idx)] = modelLabel(entry.models[0])
-                            + ' × ' + modelLabel(entry.models[1]);
-                    });
-                    var pairBar = P.buildFacetButtons({
-                        facets: [{
-                            key: 'pair',
-                            label: P.t('Model comparison'),
-                            subFacets: pairFacets,
-                            renderAs: 'buttons'
-                        }],
-                        activeKey: 'pair',
-                        onChange: function (evt) {
-                            state.pair = parseInt(evt.subFacet, 10) || 0;
-                            renderComparison();
-                        }
-                    });
-                    h.pairFacetHost.appendChild(pairBar.root);
-                }
-
-                ns.registerChart(h.agreementPanel.chart, function (el, chart) {
-                    chart.setOption(buildAgreementMatrix(data, agreement[state.pair]), true);
-                });
-                if (arbiterVerdictPanel) {
-                    ns.registerChart(arbiterVerdictPanel.chart, function (el, chart) {
-                        chart.setOption(buildArbiterVerdict(arbiterEntryFor(agreement[state.pair].models)), true);
-                    });
-                    ns.registerChart(arbiterDimPanel.chart, function (el, chart) {
-                        chart.setOption(buildArbiterDimensions(arbiterEntryFor(agreement[state.pair].models)), true);
-                    });
-                    updateArbiterNote(arbiterEntryFor(agreement[state.pair].models));
-                }
-
-                // Seed the comparison caption (charts self-render on register).
-                renderComparison();
-            })
-            .catch(function (err) {
-                console.error('IWACVis sentiment atlas:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Auto-init                                                         */
-    /* ----------------------------------------------------------------- */
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis sentiment atlas: ECharts not loaded');
+        if (!data || !data.models || !data.summary || !data.summary.total) {
+            container.innerHTML = '';
+            container.appendChild(P.buildEmptyState());
             return;
         }
-        var containers = document.querySelectorAll('.iwac-vis-sentiment-atlas');
-        for (var i = 0; i < containers.length; i++) {
-            initSentimentAtlas(containers[i]);
+
+        var firstCat = (data.extreme_categories || ['subjectivity_high'])[0];
+        var state = { model: MODELS[0].key, pair: 0, exCategory: firstCat, exType: 'subject' };
+        var h = buildLayout(container, data);
+
+        // Friendly name for the arbiter model id (gemini-3-pro-preview).
+        var arbiterModelLabel = (arbiter && /pro/i.test(arbiter.arbiter_model || ''))
+            ? 'Gemini 3 Pro'
+            : (arbiter && arbiter.arbiter_model) || 'Gemini 3 Pro';
+
+        // Index arbiter pairs by their unordered model-id set so we
+        // can look one up from an agreement pair's [a, b] order.
+        var arbiterIndex = {};
+        if (arbiter && arbiter.pairs) {
+            arbiter.pairs.forEach(function (entry) {
+                var k = [entry.model_a, entry.model_b].slice().sort().join('|');
+                arbiterIndex[k] = entry;
+            });
         }
+        function arbiterEntryFor(models) {
+            return arbiterIndex[[].concat(models).sort().join('|')] || null;
+        }
+
+        function updateNaNote() {
+            var model = data.models[state.model] || {};
+            h.naNote.textContent = P.t('sentiment.na_note', {
+                count: P.formatNumber(model.not_applicable || 0)
+            });
+        }
+        updateNaNote();
+
+        function renderExtremes() {
+            var live = ns.getLiveChart ? ns.getLiveChart(h.extremesPanel.chart) : null;
+            if (live) live.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
+            var bucket = ((data.models[state.model] || {}).extremes || {})[state.exCategory] || {};
+            h.extremesNote.textContent = P.t('sentiment.extremes_n', {
+                count: P.formatNumber(bucket.n || 0)
+            });
+        }
+
+        // -- Global model facet (drives every single-model panel) --
+        if (P.buildFacetButtons) {
+            var subFacets = {};
+            MODELS.forEach(function (m) { subFacets[m.key] = m.label; });
+            var facetBar = P.buildFacetButtons({
+                facets: [{
+                    key: 'model',
+                    label: P.t('Model'),
+                    subFacets: subFacets,
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'model',
+                onChange: function (evt) {
+                    state.model = evt.subFacet || MODELS[0].key;
+                    updateNaNote();
+                    var faceted = [
+                        [h.polarityPanel.chart,    buildPolarityByYear],
+                        [h.centralityPanel.chart,  buildCentralityByYear],
+                        [h.countryPanel.chart,     buildPolarityByCountry],
+                        [h.correlationPanel.chart, buildCorrelation],
+                        [h.cenHeatPanel.chart,     buildCentralityHeatmap]
+                    ];
+                    if (h.topicPanel)     faceted.push([h.topicPanel.chart,     buildPolarityByTopic]);
+                    if (h.newspaperPanel) faceted.push([h.newspaperPanel.chart, buildPolarityByNewspaper]);
+                    faceted.forEach(function (pair) {
+                        var live = ns.getLiveChart ? ns.getLiveChart(pair[0]) : null;
+                        if (live) live.setOption(pair[1](data, state.model), true);
+                    });
+                    renderExtremes();
+                }
+            });
+            h.modelFacetHost.appendChild(facetBar.root);
+        }
+
+        // -- Faceted single-model panels ---------------------------
+        ns.registerChart(h.polarityPanel.chart, function (el, chart) {
+            chart.setOption(buildPolarityByYear(data, state.model), true);
+        });
+        ns.registerChart(h.centralityPanel.chart, function (el, chart) {
+            chart.setOption(buildCentralityByYear(data, state.model), true);
+        });
+        ns.registerChart(h.countryPanel.chart, function (el, chart) {
+            chart.setOption(buildPolarityByCountry(data, state.model), true);
+        });
+        ns.registerChart(h.correlationPanel.chart, function (el, chart) {
+            chart.setOption(buildCorrelation(data, state.model), true);
+        });
+        ns.registerChart(h.cenHeatPanel.chart, function (el, chart) {
+            chart.setOption(buildCentralityHeatmap(data, state.model), true);
+        });
+        if (h.topicPanel) {
+            ns.registerChart(h.topicPanel.chart, function (el, chart) {
+                chart.setOption(buildPolarityByTopic(data, state.model), true);
+            });
+        }
+        if (h.newspaperPanel) {
+            ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
+                chart.setOption(buildPolarityByNewspaper(data, state.model), true);
+            });
+        }
+
+        // -- Subjectivity trend (all models at once) ---------------
+        ns.registerChart(h.subjectivityPanel.chart, function (el, chart) {
+            chart.setOption(buildSubjectivityOption(data), true);
+        });
+
+        // -- Extreme-article keyword facets ------------------------
+        if (P.buildFacetButtons) {
+            var catFacets = {};
+            (data.extreme_categories || []).forEach(function (cat) {
+                catFacets[cat] = P.t('sentiment.cat_' + cat);
+            });
+            var catBar = P.buildFacetButtons({
+                facets: [{ key: 'category', label: P.t('sentiment.extremes_category'), subFacets: catFacets }],
+                activeKey: 'category',
+                onChange: function (evt) {
+                    state.exCategory = evt.subFacet || firstCat;
+                    renderExtremes();
+                }
+            });
+            var typeBar = P.buildFacetButtons({
+                facets: [{
+                    key: 'type',
+                    label: P.t('sentiment.extremes_type'),
+                    subFacets: { subject: P.t('sentiment.kw_subject'), spatial: P.t('sentiment.kw_spatial') },
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'type',
+                onChange: function (evt) {
+                    state.exType = evt.subFacet || 'subject';
+                    renderExtremes();
+                }
+            });
+            h.extremesControls.appendChild(catBar.root);
+            h.extremesControls.appendChild(typeBar.root);
+        }
+        ns.registerChart(h.extremesPanel.chart, function (el, chart) {
+            chart.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
+        });
+        renderExtremes();
+
+        // -- Comparison & arbitration section ----------------------
+        var agreement = data.agreement || [];
+        if (agreement.length === 0) {
+            h.agreementPanel.chart.appendChild(
+                P.buildEmptyState());
+            return;
+        }
+
+        // Build the arbiter panels only when the bundle loaded.
+        var arbiterVerdictPanel = null;
+        var arbiterDimPanel = null;
+        var arbiterNote = null;
+        if (arbiter && arbiter.pairs && arbiter.pairs.length) {
+            arbiterVerdictPanel = P.buildPanel('iwac-vis-panel',
+                P.t('sentiment.arbiter_title'),
+                P.t('sentiment.arbiter_desc', { model: arbiterModelLabel }));
+            arbiterDimPanel = P.buildPanel('iwac-vis-panel',
+                P.t('sentiment.arbiter_dim_title'),
+                P.t('sentiment.arbiter_dim_desc', { model: arbiterModelLabel }));
+            arbiterNote = P.el('p', 'iwac-vis-muted');
+            arbiterVerdictPanel.panel.appendChild(arbiterNote);
+            h.compareGrid.appendChild(arbiterVerdictPanel.panel);
+            h.compareGrid.appendChild(arbiterDimPanel.panel);
+        }
+
+        function updateArbiterNote(entry) {
+            if (!arbiterNote) return;
+            var c = (entry && entry.confidence) || {};
+            arbiterNote.textContent = (entry
+                ? P.t('sentiment.arbiter_n', {
+                    count: P.formatNumber(entry.n || 0), model: arbiterModelLabel
+                }) + ' '
+                : '') + P.t('sentiment.arbiter_confidence', {
+                    high: P.formatNumber(c.high || 0),
+                    medium: P.formatNumber(c.medium || 0),
+                    low: P.formatNumber(c.low || 0)
+                });
+        }
+
+        function renderComparison() {
+            var entry = agreement[state.pair];
+            if (!entry) return;
+            h.matrixCaption.textContent = P.t('sentiment.matrix_caption', {
+                a: modelLabel(entry.models[0]),
+                b: modelLabel(entry.models[1])
+            });
+            var liveM = ns.getLiveChart ? ns.getLiveChart(h.agreementPanel.chart) : null;
+            if (liveM) liveM.setOption(buildAgreementMatrix(data, entry), true);
+
+            if (arbiterVerdictPanel) {
+                var ae = arbiterEntryFor(entry.models);
+                var liveV = ns.getLiveChart ? ns.getLiveChart(arbiterVerdictPanel.chart) : null;
+                if (liveV) liveV.setOption(buildArbiterVerdict(ae), true);
+                var liveD = ns.getLiveChart ? ns.getLiveChart(arbiterDimPanel.chart) : null;
+                if (liveD) liveD.setOption(buildArbiterDimensions(ae), true);
+                updateArbiterNote(ae);
+            }
+        }
+
+        // Pairwise % cards (all pairs) + caption above the matrix.
+        h.agreementPanel.panel.insertBefore(
+            buildAgreementCards(agreement), h.agreementPanel.chart);
+        h.agreementPanel.panel.insertBefore(h.matrixCaption, h.agreementPanel.chart);
+
+        // One pair facet drives the matrix AND the arbiter panels.
+        if (P.buildFacetButtons && agreement.length > 1) {
+            var pairFacets = {};
+            agreement.forEach(function (entry, idx) {
+                pairFacets[String(idx)] = modelLabel(entry.models[0])
+                    + ' × ' + modelLabel(entry.models[1]);
+            });
+            var pairBar = P.buildFacetButtons({
+                facets: [{
+                    key: 'pair',
+                    label: P.t('Model comparison'),
+                    subFacets: pairFacets,
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'pair',
+                onChange: function (evt) {
+                    state.pair = parseInt(evt.subFacet, 10) || 0;
+                    renderComparison();
+                }
+            });
+            h.pairFacetHost.appendChild(pairBar.root);
+        }
+
+        ns.registerChart(h.agreementPanel.chart, function (el, chart) {
+            chart.setOption(buildAgreementMatrix(data, agreement[state.pair]), true);
+        });
+        if (arbiterVerdictPanel) {
+            ns.registerChart(arbiterVerdictPanel.chart, function (el, chart) {
+                chart.setOption(buildArbiterVerdict(arbiterEntryFor(agreement[state.pair].models)), true);
+            });
+            ns.registerChart(arbiterDimPanel.chart, function (el, chart) {
+                chart.setOption(buildArbiterDimensions(arbiterEntryFor(agreement[state.pair].models)), true);
+            });
+            updateArbiterNote(arbiterEntryFor(agreement[state.pair].models));
+        }
+
+        // Seed the comparison caption (charts self-render on register).
+        renderComparison();
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-sentiment-atlas',
+        warnLabel:      'IWACVis sentiment atlas',
+        requireECharts: true,
+        beforeLoad:     function (container) {
+            var loadingLabel = container.querySelector('.iwac-vis-loading span');
+            if (loadingLabel) loadingLabel.textContent = P.t('Loading sentiment atlas') + '…';
+        },
+        // Atlas is required; the arbiter bundle is optional (the sibling study
+        // may not be deployed) — swallow its failure to null.
+        load:           function (ctx) {
+            return Promise.all([
+                P.fetchJSON(ctx.dataBase + 'sentiment-atlas.json'),
+                P.fetchJSON(ctx.dataBase + 'sentiment-arbiter.json').catch(function () { return null; })
+            ]);
+        },
+        render:         render
+    });
 })();

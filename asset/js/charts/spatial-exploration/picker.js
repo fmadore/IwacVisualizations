@@ -43,7 +43,7 @@
         root.appendChild(group(P.t('Entity type'), tabs));
 
         // --- Search + result list --------------------------------------
-        var search = P.el('input', 'iwac-vis-spatial-picker__search');
+        var search = P.el('input', 'iwac-vis-control iwac-vis-spatial-picker__search');
         search.type = 'search';
         search.placeholder = P.t('Search entities');
         search.setAttribute('aria-label', P.t('Search entities'));

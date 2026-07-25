@@ -51,37 +51,16 @@
         return { sidebar: sidebar, mapPanel: mapPanel };
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        var url = ctx.basePath + '/files/iwac-visualizations/spatial-exploration.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var h = buildLayout(container);
-                var state = SE.createState(data, ctx);
-                SE.picker.render(h.sidebar, state);
-                SE.map.render(h.mapPanel, state);
-            })
-            .catch(function (err) {
-                console.error('IWACVis spatial exploration:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-spatial');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
+    P.bootBlock({
+        selector:       '.iwac-vis-spatial',
+        warnLabel:      'IWACVis spatial exploration',
+        requireECharts: false,
+        dataFile:       'spatial-exploration.json',
+        render:         function (container, data, ctx) {
+            var h = buildLayout(container);
+            var state = SE.createState(data, ctx);
+            SE.picker.render(h.sidebar, state);
+            SE.map.render(h.mapPanel, state);
         }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

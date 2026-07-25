@@ -6,7 +6,8 @@
  * (iwac-i18n.js), and watches `body[data-theme]` so that ECharts and
  * MapLibre instances re-render when the user toggles light/dark mode.
  *
- * Load order (set by Module.php):
+ * Load order (set by view/common/iwac-assets.phtml, which builds the ordered
+ * script list every block's on-view lazy loader injects):
  *   1. https://cdn.jsdelivr.net/npm/echarts@6/...
  *   2. asset/js/iwac-i18n.js     (no deps)
  *   3. asset/js/iwac-theme.js    (needs echarts)

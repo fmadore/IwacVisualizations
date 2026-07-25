@@ -47,7 +47,7 @@
         root.appendChild(labeledGroup(P.t('Field'), typeTabs));
 
         // --- Facet selector --------------------------------------------
-        var facetSelect = P.el('select', 'iwac-vis-keywords-filters__select');
+        var facetSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
         [
             { key: 'global',    labelKey: 'Global' },
             { key: 'country',   labelKey: 'By country' },
@@ -62,7 +62,7 @@
 
         // --- Country select (conditional) ------------------------------
         var countryWrap = P.el('div');
-        var countrySelect = P.el('select', 'iwac-vis-keywords-filters__select');
+        var countrySelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
         var allCountriesOpt = P.el('option', null, P.t('All countries'));
         allCountriesOpt.value = '';
         countrySelect.appendChild(allCountriesOpt);
@@ -78,7 +78,7 @@
 
         // --- Newspaper select (conditional) ----------------------------
         var newspaperWrap = P.el('div');
-        var newspaperSelect = P.el('select', 'iwac-vis-keywords-filters__select');
+        var newspaperSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
         var allNewsOpt = P.el('option', null, P.t('All newspapers'));
         allNewsOpt.value = '';
         newspaperSelect.appendChild(allNewsOpt);
@@ -113,7 +113,7 @@
 
         // --- Top-N picker (top mode only) ------------------------------
         var topNWrap = P.el('div');
-        var topNSelect = P.el('select', 'iwac-vis-keywords-filters__select');
+        var topNSelect = P.el('select', 'iwac-vis-control iwac-vis-keywords-filters__select');
         TOP_N_OPTIONS.forEach(function (n) {
             var opt = P.el('option', null, P.t('top_n_keywords', { count: n }));
             opt.value = String(n);
@@ -134,7 +134,7 @@
         var selectedBadges = P.el('div', 'iwac-vis-keywords-compare__badges');
         compareWrap.appendChild(selectedBadges);
 
-        var searchInput = P.el('input', 'iwac-vis-keywords-compare__search');
+        var searchInput = P.el('input', 'iwac-vis-control iwac-vis-keywords-compare__search');
         searchInput.type = 'search';
         searchInput.placeholder = P.t('Search keywords');
         searchInput.setAttribute('aria-label', P.t('Search keywords'));

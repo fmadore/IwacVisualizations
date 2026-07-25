@@ -79,18 +79,6 @@
         return (c >= 'a' && c <= 'z') ? c : '0';
     }
 
-    function initBlock(container) {
-        var basePath = container.dataset.basePath || '';
-        var dataBase = basePath + '/files/iwac-visualizations/';
-
-        P.fetchJSON(dataBase + 'term-trends-index.json')
-            .then(function (index) { buildLayout(container, index, dataBase); })
-            .catch(function (err) {
-                console.error('IWACVis term-trends:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
 
     function buildLayout(container, index, dataBase) {
         var years = index.years || [];
@@ -347,20 +335,13 @@
         defaults.forEach(addTerm);
     }
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis term-trends: ECharts not loaded');
-            return;
+    P.bootBlock({
+        selector:       '.iwac-vis-ngram',
+        warnLabel:      'IWACVis term-trends',
+        requireECharts: true,
+        dataFile:       'term-trends-index.json',
+        render:         function (container, index, ctx) {
+            buildLayout(container, index, ctx.dataBase);
         }
-        var containers = document.querySelectorAll('.iwac-vis-ngram');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

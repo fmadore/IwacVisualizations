@@ -63,20 +63,6 @@
         });
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
-        P.fetchJSON(ctx.basePath + '/files/iwac-visualizations/org-cooccurrence.json')
-            .then(function (data) { buildLayout(container, data, ctx); })
-            .catch(function (err) {
-                console.error('IWACVis org-cooccurrence:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
     function buildLayout(container, data, ctx) {
         var orgs = data.orgs || [];
         var matrices = data.matrices || {};
@@ -245,20 +231,11 @@
         });
     }
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis org-cooccurrence: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-orgcooc');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-orgcooc',
+        warnLabel:      'IWACVis org-cooccurrence',
+        requireECharts: true,
+        dataFile:       'org-cooccurrence.json',
+        render:         buildLayout
+    });
 })();

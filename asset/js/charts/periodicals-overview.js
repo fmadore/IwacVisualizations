@@ -115,127 +115,104 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function initPeriodicalsOverview(container) {
-        var loadingLabel = container.querySelector('.iwac-vis-loading span');
-        if (loadingLabel) loadingLabel.textContent = P.t('Loading periodicals overview') + '…';
-
-        var basePath = container.getAttribute('data-base-path') || '';
-        var url = basePath + '/files/iwac-visualizations/periodicals-overview.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                if (!data || !data.summary || !data.summary.total) {
-                    container.innerHTML = '';
-                    container.appendChild(P.buildEmptyState());
-                    return;
-                }
-
-                var h = buildLayout(container, data.summary);
-
-                // 1. Periodical runs (Gantt — bars colored by country)
-                var runs = data.runs || [];
-                if (runs.length > 0) {
-                    ns.registerChart(h.runs, function (el, chart) {
-                        chart.setOption(C.gantt(runs));
-                    });
-                }
-
-                // 1b. Holdings matrix — periodical × year issue counts
-                //     (ROADMAP 9.4). Rows keep the Gantt's ordering; a
-                //     blank cell inside a run is a collection gap. Elides
-                //     when the deployed bundle predates the section.
-                var holdings = data.holdings || {};
-                if (holdings.cells && holdings.cells.length && C.heatmapMatrix) {
-                    ns.registerChart(h.holdings, function (el, chart) {
-                        chart.setOption(C.heatmapMatrix({
-                            xLabels: holdings.years || [],
-                            yLabels: holdings.periodicals || [],
-                            cells: holdings.cells
-                        }, {
-                            tooltipFormatter: function (p) {
-                                var v = p.value || [];
-                                return P.t('periodicals.holdings_tip', {
-                                    name: P.escapeHtml((holdings.periodicals || [])[v[1]] || ''),
-                                    year: (holdings.years || [])[v[0]],
-                                    count: P.formatNumber(v[2])
-                                });
-                            }
-                        }), true);
-                    });
-                } else if (h.holdingsPanel && h.holdingsPanel.parentNode) {
-                    h.holdingsPanel.parentNode.removeChild(h.holdingsPanel);
-                }
-
-                // 2. Issues per year, stacked by country
-                var perYear = data.issues_per_year || { years: [], countries: [], series: {} };
-                if (perYear.years && perYear.years.length > 0) {
-                    ns.registerChart(h.perYear, function (el, chart) {
-                        chart.setOption(C.timeline(perYear));
-                    });
-                }
-
-                // 3. Languages — donut (matches the references-overview
-                // languages panel). French dominates the issue count, so
-                // the labelled slices stay readable while the tooltip
-                // carries the exact share for the long tail.
-                var languages = localizeLanguages(data.languages);
-                if (languages.length > 0) {
-                    ns.registerChart(h.languages, function (el, chart) {
-                        chart.setOption(C.pie(languages));
-                    });
-                }
-
-                // 4. Countries — donut
-                var countries = data.countries || [];
-                if (countries.length > 0) {
-                    ns.registerChart(h.countries, function (el, chart) {
-                        chart.setOption(C.pie(countries));
-                    });
-                }
-
-                // 5. Top subjects
-                var subjects = data.top_subjects || [];
-                if (subjects.length > 0) {
-                    ns.registerChart(h.subjects, function (el, chart) {
-                        chart.setOption(C.horizontalBar(subjects));
-                    });
-                }
-
-                // 6. Word cloud — most frequent lemmas across all issues.
-                // C.wordcloud falls back to a bar chart when the
-                // echarts-wordcloud extension isn't available.
-                var wordcloud = data.wordcloud || [];
-                if (wordcloud.length > 0) {
-                    ns.registerChart(h.wordcloud, function (el, chart) {
-                        chart.setOption(C.wordcloud(wordcloud));
-                    });
-                }
-            })
-            .catch(function (err) {
-                console.error('IWACVis periodicals overview:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Auto-init                                                         */
-    /* ----------------------------------------------------------------- */
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis periodicals overview: ECharts not loaded');
+    function render(container, data) {
+        if (!data || !data.summary || !data.summary.total) {
+            container.innerHTML = '';
+            container.appendChild(P.buildEmptyState());
             return;
         }
-        var containers = document.querySelectorAll('.iwac-vis-periodicals-overview');
-        for (var i = 0; i < containers.length; i++) {
-            initPeriodicalsOverview(containers[i]);
+
+        var h = buildLayout(container, data.summary);
+
+        // 1. Periodical runs (Gantt — bars colored by country)
+        var runs = data.runs || [];
+        if (runs.length > 0) {
+            ns.registerChart(h.runs, function (el, chart) {
+                chart.setOption(C.gantt(runs));
+            });
+        }
+
+        // 1b. Holdings matrix — periodical × year issue counts
+        //     (ROADMAP 9.4). Rows keep the Gantt's ordering; a
+        //     blank cell inside a run is a collection gap. Elides
+        //     when the deployed bundle predates the section.
+        var holdings = data.holdings || {};
+        if (holdings.cells && holdings.cells.length && C.heatmapMatrix) {
+            ns.registerChart(h.holdings, function (el, chart) {
+                chart.setOption(C.heatmapMatrix({
+                    xLabels: holdings.years || [],
+                    yLabels: holdings.periodicals || [],
+                    cells: holdings.cells
+                }, {
+                    tooltipFormatter: function (p) {
+                        var v = p.value || [];
+                        return P.t('periodicals.holdings_tip', {
+                            name: P.escapeHtml((holdings.periodicals || [])[v[1]] || ''),
+                            year: (holdings.years || [])[v[0]],
+                            count: P.formatNumber(v[2])
+                        });
+                    }
+                }), true);
+            });
+        } else if (h.holdingsPanel && h.holdingsPanel.parentNode) {
+            h.holdingsPanel.parentNode.removeChild(h.holdingsPanel);
+        }
+
+        // 2. Issues per year, stacked by country
+        var perYear = data.issues_per_year || { years: [], countries: [], series: {} };
+        if (perYear.years && perYear.years.length > 0) {
+            ns.registerChart(h.perYear, function (el, chart) {
+                chart.setOption(C.timeline(perYear));
+            });
+        }
+
+        // 3. Languages — donut (matches the references-overview
+        // languages panel). French dominates the issue count, so
+        // the labelled slices stay readable while the tooltip
+        // carries the exact share for the long tail.
+        var languages = localizeLanguages(data.languages);
+        if (languages.length > 0) {
+            ns.registerChart(h.languages, function (el, chart) {
+                chart.setOption(C.pie(languages));
+            });
+        }
+
+        // 4. Countries — donut
+        var countries = data.countries || [];
+        if (countries.length > 0) {
+            ns.registerChart(h.countries, function (el, chart) {
+                chart.setOption(C.pie(countries));
+            });
+        }
+
+        // 5. Top subjects
+        var subjects = data.top_subjects || [];
+        if (subjects.length > 0) {
+            ns.registerChart(h.subjects, function (el, chart) {
+                chart.setOption(C.horizontalBar(subjects));
+            });
+        }
+
+        // 6. Word cloud — most frequent lemmas across all issues.
+        // C.wordcloud falls back to a bar chart when the
+        // echarts-wordcloud extension isn't available.
+        var wordcloud = data.wordcloud || [];
+        if (wordcloud.length > 0) {
+            ns.registerChart(h.wordcloud, function (el, chart) {
+                chart.setOption(C.wordcloud(wordcloud));
+            });
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-periodicals-overview',
+        warnLabel:      'IWACVis periodicals overview',
+        requireECharts: true,
+        dataFile:       'periodicals-overview.json',
+        beforeLoad:     function (container) {
+            var loadingLabel = container.querySelector('.iwac-vis-loading span');
+            if (loadingLabel) loadingLabel.textContent = P.t('Loading periodicals overview') + '…';
+        },
+        render:         render
+    });
 })();

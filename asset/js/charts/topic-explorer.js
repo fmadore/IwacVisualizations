@@ -93,32 +93,21 @@
     /*  Bootstrapping                                                     */
     /* ----------------------------------------------------------------- */
 
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis topic explorer: ECharts not loaded');
-            return;
-        }
-        var containers = document.querySelectorAll('.iwac-vis-topic-explorer');
-        for (var i = 0; i < containers.length; i++) {
-            initOne(containers[i]);
-        }
-    }
 
-    function initOne(container) {
-        var basePath = container.dataset.basePath || '';
-        var url = basePath + '/files/iwac-visualizations/topic-explorer.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                renderInitial(container, data);
-            })
-            .catch(function (err) {
-                console.error('IWACVis topic explorer:', err);
-                var loading = container.querySelector('.iwac-vis-topic-explorer__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-topic-explorer',
+        warnLabel:      'IWACVis topic explorer',
+        requireECharts: true,
+        dataFile:       'topic-explorer.json',
+        render:         function (container, data) { renderInitial(container, data); },
+        // Drops only the spinner, keeping anything else the template rendered.
+        onError:        function (container, err) {
+            console.error('IWACVis topic explorer:', err);
+            var loading = container.querySelector('.iwac-vis-topic-explorer__loading');
+            if (loading) loading.remove();
+            container.appendChild(P.buildFetchErrorState(err));
+        }
+    });
 
     /* ----------------------------------------------------------------- */
     /*  Initial render — overview shell + topic cards                     */

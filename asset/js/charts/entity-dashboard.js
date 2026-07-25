@@ -27,57 +27,14 @@
     var DL = ns.dashboardLayout;
 
     /* ----------------------------------------------------------------- */
-    /*  Empty-payload predicates (same shape as person dashboard)         */
+    /*  Layout registration                                               */
     /* ----------------------------------------------------------------- */
+    //
+    // Structurally identical to the person grid — same renderer keys, same
+    // predicates — with the entity wording on the five descriptions that have
+    // a variant. Both come from the same builder on the bridge.
 
-    function hasNewspapersData(data) {
-        var all = data && data.newspapers && data.newspapers.by_role && data.newspapers.by_role.all;
-        return !!(all && all.length > 0);
-    }
-    function hasTopicsData(data) {
-        var all = data && data.topics && data.topics.by_role && data.topics.by_role.all;
-        return !!(all && all.length > 0);
-    }
-    function hasSentimentData(data) {
-        var all = data && data.sentiment && data.sentiment.by_role && data.sentiment.by_role.all;
-        if (!all || !all.by_model) return false;
-        var models = all.models || Object.keys(all.by_model);
-        for (var i = 0; i < models.length; i++) {
-            var m = all.by_model[models[i]];
-            if (m && m.polarite && m.polarite.length > 0) return true;
-        }
-        return false;
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Layout — same renderer keys as 'person', entity-specific descs    */
-    /* ----------------------------------------------------------------- */
-
-    var ALL = DL.fullSlice;
-
-    DL.register('entity', [
-        { chart: 'iwacTimeline',     wide: true, dataAccessor: ALL,
-          title: 'Mentions',                description: 'desc_entity_mentions_timeline' },
-        { chart: 'iwacHeatmap',      wide: true, dataAccessor: ALL,
-          title: 'Year × month heatmap',    description: 'desc_year_month_heatmap' },
-        { chart: 'iwacNewspapers',               dataAccessor: ALL,
-          title: 'Top newspapers',          description: 'desc_entity_top_newspapers',
-          hasData: hasNewspapersData },
-        { chart: 'iwacCountries',                dataAccessor: ALL,
-          title: 'Countries covered',       description: 'desc_entity_countries_covered' },
-        { chart: 'iwacTopics',       wide: true, dataAccessor: ALL,
-          title: 'Top LDA topics',          description: 'desc_lda_topics',
-          hasData: hasTopicsData },
-        { chart: 'iwacSentiment',    wide: true, dataAccessor: ALL,
-          title: 'AI sentiment',            description: 'desc_ai_sentiment',
-          hasData: hasSentimentData },
-        { chart: 'iwacEntityNet',    wide: true, dataAccessor: ALL,
-          title: 'Associated entities',     description: 'desc_entity_associated_entities' },
-        { chart: 'iwacCoOccurrence', wide: true, dataAccessor: ALL,
-          title: 'Subject co-occurrence',   description: 'desc_subject_cooccurrence' },
-        { chart: 'iwacEntityMap',    wide: true, dataAccessor: ALL,
-          title: 'Associated locations',    description: 'desc_entity_associated_locations' }
-    ]);
+    DL.register('entity', DL.personLikeSlots('entity'));
 
     /* ----------------------------------------------------------------- */
     /*  Bootstrap — shared per-item dashboard boot                         */

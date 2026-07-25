@@ -59,20 +59,16 @@
     /* ----------------------------------------------------------------- */
 
     function indexUrl(basePath) {
-        return basePath + '/files/iwac-visualizations/compare-newspapers/index.json';
+        return basePath + P.DATA_BASE + 'compare-newspapers/index.json';
     }
 
     function corpusUrl(basePath, type, scope, slug) {
-        return basePath + '/files/iwac-visualizations/compare-newspapers/'
+        return basePath + P.DATA_BASE + 'compare-newspapers/'
             + type + '/' + scope + '-' + slug + '.json';
     }
 
     // Delegates to the shared helper so corpus JSONs get the same
     // credentials + `?v=` cache-busting treatment as every other block.
-    function fetchJson(url) {
-        return P.fetchJSON(url);
-    }
-
 
     /* ----------------------------------------------------------------- */
     /*  Orchestrator                                                      */
@@ -158,81 +154,59 @@
         return { A: defA, B: defB };
     }
 
-    function initBlock(container) {
-        var ctx = {
-            basePath: container.dataset.basePath || '',
-            siteBase: container.dataset.siteBase || ''
-        };
+    function render(container, index, ctx) {
+        container.innerHTML = '';
 
-        fetchJson(indexUrl(ctx.basePath))
-            .then(function (index) {
-                container.innerHTML = '';
+        var root = P.el('div', 'iwac-vis-compare-root');
+        container.appendChild(root);
 
-                var root = P.el('div', 'iwac-vis-compare-root');
-                container.appendChild(root);
+        var pickersEl = P.el('div', 'iwac-vis-compare-pickers');
+        root.appendChild(pickersEl);
 
-                var pickersEl = P.el('div', 'iwac-vis-compare-pickers');
-                root.appendChild(pickersEl);
+        var resultsRoot = P.el('div', 'iwac-vis-compare-results');
+        root.appendChild(resultsRoot);
 
-                var resultsRoot = P.el('div', 'iwac-vis-compare-results');
-                root.appendChild(resultsRoot);
+        var defaults = pickDefaults(index);
+        var state = { A: null, B: null };
+        var pickers = {};
 
-                var defaults = pickDefaults(index);
-                var state = { A: null, B: null };
-                var pickers = {};
-
-                function onPickerChange(side) {
-                    return function (pickerState) {
-                        var url = corpusUrl(ctx.basePath,
-                            pickerState.type, pickerState.scope, pickerState.slug);
-                        fetchJson(url).then(function (data) {
-                            state[side] = data;
-                            if (state.A && state.B) {
-                                renderResults(resultsRoot, state.A, state.B, ctx);
-                            } else {
-                                resultsRoot.innerHTML = '';
-                                resultsRoot.appendChild(P.el('div', 'iwac-vis-compare-empty',
-                                    P.t('Choose two corpora to compare')));
-                            }
-                        }).catch(function (err) {
-                            console.error('IWACVis compare-newspapers:', err);
-                            resultsRoot.innerHTML = '';
-                            resultsRoot.appendChild(P.buildFetchErrorState(err));
-                        });
-                    };
-                }
-
-                SIDES.forEach(function (side) {
-                    var picker = buildPicker(side, index, defaults[side], onPickerChange(side));
-                    pickers[side] = picker;
-                    pickersEl.appendChild(picker.root);
+        function onPickerChange(side) {
+            return function (pickerState) {
+                var url = corpusUrl(ctx.basePath,
+                    pickerState.type, pickerState.scope, pickerState.slug);
+                P.fetchJSON(url).then(function (data) {
+                    state[side] = data;
+                    if (state.A && state.B) {
+                        renderResults(resultsRoot, state.A, state.B, ctx);
+                    } else {
+                        resultsRoot.innerHTML = '';
+                        resultsRoot.appendChild(P.el('div', 'iwac-vis-compare-empty',
+                            P.t('Choose two corpora to compare')));
+                    }
+                }).catch(function (err) {
+                    console.error('IWACVis compare-newspapers:', err);
+                    resultsRoot.innerHTML = '';
+                    resultsRoot.appendChild(P.buildFetchErrorState(err));
                 });
-
-                SIDES.forEach(function (side) {
-                    onPickerChange(side)(pickers[side].getState());
-                });
-            })
-            .catch(function (err) {
-                console.error('IWACVis compare-newspapers index:', err);
-                container.innerHTML = '';
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    function init() {
-        if (typeof echarts === 'undefined') {
-            console.warn('IWACVis compare-newspapers: ECharts not loaded');
-            return;
+            };
         }
-        var containers = document.querySelectorAll('.iwac-vis-compare-newspapers');
-        for (var i = 0; i < containers.length; i++) {
-            initBlock(containers[i]);
-        }
+
+        SIDES.forEach(function (side) {
+            var picker = buildPicker(side, index, defaults[side], onPickerChange(side));
+            pickers[side] = picker;
+            pickersEl.appendChild(picker.root);
+        });
+
+        SIDES.forEach(function (side) {
+            onPickerChange(side)(pickers[side].getState());
+        });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    P.bootBlock({
+        selector:       '.iwac-vis-compare-newspapers',
+        warnLabel:      'IWACVis compare-newspapers index',
+        requireECharts: true,
+        load:           function (ctx) { return P.fetchJSON(indexUrl(ctx.basePath)); },
+        render:         render
+    });
 })();

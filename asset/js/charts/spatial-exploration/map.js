@@ -181,7 +181,7 @@
         var adminScale = 'quantile';
 
         var modeLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Map mode'));
-        var modeSelect = P.el('select', 'iwac-vis-spatial-toolbar__select');
+        var modeSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         [
             ['bubbles', P.t('Place bubbles')],
             ['country', P.t('Country choropleth')],
@@ -195,7 +195,7 @@
         toolbar.appendChild(modeLabel);
 
         var focusLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Country focus'));
-        var focusSelect = P.el('select', 'iwac-vis-spatial-toolbar__select');
+        var focusSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         focusLabel.appendChild(focusSelect);
         var worldOpt = P.el('option', null, P.t('Whole world'));
         worldOpt.value = '';
@@ -211,12 +211,12 @@
         toolbar.appendChild(focusLabel);
 
         var adminLevelLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Admin level'));
-        var adminLevelSelect = P.el('select', 'iwac-vis-spatial-toolbar__select');
+        var adminLevelSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         adminLevelLabel.appendChild(adminLevelSelect);
         toolbar.appendChild(adminLevelLabel);
 
         var adminScaleLabel = P.el('label', 'iwac-vis-spatial-toolbar__label', P.t('Scale'));
-        var adminScaleSelect = P.el('select', 'iwac-vis-spatial-toolbar__select');
+        var adminScaleSelect = P.el('select', 'iwac-vis-control iwac-vis-spatial-toolbar__select');
         [
             ['quantile', P.t('Quantile')],
             ['linear', P.t('Linear')],
