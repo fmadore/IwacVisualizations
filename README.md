@@ -42,6 +42,25 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.24.0 — catching up with the 2026-07 dataset
+
+The upstream pipeline changed what the dataset carries: photographs became their own `images` subset with a multimodal embedding, the bibliography gained full text (`OCR`, `embedding_OCR`, its own two LDA models, `lemma_*`, `nb_mots`), articles and references gained `lda_topic_topk`, and `OCR_is_public` appeared on five subsets. This release consumes all of it, and corrects two things the module had been asserting that were no longer true.
+
+**Corrections**
+
+- **Photograph pages read the `images` subset.** Template 15 had been unmapped in v1.3.0 because photographs weren't exported to the dataset at all. They are now, so the mapping returns — and photographs end up the *best*-served of the four minimal templates rather than the only unserved one: `embedding_image` is a multimodal vector of the picture itself, so their neighbour strip is genuine visual similarity where audio, video and documents fall back to "most recent". The strip's heading changes with its contents rather than claiming similarity it doesn't have.
+- **`Richesse_Lexicale_OCR` is MATTR, not a type-token ratio.** Nine surfaces said otherwise, including the block description and the French catalogue. Not cosmetic: raw TTR falls mechanically with text length, so a reader told they were looking at TTR would discount a long-article newspaper's low score as an artefact — the opposite of what MATTR's fixed window means.
+
+**New**
+
+- **Distinctive Vocabulary block** — keyness per country and decade (Dunning G² as the significance test only, BH-corrected, ranked by log-ratio effect size, with a 1.5× effect-size floor so significant-but-trivial terms don't fill a slice) plus Kleinberg burst detection on subject coverage. Statistics in the new `scripts/iwac_stats.py`; no SciPy needed.
+- **Reference dashboard** — the bibliography's first per-item surface, now that it has something to show: stat cards, machine topic (qualified by its model, since references are modelled twice over shared columns), the `reviewOf` relation resolved both ways, a bibliography-timeline sparkline, nearest works, and the press coverage the work resembles.
+- **Cross-corpus bridge** — both directions. Article dashboards gain "In the scholarship"; reference dashboards gain "Press coverage this resembles". Same embedding space on both sides; the hub-formation risk from chunk-averaging long texts is instrumented and disclosed rather than filtered on a guessed constant.
+- **References Overview** gains full-text coverage and per-model topic panels, ordered so a topic distribution over the digitised half is never read as a claim about the whole bibliography.
+- **Topic Explorer** gains probability-weighted prevalence from `lda_topic_topk`, plotted un-normalised so the truncation to each article's top 3 topics shows as headroom instead of being renormalised away.
+- **Article dashboard** gains the metrics row and spatial map the README had described since v0.19.0 and no code rendered.
+- **Corpus health** gains meters for the new full text, lemma and top-k coverage, plus `OCR_is_public` — labelled as rights rather than pipeline progress, because that is what it measures.
+
 ### v1.22.0 — third-audit implementation wave: consolidation + fixes
 
 Implements the 2026-07-12 third audit (REFACTORING.md Tier 5) end to end.
