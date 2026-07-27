@@ -27,6 +27,7 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 | Press Bylines | page block | **Live** — byline-coverage cards, signed-share-over-time, top-25 bylines with authority click-through | Precompute (`generate_press_bylines.py`) |
 | Islamic Organisations Co-occurrence | page block | **Live** — sliding-window context matrix per organisation (UIB / CNI / COSIM / CSI / FAIB / UMT) on the shared `C.heatmapMatrix` | Precompute (`generate_org_cooccurrence.py` + curated targets sidecar) |
 | Term Trends | page block | **Live** — the "IWAC Ngram viewer": search any of 5,000 lemmas, overlay up to 8, share-of-articles vs counts | Precompute (`generate_term_trends.py`; per-letter shards fetched lazily) |
+| Distinctive Vocabulary | page block | **Live** — keyness (log-likelihood + BH correction, ranked by log-ratio effect size) per country / decade, plus Kleinberg burst detection on subject coverage | Precompute (`generate_keyness.py`) |
 | Press Reprints | page block | **Live** — cross-newspaper near-duplicate pairs (wire copy / reprints), circulation network + pair table | Precompute (`generate_reprints.py` over `embedding_OCR`) |
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
@@ -443,6 +444,18 @@ The polarity/centrality/subjectivity/correlation/heatmap/extremes cuts all recom
 ### Press Language (page block)
 
 "The language of the press": readability (Flesch FR), lexical richness (MATTR — moving-average type-token ratio over a 50-word window, so it is not biased by article length; articles under 50 words are unscored), and article length over time and by newspaper, from the dataset's precomputed OCR text metrics. Backed by `generate_lexical_metrics.py`.
+
+### Distinctive Vocabulary (page block)
+
+Two corpus-linguistics views that the other blocks cannot express, from one bundle (`asset/data/keyness.json`, `scripts/generate_keyness.py`). Both read columns the dataset already carries, so neither needed new enrichment.
+
+**Keyness** — the vocabulary a country or a decade uses *more than the rest of the collection does*, over `lemma_nostop`, with a Country / Decade facet and one slice shown at a time. This is a different question from Term Trends: that block plots how often a word is used, this one plots where it stands out.
+
+The method matters, because the obvious implementation is wrong. Dunning log-likelihood (G²) grows with corpus size as well as with effect strength, so ranking by G² returns the biggest slice's most frequent words — the classic keyness mistake. Here G² is used **only as the significance test** (p = χ²(|G²|, df 1), Benjamini–Hochberg corrected within each slice's tested token family), and surviving tokens are ranked by **Hardie's log ratio** effect size. On top of that, a **minimum effect size** (default log₂ 1.5, i.e. a 1.5× rate) drops the significant-but-trivial: on a corpus this size a 1.1× difference clears q < 0.001 easily, and a slice with no real signature vocabulary would otherwise fill its whole top-25 with such terms — which a reader fairly takes to mean "these words characterise this slice". The sibling pipeline's CSV export applies no such floor, deliberately, since an analyst reading a CSV can filter and a panel reader cannot. Slices with nothing left are still listed, with an empty bar chart: "no distinctive vocabulary" is a finding, and dropping the slice would read as missing data. The panel caption carries the subcorpus size, because "distinctive of Niger" over 300 articles and over 3,000 are different strengths of claim.
+
+**Subject bursts** — the years in which a controlled-vocabulary subject was tagged far above its own long-run rate, via Kleinberg's 2-state automaton. This is event detection: it finds the moments the press suddenly cared about something without being told what to look for. Drawn on the shared gantt, **one row per burst rather than per subject** — a subject the press returned to twice had two episodes, and collapsing them into one span from first start to last end would invent years of intense coverage that never happened. The year axis is a contiguous calendar range with empty years zero-filled, so a burst can legitimately span a gap in the corpus instead of being split by it, and the automaton's log(T) horizon reflects the real span.
+
+The statistics live in `scripts/iwac_stats.py` (BH correction, G², log ratio, Kleinberg), ported from the pipeline's `analyses/_stats.py` + `analyses/keyness_bursts.py` rather than imported: that repo is the data pipeline, not a dependency of this module, and its outputs reach us only through the Hub. The χ² tail is computed as `erfc(sqrt(x/2))` — an identity for df = 1, not an approximation — which keeps SciPy out of `scripts/requirements.txt` and stays accurate deep in the tail where `1 - cdf` would cancel to zero.
 
 ### Spatial Exploration (page block)
 

@@ -57,6 +57,13 @@ final class BlockRegistry
             'description' => 'Side-by-side comparison of two newspaper corpora (articles or Islamic publications), scoped either to a whole country or a single newspaper. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
+        'distinctive-vocabulary' => [
+            'invokable'   => 'distinctiveVocabulary',
+            'class'       => BlockLayout\DistinctiveVocabulary::class,
+            'label'       => 'Distinctive Vocabulary', // @translate
+            'description' => 'What sets each part of the press apart, in two views: the vocabulary a country or a decade uses more than the rest of the collection does (log-likelihood keyness with a false-discovery correction, ranked by effect size), and the years in which coverage of a subject suddenly spiked above its own base rate (Kleinberg burst detection). Complements Term Trends, which shows how often a word is used rather than where it stands out. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
+            'embeddable'  => true,
+        ],
         'entity-networks' => [
             'invokable'   => 'entityNetworks',
             'class'       => BlockLayout\EntityNetworks::class,

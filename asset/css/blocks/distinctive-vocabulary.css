@@ -1,0 +1,39 @@
+/* =================================================================== */
+/*  Distinctive Vocabulary — block-specific styles                       */
+/* =================================================================== */
+/*                                                                       */
+/*  Layout: keyness section (facet bar → slice caption → effect-size      */
+/*  bars) → bursts section (caption → interval gantt). Everything else   */
+/*  — tokens, panel shell, section heading, facet bar, panel-desc —      */
+/*  comes from iwac-core.css.                                            */
+/* =================================================================== */
+
+.iwac-vis-keyness {
+    min-height: 420px;
+}
+
+/*  The keyness bars are one row per distinctive term (up to --top-n, 25
+ *  by default). Give them room so 25 rows don't compress to hairlines,
+ *  and let the host grow rather than scroll internally. */
+.iwac-vis-keyness .iwac-vis-panel .iwac-vis-chart {
+    min-height: 520px;
+}
+
+/*  Slice caption sits between the facet bar and the chart: the size of
+ *  the subcorpus qualifies every bar above it, so it reads as part of
+ *  the panel's prose rather than as a footnote. */
+.iwac-vis-keyness__caption {
+    margin-top: 0;
+}
+
+/*  Burst rows are shorter (one per detected episode, up to
+ *  --max-subjects) but the gantt carries its own y-axis dataZoom past 20
+ *  rows, so a fixed floor is enough. */
+.iwac-vis-keyness__bursts {
+    min-height: 480px;
+}
+
+@media (max-width: 600px) { /* sm */
+    .iwac-vis-keyness .iwac-vis-panel .iwac-vis-chart { min-height: 420px; }
+    .iwac-vis-keyness__bursts { min-height: 400px; }
+}

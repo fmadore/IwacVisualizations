@@ -320,6 +320,39 @@ this meter is about what an outside researcher can reproduce from the
 citable dataset, and it moves when rights are cleared on Omeka rather than
 when a script is re-run.
 
+### `generate_keyness.py`
+
+Writes `asset/data/keyness.json` — the Distinctive Vocabulary block. Two
+views over `articles`: **keyness** (which words a country or decade uses more
+than the rest of the collection) and **subject bursts** (when coverage of a
+subject spiked above its own base rate).
+
+Flags beyond the standard set: `--top-n` (terms per slice, 25),
+`--min-count` (in-slice occurrences required to test a token, 10),
+`--alpha` (BH false-discovery rate, 0.05), `--min-log-ratio` (effect-size
+floor, 0.585 = 1.5×; pass 0 to report everything significant),
+`--min-subject-total` (articles a subject needs before burst detection, 30),
+`--max-subjects` (burst subjects kept, 40), `--burst-s` / `--burst-gamma`
+(Kleinberg burst-rate multiplier and transition cost).
+
+Only five columns are materialised (`o:id`, `pub_date`, `country`, `subject`,
+`lemma_nostop`) — the subset also carries OCR and a 768-dim embedding per
+row, and pulling those into pandas is where the memory goes.
+
+## Shared statistics helpers — `iwac_stats.py`
+
+BH q-values, Dunning G², Hardie's log ratio, the per-slice keyness pass, and
+Kleinberg burst detection. Ported from the sibling IWAC-Hugging-Face
+pipeline's `analyses/_stats.py` + `analyses/keyness_bursts.py` rather than
+imported: that repo is the data pipeline, not a dependency of this module,
+and its outputs reach us only through the Hub. Where the two must agree —
+same measures, same corpus — the formulas are kept literally identical, so
+**a change to one should be made in both**.
+
+No SciPy: the χ² upper tail for df = 1 is `erfc(sqrt(x/2))`, an identity
+rather than an approximation, which also stays accurate deep in the tail
+where `1 - cdf` cancels to zero.
+
 ## Shared embedding helpers — `iwac_embeddings.py`
 
 The coerce → normalize → batched-cosine stack (REFACTORING.md Tier 4):

@@ -1,0 +1,37 @@
+<?php
+/**
+ * Distinctive Vocabulary page block.
+ *
+ * Two corpus-linguistics views over the `articles` subset, from one
+ * precomputed bundle (`files/iwac-visualizations/keyness.json`, built by
+ * `scripts/generate_keyness.py`):
+ *
+ *   1. Keyness — the vocabulary a country or a decade uses more than the
+ *      rest of the collection does. Dunning log-likelihood as the
+ *      significance test (Benjamini-Hochberg corrected), ranked by log-ratio
+ *      effect size. Country / Decade facet.
+ *   2. Subject bursts — the years coverage of a controlled-vocabulary
+ *      subject spiked above its own base rate (Kleinberg 2-state
+ *      automaton), drawn as intervals on a shared year axis.
+ *
+ * Distinct from Term Trends, which plots how *often* a term is used: this
+ * block is about where a term stands out and when it erupted.
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'blockCss' => 'distinctive-vocabulary',
+        'needs' => [
+            'chartOptions' => true,
+            // Country / Decade switch on the keyness section.
+            'facetButtons' => true,
+        ],
+        'orchestrator' => 'distinctive-vocabulary',
+    ],
+    'blockClass' => 'iwac-vis-keyness',
+    'embedSlug'  => 'distinctive-vocabulary',
+    'loading'    => $this->translate('Loading distinctive vocabulary'),
+]);

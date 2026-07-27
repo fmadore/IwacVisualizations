@@ -6,6 +6,7 @@ return [
         'invokables' => [
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
+            'distinctiveVocabulary' => Site\BlockLayout\DistinctiveVocabulary::class,
             'entityNetworks' => Site\BlockLayout\EntityNetworks::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
             'lexicalMetrics' => Site\BlockLayout\LexicalMetrics::class,
