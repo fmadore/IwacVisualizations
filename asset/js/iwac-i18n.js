@@ -253,8 +253,12 @@
             'desc_topic_newspapers':        'Newspapers and periodicals where this topic appears most often.',
             'desc_topic_top_articles':      'Articles whose text the LDA model attached most strongly to this topic, ranked by topic probability.',
             'topics_over_time_title':       'Topics over time',
-            'topics_over_time_desc':        'How the press’s attention shifted across themes: each band is a topic’s share of that year’s classified articles (largest 12 topics; the rest fold into “Other topics”). Click a band to drill into the topic.',
+            'topics_over_time_desc':        'How the press’s attention shifted across themes (largest 12 topics; the rest fold into “Other topics”). Click a band to drill into the topic.',
             'topic_other':                  'Other topics',
+            'topics_weighting_dominant':    'Dominant topic',
+            'topics_weighting_weighted':    'Probability-weighted',
+            'topics_over_time_dominant_note': 'Each band is a topic’s share of the articles it was the single best label for that year, so every year sums to 100%. An article the model split evenly between three topics counts wholly for one of them.',
+            'topics_over_time_weighted_note': 'Each band is the average probability the model assigned to that topic across the year’s articles, so an evenly-split article contributes to all three of its topics. Only each article’s top {k} topics are available, so the stack tops out around {mass}% rather than 100% — the headroom is topic mass too thinly spread to be recorded, not unclassified articles.',
 
             // Shared renderer labels (calendar heatmap, chord, radar,
             // sibling sparkline, similar-items strip, sunburst, treemap)
@@ -711,8 +715,12 @@
             'desc_topic_newspapers':        'Journaux et p\u00e9riodiques o\u00f9 ce th\u00e8me appara\u00eet le plus souvent.',
             'desc_topic_top_articles':      'Articles que le mod\u00e8le LDA a rattach\u00e9s le plus fortement \u00e0 ce th\u00e8me, class\u00e9s par probabilit\u00e9 d\u2019appartenance.',
             'topics_over_time_title':       'Th\u00e8mes au fil du temps',
-            'topics_over_time_desc':        'Comment l\u2019attention de la presse s\u2019est d\u00e9plac\u00e9e entre les th\u00e8mes : chaque bande repr\u00e9sente la part d\u2019un th\u00e8me dans les articles class\u00e9s de l\u2019ann\u00e9e (les 12 principaux th\u00e8mes ; le reste est regroup\u00e9 dans \u00ab Autres th\u00e8mes \u00bb). Cliquez sur une bande pour explorer le th\u00e8me.',
+            'topics_over_time_desc':        'Comment l\u2019attention de la presse s\u2019est d\u00e9plac\u00e9e entre les th\u00e8mes (les 12 principaux th\u00e8mes ; le reste est regroup\u00e9 dans \u00ab Autres th\u00e8mes \u00bb). Cliquez sur une bande pour explorer le th\u00e8me.',
             'topic_other':                  'Autres th\u00e8mes',
+            'topics_weighting_dominant':    'Th\u00e8me dominant',
+            'topics_weighting_weighted':    'Pond\u00e9r\u00e9 par probabilit\u00e9',
+            'topics_over_time_dominant_note': 'Chaque bande repr\u00e9sente la part d\u2019un th\u00e8me parmi les articles dont il est le meilleur libell\u00e9 unique pour l\u2019ann\u00e9e : le total de chaque ann\u00e9e fait donc 100 %. Un article que le mod\u00e8le r\u00e9partit \u00e0 parts \u00e9gales entre trois th\u00e8mes est compt\u00e9 enti\u00e8rement pour l\u2019un d\u2019eux.',
+            'topics_over_time_weighted_note': 'Chaque bande correspond \u00e0 la probabilit\u00e9 moyenne attribu\u00e9e par le mod\u00e8le \u00e0 ce th\u00e8me sur les articles de l\u2019ann\u00e9e : un article r\u00e9parti \u00e0 parts \u00e9gales contribue donc \u00e0 ses trois th\u00e8mes. Seuls les {k} th\u00e8mes principaux de chaque article sont disponibles, si bien que l\u2019empilement plafonne autour de {mass} % et non \u00e0 100 % \u2014 l\u2019espace restant correspond \u00e0 une masse th\u00e9matique trop dispers\u00e9e pour \u00eatre enregistr\u00e9e, et non \u00e0 des articles non class\u00e9s.',
 
             // Shared renderer labels \u2014 French
             'Calendar heatmap':         'Calendrier thermique',

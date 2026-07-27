@@ -220,57 +220,132 @@
     /*  Topics over time — 100%-stacked share of classified articles      */
     /* ----------------------------------------------------------------- */
     //
-    // Built entirely from the per-topic `year_distribution` arrays the
-    // bundle already carries — no extra data. Shares are computed against
-    // the year's classified total (top-12 topics + an "Other topics"
-    // remainder, so every year sums to 100%). A 100%-stacked area was
-    // chosen over ECharts' themeRiver: standard cartesian axes + dataZoom
-    // read as research instrument, not editorial flourish, and the share
-    // encoding factors out six decades of corpus growth.
+    // Two weightings of the same question, switchable from a facet bar:
+    //
+    //   dominant  100%-stacked share of *classified articles*, from the
+    //             per-topic `year_distribution` counts. Answers "how many
+    //             articles is this topic the best single label for". A
+    //             100%-stacked area beats themeRiver here — standard
+    //             cartesian axes + dataZoom read as research instrument,
+    //             not editorial flourish — and the share encoding factors
+    //             out six decades of corpus growth.
+    //
+    //   weighted  stacked *mean probability mass* per year, from the
+    //             bundle's `prevalence` block (`lda_topic_topk`). Answers
+    //             "how much of the corpus's attention went to this topic",
+    //             which is what an article split 0.34/0.33/0.33 makes of
+    //             the dominant-topic count: misleadingly sharp.
+    //
+    // The weighted view is deliberately NOT normalised to 100%. Only each
+    // article's top 3 topics are on the Hub, so the stack tops out at the
+    // captured mass (~85%) and the headroom to 100% *is* the missing tail.
+    // Renormalising would make a partial measurement look complete.
 
-    function renderTopicRiver(grid, data, onTopicSelected) {
-        var C = ns.chartOptions;
+    var RIVER_TOP = 12;
+
+    /** Fold a series list past RIVER_TOP into a single "Other topics" band. */
+    function foldTail(defs, yearCount) {
+        if (defs.length <= RIVER_TOP) return defs;
+        var kept = defs.slice(0, RIVER_TOP);
+        var other = new Array(yearCount);
+        for (var i = 0; i < yearCount; i++) other[i] = 0;
+        defs.slice(RIVER_TOP).forEach(function (d) {
+            d.values.forEach(function (v, i) { other[i] += v; });
+        });
+        kept.push({ topicId: null, name: P.t('topic_other'), values: other });
+        return kept;
+    }
+
+    function topicSeriesName(topic) {
+        var bits = (topic.top_words || []).slice(0, 2);
+        if (bits.length) return bits.join(' · ');
+        return topic.label || (P.t('Topic') + ' ' + topic.id);
+    }
+
+    /** Dominant-topic view: article counts per year, per topic. */
+    function dominantView(data) {
         var topics = (data.topics || []).slice()
             .sort(function (a, b) { return b.article_count - a.article_count; });
-        if (!topics.length) return;
+        if (!topics.length) return null;
 
-        // Union year axis across every topic's distribution.
         var yearSet = {};
         topics.forEach(function (t) {
             (t.year_distribution || []).forEach(function (e) { yearSet[e.name] = true; });
         });
         var years = Object.keys(yearSet).sort();
-        if (years.length < 2) return;
+        if (years.length < 2) return null;
 
-        function countsFor(t) {
+        var defs = topics.map(function (t) {
             var m = {};
             (t.year_distribution || []).forEach(function (e) { m[e.name] = e.value; });
-            return years.map(function (y) { return m[y] || 0; });
-        }
-
-        var TOP = 12;
-        var seriesDefs = topics.slice(0, TOP).map(function (t) {
-            var nameBits = (t.top_words || []).slice(0, 2);
             return {
                 topicId: t.id,
-                name: nameBits.length ? nameBits.join(' · ')
-                                      : (t.label || (P.t('Topic') + ' ' + t.id)),
-                counts: countsFor(t)
+                name: topicSeriesName(t),
+                values: years.map(function (y) { return m[y] || 0; })
             };
         });
-        var tail = topics.slice(TOP);
-        if (tail.length) {
-            var other = years.map(function () { return 0; });
-            tail.forEach(function (t) {
-                countsFor(t).forEach(function (v, i) { other[i] += v; });
-            });
-            seriesDefs.push({ topicId: null, name: P.t('topic_other'), counts: other });
-        }
+        defs = foldTail(defs, years.length);
 
+        // Share of the year's classified total, so every year sums to 100%.
         var totals = years.map(function (_, i) {
-            return seriesDefs.reduce(function (s, d) { return s + d.counts[i]; }, 0);
+            return defs.reduce(function (s, d) { return s + d.values[i]; }, 0);
         });
+        return {
+            key: 'dominant',
+            years: years,
+            defs: defs,
+            max: 100,
+            plot: function (d, i) {
+                return totals[i] ? Math.round(1000 * d.values[i] / totals[i]) / 10 : 0;
+            },
+            rowSuffix: function (d, i) { return ' (' + P.formatNumber(d.values[i]) + ')'; }
+        };
+    }
 
+    /** Probability-weighted view: mean topic mass per year, un-normalised. */
+    function weightedView(data) {
+        var prev = data.prevalence;
+        if (!prev || !prev.series || !prev.series.length) return null;
+        var years = (prev.years || []).map(String);
+        if (years.length < 2) return null;
+
+        var byId = {};
+        (data.topics || []).forEach(function (t) { byId[t.id] = t; });
+
+        var defs = prev.series.map(function (s) {
+            var topic = byId[s.id] || { id: s.id, label: s.label };
+            return {
+                topicId: s.id,
+                name: topicSeriesName(topic),
+                values: (s.values || []).slice()
+            };
+        });
+        defs = foldTail(defs, years.length);
+
+        return {
+            key: 'weighted',
+            years: years,
+            defs: defs,
+            // Headroom above the captured mass is the point — leave the
+            // axis at 100% so the truncation is visible rather than
+            // rescaled away.
+            max: 100,
+            plot: function (d, i) { return Math.round(1000 * d.values[i]) / 10; },
+            rowSuffix: function () { return ''; }
+        };
+    }
+
+    function renderTopicRiver(grid, data, onTopicSelected) {
+        var C = ns.chartOptions;
+        var views = {};
+        var order = [];
+        var dominant = dominantView(data);
+        if (dominant) { views.dominant = dominant; order.push('dominant'); }
+        var weighted = weightedView(data);
+        if (weighted) { views.weighted = weighted; order.push('weighted'); }
+        if (!order.length) return;
+
+        var meta = data.metadata || {};
         var panel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('topics_over_time_title'),
@@ -278,38 +353,64 @@
         );
         grid.appendChild(panel.panel);
 
-        var instance = ns.registerChart(panel.chart, function (_e, chart) {
-            chart.setOption({
+        var active = order[0];
+        var instance = null;
+        var currentDefs = views[active].defs;
+
+        // The two weightings answer different questions, so the caveat
+        // travels with the active view rather than sitting in one shared
+        // description that would be wrong half the time.
+        var note = P.el('p', 'iwac-vis-panel-desc');
+
+        function noteText() {
+            if (active !== 'weighted') return P.t('topics_over_time_dominant_note');
+            return P.t('topics_over_time_weighted_note', {
+                k:    meta.prevalence_k || 3,
+                mass: Math.round((meta.prevalence_mean_captured_mass || 0) * 100)
+            });
+        }
+
+        function draw() {
+            var view = views[active];
+            currentDefs = view.defs;
+            if (!instance) return;
+            var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
+            if (!live) return;
+            live.setOption(optionFor(view), true);
+        }
+
+        function optionFor(view) {
+            return {
                 grid: C._grid({ left: 48, top: 40, bottom: 56 }),
                 legend: { type: 'scroll', top: 0 },
                 tooltip: {
                     trigger: 'axis',
                     formatter: C.sortedAxisTooltip({
                         skip: function (p, i) {
-                            var def = seriesDefs[p.seriesIndex];
-                            return !def || !def.counts[i];
+                            var def = view.defs[p.seriesIndex];
+                            return !def || !def.values[i];
                         },
                         row: function (p, i) {
+                            var def = view.defs[p.seriesIndex];
                             return p.marker + ' ' + P.escapeHtml(p.seriesName) + ' — '
-                                + p.value + ' % ('
-                                + P.formatNumber(seriesDefs[p.seriesIndex].counts[i]) + ')';
+                                + p.value + ' %' + view.rowSuffix(def, i);
                         }
                     })
                 },
                 xAxis: {
                     type: 'category',
-                    data: years,
+                    data: view.years,
                     boundaryGap: false,
                     name: P.t('Year')
                 },
                 yAxis: {
                     type: 'value',
                     min: 0,
-                    max: 100,
+                    max: view.max,
                     axisLabel: { formatter: function (v) { return v + ' %'; } }
                 },
-                dataZoom: C._dataZoom(years.length),
-                series: seriesDefs.map(function (d) {
+                dataZoom: C._dataZoom(view.years.length),
+                series: view.defs.map(function (d) {
                     return {
                         name: d.name,
                         type: 'line',
@@ -318,16 +419,39 @@
                         lineStyle: { width: 0.5 },
                         symbol: 'none',
                         emphasis: { focus: 'series' },
-                        data: d.counts.map(function (v, i) {
-                            return totals[i] ? Math.round(1000 * v / totals[i]) / 10 : 0;
-                        })
+                        data: d.values.map(function (_v, i) { return view.plot(d, i); })
                     };
                 })
-            }, true);
+            };
+        }
+
+        // Only offer the switch when both weightings are available — a
+        // dataset without `lda_topic_topk` gets the unchanged single view.
+        if (order.length > 1 && P.buildFacetButtons) {
+            var facets = P.buildFacetButtons({
+                facets: [
+                    { key: 'dominant', label: P.t('topics_weighting_dominant') },
+                    { key: 'weighted', label: P.t('topics_weighting_weighted') }
+                ],
+                activeKey: active,
+                onChange: function (state) {
+                    active = state.facet;
+                    note.textContent = noteText();
+                    draw();
+                }
+            });
+            panel.panel.insertBefore(facets.root, panel.chart);
+        }
+
+        note.textContent = noteText();
+        panel.panel.insertBefore(note, panel.chart);
+
+        instance = ns.registerChart(panel.chart, function (_e, chart) {
+            chart.setOption(optionFor(views[active]), true);
         });
         if (instance) {
             instance.on('click', function (params) {
-                var def = seriesDefs[params.seriesIndex];
+                var def = currentDefs[params.seriesIndex];
                 if (def && def.topicId != null) onTopicSelected(def.topicId);
             });
         }
