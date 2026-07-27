@@ -301,10 +301,24 @@ evidence.
 ### `generate_corpus_health.py`
 
 Writes `asset/data/corpus-health.json` (~2 KB) — curator-facing
-coverage meters (OCR / embeddings / sentiment / LDA / bylines /
-spatial tags / ToC / geocoding / date precision per subset) rendered
-server-side on the admin Sync Data page. Labels are English-only by
-design (internal tooling).
+coverage meters (OCR / transcription / lemmas / embeddings / sentiment /
+LDA + top-k / bylines / spatial tags / ToC / abstracts / DOI / geocoding /
+date precision per subset) rendered server-side on the admin Sync Data
+page. Labels are English-only by design (internal tooling).
+
+`references` and `audiovisual` have their own branches since the 2026-07
+pipeline gave them full text: the bibliography now runs the same
+enrichment ladder as articles (text → lemmas → embeddings → LDA), and
+audiovisual `OCR` is a *transcription*, which the meter says rather than
+calling it OCR.
+
+One meter is not pipeline progress: **"Text public on islam.zmo.de"**
+(`OCR_is_public`) tracks how much of each subset's text the *public*
+Hugging Face projection carries. The generators here read the private full
+mirror, so the module's own visualisations cover all of it either way —
+this meter is about what an outside researcher can reproduce from the
+citable dataset, and it moves when rights are cleared on Omeka rather than
+when a script is re-run.
 
 ## Shared embedding helpers — `iwac_embeddings.py`
 
