@@ -4,8 +4,9 @@
  * Corpus-level lexical metrics of the IWAC `articles` subset, computed
  * from the OCR text by the dataset pipeline: readability (Flesch
  * reading-ease, French adaptation — higher = easier to read), lexical
- * richness (type-token ratio — higher = more varied vocabulary) and
- * words per article. Loads a single precomputed JSON bundle from
+ * richness (MATTR — moving-average type-token ratio over a 50-word
+ * window; higher = more varied vocabulary) and words per article. Loads
+ * a single precomputed JSON bundle from
  * `asset/data/lexical-metrics.json` (built by
  * `scripts/generate_lexical_metrics.py`) and renders all panels from
  * it — no runtime calls to the Hugging Face datasets-server.

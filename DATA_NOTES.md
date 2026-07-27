@@ -60,7 +60,7 @@ The `index` subset is **pre-aggregated** — each row already has:
 ### Articles — unique angles
 
 - **LDA topics** (30): `lda_topic_id`, `lda_topic_prob`, `lda_topic_label` → topic-over-time stacked area, topic co-occurrence
-- **Lexical metrics**: `Richesse_Lexicale_OCR` (TTR), `Lisibilite_OCR` (Flesch FR), `nb_mots` → scatter/distribution charts
+- **Lexical metrics**: `Richesse_Lexicale_OCR` (**MATTR** — moving-average TTR, 50-token window, `None` below it; *not* raw TTR, so do not length-normalise it or bin by `nb_mots`), `Lisibilite_OCR` (Flesch FR), `nb_mots` → scatter/distribution charts
 - **AI sentiment from 3 models** (Gemini / ChatGPT / Mistral), each with:
   - `*_centralite_islam_musulmans` ∈ {Très central, Central, Secondaire, Marginal, Non abordé}
   - `*_polarite` ∈ {Très positif, Positif, Neutre, Négatif, Très négatif, Non applicable}

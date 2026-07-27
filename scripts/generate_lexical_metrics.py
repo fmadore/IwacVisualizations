@@ -10,9 +10,18 @@ pipeline:
 
     Lisibilite_OCR          Flesch reading-ease score (French
                             adaptation) — higher = easier to read
-    Richesse_Lexicale_OCR   type-token ratio — higher = more varied
+    Richesse_Lexicale_OCR   MATTR (moving-average type-token ratio,
+                            50-word window) — higher = more varied
                             vocabulary
     nb_mots                 word count per article
+
+``Richesse_Lexicale_OCR`` is **MATTR, not raw TTR** — the upstream
+``calculate_lexical_richness.py`` averages the type-token ratio over a
+sliding 50-token window and returns None below that length (no TTR
+fallback: the two are incomparable). Two consequences for anything built
+on this column: it is already length-robust, so never length-normalise
+it or bin it by ``nb_mots`` before comparing; and short articles are
+legitimately unscored rather than zero.
 
 NaNs are excluded per metric: an article missing one score still
 contributes to the others. Means are rounded (readability 1 dp,

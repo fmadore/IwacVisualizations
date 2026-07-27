@@ -75,7 +75,7 @@ final class BlockRegistry
             'invokable'   => 'lexicalMetrics',
             'class'       => BlockLayout\LexicalMetrics::class,
             'label'       => 'Press Language', // @translate
-            'description' => 'Press language metrics of the newspaper articles: readability (Flesch), lexical richness (type-token ratio) and article length over time, with newspapers ranked by readability and richness. Data is precomputed from the OCR text of the IWAC articles subset. No configuration needed.', // @translate
+            'description' => 'Press language metrics of the newspaper articles: readability (Flesch), lexical richness (MATTR) and article length over time, with newspapers ranked by readability and richness. Data is precomputed from the OCR text of the IWAC articles subset. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'on-this-day' => [
