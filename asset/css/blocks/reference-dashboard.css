@@ -1,0 +1,54 @@
+/* =================================================================== */
+/*  Reference dashboard — block-specific styles                          */
+/* =================================================================== */
+/*                                                                       */
+/*  Layout: stat cards → topic line → review line → sparkline →         */
+/*  bibliography neighbours → press neighbours. Cards, panels and the   */
+/*  similar-items strip all come from iwac-core.css; only the two prose  */
+/*  lines below are specific to this dashboard.                          */
+/* =================================================================== */
+
+.iwac-vis-reference__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md, 1rem);
+}
+
+/*  Topic line: the LDA label is machine output, so it reads as data
+ *  rather than as a heading — mono face, muted, small. Matches the
+ *  module's convention of marking computational artefacts visually. */
+.iwac-vis-reference__topic {
+    margin: 0;
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-reference__topic-label {
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+    margin-right: var(--space-sm, 0.5rem);
+}
+
+.iwac-vis-reference__topic-words {
+    font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+/*  Review relation: a bibliographic fact about two works, set as prose
+ *  and tinted with the accent mix so it reads as a cross-reference
+ *  rather than another metric. */
+.iwac-vis-reference__reviews {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs, 0.25rem);
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    border-radius: var(--radius-md, 0.5rem);
+    background: color-mix(in oklab, var(--primary, #ce4115) 6%, var(--surface, #fdfcfb));
+}
+
+.iwac-vis-reference__reviews p {
+    margin: 0;
+    font-size: var(--text-sm, 0.875rem);
+    color: var(--ink, #13161c);
+}

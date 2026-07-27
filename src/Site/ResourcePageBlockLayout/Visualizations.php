@@ -39,6 +39,18 @@ class Visualizations implements ResourcePageBlockLayoutInterface
      * presence on those pages without duplicating Omeka's default
      * metadata view.
      *
+     * The eight reference templates (10 Book, 11 Book chapter, 12 Book
+     * review, 13 Report, 14 Thesis, 16 Blog post, 17 Communication,
+     * 18 Journal article) share `reference.phtml`. They were deliberately
+     * unmapped until 2026-07: a bibliographic record carried nothing a
+     * chart could add over Omeka's own item page. The pipeline's full-text
+     * pass changed that — references now have embeddings, LDA topics and
+     * word counts, so the partial can show the work's place in the
+     * bibliography's timeline, its nearest neighbours, and the press
+     * coverage it resembles. Coverage is partial (~half the bibliography
+     * has extracted text), so a missing per-item JSON removes the block
+     * rather than erroring.
+     *
      * Photograph (15) has a history: it was mapped to the `documents`
      * HF slice until v1.3.0 — wrongly, since photographs were not
      * exported to the dataset at all, so those pages showed unrelated
@@ -61,6 +73,14 @@ class Visualizations implements ResourcePageBlockLayoutInterface
         19 => 'minimal-item',  // Video recording
         22 => 'minimal-item',  // Document
         15 => 'minimal-item',  // Photograph
+        10 => 'reference',     // Book
+        11 => 'reference',     // Book chapter
+        12 => 'reference',     // Book review
+        13 => 'reference',     // Report
+        14 => 'reference',     // Thesis / dissertation
+        16 => 'reference',     // Blog post
+        17 => 'reference',     // Communication
+        18 => 'reference',     // Journal article
     ];
 
     public function getLabel(): string

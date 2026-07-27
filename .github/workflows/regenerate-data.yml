@@ -58,7 +58,7 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Run generators
-        # The 28 HF-driven generators, with default flags (defaults already match
+        # The 29 HF-driven generators, with default flags (defaults already match
         # the committed output shapes/minify). Static geojson is read from
         # asset/geo/ (present from checkout). generate_sentiment_arbiter.py is
         # deliberately excluded: it reads the sibling IWAC-sentiment-analysis repo,
@@ -81,6 +81,7 @@ jobs:
             spatial_exploration template_summary topic_explorer compare_newspapers
             article_dashboards person_dashboards entity_dashboards publication_dashboards
             org_cooccurrence term_trends reprints corpus_health keyness
+            reference_dashboards
           )
           for g in "${gens[@]}"; do
             echo "::group::generate_${g}"

@@ -37,6 +37,7 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |
 | Visualizations / Publication (bibo:Issue, template 21) | resource-page block | **Live** — stat cards + periodical-run sparkline + nearest issues in the run + semantic neighbours (auto-elided until upstream ToC coverage grows) | Precompute (`generate_publication_dashboards.py`) |
+| Visualizations / Reference (templates 10–14, 16–18) | resource-page block | **Live** — stat cards + machine topic + `reviewOf` relation + bibliography-timeline sparkline + nearest works + the press coverage the work resembles | Precompute (`generate_reference_dashboards.py`) |
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
@@ -423,6 +424,21 @@ Attaches to `bibo:Article` items (template id 8 on islam.zmo.de). `Visualization
 - **Spatial coverage** — MapLibre map with one pin per place in the article's `dcterms:spatial` field, geocoded through the IWAC authority index. Uniform pin radius (all counts = 1); popup links to the place's authority page. Auto-fits the viewport to the pins.
 
 The 3-layer network is built client-side in `network.js` from the precomputed `entities` + `related_by_entities` arrays (no separate `network` key in the JSON — saves ~3 KB per file). Reuses `C.network` unchanged: the builder is topology-agnostic, so adding `type: 'article'` for the outer ring just picks up the next palette colour and a new legend entry via the `entity_type_article` i18n key.
+
+### Visualizations (resource-page block) — Reference
+
+Attaches to the eight reference templates (10 Book, 11 Book chapter, 12 Book review, 13 Report, 14 Thesis, 16 Blog post, 17 Communication, 18 Journal article — the nine resource classes of the `references` subset). Loads `asset/data/reference-dashboards/{o_id}.json` (`scripts/generate_reference_dashboards.py`, 867 small files).
+
+References were the last content type without this block, and correctly so until 2026-07: a bibliographic record held nothing a chart could add over Omeka's own item page. The pipeline's full-text pass changed the arithmetic — `OCR`, `embedding_OCR`, LDA topics and `nb_mots` — so the dashboard now shows what the item page cannot:
+
+- **Stat cards** — type, authors, year, publisher, pages, words, language, DOI (missing cards elided).
+- **Topic line** — the LDA label, deliberately *not* a stat card: it needs a qualifier a card has no room for. The words are machine-generated, and the bibliography is modelled twice (French + English) over shared `lda_*` columns, so a topic is only interpretable alongside the model named in the tooltip.
+- **`reviewOf` relation**, resolved in both directions: what this work reviews, and which works in the bibliography review it. Title matching is NFC + case-folded; an unresolved target still renders as plain text, so a review of a book the collection doesn't hold still says what it reviews. Rendered as prose, not a chart — it is a bibliographic fact about two works, not a measurement.
+- **Bibliography sparkline** — where the work sits in the bibliography's own publication timeline. Whole-subset rather than per-publisher: publisher values are too sparse here for a per-imprint run to mean anything.
+- **Closest works** — cosine neighbours over `embedding_OCR`.
+- **Press coverage this resembles** — the reverse of the article dashboards' scholarship bridge: one long work ranked against 12k short articles, which is the "what did the papers say about this" question. Same leads-not-citations caveat in the panel copy.
+
+Coverage is partial by nature (~423 of 867 references have extracted text), so every block is independently omittable, and a missing per-item JSON **removes the block** rather than showing an error — for half the bibliography that is the normal state, not a failure.
 
 ### Periodicals Overview (page block)
 
