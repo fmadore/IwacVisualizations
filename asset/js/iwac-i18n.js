@@ -207,9 +207,11 @@
             'desc_article_context_network':
                 'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Click any node to open its page.',
             'desc_article_further_reading':
-                'Other articles from the collection that connect to this one. Switch between two ways of finding them.',
+                'Other material from the collection that connects to this article. Switch between the ways of finding it.',
             'desc_further_reading_tags':
                 'Articles tagged with the same people, places, organisations or subjects as this one. The badge shows how many tags they share.',
+            'desc_further_reading_scholarship':
+                'Scholarly works in the IWAC bibliography whose text reads similarly to this article — the academic literature around what the article covers. The same AI comparison as the previous tab, run across the two collections. Treat it as a lead to follow rather than a citation: the works are long and were compared in summary, so a broad survey can look close to many articles.',
             'desc_further_reading_content':
                 'Articles whose full text reads similarly to this one, even when they don\u2019t share any tags. The match is computed by an AI language model that turns each article into a numeric fingerprint (a \u201csemantic embedding\u201d) and compares them. The badge shows how close the match is.',
 
@@ -613,9 +615,11 @@
             'desc_article_context_network':
                 'Cet article est au centre, entour\u00e9 des personnes, lieux, organisations et sujets qui y sont balis\u00e9s. Les articles qui partagent plusieurs de ces balises apparaissent en p\u00e9riph\u00e9rie. Cliquez sur un n\u0153ud pour ouvrir sa fiche.',
             'desc_article_further_reading':
-                'D\u2019autres articles de la collection qui se rattachent \u00e0 celui-ci. Choisissez l\u2019une des deux mani\u00e8res de les trouver.',
+                'D\u2019autres documents de la collection qui se rattachent \u00e0 cet article. Choisissez l\u2019une des mani\u00e8res de les trouver.',
             'desc_further_reading_tags':
                 'Articles balis\u00e9s avec les m\u00eames personnes, lieux, organisations ou sujets que celui-ci. Le badge indique combien de balises ils ont en commun.',
+            'desc_further_reading_scholarship':
+                'Travaux scientifiques de la bibliographie IWAC dont le texte se lit de mani\u00e8re similaire \u00e0 cet article \u2014 la litt\u00e9rature savante autour de ce dont il traite. Il s\u2019agit de la m\u00eame comparaison par IA que l\u2019onglet pr\u00e9c\u00e9dent, appliqu\u00e9e d\u2019une collection \u00e0 l\u2019autre. \u00c0 consid\u00e9rer comme une piste \u00e0 explorer plut\u00f4t que comme une r\u00e9f\u00e9rence : ces travaux sont longs et ont \u00e9t\u00e9 compar\u00e9s de mani\u00e8re synth\u00e9tique, si bien qu\u2019une synth\u00e8se g\u00e9n\u00e9rale peut sembler proche de nombreux articles.',
             'desc_further_reading_content':
                 'Articles dont le texte int\u00e9gral se lit de mani\u00e8re similaire \u00e0 celui-ci, m\u00eame sans balise en commun. La comparaison est faite par un mod\u00e8le d\u2019IA qui transforme chaque article en une \u00ab empreinte num\u00e9rique \u00bb (un \u00ab plongement s\u00e9mantique \u00bb) puis les rapproche. Le badge indique la proximit\u00e9.',
 
@@ -630,6 +634,8 @@
             // Further reading — toggle labels
             'By shared tags':          'Par balises communes',
             'By similar content':      'Par contenu similaire',
+            'In the scholarship':      'Dans la littérature',
+            'No related scholarship':  'Aucun travail scientifique proche',
 
             // Compare newspapers block
             'Corpus A':                      'Corpus A',

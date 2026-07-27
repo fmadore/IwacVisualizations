@@ -26,6 +26,12 @@ without any further network calls:
                                 inlined for the tooltip)
     * ``semantic_neighbors``  — top-K articles by cosine similarity of
                                 ``embedding_OCR`` (768-dim Gemini)
+    * ``related_scholarship`` — top-K works from the ``references``
+                                subset by cosine similarity, across
+                                subsets in the one shared embedding
+                                space. Absent (not empty) when the
+                                references carry no embeddings, which is
+                                how the panel knows to elide itself.
 
 The 3-layer "context" graph the UI renders (center article + inner
 ring of entities + outer ring of related articles) is built CLIENT-SIDE
@@ -50,6 +56,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import numpy as np
 import pandas as pd
 
+from iwac_embeddings import build_normalized_matrix
 from iwac_utils import (
     DATASET_ID,
     clean_float,
@@ -64,10 +71,17 @@ from iwac_utils import (
     save_json,
 )
 
-# Only one subset is relevant here — articles. Per-article dashboards
-# intentionally don't aggregate publications / references; they are
-# about the NEWSPAPER article as a unit.
+# Per-article dashboards are about the NEWSPAPER article as a unit, so
+# they don't aggregate other subsets — with one deliberate exception since
+# 2026-07. The `references` subset now carries `embedding_OCR` from the
+# same `gemini-embedding-2` model as the articles, in the same 768-dim
+# space, which makes "which scholarship resembles this newspaper article"
+# a plain cosine lookup across the two subsets. That is a question this
+# archive is unusually well placed to answer — a press corpus and its own
+# secondary literature, in one embedding space — so the bridge is worth
+# the extra load.
 ARTICLES_SUBSET = "articles"
+REFERENCES_SUBSET = "references"
 
 # Sentiment intentionally NOT precomputed here. v0.11.0+ the article
 # dashboard renders its sentiment panel server-side from Omeka item
@@ -84,6 +98,21 @@ ARTICLES_SUBSET = "articles"
 # explicitly asked for.
 DEFAULT_TOP_K_RELATED = 20
 DEFAULT_TOP_K_SEMANTIC = 10
+
+# Scholarly works surfaced per article. Kept smaller than the semantic
+# neighbour list: only ~423 of 867 references have extracted text, so the
+# candidate pool is two orders of magnitude smaller than the article pool
+# and a long list would pad itself with weak matches.
+DEFAULT_TOP_K_SCHOLARSHIP = 5
+
+# A reference appearing in more than this share of articles' scholarship
+# lists is reported as a hub. Chunk-averaged embeddings of long documents
+# drift toward the corpus centroid, so a broad survey can end up "most
+# similar" to almost everything — a known artefact of averaging, not a
+# finding about the survey. This only warns; it does not filter, because
+# the right threshold depends on a distribution we can only see once the
+# generator has run against the real data.
+SCHOLARSHIP_HUB_SHARE = 0.25
 
 # Shared-entity ids recorded inline per related article, for the tooltip
 # "shares N entities: Djiguiba Cissé, Côte d'Ivoire, Hadj …". More than
@@ -113,6 +142,8 @@ class ArticleDashboardGenerator:
         repo_id: str = DATASET_ID,
         top_k_related: int = DEFAULT_TOP_K_RELATED,
         top_k_semantic: int = DEFAULT_TOP_K_SEMANTIC,
+        top_k_scholarship: int = DEFAULT_TOP_K_SCHOLARSHIP,
+        scholarship_min_similarity: float = 0.0,
         minify: bool = True,
     ) -> None:
         self.output_dir = output_dir
@@ -120,10 +151,17 @@ class ArticleDashboardGenerator:
         self.repo_id = repo_id
         self.top_k_related = top_k_related
         self.top_k_semantic = top_k_semantic
+        self.top_k_scholarship = top_k_scholarship
+        self.scholarship_min_similarity = scholarship_min_similarity
         self.minify = minify
 
         self.index_df: Optional[pd.DataFrame] = None
         self.articles_df: Optional[pd.DataFrame] = None
+        self.references_df: Optional[pd.DataFrame] = None
+        # (M, 768) L2-normalized reference embeddings + the metadata rows
+        # they correspond to, in matrix order.
+        self.reference_matrix: Optional[np.ndarray] = None
+        self.reference_meta: List[Dict[str, Any]] = []
 
         # Built in later steps
         self.entity_lookup: Dict[str, Dict[str, Any]] = {}   # normalized name -> entity info
@@ -162,6 +200,58 @@ class ArticleDashboardGenerator:
         if self.articles_df is None or self.articles_df.empty:
             raise RuntimeError("articles subset returned empty — aborting")
         logger.info(f"  {len(self.articles_df)} articles")
+
+    def load_references(self) -> None:
+        """Load the bibliography's embeddings for the cross-corpus lookup.
+
+        Optional by design: a missing subset, a missing column or a pipeline
+        that has not embedded the references yet all degrade to "no
+        scholarship suggestions" rather than failing the whole 12k-file
+        generation run.
+        """
+        logger.info("Loading references subset for cross-corpus scholarship links...")
+        df = load_dataset_safe(
+            REFERENCES_SUBSET,
+            repo_id=self.repo_id,
+            columns=["o:id", "title", "author", "pub_date", "o:resource_class",
+                     "doi", "URL", "embedding_OCR"],
+        )
+        if df is None or df.empty:
+            logger.warning("  references subset unavailable — scholarship links skipped")
+            return
+        if "embedding_OCR" not in df.columns:
+            logger.warning("  references subset has no embedding_OCR — scholarship links skipped")
+            return
+
+        self.references_df = df
+        matrix, valid_rows = build_normalized_matrix(df, "embedding_OCR")
+        if matrix.shape[0] == 0:
+            logger.warning("  no usable reference embeddings — scholarship links skipped")
+            self.reference_matrix = None
+            return
+
+        self.reference_matrix = matrix
+        self.reference_meta = []
+        for row_position in valid_rows:
+            row = df.iloc[row_position]
+            authors = [a for a in parse_pipe_separated(row.get("author")) if a]
+            entry: Dict[str, Any] = {
+                "o_id":  clean_str(row.get("o:id")),
+                "title": clean_str(row.get("title")),
+                "type":  clean_str(row.get("o:resource_class")),
+                "date":  clean_str(row.get("pub_date"))[:10],
+            }
+            if authors:
+                entry["authors"] = authors[:3]
+            doi = clean_str(row.get("doi"))
+            if doi:
+                entry["doi"] = doi
+            self.reference_meta.append(entry)
+
+        logger.info(
+            "  %d of %d references carry a usable embedding",
+            matrix.shape[0], len(df),
+        )
 
     # ------------------------------------------------------------------
     # Entity lookup — ported from EntityDashboardGenerator.build_entity_lookup
@@ -512,6 +602,112 @@ class ArticleDashboardGenerator:
         return result
 
     # ------------------------------------------------------------------
+    # Cross-corpus scholarship (articles × references, one embedding space)
+    # ------------------------------------------------------------------
+
+    def compute_scholarship_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
+        """Top-K scholarly works per article, by cosine similarity.
+
+        Both sides are ``gemini-embedding-2`` vectors of the same
+        dimensionality, so the dot product is meaningful across subsets —
+        but the two are not symmetric in character, and the panel copy says
+        so. An article embeds one short news text; a reference embeds a book
+        or thesis whose chunks were averaged, which pulls long documents
+        toward the corpus centroid. The consequence to watch for is hub
+        formation: a broad survey can come out "most similar" to nearly
+        everything. This method reports the share of articles each reference
+        appears for and warns above ``SCHOLARSHIP_HUB_SHARE`` rather than
+        silently filtering, since the right cut-off depends on a
+        distribution only visible once this has run on the real data.
+        """
+        result: Dict[int, List[Dict[str, Any]]] = {aid: [] for aid in self.target_ids}
+        if self.embedding_matrix is None or self.reference_matrix is None:
+            return result
+        if self.reference_matrix.shape[1] != self.embedding_matrix.shape[1]:
+            logger.warning(
+                "Embedding dimensionality differs (articles %d, references %d) — "
+                "refusing to compare across subsets",
+                self.embedding_matrix.shape[1], self.reference_matrix.shape[1],
+            )
+            return result
+
+        X = self.embedding_matrix
+        R = self.reference_matrix
+        valid = self.valid_embedding_rows
+        N = X.shape[0]
+        K = min(self.top_k_scholarship, R.shape[0])
+        if K <= 0:
+            return result
+
+        row_to_id: Dict[int, int] = {
+            row_idx: article_id
+            for article_id, row_idx in self.article_row_index.items()
+        }
+
+        hits: Counter = Counter()          # reference row -> articles it surfaced for
+        similarities: List[float] = []      # top-1 similarity per article, for the log
+
+        for start in range(0, N, KNN_BATCH_SIZE):
+            end = min(start + KNN_BATCH_SIZE, N)
+            sims = X[start:end] @ R.T       # (B, M) — no self-similarity to mask
+
+            k_eff = min(K, sims.shape[1])
+            part_idx = np.argpartition(-sims, k_eff - 1, axis=1)[:, :k_eff]
+            part_sims = np.take_along_axis(sims, part_idx, axis=1)
+            order = np.argsort(-part_sims, axis=1)
+            top_idx = np.take_along_axis(part_idx, order, axis=1)
+            top_sims = np.take_along_axis(part_sims, order, axis=1)
+
+            for local_i in range(end - start):
+                global_i = start + local_i
+                if not valid[global_i]:
+                    continue
+                article_id = row_to_id.get(global_i)
+                if article_id is None:
+                    continue
+                works: List[Dict[str, Any]] = []
+                for rank in range(k_eff):
+                    ref_row = int(top_idx[local_i, rank])
+                    sim = float(top_sims[local_i, rank])
+                    if sim <= 0.0 or sim < self.scholarship_min_similarity:
+                        continue
+                    meta = self.reference_meta[ref_row]
+                    if not meta.get("o_id"):
+                        continue
+                    works.append(dict(meta, similarity=round(sim, 4)))
+                    hits[ref_row] += 1
+                if works:
+                    result[article_id] = works
+                    similarities.append(works[0]["similarity"])
+
+        n_with = sum(1 for v in result.values() if v)
+        logger.info(
+            "Scholarship links computed for %d/%d articles", n_with, len(result)
+        )
+        if similarities:
+            ordered = sorted(similarities)
+            logger.info(
+                "  top-1 similarity: median %.3f, p10 %.3f, p90 %.3f, max %.3f "
+                "(tune --scholarship-min-similarity from this)",
+                ordered[len(ordered) // 2],
+                ordered[int(len(ordered) * 0.10)],
+                ordered[int(len(ordered) * 0.90)],
+                ordered[-1],
+            )
+        if n_with:
+            for ref_row, count in hits.most_common(3):
+                share = count / n_with
+                if share < SCHOLARSHIP_HUB_SHARE:
+                    break
+                logger.warning(
+                    "  hub reference: '%s' surfaces for %.0f%% of articles — likely an "
+                    "artefact of chunk-averaging a long text, not a real affinity",
+                    (self.reference_meta[ref_row].get("title") or "?")[:70],
+                    share * 100,
+                )
+        return result
+
+    # ------------------------------------------------------------------
     # Related-by-shared-entities
     # ------------------------------------------------------------------
 
@@ -610,6 +806,7 @@ class ArticleDashboardGenerator:
         self,
         article_id: int,
         semantic_neighbours: List[Dict[str, Any]],
+        scholarship: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         meta = self.article_meta[article_id]
         entities, spatial = self.build_entities_list(article_id)
@@ -631,7 +828,7 @@ class ArticleDashboardGenerator:
             "thumbnail":        meta.get("thumbnail", ""),
         }
 
-        return {
+        payload = {
             "version":             2,
             "generated_at":        datetime.now(timezone.utc).isoformat(),
             "article":             article_block,
@@ -640,6 +837,12 @@ class ArticleDashboardGenerator:
             "related_by_entities": related,
             "semantic_neighbors":  semantic_neighbours,
         }
+        # Omitted rather than emitted empty: the key's absence is how the
+        # panel knows to elide itself, which is also the correct state when
+        # the references have no embeddings yet.
+        if scholarship:
+            payload["related_scholarship"] = scholarship
+        return payload
 
     def generate_all(self) -> int:
         """Compute the kNN once up-front, then stream one JSON per
@@ -650,6 +853,7 @@ class ArticleDashboardGenerator:
 
         self.build_embedding_matrix()
         semantic_map = self.compute_semantic_neighbors()
+        scholarship_map = self.compute_scholarship_neighbors()
 
         targets = self.target_ids
         if self.limit:
@@ -660,6 +864,7 @@ class ArticleDashboardGenerator:
             data = self.build_article_json(
                 article_id,
                 semantic_neighbours=semantic_map.get(article_id, []),
+                scholarship=scholarship_map.get(article_id, []),
             )
             out_path = self.output_dir / f"{article_id}.json"
             save_json(data, out_path, minify=self.minify, log=False)
@@ -702,6 +907,21 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Semantic-neighbours cap per article (default: %(default)s)",
     )
     parser.add_argument(
+        "--top-k-scholarship",
+        type=int,
+        default=DEFAULT_TOP_K_SCHOLARSHIP,
+        help="Scholarly works (references subset) linked per article "
+             "(default: %(default)s; 0 disables the cross-corpus pass)",
+    )
+    parser.add_argument(
+        "--scholarship-min-similarity",
+        type=float,
+        default=0.0,
+        help="Drop scholarship links below this cosine similarity. Default 0 "
+             "reports every positive match and logs the similarity "
+             "distribution; set a floor once you have seen it (default: %(default)s)",
+    )
+    parser.add_argument(
         "--minify",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -726,11 +946,15 @@ def main() -> int:
         repo_id=args.repo,
         top_k_related=args.top_k_related,
         top_k_semantic=args.top_k_semantic,
+        top_k_scholarship=args.top_k_scholarship,
+        scholarship_min_similarity=args.scholarship_min_similarity,
         minify=args.minify,
     )
 
     gen.load_index()
     gen.load_articles()
+    if args.top_k_scholarship > 0:
+        gen.load_references()
     gen.build_entity_lookup()
     gen.resolve_articles()
     written = gen.generate_all()
