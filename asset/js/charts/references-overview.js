@@ -20,9 +20,24 @@
  *   8. Top publishers — horizontal bar (wide)
  *   9. Top subjects — horizontal bar (wide)
  *  10. References breakdown — treemap country → type (wide)
- *  11. Reference provenance — MapLibre bubble map (wide)
- *  12. Subject co-occurrence — chord graph (wide)
- *  13. Author collaborations — force-directed network (wide)
+ *  11. Full-text coverage — per-type digitisation bar (wide)
+ *  12. Scholarly topics — one horizontal-bar panel per LDA model (wide)
+ *  13. Reference provenance — MapLibre bubble map (wide)
+ *  14. Subject co-occurrence — chord graph (wide)
+ *  15. Author collaborations — force-directed network (wide)
+ *
+ * Panels 11–12 exist because the 2026-07 pipeline began extracting full
+ * text for the bibliography (`OCR`, `embedding_OCR`, its own LDA run).
+ * They are deliberately adjacent: the topic panels describe the digitised
+ * subset, and the coverage panel immediately above states how large that
+ * subset is, so the topic distribution is never read as a claim about the
+ * whole bibliography.
+ *
+ * One topic panel PER MODEL, never a merged one: `references` is
+ * topic-modelled twice (French + English) over the same `lda_topic_*`
+ * columns, so topic 3 exists in both with unrelated meanings. The
+ * generator keys on (lda_model_name, lda_topic_id); this file keeps that
+ * separation visible in the UI instead of flattening it away.
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
  */
@@ -253,10 +268,130 @@
     }
 
     /* ----------------------------------------------------------------- */
+    /*  Full-text coverage + topics (2026-07 references full text)        */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Per-type digitisation bar: how many references of each genre have
+     * extracted full text. Value is the digitised count, not the share —
+     * a 1-of-1 genre would otherwise plot as 100% and read as the
+     * best-covered category in the bibliography. The tooltip carries the
+     * share alongside both absolute numbers.
+     */
+    function coverageOption(byType) {
+        var list = (byType || []).filter(function (e) { return e && e.total > 0; });
+        return {
+            grid: C._grid ? C._grid({ left: 8, top: 8, bottom: 8, right: 48 }) : undefined,
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    var entry = list[p.dataIndex] || {};
+                    var pct = entry.total
+                        ? Math.round((entry.with_ocr / entry.total) * 100)
+                        : 0;
+                    return '<strong>' + P.escapeHtml(translateType(entry.name || '')) + '</strong><br>'
+                        + P.t('references_coverage_tooltip', {
+                            withOcr: P.formatNumber(entry.with_ocr || 0),
+                            total:   P.formatNumber(entry.total || 0),
+                            pct:     pct
+                        });
+                }
+            },
+            xAxis: { type: 'value' },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                axisTick: { show: false },
+                axisLabel: { width: 180, overflow: 'truncate' },
+                data: list.map(function (e) { return translateType(e.name); })
+            },
+            series: [{
+                type: 'bar',
+                data: list.map(function (e) { return e.with_ocr; }),
+                barMaxWidth: 22,
+                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                label: { show: true, position: 'right', formatter: function (p) {
+                    var entry = list[p.dataIndex] || {};
+                    return P.formatNumber(entry.with_ocr || 0) + '/' + P.formatNumber(entry.total || 0);
+                } }
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
+        };
+    }
+
+    /**
+     * One model's topics as a horizontal bar of reference counts. The
+     * tooltip lists the topic's most representative references (highest
+     * `lda_topic_prob`) — the payload ships five per topic, which is what
+     * makes an LDA label like "soufisme confrérie tidjaniyya" checkable
+     * against actual titles instead of taken on faith.
+     */
+    function topicOption(topics) {
+        var list = topics || [];
+        return {
+            grid: C._grid ? C._grid({ left: 8, top: 8, bottom: 8, right: 40 }) : undefined,
+            tooltip: {
+                trigger: 'item',
+                formatter: function (p) {
+                    var topic = list[p.dataIndex] || {};
+                    var lines = ['<strong>' + P.escapeHtml(topic.label || '') + '</strong>'];
+                    lines.push(P.t('references_topic_tooltip', {
+                        count: P.formatNumber(topic.count || 0),
+                        pct:   Math.round((topic.share || 0) * 100)
+                    }));
+                    (topic.items || []).slice(0, 5).forEach(function (item) {
+                        lines.push('&middot; ' + P.escapeHtml(item.title || ''));
+                    });
+                    return lines.join('<br>');
+                }
+            },
+            xAxis: { type: 'value' },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                axisTick: { show: false },
+                axisLabel: { width: 200, overflow: 'truncate' },
+                data: list.map(function (t) {
+                    return (P.topicShortLabel && P.topicShortLabel(t.label)) || t.label || ('#' + t.topic_id);
+                })
+            },
+            series: [{
+                type: 'bar',
+                data: list.map(function (t) { return t.count; }),
+                barMaxWidth: 22,
+                itemStyle: { borderRadius: [0, 4, 4, 0] },
+                label: { show: true, position: 'right' }
+            }],
+            animationDuration: 600,
+            animationEasing: 'cubicOut'
+        };
+    }
+
+    /* ----------------------------------------------------------------- */
     /*  Layout composition                                                */
     /* ----------------------------------------------------------------- */
 
-    function buildLayout(container, summary) {
+    /**
+     * The coverage panel's own description, with the denominators
+     * interpolated. Stating them in the panel prose — rather than only in
+     * a tooltip — is deliberate: the topic panels directly below describe
+     * this subset, not the whole bibliography, and that qualification
+     * should survive a screenshot.
+     */
+    function coverageDescription(coverage) {
+        if (!coverage || !coverage.total) return P.t('references_coverage_desc');
+        return P.t('references_coverage_desc_full', {
+            withOcr:   P.formatNumber(coverage.with_ocr || 0),
+            total:     P.formatNumber(coverage.total || 0),
+            pct:       Math.round((coverage.with_ocr / coverage.total) * 100),
+            words:     P.formatNumber(coverage.words_total || 0),
+            median:    P.formatNumber(coverage.words_median || 0),
+            published: P.formatNumber(coverage.public_content || 0)
+        });
+    }
+
+    function buildLayout(container, summary, topicModels, coverage) {
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-overview-root');
         container.appendChild(root);
@@ -287,6 +422,28 @@
         // Nested treemap (country › source) — give it room past the 320px
         // floor, matching the collection-overview breakdown panel.
         treemapPanel.chart.classList.add('iwac-vis-treemap-host');
+        var coveragePanel  = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Full-text coverage'),
+            coverageDescription(coverage)
+        );
+        // One panel per LDA model. The heading names the model's language
+        // so "topic 3" in the French corpus is never mistaken for "topic 3"
+        // in the English one — they come from different models.
+        var topicPanels = (topicModels || []).map(function (model) {
+            var language = model.language ? translateLang(model.language) : '';
+            var panel = P.buildPanel(
+                'iwac-vis-panel iwac-vis-panel--wide',
+                language
+                    ? P.t('references_topics_title_lang', { language: language })
+                    : P.t('Scholarly topics'),
+                P.t('references_topics_desc', {
+                    count:  P.formatNumber(model.n_docs || 0),
+                    topics: P.formatNumber(model.n_topics || 0)
+                })
+            );
+            return { model: model, panel: panel.panel, chart: panel.chart };
+        });
         var provenancePanel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('Reference provenance'),
@@ -312,6 +469,8 @@
         grid.appendChild(publishersPanel.panel);
         grid.appendChild(subjectsPanel.panel);
         grid.appendChild(treemapPanel.panel);
+        grid.appendChild(coveragePanel.panel);
+        topicPanels.forEach(function (entry) { grid.appendChild(entry.panel); });
         grid.appendChild(provenancePanel.panel);
         grid.appendChild(subjectCooccurrencePanel.panel);
         grid.appendChild(networkPanel.panel);
@@ -325,6 +484,9 @@
             publishers: publishersPanel.chart,
             subjects:  subjectsPanel.chart,
             treemap:   treemapPanel.chart,
+            coverage:  coveragePanel,
+            coverageChart: coveragePanel.chart,
+            topicPanels: topicPanels,
             provenance: provenancePanel,
             provenanceChart: provenancePanel.chart,
             subjectCooccurrence: subjectCooccurrencePanel,
@@ -389,7 +551,13 @@
             treemap:                localizedTreemap,
             provenance_map:          data.provenance_map || { locations: [] },
             subject_cooccurrence:    data.subject_cooccurrence || { nodes: [], edges: [], meta: {} },
-            author_collaborations:  data.author_collaborations || { nodes: [], edges: [] }
+            author_collaborations:  data.author_collaborations || { nodes: [], edges: [] },
+            // Left raw on purpose: reference types are translated at the
+            // point of use inside the coverage tooltip / axis, and topic
+            // labels are LDA top-word lists — machine output in the
+            // corpus language, not translatable UI copy.
+            fulltext:               data.fulltext || null,
+            topics:                 (data.topics && data.topics.models) || []
         };
     }
 
@@ -406,7 +574,13 @@
         }
 
         var data = localizeData(raw);
-        var h = buildLayout(container, data.summary);
+        // Only models that actually produced topics get a panel — a
+        // pipeline run that has not reached the English references yet
+        // should leave no empty box behind.
+        var topicModels = data.topics.filter(function (m) {
+            return m && m.topics && m.topics.length > 0;
+        });
+        var h = buildLayout(container, data.summary, topicModels, data.fulltext);
 
         // 1. Timeline
         if (data.timeline.years && data.timeline.years.length > 0) {
@@ -464,10 +638,28 @@
             });
         }
 
-        // 9. Reference provenance map
+        // 9. Full-text coverage per reference type
+        var coverage = data.fulltext;
+        if (coverage && coverage.by_type && coverage.by_type.length > 0) {
+            ns.registerChart(h.coverageChart, function (el, chart) {
+                chart.setOption(coverageOption(coverage.by_type));
+            });
+        } else {
+            h.coverageChart.appendChild(P.buildEmptyState());
+            h.coverage.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+        }
+
+        // 10. Scholarly topics — one panel per LDA model
+        h.topicPanels.forEach(function (entry) {
+            ns.registerChart(entry.chart, function (el, chart) {
+                chart.setOption(topicOption(entry.model.topics));
+            });
+        });
+
+        // 11. Reference provenance map
         renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
 
-        // 10. Subject co-occurrence chord
+        // 12. Subject co-occurrence chord
         var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
         if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
             var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
@@ -486,7 +678,7 @@
             h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
         }
 
-        // 11. Author collaboration network
+        // 13. Author collaboration network
         var graph = data.author_collaborations;
         if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
             var chart = ns.registerChart(h.networkChart, function (el, instance) {

@@ -28,6 +28,17 @@ Payload shape (top-level keys):
     publisher_countries        — country-faceted publisher rankings
     subjects                   — top-N subject histogram
     treemap                    — country -> type breakdown
+    fulltext                   — OCR / embedding / topic coverage +
+                                 OCR_is_public count + word totals +
+                                 per-type OCR coverage. The denominators
+                                 for every semantic panel below.
+    topics                     — LDA topic distribution **per model**:
+                                 {models: [{model, language, n_docs,
+                                 n_topics, topics: [...]}]}. references
+                                 is modelled twice (French + English)
+                                 over the same lda_* columns, so the
+                                 grouping key is (lda_model_name,
+                                 lda_topic_id) — see compute_topics.
     provenance_map             — geocoded reference-origin points
     subject_cooccurrence       — { nodes, edges, meta } subject graph
     author_collaborations      — { nodes, edges } graph of co-authoring +
@@ -51,6 +62,7 @@ import argparse
 import hashlib
 import logging
 import os
+import re
 from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
@@ -58,6 +70,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 
+from iwac_embeddings import coerce_embedding
 from iwac_utils import (
     DATASET_ID,
     canonicalize_country_field,
@@ -94,6 +107,22 @@ DEFAULT_SUBJECT_NETWORK_MIN_WEIGHT = 1
 PROVENANCE_PUBLICATION_LIMIT = 50
 PROVENANCE_COLUMNS = ("provenance", "Provenance", "place", "Place", "lieu", "Lieu")
 
+# Representative references kept per LDA topic (highest lda_topic_prob).
+TOPIC_ITEMS_PER_TOPIC = 5
+
+# LDA outlier bucket — excluded from the topic panel, as everywhere else
+# in the module.
+LDA_OUTLIER_ID = -1
+
+# `lda_model_name` → the language that model was trained and predicted on.
+# The upstream presets are `lda_model_references` (Français) and
+# `lda_model_references_en` (Anglais); anything else is surfaced with an
+# empty language rather than guessed at.
+MODEL_LANGUAGES: Dict[str, str] = {
+    "lda_model_references":    "Français",
+    "lda_model_references_en": "Anglais",
+}
+
 
 # Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
 _is_unknown = is_unknown
@@ -118,6 +147,31 @@ def _clean_unique_list(values: List[str]) -> List[str]:
             seen.add(value)
             result.append(value)
     return result
+
+
+def _topic_id(value: Any) -> Optional[int]:
+    """``lda_topic_id`` cell → int topic id, or None.
+
+    The column is float64 (NaN where no topic was predicted), and ``-1``
+    is the outlier bucket rather than a topic — both are excluded.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        topic_id = int(float(value))
+    except (TypeError, ValueError):
+        return None
+    return None if topic_id == LDA_OUTLIER_ID else topic_id
+
+
+def _topic_prob(value: Any) -> Optional[float]:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        prob = float(value)
+    except (TypeError, ValueError):
+        return None
+    return prob if 0.0 <= prob <= 1.0 else None
 
 
 def _ref_type(row: pd.Series) -> str:
@@ -275,6 +329,176 @@ def compute_type_distribution(rows: pd.DataFrame, n: int) -> List[Dict[str, Any]
         {"name": name, "count": int(count)}
         for name, count in counter.most_common(n)
     ]
+
+
+def compute_fulltext_coverage(rows: pd.DataFrame) -> Dict[str, Any]:
+    """How much of the bibliography actually has machine-readable text.
+
+    The 2026-07 pipeline began extracting ``OCR`` for references, so the
+    semantic panels below cover a *subset* of the bibliography rather
+    than all of it. Publishing the denominators is not decoration: a
+    topic distribution over 423 of 867 references is a claim about the
+    digitised half, and a reader who takes it for the whole corpus draws
+    the wrong conclusion about what the collection holds.
+
+    ``OCR_is_public`` is reported separately and means something quite
+    different: it is not *our* coverage but what islam.zmo.de exposes
+    publicly. This module reads the private full mirror, so every panel
+    here is computed over all available text regardless of that flag —
+    the count is published so the difference from the public dataset is
+    visible rather than implicit.
+    """
+    total = int(len(rows))
+    ocr = rows.get("OCR")
+    embedding = rows.get("embedding_OCR")
+    topic_ids = rows.get("lda_topic_id")
+    public_flags = rows.get("OCR_is_public")
+    words = rows.get("nb_mots")
+
+    def _has_text(value: Any) -> bool:
+        return bool(_clean_text(value))
+
+    with_ocr = int(sum(1 for v in ocr if _has_text(v))) if ocr is not None else 0
+
+    with_embedding = 0
+    if embedding is not None:
+        for value in embedding:
+            vec = coerce_embedding(value)
+            if vec is not None:
+                with_embedding += 1
+
+    with_topic = 0
+    if topic_ids is not None:
+        for value in topic_ids:
+            topic_id = _topic_id(value)
+            if topic_id is not None:
+                with_topic += 1
+
+    public_content = 0
+    if public_flags is not None:
+        public_content = int(sum(1 for v in public_flags if bool(v) is True))
+
+    word_values: List[int] = []
+    if words is not None:
+        for value in words:
+            try:
+                count = int(value)
+            except (TypeError, ValueError):
+                continue
+            if count > 0:
+                word_values.append(count)
+
+    # Per-type coverage: which genres of scholarship are digitised.
+    # Theses are long and often born-digital; communications rarely are.
+    by_type: Dict[str, Dict[str, int]] = {}
+    for _, row in rows.iterrows():
+        bucket = by_type.setdefault(_ref_type(row), {"total": 0, "with_ocr": 0})
+        bucket["total"] += 1
+        if _has_text(row.get("OCR")):
+            bucket["with_ocr"] += 1
+
+    types_sorted = sorted(
+        (
+            {"name": name, "total": v["total"], "with_ocr": v["with_ocr"]}
+            for name, v in by_type.items()
+        ),
+        key=lambda entry: (-entry["total"], entry["name"]),
+    )
+
+    return {
+        "total":          total,
+        "with_ocr":       with_ocr,
+        "with_embedding": with_embedding,
+        "with_topic":     with_topic,
+        "public_content": public_content,
+        "words_total":    int(sum(word_values)),
+        "words_median":   int(sorted(word_values)[len(word_values) // 2]) if word_values else 0,
+        "by_type":        types_sorted,
+    }
+
+
+def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
+    """LDA topic distribution of the references, grouped per model.
+
+    **The grouping key is ``(lda_model_name, lda_topic_id)``, never the
+    topic id alone.** Unlike ``articles`` — one French model, so its ids
+    are globally meaningful — ``references`` is topic-modelled twice:
+    ``lda_model_references`` for the French texts and
+    ``lda_model_references_en`` for the English ones, and both write the
+    *same* ``lda_topic_*`` columns. Topic 3 therefore exists twice with
+    unrelated meanings, and aggregating on the id would silently merge a
+    French topic with an English one into a single nonsense bucket.
+
+    Rows in the ``-1`` outlier bucket, or with no topic at all (no
+    extracted text), are excluded; the coverage panel reports how many
+    that is.
+    """
+    if "lda_topic_id" not in rows.columns:
+        return {"models": []}
+
+    has_model_column = "lda_model_name" in rows.columns
+
+    # model → topic_id → accumulator
+    models: Dict[str, Dict[int, Dict[str, Any]]] = defaultdict(dict)
+    model_totals: Counter = Counter()
+
+    for position, (_, row) in enumerate(rows.iterrows()):
+        topic_id = _topic_id(row.get("lda_topic_id"))
+        if topic_id is None:
+            continue
+        model_name = _clean_text(row.get("lda_model_name")) if has_model_column else ""
+        model_name = model_name or "unknown"
+
+        bucket = models[model_name].setdefault(
+            topic_id,
+            {"topic_id": topic_id, "label": "", "count": 0, "prob_sum": 0.0, "items": []},
+        )
+        bucket["count"] += 1
+        model_totals[model_name] += 1
+
+        label = _clean_text(row.get("lda_topic_label"))
+        if label and not bucket["label"]:
+            bucket["label"] = label
+
+        prob = _topic_prob(row.get("lda_topic_prob"))
+        if prob is not None:
+            bucket["prob_sum"] += prob
+
+        record = _publication_record(row, position)
+        record["prob"] = round(prob, 4) if prob is not None else None
+        bucket["items"].append(record)
+
+    out_models: List[Dict[str, Any]] = []
+    for model_name, topics in models.items():
+        n_docs = model_totals[model_name]
+        topic_list: List[Dict[str, Any]] = []
+        for bucket in topics.values():
+            items = sorted(
+                bucket["items"],
+                key=lambda entry: (entry.get("prob") is None, -(entry.get("prob") or 0.0)),
+            )[:items_per_topic]
+            topic_list.append({
+                "topic_id":  bucket["topic_id"],
+                "label":     bucket["label"],
+                "words":     [w for w in re.split(r"[,\s]+", bucket["label"]) if w][:10],
+                "count":     bucket["count"],
+                "share":     round(bucket["count"] / n_docs, 4) if n_docs else 0.0,
+                "mean_prob": round(bucket["prob_sum"] / bucket["count"], 4) if bucket["count"] else None,
+                "items":     items,
+            })
+        topic_list.sort(key=lambda entry: (-entry["count"], entry["topic_id"]))
+        out_models.append({
+            "model":    model_name,
+            "language": MODEL_LANGUAGES.get(model_name, ""),
+            "n_docs":   n_docs,
+            "n_topics": len(topic_list),
+            "topics":   topic_list,
+        })
+
+    # Largest corpus first, so the French model leads on a French-majority
+    # bibliography without hardcoding which model that is.
+    out_models.sort(key=lambda entry: -entry["n_docs"])
+    return {"models": out_models}
 
 
 def compute_publisher_rankings(
@@ -740,6 +964,7 @@ def build_references_overview(
     top_n_types: int,
     network_min_degree: int,
     subject_network_min_weight: int,
+    topic_items: int = TOPIC_ITEMS_PER_TOPIC,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC references subset from %s", repo_id)
@@ -763,6 +988,22 @@ def build_references_overview(
     publisher_countries = compute_publisher_countries(df, top_n_publishers)
     subjects = _top_n_pipe(df, "subject", top_n_subjects)
     treemap = compute_treemap(df)
+
+    fulltext = compute_fulltext_coverage(df)
+    logger.info(
+        "  full text: %d/%d with OCR, %d with embeddings, %d with a topic, "
+        "%d public on islam.zmo.de",
+        fulltext["with_ocr"], fulltext["total"], fulltext["with_embedding"],
+        fulltext["with_topic"], fulltext["public_content"],
+    )
+
+    topics = compute_topics(df, items_per_topic=topic_items)
+    for model in topics["models"]:
+        logger.info(
+            "  LDA model '%s' (%s): %d topics over %d references",
+            model["model"], model["language"] or "language unknown",
+            model["n_topics"], model["n_docs"],
+        )
 
     provenance_field = next((field for field in PROVENANCE_COLUMNS if field in df.columns), None)
     coord_lookup: Dict[str, Dict[str, Any]] = {}
@@ -801,7 +1042,7 @@ def build_references_overview(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_references_overview.py",
-        script_version="0.2.0",
+        script_version="0.3.0",
     )
 
     return {
@@ -816,6 +1057,8 @@ def build_references_overview(
         "publisher_countries":    publisher_countries,
         "subjects":              subjects,
         "treemap":               treemap,
+        "fulltext":              fulltext,
+        "topics":                topics,
         "provenance_map":         provenance_map,
         "subject_cooccurrence":   subject_cooccurrence,
         "author_collaborations": collaborations,
@@ -850,6 +1093,10 @@ def main() -> None:
         default=DEFAULT_SUBJECT_NETWORK_MIN_WEIGHT,
         help="Drop subject co-occurrence edges below this weight",
     )
+    parser.add_argument(
+        "--topic-items", type=int, default=TOPIC_ITEMS_PER_TOPIC,
+        help="Representative references kept per LDA topic (default: %(default)s)",
+    )
     parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
                         default=False,
                         help="Produce compact JSON (no indentation) (default: %(default)s)")
@@ -872,6 +1119,7 @@ def main() -> None:
         top_n_types=args.top_n_types,
         network_min_degree=args.network_min_degree,
         subject_network_min_weight=args.subject_network_min_weight,
+        topic_items=args.topic_items,
     )
 
     output_path = Path(args.output)

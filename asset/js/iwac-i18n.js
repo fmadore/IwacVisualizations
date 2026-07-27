@@ -69,6 +69,20 @@
             // References overview
             'references_provenance_desc': 'Geocoded places linked to reference provenance metadata when the Hugging Face bundle exposes resolvable origins.',
             'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same bibliographic reference.',
+
+            // References overview — full text + topics (2026-07 pipeline)
+            'Full-text coverage': 'Full-text coverage',
+            'references_coverage_desc': 'How many references have machine-readable full text extracted, by genre of scholarship.',
+            'references_coverage_desc_full': 'Full text has been extracted for {withOcr} of {total} references ({pct}%), {words} words in total, {median} in a typical reference. The topic panels below describe that digitised subset, not the whole bibliography. Bars show the digitised count per genre against its total. Separately, {published} of these references have their text published on islam.zmo.de — the rest inform the aggregate analysis here without being readable in full.',
+            'references_coverage_tooltip': '{withOcr} of {total} with full text ({pct}%)',
+            'Scholarly topics': 'Scholarly topics',
+            // Parenthetical rather than "{language}-language references":
+            // the interpolated label comes from the shared `lang_*` keys and
+            // arrives capitalised, which only reads correctly standalone.
+            'references_topics_title_lang': 'Scholarly topics ({language})',
+            'references_topics_desc': 'Topics found by an LDA model over the full text of {count} references, grouped into {topics} topics. Labels are a topic’s most characteristic words — machine-generated, not curated. Each language has its own model, so topic numbers are not comparable between these panels. Hover a bar for the references most typical of that topic.',
+            'references_topic_tooltip': '{count} references ({pct}% of this model’s corpus). Most representative:',
+
             'Languages studied': 'Languages',
             'Fetching references…': 'Fetching references\u2026',
 
@@ -375,6 +389,16 @@
             'references_subject_cooccurrence_desc': 'Paires de sujets apparaissant ensemble sur une m\u00eame r\u00e9f\u00e9rence bibliographique.',
             'No provenance locations available': 'Aucun lieu de provenance disponible',
             'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
+
+            // References overview — texte intégral + thèmes (pipeline 2026-07)
+            'Full-text coverage': 'Couverture en texte intégral',
+            'references_coverage_desc': 'Nombre de références dont le texte intégral a été extrait, par genre de travaux.',
+            'references_coverage_desc_full': 'Le texte intégral a été extrait pour {withOcr} références sur {total} ({pct} %), soit {words} mots au total et {median} pour une référence typique. Les panneaux de thèmes ci-dessous décrivent ce sous-ensemble numérisé, et non l’ensemble de la bibliographie. Les barres indiquent le nombre de références numérisées par genre, rapporté à son total. Par ailleurs, {published} de ces références ont leur texte publié sur islam.zmo.de : les autres alimentent l’analyse agrégée présentée ici sans être consultables intégralement.',
+            'references_coverage_tooltip': '{withOcr} sur {total} avec texte intégral ({pct} %)',
+            'Scholarly topics': 'Thèmes de la littérature scientifique',
+            'references_topics_title_lang': 'Thèmes de la littérature scientifique ({language})',
+            'references_topics_desc': 'Thèmes dégagés par un modèle LDA sur le texte intégral de {count} références, regroupées en {topics} thèmes. Les libellés sont les mots les plus caractéristiques du thème : ils sont générés automatiquement et non validés éditorialement. Chaque langue a son propre modèle : les numéros de thèmes ne sont donc pas comparables d’un panneau à l’autre. Survolez une barre pour voir les références les plus représentatives du thème.',
+            'references_topic_tooltip': '{count} références ({pct} % du corpus de ce modèle). Les plus représentatives :',
             'Languages studied': 'Langues',
             'Places studied': 'Lieux \u00e9tudi\u00e9s',
             'Fetching references…': 'R\u00e9cup\u00e9ration des r\u00e9f\u00e9rences\u2026',
