@@ -254,6 +254,14 @@
             'desc_topic_countries':         'Distribution of articles in this topic by country of publication.',
             'desc_topic_newspapers':        'Newspapers and periodicals where this topic appears most often.',
             'desc_topic_top_articles':      'Articles whose text the LDA model attached most strongly to this topic, ranked by topic probability.',
+            // Article dashboard — metrics row + spatial panel
+            'Readability (Flesch)':         'Readability (Flesch)',
+            'Lexical richness (MATTR)':     'Lexical richness (MATTR)',
+            'article_topic_generated':      'Topic words assigned by an LDA model over the article’s full text — machine output, not a curated subject heading.',
+            'desc_article_spatial':         'Places tagged on this article, located through the IWAC authority index. Every pin is one place mentioned once, so all pins are the same size. Click a pin to open the place’s record.',
+            'article_place_subtitle':       'Mentioned in this article',
+            'No geocoded places':           'No places on this article could be located',
+
             // Reference dashboard (bibliography item pages)
             'Authors':                      'Authors',
             'Publisher':                    'Publisher',
@@ -754,6 +762,15 @@
             'desc_topic_countries':         'R\u00e9partition des articles de ce th\u00e8me par pays de publication.',
             'desc_topic_newspapers':        'Journaux et p\u00e9riodiques o\u00f9 ce th\u00e8me appara\u00eet le plus souvent.',
             'desc_topic_top_articles':      'Articles que le mod\u00e8le LDA a rattach\u00e9s le plus fortement \u00e0 ce th\u00e8me, class\u00e9s par probabilit\u00e9 d\u2019appartenance.',
+            // Article dashboard \u2014 m\u00e9triques + panneau spatial \u2014 French
+            'Readability (Flesch)':         'Lisibilit\u00e9 (Flesch)',
+            'Lexical richness (MATTR)':     'Richesse lexicale (MATTR)',
+            'Spatial coverage':             'Couverture spatiale',
+            'article_topic_generated':      'Mots-cl\u00e9s de th\u00e8me attribu\u00e9s par un mod\u00e8le LDA sur le texte int\u00e9gral de l\u2019article : sortie automatique, et non une vedette-mati\u00e8re valid\u00e9e.',
+            'desc_article_spatial':         'Lieux associ\u00e9s \u00e0 cet article, localis\u00e9s via l\u2019index d\u2019autorit\u00e9 IWAC. Chaque point correspond \u00e0 un lieu mentionn\u00e9 une fois : tous les points ont donc la m\u00eame taille. Cliquez sur un point pour ouvrir la fiche du lieu.',
+            'article_place_subtitle':       'Mentionn\u00e9 dans cet article',
+            'No geocoded places':           'Aucun lieu de cet article n\u2019a pu \u00eatre localis\u00e9',
+
             // Reference dashboard \u2014 French
             'Authors':                      'Auteurs',
             'Publisher':                    '\u00c9diteur',

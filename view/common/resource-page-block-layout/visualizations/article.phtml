@@ -13,9 +13,11 @@
  *                           below compares the three models.
  *
  *   2. Everything else    — fetched client-side from the precomputed
- *                           files/iwac-visualizations/article-dashboards/{o_id}.json
- *                           (context network, related articles,
- *                           similar articles, spatial coverage).
+ *                           files/iwac-visualizations/article-dashboards/{o_id}.json:
+ *                           the metrics card row, the context network,
+ *                           further reading (shared tags / similar
+ *                           content / related scholarship) and spatial
+ *                           coverage.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\ItemRepresentation $resource
@@ -222,6 +224,9 @@ echo $this->partial('common/iwac-block-shell', [
         'panels' => [
             'article-dashboard/network',
             'article-dashboard/further-reading',
+            // Registers its own renderer + hasData predicate, so unlike the
+            // two above it needs no entry in dashboard-panels-bridge.
+            'article-dashboard/map',
             'article-dashboard/radar',
             'shared/dashboard-panels-bridge',
         ],
