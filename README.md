@@ -31,6 +31,7 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 | Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
 | Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
+| Visualizations / Photograph (template 15) | resource-page block | **Live** — minimal-item dashboard over the `images` subset, with *real* neighbours: multimodal `embedding_image` cosine similarity instead of a recency list | Precompute (`generate_template_summary.py`) |
 | Visualizations / Person | resource-page block | **Live** — 11 panels | Precompute (`generate_person_dashboards.py`) |
 | Visualizations / Entity (Lieux, Organisations, Sujets, Événements) | resource-page block | **Live** — reuses Person panels | Precompute (`generate_entity_dashboards.py`) |
 | Visualizations / Article (bibo:Article, template 8) | resource-page block | **Live** — 5 panels incl. 3-layer context network + semantic neighbours | Precompute (`generate_article_dashboards.py`) |

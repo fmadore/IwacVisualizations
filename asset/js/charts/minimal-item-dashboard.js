@@ -6,7 +6,8 @@
  *
  *   * 9  Audio            → audiovisual subset
  *   * 19 Video recording  → audiovisual subset
- *   * 15 Photograph       → documents subset
+ *   * 22 Document         → documents subset
+ *   * 15 Photograph       → images subset
  *
  * Loads ``asset/data/template-summary.json``, picks the slice for the
  * container's ``data-subset`` attribute, and dispatches two declarative
@@ -15,8 +16,11 @@
  *   1. ``siblingSparkline`` — year histogram for the whole subset,
  *      with a dot at the current item's year (pulled from
  *      ``data-pub-year``).
- *   2. ``similarItems``     — most-recent N items in the subset
- *      excluding the current one (filtered by ``data-item-id``).
+ *   2. ``similarItems``     — the slice's ``similar_by_id`` neighbours
+ *      for this item when the subset carries an embedding (photographs:
+ *      multimodal ``embedding_image`` cosine), else the most-recent N
+ *      items in the subset excluding the current one (filtered by
+ *      ``data-item-id``).
  *
  * Both renderers come from the v0.16.0 shared/renderers/ collection;
  * no custom renderer registrations are needed here — the orchestrator
@@ -42,21 +46,34 @@
     /*  Layout — two slots, both wide                                     */
     /* ----------------------------------------------------------------- */
 
-    DL.register('minimalItem', [
-        { chart: 'siblingSparkline', wide: true,
-          dataKey: 'sparkline',
-          title: 'Activity over time',
-          description: 'desc_minimal_sparkline' },
-        { chart: 'similarItems',     wide: true,
-          dataKey: 'similar',
-          title: 'Other items in this collection',
-          description: 'desc_minimal_similar',
-          // Items in template-summary.json have no similarity score
-          // (this isn't semantic-kNN data); the renderer's normalize
-          // pass handles missing scores by omitting the badge. Drop
-          // the lowSignal threshold to 0 so nothing is filtered.
-          options: { max: 8, lowSignal: 0 } }
-    ]);
+    // Layout is a function, not a static array: the strip's copy has to
+    // tell the truth about what produced the cards. Recency ("other
+    // items in this collection") and multimodal cosine similarity
+    // ("visually similar photographs") are different claims, and a
+    // reader can't tell them apart from the cards alone.
+    DL.register('minimalItem', function (data) {
+        var semantic = !!(data && data.semantic);
+        return [
+            { chart: 'siblingSparkline', wide: true,
+              dataKey: 'sparkline',
+              title: 'Activity over time',
+              description: 'desc_minimal_sparkline' },
+            { chart: 'similarItems',     wide: true,
+              dataKey: 'similar',
+              title: semantic
+                  ? 'Visually similar photographs'
+                  : 'Other items in this collection',
+              description: semantic
+                  ? 'desc_minimal_similar_semantic'
+                  : 'desc_minimal_similar',
+              // The recency list has no similarity score; the renderer's
+              // normalize pass omits the badge when absent. Either way
+              // drop the lowSignal threshold to 0 — filtering neighbours
+              // by score would silently empty the strip on a corpus this
+              // small (30 photographs).
+              options: { max: 8, lowSignal: 0 } }
+        ];
+    });
 
     /* ----------------------------------------------------------------- */
     /*  Bootstrap                                                         */
@@ -103,14 +120,22 @@
                     caption:   P.t('items_count', { count: P.formatNumber(slice.total || 0) })
                 };
 
-                // Similar items — drop the current item from the list
-                // so users don't see "this same item you're viewing"
-                // among the cards. The similar-items renderer
-                // normalises the shape: title / o_id / date / country
-                // / publisher / thumbnail are all consumed natively.
-                var similar = (slice.top_items || []).filter(function (it) {
-                    return it && it.o_id !== itemId;
-                });
+                // Similar items — prefer the precomputed neighbours for
+                // this exact item when the subset has an embedding
+                // (images: multimodal cosine over embedding_image).
+                // Otherwise fall back to the recency list, dropping the
+                // current item so users don't see "this same item
+                // you're viewing" among the cards. The similar-items
+                // renderer normalises the shape: title / o_id / date /
+                // country / publisher / thumbnail / score are all
+                // consumed natively.
+                var neighbours = (slice.similar_by_id || {})[String(itemId)];
+                var semantic   = !!(neighbours && neighbours.length);
+                var similar    = semantic
+                    ? neighbours
+                    : (slice.top_items || []).filter(function (it) {
+                        return it && it.o_id !== itemId;
+                    });
 
                 var body = P.el('div', 'iwac-vis-minimal-item__body');
                 container.appendChild(body);
@@ -123,7 +148,8 @@
 
                 DL.render(body, 'minimalItem', {
                     sparkline: sparkline,
-                    similar:   similar
+                    similar:   similar,
+                    semantic:  semantic
                 }, ctx);
             })
             .catch(function (err) {

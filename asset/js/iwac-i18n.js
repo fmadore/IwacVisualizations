@@ -226,9 +226,10 @@
 
             // MapLibre choropleth toggle (shared/choropleth.js)
 
-            // Minimal item dashboard (Audio / Video / Photograph)
+            // Minimal item dashboard (Audio / Video / Document / Photograph)
             'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
             'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
+            'desc_minimal_similar_semantic':     'Photographs closest to this one in a multimodal AI embedding of the image itself — visual and thematic resemblance, not shared metadata. The percentage is the similarity score.',
 
             // Topic Explorer — labels + descriptions
             'desc_horizontal_bar':          'Top values by count, ranked from highest to lowest.',
@@ -661,8 +662,10 @@
             'Loading visualizations':            'Chargement des visualisations',
             'Activity over time':                'Activit\u00e9 dans le temps',
             'Other items in this collection':    'Autres \u00e9l\u00e9ments de cette collection',
+            'Visually similar photographs':      'Photographies visuellement similaires',
             'desc_minimal_sparkline':            'O\u00f9 cet \u00e9l\u00e9ment se situe dans la chronologie d\u2019activit\u00e9 de sa collection. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
             'desc_minimal_similar':              'Autres \u00e9l\u00e9ments du m\u00eame sous-ensemble IWAC, du plus r\u00e9cent au plus ancien. Cliquez sur un \u00e9l\u00e9ment pour ouvrir sa fiche.',
+            'desc_minimal_similar_semantic':     'Photographies les plus proches de celle-ci dans un plongement multimodal de l\u2019image elle-m\u00eame : ressemblance visuelle et th\u00e9matique, et non m\u00e9tadonn\u00e9es partag\u00e9es. Le pourcentage indique le score de similarit\u00e9.',
 
             // Topic Explorer \u2014 French
             'Loading Topic Explorer':       'Chargement de l\u2019explorateur de th\u00e8mes',

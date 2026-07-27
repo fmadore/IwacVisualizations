@@ -4,15 +4,23 @@ generate_template_summary.py
 ============================
 
 Light-weight precompute for the per-item "minimal" Visualizations
-block (drives Audio / Video / Photograph resource pages, dispatched
-through ``Visualizations::TEMPLATE_PARTIALS``).
+block (drives Audio / Video / Document / Photograph resource pages,
+dispatched through ``Visualizations::TEMPLATE_PARTIALS``).
 
-The audiovisual subset (45 items) splits cleanly by ``medium`` into
-audio (template 9) and video (template 19). The documents subset (26
-items) is heterogeneous — official letters, communiqués, sermons,
-photographs, posters, etc. — and uses free-text ``type`` as the
-discriminator. Photograph (template 15) reads from
-``documents.by_type[<photograph slug>]``.
+The audiovisual subset (47 items) splits by ``medium`` into audio
+(template 9) and video (template 19). The documents subset (26 items)
+is heterogeneous — official letters, communiqués, sermons, posters —
+and uses free-text ``type`` as the discriminator; Document is template
+22. Photographs (template 15) read the ``images`` subset: they are
+class 58 ``bibo:Image`` and were exported to Hugging Face in 2026-07,
+which is what retires the pre-v1.3.0 hack of serving them the
+unrelated ``documents.by_type[photographie]`` slice.
+
+``images`` is also the first subset here to carry an embedding
+(``embedding_image`` — a multimodal ``gemini-embedding-2`` vector of the
+photograph *itself*, not of its metadata), so photograph pages get real
+similarity neighbours in ``similar_by_id`` instead of the recency list
+the other subsets fall back to.
 
 Output bundle: ``asset/data/template-summary.json`` keyed by subset:
 
@@ -42,9 +50,18 @@ Output bundle: ``asset/data/template-summary.json`` keyed by subset:
           "total": 26,
           ...,
           "by_type": {
-            "photographie": { ... },
             "communique":   { ... },
             ...
+          }
+        },
+        "images": {
+          "total": 30,
+          ...,
+          "similar_by_id": {
+            "12345": [
+              {"o_id": 23456, "title": "...", "score": 0.8123, ...},
+              ...top 6 by cosine similarity
+            ]
           }
         }
       }
@@ -52,9 +69,10 @@ Output bundle: ``asset/data/template-summary.json`` keyed by subset:
 
 The front-end orchestrator (``minimal-item-dashboard.js``) takes the
 container's ``data-subset`` + ``data-subtype-facet`` + ``data-subtype``
-attributes and reads the matching slice. ``top_items`` is filtered on
-the client to drop the current item and show the rest as
-"more items in this collection" cards via the existing
+attributes and reads the matching slice. It prefers
+``similar_by_id[<item o:id>]`` when the subset has one; otherwise
+``top_items`` is filtered on the client to drop the current item and
+show the rest as "more items in this collection" cards via the existing
 ``similar-items`` renderer (sans similarity score).
 
 Slice keys are normalised to NFC + lowercased so the front-end can
@@ -79,6 +97,7 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 
+from iwac_embeddings import build_normalized_matrix, top_k_cosine
 from iwac_utils import (
     DATASET_ID,
     canonical_country,
@@ -95,16 +114,29 @@ from iwac_utils import (
 # Subsets covered by this precompute. Articles + publications are
 # already covered by their own dedicated dashboards (article + person
 # / entity dashboards); references-overview covers references at
-# corpus level. The audiovisual + documents subsets are the
+# corpus level. The audiovisual, documents and images subsets are the
 # under-covered ones — small, heterogeneous, worth surfacing as
 # "context" panels on per-item Visualizations blocks.
-SUBSETS = ["audiovisual", "documents"]
+SUBSETS = ["audiovisual", "documents", "images"]
 
 # Top-N items kept per slice. The minimal-item orchestrator picks ~6
 # to show as "other items in this collection" cards; 30 leaves
 # headroom for client-side filtering (e.g. dropping the current
 # item, prioritising same-country neighbours).
 TOP_ITEMS = 30
+
+# subset → embedding column, for subsets where we can do better than a
+# recency list. Only ``images`` qualifies today: ``embedding_image`` is
+# multimodal (the photograph itself is embedded), so cosine neighbours
+# are genuinely "looks / reads like this one". The text subsets here
+# carry no embedding at all — audiovisual has transcriptions but no
+# vectors, documents neither.
+EMBEDDING_COLUMNS: Dict[str, str] = {"images": "embedding_image"}
+
+# Neighbours kept per item. The strip renders up to 8 cards; 6 keeps
+# the payload small while leaving the client room to drop any card
+# whose target has since been unpublished.
+SIMILAR_TOP_K = 6
 
 
 logger: Optional[logging.Logger] = None
@@ -148,20 +180,48 @@ def find_columns(df: pd.DataFrame) -> Dict[str, Optional[str]]:
     }
 
 
+def build_item(row: Any, columns: Dict[str, Optional[str]]) -> Optional[Dict[str, Any]]:
+    """Card record for one row, or None when it has no usable ``o:id``.
+
+    The single definition of the card shape consumed by the
+    ``similar-items`` renderer — shared by the ``top_items`` recency
+    list and the ``similar_by_id`` neighbour lists so the two can never
+    drift apart.
+    """
+    id_col = columns["id"]
+    if not id_col:
+        return None
+    try:
+        o_id = int(row.get(id_col))
+    except (TypeError, ValueError):
+        return None
+
+    date_raw = clean_str(row.get(columns["date"])) if columns["date"] else ""
+    item: Dict[str, Any] = {
+        "o_id":      o_id,
+        "title":     clean_str(row.get(columns["title"])) if columns["title"] else "",
+        "date":      date_raw[:10] if date_raw else "",
+        "country":   first_country(row.get(columns["country"])) if columns["country"] else "",
+        "language":  clean_str(row.get(columns["language"])) if columns["language"] else "",
+        "thumbnail": clean_str(row.get(columns["thumbnail"])) if columns["thumbnail"] else "",
+    }
+    # Optional fields — kept only when present so the JSON stays
+    # narrow per-item and the client doesn't have to filter empty
+    # strings out of the meta line.
+    for key in ("creator", "publisher", "medium", "type", "extent"):
+        col = columns[key]
+        if not col:
+            continue
+        value = clean_str(row.get(col))
+        if value:
+            item[key] = value
+    return item
+
+
 def slice_summary(df: pd.DataFrame, columns: Dict[str, Optional[str]]) -> Dict[str, Any]:
     """Compact summary of a single dataframe slice — total, year
     range, year histogram, top-N items (most-recent first)."""
-    id_col        = columns["id"]
-    title_col     = columns["title"]
-    date_col      = columns["date"]
-    country_col   = columns["country"]
-    creator_col   = columns["creator"]
-    publisher_col = columns["publisher"]
-    language_col  = columns["language"]
-    thumb_col     = columns["thumbnail"]
-    medium_col    = columns["medium"]
-    type_col      = columns["type"]
-    extent_col    = columns["extent"]
+    date_col = columns["date"]
 
     total = len(df)
     year_counter: Counter = Counter()
@@ -173,46 +233,9 @@ def slice_summary(df: pd.DataFrame, columns: Dict[str, Optional[str]]) -> Dict[s
         if year:
             year_counter[year] += 1
 
-        if not id_col:
-            continue
-        try:
-            o_id = int(row.get(id_col))
-        except (TypeError, ValueError):
-            continue
-
-        item: Dict[str, Any] = {
-            "o_id":      o_id,
-            "title":     clean_str(row.get(title_col)) if title_col else "",
-            "date":      date_raw[:10] if date_raw else "",
-            "country":   first_country(row.get(country_col)) if country_col else "",
-            "language":  clean_str(row.get(language_col)) if language_col else "",
-            "thumbnail": clean_str(row.get(thumb_col)) if thumb_col else "",
-        }
-        # Optional fields — kept only when present so the JSON stays
-        # narrow per-item and the client doesn't have to filter empty
-        # strings out of the meta line.
-        if creator_col:
-            creator = clean_str(row.get(creator_col))
-            if creator:
-                item["creator"] = creator
-        if publisher_col:
-            publisher = clean_str(row.get(publisher_col))
-            if publisher:
-                item["publisher"] = publisher
-        if medium_col:
-            medium = clean_str(row.get(medium_col))
-            if medium:
-                item["medium"] = medium
-        if type_col:
-            t = clean_str(row.get(type_col))
-            if t:
-                item["type"] = t
-        if extent_col:
-            ext = clean_str(row.get(extent_col))
-            if ext:
-                item["extent"] = ext
-
-        items.append(item)
+        item = build_item(row, columns)
+        if item is not None:
+            items.append(item)
 
     # Most-recent first by date string (ISO sorts lexically).
     items.sort(key=lambda i: i.get("date") or "", reverse=True)
@@ -264,6 +287,47 @@ def split_by_facet(
     return out
 
 
+def build_similar_by_id(
+    df: pd.DataFrame,
+    columns: Dict[str, Optional[str]],
+    embed_col: str,
+    top_k: int = SIMILAR_TOP_K,
+) -> Dict[str, List[Dict[str, Any]]]:
+    """``{o_id: [neighbour card, …]}`` by cosine similarity over
+    ``embed_col``, for subsets that carry an embedding.
+
+    Rows without a usable vector are simply absent from the map — the
+    client falls back to the recency list for those, so partial
+    embedding coverage degrades gracefully instead of emptying the
+    panel.
+    """
+    if embed_col not in df.columns:
+        return {}
+
+    X, valid = build_normalized_matrix(df, embed_col)
+    if X.shape[0] < 2:
+        return {}
+
+    neighbours = top_k_cosine(X, valid, top_k)
+    out: Dict[str, List[Dict[str, Any]]] = {}
+
+    for i, row_pos in enumerate(valid):
+        source = build_item(df.iloc[row_pos], columns)
+        if source is None:
+            continue
+        cards: List[Dict[str, Any]] = []
+        for matrix_idx, score in neighbours[i]:
+            card = build_item(df.iloc[valid[matrix_idx]], columns)
+            if card is None:
+                continue
+            card["score"] = round(score, 4)
+            cards.append(card)
+        if cards:
+            out[str(source["o_id"])] = cards
+
+    return out
+
+
 def build_subset_summary(
     subset_name: str,
     df: pd.DataFrame,
@@ -277,11 +341,19 @@ def build_subset_summary(
         summary["by_medium"] = split_by_facet(df, columns["medium"], columns)
 
     if subset_name == "documents" and columns["type"]:
-        # Free-text — drives template 15 (Photograph) plus any future
-        # per-document-type partials. The keys carried in the JSON are
-        # NFC-normalised lowercase forms of whatever the source data
-        # contains.
+        # Free-text. Photographs left this subset in 2026-07 (they are
+        # class 58 with their own `images` subset now), so no partial
+        # reads a `by_type` slice today — it stays for the granular
+        # per-document-type splits the block can grow into. The keys
+        # carried in the JSON are NFC-normalised lowercase forms of
+        # whatever the source data contains.
         summary["by_type"] = split_by_facet(df, columns["type"], columns)
+
+    embed_col = EMBEDDING_COLUMNS.get(subset_name)
+    if embed_col:
+        similar = build_similar_by_id(df, columns, embed_col)
+        if similar:
+            summary["similar_by_id"] = similar
 
     return summary
 
@@ -331,6 +403,13 @@ def main() -> int:
         if "by_type" in summary:
             for k, v in summary["by_type"].items():
                 logger.info(f"    type='{k}' ({v.get('label','?')}): {v['total']} items")
+        if "similar_by_id" in summary:
+            logger.info(
+                "    semantic neighbours for %d/%d items (%s)",
+                len(summary["similar_by_id"]),
+                summary["total"],
+                EMBEDDING_COLUMNS[subset_name],
+            )
 
     bundle = create_metadata_block(
         total_records=total_records,
