@@ -119,38 +119,44 @@ DEFAULT_MIN_LOG_RATIO = 0.585
 # gamma = the cost of entering the burst state (higher = fewer, stronger
 # bursts). Both keep the reference implementation's values so the two agree.
 #
-# gamma is deliberately NOT the lever for the over-detection the first real
-# run showed (a burst in 325 of 341 subjects). It is a one-off entry cost of
-# gamma*ln(T) ~ 4.25 over a 70-year span, while a multi-year burst saves 40+
-# — so tripling gamma suppressed none of the false positives in testing and
-# would have started eating real ones before it touched them. The real cause
-# is handled in build_bursts; see DROP_ONSET_ARTEFACTS below.
+# gamma is NOT the lever for the burst rate, measured rather than assumed:
+# it is a one-off entry cost of gamma*ln(T) ~ 4.25 over a 65-year span,
+# while a multi-year burst saves 40+, so tripling it suppressed none of the
+# false positives and would have eaten real ones first. `s` is the knob that
+# moves the rate — see the note on DROP_ONSET_ARTEFACTS for the measured
+# false-positive rates at each value, and for why the current rate is mostly
+# real rather than a defect.
 DEFAULT_BURST_S = 2.0
 DEFAULT_BURST_GAMMA = 1.0
 
-# Vocabulary-onset artefacts. Subjects enter the controlled vocabulary
-# partway through the corpus, so one introduced in 2010 and used steadily
-# since carries decades of structural zeroes that the automaton reads as a
-# single burst running from its first appearance to the present. That is the
-# subject's lifetime, not a spike in coverage, and it was the bulk of the
-# 325-of-341 over-detection the first real run showed.
+# Vocabulary-onset artefacts: a burst that starts at a subject's FIRST
+# occurrence and runs to the LAST year of the corpus. That shape is the
+# subject's arrival in the controlled vocabulary — it appeared and never came
+# back down — rather than a change in how much it was covered, so it is
+# dropped. Every other shape survives the rule: a subject tagged only in
+# 2003-2004, a spike that returns to baseline, and a late surge still rising
+# at the corpus edge were all checked against it.
 #
-# The signature is exact: the burst starts at the subject's FIRST occurrence
-# and ends at the LAST year of the corpus — it appears and never comes back
-# down. Testing that rule against the four patterns that matter, it rejects
-# only the artefact:
+# HONEST STATUS: on the real corpus this fires on ZERO subjects. It was
+# introduced to explain the 325-of-341 burst rate and does not, because that
+# rate has a different cause (see below). It is kept because the rule is
+# still correct — such a burst would be an artefact if one occurred — but it
+# is not load-bearing, and the 95% figure is unchanged by it.
 #
-#   introduced 2010 then steady   2010-2024  onset  -> dropped
-#   tagged only in 2003-2004      2003-2004         -> kept
-#   spike that returns to base    2000-2002         -> kept
-#   late surge, still rising      2015-2024         -> kept (starts long
-#                                                     after first occurrence)
+# What the 95% actually is, measured rather than assumed: simulating pure
+# Poisson subjects with a constant underlying rate over this corpus's
+# year-volume profile, ~15% burst spuriously at s=2.0 (falling to 6% at
+# s=3.0 and 2% at s=4.0). Noise therefore explains only a sixth of it. The
+# rest appears to be real: subject coverage in a historical press archive
+# genuinely does concentrate around events, so "at some point in 65 years
+# this subject ran at twice its own average for a stretch" is true of most
+# subjects. A high rate here is a property of the corpus meeting a
+# permissive threshold, not evidence of a broken detector — and the panel
+# ranks by burst weight and keeps the strongest 40, so what a reader sees is
+# the top of that distribution either way.
 #
-# An earlier attempt restricted the automaton to each subject's active span
-# instead. That also removed the artefact, but it discarded the sharpest
-# signals in the corpus: a subject tagged only in 2003-2004 has a two-year
-# span, which is flat within itself and so bursts nowhere — exactly the
-# event a reader most wants to see.
+# `s` is the knob if "burst" should mean exceptional rather than
+# above-average; the false-positive rates above are the basis for choosing.
 DROP_ONSET_ARTEFACTS = True
 
 # A subject needs this many tagged articles before burst detection is run
