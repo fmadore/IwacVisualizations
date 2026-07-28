@@ -126,7 +126,18 @@ DEFAULT_MIN_LOG_RATIO = 0.585
 # moves the rate — see the note on DROP_ONSET_ARTEFACTS for the measured
 # false-positive rates at each value, and for why the current rate is mostly
 # real rather than a defect.
-DEFAULT_BURST_S = 2.0
+# s = 3.0 departs from the reference implementation's 2.0 by decision: a
+# burst should mean a subject ran at THREE times its own long-run rate, not
+# twice. The basis is measured rather than taste — simulating pure Poisson
+# subjects (constant rate, no real burst) over this corpus's year-volume
+# profile, spurious bursts fall from ~15% of subjects at s=2.0 to ~6% at
+# s=3.0 and ~2% at s=4.0. 3.0 removes most of the noise floor while keeping
+# the threshold recognisable as "much more than usual"; 4.0 starts demanding
+# a quadrupling, which on a corpus this size reports only the largest few
+# events. Raising s also changes burst WEIGHTS (the cost saved against the
+# base state), so the panel's top-40 ranking shifts somewhat, not just its
+# membership.
+DEFAULT_BURST_S = 3.0
 DEFAULT_BURST_GAMMA = 1.0
 
 # Vocabulary-onset artefacts: a burst that starts at a subject's FIRST

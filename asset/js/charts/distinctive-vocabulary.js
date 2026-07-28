@@ -215,7 +215,10 @@
             P.t('bursts_title'),
             P.t('bursts_desc', {
                 min: P.formatNumber(params.min_subject_total || 30),
-                s:   params.burst_s != null ? params.burst_s : 2
+                // Fallback matches the generator's DEFAULT_BURST_S; the
+                // payload normally carries the real value, so this only
+                // shows on a bundle predating the `params` block.
+                s:   params.burst_s != null ? params.burst_s : 3
             })
         );
         panel.chart.classList.add('iwac-vis-keyness__bursts');
