@@ -9,7 +9,8 @@
     "build:css": "node scripts/build-css.js",
     "lint:theme": "node scripts/check-theme-tokens.js",
     "lint:blocks": "node scripts/check-blocks.js",
-    "lint": "npm run lint:theme && npm run lint:blocks"
+    "lint:py": "node scripts/check-python.js",
+    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:py"
   },
   "devDependencies": {
     "csso": "^5.0.5",

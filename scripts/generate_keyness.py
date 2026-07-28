@@ -79,8 +79,6 @@ from iwac_stats import (
 from iwac_utils import (
     add_standard_args,
     canonical_country,
-    clean_str,
-    configure_logging,
     create_metadata_block,
     extract_year,
     is_unknown,
@@ -125,8 +123,8 @@ DEFAULT_MIN_LOG_RATIO = 0.585
 # run showed (a burst in 325 of 341 subjects). It is a one-off entry cost of
 # gamma*ln(T) ~ 4.25 over a 70-year span, while a multi-year burst saves 40+
 # — so tripling gamma suppressed none of the false positives in testing and
-# would have started eating real ones before it touched them. The cause was
-# the comparison window, fixed in build_bursts; see MIN_ACTIVE_SPAN_YEARS.
+# would have started eating real ones before it touched them. The real cause
+# is handled in build_bursts; see DROP_ONSET_ARTEFACTS below.
 DEFAULT_BURST_S = 2.0
 DEFAULT_BURST_GAMMA = 1.0
 
