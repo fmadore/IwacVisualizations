@@ -48,8 +48,12 @@
             chart: 'calendarHeatmap',
             wide: true,
             dataKey: 'calendar',
-            title: 'Year × day calendar',
-            description: 'desc_topic_calendar'
+            title: 'cal_panel_title',
+            description: 'desc_topic_calendar',
+            // Month grid by default: a topic's articles spread over six
+            // decades render as near-empty whitespace at day resolution.
+            // Day and Hijri stay one click away in the renderer's facet bar.
+            options: { granularity: 'month', unitKey: 'articles_count' }
         },
         {
             chart: 'horizontalBar',
@@ -88,6 +92,61 @@
             options: { max: 10, lowSignal: 0 }
         }
     ]);
+
+    /* ----------------------------------------------------------------- */
+    /*  Deep linking — ?topic=<id>                                        */
+    /* ----------------------------------------------------------------- */
+    //
+    // A topic's detail view is a destination, not a transient UI state:
+    // it is what gets cited in a footnote, pasted into an email, or
+    // bookmarked. So it earns a URL. A query parameter rather than a
+    // hash, because the hash is already the page's anchor namespace and
+    // an Omeka page ignores query params it doesn't know.
+    //
+    // Every failure mode here is non-fatal by design: a sandboxed iframe
+    // throws on pushState, `URL` may be missing on an ancient browser.
+    // In both cases the block keeps working and simply stops syncing
+    // the address bar.
+
+    var URL_PARAM = 'topic';
+
+    function readTopicFromUrl() {
+        if (typeof URLSearchParams === 'undefined') return null;
+        try {
+            var raw = new URLSearchParams(window.location.search).get(URL_PARAM);
+            if (raw == null || raw === '') return null;
+            var id = parseInt(raw, 10);
+            return isNaN(id) ? null : id;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function topicUrl(topicId) {
+        try {
+            var url = new URL(window.location.href);
+            if (topicId == null) url.searchParams['delete'](URL_PARAM);
+            else url.searchParams.set(URL_PARAM, String(topicId));
+            return url.toString();
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function syncUrl(topicId, replace) {
+        if (!window.history || !window.history.pushState) return;
+        var href = topicUrl(topicId);
+        if (!href || href === window.location.href) return;
+        try {
+            window.history[replace ? 'replaceState' : 'pushState'](
+                { iwacTopic: topicId }, '', href
+            );
+        } catch (e) { /* cross-origin embed — address bar stays as it is */ }
+    }
+
+    function findTopic(data, topicId) {
+        return (data.topics || []).find(function (t) { return t.id === topicId; }) || null;
+    }
 
     /* ----------------------------------------------------------------- */
     /*  Bootstrapping                                                     */
@@ -145,8 +204,28 @@
         body.appendChild(overview);
         body.appendChild(detail);
 
+        var nav = { overview: overview, detail: detail, ctx: ctx };
+
         renderOverview(overview, data, function (topicId) {
-            showDetail(container, overview, detail, ctx, topicId);
+            if (!showDetail(nav, topicId, true)) return;
+            syncUrl(topicId, false);
+        });
+
+        // Landing straight on ?topic=7 opens that topic. replaceState
+        // rather than push, so the entry the reader arrived on stays the
+        // topic itself and Back leaves the page instead of bouncing to
+        // an overview they never saw.
+        var deepLinked = readTopicFromUrl();
+        if (deepLinked != null && findTopic(data, deepLinked)) {
+            showDetail(nav, deepLinked, true);
+            syncUrl(deepLinked, true);
+        }
+
+        // Back / Forward move between the overview and topics.
+        window.addEventListener('popstate', function () {
+            var id = readTopicFromUrl();
+            if (id != null && findTopic(data, id)) showDetail(nav, id, false);
+            else showOverview(nav);
         });
     }
 
@@ -496,19 +575,34 @@
     /*  Detail view — declarative layout via dashboardLayout.render()     */
     /* ----------------------------------------------------------------- */
 
-    function showDetail(container, overview, detail, ctx, topicId) {
-        var topic = (ctx.data.topics || []).find(function (t) {
-            return t.id === topicId;
-        });
-        if (!topic) return;
+    function showOverview(nav) {
+        nav.detail.classList.remove('is-active');
+        nav.overview.classList.add('is-active');
+    }
+
+    /**
+     * Swap to a topic's detail view. Returns false when the id matches no
+     * topic, so callers can skip the URL write for a bad `?topic=` value.
+     *
+     * `scroll` is false when the move came from Back/Forward: the browser
+     * restores the scroll position itself, and fighting it lands the
+     * reader somewhere neither of them chose.
+     */
+    function showDetail(nav, topicId, scroll) {
+        var ctx = nav.ctx;
+        var overview = nav.overview;
+        var detail = nav.detail;
+
+        var topic = findTopic(ctx.data, topicId);
+        if (!topic) return false;
 
         overview.classList.remove('is-active');
         detail.classList.add('is-active');
         detail.innerHTML = '';
 
         detail.appendChild(buildDetailHeader(topic, function back() {
-            detail.classList.remove('is-active');
-            overview.classList.add('is-active');
+            showOverview(nav);
+            syncUrl(null, false);
         }));
 
         // Build the slice bundle the layout's slots will read from.
@@ -538,9 +632,12 @@
         // Bring the detail header into view smoothly so the user
         // doesn't have to scroll up after clicking a topic deep
         // in the overview's card grid.
-        try {
-            detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } catch (e) { /* old browsers ignore the options bag */ }
+        if (scroll) {
+            try {
+                detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (e) { /* old browsers ignore the options bag */ }
+        }
+        return true;
     }
 
     function buildDetailHeader(topic, onBack) {
@@ -552,11 +649,35 @@
             'iwac-vis-topic-detail__title',
             P.t('Topic') + ' ' + topic.id
         ));
+        var actions = P.el('div', 'iwac-vis-topic-detail__actions');
+
         var back = P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__back',
             '← ' + P.t('Back to all topics'));
         back.type = 'button';
         back.addEventListener('click', onBack);
-        topRow.appendChild(back);
+        actions.appendChild(back);
+
+        // The address bar already carries the topic URL; this just makes
+        // that discoverable. Omitted when there's no URL to hand out
+        // (no `URL` support) or no clipboard helper on the page.
+        var href = topicUrl(topic.id);
+        if (href && ns.embed && ns.embed.copyToClipboard) {
+            var copy = P.el('button', 'iwac-vis-btn iwac-vis-topic-detail__copy',
+                P.t('topic_copy_link'));
+            copy.type = 'button';
+            copy.addEventListener('click', function () {
+                ns.embed.copyToClipboard(href);
+                copy.textContent = P.t('topic_link_copied');
+                copy.classList.add('iwac-vis-embed-btn--copied');
+                setTimeout(function () {
+                    copy.textContent = P.t('topic_copy_link');
+                    copy.classList.remove('iwac-vis-embed-btn--copied');
+                }, 2000);
+            });
+            actions.appendChild(copy);
+        }
+
+        topRow.appendChild(actions);
         header.appendChild(topRow);
 
         if (topic.top_words && topic.top_words.length) {
@@ -586,15 +707,5 @@
         header.appendChild(meta);
 
         return header;
-    }
-
-    /* ----------------------------------------------------------------- */
-    /*  Boot                                                              */
-    /* ----------------------------------------------------------------- */
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
     }
 })();

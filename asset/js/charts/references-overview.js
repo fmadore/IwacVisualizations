@@ -369,6 +369,211 @@
     }
 
     /* ----------------------------------------------------------------- */
+    /*  Semantic landscape — UMAP scatter of the embedded references       */
+    /* ----------------------------------------------------------------- */
+    //
+    // The bibliography's counterpart to the press corpus's Semantic
+    // Landscape block, as a panel rather than a block: at ~423 points
+    // it is one view among several here, not a destination of its own.
+    // Both are UMAP over 768-dim gemini-embedding-2 vectors, so the two
+    // maps are built the same way — but they are separate projections
+    // and coordinates are NOT comparable across them.
+
+    var LANDSCAPE_FACETS = ['type', 'country', 'decade'];
+    var LANDSCAPE_FACET_LABEL = { type: 'Type', country: 'Country', decade: 'Decade' };
+
+    function landscapeHasPoints(landscape) {
+        return !!(landscape && landscape.points &&
+                  landscape.points.o_id && landscape.points.o_id.length);
+    }
+
+    /** Which facets the bundle can actually colour by. */
+    function landscapeFacets(landscape) {
+        return LANDSCAPE_FACETS.filter(function (f) {
+            var table = f === 'type' ? landscape.types
+                      : f === 'country' ? landscape.countries
+                      : landscape.decades;
+            return table && table.length > 1;
+        });
+    }
+
+    /**
+     * Bucket point indices by the active facet's category. Points whose
+     * category is missing (-1) land in "Other" rather than vanishing —
+     * a reference with no recorded country is still a reference, and
+     * dropping it would quietly shrink the map when the facet changes.
+     */
+    function landscapeGroups(landscape, facet) {
+        var pts = landscape.points;
+        var table = facet === 'type' ? (landscape.types || [])
+                  : facet === 'country' ? (landscape.countries || [])
+                  : (landscape.decades || []);
+        var column = pts[facet] || [];
+        var other = P.t('Other');
+
+        var groups = {};
+        var order = [];
+        for (var i = 0; i < pts.o_id.length; i++) {
+            var idx = column[i];
+            var name = idx >= 0 && table[idx] != null ? table[idx] : other;
+            if (facet === 'type') name = translateType(name);
+            if (!groups[name]) { groups[name] = []; order.push(name); }
+            groups[name].push(i);
+        }
+        // Decades read chronologically; the rest by size, "Other" last.
+        if (facet === 'decade') order.sort();
+        else order.sort(function (a, b) { return groups[b].length - groups[a].length; });
+        var tail = order.indexOf(other);
+        if (tail !== -1) order.splice(order.length - 1, 0, order.splice(tail, 1)[0]);
+        return { groups: groups, order: order };
+    }
+
+    function landscapeOption(landscape, facet) {
+        var pts = landscape.points;
+        var grouped = landscapeGroups(landscape, facet);
+        var types = landscape.types || [];
+
+        return {
+            legend: {
+                type: 'scroll',
+                bottom: 0,
+                itemWidth: 12,
+                itemHeight: 10,
+                data: grouped.order.slice()
+            },
+            tooltip: {
+                trigger: 'item',
+                confine: true,
+                formatter: function (p) {
+                    var i = p.data[2];
+                    var bits = [];
+                    if (pts.author && pts.author[i]) bits.push(pts.author[i]);
+                    var t = pts.type ? pts.type[i] : -1;
+                    if (t >= 0 && types[t]) bits.push(translateType(types[t]));
+                    if (pts.year && pts.year[i]) bits.push(String(pts.year[i]));
+                    return '<strong>' + P.escapeHtml(pts.title[i] || '') + '</strong>'
+                        + (bits.length ? '<br>' + P.escapeHtml(bits.join(' · ')) : '');
+                }
+            },
+            grid: { left: 8, right: 8, top: 8, bottom: 36 },
+            // UMAP coordinates carry no unit — only relative position is
+            // meaningful — so the axes are hidden rather than labelled
+            // with numbers a reader could mistake for a measurement.
+            xAxis: { type: 'value', scale: true, show: false },
+            yAxis: { type: 'value', scale: true, show: false },
+            dataZoom: [
+                { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+                { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
+            ],
+            series: grouped.order.map(function (name) {
+                return {
+                    name: name,
+                    type: 'scatter',
+                    // Larger than the article landscape's 4px: a few
+                    // hundred points can afford to be legible.
+                    symbolSize: 7,
+                    itemStyle: { opacity: 0.75 },
+                    emphasis: { itemStyle: { opacity: 1 } },
+                    // [x, y, point-index] — the index feeds tooltip + click.
+                    data: grouped.groups[name].map(function (i) {
+                        return [pts.x[i], pts.y[i], i];
+                    })
+                };
+            }),
+            animation: false
+        };
+    }
+
+    /**
+     * Draw the landscape panel, or explain why there is nothing to draw.
+     *
+     * The generator ships an empty-state contract (same keys, no points)
+     * when umap-learn is missing or too few references are embedded, so
+     * this reads `meta.reason` and says which rather than rendering a
+     * bare "no data" box the reader can't act on.
+     */
+    function renderLandscape(panel, host, landscape, siteBase) {
+        var meta = (landscape && landscape.meta) || {};
+        if (!landscapeHasPoints(landscape)) {
+            var messageKey = meta.reason === 'umap_not_installed'
+                ? 'references_landscape_empty_umap'
+                : meta.reason === 'too_few_embeddings'
+                    ? 'references_landscape_empty_few'
+                    : 'references_landscape_empty';
+            host.appendChild(P.buildEmptyState(P.t(messageKey)));
+            panel.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
+            return;
+        }
+
+        var facets = landscapeFacets(landscape);
+        if (!facets.length) facets = ['type'];
+        var state = { facet: facets[0] };
+
+        if (facets.length > 1 && P.buildFacetButtons) {
+            var subFacets = {};
+            facets.forEach(function (f) { subFacets[f] = P.t(LANDSCAPE_FACET_LABEL[f]); });
+            var facetBar = P.buildFacetButtons({
+                facets: [{
+                    key: 'facet',
+                    label: P.t('Color by'),
+                    subFacets: subFacets,
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'facet',
+                onChange: function (evt) {
+                    var f = evt.subFacet || facets[0];
+                    if (facets.indexOf(f) === -1) f = facets[0];
+                    state.facet = f;
+                    var live = ns.getLiveChart && ns.getLiveChart(host);
+                    // `true` — each facet produces a different series
+                    // set, so a merged update would leave the previous
+                    // facet's groups on the canvas.
+                    if (live) live.setOption(landscapeOption(landscape, state.facet), true);
+                }
+            });
+            panel.panel.insertBefore(facetBar.root, host);
+        }
+
+        var chart = ns.registerChart(host, function (el, instance) {
+            instance.setOption(landscapeOption(landscape, state.facet), true);
+        });
+
+        if (chart && siteBase) {
+            chart.on('click', function (params) {
+                var i = params.data && params.data[2];
+                if (i == null) return;
+                var oId = landscape.points.o_id[i];
+                if (oId != null) window.location.href = siteBase + '/item/' + oId;
+            });
+        }
+        if (chart && P.addFullscreenButton) {
+            P.addFullscreenButton(panel.panel, {
+                onResize: function () {
+                    var live = ns.getLiveChart && ns.getLiveChart(host);
+                    if (live) live.resize();
+                }
+            });
+        }
+    }
+
+    /**
+     * The landscape's description, carrying its denominators for the
+     * same reason the coverage panel does — except here the stakes are
+     * higher, because a scatter of every point *looks* exhaustive. The
+     * embedded half is not a random sample of the bibliography: it is
+     * what IWAC could obtain and digitise.
+     */
+    function landscapeDescription(landscape) {
+        var meta = (landscape && landscape.meta) || {};
+        if (!meta.total) return P.t('references_landscape_desc');
+        return P.t('references_landscape_desc_full', {
+            embedded: P.formatNumber(meta.embedded || 0),
+            total:    P.formatNumber(meta.total || 0),
+            pct:      Math.round(((meta.embedded || 0) / meta.total) * 100)
+        });
+    }
+
+    /* ----------------------------------------------------------------- */
     /*  Layout composition                                                */
     /* ----------------------------------------------------------------- */
 
@@ -391,7 +596,7 @@
         });
     }
 
-    function buildLayout(container, summary, topicModels, coverage) {
+    function buildLayout(container, summary, topicModels, coverage, landscape) {
         container.innerHTML = '';
         var root = P.el('div', 'iwac-vis-overview-root');
         container.appendChild(root);
@@ -444,6 +649,18 @@
             );
             return { model: model, panel: panel.panel, chart: panel.chart };
         });
+        var landscapePanel = P.buildPanel(
+            'iwac-vis-panel iwac-vis-panel--wide',
+            P.t('Semantic landscape of the literature'),
+            // With no projection there is nothing for the description to
+            // describe — "covers 0 of 867 references" over an empty box
+            // reads as a broken panel. The empty state says why instead.
+            landscapeHasPoints(landscape) ? landscapeDescription(landscape) : null
+        );
+        // A scatter needs room to separate; reuse the graph host's 640px
+        // reservation rather than the 320px default, as the landscape
+        // block does.
+        landscapePanel.chart.classList.add('iwac-vis-graph-host');
         var provenancePanel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide',
             P.t('Reference provenance'),
@@ -471,6 +688,7 @@
         grid.appendChild(treemapPanel.panel);
         grid.appendChild(coveragePanel.panel);
         topicPanels.forEach(function (entry) { grid.appendChild(entry.panel); });
+        grid.appendChild(landscapePanel.panel);
         grid.appendChild(provenancePanel.panel);
         grid.appendChild(subjectCooccurrencePanel.panel);
         grid.appendChild(networkPanel.panel);
@@ -487,6 +705,8 @@
             coverage:  coveragePanel,
             coverageChart: coveragePanel.chart,
             topicPanels: topicPanels,
+            landscape: landscapePanel,
+            landscapeChart: landscapePanel.chart,
             provenance: provenancePanel,
             provenanceChart: provenancePanel.chart,
             subjectCooccurrence: subjectCooccurrencePanel,
@@ -580,7 +800,8 @@
         var topicModels = data.topics.filter(function (m) {
             return m && m.topics && m.topics.length > 0;
         });
-        var h = buildLayout(container, data.summary, topicModels, data.fulltext);
+        var landscape = raw.semantic_landscape || null;
+        var h = buildLayout(container, data.summary, topicModels, data.fulltext, landscape);
 
         // 1. Timeline
         if (data.timeline.years && data.timeline.years.length > 0) {
@@ -656,10 +877,13 @@
             });
         });
 
-        // 11. Reference provenance map
+        // 11. Semantic landscape of the embedded references
+        renderLandscape(h.landscape, h.landscapeChart, landscape, siteBase);
+
+        // 12. Reference provenance map
         renderProvenanceMap(h.provenance.panel, h.provenanceChart, data.provenance_map, siteBase);
 
-        // 12. Subject co-occurrence chord
+        // 13. Subject co-occurrence chord
         var subjectChord = subjectGraphToChord(data.subject_cooccurrence, 30);
         if (subjectChord.names.length > 1 && hasChordEdges(subjectChord) && C.chord) {
             var subjectChart = ns.registerChart(h.subjectCooccurrenceChart, function (el, instance) {
@@ -678,7 +902,7 @@
             h.subjectCooccurrence.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
         }
 
-        // 13. Author collaboration network
+        // 14. Author collaboration network
         var graph = data.author_collaborations;
         if (graph.nodes && graph.nodes.length > 1 && C.collaborationNetwork) {
             var chart = ns.registerChart(h.networkChart, function (el, instance) {

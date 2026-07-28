@@ -39,6 +39,15 @@ Payload shape (top-level keys):
                                  over the same lda_* columns, so the
                                  grouping key is (lda_model_name,
                                  lda_topic_id) — see compute_topics.
+    semantic_landscape         — 2-D UMAP projection of the references
+                                 that carry an ``embedding_OCR``, in the
+                                 columnar {types, countries, decades,
+                                 points, meta} shape. Covers only the
+                                 embedded subset (~423/867) and says so
+                                 in ``meta.embedded`` / ``meta.total``.
+                                 Degrades to an empty-state contract when
+                                 umap-learn is absent or the subset is
+                                 too small to project honestly.
     provenance_map             — geocoded reference-origin points
     subject_cooccurrence       — { nodes, edges, meta } subject graph
     author_collaborations      — { nodes, edges } graph of co-authoring +
@@ -68,6 +77,7 @@ from itertools import combinations
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
 import pandas as pd
 
 from iwac_embeddings import coerce_embedding
@@ -109,6 +119,17 @@ PROVENANCE_COLUMNS = ("provenance", "Provenance", "place", "Place", "lieu", "Lie
 
 # Representative references kept per LDA topic (highest lda_topic_prob).
 TOPIC_ITEMS_PER_TOPIC = 5
+
+# Semantic landscape (UMAP over embedding_OCR). The bibliography is two
+# orders of magnitude smaller than the article corpus, so the default
+# neighbourhood shrinks with it — 15 neighbours over ~400 points smooths
+# away the local structure the map exists to show. Below LANDSCAPE_MIN_POINTS
+# the projection says more about UMAP than about the literature, so the
+# panel renders its empty state instead.
+DEFAULT_LANDSCAPE_N_NEIGHBORS = 10
+DEFAULT_LANDSCAPE_MIN_DIST = 0.15
+LANDSCAPE_MIN_POINTS = 30
+LANDSCAPE_TITLE_LEN = 70
 
 # LDA outlier bucket — excluded from the topic panel, as everywhere else
 # in the module.
@@ -499,6 +520,179 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
     # bibliography without hardcoding which model that is.
     out_models.sort(key=lambda entry: -entry["n_docs"])
     return {"models": out_models}
+
+
+def _empty_landscape(reason: str, embedded: int = 0, total: int = 0) -> Dict[str, Any]:
+    """Empty-state contract, same shape as a populated bundle.
+
+    Follows ``_empty_provenance_map``: the panel is optional, so an
+    absent projection must be a rendered explanation rather than a
+    crashed build. UMAP is the only optional dependency in this script,
+    and a bibliography refresh should not fail because it is missing.
+    """
+    return {
+        "types": [],
+        "countries": [],
+        "decades": [],
+        "points": {
+            "o_id": [], "x": [], "y": [], "title": [], "author": [],
+            "type": [], "country": [], "decade": [], "year": [],
+        },
+        "meta": {
+            "embedded": int(embedded),
+            "total": int(total),
+            "reason": reason,
+            "umap": None,
+        },
+    }
+
+
+def compute_semantic_landscape(
+    rows: pd.DataFrame,
+    n_neighbors: int,
+    min_dist: float,
+    max_title_len: int,
+) -> Dict[str, Any]:
+    """2-D UMAP projection of the references that carry an embedding.
+
+    Same recipe as ``generate_semantic_landscape.py`` (cosine metric over
+    L2-normalised ``embedding_OCR``, fixed ``random_state``), so a
+    reference and an article land in comparable geometry — both are
+    ``gemini-embedding-2`` at 768 dims.
+
+    **Read the coverage before reading the map.** Only the references
+    IWAC holds full text for have an embedding — roughly half — and that
+    half is not a random sample: it skews toward what could be obtained
+    and digitised. The projection is therefore a map of the digitised
+    bibliography, never of the field. ``meta.embedded`` / ``meta.total``
+    carry the denominators so the panel can say so out loud.
+
+    Neighbourhood size is deliberately smaller than the 12k-article
+    landscape's default: at a few hundred points, ``n_neighbors=15``
+    starts smoothing away exactly the local structure that makes a small
+    map worth drawing. It is also clamped to ``len(vectors) - 1``, since
+    UMAP cannot ask for more neighbours than the set contains.
+    """
+    total = int(len(rows))
+    if "embedding_OCR" not in rows.columns:
+        return _empty_landscape("missing_embedding_column", 0, total)
+
+    try:
+        import umap  # type: ignore
+    except ImportError:
+        logging.getLogger(__name__).warning(
+            "umap-learn is not installed — the semantic landscape panel will "
+            "render its empty state (pip install umap-learn)"
+        )
+        return _empty_landscape("umap_not_installed", 0, total)
+
+    vectors: List[Any] = []
+    records: List[Dict[str, Any]] = []
+    dim: Optional[int] = None
+
+    for _, row in rows.iterrows():
+        vec = coerce_embedding(row.get("embedding_OCR"))
+        if vec is None:
+            continue
+        if dim is None:
+            dim = len(vec)
+        elif len(vec) != dim:
+            continue
+
+        # `o:id` specifically, not `_reference_id`: every point is a
+        # click-through to /item/<id>, so a row without an Omeka id has
+        # nowhere to link and is better left off the map.
+        try:
+            o_id = int(_clean_text(row.get("o:id")))
+        except (TypeError, ValueError):
+            continue
+
+        title = _clean_text(row.get("title"))
+        if len(title) > max_title_len:
+            title = title[: max_title_len - 1].rstrip() + "…"
+
+        authors = _clean_unique_list(parse_pipe_separated(row.get("author")))
+        year = extract_year(row.get("pub_date"))
+
+        vectors.append(vec)
+        records.append({
+            "o_id":    o_id,
+            "title":   title,
+            # One name is enough for a tooltip; "et al." signals the rest.
+            "author":  (authors[0] + " et al." if len(authors) > 1 else authors[0]) if authors else "",
+            "type":    _ref_type(row),
+            "country": _clean_text(canonicalize_country_field(row.get("country"))),
+            "year":    year,
+            "decade":  f"{(year // 10) * 10}s" if year is not None else "",
+        })
+
+    embedded = len(vectors)
+    if embedded < LANDSCAPE_MIN_POINTS:
+        return _empty_landscape("too_few_embeddings", embedded, total)
+
+    X = np.vstack(vectors)
+    norms = np.linalg.norm(X, axis=1, keepdims=True)
+    X = X / np.where(norms == 0.0, 1.0, norms)
+
+    neighbors = max(2, min(n_neighbors, embedded - 1))
+    logging.getLogger(__name__).info(
+        "  running UMAP over %d reference embeddings "
+        "(n_neighbors=%d, min_dist=%s, metric=cosine)",
+        embedded, neighbors, min_dist,
+    )
+    reducer = umap.UMAP(
+        n_components=2,
+        n_neighbors=neighbors,
+        min_dist=min_dist,
+        metric="cosine",
+        random_state=42,
+    )
+    coords = reducer.fit_transform(X)
+
+    # Categorical index tables — the columnar shape the landscape block
+    # already consumes, so 400-odd points stay a few KB. Types ship as
+    # raw French: translation is the front end's job (P.t('ref_type_*')),
+    # exactly as the type histogram does.
+    def _index_table(key: str, sort_key: Any) -> Tuple[List[str], Dict[str, int]]:
+        names = sorted({r[key] for r in records if r[key]}, key=sort_key)
+        return names, {name: i for i, name in enumerate(names)}
+
+    type_names, type_index = _index_table("type", lambda v: v.lower())
+    country_names, country_index = _index_table("country", lambda v: v.lower())
+    decade_names, decade_index = _index_table("decade", lambda v: v)
+
+    points: Dict[str, List[Any]] = {
+        "o_id": [], "x": [], "y": [], "title": [], "author": [],
+        "type": [], "country": [], "decade": [], "year": [],
+    }
+    for i, record in enumerate(records):
+        points["o_id"].append(record["o_id"])
+        points["x"].append(round(float(coords[i, 0]), 2))
+        points["y"].append(round(float(coords[i, 1]), 2))
+        points["title"].append(record["title"])
+        points["author"].append(record["author"])
+        points["type"].append(type_index.get(record["type"], -1))
+        points["country"].append(country_index.get(record["country"], -1))
+        points["decade"].append(decade_index.get(record["decade"], -1))
+        points["year"].append(record["year"])
+
+    return {
+        "types":     type_names,
+        "countries": country_names,
+        "decades":   decade_names,
+        "points":    points,
+        "meta": {
+            "embedded": embedded,
+            "total":    total,
+            "reason":   "",
+            "umap": {
+                "n_neighbors":  neighbors,
+                "min_dist":     min_dist,
+                "metric":       "cosine",
+                "random_state": 42,
+            },
+        },
+    }
 
 
 def compute_publisher_rankings(
@@ -965,6 +1159,9 @@ def build_references_overview(
     network_min_degree: int,
     subject_network_min_weight: int,
     topic_items: int = TOPIC_ITEMS_PER_TOPIC,
+    landscape_n_neighbors: int = DEFAULT_LANDSCAPE_N_NEIGHBORS,
+    landscape_min_dist: float = DEFAULT_LANDSCAPE_MIN_DIST,
+    landscape: bool = True,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC references subset from %s", repo_id)
@@ -1005,6 +1202,23 @@ def build_references_overview(
             model["n_topics"], model["n_docs"],
         )
 
+    if landscape:
+        semantic_landscape = compute_semantic_landscape(
+            df,
+            n_neighbors=landscape_n_neighbors,
+            min_dist=landscape_min_dist,
+            max_title_len=LANDSCAPE_TITLE_LEN,
+        )
+    else:
+        semantic_landscape = _empty_landscape("disabled", 0, int(len(df)))
+    logger.info(
+        "  semantic landscape: %d/%d references projected%s",
+        semantic_landscape["meta"]["embedded"],
+        semantic_landscape["meta"]["total"],
+        f" ({semantic_landscape['meta']['reason']})"
+        if semantic_landscape["meta"]["reason"] else "",
+    )
+
     provenance_field = next((field for field in PROVENANCE_COLUMNS if field in df.columns), None)
     coord_lookup: Dict[str, Dict[str, Any]] = {}
     if provenance_field:
@@ -1042,7 +1256,7 @@ def build_references_overview(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_references_overview.py",
-        script_version="0.3.0",
+        script_version="0.4.0",
     )
 
     return {
@@ -1059,6 +1273,7 @@ def build_references_overview(
         "treemap":               treemap,
         "fulltext":              fulltext,
         "topics":                topics,
+        "semantic_landscape":     semantic_landscape,
         "provenance_map":         provenance_map,
         "subject_cooccurrence":   subject_cooccurrence,
         "author_collaborations": collaborations,
@@ -1097,6 +1312,19 @@ def main() -> None:
         "--topic-items", type=int, default=TOPIC_ITEMS_PER_TOPIC,
         help="Representative references kept per LDA topic (default: %(default)s)",
     )
+    parser.add_argument(
+        "--landscape-n-neighbors", type=int, default=DEFAULT_LANDSCAPE_N_NEIGHBORS,
+        help="UMAP n_neighbors for the semantic landscape (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--landscape-min-dist", type=float, default=DEFAULT_LANDSCAPE_MIN_DIST,
+        help="UMAP min_dist for the semantic landscape (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--landscape", action=argparse.BooleanOptionalAction, default=True,
+        help="Compute the semantic landscape projection (default: %(default)s). "
+             "--no-landscape skips the UMAP pass, which dominates runtime.",
+    )
     parser.add_argument("--minify", action=argparse.BooleanOptionalAction,
                         default=False,
                         help="Produce compact JSON (no indentation) (default: %(default)s)")
@@ -1120,6 +1348,9 @@ def main() -> None:
         network_min_degree=args.network_min_degree,
         subject_network_min_weight=args.subject_network_min_weight,
         topic_items=args.topic_items,
+        landscape_n_neighbors=args.landscape_n_neighbors,
+        landscape_min_dist=args.landscape_min_dist,
+        landscape=args.landscape,
     )
 
     output_path = Path(args.output)
