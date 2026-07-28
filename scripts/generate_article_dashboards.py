@@ -109,10 +109,17 @@ DEFAULT_TOP_K_SCHOLARSHIP = 5
 # lists is reported as a hub. Chunk-averaged embeddings of long documents
 # drift toward the corpus centroid, so a broad survey can end up "most
 # similar" to almost everything — a known artefact of averaging, not a
-# finding about the survey. This only warns; it does not filter, because
-# the right threshold depends on a distribution we can only see once the
-# generator has run against the real data.
+# finding about the survey. Since v1.24.1 the centering correction below is
+# supposed to prevent this, so a warning here now means the correction was
+# not strong enough rather than that no correction exists.
 SCHOLARSHIP_HUB_SHARE = 0.25
+
+# Strength of the hubness penalty: each reference's score is reduced by
+# this multiple of its mean cosine across the whole article corpus. 1.0 is
+# full centering, which is what the literature uses and what the planted-hub
+# test needs to displace a hub while leaving specialists on top. 0 disables
+# the correction, restoring the raw-cosine behaviour of v1.24.0.
+SCHOLARSHIP_HUBNESS_WEIGHT = 1.0
 
 # Shared-entity ids recorded inline per related article, for the tooltip
 # "shares N entities: Djiguiba Cissé, Côte d'Ivoire, Hadj …". More than
@@ -144,6 +151,7 @@ class ArticleDashboardGenerator:
         top_k_semantic: int = DEFAULT_TOP_K_SEMANTIC,
         top_k_scholarship: int = DEFAULT_TOP_K_SCHOLARSHIP,
         scholarship_min_similarity: float = 0.0,
+        scholarship_hubness_weight: float = SCHOLARSHIP_HUBNESS_WEIGHT,
         minify: bool = True,
     ) -> None:
         self.output_dir = output_dir
@@ -153,6 +161,7 @@ class ArticleDashboardGenerator:
         self.top_k_semantic = top_k_semantic
         self.top_k_scholarship = top_k_scholarship
         self.scholarship_min_similarity = scholarship_min_similarity
+        self.scholarship_hubness_weight = scholarship_hubness_weight
         self.minify = minify
 
         self.index_df: Optional[pd.DataFrame] = None
@@ -606,19 +615,52 @@ class ArticleDashboardGenerator:
     # ------------------------------------------------------------------
 
     def compute_scholarship_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
-        """Top-K scholarly works per article, by cosine similarity.
+        """Top-K scholarly works per article, hubness-corrected.
 
         Both sides are ``gemini-embedding-2`` vectors of the same
         dimensionality, so the dot product is meaningful across subsets —
-        but the two are not symmetric in character, and the panel copy says
-        so. An article embeds one short news text; a reference embeds a book
-        or thesis whose chunks were averaged, which pulls long documents
-        toward the corpus centroid. The consequence to watch for is hub
-        formation: a broad survey can come out "most similar" to nearly
-        everything. This method reports the share of articles each reference
-        appears for and warns above ``SCHOLARSHIP_HUB_SHARE`` rather than
-        silently filtering, since the right cut-off depends on a
-        distribution only visible once this has run on the real data.
+        but the two are not symmetric in character. An article embeds one
+        short news text; a reference embeds a book or thesis whose chunks
+        were averaged, which pulls long documents toward the corpus
+        centroid. The first run against the real data showed exactly the
+        predicted failure: one interview surfaced for 38% of all articles
+        and a survey for 32%, which is an artefact of averaging rather than
+        an affinity anyone would recognise.
+
+        A similarity floor cannot fix that, and this method used to suggest
+        one. A hub is close to *everything* by construction — those two sat
+        inside a distribution whose median top-1 was 0.691 — so any
+        threshold high enough to exclude them would first delete the
+        legitimate matches. The correction has to be relative to how
+        popular a reference is overall, not absolute.
+
+        The correction is **global mean centering**: each reference is
+        penalised by its mean cosine across the whole article corpus::
+
+            score(a, r) = cos(a, r) − w · mean_over_all_articles cos(·, r)
+
+        The first attempt here used CSLS (Conneau et al. 2017), which
+        penalises by the mean cosine to a reference's *k nearest* articles.
+        Testing showed that does nothing for this problem: a genuine
+        specialist's ten nearest articles are all in its own tight cluster,
+        so its local density is as high as the hub's and both get penalised
+        equally — the top pick changed for zero articles. What separates a
+        hub from a specialist is not how close its closest neighbours are
+        but how close *everything* is, which only the global mean sees. A
+        specialist that matches a third of the corpus and nothing else
+        carries a small penalty; a work adjacent to all of it carries a
+        large one.
+
+        Global centering is the standard treatment for exactly this
+        (Dinu & Baroni's globally-corrected retrieval; Suzuki et al. on
+        hubness in high-dimensional spaces), and it degrades gracefully:
+        where no specialist matches an article at all, the hub still wins,
+        which is the right answer rather than a gap.
+
+        The **displayed** number stays the raw cosine, and the selected
+        works are re-sorted by it, so the badge means what a reader takes
+        it to mean and the cards descend monotonically. The correction
+        decides *which* works appear, not what the percentage says.
         """
         result: Dict[int, List[Dict[str, Any]]] = {aid: [] for aid in self.target_ids}
         if self.embedding_matrix is None or self.reference_matrix is None:
@@ -635,7 +677,8 @@ class ArticleDashboardGenerator:
         R = self.reference_matrix
         valid = self.valid_embedding_rows
         N = X.shape[0]
-        K = min(self.top_k_scholarship, R.shape[0])
+        M = R.shape[0]
+        K = min(self.top_k_scholarship, M)
         if K <= 0:
             return result
 
@@ -644,19 +687,41 @@ class ArticleDashboardGenerator:
             for article_id, row_idx in self.article_row_index.items()
         }
 
-        hits: Counter = Counter()          # reference row -> articles it surfaced for
-        similarities: List[float] = []      # top-1 similarity per article, for the log
+        # (M, N) raw cosine. 423 x 12,356 float32 is ~21 MB — small enough
+        # to hold whole, which the hubness term needs anyway: it is a
+        # statistic over each reference's entire row.
+        sims = R @ X.T
+
+        # Invalid articles are all-zero rows in X, so their columns are
+        # already 0 and cannot win a top-k. They must still be excluded
+        # from the hubness average, or a corpus with many un-embedded
+        # articles would drag every reference's mean toward zero and
+        # flatten the correction.
+        valid_cols = np.asarray(valid, dtype=bool)
+        n_valid_cols = int(valid_cols.sum())
+        if n_valid_cols == 0:
+            return result
+
+        weight = float(self.scholarship_hubness_weight)
+        if weight > 0.0:
+            # Mean cosine of each reference across the whole article corpus.
+            hubness = sims[:, valid_cols].mean(axis=1)              # (M,)
+        else:
+            hubness = np.zeros(M, dtype=sims.dtype)
+
+        corrected = sims - weight * hubness[:, None]
+
+        hits: Counter = Counter()           # reference row -> articles it surfaced for
+        similarities: List[float] = []      # top-1 RAW cosine per article, for the log
+        displaced = 0                       # picks the correction changed
 
         for start in range(0, N, KNN_BATCH_SIZE):
             end = min(start + KNN_BATCH_SIZE, N)
-            sims = X[start:end] @ R.T       # (B, M) — no self-similarity to mask
+            block_corrected = corrected[:, start:end]   # (M, B)
+            block_raw = sims[:, start:end]
 
-            k_eff = min(K, sims.shape[1])
-            part_idx = np.argpartition(-sims, k_eff - 1, axis=1)[:, :k_eff]
-            part_sims = np.take_along_axis(sims, part_idx, axis=1)
-            order = np.argsort(-part_sims, axis=1)
-            top_idx = np.take_along_axis(part_idx, order, axis=1)
-            top_sims = np.take_along_axis(part_sims, order, axis=1)
+            k_eff = min(K, M)
+            part_idx = np.argpartition(-block_corrected, k_eff - 1, axis=0)[:k_eff, :]
 
             for local_i in range(end - start):
                 global_i = start + local_i
@@ -665,45 +730,75 @@ class ArticleDashboardGenerator:
                 article_id = row_to_id.get(global_i)
                 if article_id is None:
                     continue
-                works: List[Dict[str, Any]] = []
-                for rank in range(k_eff):
-                    ref_row = int(top_idx[local_i, rank])
-                    sim = float(top_sims[local_i, rank])
-                    if sim <= 0.0 or sim < self.scholarship_min_similarity:
+
+                candidates = []
+                for ref_row in part_idx[:, local_i]:
+                    ref_row = int(ref_row)
+                    raw = float(block_raw[ref_row, local_i])
+                    if raw <= 0.0 or raw < self.scholarship_min_similarity:
                         continue
                     meta = self.reference_meta[ref_row]
                     if not meta.get("o_id"):
                         continue
-                    works.append(dict(meta, similarity=round(sim, 4)))
+                    candidates.append((ref_row, raw))
+                if not candidates:
+                    continue
+
+                # Display order is by the raw cosine the badge shows, so the
+                # cards descend monotonically; the correction has already
+                # done its work in choosing *which* candidates got here.
+                candidates.sort(key=lambda pair: -pair[1])
+                works = []
+                for ref_row, raw in candidates:
+                    works.append(dict(self.reference_meta[ref_row],
+                                      similarity=round(raw, 4)))
                     hits[ref_row] += 1
-                if works:
-                    result[article_id] = works
-                    similarities.append(works[0]["similarity"])
+
+                # Did the correction change the pick? Compare against the
+                # uncorrected argmax for this article.
+                if int(np.argmax(block_raw[:, local_i])) != candidates[0][0]:
+                    displaced += 1
+
+                result[article_id] = works
+                similarities.append(works[0]["similarity"])
 
         n_with = sum(1 for v in result.values() if v)
         logger.info(
             "Scholarship links computed for %d/%d articles", n_with, len(result)
         )
+        logger.info(
+            "  hubness correction (global centering, w=%.2f): reference penalties "
+            "span %.3f–%.3f; top pick differs from the uncorrected one for %d articles",
+            weight, float(hubness.min()), float(hubness.max()), displaced,
+        )
         if similarities:
             ordered = sorted(similarities)
             logger.info(
-                "  top-1 similarity: median %.3f, p10 %.3f, p90 %.3f, max %.3f "
-                "(tune --scholarship-min-similarity from this)",
+                "  top-1 raw cosine: median %.3f, p10 %.3f, p90 %.3f, max %.3f",
                 ordered[len(ordered) // 2],
                 ordered[int(len(ordered) * 0.10)],
                 ordered[int(len(ordered) * 0.90)],
                 ordered[-1],
             )
         if n_with:
+            top_share = 0.0
             for ref_row, count in hits.most_common(3):
                 share = count / n_with
+                top_share = max(top_share, share)
                 if share < SCHOLARSHIP_HUB_SHARE:
                     break
                 logger.warning(
-                    "  hub reference: '%s' surfaces for %.0f%% of articles — likely an "
-                    "artefact of chunk-averaging a long text, not a real affinity",
+                    "  hub reference SURVIVED the correction: '%s' still surfaces for "
+                    "%.0f%% of articles — consider raising --scholarship-hubness-weight",
                     (self.reference_meta[ref_row].get("title") or "?")[:70],
                     share * 100,
+                )
+            most_common = hits.most_common(1)
+            if most_common:
+                logger.info(
+                    "  most-surfaced reference now appears for %.0f%% of articles "
+                    "(warn threshold %.0f%%)",
+                    (most_common[0][1] / n_with) * 100, SCHOLARSHIP_HUB_SHARE * 100,
                 )
         return result
 
@@ -917,9 +1012,19 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--scholarship-min-similarity",
         type=float,
         default=0.0,
-        help="Drop scholarship links below this cosine similarity. Default 0 "
-             "reports every positive match and logs the similarity "
-             "distribution; set a floor once you have seen it (default: %(default)s)",
+        help="Drop scholarship links below this raw cosine. Rarely the right "
+             "knob — a hub reference is close to everything, so a floor deletes "
+             "genuine matches before it touches the hub; use "
+             "--scholarship-hubness-weight for that (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--scholarship-hubness-weight",
+        type=float,
+        default=SCHOLARSHIP_HUBNESS_WEIGHT,
+        help="Strength of the hubness penalty: a reference's score drops by "
+             "this multiple of its mean cosine over all articles, so works "
+             "adjacent to the whole corpus stop winning everywhere. "
+             "0 disables it (default: %(default)s)",
     )
     parser.add_argument(
         "--minify",
@@ -948,6 +1053,7 @@ def main() -> int:
         top_k_semantic=args.top_k_semantic,
         top_k_scholarship=args.top_k_scholarship,
         scholarship_min_similarity=args.scholarship_min_similarity,
+        scholarship_hubness_weight=args.scholarship_hubness_weight,
         minify=args.minify,
     )
 

@@ -119,9 +119,41 @@ DEFAULT_MIN_LOG_RATIO = 0.585
 
 # Kleinberg parameters. s = how many times the base rate counts as a burst;
 # gamma = the cost of entering the burst state (higher = fewer, stronger
-# bursts). The reference implementation's defaults, kept so the two agree.
+# bursts). Both keep the reference implementation's values so the two agree.
+#
+# gamma is deliberately NOT the lever for the over-detection the first real
+# run showed (a burst in 325 of 341 subjects). It is a one-off entry cost of
+# gamma*ln(T) ~ 4.25 over a 70-year span, while a multi-year burst saves 40+
+# — so tripling gamma suppressed none of the false positives in testing and
+# would have started eating real ones before it touched them. The cause was
+# the comparison window, fixed in build_bursts; see MIN_ACTIVE_SPAN_YEARS.
 DEFAULT_BURST_S = 2.0
 DEFAULT_BURST_GAMMA = 1.0
+
+# Vocabulary-onset artefacts. Subjects enter the controlled vocabulary
+# partway through the corpus, so one introduced in 2010 and used steadily
+# since carries decades of structural zeroes that the automaton reads as a
+# single burst running from its first appearance to the present. That is the
+# subject's lifetime, not a spike in coverage, and it was the bulk of the
+# 325-of-341 over-detection the first real run showed.
+#
+# The signature is exact: the burst starts at the subject's FIRST occurrence
+# and ends at the LAST year of the corpus — it appears and never comes back
+# down. Testing that rule against the four patterns that matter, it rejects
+# only the artefact:
+#
+#   introduced 2010 then steady   2010-2024  onset  -> dropped
+#   tagged only in 2003-2004      2003-2004         -> kept
+#   spike that returns to base    2000-2002         -> kept
+#   late surge, still rising      2015-2024         -> kept (starts long
+#                                                     after first occurrence)
+#
+# An earlier attempt restricted the automaton to each subject's active span
+# instead. That also removed the artefact, but it discarded the sharpest
+# signals in the corpus: a subject tagged only in 2003-2004 has a two-year
+# span, which is flat within itself and so bursts nowhere — exactly the
+# event a reader most wants to see.
+DROP_ONSET_ARTEFACTS = True
 
 # A subject needs this many tagged articles before burst detection is run
 # on it. Below that the base rate is too noisy for "above base rate" to
@@ -255,15 +287,30 @@ def build_bursts(
     totals = [float(docs_by_year.get(year, 0)) for year in years]
 
     detected: List[Dict[str, Any]] = []
+    onset_dropped = 0
     for subject, total in subject_total.items():
         if total < min_subject_total:
             continue
         counts = [0.0] * len(years)
         for year, count in subject_year[subject].items():
             counts[year_index[year]] = float(count)
+
         bursts = kleinberg_bursts(
             counts, totals, years, s=burst_s, gamma=burst_gamma,
         )
+
+        # Drop the "appeared and never came down" shape — the subject's
+        # arrival in the vocabulary, not a spike in how much it was covered.
+        if bursts and DROP_ONSET_ARTEFACTS:
+            first_year = min(subject_year[subject])
+            kept_bursts = [
+                b for b in bursts
+                if not (b["start"] == first_year and b["end"] == years[-1])
+            ]
+            if len(kept_bursts) != len(bursts):
+                onset_dropped += 1
+            bursts = kept_bursts
+
         if not bursts:
             continue
         peak_year = max(subject_year[subject].items(), key=lambda kv: (kv[1], kv[0]))[0]
@@ -282,11 +329,18 @@ def build_bursts(
         key=lambda entry: (-max(b["weight"] for b in entry["bursts"]), entry["subject"]),
     )
     kept = detected[:max_subjects]
+    tested = sum(1 for t in subject_total.values() if t >= min_subject_total)
     logger.info(
-        "  bursts: %d subjects tested, %d with bursts, %d kept",
-        sum(1 for t in subject_total.values() if t >= min_subject_total),
-        len(detected), len(kept),
+        "  bursts: %d subjects tested, %d with bursts, %d kept "
+        "(%d had a vocabulary-onset burst discarded)",
+        tested, len(detected), len(kept), onset_dropped,
     )
+    if tested:
+        logger.info(
+            "  burst rate: %.0f%% of tested subjects burst at all "
+            "(a rate near 100%% means the detector is not discriminating)",
+            (len(detected) / tested) * 100,
+        )
     if len(detected) > len(kept):
         logger.info(
             "  (%d burst subjects dropped by --max-subjects=%d)",
@@ -297,7 +351,8 @@ def build_bursts(
         "years":       years,
         "docs_total":  [int(t) for t in totals],
         "subjects":    kept,
-        "tested":      sum(1 for t in subject_total.values() if t >= min_subject_total),
+        "tested":      tested,
+        "onset_dropped": onset_dropped,
         "with_bursts": len(detected),
     }
 
