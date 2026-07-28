@@ -127,16 +127,23 @@ DEFAULT_MIN_LOG_RATIO = 0.585
 # false-positive rates at each value, and for why the current rate is mostly
 # real rather than a defect.
 # s = 3.0 departs from the reference implementation's 2.0 by decision: a
-# burst should mean a subject ran at THREE times its own long-run rate, not
-# twice. The basis is measured rather than taste — simulating pure Poisson
-# subjects (constant rate, no real burst) over this corpus's year-volume
-# profile, spurious bursts fall from ~15% of subjects at s=2.0 to ~6% at
-# s=3.0 and ~2% at s=4.0. 3.0 removes most of the noise floor while keeping
-# the threshold recognisable as "much more than usual"; 4.0 starts demanding
-# a quadrupling, which on a corpus this size reports only the largest few
-# events. Raising s also changes burst WEIGHTS (the cost saved against the
-# base state), so the panel's top-40 ranking shifts somewhat, not just its
-# membership.
+# burst means a subject ran at THREE times its own long-run rate, not twice.
+# On simulated pure-Poisson subjects (constant rate, no real burst) over
+# this corpus's year-volume profile, spurious bursts fall from ~15% of
+# subjects at s=2.0 to ~6% at s=3.0 and ~2% at s=4.0.
+#
+# MEASURED EFFECT ON THE REAL CORPUS: almost none on the *rate*. Subjects
+# with a burst went 325 -> 323 of 341; the 95% figure did not move. That is
+# the strongest evidence yet that the rate reflects the archive rather than
+# the threshold — even demanding three times its own average, essentially
+# every subject qualifies somewhere across 65 years, because press coverage
+# concentrates around events. No realistic value of s will make this number
+# small, and chasing it would only start deleting real episodes.
+#
+# What the change DID do is re-scale burst weights (the cost saved against
+# the base state), so the panel's top-40 is now ranked by 3x-relative
+# strength rather than 2x. That is the substantive difference; the ordering
+# shifts rather than the list merely shortening.
 DEFAULT_BURST_S = 3.0
 DEFAULT_BURST_GAMMA = 1.0
 
