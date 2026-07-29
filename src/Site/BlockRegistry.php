@@ -89,7 +89,7 @@ final class BlockRegistry
             'invokable'   => 'onThisDay',
             'class'       => BlockLayout\OnThisDay::class,
             'label'       => 'On This Day', // @translate
-            'description' => 'Items published on today\'s date across the collection\'s decades — newspaper articles and periodical issues with full publication dates. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset. No configuration needed.', // @translate
+            'description' => 'Items published on today\'s date across the collection\'s decades — newspaper articles and periodical issues with full publication dates, with page scans and a line of the text where they exist. Readers can read the day in the Gregorian or the Hijri calendar (each picks its own documents), switch between three layouts, and unfold the full list for the day. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset.', // @translate
             'embeddable'  => true,
         ],
         'org-cooccurrence' => [

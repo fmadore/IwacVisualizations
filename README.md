@@ -23,7 +23,7 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
 | Compare Newspapers | page block | **Live** — side-by-side comparison of two corpora (whole country or single newspaper): timeline, subjects, sentiment, word clouds, split-corpus choropleth | Precompute (`generate_compare_newspapers.py` per-corpus bundles) |
-| On This Day | page block | **Live** — almanac panel of items published on today's date across the decades; deterministic daily picks; removes itself silently without data | Precompute (`generate_on_this_day.py`, 366-file fan-out) |
+| On This Day | page block | **Live** — almanac of items published on today's date across the decades, with scans and ledes; Gregorian / Hijri calendars, three reader-switchable layouts, full-day disclosure; removes itself silently without data | Precompute (`generate_on_this_day.py`, 366 + 360-file fan-out) |
 | Press Bylines | page block | **Live** — byline-coverage cards, signed-share-over-time, top-25 bylines with authority click-through | Precompute (`generate_press_bylines.py`) |
 | Islamic Organisations Co-occurrence | page block | **Live** — sliding-window context matrix per organisation (UIB / CNI / COSIM / CSI / FAIB / UMT) on the shared `C.heatmapMatrix` | Precompute (`generate_org_cooccurrence.py` + curated targets sidecar) |
 | Term Trends | page block | **Live** — the "IWAC Ngram viewer": search any of 5,000 lemmas, overlay up to 8, share-of-articles vs counts | Precompute (`generate_term_trends.py`; per-letter shards fetched lazily) |
@@ -529,7 +529,13 @@ Co-occurrence networks rendered with MapLibre GL (see the v1.7.0 changelog entry
 
 ### On This Day (page block)
 
-The module's one deliberate engagement hook: a quiet almanac panel listing newspaper articles and periodical issues published on today's date (visitor-local) across the collection's decades — a 1970 Togo-Presse graduation piece next to a 2019 Ramadan report. Each row links to its item page. Backed by the `asset/data/on-this-day/{MM-DD}.json` fan-out (`generate_on_this_day.py`, 366 files ~1 KB each; only fully-dated items participate — ~99 % of articles). The client makes a deterministic daily selection spread across the decades (identical for every visitor on a given date) and silently removes the whole block when the day file is missing, so it can sit on a homepage before the first data sync without ever showing an error.
+The module's one deliberate engagement hook: an almanac of newspaper articles and periodical issues published on today's date across the collection's decades — a 1971 Togo-Presse graduation piece next to a 2020 Ramadan report — each entry carrying its page scan and a line of its text, and linking to its item page.
+
+**Two calendars.** A Gregorian / Hijri switch runs the same day through both, and each picks its own documents: the same lunar date across the decades is a different set of items from the same solar date. `generate_on_this_day.py` writes both fan-outs — `on-this-day/{MM-DD}.json` (366 files) and `on-this-day/h/{MM-DD}.json` (360, Umm al-Qura via `hijridate`), ~7 KB median. Only the *current* date is converted in the browser; each item's Hijri year is written into the data, because ICU's tables and `hijridate`'s disagree on ~42 % of pre-2000 dates and a re-derived label would contradict the file the item is filed under.
+
+**Three layouts, one cast.** *Register* (ruled rows, six documents — the default), *Decades* (five documents pinned along the masthead rule turned time axis) and *Clippings* (eight in a three-column mosaic). The page editor picks the opening layout in the block form; the reader can switch, and the choice is remembered. All three draw from one deterministic eight-item cast, so switching changes the rhythm without swapping the documents out. The cast is bucketed by **year range, not list position** — the corpus is heavily skewed to the 2010s, and equal-count segments would render a block promising "across the decades" as a wall of recent years.
+
+**Absent things are designed for.** Only ~44 % of fully-dated items have a scan, so the image-forward layouts fall back to a typographic catalogue slip at the same footprint rather than a grey box. Article ledes are hunted out of the OCR past mastheads, decks and production stamps, and dropped entirely when no prose turns up; periodical issues use their table of contents or nothing, since an issue's OCR opens on front matter. The footer unfolds the complete day in place — the day file already holds every item — rather than linking to a search that cannot express "this day, any year". The block silently removes itself when the day file is missing, and drops just the calendar switch when the Hijri fan-out is missing, so it is safe on a homepage before the first data sync. Layout breakpoints are container queries, so it survives a narrow column.
 
 ### Press Bylines (page block)
 
@@ -949,7 +955,7 @@ python3 scripts/generate_sentiment_arbiter.py    --minify   # → asset/data/sen
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
 
 # v1.19.0 blocks
-python3 scripts/generate_on_this_day.py                     # → asset/data/on-this-day/{MM-DD}.json (366 files)
+python3 scripts/generate_on_this_day.py                     # → asset/data/on-this-day/{MM-DD}.json + h/{MM-DD}.json (366 + 360 files)
 python3 scripts/generate_press_bylines.py                   # → asset/data/press-bylines.json
 ```
 

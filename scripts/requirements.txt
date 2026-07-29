@@ -9,3 +9,7 @@ numpy
 umap-learn
 # generate_entity_networks.py only - ForceAtlas2 layout for the entity graph
 networkx
+# generate_on_this_day.py only - Umm al-Qura conversion for the Hijri fan-out
+# (same calendar the client's Intl 'islamic-umalqura' formats against, so the
+# day the browser computes and the day file the generator wrote agree)
+hijridate

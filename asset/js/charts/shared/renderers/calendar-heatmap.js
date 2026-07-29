@@ -102,6 +102,13 @@
     /*  Gregorian → Hijri                                                 */
     /* ----------------------------------------------------------------- */
     //
+    // NOTE: `shared/hijri.js` (added in v1.27.0 for the On This Day block)
+    // now carries this same probe, month table and conversion as a standalone
+    // module. This copy predates it and is left in place because the renderer
+    // is loaded through dashboard-layout rather than a block's panel list;
+    // folding it onto IWACVis.hijri would remove the chance of the two
+    // drifting. They agree today.
+    //
     // Intl carries the Umm al-Qura tables, so no date library is needed.
     // `undefined` = not yet probed, `false` = this browser can't do it
     // (the facet is then dropped rather than silently serving Gregorian

@@ -2,25 +2,45 @@
 /**
  * On This Day page block.
  *
- * The module's one deliberate engagement hook: items published on
- * today's date (visitor-local) across the collection's decades —
- * newspaper articles and periodical issues with full publication dates.
- * Fetches the tiny per-day file
- * `files/iwac-visualizations/on-this-day/{MM-DD}.json` (built by
- * `scripts/generate_on_this_day.py`, ~1 KB) and removes itself silently
- * when the file is absent (e.g. before the first data sync) — an
- * engagement hook must never render an error banner.
+ * The module's one deliberate engagement hook: items published on today's
+ * date across the collection's decades — newspaper articles and periodical
+ * issues with full publication dates, in the Gregorian and Umm al-Qura
+ * calendars, in whichever of three layouts the reader picks.
+ *
+ * Fetches the tiny per-day files
+ * `files/iwac-visualizations/on-this-day/{MM-DD}.json` and
+ * `…/on-this-day/h/{MM-DD}.json` (built by
+ * `scripts/generate_on_this_day.py`, ~7 KB each). It removes itself
+ * silently when the Gregorian file is absent — e.g. before the first data
+ * sync — because an engagement hook must never render an error banner, and
+ * drops just the calendar toggle when the Hijri fan-out is absent, which is
+ * what an installation sees between a module update and the admin's next
+ * "Pull latest data" run.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
- * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation|null $block
+ * @var string|null $layout  Editor's default layout; absent on the embed
+ *                           route, which renders the partial without a block.
  */
 
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'blockCss' => 'on-this-day',
+        'panels'   => [
+            'shared/hijri',
+            'on-this-day/shared',
+            'on-this-day/register',
+            'on-this-day/decades',
+            'on-this-day/clippings',
+        ],
         'orchestrator' => 'on-this-day',
     ],
     'blockClass' => 'iwac-vis-on-this-day',
     'embedSlug'  => 'on-this-day',
     'loading'    => $this->translate('Loading on this day'),
+    'data'       => [
+        'layout' => isset($layout) && $layout
+            ? $layout
+            : \IwacVisualizations\Site\BlockLayout\OnThisDay::DEFAULT_LAYOUT,
+    ],
 ]);
