@@ -1,0 +1,53 @@
+name: CDN versions
+
+# The upgrade signal Dependabot cannot give us. ECharts, echarts-wordcloud,
+# MapLibre GL and the four d3 modules are the only dependencies that reach
+# visitors' browsers, and they are jsDelivr URLs pinned as PHP constants in
+# view/common/iwac-assets.phtml — not npm dependencies, so nothing in
+# .github/dependabot.yml can see them. Pinning them exactly (v1.22.0) stopped
+# the live site from silently upgrading itself; this restores the other half,
+# a deliberate notification that something moved.
+#
+# Two triggers, two strictnesses:
+#   - schedule / manual: strict. A red monthly run is the notification — GitHub
+#     emails the repo owner when a scheduled workflow fails.
+#   - pull_request touching the partial: --warn-only. Pinning to something
+#     older than `latest` is a legitimate choice, so drift annotates but never
+#     blocks the merge. Mismatched pins for one package (bumping the MapLibre
+#     JS URL and forgetting the CSS one) stay fatal in both modes — that is a
+#     shipped bug, not drift.
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"   # 06:00 UTC on the 1st — after regenerate-data's 04:00
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "view/common/iwac-assets.phtml"
+      - "scripts/check-cdn-versions.js"
+      - ".github/workflows/cdn-versions.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cdn-versions-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      # No `npm ci`: the checker has zero dependencies (global fetch + fs), so
+      # the job stays a ~15 second check.
+      - name: Compare pinned CDN versions against the npm registry
+        run: >-
+          node scripts/check-cdn-versions.js
+          ${{ github.event_name == 'pull_request' && '--warn-only' || '' }}

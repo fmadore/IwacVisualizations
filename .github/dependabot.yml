@@ -1,0 +1,41 @@
+version: 2
+
+# Scope note — this repo has four dependency surfaces and Dependabot is only
+# the right tool for one of them:
+#
+#   1. GitHub Actions (below). Covered here. Small surface, low noise, and the
+#      only surface where a compromised dependency touches a secret.
+#   2. npm — `csso` + `terser`, both devDependencies. NOT covered: nothing here
+#      ships to visitors, so a vuln means an attacker who can already run the
+#      build. If you do enable it, note that a terser bump usually changes the
+#      committed .min output, so the PR will fail `Build check (JS/CSS)` on
+#      "minified assets are stale" until you run `npm run build` and commit the
+#      .min siblings — those PRs are never auto-mergeable.
+#   3. pip — `scripts/requirements.txt` is intentionally unpinned, and
+#      Dependabot updates version constraints, so there is nothing for it to
+#      bump. Enabling it would be a no-op until the requirements are pinned.
+#   4. The CDN libraries that actually reach visitors' browsers (ECharts,
+#      MapLibre GL, d3) are PHP string constants in
+#      view/common/iwac-assets.phtml and are invisible to Dependabot entirely.
+#      The `CDN versions` workflow covers those instead.
+#
+# Dependabot *alerts* (the CVE feed) are a separate repo setting, not
+# configured by this file.
+
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    # One grouped PR rather than four. The actions are pinned to major tags
+    # (@v7, @v6, @v2), so in practice this fires only on major releases —
+    # a couple of PRs a year.
+    groups:
+      actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies

@@ -1030,6 +1030,27 @@ Every sheet is mirrored to a committed `.min.css` sibling by `scripts/build-css.
 
 Each block template enqueues `iwac-core.css` first, then `iwac-maplibre.css` if it uses a map, then its own block sheet (if any). **References Overview** now requests `iwac-maplibre.css` for its provenance bubble map but otherwise has no block-specific chrome beyond the generic panel + table. HTTP/2 makes the extra requests free, and splitting keeps each file under ~600 lines so conflicts stay localised to the block that touches them.
 
+### Keeping dependencies current
+
+The module has four dependency surfaces, and they are watched by two different mechanisms:
+
+| Surface | Where | Watched by |
+| --- | --- | --- |
+| GitHub Actions | `.github/workflows/*.yml` | Dependabot (`.github/dependabot.yml`), monthly, grouped |
+| npm devDependencies | `package.json` — `csso`, `terser` | Nothing. Build-only; never served to visitors |
+| Python | `scripts/requirements.txt` | Nothing. Deliberately unpinned against a moving HF dataset |
+| **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
+
+That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.
+
+`scripts/check-cdn-versions.js` closes that loop — it parses the pins out of the partial and compares them against the npm registry:
+
+```bash
+npm run check:cdn
+```
+
+It runs monthly on a schedule (a red run is the notification) and on pull requests that touch the partial, where it is advisory only — pinning behind `latest` is a legitimate choice. One thing stays fatal in both modes: the same package pinned at two different versions, which is what happens when the MapLibre JS URL gets bumped and the CSS one next to it does not.
+
 **Conventions for adding a new block:**
 
 1. Add block-specific selectors to `asset/css/blocks/<block>.css`. If the block shares a pattern with an existing one (e.g. "chip controls", "form controls"), add your selector to the canonical rule in `iwac-core.css` — never redefine base chip/button styles per block.

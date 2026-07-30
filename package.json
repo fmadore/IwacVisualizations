@@ -10,7 +10,8 @@
     "lint:theme": "node scripts/check-theme-tokens.js",
     "lint:blocks": "node scripts/check-blocks.js",
     "lint:py": "node scripts/check-python.js",
-    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:py"
+    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:py",
+    "check:cdn": "node scripts/check-cdn-versions.js"
   },
   "devDependencies": {
     "csso": "^5.0.5",
