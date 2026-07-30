@@ -8,9 +8,9 @@
  *
  *   1. Sentiment          — extracted server-side from Omeka item
  *                           metadata (iwac:<model><Axis>) via
- *                           SentimentExtractor. Rendered directly into
- *                           PHP cards here; a small ECharts radar
- *                           below compares the three models.
+ *                           SentimentExtractor. Rendered here as three
+ *                           dot plots (one per axis, one lane per model);
+ *                           no chart library involved.
  *
  *   2. Everything else    — fetched client-side from the precomputed
  *                           files/iwac-visualizations/article-dashboards/{o_id}.json:
@@ -35,51 +35,88 @@ $sentiment    = SentimentExtractor::fromItem($resource);
 $hasSentiment = SentimentExtractor::hasAny($sentiment);
 
 // Per-model chrome (name / org / short / logo) — single source of truth on
-// the extractor, so the cards below and the radar legend cannot drift apart.
+// the extractor, so every lane label in the panel names the same models.
 $modelInfo = SentimentExtractor::MODEL_INFO;
 
-// CSS-class slug used by the .iwac-vis-chip--polarity-<slug>
-// colouring rules. English "Very positive" → "very-positive".
-$slug = function (?string $label): string {
-    if (!$label) return '';
-    return strtolower(str_replace(' ', '-', $label));
-};
-
-// Render the centrality dot scale as a small reusable closure so the
-// card markup below stays readable.
-$dots = function (int $level, int $max = 5) {
-    $out = '';
-    for ($i = 0; $i < $max; $i++) {
-        $filled = $i < $level;
-        $out .= '<span class="iwac-vis-dot ' . ($filled ? 'iwac-vis-dot--on' : 'iwac-vis-dot--off') . '" aria-hidden="true"></span>';
-    }
-    return '<span class="iwac-vis-dots" role="img" aria-label="' . (int) $level . ' / ' . (int) $max . '">' . $out . '</span>';
-};
-
-// Translated radar dimension labels + numeric datasets — serialised
-// for the ECharts radar panel via the standard
-// `<script type="application/json">` contract used throughout the
-// module.
-$radarData = [
-    'labels' => [
-        $translate('Polarity'),
-        $translate('Centrality'),
-        $translate('Subjectivity'),
+// ---- Axis definitions -------------------------------------------------
+//
+// The panel is organised BY AXIS, not by model: the question a reader
+// actually has is "do the three models read this article the same way?",
+// and that is only answerable when the three ratings for one axis sit on
+// one shared scale, vertically aligned. Grouping by model (the old card
+// layout) put the comparable numbers in three separate boxes and then
+// needed a radar chart underneath to undo that.
+//
+// `low` / `high` are the two poles of each 1–5 vocabulary. They reuse the
+// controlled-vocabulary msgids (Module::POLARITE_ITEMS and friends), so no
+// new translation work is needed to label the scales. `diverging` marks
+// the one axis whose midpoint is meaningful — polarity pivots on Neutral,
+// whereas centrality and subjectivity just run low → high.
+$axes = [
+    [
+        'title'     => $translate('Polarity'),
+        'low'       => $translate('Very negative'),
+        'high'      => $translate('Very positive'),
+        'diverging' => true,
+        'labelKey'  => 'polarite',
+        'scoreKey'  => 'polarite_numeric',
+        'justKey'   => 'polarite_justification',
     ],
-    'models' => [],
+    [
+        'title'     => $translate('Centrality'),
+        'low'       => $translate('Not addressed'),
+        'high'      => $translate('Very central'),
+        'diverging' => false,
+        'labelKey'  => 'centralite',
+        'scoreKey'  => 'centralite_numeric',
+        'justKey'   => 'centralite_justification',
+    ],
+    [
+        'title'     => $translate('Subjectivity'),
+        'low'       => $translate('Very objective'),
+        'high'      => $translate('Very subjective'),
+        'diverging' => false,
+        'labelKey'  => 'subjectivite_label',
+        'scoreKey'  => 'subjectivite_score',
+        'justKey'   => 'subjectivite_justification',
+    ],
 ];
+
+// The 1–5 scale as five stops, with the model's rating filled in. Purely
+// graphic: the rating is already spelled out in words in the same row, so
+// the track is aria-hidden rather than given a redundant label.
+$track = function (int $score, bool $diverging): string {
+    $out = '<span class="iwac-vis-sent-track'
+        . ($diverging ? ' iwac-vis-sent-track--diverging' : '')
+        . '" aria-hidden="true">';
+    for ($stop = 1; $stop <= 5; $stop++) {
+        $out .= '<span class="iwac-vis-sent-stop'
+            . ($stop === $score ? ' iwac-vis-sent-stop--on' : '')
+            . '"></span>';
+    }
+    return $out . '</span>';
+};
+
+// How far apart the models are on one axis, as a phrase. Unscored ratings
+// ("Not applicable" polarity, score 0) are excluded — they carry no
+// position on the scale, so they can neither agree nor disagree — and a
+// single rating is left unlabelled since one model cannot form a verdict.
+$verdict = function (array $scores) use ($translate): array {
+    $scored = [];
+    foreach ($scores as $s) {
+        if ($s >= 1) $scored[] = $s;
+    }
+    if (count($scored) < 2) return [];
+    $spread = max($scored) - min($scored);
+    if ($spread === 0) return ['agree',  $translate('Models agree')];
+    if ($spread === 1) return ['near',   $translate('Models nearly agree')];
+    return ['differ', $translate('Models disagree')];
+};
+
+// Models that rated nothing at all get no lane anywhere.
+$ratedModels = [];
 foreach (SentimentExtractor::MODELS as $m) {
-    $s = $sentiment[$m];
-    $radarData['models'][] = [
-        'key'               => $m,
-        'label'             => $modelInfo[$m]['short'],
-        'polarite'          => $s['polarite_numeric'] ?? 0,
-        'centralite'        => $s['centralite_numeric'] ?? 0,
-        'subjectivite'      => $s['subjectivite_score'] ?? 0,
-        'polariteLabel'     => $s['polarite']           ? $translate($s['polarite'])           : '',
-        'centraliteLabel'   => $s['centralite']         ? $translate($s['centralite'])         : '',
-        'subjectiviteLabel' => $s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '',
-    ];
+    if (!empty($sentiment[$m]['rated'])) $ratedModels[] = $m;
 }
 
 // The AI sentiment panel is server-rendered (it reads Omeka item metadata, not
@@ -96,105 +133,76 @@ if ($hasSentiment) {
             <?= $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (Gemini 3 Flash, GPT-5 mini, Ministral 14B). Read directly from the Omeka item metadata.') ?>
         </p>
 
-        <div class="iwac-vis-sent-cards">
-            <?php foreach ($sentiment as $model => $s):
-                if (!$s['rated']) continue;
-                $info = $modelInfo[$model];
+        <div class="iwac-vis-sent">
+            <?php foreach ($axes as $axis):
+                // Lanes for this axis, plus the material the header and the
+                // reasoning drawer need. A model that rated the article but
+                // left THIS axis empty gets no lane here.
+                $lanes  = [];
+                $scores = [];
+                $justs  = [];
+                foreach ($ratedModels as $model) {
+                    $s     = $sentiment[$model];
+                    $label = $s[$axis['labelKey']] ?? null;
+                    if (!$label) continue;
+                    $score    = (int) ($s[$axis['scoreKey']] ?? 0);
+                    $lanes[]  = ['model' => $model, 'label' => $label, 'score' => $score];
+                    $scores[] = $score;
+                    if (!empty($s[$axis['justKey']])) {
+                        $justs[$model] = $s[$axis['justKey']];
+                    }
+                }
+                if (!$lanes) continue;
+                $v = $verdict($scores);
             ?>
-            <article class="iwac-vis-sent-card iwac-vis-sent-card--<?= $escapeAttr($model) ?>">
-                <header class="iwac-vis-sent-card__header">
-                    <img class="iwac-vis-sent-card__logo"
-                         src="<?= $escapeAttr($assetUrl('img/ai-logos/' . $info['logo'], 'IwacVisualizations')) ?>"
-                         alt=""
-                         width="22" height="22" loading="lazy">
-                    <div class="iwac-vis-sent-card__names">
-                        <h5 class="iwac-vis-sent-card__name"><?= $escapeHtml($info['name']) ?></h5>
-                        <span class="iwac-vis-sent-card__org"><?= $escapeHtml($info['org']) ?></span>
-                    </div>
+            <section class="iwac-vis-sent-axis">
+                <header class="iwac-vis-sent-axis__head">
+                    <h5 class="iwac-vis-sent-axis__title"><?= $escapeHtml($axis['title']) ?></h5>
+                    <?php if ($v): ?>
+                    <p class="iwac-vis-sent-axis__verdict iwac-vis-sent-axis__verdict--<?= $escapeAttr($v[0]) ?>">
+                        <?= $escapeHtml($v[1]) ?>
+                    </p>
+                    <?php endif; ?>
                 </header>
 
-                <dl class="iwac-vis-sent-card__metrics">
-                    <?php if ($s['polarite']): ?>
-                    <div class="iwac-vis-sent-row">
-                        <dt class="iwac-vis-sent-row__label"><?= $translate('Polarity') ?></dt>
-                        <dd class="iwac-vis-sent-row__value">
-                            <span class="iwac-vis-chip iwac-vis-chip--polarity iwac-vis-chip--polarity-<?= $escapeAttr($slug($s['polarite'])) ?>">
-                                <?= $escapeHtml($translate($s['polarite'])) ?>
-                            </span>
-                        </dd>
-                    </div>
-                    <?php endif; ?>
+                <div class="iwac-vis-sent-axis__anchors" aria-hidden="true">
+                    <span class="iwac-vis-sent-axis__anchor"><?= $escapeHtml($axis['low']) ?></span>
+                    <span class="iwac-vis-sent-axis__anchor"><?= $escapeHtml($axis['high']) ?></span>
+                </div>
 
-                    <?php if ($s['centralite']): ?>
-                    <div class="iwac-vis-sent-row">
-                        <dt class="iwac-vis-sent-row__label"><?= $translate('Centrality') ?></dt>
-                        <dd class="iwac-vis-sent-row__value iwac-vis-sent-row__value--inline">
-                            <span class="iwac-vis-sent-row__text"><?= $escapeHtml($translate($s['centralite'])) ?></span>
-                            <?= $dots((int) ($s['centralite_numeric'] ?? 0)) ?>
-                        </dd>
-                    </div>
-                    <?php endif; ?>
+                <ul class="iwac-vis-sent-lanes">
+                    <?php foreach ($lanes as $lane):
+                        $info = $modelInfo[$lane['model']];
+                    ?>
+                    <li class="iwac-vis-sent-lane<?= $lane['score'] < 1 ? ' iwac-vis-sent-lane--unscored' : '' ?>">
+                        <span class="iwac-vis-sent-lane__model">
+                            <img class="iwac-vis-sent-lane__logo"
+                                 src="<?= $escapeAttr($assetUrl('img/ai-logos/' . $info['logo'], 'IwacVisualizations')) ?>"
+                                 alt=""
+                                 width="18" height="18" loading="lazy">
+                            <span class="iwac-vis-sent-lane__name"><?= $escapeHtml($info['name']) ?></span>
+                        </span>
+                        <?= $track($lane['score'], $axis['diverging']) ?>
+                        <span class="iwac-vis-sent-lane__reading"><?= $escapeHtml($translate($lane['label'])) ?></span>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
 
-                    <?php if (!empty($s['subjectivite_score'])): ?>
-                    <div class="iwac-vis-sent-row">
-                        <dt class="iwac-vis-sent-row__label"><?= $translate('Subjectivity') ?></dt>
-                        <dd class="iwac-vis-sent-row__value">
-                            <?php $subSlug = 'iwac-vis-chip--subjectivity-' . (int) $s['subjectivite_score']; ?>
-                            <span class="iwac-vis-chip iwac-vis-chip--subjectivity <?= $escapeAttr($subSlug) ?>">
-                                <?= $escapeHtml($s['subjectivite_label'] ? $translate($s['subjectivite_label']) : '') ?>
-                            </span>
-                        </dd>
-                    </div>
-                    <?php endif; ?>
-                </dl>
-
-                <?php
-                    $hasJust = $s['polarite_justification']
-                        || $s['centralite_justification']
-                        || $s['subjectivite_justification'];
-                ?>
-                <?php if ($hasJust): ?>
-                <details class="iwac-vis-sent-card__justifications">
+                <?php if ($justs): ?>
+                <details class="iwac-vis-sent-axis__why">
                     <summary><?= $translate('Show reasoning') ?></summary>
-                    <div class="iwac-vis-sent-just">
-                        <?php if ($s['polarite_justification']): ?>
-                        <div class="iwac-vis-sent-just__item">
-                            <strong><?= $translate('Polarity') ?></strong>
-                            <p><?= $escapeHtml($s['polarite_justification']) ?></p>
+                    <div class="iwac-vis-sent-why">
+                        <?php foreach ($justs as $model => $text): ?>
+                        <div class="iwac-vis-sent-why__item">
+                            <span class="iwac-vis-sent-why__model"><?= $escapeHtml($modelInfo[$model]['name']) ?></span>
+                            <p><?= $escapeHtml($text) ?></p>
                         </div>
-                        <?php endif; ?>
-                        <?php if ($s['centralite_justification']): ?>
-                        <div class="iwac-vis-sent-just__item">
-                            <strong><?= $translate('Centrality') ?></strong>
-                            <p><?= $escapeHtml($s['centralite_justification']) ?></p>
-                        </div>
-                        <?php endif; ?>
-                        <?php if ($s['subjectivite_justification']): ?>
-                        <div class="iwac-vis-sent-just__item">
-                            <strong><?= $translate('Subjectivity') ?></strong>
-                            <p><?= $escapeHtml($s['subjectivite_justification']) ?></p>
-                        </div>
-                        <?php endif; ?>
+                        <?php endforeach; ?>
                     </div>
                 </details>
                 <?php endif; ?>
-            </article>
+            </section>
             <?php endforeach; ?>
-        </div>
-
-        <!-- Radar chart — picked up by articleDashboard.radar (ECharts).
-             Data is serialised below as JSON; the panel JS reads this
-             script element by class and renders into the sibling
-             `.iwac-vis-sent-radar__chart` div. -->
-        <div class="iwac-vis-sent-radar">
-            <h5 class="iwac-vis-sent-radar__title"><?= $translate('Model comparison') ?></h5>
-            <div class="iwac-vis-sent-radar__chart" data-item-id="<?= $escapeAttr($resource->id()) ?>"></div>
-            <script type="application/json" class="iwac-vis-sent-radar__data">
-                <?= json_encode($radarData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) ?>
-            </script>
-            <p class="iwac-vis-sent-radar__scale">
-                <?= $translate('Scales: polarity 1 (very negative) – 5 (very positive) · centrality 1 (not addressed) – 5 (very central) · subjectivity 1 (objective) – 5 (subjective)') ?>
-            </p>
         </div>
     </section>
 <?php
@@ -219,8 +227,8 @@ echo $this->partial('common/iwac-block-shell', [
             'layout'       => true,
         ],
         // Self-registering IIFEs for the client-side panels. The sentiment
-        // panel is server-rendered and so has no entry here; the radar panel
-        // self-initialises from the inline JSON emitted above.
+        // panel is entirely server-rendered (CSS dot plots, no chart library)
+        // and so has no entry here.
         // `dashboard-panels-bridge` MUST load after the per-panel IIFEs — it
         // registers thin wrappers into IWACVis.dashboardLayout so the
         // orchestrator can dispatch via declarative slot arrays.
@@ -230,7 +238,6 @@ echo $this->partial('common/iwac-block-shell', [
             // Registers its own renderer + hasData predicate, so unlike the
             // two above it needs no entry in dashboard-panels-bridge.
             'article-dashboard/map',
-            'article-dashboard/radar',
             'shared/dashboard-panels-bridge',
         ],
         'orchestrator' => 'article-dashboard',

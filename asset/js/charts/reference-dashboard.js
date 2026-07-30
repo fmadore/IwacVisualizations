@@ -66,17 +66,21 @@
      * metric is missing so the caller can skip the row.
      */
     function buildMetricCards(metrics) {
+        // `text: true` = prose, not a figure: the card lets it wrap instead
+        // of painting one unwrappable line out past its own edge and giving
+        // the page a horizontal scrollbar. A DOI is the worst case — it has
+        // no space to break at, hence `overflow-wrap: anywhere` on the class.
         var defs = [
-            { key: 'type',      label: 'Type', format: function (v) {
+            { key: 'type',      label: 'Type', text: true, format: function (v) {
                 return P.translateKeyed('ref_type_', v);
             } },
-            { key: 'authors',   label: 'Authors' },
+            { key: 'authors',   label: 'Authors',   text: true },
             { key: 'year',      label: 'Year' },
-            { key: 'publisher', label: 'Publisher' },
+            { key: 'publisher', label: 'Publisher', text: true },
             { key: 'pages',     label: 'Pages', format: P.formatNumber },
             { key: 'words',     label: 'Words', format: P.formatNumber },
-            { key: 'language',  label: 'Language' },
-            { key: 'doi',       label: 'DOI' }
+            { key: 'language',  label: 'Language',  text: true },
+            { key: 'doi',       label: 'DOI',       text: true }
         ];
         var row = P.el('div', 'iwac-vis-overview-summary');
         var rendered = 0;
@@ -85,7 +89,8 @@
             if (v == null || v === '') return;
             var card = P.el('div', 'iwac-vis-summary-card');
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(d.label)));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
+            card.appendChild(P.el('div',
+                'iwac-vis-summary-card__value' + (d.text ? ' iwac-vis-summary-card__value--text' : ''),
                 d.format ? d.format(v) : String(v)));
             row.appendChild(card);
             rendered++;

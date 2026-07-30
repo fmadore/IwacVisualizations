@@ -106,10 +106,12 @@ class Module extends AbstractModule
     ];
 
     /**
-     * Ordinal values used by the radar chart (higher = more intense
+     * Ordinal position on each 1-5 scale (higher = more intense
      * positive / more central / more subjective). "Not applicable"
-     * polarity collapses to 0 so it reads as a missing spoke rather
-     * than a negative one on the radar.
+     * polarity collapses to 0, which is deliberately OFF the scale: the
+     * article sentiment panel renders it as an empty track with the word
+     * shown in muted type, and excludes it from the agreement verdict,
+     * so an absent rating never reads as a rating at the negative end.
      */
     const CENTRALITE_VALUES = [
         'Very central' => 5,

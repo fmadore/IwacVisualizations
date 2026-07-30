@@ -105,8 +105,9 @@ class SentimentExtractor
 
             $out[$model] = [
                 // English source labels — feed into $view->translate()
-                // for the public display and into the CSS class name
-                // builder (`iwac-vis-chip--polarity-positive`, etc.).
+                // for the public display in the article partial's
+                // sentiment panel, and (for polarity / centrality) into
+                // the *_numeric lookups below.
                 'polarite'              => $polLabel,
                 'centralite'            => $cenLabel,
                 'subjectivite_score'    => $subInfo['score']  ?? null,
@@ -119,7 +120,9 @@ class SentimentExtractor
                 'polarite_fr'           => $polResource ? (string) $polResource->displayTitle() : '',
                 'centralite_fr'         => $cenResource ? (string) $cenResource->displayTitle() : '',
 
-                // Numeric values feed the ECharts radar.
+                // Ordinal position on each 1-5 scale: which stop the
+                // model's marker sits on, and the input to the panel's
+                // agree / nearly-agree / disagree verdict.
                 'polarite_numeric'      => Module::getPolariteNumeric($polLabel),
                 'centralite_numeric'    => Module::getCentraliteNumeric($cenLabel),
 

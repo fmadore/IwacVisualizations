@@ -8,12 +8,10 @@
 /*    - Body wrapper                                                    */
 /*    - Stats row + LDA-topic --wide card modifier                      */
 /*    - Similar / related-article card grids (semantic + entity-shared)*/
-/*    - Sentiment cards (per-model), chips, centrality dots,            */
-/*      justifications drawer, radar wrapper                            */
+/*    - AI sentiment dot plots (per axis), reasoning drawer            */
 /*                                                                       */
-/*  All colours resolve through tokens declared in iwac-core.css        */
-/*  (`--iwac-vis-sent-*`, `--iwac-vis-cent-*`, `--iwac-vis-subj-*`,     */
-/*  `--iwac-vis-model-*`). No hex literals.                             */
+/*  All colours resolve through IWAC theme tokens. No hex literals      */
+/*  outside var() fallbacks.                                            */
 /* =================================================================== */
 
 /* `.iwac-vis-article` is the top-level resource-page wrapper. It
@@ -152,288 +150,309 @@
 
 
 /* =================================================================== */
-/*  Sentiment cards — server-rendered by article.phtml                   */
+/*  AI sentiment — server-rendered dot plots (article.phtml)              */
 /* =================================================================== */
+/*                                                                       */
+/*  One block per axis (polarity / centrality / subjectivity), each a    */
+/*  five-stop ordinal scale with one lane per model. Because the three   */
+/*  lanes share a scale, agreement reads as vertical alignment and       */
+/*  disagreement as a stagger — the comparison the old per-model cards   */
+/*  + radar chart needed two components (and 640 KB of ECharts) to make. */
+/*                                                                       */
+/*  Colour budget: none. Model identity comes from the vendor logo and   */
+/*  the row label, values from position on the scale. The theme reserves */
+/*  --primary for state, and "which of three raters is which" is not     */
+/*  state — so the plot is drawn entirely in --ink / --border, matching  */
+/*  the ledger-rule grammar of the summary cards above it and the        */
+/*  theme's own `.property--ai` treatment on resource-show.              */
 
-/* Panel-level container — the panel itself uses the standard
- * .iwac-vis-panel chrome from iwac-core.css. The sentiment-specific
- * layout is the child cards grid + the radar block below it. */
 .iwac-vis-article__sentiment {
     display: flex;
     flex-direction: column;
     gap: var(--space-4, 1rem);
 }
 
-.iwac-vis-sent-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-    gap: var(--space-3, 0.75rem);
-    /* Don't stretch cards vertically. When one card has its
-     * justification drawer open the others used to grow to match, which
-     * left large empty gaps between metrics and card bottom. Letting
-     * each card keep its natural height is the ugly-but-honest default
-     * the reader expects. */
-    align-items: start;
-}
-
-.iwac-vis-sent-card {
+.iwac-vis-sent {
     display: flex;
     flex-direction: column;
-    background: var(--surface, #fdfcfb);
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    overflow: hidden;
+    gap: var(--space-5, 1.25rem);
 }
-/*  The model is identified by its vendor logo + name in the header and by
- *  a dot on the header rule; the old 3px coloured left stripe was chart
- *  junk on a metadata card. The dot picks up the same palette token the
- *  radar overlay uses, keeping the link between card and chart. */
-.iwac-vis-sent-card__header {
+
+/*  Column geometry, declared once and consumed by both the anchor row
+ *  and every lane so the five stops line up exactly under the scale
+ *  poles. Fixed side columns (rather than `auto`) are what keeps the
+ *  three tracks aligned when model names differ in length. */
+.iwac-vis-sent-axis {
+    --iwac-vis-sent-cols: minmax(0, 10rem) minmax(0, 1fr) minmax(0, 8rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+    /*  The theme's ledger line: a 2px ink rule opening each section.
+     *  Same device as .iwac-vis-summary-card, so the article page reads
+     *  as one instrument rather than a stack of unrelated widgets. */
+    border-top: 2px solid var(--ink-strong, var(--ink, #13161c));
+    padding-top: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-sent-axis__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+}
+.iwac-vis-sent-axis__title {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #13161c));
+    letter-spacing: var(--tracking-tight, -0.015em);
+}
+/*  The verdict is the panel's headline finding — whether the three
+ *  readings converge — so it gets the theme's metadata eyebrow
+ *  treatment rather than a coloured badge. `--differ` steps up from
+ *  --muted to --ink-light: divergence is the case worth a second look,
+ *  and a weight change says so without spending a hue on it. */
+.iwac-vis-sent-axis__verdict {
+    margin: 0;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    color: var(--muted, #66696e);
+}
+.iwac-vis-sent-axis__verdict--differ {
+    color: var(--ink-light, var(--ink, #13161c));
+}
+
+/*  Scale poles, sitting in the track column so they read as the ends of
+ *  the ruler below. Reuses the controlled-vocabulary terms, which is why
+ *  they need no new translations. */
+.iwac-vis-sent-axis__anchors {
+    display: grid;
+    grid-template-columns: var(--iwac-vis-sent-cols);
+    gap: var(--space-3, 0.75rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--ink-subtle, var(--muted, #66696e));
+    text-transform: lowercase;
+    line-height: 1.2;
+}
+/*  Both poles share row 1 of the track column, pinned to either end.
+ *  `grid-row` is load-bearing: two items explicitly placed in the same
+ *  column with auto rows get stacked onto separate rows, which put the
+ *  high pole under the low one instead of opposite it. `max-width` keeps
+ *  them from ever meeting in the middle. */
+.iwac-vis-sent-axis__anchor {
+    grid-row: 1;
+    grid-column: 2;
+    min-width: 0;
+    max-width: 48%;
+}
+.iwac-vis-sent-axis__anchor:first-child { justify-self: start; }
+.iwac-vis-sent-axis__anchor:last-child  { justify-self: end; }
+
+.iwac-vis-sent-lanes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-sent-lane {
+    display: grid;
+    grid-template-columns: var(--iwac-vis-sent-cols);
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+    /*  The theme gives every list item a `margin-block-end: --space-2`
+     *  for prose lists. Here the flex `gap` above already spaces the
+     *  lanes, and leaving the margin in stacks the two — 8px of dead
+     *  air per lane that pushed the three rows apart enough to weaken
+     *  the vertical alignment the whole plot depends on. */
+    margin: 0;
+}
+.iwac-vis-sent-lane__model {
     display: flex;
     align-items: center;
     gap: var(--space-2, 0.5rem);
-    padding: var(--space-3, 0.75rem);
-    border-bottom: 1px solid var(--border-light, var(--border, #ced1d6));
+    min-width: 0;
 }
-.iwac-vis-sent-card__header::after {
-    content: '';
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    margin-inline-start: auto;
-    flex-shrink: 0;
-    background: var(--iwac-vis-sent-card-dot, var(--muted, #66696e));
-}
-.iwac-vis-sent-card--gemini  { --iwac-vis-sent-card-dot: var(--iwac-vis-model-gemini,  #3b82f6); }
-.iwac-vis-sent-card--chatgpt { --iwac-vis-sent-card-dot: var(--iwac-vis-model-chatgpt, #10a37f); }
-.iwac-vis-sent-card--mistral { --iwac-vis-sent-card-dot: var(--iwac-vis-model-mistral, #f97316); }
-.iwac-vis-sent-card__logo {
-    width: 22px;
-    height: 22px;
+.iwac-vis-sent-lane__logo {
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
     object-fit: contain;
 }
-.iwac-vis-sent-card__names {
-    display: flex;
-    flex-direction: column;
+.iwac-vis-sent-lane__name {
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--ink-light, var(--ink, #13161c));
+    line-height: 1.2;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.iwac-vis-sent-lane__reading {
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 500;
+    color: var(--ink, #13161c);
+    line-height: 1.25;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+/*  "Not applicable" polarity has a label but no position on the scale.
+ *  Its track stays empty and the word drops to muted, so an absent
+ *  rating never reads as a rating of zero. */
+.iwac-vis-sent-lane--unscored .iwac-vis-sent-lane__reading {
+    color: var(--muted, #66696e);
+    font-weight: 400;
+}
+
+/* --------------------------------------------------------------------
+ * The five-stop track
+ * ------------------------------------------------------------------ */
+.iwac-vis-sent-track {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: center;
+    min-height: 1.25rem;
     min-width: 0;
 }
-.iwac-vis-sent-card__name {
-    margin: 0;
-    font-size: var(--text-sm, 0.9375rem);
-    font-weight: 600;
-    color: var(--ink, #13161c);
-    line-height: 1.2;
+/*  The rule runs between the outer stops, not to the container edge —
+ *  each stop is centred in its 1fr cell, so the first and last sit 10%
+ *  in from either end.
+ *
+ *  --border-strong, not --border: the theme's plain hairline sits around
+ *  1.4:1 on panel surfaces, which is right for a card edge the eye should
+ *  ignore and too faint for a scale the eye has to follow. At --border-
+ *  strong the whole lattice (rule, empty stops, midpoint tick) lands
+ *  around 2.1-2.4:1 — clearly present, and still far enough below the
+ *  16-20:1 marker that the data reads first. */
+.iwac-vis-sent-track::before {
+    content: '';
+    position: absolute;
+    inset-inline: 10%;
+    top: 50%;
+    height: 1px;
+    margin-top: -0.5px;
+    background: var(--border-strong, #aeb1b7);
 }
-.iwac-vis-sent-card__org {
-    font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #66696e);
-    line-height: 1.2;
-}
-
-.iwac-vis-sent-card__metrics {
-    margin: 0;
-    padding: var(--space-3, 0.75rem);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3, 0.75rem);
-}
-
-.iwac-vis-sent-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    margin: 0;
-}
-.iwac-vis-sent-row__label {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    color: var(--muted, #66696e);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
-    margin: 0;
-}
-.iwac-vis-sent-row__value {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2, 0.5rem);
-    font-size: var(--text-sm, 0.9375rem);
-    color: var(--ink, #13161c);
-}
-.iwac-vis-sent-row__value--inline {
-    flex-wrap: nowrap;
-}
-.iwac-vis-sent-row__text {
-    font-weight: 500;
-}
-
-
-/* --------------------------------------------------------------------
- * Chips — pill-shaped labels for polarity / subjectivity
- * ------------------------------------------------------------------ */
-.iwac-vis-chip {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 500;
-    border-radius: var(--radius-full, 9999px);
-    line-height: 1.4;
-    /* Foreground is picked to read against the chip background.
-     * Polarity + subjectivity rules below override with the right
-     * color for each variant. */
-    color: var(--surface, #fdfcfb);
-}
-
-/* Polarity chip colours — aligned with the --iwac-vis-sent-* ramp
- * already defined in iwac-core.css. Keys are the English source
- * labels as slugs so the PHP partial can just do
- * `iwac-vis-chip--polarity-<slug($s['polarite'])>`. */
-.iwac-vis-chip--polarity-very-positive { background: var(--iwac-vis-sent-pos-strong); }
-.iwac-vis-chip--polarity-positive      { background: var(--iwac-vis-sent-pos); }
-.iwac-vis-chip--polarity-neutral       { background: var(--iwac-vis-sent-neutral); }
-.iwac-vis-chip--polarity-negative      { background: var(--iwac-vis-sent-neg); }
-.iwac-vis-chip--polarity-very-negative { background: var(--iwac-vis-sent-neg-strong); }
-.iwac-vis-chip--polarity-not-applicable {
-    background: var(--iwac-vis-sent-na);
-    color: var(--ink, #13161c);
-}
-
-/* Subjectivity chip colours — use the sequential --iwac-vis-subj-*
- * ramp. Low values (1 = very objective) get a light tint of --primary
- * so the contrast with white text is weak — flip to dark ink instead. */
-.iwac-vis-chip--subjectivity-1 {
-    background: var(--iwac-vis-subj-1);
-    color: var(--ink, #13161c);
-}
-.iwac-vis-chip--subjectivity-2 {
-    background: var(--iwac-vis-subj-2);
-    color: var(--ink, #13161c);
-}
-.iwac-vis-chip--subjectivity-3 {
-    background: var(--iwac-vis-subj-3);
-    color: var(--ink, #13161c);
-}
-.iwac-vis-chip--subjectivity-4 {
-    background: var(--iwac-vis-subj-4);
-    /* 75% --primary mix reads well against --surface, so stick with
-     * light foreground at this level. */
-    color: var(--surface, #fdfcfb);
-}
-.iwac-vis-chip--subjectivity-5 {
-    background: var(--iwac-vis-subj-5);
-    color: var(--surface, #fdfcfb);
-}
-
-
-/* --------------------------------------------------------------------
- * Centrality dot scale — 5 dots, `--on` = filled, `--off` = empty
- * ------------------------------------------------------------------ */
-.iwac-vis-dots {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-}
-.iwac-vis-dot {
-    width: 9px;
-    height: 9px;
+.iwac-vis-sent-stop {
+    position: relative;
+    justify-self: center;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    border: 1px solid var(--border, #ced1d6);
-    background: var(--border-light, var(--border, #ced1d6));
+    background: var(--border-strong, #aeb1b7);
 }
-.iwac-vis-dot--on {
-    background: var(--iwac-vis-cent-1);
-    border-color: color-mix(in oklab, var(--iwac-vis-cent-1) 70%, var(--ink, #13161c));
+/*  The rating. The surface-coloured ring lifts the marker off the rule
+ *  so a value never looks like a bead threaded on a wire. */
+.iwac-vis-sent-stop--on {
+    width: 11px;
+    height: 11px;
+    background: var(--ink-strong, var(--ink, #13161c));
+    box-shadow: 0 0 0 3px var(--panel-bg, var(--surface, #fdfcfb));
 }
-
+/*  Polarity is the one diverging scale: its midpoint (Neutral) is a
+ *  meaningful pivot, not just the third of five steps, so it carries a
+ *  tick. Suppressed when a model actually sits there — the marker is
+ *  the more important mark. */
+.iwac-vis-sent-track--diverging
+.iwac-vis-sent-stop:nth-child(3):not(.iwac-vis-sent-stop--on)::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1px;
+    height: 13px;
+    transform: translate(-50%, -50%);
+    background: var(--border-strong, #aeb1b7);
+}
 
 /* --------------------------------------------------------------------
- * Justifications drawer — `<details>` reveal
+ * Reasoning drawer — one per axis, so the three models' rationales for
+ * the SAME question sit side by side. Grouped by model previously, which
+ * made the one comparison a reader wants take three separate clicks.
  * ------------------------------------------------------------------ */
-.iwac-vis-sent-card__justifications {
-    padding: 0 var(--space-3, 0.75rem) var(--space-3, 0.75rem);
-    border-top: 1px solid var(--border-light, var(--border, #ced1d6));
-    margin-top: auto; /* push to card bottom when card taller than content */
+.iwac-vis-sent-axis__why {
+    margin-top: var(--space-1, 0.25rem);
 }
-.iwac-vis-sent-card__justifications > summary {
+.iwac-vis-sent-axis__why > summary {
     cursor: pointer;
-    padding: var(--space-2, 0.5rem) 0;
+    padding: var(--space-1, 0.25rem) 0;
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
     list-style: none;
     transition: color var(--transition-fast, 150ms ease);
 }
-.iwac-vis-sent-card__justifications > summary::-webkit-details-marker { display: none; }
-.iwac-vis-sent-card__justifications > summary::before {
+.iwac-vis-sent-axis__why > summary::-webkit-details-marker { display: none; }
+.iwac-vis-sent-axis__why > summary::before {
     content: '▸';
     display: inline-block;
     margin-right: 0.35rem;
     transition: transform var(--transition-fast, 150ms ease);
 }
-.iwac-vis-sent-card__justifications[open] > summary::before {
+.iwac-vis-sent-axis__why[open] > summary::before {
     transform: rotate(90deg);
 }
-.iwac-vis-sent-card__justifications > summary:hover {
+.iwac-vis-sent-axis__why > summary:hover {
     color: var(--ink, #13161c);
 }
-
-.iwac-vis-sent-just {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
+.iwac-vis-sent-axis__why > summary:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+    border-radius: var(--radius-sm, 0.375rem);
 }
-.iwac-vis-sent-just__item {
+
+.iwac-vis-sent-why {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--space-3, 0.75rem);
+    padding-top: var(--space-2, 0.5rem);
+}
+.iwac-vis-sent-why__item {
     font-size: var(--text-xs, 0.8125rem);
     line-height: 1.5;
+    min-width: 0;
 }
-.iwac-vis-sent-just__item strong {
+.iwac-vis-sent-why__model {
     display: block;
-    color: var(--ink-light, var(--ink, #13161c));
     margin-bottom: 0.25rem;
+    color: var(--ink-light, var(--ink, #13161c));
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
 }
-.iwac-vis-sent-just__item p {
+.iwac-vis-sent-why__item p {
     margin: 0;
     color: var(--muted, #66696e);
     padding-left: var(--space-2, 0.5rem);
     border-left: 2px solid var(--border-light, var(--border, #ced1d6));
+    overflow-wrap: anywhere;
 }
-
 
 /* --------------------------------------------------------------------
- * Radar chart wrapper — sits below the sentiment cards
+ * Narrow screens — the three-column lane can't hold a scale under about
+ * 34rem, so the track drops to its own full-width row with the model and
+ * its reading paired above it.
  * ------------------------------------------------------------------ */
-.iwac-vis-sent-radar {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2, 0.5rem);
-    padding: var(--space-3, 0.75rem);
-    background: color-mix(in oklab, var(--primary, #ce4115) 3%, var(--surface, #fdfcfb));
-    border: 1px solid var(--border-light, var(--border, #ced1d6));
-    border-radius: var(--radius-md, 0.5rem);
-}
-.iwac-vis-sent-radar__title {
-    margin: 0;
-    font-size: var(--text-sm, 0.9375rem);
-    font-weight: 600;
-    color: var(--ink, #13161c);
-    text-align: center;
-}
-.iwac-vis-sent-radar__chart {
-    /* ECharts populates this; we give it a deterministic height so
-     * the radar renders without waiting on a resize event. */
-    width: 100%;
-    min-height: 340px;
-    max-width: 520px;
-    margin: 0 auto;
-}
-.iwac-vis-sent-radar__data { display: none; }
-.iwac-vis-sent-radar__scale {
-    margin: 0;
-    font-size: var(--text-xs, 0.8125rem);
-    color: var(--muted, #66696e);
-    text-align: center;
-    line-height: 1.5;
+@media (max-width: 560px) {
+    .iwac-vis-sent-axis {
+        --iwac-vis-sent-cols: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .iwac-vis-sent-lanes {
+        gap: var(--space-3, 0.75rem);
+    }
+    .iwac-vis-sent-lane {
+        row-gap: var(--space-1, 0.25rem);
+    }
+    .iwac-vis-sent-lane__model   { grid-area: 1 / 1; }
+    .iwac-vis-sent-lane__reading { grid-area: 1 / 2; justify-self: end; text-align: end; }
+    .iwac-vis-sent-track         { grid-area: 2 / 1 / auto / -1; }
+    /*  Two columns here, so the poles get one each and need no width cap. */
+    .iwac-vis-sent-axis__anchor { max-width: none; }
+    .iwac-vis-sent-axis__anchor:first-child { grid-column: 1; }
+    .iwac-vis-sent-axis__anchor:last-child  { grid-column: 2; }
 }
 
 

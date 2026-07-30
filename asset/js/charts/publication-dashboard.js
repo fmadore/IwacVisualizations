@@ -71,13 +71,17 @@
             // verbatim, which is exactly what we want.
             return P.formatDate(v);
         };
+        // `text: true` = prose, not a figure: the card lets it wrap instead
+        // of painting one unwrappable line out past its own edge and giving
+        // the page a horizontal scrollbar. Date ranges ("2009-05/2009-08")
+        // count — they pass through asDate verbatim.
         var defs = [
             { key: 'words',    label: 'Words',    format: P.formatNumber },
             { key: 'pages',    label: 'Pages',    format: P.formatNumber },
-            { key: 'issue',    label: 'Issue' },
-            { key: 'language', label: 'Language' },
-            { key: 'country',  label: 'Country' },
-            { key: 'date',     label: 'Date',     format: asDate }
+            { key: 'issue',    label: 'Issue',    text: true },
+            { key: 'language', label: 'Language', text: true },
+            { key: 'country',  label: 'Country',  text: true },
+            { key: 'date',     label: 'Date',     format: asDate, text: true }
         ];
         var row = P.el('div', 'iwac-vis-overview-summary');
         var rendered = 0;
@@ -86,7 +90,8 @@
             if (v == null || v === '') return;
             var card = P.el('div', 'iwac-vis-summary-card');
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(d.label)));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
+            card.appendChild(P.el('div',
+                'iwac-vis-summary-card__value' + (d.text ? ' iwac-vis-summary-card__value--text' : ''),
                 d.format ? d.format(v) : String(v)));
             row.appendChild(card);
             rendered++;

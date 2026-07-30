@@ -23,11 +23,10 @@
  * and the README has always described both views, but neither had a
  * consumer — the payload rode along unread in ~12k files.
  *
- * Server-side renders (the AI sentiment cards + the radar chart that
- * self-initialises from the inline JSON) live in `article.phtml` and
- * are NOT part of the dashboardLayout slot list. The radar
- * (`articleDashboard.radar`) hangs off its own DOM hook — it doesn't
- * need an orchestrator.
+ * The AI sentiment panel is rendered server-side in `article.phtml`
+ * (CSS dot plots off Omeka item metadata, no chart library) and is NOT
+ * part of the dashboardLayout slot list — it needs no orchestrator and
+ * no JS at all.
  *
  * Renderer wiring lives in `shared/dashboard-panels-bridge.js`.
  */
@@ -72,6 +71,11 @@
      * same reason the publication and reference dashboards build their own.
      */
     function buildMetricCards(article) {
+        // `text: true` marks a value that is prose rather than a figure, so
+        // the card lets it wrap. Without it the LDA topic — six keywords
+        // joined by dashes — rendered as one unwrappable line that painted
+        // past the card and gave the whole article page a horizontal
+        // scrollbar at any viewport narrow enough to squeeze the column.
         var defs = [
             { key: 'word_count',       label: 'Words',    format: P.formatNumber },
             { key: 'readability',      label: 'Readability (Flesch)' },
@@ -79,8 +83,8 @@
             // what the upstream column actually is.
             { key: 'lexical_richness', label: 'Lexical richness (MATTR)' },
             { key: 'nb_pages',         label: 'Pages',    format: P.formatNumber },
-            { key: 'language',         label: 'Language' },
-            { key: 'lda_label',        label: 'Topic' }
+            { key: 'language',         label: 'Language', text: true },
+            { key: 'lda_label',        label: 'Topic',    text: true }
         ];
         var row = P.el('div', 'iwac-vis-overview-summary');
         var rendered = 0;
@@ -89,7 +93,8 @@
             if (v == null || v === '') return;
             var card = P.el('div', 'iwac-vis-summary-card');
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(d.label)));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
+            card.appendChild(P.el('div',
+                'iwac-vis-summary-card__value' + (d.text ? ' iwac-vis-summary-card__value--text' : ''),
                 d.format ? d.format(v) : String(v)));
             // The LDA topic is machine output; mark it so a reader can tell
             // it apart from the archival metadata beside it.
@@ -127,8 +132,7 @@
     //
     // No facet here: the dynamic-panels `__body` wrapper mounts as a
     // sibling of the server-rendered sentiment block already in
-    // article.phtml, and `articleDashboard.radar` self-initialises off that
-    // template's inline JSON — neither needs an orchestrator step. The
+    // article.phtml, which needs no orchestrator step of its own. The
     // metrics row rides in through `mountHeader`, which the boot helper
     // calls with the body wrapper before the slots render.
 

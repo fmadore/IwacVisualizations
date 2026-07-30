@@ -762,6 +762,20 @@
     white-space: nowrap;
 }
 
+/*  Text-valued variant. `white-space: nowrap` above is right for a
+ *  figure — a thousands-separated number must never break across lines —
+ *  but a card whose value is prose (a language, an author list, a DOI, an
+ *  LDA topic's top words) has no such break to protect, and nowrap turns
+ *  it into one unwrappable run that paints straight out of the card and
+ *  gives the whole PAGE a horizontal scrollbar. `overflow-wrap: anywhere`
+ *  covers the DOI case, where there is no space to break at either.
+ *  Applied by the per-item dashboards that build their own cards; the
+ *  shared P.buildSummaryCards only ever renders formatNumber output. */
+.iwac-vis-summary-card__value--text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
 /* ---- Featured variant --------------------------------------------- */
 /*  The headline "Total items" figure: its ledger rule turns primary and
  *  the numeral steps up. One accent, no gradient wash. */
