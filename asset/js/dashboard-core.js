@@ -177,6 +177,34 @@
     };
 
     /**
+     * Register a plain canvas renderer so it repaints on theme change.
+     *
+     * The third tracked `kind`, alongside 'echarts' and 'maplibre'. It exists
+     * for the d3-force graphs (shared/graph-force.js), which paint straight to
+     * a 2D canvas from `getChartTokens()`: a light/dark toggle only needs the
+     * tokens re-read and one repaint, and MUST NOT re-run the simulation — the
+     * layout the reader arranged has to survive the swap.
+     *
+     * Sizing is NOT routed through here: a canvas renderer owns its own
+     * ResizeObserver on its container (which a window resize triggers anyway),
+     * so adding it to the window-resize sweep would only repaint twice.
+     *
+     * @param {HTMLElement} el
+     * @param {function(): void} repaint
+     * @returns {{remove: function(): void}}
+     */
+    ns.registerRenderer = function (el, repaint) {
+        var entry = { el: el, render: repaint, instance: null, kind: 'renderer' };
+        ns._charts.push(entry);
+        return {
+            remove: function () {
+                var i = ns._charts.indexOf(entry);
+                if (i >= 0) ns._charts.splice(i, 1);
+            }
+        };
+    };
+
+    /**
      * Return the currently-live MapLibre instance for a given container,
      * or null if the map is not tracked or has been removed. Used by
      * the panel-toolbar download button to capture the current canvas
@@ -198,6 +226,9 @@
             var alive = false;
             if (c.kind === 'echarts') alive = c.instance && !c.instance.isDisposed();
             else if (c.kind === 'maplibre') alive = c.instance && !c.instance._removed;
+            // A canvas renderer has no instance to interrogate — it lives
+            // exactly as long as its container is still in the document.
+            else if (c.kind === 'renderer') alive = !!(c.el && c.el.isConnected);
             if (!alive && c._resizeObserver) {
                 c._resizeObserver.disconnect();
                 c._resizeObserver = null;
@@ -228,6 +259,10 @@
      * registers an `onStyleReady` callback that re-runs on every
      * `style.load`, so custom sources / layers / markers get rebuilt
      * automatically after the basemap swap.
+     *
+     * For a plain canvas renderer (kind 'renderer') we just call its repaint:
+     * it reads `getChartTokens()` per frame, and its layout must survive the
+     * swap untouched.
      */
     ns.applyThemeToCharts = function () {
         if (typeof ns.refreshThemes === 'function') ns.refreshThemes();
@@ -247,6 +282,12 @@
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);
                 }
+            } else if (entry.kind === 'renderer') {
+                // refreshThemes() above already re-read the CSS variables, so
+                // the repaint picks up the new tokens. Deliberately no
+                // re-layout: a force graph's positions are the reader's.
+                try { entry.render(); }
+                catch (e) { console.error('IWACVis: renderer repaint failed', e); }
             } else if (entry.kind === 'maplibre') {
                 try {
                     // Route through P.setMapTheme when shared/maplibre.js

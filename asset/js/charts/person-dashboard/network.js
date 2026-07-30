@@ -1,95 +1,90 @@
 /**
- * IWAC Visualizations — Person + Entity Dashboards: network panel
+ * IWAC Visualizations — Person + Entity Dashboards: Associated entities
  *
- * Force-directed graph of TF-IDF ranked associated entities, colored
- * by index.Type. Reuses C.network. Click a node to navigate to the
- * corresponding Omeka item.
+ * The TF-IDF ranked neighbourhood of an authority record, drawn as a live
+ * d3-force graph on canvas (shared/graph-force.js) rather than the frozen
+ * ECharts `graph`/`force` series it used until v1.28.
  *
- * The toolbar (zoom ±, reset, legend, PNG download, fullscreen) and the
- * click-vs-drag-disambiguated click-through come from the shared
- * `P.buildGraphPanelToolbar` / `P.attachGraphClickThrough` helpers, so
- * this panel and the article context network stay visually +
- * behaviourally identical.
+ * What changed, and why it mattered here specifically:
  *
- * The panel opts out of the shared `.iwac-vis-panel-toolbar` via
- * `data-iwac-no-panel-toolbar="1"` (and its chart host carries the
- * `.iwac-vis-graph-host` marker class) so the two toolbars don't stack.
+ *   - The ECharts series ran its layout once and froze it (necessarily:
+ *     `layoutAnimation: false` is what stopped a resize or a merge-mode
+ *     setOption re-animating every edge). Dragging a node therefore moved
+ *     that one node through a static picture — the neighbourhood it belongs
+ *     to didn't respond, which is the whole point of dragging a node.
+ *   - It had no collision pass for labels, so a 50-node ego graph could
+ *     only ever label a handful of them, chosen by draw order.
+ *   - Clicking a node navigated straight to `/item/<o_id>`, throwing the
+ *     graph away on the obvious "tell me more" gesture. A node now becomes
+ *     the selection: its neighbourhood is highlighted, its connections are
+ *     named along their edges, and the record is an explicit link in the
+ *     card.
+ *
+ * The payload's second edge layer (neighbour ↔ neighbour, `kind: 'cross'`)
+ * is what gives the layout something to find; before v1.28 the precompute
+ * emitted a pure star and no renderer could have improved on a ring. Graphs
+ * generated before that carry ego edges only and still render.
+ *
+ * All the entity vocabulary (types, colours, tooltips, record URLs) lives in
+ * shared/entity-graph.js, which the article context network shares.
  */
 (function () {
     'use strict';
 
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
-    var C = ns.chartOptions;
-    if (!P || !C || !C.network) {
-        console.warn('IWACVis.person-dashboard/network: missing deps (need C.network)');
+    if (!P || !P.mountEntityGraph) {
+        console.warn('IWACVis.person-dashboard/network: missing deps (need shared/entity-graph.js)');
         return;
     }
 
     function render(panelEl, data, facet, ctx) {
         var byRole = (data && data.network && data.network.by_role) || {};
 
-        function currentGraph() {
-            return byRole[facet.role] || { nodes: [], edges: [] };
-        }
-        function hasData(g) { return g && g.nodes && g.nodes.length > 1; }
-
-        panelEl.chart.classList.add('iwac-vis-graph-host');
-        // Opt out of the shared panel-toolbar auto-wire — this panel ships
-        // its own graph toolbar (with a download button) just below.
-        if (panelEl.panel && panelEl.panel.setAttribute) {
-            panelEl.panel.setAttribute('data-iwac-no-panel-toolbar', '1');
-        }
-
-        // Build the full option only when the graph itself changes (facet
-        // switch, role flip). The toolbar's legend + fullscreen toggles use
-        // merge-mode setOption so the force simulation never restarts.
-        var toolbar = null;
-        function buildFullOption() {
-            // thumbnail: ECharts 6 minimap — orientation aid once the user
-            // zooms/pans the 50-node graph (auto-hidden ≤640px).
-            return C.network(currentGraph(), {
-                showLegend: toolbar ? toolbar.isLegendVisible() : true,
-                thumbnail: true
-            });
-        }
-
-        var chart = ns.registerChart(panelEl.chart, function (el, instance) {
-            if (hasData(currentGraph())) {
-                instance.setOption(buildFullOption(), true);
-            } else {
-                instance.clear();
-            }
+        var roles = Object.keys(byRole);
+        var hasAny = roles.some(function (role) {
+            var g = byRole[role];
+            return g && g.nodes && g.nodes.length > 1;
         });
-
-        if (!hasData(currentGraph()) && !chart) {
+        if (!hasAny) {
             panelEl.chart.appendChild(P.buildEmptyState());
+            return;
         }
 
-        if (chart) {
-            toolbar = P.buildGraphPanelToolbar(panelEl, chart, {
-                downloadName: 'iwac-associated-entities.png'
-            });
-            P.attachGraphClickThrough(chart, function (node) {
-                if (node.entityType === 'center') return;
-                if (node.o_id && ctx && ctx.siteBase) {
-                    window.location.href = ctx.siteBase + '/item/' + node.o_id;
-                }
-            });
-        }
-
-        // Role flips DO change the graph (different nodes + edges), so
-        // rebuild the full option. Force layout runs once synchronously
-        // because layoutAnimation is disabled in C.network.
-        facet.subscribe(function () {
-            if (chart && !chart.isDisposed()) {
-                if (hasData(currentGraph())) {
-                    chart.setOption(buildFullOption(), true);
-                } else {
-                    chart.clear();
-                }
-            }
+        var mounted = P.mountEntityGraph(panelEl, ctx, {
+            // Every role's nodes are registered up front, so flipping the facet
+            // re-settles the shared node objects rather than seeding a fresh
+            // layout — an entity that appears in both roles keeps its place.
+            variants: byRole,
+            downloadName: 'iwac-associated-entities.png',
+            ariaLabel: P.t('Network of the entities most associated with this record. Use the arrow keys to move between them and Enter to select one.')
         });
+        if (!mounted) {
+            panelEl.chart.appendChild(P.buildEmptyState());
+            return;
+        }
+
+        // A role can pass the facet bar's "has mentions" test and still yield a
+        // network with fewer than two nodes — every neighbour below
+        // `min_cooccurrence`, or dropped as collection-wide noise. So the empty
+        // state is per-role, not per-panel, and the canvas is cleared with it:
+        // leaving the previous role's graph up would silently mislabel it.
+        var empty = P.buildEmptyState();
+        panelEl.chart.appendChild(empty);
+
+        function apply(warm) {
+            var ok = mounted.show(facet.role, warm);
+            if (!ok) mounted.clear();
+            empty.hidden = ok;
+            panelEl.chart.classList.toggle('iwac-vis-graph-host--empty', !ok);
+        }
+
+        apply(false);
+
+        // A role flip is a warm update: same node objects, different visible
+        // set, so the graph relaxes into the new shape instead of exploding
+        // out of one point.
+        facet.subscribe(function () { apply(true); });
     }
 
     ns.personDashboard = ns.personDashboard || {};

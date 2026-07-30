@@ -29,8 +29,8 @@
 
     /**
      * The roam/drag/zoom-clamped, circular-seeded, layoutAnimation:false
-     * base every IWAC force graph builds on (C.network,
-     * C.collaborationNetwork, press-reprints). Two of its choices are
+     * base the remaining ECharts force graphs build on
+     * (C.collaborationNetwork, press-reprints). Two of its choices are
      * load-bearing, not stylistic:
      *
      * - `initLayout: 'circular'` seeds node positions — a frozen
@@ -39,6 +39,12 @@
      * - `layoutAnimation: false` runs the simulation once, synchronously,
      *   and freezes the positions, so resize / fullscreen / merge-mode
      *   setOption never re-animates the edges.
+     *
+     * That second choice is also why the item-page ego networks left this
+     * family in v1.28.0: a frozen layout cannot respond to a drag, so moving
+     * a node moved it through a static picture. Those graphs now simulate
+     * live on canvas (shared/graph-force.js). The two that remain here are
+     * collection-scale and read as pictures rather than instruments.
      *
      * Callers `Object.assign` their data / links / categories / emphasis
      * / cursor on top; only the knobs that actually differ between the
@@ -73,268 +79,6 @@
                 layoutAnimation: false
             }
         };
-    };
-
-    /* ----------------------------------------------------------------- */
-    /*  Entity neighbor network (force-directed graph)                    */
-    /* ----------------------------------------------------------------- */
-
-    /**
-     * Force-layout graph for a center entity + its top-N neighbors.
-     *
-     * Expected shape (produced by the Python generator):
-     *   graph = {
-     *     nodes: [
-     *       { o_id, title, type, cooc, score }   // nodes[0] is the center
-     *       ...
-     *     ],
-     *     edges: [
-     *       { source, target, weight, cooc }
-     *       ...
-     *     ]
-     *   }
-     *
-     * @param {Object} graph
-     * @param {Object} [opts]
-     * @param {number} [opts.maxLabelLength=24]   Middle-ellipsis cutoff
-     * @param {Object} [opts.typeColors]          { typeName: hex }
-     */
-    C.network = function (graph, opts) {
-        opts = opts || {};
-        var maxLen = opts.maxLabelLength || 24;
-        var nodes = (graph && graph.nodes) || [];
-        var edges = (graph && graph.edges) || [];
-
-        var palette = (ns.getPalette && ns.getPalette())
-            || ['#e64a19', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574'];
-        var TYPE_COLORS = {
-            'center':        palette[0],
-            'Personnes':     palette[1],
-            'Organisations': palette[2],
-            'Lieux':         palette[3],
-            'Sujets':        palette[4],
-            '\u00c9v\u00e9nements': palette[5]
-        };
-        if (opts.typeColors) {
-            for (var k in opts.typeColors) {
-                if (Object.prototype.hasOwnProperty.call(opts.typeColors, k)) {
-                    TYPE_COLORS[k] = opts.typeColors[k];
-                }
-            }
-        }
-
-        var scores = nodes.map(function (n) { return n.score || 0; });
-        var maxScore = Math.max.apply(null, scores.concat([1]));
-        var weights = edges.map(function (e) { return e.weight || 0; });
-        var maxWeight = Math.max.apply(null, weights.concat([1]));
-
-        // Build the categories array that ECharts needs for legend
-        // toggling. Category 0 is always the centre so it can keep its
-        // distinctive palette[0] color; non-centre types get their own
-        // category in order of first appearance. Legend data is then
-        // built FROM categories[].name, so legend names automatically
-        // match series categories — clicking a legend entry toggles
-        // all nodes with that category without the panel having to
-        // replace the whole option.
-        var categoryIndex = { 'center': 0 };
-        var categories = [{
-            name: t('entity_type_center') || 'Center',
-            itemStyle: { color: TYPE_COLORS.center }
-        }];
-        nodes.forEach(function (n) {
-            if (!n.type || n.type === 'center') return;
-            if (categoryIndex[n.type] != null) return;
-            categoryIndex[n.type] = categories.length;
-            categories.push({
-                name: t('entity_type_' + n.type),
-                itemStyle: { color: TYPE_COLORS[n.type] || palette[categories.length % palette.length] }
-            });
-        });
-
-        var graphNodes = nodes.map(function (n, idx) {
-            var isCenter = n.type === 'center';
-            var normScore = isCenter ? 1 : Math.max(0, Math.min(1, (n.score || 0) / maxScore));
-            // Make the centre visually unmistakable since we no longer
-            // fix its position — size + type color do all the lifting.
-            var symbolSize = isCenter ? 56 : 14 + Math.sqrt(normScore) * 28;
-            return {
-                id: String(n.o_id),
-                name: C._truncate(n.title || '', maxLen),
-                fullTitle: n.title || '',
-                entityType: n.type,
-                o_id: n.o_id,
-                cooc: n.cooc,
-                score: n.score,
-                symbolSize: symbolSize,
-                category: categoryIndex[n.type] != null ? categoryIndex[n.type] : 0,
-                // Intentionally NO `fixed` and NO x/y seed: pinning the
-                // centre at (0,0) made the auto-fit asymmetric — nodes
-                // clustered around the pin and ECharts couldn't centre
-                // the resulting bbox in the viewport. Force layout with
-                // an `initLayout: 'circular'` seed (set below) produces
-                // a symmetric starting point so the final layout lands
-                // in the middle of the panel.
-                label: { show: true, position: 'right', formatter: '{b}' }
-            };
-        });
-
-        var graphEdges = edges.map(function (e) {
-            var normWeight = Math.max(0, Math.min(1, (e.weight || 0) / maxWeight));
-            return {
-                source: String(e.source),
-                target: String(e.target),
-                value: e.weight,
-                cooc: e.cooc,
-                lineStyle: {
-                    width: 1 + Math.sqrt(normWeight) * 4,
-                    opacity: 0.55
-                }
-            };
-        });
-
-        // Legend data = category names excluding the centre, so the
-        // centre is always visible but the user can toggle off any
-        // type they don't care about. Clicking a legend entry now
-        // works because the names are guaranteed to match a category.
-        var legendData = categories.slice(1).map(function (c) { return c.name; });
-
-        var base = {
-            tooltip: {
-                trigger: 'item',
-                // Keep the tooltip clamped inside the chart bounds and
-                // append it to the chart's host element. Both matter
-                // for native fullscreen: the panel becomes the only
-                // visible element, so a tooltip that ECharts had
-                // appended elsewhere (or positioned outside the chart
-                // host's box) renders off-screen. `confine: true` +
-                // explicit `appendTo` survive `requestFullscreen()`.
-                confine: true,
-                appendTo: function (chartEl) { return chartEl; },
-                formatter: function (p) {
-                    if (p.dataType === 'node') {
-                        var nodeData = p.data || {};
-                        var lines = ['<strong>' + esc(nodeData.fullTitle || '') + '</strong>'];
-                        if (nodeData.entityType && nodeData.entityType !== 'center') {
-                            lines.push(t('entity_type_' + nodeData.entityType));
-                        }
-                        if (nodeData.cooc != null) {
-                            lines.push(t('mentions_count', { count: fmt(nodeData.cooc) }));
-                        }
-                        if (nodeData.score != null) {
-                            lines.push(t('Distinctiveness score') + ': ' + fmt(Math.round(nodeData.score * 10) / 10));
-                        }
-                        return lines.join('<br>');
-                    }
-                    if (p.dataType === 'edge') {
-                        var edgeData = p.data || {};
-                        return t('mentions_count', { count: fmt(edgeData.cooc || 0) });
-                    }
-                    return '';
-                }
-            },
-            legend: legendData.length ? (function () {
-                // Theme-aware legend chrome — read tokens at build time so
-                // the panel matches IWAC light/dark and the user's CSS
-                // overrides without any hardcoded rgba.
-                var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-                return [{
-                    // Legend data now matches series categories by name,
-                    // so ECharts can toggle categories on/off when the
-                    // user clicks a legend entry. The old implementation
-                    // passed object literals with no series match and
-                    // the legend rendered as an empty box.
-                    data: legendData,
-                    show: opts.showLegend !== false,
-                    bottom: 8,
-                    left: 'center',
-                    orient: 'horizontal',
-                    itemWidth: 14,
-                    itemHeight: 10,
-                    itemGap: 16,
-                    padding: [6, 12],
-                    backgroundColor: tokens.surface || 'transparent',
-                    borderColor: tokens.borderLight || tokens.border || 'transparent',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                    textStyle: { fontSize: 12, color: tokens.inkLight || tokens.ink }
-                }];
-            })() : [],
-            // Reserve room for the bottom legend only when it is actually
-            // visible; otherwise the force layout gets the whole panel
-            // below the top padding.
-            series: [Object.assign(
-                C._forceGraphBase({ bottom: opts.showLegend !== false ? 56 : 16 }),
-                {
-                    // Shrink node symbols gently as the user zooms in so
-                    // labels stay readable.
-                    nodeScaleRatio: 0.6,
-                    focusNodeAdjacency: true,
-                    // Categories drive the legend. Each entry's name must
-                    // match the legend.data entries (which we built from
-                    // the same array), so clicks on the legend toggle the
-                    // corresponding category without the panel JS having
-                    // to rebuild the whole option.
-                    categories: categories,
-                    emphasis: {
-                        focus: 'adjacency',
-                        lineStyle: { width: 4 },
-                        scale: true,
-                        scaleSize: 3
-                    },
-                    data: graphNodes,
-                    links: graphEdges,
-                    cursor: 'pointer'
-                }
-            )],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
-        };
-
-        // Optional thumbnail minimap (ECharts 6.0 component) — orientation
-        // aid for the bigger ego networks: the window rectangle shows
-        // which part of the zoomed/panned graph is in view. Off by
-        // default; the person / article network panels opt in.
-        if (opts.thumbnail) {
-            var thumbTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            base.thumbnail = {
-                show: true,
-                right: 8,
-                top: 8,
-                width: '24%',
-                height: '24%',
-                seriesIndex: 0,
-                itemStyle: {
-                    color: thumbTokens.surface || 'transparent',
-                    borderColor: thumbTokens.border || '#999',
-                    borderWidth: 1
-                },
-                windowStyle: {
-                    color: 'transparent',
-                    borderColor: thumbTokens.primary || thumbTokens.ink || '#999',
-                    borderWidth: 1
-                }
-            };
-        }
-
-        var networkMedia = [
-            {
-                query: { maxWidth: R ? R.BP.sm : 640 },
-                option: {
-                    // The minimap costs too much canvas on phones.
-                    thumbnail: { show: false },
-                    series: [{
-                        force: {
-                            repulsion: 120,
-                            edgeLength: [30, 80]
-                        }
-                    }]
-                }
-            }
-        ];
-
-        return R && R.withMedia
-            ? R.withMedia(base, networkMedia)
-            : base;
     };
 
     /* ------------------------------------------------------------------ */
@@ -442,9 +186,9 @@
 
     /**
      * Force-directed graph of authors that collaborated on the same
-     * references. Distinct from `C.network` (which is the ego-centric
-     * entity dashboard graph): every node here is an author, and edges
-     * carry a `type` field with three valid values:
+     * references. Not ego-centric — the item-page ego networks moved to
+     * the canvas renderer in v1.28.0. Every node here is an author, and
+     * edges carry a `type` field with three valid values:
      *
      *   - `coauthor`        — two authors signed the same reference
      *   - `author_editor`   — one author signed a reference whose

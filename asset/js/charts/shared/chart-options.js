@@ -17,7 +17,7 @@
  *
  *   chart-options-bar.js      timeline, growthBar, stackedBar
  *   chart-options-hbar.js     horizontalBar, newspaper, entities, scaryTerms
- *   chart-options-graph.js    network, chord, collaborationNetwork, sankey
+ *   chart-options-graph.js    chord, collaborationNetwork, sankey
  *   chart-options-special.js  pie, treemap, gantt, wordcloud, segmentedBar,
  *                             sunburst, beeswarm, heatmap
  *

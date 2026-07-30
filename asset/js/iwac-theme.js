@@ -37,6 +37,7 @@
         primary:       '#ce4115',  // --primary = mix(#e64a19, black 8%)
         secondary:     '#394f68',  // --secondary = seed (slate; 2nd data colour)
         ink:           '#13161c',  // oklch(20% 0.012 264)
+        inkStrong:     '#05070c',  // oklch(12% 0.014 264)
         inkLight:      '#3f4349',  // oklch(38% 0.012 260)
         muted:         '#66696e',  // oklch(52% 0.008 256)
         surface:       '#fdfcfb',  // oklch(99.2% 0.002 60)  near-white, not cream
@@ -51,6 +52,7 @@
         primary:       '#ec653f',  // mix(--primary-base, white 12%) in oklab
         secondary:     '#708093',  // mix(--secondary-base, white 30%) in oklab
         ink:           '#e7e4df',  // oklch(92% 0.008 78)
+        inkStrong:     '#f7f5f1',  // oklch(97% 0.006 80)
         inkLight:      '#b5b0aa',  // oklch(76% 0.010 75)
         muted:         '#8a8580',  // oklch(62% 0.010 70)
         surface:       '#110c08',  // oklch(16% 0.012 70)
@@ -363,6 +365,10 @@
             primary:       readColorVar('--primary')        || fallback.primary,
             secondary:     readColorVar('--secondary')      || fallback.secondary,
             ink:           readColorVar('--ink')            || fallback.ink,
+            // The theme's strongest ink, reserved for display headings. Read
+            // for the canvas force graphs, whose centre label is the one piece
+            // of type in them that carries heading weight.
+            inkStrong:     readColorVar('--ink-strong')     || fallback.inkStrong,
             inkLight:      readColorVar('--ink-light')      || fallback.inkLight,
             muted:         readColorVar('--muted')          || fallback.muted,
             surface:       readColorVar('--surface')        || fallback.surface,

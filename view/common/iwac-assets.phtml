@@ -17,6 +17,7 @@
  *         'needs'        => [
  *             'maplibre'     => true,
  *             'wordcloud'    => true,
+ *             'd3'           => true,           // canvas force-graph renderer
  *             'chartOptions' => true,
  *             'facetButtons' => true,
  *             'table'        => true,
@@ -64,6 +65,19 @@ $cdnEcharts     = 'https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.j
 $cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js';
 $cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js';
 $cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css';
+// d3-force for the item-page ego networks (~17 KB total, vs the 640 KB
+// ECharts bundle they used to lean on for a `graph`/`force` series).
+// ORDER IS LOAD-BEARING: the UMD builds all attach to one shared `d3`
+// global, and d3-force resolves forceCollide's quadtree, the dispatcher and
+// the animation timer off that global at definition time. Loading force
+// first leaves `d3.forceCollide` undefined at runtime with no error at load.
+// The lazy loader below preserves this order (`async = false`).
+$cdnD3 = [
+    'https://cdn.jsdelivr.net/npm/d3-dispatch@3.0.1/dist/d3-dispatch.min.js',
+    'https://cdn.jsdelivr.net/npm/d3-quadtree@3.0.1/dist/d3-quadtree.min.js',
+    'https://cdn.jsdelivr.net/npm/d3-timer@3.0.1/dist/d3-timer.min.js',
+    'https://cdn.jsdelivr.net/npm/d3-force@3.0.0/dist/d3-force.min.js',
+];
 
 // -- Defaults -----------------------------------------------------------
 $blockCss     = isset($blockCss)     ? $blockCss     : null;
@@ -74,6 +88,9 @@ $orchestrator = isset($orchestrator) ? $orchestrator : null;
 $needMaplibre   = !empty($needs['maplibre']);
 $needWordcloud  = !empty($needs['wordcloud']);
 $needChartOpts  = !empty($needs['chartOptions']);
+// `d3` pulls d3-force + the IWAC canvas force-graph renderer (graph-canvas →
+// graph-force → graph-panel). Opt-in: only the item-page ego networks need it.
+$needD3         = !empty($needs['d3']);
 // `table` implicitly needs pagination — pagination.js is table.js's dep.
 $needPagination = !empty($needs['pagination']) || !empty($needs['table']);
 $needTable      = !empty($needs['table']);
@@ -136,6 +153,11 @@ $scripts[] = $cdnEcharts;
 if ($needWordcloud) {
     $scripts[] = $cdnWordcloud;
 }
+if ($needD3) {
+    foreach ($cdnD3 as $d3Script) {
+        $scripts[] = $d3Script;
+    }
+}
 $lazyCss = [];
 if ($needMaplibre) {
     $scripts[] = $cdnMaplibreJs;
@@ -195,6 +217,15 @@ if ($needMaplibre) {
     $scripts[] = $this->assetUrl('js/charts/shared/maplibre.min.js', $module);
     $scripts[] = $this->assetUrl('js/charts/shared/map-popup.min.js', $module);
     $scripts[] = $this->assetUrl('js/charts/shared/choropleth.min.js', $module);
+}
+// Canvas force-graph renderer. Strict order: the painter, then the
+// simulation/interaction controller that drives it, then the panel chrome,
+// then the IWAC entity vocabulary layered on top of all three.
+if ($needD3) {
+    $scripts[] = $this->assetUrl('js/charts/shared/graph-canvas.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/graph-force.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/graph-panel.min.js', $module);
+    $scripts[] = $this->assetUrl('js/charts/shared/entity-graph.min.js', $module);
 }
 
 // Dashboard layout system + opt-in renderers (each renderer self-registers

@@ -209,6 +209,9 @@ echo $this->partial('common/iwac-block-shell', [
         'blockCss' => ['person-dashboard', 'article-dashboard'],
         'needs' => [
             'maplibre'     => true,
+            // The context network is a canvas force graph (d3-force), not an
+            // ECharts series — see article-dashboard/network.js.
+            'd3'           => true,
             'chartOptions' => true,
             'facetButtons' => true,
             'table'        => true,

@@ -156,6 +156,33 @@ DEFAULT_MIN_COOCCURRENCE = 2
 # Top cap per target, per role slice, for the neighbor network panel.
 TOP_N_NEIGHBORS = 50
 
+# Minimum co-occurrence between two NEIGHBOURS before the network draws an
+# edge between them. The ego edges (target → neighbour) are the panel's
+# primary layer and keep their own DEFAULT_MIN_COOCCURRENCE floor; this
+# governs the second layer, which exists to give the graph structure the
+# ego edges cannot have.
+#
+# Before v1.28 the panel emitted ONLY ego edges, so every dashboard's
+# network was a star: fifty spokes around one hub, no triangles, nothing
+# for a layout to reveal beyond "these fifty things are near this one
+# thing". A force layout has no information to work with there — the
+# picture is a ring whatever the physics. With neighbour↔neighbour edges
+# the same fifty entities separate into the clusters they actually form
+# (a town, its imams, and the association they founded pull together and
+# away from an unrelated national controversy), which is the question a
+# reader brings to an entity page in the first place.
+#
+# 2 rather than 1: a single shared item between two neighbours is usually
+# the target's own item, which links them trivially and would draw the
+# complete graph on the top-N — every pair connected, i.e. no structure
+# again, at 1,225 edges.
+MIN_NEIGHBOUR_LINK = 2
+
+# Cap on the second layer. Sized so the cross edges stay a texture the eye
+# reads through rather than a mesh it reads instead; the ego edges are at
+# most TOP_N_NEIGHBORS, so this keeps the two layers within ~4x.
+MAX_NEIGHBOUR_LINKS = 200
+
 # Max articles attached to each location in the map popup. Bounded
 # because popular targets in large cities accumulate hundreds of
 # mentions, and the popup only paginates a few per page anyway.
@@ -857,11 +884,26 @@ class DashboardAggregator:
         Nodes[0] is the target itself (type='center', score=null).
         Neighbors are scored as ``cooc * log(N / df_x)``, sorted by
         score descending, capped at ``TOP_N_NEIGHBORS``.
+
+        Two layers of edges:
+
+        - **ego** (``kind='ego'``) — target → neighbour, weighted by the
+          TF-IDF score. The panel's primary statement.
+        - **cross** (``kind='cross'``) — neighbour ↔ neighbour, weighted by
+          how many of the target's items mention both. Emitted since v1.28;
+          see ``MIN_NEIGHBOUR_LINK`` for why a star was the wrong shape.
+
+        Consumers must treat ``kind`` as optional: dashboards generated
+        before v1.28 carry ego edges only and no ``kind`` field at all.
         """
         target_info = self.targets[target_id]
         by_role: Dict[str, Any] = {}
 
         for role, item_keys in self._role_slices(target_id):
+            # Materialised once: the cross-edge pass below needs a second
+            # walk over the same items, and _role_slices may hand back a
+            # one-shot iterable.
+            item_keys = list(item_keys)
             cooc: Counter = Counter()
             for key in item_keys:
                 for o_id in self._item_neighbor_ids(key, target_id):
@@ -907,11 +949,60 @@ class DashboardAggregator:
                 "target": n["o_id"],
                 "weight": n["score"],
                 "cooc": n["cooc"],
+                "kind": "ego",
             } for n in scored]
+            edges.extend(
+                self._neighbour_edges(target_id, item_keys, {n["o_id"] for n in scored})
+            )
 
             by_role[role] = {"nodes": nodes, "edges": edges}
 
         return {"by_role": by_role}
+
+    def _neighbour_edges(
+        self,
+        target_id: int,
+        item_keys: List[str],
+        kept: Set[int],
+    ) -> List[Dict[str, Any]]:
+        """Neighbour ↔ neighbour co-occurrence edges among ``kept``.
+
+        Same pairwise counting as ``compute_cooccurrence`` (each of the
+        target's items contributes one count to every pair of other
+        entities it mentions), restricted to the nodes the network kept
+        and to pairs above ``MIN_NEIGHBOUR_LINK``.
+
+        Sorted by weight then by id pair, so a regeneration of unchanged
+        data produces a byte-identical file — the fan-out writes one JSON
+        per item and a churning diff there is expensive.
+        """
+        if len(kept) < 2:
+            return []
+
+        pair_counts: Counter = Counter()
+        for key in item_keys:
+            here = sorted(
+                o_id for o_id in set(self._item_neighbor_ids(key, target_id))
+                if o_id in kept
+            )
+            for i in range(len(here)):
+                for j in range(i + 1, len(here)):
+                    pair_counts[(here[i], here[j])] += 1
+
+        pairs = [
+            (pair, count)
+            for pair, count in pair_counts.items()
+            if count >= MIN_NEIGHBOUR_LINK
+        ]
+        pairs.sort(key=lambda item: (-item[1], item[0]))
+
+        return [{
+            "source": pair[0],
+            "target": pair[1],
+            "weight": count,
+            "cooc": count,
+            "kind": "cross",
+        } for pair, count in pairs[:MAX_NEIGHBOUR_LINKS]]
 
     # ------------------------------------------------------------------
     # Section assembly

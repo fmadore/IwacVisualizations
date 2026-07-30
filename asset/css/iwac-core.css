@@ -175,6 +175,15 @@
     font-size: var(--text-sm, 0.9375rem);
 }
 
+/*  `display: flex` above OUTRANKS the UA's `[hidden] { display: none }`, so a
+ *  banner toggled via the `hidden` property would stay on screen. Anything
+ *  that keeps an empty state in the DOM and shows it per-facet (the entity
+ *  force graph) needs this. */
+.iwac-vis-empty[hidden],
+.iwac-vis-error[hidden] {
+    display: none;
+}
+
 .iwac-vis-error {
     color: var(--error, #c9222b);
 }
@@ -1352,4 +1361,328 @@ select.iwac-vis-control:hover {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+
+/* =================================================================== */
+/*  Canvas force graph (d3-force) — stage, legend, tooltip, card         */
+/* =================================================================== */
+
+/*  Shared by the item-page ego networks (Associated entities on the
+ *  person / entity dashboards, Article context). The ECharts graphs that
+ *  remain — references-overview, semantic-landscape — keep using plain
+ *  `.iwac-vis-graph-host`, which is why the flex column below is gated
+ *  behind the `--force` modifier rather than added to the base class.
+ *
+ *  Height flows DOWN, never up: the host has the 640px floor (and the
+ *  fullscreen override further up this file), the stage takes what the
+ *  flex row leaves it, and the canvas is absolutely positioned inside the
+ *  stage. A canvas in flow carrying an inline pixel height measured from
+ *  its own container ratchets on every ResizeObserver pass — that bug grew
+ *  the sibling AMIRA module's graph without bound in fullscreen. */
+
+.iwac-vis-graph-host--force {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.5rem);
+}
+
+/*  `.iwac-vis-btn` sets `display: flex`, which OUTRANKS the UA's
+ *  `[hidden] { display: none }` — so a toolbar button hidden via the
+ *  `hidden` property stayed visible. The "release the nodes you moved"
+ *  button is hidden until something is actually pinned, so without this it
+ *  offered to undo nothing. */
+.iwac-vis-graph-toolbar__btn[hidden] {
+    display: none;
+}
+
+/*  A facet with nothing to draw: the empty state replaces the whole
+ *  apparatus, rather than leaving a toolbar and a legend attached to a
+ *  blank canvas. */
+.iwac-vis-graph-host--empty > .iwac-vis-graph-stage,
+.iwac-vis-graph-host--empty > .iwac-vis-graph-legend,
+.iwac-vis-graph-host--empty > .iwac-vis-graph-toolbar {
+    display: none;
+}
+
+.iwac-vis-graph-stage {
+    position: relative;
+    flex: 1 1 auto;
+    /*  Without this a flex item refuses to shrink below its content, which
+     *  would hand the ratchet back to us through the back door. */
+    min-height: 0;
+}
+
+.iwac-vis-graph-canvas {
+    position: absolute;
+    inset: 0;
+    /*  A <canvas> is a REPLACED element, so `inset: 0` alone leaves it at its
+     *  intrinsic 300x150 in the corner — CSS 2.1 §10.3.7 resolves an absolutely
+     *  positioned replaced element's width from its intrinsic size and ignores
+     *  left/right. GraphCanvas.resize() writes explicit pixel sizes a frame
+     *  later, so this is what the reader sees in between. */
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;   /* the graph owns pan + pinch inside its own box */
+    cursor: grab;
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+.iwac-vis-graph-canvas:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+/*  Screen-reader running commentary for the keyboard walk. Visually
+ *  hidden, never display:none — that would take it out of the
+ *  accessibility tree and silence the live region. */
+.iwac-vis-graph-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ---- Tooltip ------------------------------------------------------- */
+
+.iwac-vis-graph-tooltip {
+    position: absolute;
+    z-index: 6;
+    max-width: 17rem;
+    padding: var(--space-xs, 0.25rem) var(--space-sm, 0.5rem);
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--surface, #fdfcfb);
+    color: var(--ink, #13161c);
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.45;
+    box-shadow: var(--shadow-md, 0 4px 12px 0 var(--iwac-vis-shadow-subtle));
+    pointer-events: none;
+}
+
+.iwac-vis-graph-tooltip__hint {
+    margin-top: 0.15rem;
+    color: var(--muted, #66696e);
+    font-size: 0.6875rem;
+}
+
+/* ---- Legend -------------------------------------------------------- */
+
+/*  In flow below the stage, not an overlay: a legend that covers nodes is
+ *  a legend the reader has to move out of the way. */
+.iwac-vis-graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs, 0.25rem);
+    flex: 0 0 auto;
+}
+
+.iwac-vis-graph-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--surface, #fdfcfb);
+    color: var(--ink, #13161c);
+    font-family: inherit;
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.4;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast, 150ms ease),
+        border-color var(--transition-fast, 150ms ease),
+        opacity var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-graph-legend__item:hover {
+    border-color: var(--border-strong, var(--border, #ced1d6));
+    background: var(--surface-raised, #faf8f6);
+}
+
+.iwac-vis-graph-legend__item:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+/*  Hidden category: dimmed and struck through, so "off" is legible
+ *  without relying on the opacity difference alone. */
+.iwac-vis-graph-legend__item--off {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.iwac-vis-graph-legend__swatch {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: var(--radius-full, 9999px);
+    flex: 0 0 auto;
+}
+
+/* ---- Selection card ------------------------------------------------ */
+
+/*  Opens when a reader selects a node. Bottom-left of the stage so it sits
+ *  opposite the toolbar and clear of the label gutter fit() reserves on
+ *  the right. */
+.iwac-vis-graph-card {
+    position: absolute;
+    left: var(--space-sm, 0.5rem);
+    bottom: var(--space-sm, 0.5rem);
+    z-index: 5;
+    width: 17rem;
+    max-width: calc(100% - var(--space-lg, 1.5rem));
+    max-height: 60%;
+    overflow-y: auto;
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    border: 1px solid var(--border, #ced1d6);
+    /*  The one structural side-stripe here: it marks the card as belonging
+     *  to the selected node, whose ring on the canvas is the same accent. */
+    border-left: var(--accent-line-md, 3px) solid var(--primary, #ce4115);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--surface, #fdfcfb);
+    box-shadow: var(--shadow-md, 0 4px 12px 0 var(--iwac-vis-shadow-subtle));
+}
+
+.iwac-vis-graph-card__close {
+    float: right;
+    width: var(--iwac-vis-icon-btn-sm, 28px);
+    height: var(--iwac-vis-icon-btn-sm, 28px);
+    margin: -0.15rem -0.5rem 0 0.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted, #66696e);
+    font-size: var(--text-lg, 1.1875rem);
+    line-height: 1;
+    cursor: pointer;
+}
+
+.iwac-vis-graph-card__close:hover {
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-graph-card__close:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 1px;
+}
+
+.iwac-vis-graph-card__title {
+    margin: 0 0 0.15rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink-strong, var(--ink, #13161c));
+}
+
+.iwac-vis-graph-card__kind {
+    margin: 0 0 var(--space-sm, 0.5rem);
+    font-size: 0.6875rem;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-graph-card__facts {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.1rem var(--space-sm, 0.5rem);
+    margin: 0 0 var(--space-sm, 0.5rem);
+    font-size: var(--text-xs, 0.8125rem);
+}
+
+.iwac-vis-graph-card__facts dt {
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-graph-card__facts dd {
+    margin: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink, #13161c);
+}
+
+.iwac-vis-graph-card__label {
+    margin: 0 0 0.2rem;
+    font-size: 0.6875rem;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-graph-card__links {
+    margin: 0 0 var(--space-sm, 0.5rem);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs, 0.8125rem);
+}
+
+.iwac-vis-graph-card__links li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm, 0.5rem);
+    padding: 0.1rem 0;
+}
+
+/*  Walking to a neighbour re-anchors the graph — it never navigates, so it
+ *  is a button, styled as the quiet link it behaves like. */
+.iwac-vis-graph-card__jump {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink, #13161c);
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-graph-card__jump:hover {
+    color: var(--primary, #ce4115);
+    text-decoration: underline;
+}
+
+.iwac-vis-graph-card__jump:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 1px;
+}
+
+.iwac-vis-graph-card__weight {
+    flex: 0 0 auto;
+    color: var(--muted, #66696e);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-graph-card__more {
+    margin: 0 0 var(--space-sm, 0.5rem);
+    font-size: var(--text-xs, 0.8125rem);
+    color: var(--muted, #66696e);
+}
+
+/*  The only navigation out of the graph, and deliberately the only thing
+ *  in the card that looks like a link. */
+.iwac-vis-graph-card__open {
+    display: inline-block;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--primary, #ce4115);
+}
+
+@media (max-width: 600px) { /* sm */
+    /*  Full width at the bottom on a phone: a 17rem card floating over a
+     *  narrow stage hides more graph than it explains. */
+    .iwac-vis-graph-card {
+        left: var(--space-xs, 0.25rem);
+        right: var(--space-xs, 0.25rem);
+        bottom: var(--space-xs, 0.25rem);
+        width: auto;
+        max-width: none;
+        max-height: 50%;
+    }
 }

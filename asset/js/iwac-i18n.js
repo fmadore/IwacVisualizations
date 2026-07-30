@@ -160,7 +160,7 @@
             'desc_mentions_timeline':      'Articles, publications and references mentioning this person each year, stacked by country of publication.',
             'desc_top_newspapers':         'News and periodical sources where this person appears most often (top 15).',
             'desc_countries_covered':      'Distribution of mentions by country of publication of the source.',
-            'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named.',
+            'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named. Thick lines run from this person to each entity; the faint dashed ones join entities that keep turning up together. Drag a node to rearrange the graph, click one to see its connections.',
             'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
             // New shared panels (person + entity)
@@ -197,12 +197,20 @@
             'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
             'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
             'desc_entity_countries_covered':    'Distribution of mentions by country of publication of the source.',
-            'desc_entity_associated_entities':  'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this entity is named.',
+            'desc_entity_associated_entities':  'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this entity is named. Thick lines run from this entity to each of them; the faint dashed ones join entities that keep turning up together. Drag a node to rearrange the graph, click one to see its connections.',
             'desc_entity_associated_locations': 'Geographic places mentioned in the same items as this entity, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
 
-            // Network panel toolbar
+            // Network panel toolbar + canvas force graph.
+            // English keys are their own value, so only the parameterised
+            // templates need an entry here; the plain labels
+            // ('Show all labels', 'Freeze the layout', …) fall through the
+            // identity default and are translated in the fr table below.
+            'shared_items_count': '{count} shared items',
+            'connections_count':  '{count} connections',
+            'one_connection':     '1 connection',
+            'and_n_more':         'and {count} more',
 
-            // Entity type labels (used by C.network legend + tooltips)
+            // Entity type labels (legend + tooltips of the entity graphs)
             'entity_type_center': 'Center',
             'entity_type_Personnes': 'Persons',
             'entity_type_Organisations': 'Organizations',
@@ -217,7 +225,7 @@
             // general audience; no jargon like "cosine similarity" or
             // "thematic siblings").
             'desc_article_context_network':
-                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Click any node to open its page.',
+                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Drag a node to rearrange the graph, click one to see its connections and a link to its page.',
             'desc_article_further_reading':
                 'Other material from the collection that connects to this article. Switch between the ways of finding it.',
             'desc_further_reading_tags':
@@ -605,14 +613,14 @@
             'desc_mentions_timeline':      'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette personne par ann\u00e9e, empil\u00e9 par pays de publication.',
             'desc_top_newspapers':         'Journaux et p\u00e9riodiques o\u00f9 cette personne appara\u00eet le plus souvent (top 15).',
             'desc_countries_covered':      'R\u00e9partition des mentions par pays de publication de la source.',
-            'desc_associated_entities':    'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette personne est nomm\u00e9e.',
+            'desc_associated_entities':    'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette personne est nomm\u00e9e. Les traits \u00e9pais relient cette personne \u00e0 chaque entit\u00e9 ; les pointill\u00e9s discrets relient les entit\u00e9s qui reviennent ensemble. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe, cliquez dessus pour voir ses liens.',
             'desc_associated_locations':   'Lieux g\u00e9ographiques mentionn\u00e9s dans les notices o\u00f9 cette personne appara\u00eet comme cr\u00e9ateur ou sujet, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
 
             // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
             'desc_entity_mentions_timeline':    'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette entit\u00e9 par ann\u00e9e, empil\u00e9 par pays de publication.',
             'desc_entity_top_newspapers':       'Journaux et p\u00e9riodiques o\u00f9 cette entit\u00e9 est nomm\u00e9e le plus souvent (top 15).',
             'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
-            'desc_entity_associated_entities':  'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette entit\u00e9 est nomm\u00e9e.',
+            'desc_entity_associated_entities':  'Top 50 des entit\u00e9s co-occurrentes (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) class\u00e9es par score TF-IDF dans les notices o\u00f9 cette entit\u00e9 est nomm\u00e9e. Les traits \u00e9pais relient cette entit\u00e9 \u00e0 chacune d\u2019elles ; les pointill\u00e9s discrets relient les entit\u00e9s qui reviennent ensemble. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe, cliquez dessus pour voir ses liens.',
             'desc_entity_associated_locations': 'Lieux g\u00e9ographiques mentionn\u00e9s dans les m\u00eames notices que cette entit\u00e9, extraits de la couverture spatiale et des balises de lieux li\u00e9es \u00e0 la liste d\u2019autorit\u00e9 IWAC.',
 
             // New shared panels (person + entity)
@@ -660,7 +668,28 @@
             'Toggle legend': 'Afficher/masquer la l\u00e9gende',
             'Toggle fullscreen': 'Basculer en plein \u00e9cran',
 
-            // Entity type labels (used by C.network legend + tooltips)
+            // Canvas force graph \u2014 toolbar, legend, tooltip, selection card
+            'Show all labels':              'Afficher toutes les \u00e9tiquettes',
+            'Name the connections':         'Nommer les liens',
+            'Freeze the layout':            'Figer la disposition',
+            'Release the nodes you moved':  'Lib\u00e9rer les n\u0153uds d\u00e9plac\u00e9s',
+            'Filter by entity type':        'Filtrer par type d\u2019entit\u00e9',
+            'Drag to move it':              'Faites-le glisser pour le d\u00e9placer',
+            'Click to see its connections': 'Cliquez pour voir ses liens',
+            'Open the record':              'Ouvrir la fiche',
+            'Close':                        'Fermer',
+            'shared_items_count':           '{count} documents en commun',
+            'connections_count':            '{count} liens',
+            'one_connection':               '1 lien',
+            'and_n_more':                   'et {count} autres',
+            'Network graph. Use the arrow keys to move between connected entities and Enter to select one.':
+                'Graphe de r\u00e9seau. Utilisez les fl\u00e8ches pour circuler entre les entit\u00e9s reli\u00e9es et Entr\u00e9e pour en s\u00e9lectionner une.',
+            'Network of the entities most associated with this record. Use the arrow keys to move between them and Enter to select one.':
+                'R\u00e9seau des entit\u00e9s les plus associ\u00e9es \u00e0 cette notice. Utilisez les fl\u00e8ches pour circuler entre elles et Entr\u00e9e pour en s\u00e9lectionner une.',
+            'Network of the entities this article is tagged with and the articles sharing them. Use the arrow keys to move between them and Enter to select one.':
+                'R\u00e9seau des entit\u00e9s balis\u00e9es dans cet article et des articles qui les partagent. Utilisez les fl\u00e8ches pour circuler entre elles et Entr\u00e9e pour en s\u00e9lectionner une.',
+
+            // Entity type labels (legend + tooltips of the entity graphs)
             'entity_type_center': 'Centre',
             'entity_type_Personnes': 'Personnes',
             'entity_type_Organisations': 'Organisations',
@@ -675,7 +704,7 @@
 
             // Article dashboard — panel descriptions (langage accessible)
             'desc_article_context_network':
-                'Cet article est au centre, entour\u00e9 des personnes, lieux, organisations et sujets qui y sont balis\u00e9s. Les articles qui partagent plusieurs de ces balises apparaissent en p\u00e9riph\u00e9rie. Cliquez sur un n\u0153ud pour ouvrir sa fiche.',
+                'Cet article est au centre, entour\u00e9 des personnes, lieux, organisations et sujets qui y sont balis\u00e9s. Les articles qui partagent plusieurs de ces balises apparaissent en p\u00e9riph\u00e9rie. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe, cliquez dessus pour voir ses liens et un lien vers sa fiche.',
             'desc_article_further_reading':
                 'D\u2019autres documents de la collection qui se rattachent \u00e0 cet article. Choisissez l\u2019une des mani\u00e8res de les trouver.',
             'desc_further_reading_tags':
