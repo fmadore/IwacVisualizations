@@ -620,7 +620,12 @@
         });
 
         DL.render(detail, 'topicDetail', {
-            calendar:               { cells: topic.day_cells || [] },
+            calendar:               {
+                cells:      topic.day_cells || [],
+                // Precomputed from the dataset's stored Umm al-Qura
+                // dates — the renderer converts nothing.
+                hijriCells: topic.hijri_cells || []
+            },
             country_distribution:   topic.country_distribution || [],
             newspaper_distribution: topic.newspaper_distribution || [],
             top_articles:           topArticles

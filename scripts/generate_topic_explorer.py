@@ -59,6 +59,7 @@ front-end can consume without any further joins:
           "year_max":         2024,
           "year_distribution":  [{"name": "1995", "value": 12}, ...],
           "day_cells":          [["2020-01-15", 5], ["2020-01-23", 3], ...],
+          "hijri_cells":        [[1441, 5, 8], [1441, 6, 3], ...],
           "country_distribution": [{"name": "Bénin", "value": 45}, ...],
           "newspaper_distribution": [{"name": "Le Soleil", "value": 23}, ...],
           "top_articles": [
@@ -178,6 +179,34 @@ def extract_iso_day(value: Any) -> Optional[str]:
     return s[:10]
 
 
+# The Hijri columns the dataset ships beside `pub_date`, written upstream
+# from the Umm al-Qura tables. Read, never recomputed: the browser's ICU
+# tables disagree with these on ~75% of this collection's pre-2000 days,
+# which at the Hijri facet's month granularity moved 0.78% of items into
+# the wrong lunar month back when the client did the conversion itself.
+HIJRI_COLUMNS = ('hijri_year', 'hijri_month', 'hijri_day')
+
+
+def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
+                     ) -> Optional[Tuple[int, int]]:
+    """The row's stored ``(hijri_year, hijri_month)``, or None.
+
+    None means the dataset left the conversion empty, which it does for
+    every ``pub_date`` that is not a complete ``YYYY-MM-DD`` — the same
+    rows ``extract_iso_day`` already drops.
+    """
+    y_col, m_col = cols.get('hijri_year'), cols.get('hijri_month')
+    if not y_col or not m_col:
+        return None
+    try:
+        h_year, h_month = int(row.get(y_col)), int(row.get(m_col))
+    except (TypeError, ValueError):
+        return None
+    if not (1 <= h_month <= 12 and h_year > 0):
+        return None
+    return h_year, h_month
+
+
 def aggregate_per_topic(
     df: pd.DataFrame,
     columns: Dict[str, Optional[str]],
@@ -195,6 +224,15 @@ def aggregate_per_topic(
     country_col    = columns['country']
     newspaper_col  = columns['newspaper']
     thumbnail_col  = columns['thumbnail']
+    hijri_cols     = {c: columns.get(c) for c in HIJRI_COLUMNS}
+    if not all(hijri_cols.values()):
+        logger.warning(
+            "articles carries no %s — the calendar's Hijri facet will be "
+            "absent. Re-pull the dataset; these are written upstream for "
+            "every complete YYYY-MM-DD.",
+            ', '.join(c for c in HIJRI_COLUMNS if not hijri_cols.get(c)))
+
+    stats = {'hijri_dated': 0, 'hijri_missing': 0}
 
     # Per-topic accumulators
     counts:    Dict[int, int]                = {}
@@ -203,6 +241,11 @@ def aggregate_per_topic(
     years_max: Dict[int, int]                = {}
     year_hist: Dict[int, Counter]            = {}
     day_hist:  Dict[int, Counter]            = {}
+    # Keyed by (hijri_year, hijri_month) — the Hijri facet's grid is a
+    # year x month matrix, so aggregating here rather than shipping a
+    # day->Hijri lookup keeps the payload smaller than `day_cells` and
+    # takes the conversion off the client entirely.
+    hijri_hist: Dict[int, Counter]           = {}
     country_hist: Dict[int, Counter]         = {}
     newspaper_hist: Dict[int, Counter]       = {}
     candidates: Dict[int, List[Dict[str, Any]]] = {}
@@ -246,6 +289,15 @@ def aggregate_per_topic(
                 corpus_year_max = year
         if day_key:
             day_hist.setdefault(topic_id, Counter())[day_key] += 1
+        hijri_key = read_hijri_month(row, hijri_cols)
+        if hijri_key:
+            hijri_hist.setdefault(topic_id, Counter())[hijri_key] += 1
+            stats['hijri_dated'] += 1
+        elif day_key:
+            # A fully-dated article the dataset has no Hijri date for.
+            # Counted so the run says how much the Hijri facet is missing
+            # rather than quietly drawing a thinner grid.
+            stats['hijri_missing'] += 1
         if country:
             country_hist.setdefault(topic_id, Counter())[country] += 1
         if newspaper:
@@ -287,6 +339,12 @@ def aggregate_per_topic(
         day_pairs = sorted(day_hist.get(topic_id, Counter()).items())
         day_cells = [[d, v] for d, v in day_pairs]
 
+        # Hijri counterpart, already aggregated to the year x month grid
+        # the facet draws: [[hijri_year, hijri_month, count], ...]. The
+        # client does no calendar conversion — see HIJRI_COLUMNS.
+        hijri_pairs = sorted(hijri_hist.get(topic_id, Counter()).items())
+        hijri_cells = [[y, m, v] for (y, m), v in hijri_pairs]
+
         country_dist = [
             {'name': name, 'value': v}
             for name, v in country_hist.get(topic_id, Counter()).most_common(MAX_DISTRIBUTION_BARS)
@@ -310,10 +368,22 @@ def aggregate_per_topic(
             'year_max':               years_max.get(topic_id),
             'year_distribution':      year_distribution,
             'day_cells':              day_cells,
+            'hijri_cells':            hijri_cells,
             'country_distribution':   country_dist,
             'newspaper_distribution': newspaper_dist,
             'top_articles':           top_arts,
         })
+
+    logger.info("Hijri-dated articles: %d%s", stats['hijri_dated'],
+                f" · fully dated but missing a stored Hijri date: "
+                f"{stats['hijri_missing']}" if stats['hijri_missing'] else "")
+    if stats['hijri_missing']:
+        logger.warning(
+            "%d fully-dated articles carry no Hijri date and are absent from "
+            "the calendar's Hijri facet. The dataset populates hijri_* for "
+            "every complete YYYY-MM-DD, so this means the snapshot predates a "
+            "pipeline run rather than the dates being unconvertible.",
+            stats['hijri_missing'])
 
     metadata = {
         'total_topics':              len(topics),
@@ -322,6 +392,7 @@ def aggregate_per_topic(
         'year_min':                  corpus_year_min,
         'year_max':                  corpus_year_max,
         'newspapers':                len(all_newspapers),
+        'hijri_dated':               stats['hijri_dated'],
     }
 
     return topics, metadata
@@ -463,6 +534,9 @@ def build_bundle(df: pd.DataFrame, top_articles: int) -> Dict[str, Any]:
         'country':     find_column(df, ['country', 'countries']),
         'newspaper':   find_column(df, ['newspaper', 'dcterms:publisher', 'source']),
         'thumbnail':   find_column(df, ['thumbnail']),
+        'hijri_year':  find_column(df, ['hijri_year']),
+        'hijri_month': find_column(df, ['hijri_month']),
+        'hijri_day':   find_column(df, ['hijri_day']),
     }
 
     topics, meta = aggregate_per_topic(df, columns, top_articles)

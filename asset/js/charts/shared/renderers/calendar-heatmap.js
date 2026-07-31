@@ -13,14 +13,13 @@
  *                       and is mostly whitespace for any entity with
  *                       fewer than a few thousand articles — hence
  *                       opt-in rather than the default.
- *   `hijri`             Hijri year × month grid, same shape as `month`.
- *                       Converts each Gregorian cell date with the
- *                       Umm al-Qura calendar. Makes the liturgical
- *                       rhythm legible — Ramadan and Dhu al-Hijja read
- *                       as rows instead of being smeared across two
- *                       Gregorian months that drift ~11 days a year.
- *                       Omitted when the browser's Intl lacks Islamic
- *                       calendar support.
+ *   `hijri`             Hijri year × month grid, same shape as `month`,
+ *                       drawn from the Umm al-Qura dates the dataset
+ *                       stores. Makes the liturgical rhythm legible —
+ *                       Ramadan and Dhu al-Hijja read as rows instead of
+ *                       being smeared across two Gregorian months that
+ *                       drift ~11 days a year. Omitted when the producer
+ *                       ships no `hijriCells`.
  *
  * Colour ramp tracks the IWAC theme's `--iwac-vis-heatmap-*` tokens via
  * `ns.resolveCssVar` so it follows `--primary` and flips for dark mode.
@@ -28,16 +27,23 @@
  * Data shape:
  *
  *     {
- *       cells:    [['2020-01-15', 3], ['2020-01-16', 1], ...],
- *       yearMin:  2018,                   // optional, derived from cells
- *       yearMax:  2024                    // optional, derived from cells
+ *       cells:      [['2020-01-15', 3], ['2020-01-16', 1], ...],
+ *       hijriCells: [[1441, 5, 8], [1441, 6, 3], ...],  // optional
+ *       yearMin:    2018,                 // optional, derived from cells
+ *       yearMax:    2024                  // optional, derived from cells
  *     }
  *
  * Cell dates must be day-precision ISO (`YYYY-MM-DD`); the `day` view
- * places a mark on an exact square and the Hijri view needs a day to
- * convert. Producers drop year-only / year-month dates rather than
- * fake-positioning them (see `generate_topic_explorer.py`), so callers
- * should say so in the panel description.
+ * places a mark on an exact square. Producers drop year-only / year-month
+ * dates rather than fake-positioning them (see `generate_topic_explorer.py`),
+ * so callers should say so in the panel description.
+ *
+ * `hijriCells` is `[hijriYear, hijriMonth, count]`, already folded to the
+ * grid the Hijri facet draws. It is a separate series rather than a
+ * conversion of `cells` because the lunar dates are read from the
+ * dataset, never derived in the browser — see the Hijri cells section
+ * below for why that distinction matters. Omit it and the facet is not
+ * offered.
  *
  * Slot options (`slot.options`):
  *   - `granularity` (string)         initial view, default 'month'
@@ -99,73 +105,26 @@
     }
 
     /* ----------------------------------------------------------------- */
-    /*  Gregorian → Hijri                                                 */
+    /*  Hijri cells                                                       */
     /* ----------------------------------------------------------------- */
     //
-    // NOTE: `shared/hijri.js` (added in v1.27.0 for the On This Day block)
-    // now carries this same probe, month table and conversion as a standalone
-    // module. This copy predates it and is left in place because the renderer
-    // is loaded through dashboard-layout rather than a block's panel list;
-    // folding it onto IWACVis.hijri would remove the chance of the two
-    // drifting. They agree today.
+    // The Hijri grid is not converted here. It arrives already aggregated
+    // as `hijriCells` — [[hijriYear, hijriMonth, count], …] — computed by
+    // the generator from the dataset's stored `hijri_*` columns, which are
+    // written upstream from the Umm al-Qura tables.
     //
-    // Intl carries the Umm al-Qura tables, so no date library is needed.
-    // `undefined` = not yet probed, `false` = this browser can't do it
-    // (the facet is then dropped rather than silently serving Gregorian
-    // numbers under Hijri month names).
-
-    var hijriFormatter;
-
-    function getHijriFormatter() {
-        if (hijriFormatter !== undefined) return hijriFormatter;
-        hijriFormatter = false;
-        try {
-            var fmt = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
-                year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC'
-            });
-            // Probe rather than trust: an engine without the calendar
-            // silently falls back to Gregorian, which would render 2000
-            // where 1420 belongs. A real conversion puts every modern
-            // date in the 1300–1500 AH band.
-            var probe = readParts(fmt, new Date(Date.UTC(2000, 0, 1)));
-            if (probe && probe.year > 1300 && probe.year < 1500) hijriFormatter = fmt;
-        } catch (e) { /* no Intl, or no Islamic calendar data */ }
-        return hijriFormatter;
-    }
-
-    function readParts(fmt, date) {
-        var parts = fmt.formatToParts(date);
-        var year = null;
-        var month = null;
-        for (var i = 0; i < parts.length; i++) {
-            if (parts[i].type === 'year')  year  = parseInt(parts[i].value, 10);
-            if (parts[i].type === 'month') month = parseInt(parts[i].value, 10);
-        }
-        if (year == null || month == null || isNaN(year) || isNaN(month)) return null;
-        return { year: year, month: month };
-    }
-
-    // Conversions are pure and repeat across theme rebuilds and facet
-    // switches, so memoise on the ISO string.
-    var hijriCache = {};
-
-    function toHijri(iso) {
-        if (Object.prototype.hasOwnProperty.call(hijriCache, iso)) return hijriCache[iso];
-        var result = null;
-        var fmt = getHijriFormatter();
-        if (fmt) {
-            var y = parseInt(iso.slice(0, 4), 10);
-            var m = parseInt(iso.slice(5, 7), 10);
-            var d = parseInt(iso.slice(8, 10), 10);
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-                try {
-                    result = readParts(fmt, new Date(Date.UTC(y, m - 1, d)));
-                } catch (e) { result = null; }
-            }
-        }
-        hijriCache[iso] = result;
-        return result;
-    }
+    // This renderer used to convert each day cell itself with
+    // `Intl.DateTimeFormat('…-ca-islamic-umalqura')`. ICU's tables fall
+    // back to a tabular approximation for older dates and disagree with
+    // the stored ones on ~75% of this collection's pre-2000 days (and on
+    // none from 2000 on), which at this grid's month granularity put 105
+    // of 13,464 items (0.78%) in the wrong lunar month. Reading the
+    // precomputed cells also means the facet no longer depends on the
+    // browser shipping Islamic calendar data at all.
+    //
+    // `shared/hijri.js` still owns the client-side conversion, correctly:
+    // it converts only *today* — post-2000, where ICU and Umm al-Qura
+    // agree — to pick a day file for the On This Day block.
 
     /* ----------------------------------------------------------------- */
     /*  Shared theme plumbing                                             */
@@ -206,7 +165,12 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Fold day cells into a year × month matrix.
+     * Fold cells into a year × month matrix.
+     *
+     * Gregorian cells are `[iso, count]` and carry their year and month in
+     * the date string; Hijri cells arrive pre-aggregated as
+     * `[hijriYear, hijriMonth, count]` (see above — the client does no
+     * calendar conversion).
      *
      * The year axis is filled to a contiguous min…max run rather than
      * listing only the years that carry articles: a category axis of
@@ -222,18 +186,18 @@
         var skipped = 0;
 
         for (var i = 0; i < cells.length; i++) {
-            var iso = String((cells[i] && cells[i][0]) || '');
-            var count = (cells[i] && cells[i][1]) || 0;
-            var year, month;
+            var cell = cells[i] || [];
+            var year, month, count;
 
             if (hijri) {
-                var h = toHijri(iso);
-                if (!h) { skipped += count; continue; }
-                year = h.year;
-                month = h.month;
+                year = parseInt(cell[0], 10);
+                month = parseInt(cell[1], 10);
+                count = cell[2] || 0;
             } else {
+                var iso = String(cell[0] || '');
                 year = parseInt(iso.slice(0, 4), 10);
                 month = parseInt(iso.slice(5, 7), 10);
+                count = cell[1] || 0;
             }
             if (isNaN(year) || isNaN(month) || month < 1 || month > 12) {
                 skipped += count;
@@ -448,9 +412,13 @@
         hijri: 'cal_view_hijri'
     };
 
+    function hijriCellsOf(data) {
+        return (data && data.hijriCells) || [];
+    }
+
     function buildOption(view, data, opts) {
         if (view === 'day')   return buildDayOption(data, opts);
-        if (view === 'hijri') return buildMonthOption((data && data.cells) || [], opts, true);
+        if (view === 'hijri') return buildMonthOption(hijriCellsOf(data), opts, true);
         return buildMonthOption((data && data.cells) || [], opts, false);
     }
 
@@ -462,10 +430,12 @@
             return;
         }
 
-        // Offer only what this browser and this caller can actually serve.
+        // Offer only what this caller can actually serve. The Hijri facet
+        // is now a question about the data, not about the browser: it
+        // appears when the producer shipped precomputed Hijri cells.
         var offered = opts.views || ['month', 'day', 'hijri'];
         var views = offered.filter(function (v) {
-            if (v === 'hijri') return !!getHijriFormatter();
+            if (v === 'hijri') return hijriCellsOf(data).length > 0;
             return v === 'month' || v === 'day';
         });
         if (!views.length) views = ['month'];
