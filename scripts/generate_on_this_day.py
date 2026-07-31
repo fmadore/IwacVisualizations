@@ -52,20 +52,34 @@ Output
                                   (per-file ``_meta`` blocks would cost more
                                   than the payloads).
 
+Where the Hijri dates come from
+-------------------------------
+They are **read**, not computed. The dataset ships ``hijri_year`` /
+``hijri_month`` / ``hijri_day`` beside ``pub_date``, written upstream by
+``post-processing/calculate_hijri_dates.py`` from the Umm al-Qura tables,
+and populated for every complete ``YYYY-MM-DD`` — which is the only case
+this script keeps anyway. This script used to re-derive them locally with
+the same ``hijridate`` library, which agreed with the stored values on all
+13,464 fully-dated rows but only *by construction*: it held as long as two
+repositories happened to pin compatible versions of one library. Reading
+the column makes the agreement structural instead, and drops this repo's
+only ``hijridate`` dependency.
+
 Why ``hYear`` is stored rather than re-derived in the browser
 ------------------------------------------------------------
 Both sides name the same calendar, but they do not implement it the same
-way: ``hijridate`` uses the Umm al-Qura tables throughout, while the ICU
-tables behind the browser's ``Intl`` fall back to a tabular approximation
-for older dates. Measured across this collection's range they disagree on
-**~42 % of pre-2000 dates** (1960s–1990s) and on **none from 2000 on**.
+way: the Umm al-Qura tables behind the stored columns run throughout, while
+the ICU tables behind the browser's ``Intl`` fall back to a tabular
+approximation for older dates. Measured across this collection's range they
+disagree on **~42 % of pre-2000 dates** (1960s–1990s) and on **none from
+2000 on**.
 
 So the client must not re-convert an item's ``pub_date`` to label it — it
 would print a date one day off from the file the item is filed under. It
 converts only *today* (post-2000, where the two agree) to pick the day
 file, and renders each item's date as today's Hijri day-and-month plus the
-``hYear`` written here. Bucketing keeps the more accurate converter; the
-label stays consistent with its bucket.
+``hYear`` written here. Bucketing keeps the more accurate dates; the label
+stays consistent with its bucket.
 
 Privacy
 -------
@@ -103,8 +117,6 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from hijridate import Gregorian
-
 from iwac_utils import (
     FULL_DATE_RE,
     add_standard_args,
@@ -134,7 +146,14 @@ SOURCES = [
 ]
 
 COLUMNS = ["pub_date", "o:id", "title", "newspaper",
-           "thumbnail", "OCR", "OCR_is_public", "tableOfContents"]
+           "thumbnail", "OCR", "OCR_is_public", "tableOfContents",
+           "hijri_year", "hijri_month", "hijri_day"]
+
+# The Hijri columns the dataset ships beside `pub_date`. Nullable Int64,
+# populated exactly where `pub_date` is a complete YYYY-MM-DD — which is
+# also the only case this script keeps — and absent on `references`, which
+# is not one of our SOURCES.
+HIJRI_COLUMNS = ("hijri_year", "hijri_month", "hijri_day")
 
 # Omeka derivative URL -> storage id. Every derivative is a JPEG whatever the
 # original was, so the client can rebuild `/files/{size}/{id}.jpg` for any of
@@ -311,22 +330,23 @@ def _clip(text: str) -> str:
     return cut.rstrip(" ,;:.-—–") + "…"
 
 
-def to_hijri(year: int, month: int, day: int) -> Optional[Tuple[int, int, int]]:
+def read_hijri(y_raw: Any, m_raw: Any, d_raw: Any) -> Optional[Tuple[int, int, int]]:
     """
-    Umm al-Qura (year, month, day), or None when the date falls outside the
-    converter's tabulated range.
+    The row's stored Umm al-Qura (year, month, day), or None when the dataset
+    left it empty.
 
-    The collection runs 1961–2025, comfortably inside 1343–1500 AH
-    (1925–2077), so None here means a bad date got past `valid_day` rather
-    than a real limitation — skip the row instead of failing the run.
+    The dataset populates these wherever `pub_date` is a complete
+    YYYY-MM-DD, which is the only case this script keeps, so None here means
+    the snapshot is missing a conversion rather than the date being
+    unconvertible — count it and carry on rather than failing the run.
     """
     try:
-        h = Gregorian(year, month, day).to_hijri()
-        return h.year, h.month, h.day
-    except (ValueError, OverflowError) as exc:
-        logger.debug("Hijri conversion failed for %04d-%02d-%02d: %s",
-                     year, month, day, exc)
+        h_year, h_month, h_day = int(y_raw), int(m_raw), int(d_raw)
+    except (TypeError, ValueError):
         return None
+    if not (1 <= h_month <= 12 and 1 <= h_day <= 30 and h_year > 0):
+        return None
+    return h_year, h_month, h_day
 
 
 def collect_days(repo_id: str, hijri: bool = True
@@ -334,7 +354,7 @@ def collect_days(repo_id: str, hijri: bool = True
     """Bucket every fully-dated article / issue by its Gregorian and Hijri MM-DD."""
     greg: Dict[str, List[List[Any]]] = defaultdict(list)
     hij: Dict[str, List[List[Any]]] = defaultdict(list)
-    stats = {"thumb": 0, "excerpt": 0, "hijri_failed": 0}
+    stats = {"thumb": 0, "excerpt": 0, "hijri_missing": 0}
 
     for subset, type_flag, excerpt_mode in SOURCES:
         logger.info("Loading %s subset...", subset)
@@ -350,11 +370,21 @@ def collect_days(repo_id: str, hijri: bool = True
         def col(name):
             return df[name] if name in df.columns else [None] * len(df)
 
+        if hijri:
+            absent = [c for c in HIJRI_COLUMNS if c not in df.columns]
+            if absent:
+                logger.warning(
+                    "%s carries no %s — every item from this subset will be "
+                    "missing from the Hijri fan-out. Re-pull the dataset, or "
+                    "pass --no-hijri to build the Gregorian side only.",
+                    subset, ", ".join(absent))
+
         for (pub_date, oid_raw, title_raw, newspaper_raw, thumb_raw, ocr_raw,
-             pub_ok, contents_raw) in zip(
+             pub_ok, contents_raw, hy_raw, hm_raw, hd_raw) in zip(
                 col("pub_date"), col("o:id"), col("title"), col("newspaper"),
                 col("thumbnail"), col("OCR"), col("OCR_is_public"),
-                col("tableOfContents")):
+                col("tableOfContents"), col("hijri_year"), col("hijri_month"),
+                col("hijri_day")):
             m = FULL_DATE_RE.match(clean_str(pub_date))
             if not m:
                 continue
@@ -385,9 +415,9 @@ def collect_days(repo_id: str, hijri: bool = True
             greg[f"{month:02d}-{day:02d}"].append(row)
 
             if hijri:
-                converted = to_hijri(year, month, day)
+                converted = read_hijri(hy_raw, hm_raw, hd_raw)
                 if converted is None:
-                    stats["hijri_failed"] += 1
+                    stats["hijri_missing"] += 1
                 else:
                     h_year, h_month, h_day = converted
                     hij[f"{h_month:02d}-{h_day:02d}"].append(row + [h_year])
@@ -396,8 +426,14 @@ def collect_days(repo_id: str, hijri: bool = True
 
     logger.info("Thumbnails: %d · public-OCR excerpts: %d%s",
                 stats["thumb"], stats["excerpt"],
-                f" · Hijri conversions failed: {stats['hijri_failed']}"
-                if stats["hijri_failed"] else "")
+                f" · items with no stored Hijri date: {stats['hijri_missing']}"
+                if stats["hijri_missing"] else "")
+    if stats["hijri_missing"]:
+        logger.warning(
+            "%d fully-dated items carry no Hijri date and are absent from the "
+            "Hijri fan-out. The dataset populates hijri_* for every complete "
+            "YYYY-MM-DD, so this means the snapshot predates a pipeline run "
+            "rather than the dates being unconvertible.", stats["hijri_missing"])
     return greg, hij
 
 
