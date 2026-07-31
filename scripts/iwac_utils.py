@@ -22,6 +22,9 @@ Functions:
 - clean_float: Cast a DataFrame cell to float, or None for garbage
 - load_dataset_safe: Load HuggingFace dataset with error handling
 - find_column: Find first matching column in DataFrame
+- sentiment_columns: Candidate HF column names for one model x field
+- resolve_sentiment_columns: Map canonical model ids onto the sentiment
+  columns actually present (absorbs the 2026-07-31 upstream rename)
 - save_json: Save JSON with mkdir and optional minification
 - configure_logging: Standard logging setup
 """
@@ -794,6 +797,132 @@ def find_column(
         raise ValueError(f"Required column not found. Tried: {candidates}")
 
     return None
+
+
+# =============================================================================
+# AI sentiment columns
+# =============================================================================
+
+SENTIMENT_MODELS: Tuple[str, ...] = ("gemini", "chatgpt", "mistral")
+"""Canonical model ids the whole module keys on.
+
+These are *vendor slots*, and they are deliberately stable: they are the
+keys in every generated JSON payload, in the block JS and i18n catalogs,
+in the Omeka properties ``SentimentExtractor.php`` reads (``iwac:gemini*``,
+``iwac:chatgpt*``, ``iwac:mistral*`` — Omeka was NOT renamed), and in the
+sibling study's arbiter files that ``generate_sentiment_arbiter.py``
+folds in. Only the Hugging Face *column names* changed; see
+:data:`SENTIMENT_HF_PREFIXES`.
+"""
+
+SENTIMENT_HF_PREFIXES: Dict[str, Tuple[str, ...]] = {
+    "gemini": ("gemini_3_flash_preview", "gemini"),
+    "chatgpt": ("gpt_5_mini", "chatgpt"),
+    "mistral": ("ministral_14b_2512", "mistral"),
+}
+"""Canonical model id → Hugging Face column prefixes, preferred first.
+
+Renamed upstream on 2026-07-31: the columns now name the exact model that
+produced the annotation instead of the vendor slot. The values themselves
+carry no model annotation (unlike ``iwac:summaryModel`` / ``iwac:ocrModel``),
+so nothing else recorded which model ran — the corpus was annotated
+January–February 2026 by ``gemini-3-flash-preview``, ``gpt-5-mini`` and
+``ministral-14b-2512``.
+
+The legacy vendor-keyed name is kept as a second candidate so a stale local
+parquet cache still resolves; it no longer exists on either Hub repo.
+"""
+
+SENTIMENT_FIELD_SUFFIXES: Dict[str, str] = {
+    "polarite": "polarite",
+    "centralite": "centralite_islam_musulmans",
+    "subjectivite": "subjectivite_score",
+}
+"""Internal field key → HF column suffix, for the scored fields.
+
+Each scored field also has a free-text ``*_justification`` sibling on HF
+(e.g. ``gemini_3_flash_preview_polarite_justification``). The module does
+not aggregate those — the item page renders justifications straight from
+Omeka — so they are deliberately absent here.
+"""
+
+
+def sentiment_columns(model: str, field: str) -> List[str]:
+    """Candidate HF column names for one model × field, preferred first.
+
+    Args:
+        model: Canonical model id from :data:`SENTIMENT_MODELS`
+        field: Field key from :data:`SENTIMENT_FIELD_SUFFIXES`
+
+    Returns:
+        Column names to try, current naming first, legacy second
+
+    Examples:
+        >>> sentiment_columns("chatgpt", "polarite")
+        ['gpt_5_mini_polarite', 'chatgpt_polarite']
+    """
+    suffix = SENTIMENT_FIELD_SUFFIXES[field]
+    return [f"{prefix}_{suffix}" for prefix in SENTIMENT_HF_PREFIXES[model]]
+
+
+_SENTIMENT_WARNED: set = set()
+
+
+def resolve_sentiment_columns(
+    df: pd.DataFrame,
+    models: Optional[Tuple[str, ...]] = None,
+    fields: Optional[List[str]] = None,
+) -> Dict[str, Dict[str, Optional[str]]]:
+    """Resolve the sentiment columns actually present in ``df``.
+
+    Absorbs the 2026-07-31 upstream rename so callers keep working in
+    canonical model ids. A model that resolves to nothing logs a warning
+    rather than failing silently — sentiment quietly vanishing from every
+    dashboard is exactly how that rename would otherwise land. Warnings are
+    emitted once per process, so this is safe to call inside a per-slice
+    loop.
+
+    Args:
+        df: DataFrame to inspect (normally the ``articles`` subset)
+        models: Model ids to resolve (default :data:`SENTIMENT_MODELS`)
+        fields: Field keys to resolve (default all scored fields)
+
+    Returns:
+        ``{model: {field: column_name_or_None}}``
+
+    Examples:
+        >>> cols = resolve_sentiment_columns(df)
+        >>> cols["chatgpt"]["polarite"]
+        'gpt_5_mini_polarite'
+    """
+    logger = logging.getLogger(__name__)
+    models = models or SENTIMENT_MODELS
+    fields = fields or list(SENTIMENT_FIELD_SUFFIXES)
+
+    resolved: Dict[str, Dict[str, Optional[str]]] = {}
+    for model in models:
+        found = {
+            field: find_column(df, sentiment_columns(model, field))
+            for field in fields
+        }
+        if not any(found.values()):
+            if model not in _SENTIMENT_WARNED:
+                _SENTIMENT_WARNED.add(model)
+                logger.warning(
+                    f"No sentiment columns found for model '{model}' — tried "
+                    f"prefixes {SENTIMENT_HF_PREFIXES[model]}. Sentiment for "
+                    "this model will be empty in the generated output."
+                )
+        elif any(v is None for v in found.values()):
+            missing = sorted(k for k, v in found.items() if v is None)
+            key = (model, tuple(missing))
+            if key not in _SENTIMENT_WARNED:
+                _SENTIMENT_WARNED.add(key)
+                logger.warning(
+                    f"Model '{model}' is missing sentiment field(s) {missing}"
+                )
+        resolved[model] = found
+    return resolved
 
 
 # =============================================================================

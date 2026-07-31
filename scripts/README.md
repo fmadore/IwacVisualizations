@@ -157,12 +157,15 @@ python3 scripts/generate_article_dashboards.py --top-k-related 20     # default
 5. **Related-by-entities**: for each article, counter-union its
    entities' article sets, take `most_common(top_k_related)`; record
    up to 3 shared-entity ids inline so the UI tooltip can name them
-6. Reshape the 3-model sentiment (Gemini / ChatGPT / Mistral) into
-   the same bucket-histogram contract the aggregate sentiment panel
-   reads — `count=1` in the bucket the model picked, 0 elsewhere
-7. Write one JSON per article (minified)
+6. Write one JSON per article (minified)
 
-**Output shape:** `{article, entities, spatial, sentiment, related_by_entities, semantic_neighbors}`.
+Sentiment is deliberately **not** precomputed here: since v0.11.0 the
+article dashboard renders its sentiment panel server-side straight from
+the Omeka `iwac:<model><Axis>` properties via `SentimentExtractor.php`,
+so it stays in sync with editorial changes on islam.zmo.de without
+waiting for a regenerator pass.
+
+**Output shape:** `{article, entities, spatial, related_by_entities, semantic_neighbors}`.
 The client (`network.js`) builds the 3-layer force graph at render time
 from `entities` + `related_by_entities` — keeping the graph out of the
 precomputed JSON saves ~3 KB per file.
@@ -388,6 +391,8 @@ classic `"lat, lng"` form.
 | `clean_str(value)` | Strip-and-cast a DataFrame cell, treating NaN/None as `""`. |
 | `clean_float(value)` | Cast a DataFrame cell to float, or `None` for NaN / missing / garbage. |
 | `find_column(df, candidates, required)` | Return the first matching column name, optionally raise. |
+| `sentiment_columns(model, field)` | Candidate HF column names for one canonical model id × field, current naming first. |
+| `resolve_sentiment_columns(df, models, fields)` | `{model: {field: column_or_None}}` for the sentiment columns actually present. **Use this instead of building `f"{model}_polarite"` by hand** — HF renamed the prefixes to model-specific names on 2026-07-31 and hand-built names now silently resolve to nothing. Warns once per process when a model resolves to nothing. |
 | `save_json(data, path, minify, log)` | Write JSON with auto-mkdir, size-logged. |
 | `create_metadata_block(total_records, data_source, **extra)` | Standard metadata dict for output files. |
 | `generate_timestamp()` | ISO UTC timestamp with `Z` suffix. |
@@ -396,6 +401,14 @@ classic `"lat, lng"` form.
 Constants: `DATASET_ID = "fmadore/islam-west-africa-collection-full"` (the
 private full mirror; `--repo` on every generator overrides it) and
 `SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]`.
+
+Sentiment constants: `SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")` —
+the canonical ids every generated payload, block JS file, i18n catalog,
+Omeka property (`iwac:gemini*`) and arbiter file keys on — plus
+`SENTIMENT_HF_PREFIXES` mapping each onto the model-specific HF column
+prefix (`gemini_3_flash_preview`, `gpt_5_mini`, `ministral_14b_2512`) with
+the pre-2026-07-31 vendor name kept as a fallback for stale parquet
+caches. See [DATA_NOTES.md](../DATA_NOTES.md) for the full table.
 
 ## Shared dashboard core — `dashboard_aggregator.py`
 

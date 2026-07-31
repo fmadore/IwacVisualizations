@@ -61,12 +61,22 @@ The `index` subset is **pre-aggregated** — each row already has:
 
 - **LDA topics** (30): `lda_topic_id`, `lda_topic_prob`, `lda_topic_label` → topic-over-time stacked area, topic co-occurrence
 - **Lexical metrics**: `Richesse_Lexicale_OCR` (**MATTR** — moving-average TTR, 50-token window, `None` below it; *not* raw TTR, so do not length-normalise it or bin by `nb_mots`), `Lisibilite_OCR` (Flesch FR), `nb_mots` → scatter/distribution charts
-- **AI sentiment from 3 models** (Gemini / ChatGPT / Mistral), each with:
+- **AI sentiment from 3 models**, each with:
   - `*_centralite_islam_musulmans` ∈ {Très central, Central, Secondaire, Marginal, Non abordé}
   - `*_polarite` ∈ {Très positif, Positif, Neutre, Négatif, Très négatif, Non applicable}
   - `*_subjectivite_score` 1–5
-  - `*_justification` free text
+  - `*_centralite_justification` / `*_polarite_justification` / `*_subjectivite_justification` free text (not aggregated by the generators — the item page renders these straight from Omeka)
   - → model-comparison charts, sentiment-over-time, sentiment-by-newspaper/country
+
+  **Column prefixes were renamed upstream on 2026-07-31** — they now name the exact model instead of the vendor slot, because the values carry no model annotation and nothing else recorded which model ran:
+
+  | Canonical id (ours) | HF column prefix | Was (pre-2026-07-31) |
+  |---|---|---|
+  | `gemini` | `gemini_3_flash_preview_` | `gemini_` |
+  | `chatgpt` | `gpt_5_mini_` | `chatgpt_` |
+  | `mistral` | `ministral_14b_2512_` | `mistral_` |
+
+  The canonical ids on the left are **unchanged** and remain what everything downstream keys on: generated JSON payloads, block JS, i18n catalogs, the Omeka properties `SentimentExtractor.php` reads (`iwac:gemini*` etc. — Omeka was *not* renamed), and the sibling study's arbiter files. Never build these column names by hand: call `iwac_utils.resolve_sentiment_columns(df)`, which maps canonical id → live column and warns loudly if a model resolves to nothing.
 - **Semantic embeddings** `embedding_OCR` → 2D projection (UMAP/t-SNE precomputed offline) for "article landscape" scatter
 
 ### Subject tags (all content types)

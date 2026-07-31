@@ -58,6 +58,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    SENTIMENT_MODELS,
     canonical_country,
     canonicalize_country_field,
     configure_logging,
@@ -66,6 +67,7 @@ from iwac_utils import (
     load_dataset_safe,
     parse_coordinates,
     parse_pipe_separated,
+    resolve_sentiment_columns,
     save_json,
 )
 
@@ -564,8 +566,6 @@ def compute_corpus(
 # Sentiment aggregation (articles only)
 # ---------------------------------------------------------------------------
 
-SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")
-
 # Ordered so the JSON renders each model's buckets in the canonical
 # "very positive → very negative" / "very central → not addressed"
 # progression rather than dataset-insertion order.
@@ -608,14 +608,19 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
     result: Dict[str, Any] = {"rated": 0, "models": {}}
     rated_mask: Optional[pd.Series] = None
 
-    for model in SENTIMENT_MODELS:
-        pol_col = "{}_polarite".format(model)
-        cen_col = "{}_centralite_islam_musulmans".format(model)
-        subj_col = "{}_subjectivite_score".format(model)
+    # HF column names are model-specific since the 2026-07-31 rename;
+    # SENTIMENT_MODELS stays vendor-keyed because that is what the emitted
+    # JSON, the block JS and the arbiter payload all key on.
+    resolved = resolve_sentiment_columns(sub)
 
-        has_pol = pol_col in sub.columns
-        has_cen = cen_col in sub.columns
-        has_subj = subj_col in sub.columns
+    for model in SENTIMENT_MODELS:
+        pol_col = resolved[model]["polarite"]
+        cen_col = resolved[model]["centralite"]
+        subj_col = resolved[model]["subjectivite"]
+
+        has_pol = pol_col is not None
+        has_cen = cen_col is not None
+        has_subj = subj_col is not None
         if not (has_pol or has_cen or has_subj):
             continue
 

@@ -46,6 +46,7 @@ from iwac_utils import (
     load_dataset_safe,
     parse_coordinates,
     parse_standard_args,
+    resolve_sentiment_columns,
     save_json,
 )
 
@@ -127,11 +128,14 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         metrics.extend(_enrichment_metrics(df, n, "OCR text"))
         if col("embedding_OCR") is not None:
             metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
-        for prefix, label in (("gemini", "Sentiment — Gemini"),
-                              ("chatgpt", "Sentiment — ChatGPT"),
-                              ("mistral", "Sentiment — Mistral")):
-            c = f"{prefix}_polarite"
-            if col(c) is not None:
+        # Labels name the exact model that produced the annotation, which
+        # is also what the HF columns key on since the 2026-07-31 rename.
+        sentiment_cols = resolve_sentiment_columns(df)
+        for model, label in (("gemini", "Sentiment — Gemini 3 Flash"),
+                             ("chatgpt", "Sentiment — GPT-5 mini"),
+                             ("mistral", "Sentiment — Ministral 14B")):
+            c = sentiment_cols[model]["polarite"]
+            if c is not None:
                 metrics.append(metric(label, _nonempty(df[c]), n))
         if col("lda_topic_id") is not None:
             assigned = int(((df["lda_topic_id"].notna())

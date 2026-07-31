@@ -80,6 +80,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from iwac_utils import (
     DATASET_ID,
+    SENTIMENT_MODELS,
     canonicalize_country_field,
     clean_float,
     clean_str,
@@ -89,12 +90,15 @@ from iwac_utils import (
     is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
+    resolve_sentiment_columns,
     save_json,
 )
 
 SUBSET = "articles"
 
-MODELS: Tuple[str, ...] = ("gemini", "chatgpt", "mistral")
+# Canonical model ids — the keys the block JS and i18n catalogs use. The
+# matching HF column names are resolved at read time (see iwac_utils).
+MODELS: Tuple[str, ...] = SENTIMENT_MODELS
 
 # Canonical scale orders — the JS renders stacks / matrix axes in this
 # exact order (most positive / most central first).
@@ -295,9 +299,13 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         pair: [[0] * n_labels for _ in range(n_labels)] for pair in pairs
     }
 
-    pol_cols = {m: f"{m}_polarite" for m in MODELS}
-    cen_cols = {m: f"{m}_centralite_islam_musulmans" for m in MODELS}
-    subj_cols = {m: f"{m}_subjectivite_score" for m in MODELS}
+    # HF renamed these columns to model-specific prefixes on 2026-07-31;
+    # resolve_sentiment_columns maps the canonical ids in MODELS onto
+    # whatever the loaded snapshot actually carries.
+    resolved = resolve_sentiment_columns(df, models=MODELS)
+    pol_cols = {m: resolved[m]["polarite"] for m in MODELS}
+    cen_cols = {m: resolved[m]["centralite"] for m in MODELS}
+    subj_cols = {m: resolved[m]["subjectivite"] for m in MODELS}
 
     for _, row in df.iterrows():
         year = int(row["_year"])

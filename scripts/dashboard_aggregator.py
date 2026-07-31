@@ -64,6 +64,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    SENTIMENT_MODELS,
     clean_float,
     clean_str,
     extract_month_num,
@@ -74,6 +75,7 @@ from iwac_utils import (
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    resolve_sentiment_columns,
 )
 
 # Messages propagate to the root handlers installed by
@@ -111,12 +113,10 @@ SPATIAL_FIELDS = {
 # Sentiment + LDA columns only exist on the articles subset. Items
 # from publications/references contribute to mention counts but are
 # silently skipped by the sentiment / topics / heatmap aggregators.
-SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")
-SENTIMENT_FIELDS = {
-    "polarite":     "{model}_polarite",
-    "centralite":   "{model}_centralite_islam_musulmans",
-    "subjectivite": "{model}_subjectivite_score",
-}
+#
+# SENTIMENT_MODELS holds the canonical model ids the emitted JSON keys on;
+# the HF column names behind them are resolved via iwac_utils (they were
+# renamed to model-specific prefixes upstream on 2026-07-31).
 
 # Polarité ordering — kept as the canonical IWAC scale so the chart
 # segments always render in this order regardless of dataset row order.
@@ -453,12 +453,10 @@ class DashboardAggregator:
             # On other subsets these resolve to None and the
             # corresponding aggregators silently skip the item.
             lda_label_col = find_column(df, ["lda_topic_label", "lda_topic"])
-            sentiment_cols: Dict[str, Dict[str, Optional[str]]] = {}
-            for model in SENTIMENT_MODELS:
-                sentiment_cols[model] = {
-                    k: (tpl.format(model=model) if tpl.format(model=model) in df.columns else None)
-                    for k, tpl in SENTIMENT_FIELDS.items()
-                }
+            sentiment_cols: Dict[str, Dict[str, Optional[str]]] = (
+                resolve_sentiment_columns(df) if subset == "articles" else
+                {model: {} for model in SENTIMENT_MODELS}
+            )
 
             for _, row in df.iterrows():
                 raw_id = row.get(id_col)
@@ -479,9 +477,11 @@ class DashboardAggregator:
                 }
                 for model in SENTIMENT_MODELS:
                     cols = sentiment_cols[model]
-                    meta[f"{model}_polarite"]     = clean_str(row.get(cols["polarite"]))     if cols["polarite"]     else ""
-                    meta[f"{model}_centralite"]   = clean_str(row.get(cols["centralite"]))   if cols["centralite"]   else ""
-                    meta[f"{model}_subjectivite"] = clean_float(row.get(cols["subjectivite"])) if cols["subjectivite"] else None
+                    pol_c, cen_c = cols.get("polarite"), cols.get("centralite")
+                    subj_c = cols.get("subjectivite")
+                    meta[f"{model}_polarite"]     = clean_str(row.get(pol_c))     if pol_c  else ""
+                    meta[f"{model}_centralite"]   = clean_str(row.get(cen_c))     if cen_c  else ""
+                    meta[f"{model}_subjectivite"] = clean_float(row.get(subj_c))  if subj_c else None
                 self.items_meta[item_key] = meta
 
                 roles: Dict[str, List[int]] = {role: [] for role in self.ROLE_FIELDS}
