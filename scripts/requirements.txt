@@ -3,7 +3,9 @@ pandas
 huggingface-hub
 pyarrow
 hf_xet
-numpy
+# Numba 0.66 currently requires NumPy <2.5. Keep the direct bound here so uv
+# cannot satisfy unconstrained NumPy 2.5 with an obsolete Python<3.10 Numba.
+numpy<2.5
 # generate_semantic_landscape.py + generate_periodicals_landscape.py —
 # 2-D UMAP projection of the article / publication embeddings
 umap-learn

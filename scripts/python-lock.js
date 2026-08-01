@@ -41,6 +41,10 @@ function update() {
         'scripts/requirements.txt',
         '--python-version', '3.12',
         '--python-platform', 'x86_64-unknown-linux-gnu',
+        // uv reuses pins from an existing output file unless explicitly told
+        // to upgrade. Resolve the newest compatible graph on every deliberate
+        // lock refresh instead of carrying an obsolete transitive pin forward.
+        '--upgrade',
         '--generate-hashes',
         '--output-file', 'scripts/requirements.lock',
     ], { cwd: ROOT, encoding: 'utf8', stdio: 'inherit' });
