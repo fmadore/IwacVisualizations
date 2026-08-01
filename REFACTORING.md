@@ -657,7 +657,7 @@ local contributor following them would hit an unexplained 401.
   `npm run build` (token lint + minify freshness) is enforced purely
   locally. A lightweight push-triggered check would catch a forgotten
   `.min` rebuild or token violation. **Effort M.**
-- [ ] **Actions pinned to major tags** — still open (optional hardening); SHA pinning needs the real commit SHAs verified against upstream, which the implementation environment could not reach. (`checkout@v7`, `setup-python@v6`),
+- [ ] **Actions pinned to major tags** — still open (optional hardening); SHA pinning needs the real commit SHAs verified against upstream. The valid current majors were checked on 2026-08-01 (`checkout@v6`, `setup-python@v6`, `setup-node@v6`, `setup-php@v2`).
   not commit SHAs — fine for this repo's risk profile; SHA-pinning is the
   hardening move if wanted. **Effort S.**
 
@@ -994,6 +994,106 @@ regression stays fixed); `EmbedController::BLOCKS` labels all have matching
 
 ---
 
+## Tier 7 — 2026-07-31 fifth audit (behavioral contracts + failure boundaries)
+
+This pass reviewed current `main` at v1.30.0 after the stored-Hijri and
+model-specific sentiment-column changes. It re-ran the existing theme, block,
+minification and Python lint checks; inspected the Omeka controllers/events,
+resource-page dispatch, sync job, shared JS runtime, generator utilities,
+statistics/embedding kernels, workflows and documentation; and deliberately
+looked for behavior the existing syntax-only CI could not falsify.
+
+### Implemented in v1.31.0
+
+- [x] **Behavioral CI, three runtimes.** Node's built-in test runner now covers
+  i18n locale/interpolation, HTML escaping, one-shot lazy initialization and
+  cache-busted JSON fetching. Python `unittest` covers IWAC country/pipe/date
+  contracts, current+legacy sentiment-column resolution, column projection,
+  embeddings, BH/G² statistics and stored Hijri dates. A dependency-free PHP
+  runner stubs only Omeka/Laminas interfaces and exercises the real module
+  classes: sentiment maps/filter/extraction, one-read-per-property, block
+  registry, resource-template dispatch, sync status and ZIP path safety.
+- [x] **One-row kNN returned itself.** `top_k_cosine()` computed `kk = 0` and
+  then sliced with `[-0:]` (the whole array), returning `(self, -inf)` despite
+  its contract. Singleton matrices now return `[[]]`; invalid batch sizes fail
+  fast and nested embedding arrays are rejected instead of entering a matrix
+  under a misleading dimension.
+- [x] **Dunning G² omitted half of the contingency table.** The implementation
+  summed only the token-present observations `a` and `b`; a binomial 2×2
+  likelihood ratio also requires `total_a-a` and `total_b-b`. The complete
+  table now drives significance/BH filtering. Ranking remains log-ratio based,
+  but a regeneration is required because marginal significance decisions can
+  change. Port the same correction to the sibling pipeline's older copy.
+- [x] **Unknown-value drift across Python/JS.** Python recognized bilingual
+  placeholders (`inconnu`, `n/a`, em dash, etc.) but did not trim; JS trimmed
+  but recognized only `unknown`. Both now implement the same set, so stale or
+  live-fetched placeholders do not become chart categories.
+- [x] **Release version single-source guard.** `package-lock.json` still said
+  1.28.0 while `package.json`/`module.ini` said 1.30.0. `check-versions.js`
+  verifies all four declarations on every build.
+- [x] **Duplicate-i18n-key guard.** The v1.23 audit found real shadowed keys but
+  added no permanent check. `check-i18n.js` decodes source spellings (including
+  Unicode escapes) and rejects duplicate runtime keys per locale. Its first run
+  caught the same-valued French `Type` and `Authors` declarations; the redundant
+  copies were removed without changing output.
+- [x] **Sync extraction boundary hardened.** The job now caps entry count,
+  individual expanded size and total expanded size; rejects NULs, traversal,
+  absolute/Windows paths, symlinks and Unix special files; treats a `stopping`
+  job as active; and removes only a stale job-scoped old-tree directory before
+  an atomic retry.
+- [x] **Mechanical documentation drift.** Page-block count 18→19, retired
+  Compare Projects installation example, stale Scary Terms summary, build-size
+  count 98→128, and the missing `images` entry in `scripts/README.md` fixed.
+
+### Implemented in v1.32.0
+
+- [x] **Reproducible Python environment.** The short direct-requirements file
+  now compiles to a Python 3.12/Linux lock with hashes for every artifact. CI
+  installs with `--require-hashes`; a recorded input digest and npm lint guard
+  fail on drift. `uv==0.12.1` was verified upstream before pinning.
+- [x] **Exact production integration.** A dedicated job downloads and verifies
+  the official Omeka S 4.2.1 archive, imports its real schema, activates the
+  module under PHP 8.5 + MariaDB 11.8, boots the application, resolves all
+  registered layouts/controllers/templates/routes and exercises the real
+  Laminas response-header path. No module-local Laminas/PSR packages were added.
+- [x] **G² upstream handoff.** The complete-table correction is tracked in
+  `fmadore/IWAC-Hugging-Face#8`, with a numerical reproduction and regression
+  test contract. The upstream code remains intentionally untouched here.
+- [x] **CSP composition.** Embed responses now rewrite `frame-ancestors` inside
+  every existing policy while preserving unrelated directives; a missing CSP
+  receives one policy. Multiple-header/list behavior has pure and real-Laminas
+  coverage, including the Omeka 4.0-era implementation whose `Headers::get()`
+  returns only the first generic header. Proxy-added headers still require
+  proxy configuration.
+- [x] **Browser/render regression suite.** Playwright runs the production
+  minified CSS/JS in Chromium across desktop, French, dark mobile and
+  single-panel embed cases, checking translation, snippets, overflow and panel
+  selection. The first run caught missing French embed-control strings.
+- [x] **Schema authority reconciliation.** The installed `iwac-data` skill now
+  documents the private full mirror and public per-row-masked projection, all
+  seven subsets, images/multimodal embeddings, reference OCR/LDA, stored Hijri
+  fields and exact model-specific sentiment prefixes. The skill validator
+  passes on the installed copy.
+- [x] **Sync URL policy.** `SyncData` no longer accepts a caller-supplied URL;
+  it constructs the fixed repository release URL from one encoded tag segment.
+- [x] **Runnable action pins.** All workflows used nonexistent future `v7`
+  tags for GitHub-maintained actions. Official upstream releases confirm v6 is
+  current for checkout/setup-node/setup-python; every workflow now uses those
+  valid majors, while setup-php remains on its documented rolling v2 tag.
+- [x] **Declared-floor integration coverage.** The real-Omeka workflow is now
+  a fail-independent matrix: literal floor Omeka S 4.0.0/PHP 8.1 plus the exact
+  production Omeka S 4.2.1/PHP 8.5 pair. Both checksum-verified distributions
+  hydrate and render a database-seeded page block through Omeka's API, service
+  and view layers in addition to resolving every registered module service.
+- [x] **Lazy Hugging Face client.** Pure `iwac_utils` imports now require only
+  pandas. The heavyweight `datasets` client is imported inside the actual load
+  boundary, retaining a focused install error for generators while keeping the
+  normalization/statistics test environment lightweight.
+
+### Remaining opportunities, prioritized
+
+No P1/P2 opportunities from this audit remain open.
+
 ## Verification notes
 
 Confirmed by direct inspection during the audit:
@@ -1012,9 +1112,9 @@ fallback hex values duplicate the token values (minor drift risk). No action
 needed beyond optionally sourcing the fallbacks from a single constant.
 
 ## What's already right (don't "refactor" these away)
-- `AbstractIwacBlockLayout` — all 12 page blocks extend it, supplying only
+- `AbstractIwacBlockLayout` — all 19 page blocks extend it, supplying only
   label/description/template. Zero boilerplate.
-- `iwac-block-shell.phtml` used by 17 of 18 templates (article.phtml is the holdout).
+- `iwac-block-shell.phtml` used by all 19 page-block templates.
 - `SentimentExtractor` property readers genuinely folded onto one `firstValue()`.
 - Escaping discipline across all templates (no unescaped resource data).
 - Theme-swap path centralized: one `MutationObserver`, one `applyThemeToCharts`,

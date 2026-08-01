@@ -17,6 +17,10 @@ on:
       - "**/*.phtml"
       - "scripts/*.py"
       - "scripts/requirements.txt"
+      - "scripts/requirements.lock"
+      - "scripts/python-lock.js"
+      - "tests/php/**"
+      - "tests/python/**"
       - ".github/workflows/lint.yml"
   pull_request:
     paths:
@@ -24,6 +28,10 @@ on:
       - "**/*.phtml"
       - "scripts/*.py"
       - "scripts/requirements.txt"
+      - "scripts/requirements.lock"
+      - "scripts/python-lock.js"
+      - "tests/php/**"
+      - "tests/python/**"
       - ".github/workflows/lint.yml"
 
 permissions:
@@ -38,12 +46,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
       - uses: shivammathur/setup-php@v2
         with:
-          # Matches the module's `omeka_version_constraint = "^4.0.0"` floor;
-          # Omeka S 4 requires PHP 8.1+.
+          # Lower runtime exercised with the literal Omeka S 4.0.0 floor in
+          # omeka-integration.yml (the exact production runtime is PHP 8.5).
           php-version: "8.1"
           coverage: none
 
@@ -58,22 +66,39 @@ jobs:
           done < <(find src view config Module.php -type f \( -name '*.php' -o -name '*.phtml' \) -print0)
           exit $fail
 
+      - name: PHP behavioral contracts
+        run: php tests/php/run.php
+
   python:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      # pyflakes only: no dependency install, so this stays a seconds-long
-      # check. It catches the failure modes that actually happen here —
-      # undefined names, unused imports, redefinitions — without needing the
-      # heavy scientific stack the generators import at runtime.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Python generator lock matches its input
+        run: node scripts/python-lock.js --check
+
+      # Keep lint isolated from the generator stack. It catches undefined
+      # names, unused imports and redefinitions before the focused test
+      # dependencies are installed below.
       - name: Install pyflakes
-        run: pip install pyflakes==3.2.0
+        run: pip install pyflakes==3.4.0
+
+      # `datasets` is lazy-loaded at the network boundary; pinned numpy+pandas
+      # wheels are enough to exercise and import the pure shared helpers.
+      - name: Install Python test dependencies
+        run: pip install -r tests/python/requirements.txt
 
       - name: pyflakes over the generators
         run: pyflakes scripts/*.py
+
+      - name: Python behavioral contracts
+        run: python -m unittest discover -s tests/python -v

@@ -39,8 +39,9 @@
 
     /**
      * Keys are English source strings (matching Omeka convention).
-     * Add new keys here as the UI grows. Keep `en` values identical to the
-     * key — they exist so `t()` can fall back gracefully.
+     * Add new keys here as the UI grows. Identity-valued English entries are
+     * intentionally omitted because `t()` already falls back to the key; keep
+     * only English entries whose rendered value differs from their key.
      *
      * For pluralization and interpolation, use curly placeholders:
      *   'items_count': '{count} items'
@@ -398,6 +399,8 @@
             'Knowledge Graph': 'Graphe de connaissances',
             'Save as image': 'Enregistrer comme image',
             'Download chart': 'T\u00e9l\u00e9charger le graphique',
+            'Copy embed code': 'Copier le code d\u2019int\u00e9gration',
+            'Copied!': 'Copi\u00e9 !',
             'Show patterns': 'Afficher les motifs',
             'Hide patterns': 'Masquer les motifs',
             'No data available': 'Aucune donn\u00e9e disponible',
@@ -484,7 +487,6 @@
             'references_landscape_empty_few': 'Trop peu de références disposent d’un texte intégral extrait pour projeter une carte significative',
             'Color by': 'Colorer par',
             'Decade': 'Décennie',
-            'Type': 'Type',
 
             'Scholarly topics': 'Thèmes de la littérature scientifique',
             'references_topics_title_lang': 'Thèmes de la littérature scientifique ({language})',
@@ -841,7 +843,6 @@
             'No geocoded places':           'Aucun lieu de cet article n\u2019a pu \u00eatre localis\u00e9',
 
             // Reference dashboard \u2014 French
-            'Authors':                      'Auteurs',
             'Publisher':                    '\u00c9diteur',
             'DOI':                          'DOI',
             'This work in the bibliography': 'Ce travail dans la bibliographie',

@@ -19,7 +19,7 @@ use Laminas\View\Model\ViewModel;
 class DataController extends AbstractActionController
 {
     /** Job statuses that mean a sync is still active. */
-    const ACTIVE_STATUSES = ['starting', 'in_progress'];
+    const ACTIVE_STATUSES = ['starting', 'in_progress', 'stopping'];
 
     /** @var \Omeka\File\Store\StoreInterface */
     protected $store;

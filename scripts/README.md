@@ -39,12 +39,25 @@ python3 -m venv .venv
 source .venv/bin/activate           # Linux/macOS
 # .\.venv\Scripts\Activate.ps1       # Windows PowerShell
 
-# Install dependencies
-pip install -r scripts/requirements.txt
+# Install the exact, hash-verified CI environment
+pip install --require-hashes -r scripts/requirements.lock
 
 # Run a generator
 python3 scripts/generate_collection_overview.py
 ```
+
+`scripts/requirements.txt` remains the short, human-maintained list of direct
+dependencies. `scripts/requirements.lock` is the reproducible Python 3.12/Linux
+environment used by the data workflow. After changing the input, regenerate it
+with the currently verified uv release:
+
+```bash
+npm run lock:python
+```
+
+The command uses `uv==0.12.1`, resolves for the GitHub runner platform, writes
+hashes for every artifact, and records the input-file digest. `npm run lint`
+fails if the input and lock drift apart.
 
 Environment variables:
 
@@ -377,7 +390,7 @@ classic `"lat, lng"` form.
 
 | Function | What it does |
 |---|---|
-| `load_dataset_safe(config_name, repo_id, token)` | Fetch a HF subset as a pandas DataFrame. Logs and returns `None` on error. |
+| `load_dataset_safe(config_name, repo_id, token)` | Fetch a HF subset as a pandas DataFrame. The heavyweight `datasets` client is imported only when this function is called; errors are logged and return `None`. |
 | `canonical_country(name)` | Apply IWAC display overrides on top of `str.title()` — handles apostrophes ("Côte d'Ivoire") and accents. Re-exported as `_canonical_country` for backwards compatibility. |
 | `canonicalize_country_field(value)` | `pandas.Series.apply()`-ready helper: maps a `country` cell to its canonical form, handling None/NaN, plain strings, and pipe-separated strings. Promoted from duplicates in 3 generators. |
 | `normalize_country(value, ...)` | Strip, title-case, handle `\|,;/` separators, `None` → `"Unknown"`. |
@@ -400,7 +413,7 @@ classic `"lat, lng"` form.
 
 Constants: `DATASET_ID = "fmadore/islam-west-africa-collection-full"` (the
 private full mirror; `--repo` on every generator overrides it) and
-`SUBSETS = ["articles", "audiovisual", "documents", "publications", "references", "index"]`.
+`SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]`.
 
 Sentiment constants: `SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")` —
 the canonical ids every generated payload, block JS file, i18n catalog,

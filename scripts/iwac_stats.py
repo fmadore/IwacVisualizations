@@ -13,9 +13,11 @@ IWAC-Hugging-Face pipeline (``analyses/_stats.py`` and
 CSV reporting. The port is deliberate rather than an import: that repo is
 the data pipeline and is not a dependency of this module (its outputs reach
 us only through the Hugging Face Hub). Keeping the maths here means a
-generator can be run against the Hub alone. Where the two must agree —
-they are the same measures over the same corpus — the formulas below are
-kept literally identical, and any change should be made in both.
+generator can be run against the Hub alone. Where the two repositories
+compute the same measure they should agree, and changes should normally be
+made in both. The complete-2×2 G² correction in this copy (v1.31.0) therefore
+also needs porting to any older sibling-pipeline copy that still sums only
+the two token-present cells.
 
 Functions
 ---------
@@ -91,17 +93,30 @@ def dunning_g2(a: int, b: int, total_a: int, total_b: int) -> float:
     """Signed G² for token overrepresentation in corpus A vs corpus B.
 
     Positive when the token's *rate* is higher in A. The sign carries the
-    direction; the test statistic is the absolute value.
+    direction; the test statistic is the absolute value. The likelihood
+    ratio is computed over the complete 2×2 table (token / not-token ×
+    corpus A / corpus B). Omitting the two not-token cells understates the
+    evidence, especially for common terms.
     """
-    if a == 0 or total_a == 0:
+    if (total_a <= 0 or total_b <= 0
+            or a < 0 or b < 0 or a > total_a or b > total_b):
         return 0.0
-    e1 = total_a * (a + b) / (total_a + total_b)
-    e2 = total_b * (a + b) / (total_a + total_b)
+
+    grand_total = total_a + total_b
+    token_total = a + b
+    not_token_total = grand_total - token_total
+    observed = (a, total_a - a, b, total_b - b)
+    expected = (
+        total_a * token_total / grand_total,
+        total_a * not_token_total / grand_total,
+        total_b * token_total / grand_total,
+        total_b * not_token_total / grand_total,
+    )
+
     g2 = 0.0
-    if a > 0 and e1 > 0:
-        g2 += a * math.log(a / e1)
-    if b > 0 and e2 > 0:
-        g2 += b * math.log(b / e2)
+    for obs, exp in zip(observed, expected):
+        if obs > 0 and exp > 0:
+            g2 += obs * math.log(obs / exp)
     g2 *= 2.0
     return g2 if (a / total_a) > ((b / total_b) if total_b else 0) else -g2
 

@@ -35,6 +35,11 @@ class SyncData extends AbstractJob
     /** A generated entry that must be present — guards against a 404-HTML-as-zip / truncation. */
     const MARKER_ENTRY = 'collection-overview.json';
 
+    /** Generous extraction ceilings: the normal bundle is ~18k entries / ~120 MB. */
+    const MAX_ARCHIVE_ENTRIES = 50000;
+    const MAX_ENTRY_BYTES = 536870912;       // 512 MB for one expanded entry
+    const MAX_EXTRACTED_BYTES = 2147483648;  // 2 GB expanded in total
+
     /** Global setting holding the last successful sync (time/count/bytes/tag). */
     const SETTING_LAST_SYNC = 'iwacvis_last_sync';
 
@@ -88,13 +93,11 @@ class SyncData extends AbstractJob
                 return;
             }
 
-            // 1. Resolve the download URL (explicit url arg > tag > moving `data` release).
-            $url = trim((string) $this->getArg('url', ''));
-            if ($url === '') {
-                $url = self::RELEASE_BASE
-                    . ($tag !== '' ? rawurlencode($tag) : 'data')
-                    . '/' . self::ASSET_NAME;
-            }
+            // 1. Resolve the repository-owned release URL. Do not accept an
+            // arbitrary job argument here: background-job arguments can be
+            // dispatched outside this controller and would otherwise create
+            // a server-side request primitive.
+            $url = self::releaseUrlForTag($tag);
             $logger->info(sprintf('IWAC data sync: downloading %s', $url));
 
             // 2. Stream the archive to a temp file (GitHub asset URLs 302 → CDN).
@@ -119,21 +122,54 @@ class SyncData extends AbstractJob
                 $zip->close();
                 throw new \RuntimeException('Archive is missing the expected entry "' . self::MARKER_ENTRY . '".');
             }
+            if ($count > self::MAX_ARCHIVE_ENTRIES) {
+                $zip->close();
+                throw new \RuntimeException(sprintf(
+                    'Archive contains too many entries (%d; maximum %d).',
+                    $count,
+                    self::MAX_ARCHIVE_ENTRIES
+                ));
+            }
             // Zip-slip guard: refuse any entry whose path could escape the
             // staging dir (absolute, drive-letter, backslash, or `..`
-            // segments). The archive comes from this repo's own release, so
-            // this is defense-in-depth rather than a live threat — but the
-            // job writes into files/, so hostile-archive hygiene is cheap.
+            // segments), any Unix special file/symlink, or an implausibly
+            // large expanded payload. The archive comes from this repo's own
+            // release, so this is defense-in-depth — but the job writes into
+            // files/, so hostile-archive hygiene is cheap.
+            $expandedBytes = 0;
             for ($i = 0; $i < $count; $i++) {
                 $name = (string) $zip->getNameIndex($i);
-                if ($name === ''
-                    || $name[0] === '/'
-                    || strpos($name, '\\') !== false
-                    || preg_match('#(?:^|/)\.\.(?:/|$)#', $name)
-                    || preg_match('#^[A-Za-z]:#', $name)
-                ) {
+                if (!self::isSafeArchiveEntryPath($name)) {
                     $zip->close();
                     throw new \RuntimeException('Archive contains an unsafe entry path: ' . $name);
+                }
+
+                $stat = $zip->statIndex($i);
+                if ($stat === false) {
+                    $zip->close();
+                    throw new \RuntimeException('Could not inspect archive entry: ' . $name);
+                }
+                $size = (int) ($stat['size'] ?? 0);
+                if ($size < 0 || $size > self::MAX_ENTRY_BYTES) {
+                    $zip->close();
+                    throw new \RuntimeException('Archive entry is too large: ' . $name);
+                }
+                $expandedBytes += $size;
+                if ($expandedBytes > self::MAX_EXTRACTED_BYTES) {
+                    $zip->close();
+                    throw new \RuntimeException('Archive expands beyond the 2 GB safety limit.');
+                }
+
+                $opsys = 0;
+                $attributes = 0;
+                if ($zip->getExternalAttributesIndex($i, $opsys, $attributes)
+                    && $opsys === ZipArchive::OPSYS_UNIX
+                    && !self::isSafeUnixArchiveAttributes($attributes)
+                ) {
+                    $zip->close();
+                    throw new \RuntimeException(
+                        'Archive contains a symlink or special-file entry: ' . $name
+                    );
                 }
             }
             $this->rrmdir($stageDir);
@@ -156,6 +192,10 @@ class SyncData extends AbstractJob
                 $logger->info('IWAC data sync: stop requested before swap — aborting (no changes made).');
                 return;
             }
+            // A process killed between the two renames can leave this job's
+            // old-tree destination behind. Clear only that job-scoped sibling
+            // before attempting the atomic swap again.
+            $this->rrmdir($oldDir);
             $hadLive = is_dir($liveDir);
             if ($hadLive && !@rename($liveDir, $oldDir)) {
                 throw new \RuntimeException('Could not move the current data aside.');
@@ -186,6 +226,41 @@ class SyncData extends AbstractJob
             fclose($lock);
             @unlink($lockPath);
         }
+    }
+
+    /**
+     * True when a ZIP entry is a relative forward-slash path that cannot
+     * escape the staging directory. Kept public and side-effect-free so the
+     * security boundary is covered by the dependency-free PHP test runner.
+     */
+    public static function isSafeArchiveEntryPath(string $name): bool
+    {
+        return $name !== ''
+            && $name[0] !== '/'
+            && strpos($name, "\0") === false
+            && strpos($name, '\\') === false
+            && !preg_match('#(?:^|/)\.\.(?:/|$)#', $name)
+            && !preg_match('#^[A-Za-z]:#', $name);
+    }
+
+    /** Build the only permitted download origin for a release tag. */
+    public static function releaseUrlForTag(string $tag): string
+    {
+        $tag = trim($tag);
+        return self::RELEASE_BASE
+            . ($tag !== '' ? rawurlencode($tag) : 'data')
+            . '/' . self::ASSET_NAME;
+    }
+
+    /**
+     * Accept a Unix ZIP entry only when its mode describes a regular file,
+     * directory, or carries no file-type bits. The last form is emitted by
+     * some ordinary ZIP creators; explicit symlinks/devices/sockets are not.
+     */
+    public static function isSafeUnixArchiveAttributes(int $attributes): bool
+    {
+        $type = ($attributes >> 16) & 0170000;
+        return $type === 0 || $type === 0100000 || $type === 0040000;
     }
 
     /**

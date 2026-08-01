@@ -18,7 +18,11 @@ on:
       - "asset/**"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
-      - "scripts/check-theme-tokens.js"
+      - "scripts/check-*.js"
+      - "tests/js/**"
+      - "tests/browser/**"
+      - "playwright.config.js"
+      - "config/module.ini"
       - "tokens.json"
       - "package.json"
       - "package-lock.json"
@@ -27,7 +31,11 @@ on:
       - "asset/**"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
-      - "scripts/check-theme-tokens.js"
+      - "scripts/check-*.js"
+      - "tests/js/**"
+      - "tests/browser/**"
+      - "playwright.config.js"
+      - "config/module.ini"
       - "tokens.json"
       - "package.json"
       - "package-lock.json"
@@ -42,17 +50,26 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
 
       - name: Install pinned build tooling
         run: npm ci
+
+      - name: JavaScript behavioral contracts
+        run: npm test
+
+      - name: Install Chromium for responsive browser contracts
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser rendering and embed contracts
+        run: npm run test:browser
 
       - name: Token guard + rebuild minified assets
         run: npm run build

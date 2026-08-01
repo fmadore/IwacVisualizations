@@ -1,20 +1,27 @@
 {
   "name": "iwac-visualizations",
-  "version": "1.30.0",
+  "version": "1.32.0",
   "private": true,
   "description": "Build scripts for IWAC Visualizations module static assets.",
   "scripts": {
     "build": "npm run lint && npm run build:js && npm run build:css",
     "build:js": "node scripts/build-js.js",
     "build:css": "node scripts/build-css.js",
+    "test": "node --test tests/js/index.test.js",
+    "test:browser": "playwright test",
     "lint:theme": "node scripts/check-theme-tokens.js",
     "lint:blocks": "node scripts/check-blocks.js",
+    "lint:i18n": "node scripts/check-i18n.js",
+    "lint:versions": "node scripts/check-versions.js",
+    "lint:python-lock": "node scripts/python-lock.js --check",
     "lint:py": "node scripts/check-python.js",
-    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:py",
+    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:i18n && npm run lint:versions && npm run lint:python-lock && npm run lint:py",
+    "lock:python": "node scripts/python-lock.js --update",
     "check:cdn": "node scripts/check-cdn-versions.js"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "csso": "^5.0.5",
-    "terser": "^5.36.0"
+    "terser": "^5.49.0"
   }
 }

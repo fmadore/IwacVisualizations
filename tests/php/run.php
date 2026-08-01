@@ -1,0 +1,324 @@
+<?php
+declare(strict_types=1);
+
+// Dependency-free behavioral smoke tests. Minimal framework stubs let the
+// module's pure contracts run on CI without bundling Omeka's Laminas/PSR
+// dependencies inside the module (which would collide with Omeka at runtime).
+
+namespace Laminas\Mvc {
+    class MvcEvent {}
+}
+
+namespace Laminas\Mvc\Controller {
+    abstract class AbstractActionController {}
+}
+
+namespace Laminas\EventManager {
+    interface SharedEventManagerInterface {}
+
+    class Event
+    {
+        private $params;
+
+        public function __construct(array $params = [])
+        {
+            $this->params = $params;
+        }
+
+        public function getParam(string $name)
+        {
+            return $this->params[$name] ?? null;
+        }
+
+        public function setParam(string $name, $value): void
+        {
+            $this->params[$name] = $value;
+        }
+    }
+}
+
+namespace Omeka\Module {
+    abstract class AbstractModule
+    {
+        public function onBootstrap(\Laminas\Mvc\MvcEvent $event): void {}
+    }
+}
+
+namespace Omeka\Job {
+    abstract class AbstractJob {}
+}
+
+namespace Omeka\Api\Representation {
+    abstract class AbstractResourceEntityRepresentation {}
+}
+
+namespace Laminas\View\Renderer {
+    class PhpRenderer
+    {
+        public $lastPartial;
+        public $lastVariables;
+
+        public function partial(string $name, array $variables = []): string
+        {
+            $this->lastPartial = $name;
+            $this->lastVariables = $variables;
+            return $name;
+        }
+    }
+}
+
+namespace Omeka\Site\ResourcePageBlockLayout {
+    interface ResourcePageBlockLayoutInterface
+    {
+        public function getLabel(): string;
+        public function getCompatibleResourceNames(): array;
+        public function render(
+            \Laminas\View\Renderer\PhpRenderer $view,
+            \Omeka\Api\Representation\AbstractResourceEntityRepresentation $resource
+        ): string;
+    }
+}
+
+namespace {
+    use IwacVisualizations\Job\SyncData;
+    use IwacVisualizations\Module;
+    use IwacVisualizations\Site\BlockRegistry;
+    use IwacVisualizations\Site\ResourcePageBlockLayout\SentimentExtractor;
+    use IwacVisualizations\Site\ResourcePageBlockLayout\Visualizations;
+    use Laminas\EventManager\Event;
+    use Laminas\View\Renderer\PhpRenderer;
+    use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
+
+    $root = dirname(__DIR__, 2);
+    require $root . '/Module.php';
+    require $root . '/src/Site/BlockRegistry.php';
+    require $root . '/src/Site/ResourcePageBlockLayout/SentimentExtractor.php';
+    require $root . '/src/Site/ResourcePageBlockLayout/Visualizations.php';
+    require $root . '/src/Controller/Admin/DataController.php';
+    require $root . '/src/Job/SyncData.php';
+
+    $failures = [];
+    $checks = 0;
+
+    function check(bool $condition, string $message): void
+    {
+        global $failures, $checks;
+        $checks++;
+        if (!$condition) {
+            $failures[] = $message;
+        }
+    }
+
+    final class FakeLinkedResource
+    {
+        private $id;
+        private $title;
+
+        public function __construct(int $id, string $title)
+        {
+            $this->id = $id;
+            $this->title = $title;
+        }
+
+        public function id(): int
+        {
+            return $this->id;
+        }
+
+        public function displayTitle(): string
+        {
+            return $this->title;
+        }
+    }
+
+    final class FakeValue
+    {
+        private $text;
+        private $resource;
+
+        public function __construct(string $text = '', $resource = null)
+        {
+            $this->text = $text;
+            $this->resource = $resource;
+        }
+
+        public function valueResource()
+        {
+            return $this->resource;
+        }
+
+        public function __toString(): string
+        {
+            return $this->text;
+        }
+    }
+
+    final class FakeItem extends AbstractResourceEntityRepresentation
+    {
+        public $calls = [];
+        private $values;
+
+        public function __construct(array $values)
+        {
+            $this->values = $values;
+        }
+
+        public function value(string $property, array $options = [])
+        {
+            $this->calls[$property] = ($this->calls[$property] ?? 0) + 1;
+            if (!array_key_exists($property, $this->values)) {
+                throw new \RuntimeException('Property absent from test template');
+            }
+            return $this->values[$property];
+        }
+    }
+
+    final class FakeTemplate
+    {
+        private $id;
+
+        public function __construct(int $id)
+        {
+            $this->id = $id;
+        }
+
+        public function id(): int
+        {
+            return $this->id;
+        }
+    }
+
+    final class FakeTemplateResource extends AbstractResourceEntityRepresentation
+    {
+        private $template;
+
+        public function __construct(?int $templateId)
+        {
+            $this->template = $templateId === null ? null : new FakeTemplate($templateId);
+        }
+
+        public function resourceTemplate()
+        {
+            return $this->template;
+        }
+    }
+
+    // Controlled-vocabulary lookup and default metadata filtering.
+    check(Module::getPolariteLabel(78040) === 'Negative', 'polarity item mapping drifted');
+    check(Module::getCentraliteNumeric('Very central') === 5, 'centrality scale drifted');
+    check(Module::getPolariteNumeric('Not applicable') === 0, 'off-scale polarity drifted');
+
+    $csp = Module::relaxFrameAncestorsPolicies([
+        "default-src 'self'; frame-ancestors 'self'; img-src data:",
+        "script-src 'none', default-src https:; frame-ancestors https://slides.example",
+    ]);
+    check(
+        $csp[0] === "default-src 'self'; frame-ancestors *; img-src data:",
+        'existing CSP directives were not preserved while relaxing framing'
+    );
+    check(
+        $csp[1] === "script-src 'none'; frame-ancestors *, default-src https:; frame-ancestors *",
+        'every policy in a CSP policy list must relax frame-ancestors'
+    );
+    check(
+        Module::relaxFrameAncestorsPolicies([]) === ['frame-ancestors *'],
+        'missing CSP did not receive a framing policy'
+    );
+
+    $event = new Event(['values' => [
+        'dcterms:title' => ['kept'],
+        'iwac:geminiPolarite' => ['hidden'],
+        'iwac:mistralSubjectiviteJustification' => ['hidden'],
+    ]]);
+    (new Module())->filterSentimentValues($event);
+    $filtered = $event->getParam('values');
+    check(isset($filtered['dcterms:title']), 'ordinary metadata was removed');
+    check(!isset($filtered['iwac:geminiPolarite']), 'sentiment metadata was not removed');
+    check(!isset($filtered['iwac:mistralSubjectiviteJustification']), 'sentiment rationale was not removed');
+
+    // The extractor should resolve every property once, not repeat Omeka
+    // value lookups for an ID and then again for its display label.
+    $item = new FakeItem([
+        'iwac:geminiPolarite' => [new FakeValue('', new FakeLinkedResource(78040, 'Négatif'))],
+        'iwac:geminiCentralite' => [new FakeValue('', new FakeLinkedResource(78048, 'Très central'))],
+        'iwac:geminiSubjectiviteScore' => [new FakeValue('', new FakeLinkedResource(78047, 'Très subjectif'))],
+        'iwac:geminiPolariteJustification' => [new FakeValue('polarity reason')],
+        'iwac:geminiCentraliteJustification' => [new FakeValue('centrality reason')],
+        'iwac:geminiSubjectiviteJustification' => [new FakeValue('subjectivity reason')],
+    ]);
+    $bundle = SentimentExtractor::fromItem($item);
+    check($bundle['gemini']['polarite'] === 'Negative', 'extractor polarity label is wrong');
+    check($bundle['gemini']['polarite_fr'] === 'Négatif', 'extractor lost the raw French label');
+    check($bundle['gemini']['polarite_numeric'] === 2, 'extractor polarity score is wrong');
+    check($bundle['gemini']['centralite_numeric'] === 5, 'extractor centrality score is wrong');
+    check($bundle['gemini']['subjectivite_score'] === 5, 'extractor subjectivity score is wrong');
+    check($bundle['gemini']['rated'] === true, 'rated model was marked empty');
+    check($bundle['chatgpt']['rated'] === false, 'empty model was marked rated');
+    check(SentimentExtractor::hasAny($bundle), 'rated bundle was considered empty');
+    foreach ($item->calls as $property => $count) {
+        check($count === 1, $property . ' was read more than once');
+    }
+
+    // Registry/dispatch contracts used by both normal blocks and embeds.
+    check(count(BlockRegistry::slugs()) === 19, 'page-block registry count drifted');
+    check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
+    check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
+
+    $visualizations = new Visualizations();
+    $view = new PhpRenderer();
+    $rendered = $visualizations->render($view, new FakeTemplateResource(15));
+    check(
+        $rendered === 'common/resource-page-block-layout/visualizations/minimal-item',
+        'photograph template no longer dispatches to minimal-item'
+    );
+    check($visualizations->render($view, new FakeTemplateResource(999)) === '', 'unknown template should render nothing');
+
+    // ZIP extraction boundary.
+    foreach ([
+        'collection-overview.json',
+        'article-dashboards/123.json',
+        'on-this-day/h/01-01.json',
+    ] as $safe) {
+        check(SyncData::isSafeArchiveEntryPath($safe), 'safe ZIP path rejected: ' . $safe);
+    }
+    foreach ([
+        '',
+        '/absolute.json',
+        '../escape.json',
+        'nested/../../escape.json',
+        'C:/windows.json',
+        'nested\\windows.json',
+        "nul\0byte.json",
+    ] as $unsafe) {
+        check(!SyncData::isSafeArchiveEntryPath($unsafe), 'unsafe ZIP path accepted: ' . $unsafe);
+    }
+    check(SyncData::isSafeUnixArchiveAttributes(0100644 << 16), 'regular ZIP entry rejected');
+    check(SyncData::isSafeUnixArchiveAttributes(0040755 << 16), 'ZIP directory rejected');
+    check(!SyncData::isSafeUnixArchiveAttributes(0120777 << 16), 'ZIP symlink accepted');
+    check(!SyncData::isSafeUnixArchiveAttributes(0140777 << 16), 'ZIP socket accepted');
+    check(
+        SyncData::releaseUrlForTag('')
+            === 'https://github.com/fmadore/IwacVisualizations/releases/download/data/iwac-data.zip',
+        'default sync release URL drifted'
+    );
+    check(
+        SyncData::releaseUrlForTag('../foreign host')
+            === 'https://github.com/fmadore/IwacVisualizations/releases/download/..%2Fforeign%20host/iwac-data.zip',
+        'release tag was not confined to one encoded path segment'
+    );
+
+    check(
+        in_array('stopping', \IwacVisualizations\Controller\Admin\DataController::ACTIVE_STATUSES, true),
+        'a stopping sync is not treated as active'
+    );
+
+    if ($failures) {
+        fwrite(STDERR, "\nPHP behavioral tests failed:\n");
+        foreach ($failures as $failure) {
+            fwrite(STDERR, '  - ' . $failure . "\n");
+        }
+        exit(1);
+    }
+
+    echo sprintf("PHP behavioral tests passed: %d checks\n", $checks);
+}

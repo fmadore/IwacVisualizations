@@ -64,7 +64,9 @@
     P.isUnknown = function (value) {
         if (value == null) return true;
         var s = String(value).trim().toLowerCase();
-        return s === '' || s === 'unknown';
+        return s === '' || [
+            'unknown', 'inconnu', 'n/a', 'na', 'none', 'null', '—'
+        ].indexOf(s) !== -1;
     };
 
     /* ----------------------------------------------------------------- */

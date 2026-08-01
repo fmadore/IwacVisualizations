@@ -6,14 +6,14 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — eighteen page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — nineteen page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
 | Collection Overview | page block | **Live** — 14 panels, including source locations | Precompute (`generate_collection_overview.py` + two sidecar generators) |
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 16 panels, incl. full-text coverage, per-model LDA topics + semantic landscape | Precompute (`generate_references_overview.py`) |
-| Scary Terms | page block | **Live** — bar-chart race + country view + global view | Precompute (`generate_scary_terms.py`) |
+| Scary Terms | page block | **Live** — seven views: race, trends, country/global counts, co-occurrence, context word cloud, and mentioned-place map | Precompute (`generate_scary_terms.py`) |
 | Topic Explorer | page block | **Live** — LDA-30 overview (treemap + topics-over-time, switchable between dominant-topic share and probability-weighted prevalence) + per-topic drill-down (first consumer of `IWACVis.dashboardLayout`) | Precompute (`generate_topic_explorer.py`) |
 | Periodicals Overview | page block | **Live** — 8 panels: runs gantt, issue-holdings matrix, issues/year, languages & countries donuts, top subjects, word cloud | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets, topic cluster labels | Precompute (`generate_semantic_landscape.py`) |
@@ -41,6 +41,18 @@ Every registered block is wired end-to-end with live data — eighteen page bloc
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.32.0 — production compatibility and reproducible CI
+
+The production pair is now exercised directly: GitHub Actions downloads the checksum-verified Omeka S 4.2.1 distribution, boots this module as active under PHP 8.5 with MariaDB, resolves all registered blocks/controllers/templates and checks real route and response-header behavior. A second Omeka S 4.0.0/PHP 8.1 leg enforces the literal `^4.0.0` compatibility floor; both legs hydrate and render a database-seeded page block through Omeka's API and view layer. The embed response now rewrites `frame-ancestors` in every CSP header instead of adding a second intersecting policy, including on Omeka 4.0's older single-value `Headers::get()` implementation, and the data-sync job derives its release URL solely from a validated tag.
+
+The Python data build now installs a hash-verified Python 3.12/Linux lock whose digest is tied to the short direct-requirements file. Pure `iwac_utils` consumers load with pandas alone; the heavyweight Hugging Face `datasets` client is imported only when a generator actually crosses the dataset I/O boundary. A Chromium/Playwright suite renders the real shared module assets across desktop, French, dark mobile and single-panel embed cases; it also caught and fixed the missing French embed-control labels.
+
+### v1.31.0 — behavioral tests and audit hardening
+
+The fifth repository audit adds the first behavioral test layer on top of the existing syntax/build checks: dependency-free Node tests cover i18n, escaping, lazy initialization and cache-busted JSON fetches; Python tests cover data normalization, sentiment-column adaptation, embeddings, G²/BH statistics and stored Hijri dates; and a stubbed PHP runner covers sentiment extraction, resource-template dispatch, registry contracts and ZIP path safety. All three suites now run in GitHub Actions.
+
+Correctness fixes found while writing the tests: single-row embedding matrices no longer return the row as its own neighbour; nested/non-vector embedding cells are rejected; Python and JavaScript now agree on bilingual unknown-value placeholders; and Dunning G² uses the complete 2×2 token/not-token table rather than only the two token-present cells. The data-sync job now treats `stopping` as active, rejects symlinks/special files and oversized expanded archives, and clears only a stale job-scoped swap directory before promotion. Build guards also reject duplicate runtime i18n keys and version drift between `module.ini`, `package.json`, and both package-lock declarations.
 
 ### v1.29.0 — three readings on one scale
 
@@ -855,19 +867,19 @@ Not yet released. For local development:
 
 1. Place this directory (or a clone of the repo) under your Omeka S `modules/` folder.
 2. If you plan to regenerate the minified JS bundles or the precomputed data:
-   - **Node 18+** for the JS build: `npm install && npm run build:js`
-   - **Python 3.9+** for the precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install -r scripts/requirements.txt`
+   - **Node 20+** for the JS build/browser tests: `npm install && npm run build:js`
+   - **Python 3.12** for the CI-equivalent precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install --require-hashes -r scripts/requirements.lock`
 3. Regenerate data as needed (see [Precompute pipeline](#precompute-pipeline)).
 4. Activate the module in **Admin → Modules**.
-5. On any site page, add one of the page blocks (**Collection Overview**, **References Overview**, **Compare Projects**). For resource-page blocks (**Visualizations**, **Item Set Dashboard**), attach them to the appropriate resource templates from the admin.
+5. On any site page, add one of the page blocks (for example **Collection Overview**, **References Overview**, or **Compare Newspapers**). For resource-page blocks (**Visualizations**, **Item Set Dashboard**), attach them to the appropriate resource templates from the admin.
 
 Already-committed `.min.js` files mean a fresh clone works without running `npm install` — the Node build is only needed when you change a `.js` source.
 
 ### Requirements
 
-- **Omeka S 4.0+** (declared in `config/module.ini`)
-- **Node 18+** — only needed when rebuilding minified JS bundles (dev step)
-- **Python 3.9+** — only needed when running Python precompute generators. `datasets`, `pandas`, `pyarrow`, `huggingface-hub`, `numpy`, … see `scripts/requirements.txt`
+- **Omeka S 4.0+** (declared in `config/module.ini`; CI boots both the literal Omeka S 4.0.0 floor on PHP 8.1 and the production target, Omeka S 4.2.1 on PHP 8.5)
+- **Node 20+** — only needed when rebuilding minified JS bundles or running Playwright (dev/CI step)
+- **Python 3.12** — only needed when running the CI-equivalent Python precompute generators. Direct requirements live in `scripts/requirements.txt`; the workflow installs the hash-verified `scripts/requirements.lock`.
 - **Theme:** [IWAC theme](https://github.com/fmadore/IWAC-theme). The module works without it (CSS fallback values + ECharts theme fallback constants), but chart colors will look generic and the dark-mode toggle will only follow the OS preference.
 
 ### IWAC theme integration
@@ -943,7 +955,7 @@ Full workflow documented in **`scripts/README.md`**. Short version:
 ```bash
 cd /path/to/IwacVisualizations
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r scripts/requirements.txt
+pip install --require-hashes -r scripts/requirements.lock
 
 # Collection-level data
 python3 scripts/generate_collection_overview.py  --minify   # → asset/data/collection-overview.json
@@ -987,7 +999,7 @@ python3 scripts/generate_press_bylines.py                   # → asset/data/pre
 
 `--minify` strips indentation and whitespace from the JSON output. Use it on the heavier bundles (`collection-overview`, `index-overview`, `keyword-explorer-*`) — it typically halves file size with no downside, since the JSON is only ever consumed by JS, not read by humans. Per-entity dashboards are individually small enough that pretty-printed output stays below a few KB each.
 
-The HF dataset updates roughly monthly, so regeneration is a manual developer step, not a scheduled job. After every data regeneration, bump the version in `config/module.ini` (and `package.json` to match) so Omeka's `?v=` query string busts any stale browser caches pointing at the old asset URLs. When adding a new visualization, add a new `generate_*.py` next to the existing ones and document it in `scripts/README.md`.
+The HF dataset updates roughly monthly, so the workflow regenerates on a monthly schedule, on generator changes, or by manual dispatch. The archive manifest and Omeka sync timestamp provide data cache busting independently of the module version. When adding a new visualization, add a new `generate_*.py` next to the existing ones and document it in `scripts/README.md`.
 
 **Provenance:** `iwac_utils.py` and several generators here were originally ported from the sibling [`iwac-dashboard`](https://github.com/fmadore/iwac-dashboard) project (`generate_keyword_explorer.py`, for instance, generalizes its `/keywords` generator). **That project is now deprecated** — this module's `scripts/` is self-contained and the source of truth; there is no cross-repo sync constraint. Use the `iwac-dataset` skill for the dataset schema.
 
@@ -1002,7 +1014,7 @@ npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each so
 
 `node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
 
-Current minification results across **98 files: ≈ 943 KB → 345 KB (−63.4%)**. The chart-options builders (formerly a single ≈ 81 KB `charts/shared/chart-options.js`) were split in v0.23.0 into a small core plus four chart-family files (`chart-options-bar`, `-hbar`, `-graph`, `-special`) that together minify to ≈ 27 KB. The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the nine renderers fit in ≈ 13 KB combined. `choropleth.js` lands at ≈ 5.7 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle. `dashboard-panels-bridge.js` is ≈ 1.4 KB.
+Current minification results across **128 files: ≈ 1.33 MB → 488 KB (−63.4%)**. The chart-options builders (formerly a single ≈ 81 KB `charts/shared/chart-options.js`) were split in v0.23.0 into a small core plus four chart-family files (`chart-options-bar`, `-hbar`, `-graph`, `-special`) that together minify to ≈ 27 KB. The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the renderers stay independently loadable. `choropleth.js` lands at ≈ 5.7 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle.
 
 Every sheet under `asset/css/` is hand-authored; the styles are split per-block, mirroring the JS architecture:
 
@@ -1038,7 +1050,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | --- | --- | --- |
 | GitHub Actions | `.github/workflows/*.yml` | Dependabot (`.github/dependabot.yml`), monthly, grouped |
 | npm devDependencies | `package.json` — `csso`, `terser` | Nothing. Build-only; never served to visitors |
-| Python | `scripts/requirements.txt` | Nothing. Deliberately unpinned against a moving HF dataset |
+| Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 
 That last row is the one that matters to visitors and the one Dependabot structurally cannot see: ECharts, echarts-wordcloud, MapLibre GL and the four d3 modules are jsDelivr URLs written as PHP string constants, not npm dependencies. Exact-pinning them in v1.22.0 stopped the live site from upgrading itself mid-flight (ECharts 6.1.0 landed unannounced on 2026-05-19) but left no signal that anything had moved.

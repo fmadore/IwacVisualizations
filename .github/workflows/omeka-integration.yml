@@ -1,0 +1,132 @@
+name: Omeka S integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Module.php"
+      - "config/**"
+      - "src/**"
+      - "view/**"
+      - "tests/integration/**"
+      - ".github/workflows/omeka-integration.yml"
+  pull_request:
+    paths:
+      - "Module.php"
+      - "config/**"
+      - "src/**"
+      - "view/**"
+      - "tests/integration/**"
+      - ".github/workflows/omeka-integration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: omeka-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  omeka:
+    name: Omeka ${{ matrix.omeka_version }} / PHP ${{ matrix.php_version }} (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Literal floor of config/module.ini's ^4.0.0 promise. Omeka 4.0.0
+          # declares PHP >=7.4; PHP 8.1 is this project's lower CI runtime.
+          - target: declared floor
+            omeka_version: 4.0.0
+            php_version: "8.1"
+            omeka_sha256: bbc103ce6beefe780811f7499da2fd4ab678db0bbda9f532ab3b64cd741d11f5
+          # Exact versions running on the live production instance.
+          - target: production
+            omeka_version: 4.2.1
+            php_version: "8.5"
+            omeka_sha256: cc27d1c7aca0209523d19aa285f4a08e29e34950dcc446951a7c1311de348e82
+    env:
+      OMEKA_VERSION: ${{ matrix.omeka_version }}
+      EXPECTED_OMEKA_VERSION: ${{ matrix.omeka_version }}
+      EXPECTED_PHP_SERIES: ${{ matrix.php_version }}
+    services:
+      mariadb:
+        # Current MariaDB 11.8 LTS patch, verified on Docker Hub 2026-08-01.
+        image: mariadb:11.8.8
+        env:
+          MARIADB_DATABASE: omeka
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php_version }}
+          extensions: intl, mbstring, pdo_mysql, xml, zip
+          coverage: none
+
+      - name: Download the verified Omeka S distribution
+        env:
+          OMEKA_SHA256: ${{ matrix.omeka_sha256 }}
+        run: |
+          OMEKA_URL="https://github.com/omeka/omeka-s/releases/download/v${OMEKA_VERSION}/omeka-s-${OMEKA_VERSION}.zip"
+          curl --fail --location --retry 3 "$OMEKA_URL" --output "$RUNNER_TEMP/omeka-s.zip"
+          echo "$OMEKA_SHA256  $RUNNER_TEMP/omeka-s.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/omeka-s.zip" -d "$RUNNER_TEMP"
+          ln -s "$GITHUB_WORKSPACE" "$RUNNER_TEMP/omeka-s/modules/IwacVisualizations"
+
+      - name: Prepare the Omeka schema and activate the module
+        env:
+          MYSQL_PWD: root
+        run: |
+          MODULE_VERSION=$(sed -nE 's/^version[[:space:]]*=[[:space:]]*"([0-9]+\.[0-9]+\.[0-9]+)"[[:space:]]*$/\1/p' config/module.ini)
+          if [ -z "$MODULE_VERSION" ]; then
+            echo "::error::Could not read a semantic version from config/module.ini"
+            exit 1
+          fi
+          cat > "$RUNNER_TEMP/omeka-s/config/database.ini" <<'INI'
+          user     = "root"
+          password = "root"
+          dbname   = "omeka"
+          host     = "127.0.0.1"
+          port     = 3306
+          INI
+          mysql --host=127.0.0.1 --user=root omeka \
+            < "$RUNNER_TEMP/omeka-s/application/data/install/schema.sql"
+          mysql --host=127.0.0.1 --user=root omeka <<SQL
+          INSERT INTO setting (id, value) VALUES
+            ('version', '"$OMEKA_VERSION"'),
+            ('locale', '"en_US"');
+          INSERT INTO module (id, is_active, version)
+            VALUES ('IwacVisualizations', 1, '$MODULE_VERSION');
+          INSERT INTO site
+            (id, slug, theme, title, summary, navigation, item_pool, created,
+             modified, is_public, assign_new_items)
+            VALUES
+            (1, 'test', 'default', 'Integration fixture', NULL, '[]', '[]',
+             NOW(), NULL, 1, 0);
+          INSERT INTO site_page
+            (id, site_id, slug, title, is_public, created, modified)
+            VALUES
+            (1, 1, 'visualizations', 'Visualizations', 1, NOW(), NULL);
+          INSERT INTO site_page_block
+            (id, page_id, layout, data, position)
+            VALUES
+            (1, 1, 'collectionOverview', '[]', 1);
+          UPDATE site SET homepage_id = 1 WHERE id = 1;
+          SQL
+
+      - name: Boot Omeka, resolve services, and render a seeded block
+        env:
+          OMEKA_PATH: ${{ runner.temp }}/omeka-s
+        run: php tests/integration/omeka_boot.php

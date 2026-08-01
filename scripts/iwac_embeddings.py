@@ -39,7 +39,7 @@ def coerce_embedding(value: Any) -> Optional[np.ndarray]:
     if value is None:
         return None
     if isinstance(value, np.ndarray):
-        if value.size == 0 or not np.isfinite(value).all():
+        if value.ndim != 1 or value.size == 0 or not np.isfinite(value).all():
             return None
         return value.astype(np.float32, copy=False)
     if isinstance(value, (list, tuple)):
@@ -49,7 +49,7 @@ def coerce_embedding(value: Any) -> Optional[np.ndarray]:
             arr = np.asarray(value, dtype=np.float32)
         except (TypeError, ValueError):
             return None
-        if arr.size == 0 or not np.isfinite(arr).all():
+        if arr.ndim != 1 or arr.size == 0 or not np.isfinite(arr).all():
             return None
         return arr
     return None
@@ -113,6 +113,10 @@ def top_k_cosine(
     n = X.shape[0]
     if n == 0 or k <= 0:
         return []
+    if n == 1:
+        return [[]]
+    if batch_size is not None and batch_size <= 0:
+        raise ValueError("batch_size must be a positive integer")
     if batch_size is None:
         batch_size = n if n <= 4096 else 1024
 
@@ -139,6 +143,8 @@ def pairs_above_threshold(
     and cosine similarity ≥ ``threshold``, in batched matrix products so
     the full n × n similarity matrix never materializes.
     """
+    if batch_size <= 0:
+        raise ValueError("batch_size must be a positive integer")
     n = X.shape[0]
     for start in range(0, n, batch_size):
         stop = min(n, start + batch_size)

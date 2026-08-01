@@ -41,12 +41,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 try:
-    from datasets import load_dataset as hf_load_dataset
     import pandas as pd
 except ImportError:
     raise ImportError(
-        "Required packages not installed. Please run:\n"
-        "pip install datasets pandas huggingface-hub pyarrow"
+        "Required package not installed. Please run:\n"
+        "pip install pandas"
     )
 
 
@@ -596,9 +595,19 @@ def is_unknown(value: Any) -> bool:
     membership set covers the FR/EN placeholders the dataset uses for a missing
     value: unknown / inconnu / n/a / na / none / null / em-dash.
     """
-    if not value:
+    if value is None:
         return True
-    return str(value).lower() in {"unknown", "inconnu", "n/a", "na", "none", "null", "—"}
+    try:
+        if bool(pd.isna(value)):
+            return True
+    except (TypeError, ValueError):
+        # Non-scalar containers are not valid labels, but they are not an
+        # empty/unknown sentinel either; stringify consistently below.
+        pass
+    normalized = str(value).strip().lower()
+    return normalized == "" or normalized in {
+        "unknown", "inconnu", "n/a", "na", "none", "null", "—"
+    }
 
 
 def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:
@@ -699,6 +708,18 @@ def tokenize(text: Any) -> List[str]:
 # Dataset Loading
 # =============================================================================
 
+def _load_hf_dataset(**kwargs: Any) -> Any:
+    """Import the heavyweight Hugging Face client only at the I/O boundary."""
+    try:
+        from datasets import load_dataset
+    except ImportError as exc:
+        raise ImportError(
+            "Hugging Face dataset client not installed. Please run:\n"
+            "pip install datasets huggingface-hub pyarrow"
+        ) from exc
+    return load_dataset(**kwargs)
+
+
 def load_dataset_safe(
     config_name: str,
     repo_id: str = DATASET_ID,
@@ -737,7 +758,7 @@ def load_dataset_safe(
         if token:
             kwargs["token"] = token
 
-        dataset = hf_load_dataset(**kwargs)
+        dataset = _load_hf_dataset(**kwargs)
         data = dataset["train"]
         if columns:
             keep = [c for c in columns if c in data.column_names]

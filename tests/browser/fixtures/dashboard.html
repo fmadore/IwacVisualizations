@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC browser fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        document.documentElement.lang = fixtureParams.get('lang') || 'en';
+    </script>
+    <style>
+        :root {
+            --primary: #a33312;
+            --ink: #171717;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+            --space-8: 2rem;
+        }
+        body { margin: 0; padding: 1rem; background: var(--surface-raised); }
+        body[data-theme="dark"] {
+            --primary: #ff8a62;
+            --ink: #f2eeeb;
+            --muted: #c3bdb8;
+            --surface: #1a1d21;
+            --surface-raised: #101216;
+            --border: #555b62;
+            --border-light: #353a40;
+        }
+        .fixture-chart {
+            display: grid;
+            place-items: center;
+            min-height: 180px;
+            border: 1px dashed var(--border);
+            color: var(--muted);
+        }
+    </style>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+</head>
+<body>
+    <script>
+        if (fixtureParams.get('theme') === 'dark') document.body.dataset.theme = 'dark';
+        const embeddedPanel = fixtureParams.get('embed');
+        if (embeddedPanel) {
+            document.body.className = 'iwac-embed-body iwac-embed-single';
+            document.body.dataset.embedPanel = embeddedPanel;
+        }
+    </script>
+    <main>
+        <section class="iwac-vis-block" data-embed-slug="collection-overview" data-embed-base="/s/iwac">
+            <header class="iwac-vis-block-header">
+                <h3 class="iwac-vis-block-header__title">Collection Overview with a deliberately long heading that must wrap on narrow screens</h3>
+                <p class="iwac-vis-block-header__desc">A real module-CSS fixture for responsive and embed behavior.</p>
+            </header>
+            <div class="iwac-vis-overview-grid">
+                <article class="iwac-vis-panel">
+                    <h4>Records by year</h4>
+                    <p class="iwac-vis-panel-desc">A compact chronology of the collection.</p>
+                    <div class="iwac-vis-chart fixture-chart">Chart placeholder</div>
+                </article>
+                <article class="iwac-vis-panel">
+                    <h4>Geographic coverage</h4>
+                    <p class="iwac-vis-panel-desc">Places represented across the archive.</p>
+                    <div class="iwac-vis-chart fixture-chart">Map placeholder</div>
+                </article>
+                <article class="iwac-vis-panel iwac-vis-panel--wide">
+                    <h4>A very long panel title that should leave room for its toolbar without forcing horizontal page overflow</h4>
+                    <p class="iwac-vis-panel-desc">Long labels are common in bilingual scholarly metadata.</p>
+                    <div class="iwac-vis-chart fixture-chart">Table placeholder</div>
+                </article>
+            </div>
+        </section>
+    </main>
+    <script src="/asset/js/iwac-i18n.min.js"></script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script src="/asset/js/charts/shared/panel-toolbar.min.js"></script>
+    <script src="/asset/js/charts/shared/embed.min.js"></script>
+</body>
+</html>

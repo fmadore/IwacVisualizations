@@ -26,6 +26,8 @@ on:
     paths:
       - "scripts/*.py"
       - "scripts/requirements.txt"
+      - "scripts/requirements.lock"
+      - "scripts/python-lock.js"
   # The other driver of data changes is the HF dataset itself (refreshed roughly
   # monthly), which leaves no signal in this repo — so rebuild on a schedule too.
   schedule:
@@ -45,17 +47,23 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: scripts/requirements.txt
+          cache-dependency-path: scripts/requirements.lock
 
-      - name: Install dependencies
-        run: pip install -r scripts/requirements.txt
+      - name: Verify and install locked dependencies
+        run: |
+          node scripts/python-lock.js --check
+          pip install --require-hashes -r scripts/requirements.lock
 
       - name: Run generators
         # The 29 HF-driven generators, with default flags (defaults already match

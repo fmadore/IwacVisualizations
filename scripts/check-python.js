@@ -76,7 +76,7 @@ function run() {
 
     console.log(
         '• python lint SKIPPED: no interpreter with pyflakes found. ' +
-        'Install it with `pip install pyflakes==3.2.0` to catch unused imports ' +
+        'Install it with `pip install pyflakes==3.4.0` to catch unused imports ' +
         'and undefined names before CI does.'
     );
     return 0;

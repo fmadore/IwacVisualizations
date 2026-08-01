@@ -198,16 +198,93 @@ class Module extends AbstractModule
             return;
         }
         $headers = $response->getHeaders();
-        $xfo = $headers->get('X-Frame-Options');
-        if ($xfo) {
-            foreach (($xfo instanceof \Traversable ? iterator_to_array($xfo) : [$xfo]) as $header) {
-                $headers->removeHeader($header);
+        foreach (self::responseHeadersNamed($headers, 'X-Frame-Options') as $header) {
+            $headers->removeHeader($header);
+        }
+        // Public read-only widget — any parent may frame it. Every enforced
+        // CSP policy must allow the parent: multiple CSP headers are applied
+        // as an intersection, so appending a permissive second header cannot
+        // relax an existing `frame-ancestors 'self'`. Rewrite the directive
+        // in each policy while preserving every unrelated directive.
+        $cspHeaders = self::responseHeadersNamed($headers, 'Content-Security-Policy');
+        $policies = [];
+        foreach ($cspHeaders as $header) {
+            $policies[] = $header->getFieldValue();
+            $headers->removeHeader($header);
+        }
+        foreach (self::relaxFrameAncestorsPolicies($policies) as $policy) {
+            $headers->addHeaderLine('Content-Security-Policy', $policy);
+        }
+    }
+
+    /**
+     * Return every response header with the requested field name.
+     *
+     * Laminas HTTP versions bundled with Omeka S 4.0 treat generic headers
+     * such as Content-Security-Policy as single-value in Headers::get(), even
+     * when the response contains the field more than once. Iterating the
+     * container is the version-neutral way to reach and rewrite every enforced
+     * policy (and every X-Frame-Options line).
+     */
+    private static function responseHeadersNamed($headers, string $fieldName): array
+    {
+        $matches = [];
+        foreach ($headers as $header) {
+            if (strcasecmp($header->getFieldName(), $fieldName) === 0) {
+                $matches[] = $header;
             }
         }
-        // Public read-only widget — any parent may frame it. Swap in an
-        // explicit allowlist (e.g. "frame-ancestors 'self' https://slides.example")
-        // here if embedding should ever be restricted.
-        $headers->addHeaderLine('Content-Security-Policy', 'frame-ancestors *');
+        return $matches;
+    }
+
+    /**
+     * Return CSP header values with every enforced policy allowing framing.
+     * Kept pure so multiple-policy composition is covered without booting MVC.
+     */
+    public static function relaxFrameAncestorsPolicies(array $headerValues): array
+    {
+        if (!$headerValues) {
+            return ['frame-ancestors *'];
+        }
+        return array_map([self::class, 'relaxFrameAncestorsPolicy'], $headerValues);
+    }
+
+    /** Rewrite frame-ancestors within one CSP header value. */
+    private static function relaxFrameAncestorsPolicy(string $headerValue): string
+    {
+        // A field value may contain a comma-separated CSP policy list. A comma
+        // followed by a directive name starts another policy; ordinary source
+        // expressions do not use that shape.
+        $policyValues = preg_split(
+            '/\s*,\s*(?=[A-Za-z][A-Za-z0-9-]*\s)/',
+            trim($headerValue)
+        );
+        $relaxed = [];
+        foreach ($policyValues ?: [''] as $policyValue) {
+            $directives = array_values(array_filter(
+                array_map('trim', explode(';', $policyValue)),
+                static function (string $directive): bool {
+                    return $directive !== '';
+                }
+            ));
+            $rewritten = [];
+            $inserted = false;
+            foreach ($directives as $directive) {
+                if (preg_match('/^frame-ancestors(?:\s|$)/i', $directive)) {
+                    if (!$inserted) {
+                        $rewritten[] = 'frame-ancestors *';
+                        $inserted = true;
+                    }
+                    continue;
+                }
+                $rewritten[] = $directive;
+            }
+            if (!$inserted) {
+                $rewritten[] = 'frame-ancestors *';
+            }
+            $relaxed[] = implode('; ', $rewritten);
+        }
+        return implode(', ', $relaxed);
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager): void
