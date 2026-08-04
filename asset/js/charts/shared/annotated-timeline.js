@@ -29,6 +29,32 @@
     var P = ns.panels;
 
     /**
+     * Longest curated label drawn inside the plot area, in characters.
+     *
+     * markLine labels rotate to follow their vertical line, so label length
+     * is consumed against the GRID HEIGHT, not its width — a 60-character
+     * event name ("Colloque national sur les confessions religieuses et
+     * laïcité") runs straight past the x-axis and over the axis title and
+     * the zoom slider. 40 characters is about 235 px at 11 px, which clears
+     * a standard ~370 px grid even at the alternating bottom anchor.
+     *
+     * Nothing is lost by truncating: the full label is on hover and in the
+     * `<details>` list below the chart, which is also what a screen reader
+     * and a no-hover reader get.
+     */
+    var LABEL_MAX_CHARS = 40;
+
+    /** Truncate at the last word boundary before the cap. */
+    function truncateLabel(text, max) {
+        if (!text) return '';
+        if (text.length <= max) return text;
+        var cut = text.slice(0, max);
+        var space = cut.lastIndexOf(' ');
+        if (space > max * 0.6) cut = cut.slice(0, space);
+        return cut.replace(/[\s,;:.—-]+$/, '') + '…';
+    }
+
+    /**
      * Filter curated events to those visible for the active country scope:
      * `global` events always pass, `country` events only when the chart is
      * filtered to that country.
@@ -216,7 +242,8 @@
                 label: {
                     show: !style.compact,
                     formatter: function (p) {
-                        return (p.data && p.data.iwacLabel) || '';
+                        return truncateLabel(
+                            (p.data && p.data.iwacLabel) || '', LABEL_MAX_CHARS);
                     },
                     color: style.muted,
                     fontSize: 11,
@@ -230,7 +257,14 @@
                     width: 1
                 },
                 emphasis: {
-                    label: { show: true },
+                    // Hover restores the untruncated name — the one place the
+                    // reader can ask for it without leaving the chart.
+                    label: {
+                        show: true,
+                        formatter: function (p) {
+                            return (p.data && p.data.iwacLabel) || '';
+                        }
+                    },
                     lineStyle: { color: style.muted }
                 },
                 data: sorted.map(function (e, i) {

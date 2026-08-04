@@ -102,7 +102,16 @@
             var v = subsets[subset];
             if (!v) return;
             var tr = P.el('tr');
-            tr.appendChild(P.el('th', 'iwac-vis-laicite-corpus', L.subsetLabel(subset)));
+            // Name plus a one-line gloss. Four bare corpus labels invite the
+            // reading that only one of them holds primary sources; the gloss
+            // says what each actually contains, and the note under the table
+            // says which one is not a source at all.
+            var corpus = P.el('th', 'iwac-vis-laicite-corpus');
+            corpus.appendChild(P.el('span', 'iwac-vis-laicite-corpus-name',
+                L.subsetLabel(subset)));
+            corpus.appendChild(P.el('span', 'iwac-vis-laicite-corpus-gloss',
+                P.t('laicite.subset_gloss_' + subset)));
+            tr.appendChild(corpus);
             tr.appendChild(P.el('td', null, P.formatNumber(v.members || 0)));
             tr.appendChild(P.el('td', null, P.formatNumber(v.tagged || 0)));
             tr.appendChild(P.el('td', null, P.formatNumber(v.said || 0)));
@@ -132,6 +141,8 @@
         var wrap = P.el('div', 'iwac-vis-table-wrapper');
         wrap.appendChild(table);
         panel.appendChild(wrap);
+        panel.appendChild(P.el('p', 'iwac-vis-laicite-table-note',
+            P.t('laicite.subset_table_note')));
         return panel;
     };
 
@@ -176,8 +187,10 @@
                 P.t('laicite.frame_share', { percent: L.pct(items, totalMembers) })));
 
             var spec = (metadata.frames || {})[frame] || {};
-            if (spec.note) {
-                card.appendChild(P.el('p', 'iwac-vis-laicite-frame-note', spec.note));
+            var note = (ns.locale === 'fr' ? spec.note_fr : spec.note_en)
+                || spec.note_en;
+            if (note) {
+                card.appendChild(P.el('p', 'iwac-vis-laicite-frame-note', note));
             }
             grid.appendChild(card);
         });

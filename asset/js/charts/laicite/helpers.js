@@ -55,13 +55,17 @@
     L.buildMetricCards = function (metadata) {
         var totals = metadata.totals || {};
         var span = metadata.year_range || [];
+        // Raw numbers, never pre-formatted strings: buildSummaryCards runs
+        // every value through formatNumber itself, so formatting here too
+        // rendered the whole row as "NaN". The span is prose, hence `text`.
         var cards = [
-            { value: P.formatNumber(totals.members || 0), labelKey: 'laicite.kpi_members', featured: true },
-            { value: P.formatNumber(totals.tagged || 0), labelKey: 'laicite.kpi_tagged' },
-            { value: P.formatNumber(totals.said || 0), labelKey: 'laicite.kpi_said' },
-            { value: P.formatNumber(totals.occurrences || 0), labelKey: 'laicite.kpi_occurrences' },
-            { value: String(totals.countries || 0), labelKey: 'laicite.kpi_countries' },
-            { value: span.length === 2 ? span[0] + '–' + span[1] : '—', labelKey: 'laicite.kpi_span' }
+            { value: totals.members || 0, labelKey: 'laicite.kpi_members', featured: true },
+            { value: totals.tagged || 0, labelKey: 'laicite.kpi_tagged' },
+            { value: totals.said || 0, labelKey: 'laicite.kpi_said' },
+            { value: totals.occurrences || 0, labelKey: 'laicite.kpi_occurrences' },
+            { value: totals.countries || 0, labelKey: 'laicite.kpi_countries' },
+            { value: span.length === 2 ? span[0] + '–' + span[1] : '—',
+              labelKey: 'laicite.kpi_span', text: true }
         ];
         var el = P.buildSummaryCards(cards);
         el.classList.add('iwac-vis-laicite-metrics');

@@ -9,12 +9,17 @@ block (GitHub issue #14) — a dossier on secularism in the IWAC corpus:
     asset/data/laicite-metadata.json      # KPIs, tag-vs-text Venn, rights split
     asset/data/laicite-trends.json        # per-year series, global/country/frame
     asset/data/laicite-countries.json     # per-country aggregates
-    asset/data/laicite-documents.json     # the primary-source dossier
+    asset/data/laicite-documents.json     # the archival dossier
     asset/data/laicite-concordance.json   # KWIC rows — RIGHTS-GATED (see below)
     asset/data/laicite-collocates.json    # log-likelihood collocates, sliced
     asset/data/laicite-implicit.json      # vocabulary of the tagged-but-unsaid
     asset/data/laicite-corpora.json       # press vs periodicals, token-normalised
     asset/data/laicite-seasonality.json   # Gregorian vs lunar month profile
+    asset/data/laicite-actors.json        # co-occurring persons / organisations
+    asset/data/laicite-arenas.json        # frame x decade x country shares
+    asset/data/laicite-sentiment.json     # three-model AI framing vs a baseline
+    asset/data/laicite-places.json        # geocoded spatial mentions
+    asset/data/laicite-references.json    # the scholarship, on its own axis
 
 The hand-curated event annotations for the timeline live in
 ``asset/data/laicite-events.json`` — a committed file (gitignore exception,
@@ -32,10 +37,13 @@ Three consequences shape the code:
    *Laïcité*), so the dossier is defined by the tag *and* the text, and the
    divergence between them is surfaced rather than smoothed away.
 2. **It scans four subsets, not one.** ``articles`` (press coverage),
-   ``publications`` (Islamic periodicals), ``documents`` (primary sources)
+   ``publications`` (Islamic periodicals), ``documents`` (archival material)
    and ``references`` (scholarship) are different evidentiary objects, so
    every record carries a ``subset`` discriminator and **no bundle sums
-   across subsets without labelling it**.
+   across subsets without labelling it**. The first three are all primary
+   sources — see ``SOURCE_TYPES``, which is about evidentiary status, not
+   genre; ``references`` is the only one that is commentary rather than
+   evidence, and it is excluded from every temporal facet for that reason.
 3. **It matches RAW text, not ``lemma_text``.** Scary Terms counts against
    the lemma column; that is the one recipe here that must not be ported.
    The concordance is built on character offsets into readable text with
@@ -119,6 +127,8 @@ import pandas as pd
 from iwac_stats import keyness_for_slices
 from iwac_utils import (
     DATASET_ID,
+    SENTIMENT_FIELD_SUFFIXES,
+    SENTIMENT_MODELS,
     STOPWORDS,
     add_standard_args,
     extract_month_num,
@@ -126,9 +136,13 @@ from iwac_utils import (
     generate_timestamp,
     load_dataset_safe,
     normalize_country,
+    normalize_location_name,
+    parse_coordinates,
     parse_pipe_separated,
     parse_standard_args,
+    resolve_sentiment_columns,
     save_json,
+    sentiment_columns,
 )
 
 LEXICON_PATH = Path(__file__).with_name("laicite_lexicon.json")
@@ -151,6 +165,13 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
         "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI",
         "iwac_url", "hijri_month",
+        # The three-model AI sentiment (view 9). Both the current
+        # model-keyed names and the pre-2026-07-31 vendor-keyed ones are
+        # requested: load_dataset_safe keeps whichever exist and logs the
+        # rest, so the projection survives the rename in either direction.
+        # `articles` is the only subset carrying these columns.
+        *[c for m in SENTIMENT_MODELS for f in SENTIMENT_FIELD_SUFFIXES
+          for c in sentiment_columns(m, f)],
     ],
     "publications": [
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
@@ -169,7 +190,22 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
     ],
 }
 
-# Per-item snippet caps, by subset. Primary sources are uncapped (26 items,
+# Evidentiary status, not genre. Press articles, Islamic periodicals and
+# archival documents are all PRIMARY SOURCES — they differ in genre, not in
+# what they are evidence of. `references` is the odd one out: it is not a
+# source but scholarship *about* the others, it is largely anglophone, and
+# it is dated by when the analysis was published rather than by the period
+# analysed. Pooling its 9,167 occurrences with the sources' 11,530 makes the
+# "all together" collocate list half a description of anglophone academic
+# prose, which is why the split is offered as its own slicing.
+SOURCE_TYPES: Dict[str, str] = {
+    "articles": "primary",
+    "publications": "primary",
+    "documents": "primary",
+    "references": "scholarship",
+}
+
+# Per-item snippet caps, by subset. Archival documents are uncapped (26 items,
 # the densest and most quotable material in the collection); a periodical
 # issue is a whole magazine so it earns more lines than a single article.
 PER_ITEM_SNIPPET_CAP: Dict[str, Optional[int]] = {
@@ -291,11 +327,20 @@ class Lexicon:
         self.state_near = {fold_plain(w) for w in d["state_near"]}
 
     def frame_labels(self) -> Dict[str, Dict[str, str]]:
+        """Reader-facing labels and captions, per frame.
+
+        The sidecar's bare ``note`` is deliberately NOT emitted: it is the
+        internal rationale for whoever edits the lexicon (why a nearly-empty
+        frame is kept, why a family is re-counted here rather than joined
+        from the scary-terms bundles) and it is English-only. The caption
+        the panel renders is ``note_en`` / ``note_fr``.
+        """
         return {
             name: {
                 "en": spec.get("label_en", name),
                 "fr": spec.get("label_fr", name),
-                "note": spec.get("note", ""),
+                "note_en": spec.get("note_en", ""),
+                "note_fr": spec.get("note_fr", ""),
             }
             for name, spec in self.frames.items()
         }
@@ -415,6 +460,8 @@ class LaiciteGenerator:
         min_implicit_documents: int = 4,
         min_implicit_terms: int = 8,
         min_newspaper_items: int = 5,
+        min_actor_items: int = 4,
+        min_place_items: int = 3,
         seed: int = 20260804,
     ):
         self.output_dir = Path(output_dir)
@@ -430,7 +477,14 @@ class LaiciteGenerator:
         self.min_implicit_documents = min_implicit_documents
         self.min_implicit_terms = min_implicit_terms
         self.min_newspaper_items = min_newspaper_items
+        self.min_actor_items = min_actor_items
+        self.min_place_items = min_place_items
         self._entities: Optional[Set[str]] = None
+        self._index_df: Optional[pd.DataFrame] = None
+        self._index_loaded = False
+        #: Resolved per-model sentiment column names, filled while scanning
+        #: `articles` (the only subset that carries them).
+        self._sentiment_cols: Dict[str, Dict[str, Optional[str]]] = {}
         self.rng = random.Random(seed)
         self.lex = Lexicon()
         self.logger = logging.getLogger(__name__)
@@ -441,6 +495,10 @@ class LaiciteGenerator:
         self.subset_public: Dict[str, int] = {}
         self.laity_by_subset: Dict[str, int] = defaultdict(int)
         self.state_by_subset: Dict[str, int] = defaultdict(int)
+        #: Sentiment over the WHOLE `articles` corpus, dossier or not. The
+        #: comparison is what turns view 9 from a table into a finding, and
+        #: it is free here — the rows are already in memory during the scan.
+        self._baseline_sentiment: Dict[str, Dict[str, Any]] = {}
 
     # ---------------------------------------------------------------------
     #  Single corpus scan
@@ -462,10 +520,14 @@ class LaiciteGenerator:
                 self.subset_public[subset] = int(df["OCR_is_public"].fillna(False).sum())
             else:
                 self.subset_public[subset] = 0
+            if subset == "articles":
+                self._sentiment_cols = resolve_sentiment_columns(df)
 
             self.logger.info(f"Scanning '{subset}' ({len(df)} rows)…")
             members = 0
             for _, row in df.iterrows():
+                if subset == "articles":
+                    self._tally_baseline_sentiment(row)
                 rec = self._scan_row(row, subset, fields, tag_folded)
                 if rec is not None:
                     self.scans.append(rec)
@@ -593,9 +655,76 @@ class LaiciteGenerator:
             rec.extra = {
                 "author": str(row.get("author") or "").strip(),
                 "resource_class": str(row.get("o:resource_class") or "").strip(),
+                "languages": parse_pipe_separated(row.get("language")),
+                "abstract": str(row.get("abstract") or "").strip(),
             }
+        elif subset == "articles":
+            rec.extra = {"sentiment": self._row_sentiment(row)}
         self.texts[(subset, rec.o_id)] = texts
         return rec
+
+    def _row_sentiment(self, row: pd.Series) -> Dict[str, Any]:
+        """Pull the three-model AI sentiment off one `articles` row.
+
+        Only the scored fields; the free-text justifications are never
+        aggregated (the item page renders those straight from Omeka).
+        Values are the raw French scale labels — the mapping to an ordinal
+        belongs in the view, next to the axis it labels, not here.
+        """
+        out: Dict[str, Any] = {}
+        for model, fields in self._sentiment_cols.items():
+            entry: Dict[str, Any] = {}
+            for key, column in fields.items():
+                if not column or column not in row:
+                    continue
+                value = row.get(column)
+                if value is None or (isinstance(value, float) and pd.isna(value)):
+                    continue
+                text = str(value).strip()
+                if text:
+                    entry[key] = text
+            if entry:
+                out[model] = entry
+        return out
+
+    def _tally_baseline_sentiment(self, row: pd.Series) -> None:
+        """Fold one `articles` row into the corpus-wide sentiment baseline.
+
+        Runs on every row, dossier member or not — that is the point: the
+        baseline is what "laïcité coverage is more polemical than the press
+        at large" is measured against.
+        """
+        for model, entry in self._row_sentiment(row).items():
+            base = self._baseline_sentiment.setdefault(
+                model, {"rated": 0, "polarity": Counter(),
+                        "subjectivity": Counter()})
+            base["rated"] += 1
+            if entry.get("polarite"):
+                base["polarity"][entry["polarite"]] += 1
+            level = self._subjectivity_level(entry.get("subjectivite"))
+            if level is not None:
+                base["subjectivity"][level] += 1
+
+    def _index_records(self) -> Optional[pd.DataFrame]:
+        """The IWAC ``index`` authority file, loaded at most once.
+
+        Three Phase 3 builders join against it (actors, places) and so does
+        the collocate name-marking, which used to load it on its own. One
+        load, one projection.
+        """
+        if self._index_loaded:
+            return self._index_df
+        self._index_loaded = True
+        self._index_df = load_dataset_safe(
+            "index",
+            repo_id=self.repo_id,
+            columns=["o:id", "Titre", "Titre alternatif", "Type", "Coordonnées"],
+        )
+        if self._index_df is None:
+            self.logger.warning(
+                "index subset unavailable — actors, places and entity-name "
+                "marking will be empty")
+        return self._index_df
 
     def _entity_tokens(self) -> Set[str]:
         """Tokens belonging to curated NAMED ENTITIES, from the index subset.
@@ -617,11 +746,8 @@ class LaiciteGenerator:
         """
         if self._entities is not None:
             return self._entities
-        df = load_dataset_safe(
-            "index", repo_id=self.repo_id, columns=["Titre", "Type"])
+        df = self._index_records()
         if df is None:
-            self.logger.warning(
-                "index subset unavailable — entity names will not be marked")
             self._entities = set()
             return self._entities
 
@@ -973,14 +1099,20 @@ class LaiciteGenerator:
     def build_collocates(self) -> Dict[str, Any]:
         """Log-likelihood collocates of the core forms (issue #14, view 5).
 
-        Four slicings, all through ``iwac_stats.keyness_for_slices``:
+        Five slicings, all through ``iwac_stats.keyness_for_slices``:
 
-        ``global``      in-window vocabulary vs the rest of the same documents
-        ``by_decade``   each decade's window vocabulary vs the other decades'
-        ``by_country``  each country's vs the others'
-        ``by_subset``   each corpus's vs the others'
+        ``global``          in-window vocabulary vs the rest of the same documents
+        ``by_source_type``  primary sources vs scholarship (see SOURCE_TYPES)
+        ``by_decade``       each decade's window vocabulary vs the other decades'
+        ``by_country``      each country's vs the others'
+        ``by_subset``       each corpus's vs the others'
 
-        The last three answer "and when/where did that change", which a
+        ``by_source_type`` is the one to reach for first when a pooled list
+        looks odd: scholarship supplies 44% of all occurrences and is written
+        in a different language and register from the sources it analyses, so
+        "all together" is a genuine mixture rather than a single population.
+
+        The rest answer "and when/where did that change", which a
         single global list cannot. G² is the significance test only; ranking
         is by log-ratio effect size, with Benjamini–Hochberg correction
         inside each slice — ranking by G² is the classic keyness mistake
@@ -1000,6 +1132,7 @@ class LaiciteGenerator:
         by_decade: Dict[str, Counter] = defaultdict(Counter)
         by_country: Dict[str, Counter] = defaultdict(Counter)
         by_subset: Dict[str, Counter] = defaultdict(Counter)
+        by_source: Dict[str, Counter] = defaultdict(Counter)
         decade_items: Counter = Counter()
         country_items: Counter = Counter()
         # Document frequency per slice: how many distinct items a token
@@ -1013,8 +1146,11 @@ class LaiciteGenerator:
             pooled_window.update(s.window_tokens)
             pooled_rest.update(s.rest_tokens)
             by_subset[s.subset].update(s.window_tokens)
+            source = SOURCE_TYPES.get(s.subset, "primary")
+            by_source[source].update(s.window_tokens)
             df["window"].update(distinct)
             df["subset:" + s.subset].update(distinct)
+            df["source:" + source].update(distinct)
             # `references` are deliberately absent from the temporal facet.
             # A reference's pub_date is when the ANALYSIS was published, not
             # when the discourse happened, so a 2022 monograph about the
@@ -1065,6 +1201,19 @@ class LaiciteGenerator:
                 f"  collocates: dropped thin slices — decades {dropped_decades}, "
                 f"countries {dropped_countries} (< {self.min_country_items} items)")
 
+        # Both source-type slices are large (roughly 11.5k vs 9.2k
+        # occurrences), so they carry the full corpus-wide min_count rather
+        # than the relaxed thin-slice one.
+        by_source_type = self._floor_slices(
+            score(by_source, self.min_collocate_count), df, "source:")
+        by_subset_scored = self._floor_slices(
+            score(by_subset, self.min_slice_count), df, "subset:")
+        dropped_subsets = sorted(set(by_subset) - set(by_subset_scored))
+        if dropped_subsets:
+            self.logger.info(
+                f"  collocates: no token cleared the document-frequency floor "
+                f"in subsets {dropped_subsets}")
+
         out = {
             "generated_at": generate_timestamp(),
             "window": COLLOCATE_WINDOW,
@@ -1077,9 +1226,16 @@ class LaiciteGenerator:
                 "The rest of the same documents — a collocate sits near the "
                 "word more than it does elsewhere in writing already about it."
             ),
+            "source_scope": (
+                "Press articles, Islamic periodicals and archival documents "
+                "are all primary sources; scholarship is writing about them. "
+                "It supplies 44% of all occurrences and is largely anglophone, "
+                "so the pooled list mixes two populations — this slicing "
+                "separates them."
+            ),
             "decade_scope": (
-                "Press, periodicals and primary sources only. Scholarship is "
-                "excluded from the temporal slices: a reference is dated by "
+                "Press, periodicals and archival documents only. Scholarship "
+                "is excluded from the temporal slices: a reference is dated by "
                 "when the analysis was published, not by the period it "
                 "analyses, so it would misattribute its vocabulary to the "
                 "decade it was written in."
@@ -1088,25 +1244,43 @@ class LaiciteGenerator:
             "top_n": self.top_collocates,
             "min_document_frequency": self.min_document_frequency,
             "global": global_list,
+            "by_source_type": by_source_type,
             "by_decade": self._floor_slices(
                 score(decades, self.min_slice_count), df, "decade:"),
             "by_country": self._floor_slices(
                 score(countries, self.min_slice_count), df, "country:"),
-            "by_subset": self._floor_slices(
-                score(by_subset, self.min_slice_count), df, "subset:"),
+            "by_subset": by_subset_scored,
             "slice_sizes": {
                 "decade": {k: decade_items[k] for k in decades},
                 "country": {k: country_items[k] for k in countries},
                 "subset": {k: sum(1 for s in scans if s.subset == k and s.window_tokens)
                            for k in by_subset},
+                "source_type": {
+                    k: sum(1 for s in scans
+                           if SOURCE_TYPES.get(s.subset) == k and s.window_tokens)
+                    for k in by_source
+                },
+            },
+            "source_members": {
+                k: sorted(sub for sub, t in SOURCE_TYPES.items() if t == k)
+                for k in by_source
             },
             "dropped_slices": {
                 "decades": dropped_decades, "countries": dropped_countries,
                 "reason": f"fewer than {self.min_country_items} items",
+                # A different reason, so a different key: these slices were
+                # large enough to test and simply produced nothing that
+                # appears in enough distinct documents to be vocabulary.
+                "subsets": dropped_subsets,
+                "subsets_reason": (
+                    f"no token appeared in at least "
+                    f"{self.min_document_frequency} distinct documents"
+                ),
             },
         }
         self.logger.info(
             f"  collocates: {len(out['global'])} global, "
+            f"{len(out['by_source_type'])} source types, "
             f"{len(out['by_decade'])} decades, {len(out['by_country'])} countries "
             f"(document-frequency floor {self.min_document_frequency})")
         return out
@@ -1425,6 +1599,486 @@ class LaiciteGenerator:
             "by_subset": out,
         }
 
+    # -- Phase 3: context --------------------------------------------------
+
+    @staticmethod
+    def _decade(year: Optional[int]) -> Optional[str]:
+        return f"{year // 10 * 10}s" if year else None
+
+    def _authority_index(self) -> Tuple[Dict[str, Dict[str, Any]], int]:
+        """``normalized name → authority record`` over EVERY index type.
+
+        Every type is indexed, not only the ones a caller wants, so that a
+        subject string resolving to a ``Sujets`` record counts as resolved
+        rather than landing in the unresolved list. Otherwise "unresolved"
+        would be dominated by *Laïcité*, *Paix*, *Politique* — the research
+        vocabulary, which is catalogued and simply is not an actor.
+        """
+        df = self._index_records()
+        if df is None:
+            return {}, 0
+        by_name: Dict[str, Dict[str, Any]] = {}
+        count = 0
+        aliases: List[Tuple[str, Dict[str, Any]]] = []
+        for _, row in df.iterrows():
+            title = str(row.get("Titre") or "").strip()
+            if not title:
+                continue
+            try:
+                o_id = int(row["o:id"])
+            except (TypeError, ValueError, KeyError):
+                continue
+            record = {
+                "o_id": o_id,
+                "name": title,
+                "type": str(row.get("Type") or "").strip(),
+                "coords": parse_coordinates(row.get("Coordonnées")),
+            }
+            count += 1
+            by_name[normalize_location_name(title)] = record
+            for alt in parse_pipe_separated(row.get("Titre alternatif")):
+                key = normalize_location_name(alt)
+                if key:
+                    aliases.append((key, record))
+        # Aliases are applied after every canonical title, so an alternative
+        # title can never shadow another record's real one.
+        for key, record in aliases:
+            by_name.setdefault(key, record)
+        return by_name, count
+
+    def build_actors(self) -> Dict[str, Any]:
+        """Who is speaking laïcité, and when (issue #14, view 7).
+
+        Joins each dossier item's ``subject`` list against the IWAC index
+        and keeps the records that are *actors*: persons, organisations and
+        curated events. ``Sujets`` are excluded here — not because they are
+        noise (the repo's CLAUDE.md is explicit that they are not) but
+        because they answer a different question, and the frame legend and
+        the arenas view already answer it.
+
+        Counted once per item: an organisation named three times in one
+        article is one item's worth of evidence, not three.
+        """
+        scans = self.scan_all()
+        by_name, indexed = self._authority_index()
+        actor_types = {"Personnes", "Organisations", "Événements"}
+
+        stats: Dict[int, Dict[str, Any]] = {}
+        unresolved: Counter = Counter()
+        for s in scans:
+            decade = self._decade(s.year)
+            matched: Dict[int, Dict[str, Any]] = {}
+            for raw in s.subjects:
+                record = by_name.get(normalize_location_name(raw))
+                if record is None:
+                    unresolved[raw] += 1
+                    continue
+                if record["type"] in actor_types:
+                    matched[record["o_id"]] = record
+            for o_id, record in matched.items():
+                st = stats.get(o_id)
+                if st is None:
+                    st = stats[o_id] = {
+                        "o_id": o_id,
+                        "name": record["name"],
+                        "type": record["type"],
+                        "items": 0,
+                        "tagged": 0,
+                        "by_decade": Counter(),
+                        "by_country": Counter(),
+                        "by_subset": Counter(),
+                        "first_year": s.year,
+                        "last_year": s.year,
+                    }
+                st["items"] += 1
+                if s.is_tagged:
+                    st["tagged"] += 1
+                if decade:
+                    st["by_decade"][decade] += 1
+                for country in s.countries:
+                    st["by_country"][country] += 1
+                st["by_subset"][s.subset] += 1
+                if s.year:
+                    lo, hi = st["first_year"], st["last_year"]
+                    st["first_year"] = s.year if lo is None else min(lo, s.year)
+                    st["last_year"] = s.year if hi is None else max(hi, s.year)
+
+        kept = [st for st in stats.values() if st["items"] >= self.min_actor_items]
+        kept.sort(key=lambda st: (-st["items"], st["name"]))
+        decades = sorted({d for st in kept for d in st["by_decade"]})
+
+        actors = [{
+            "o_id": st["o_id"],
+            "name": st["name"],
+            "type": st["type"],
+            "items": st["items"],
+            "tagged": st["tagged"],
+            "first_year": st["first_year"],
+            "last_year": st["last_year"],
+            "by_decade": [st["by_decade"].get(d, 0) for d in decades],
+            "by_country": dict(st["by_country"]),
+            "by_subset": dict(st["by_subset"]),
+        } for st in kept]
+
+        self.logger.info(
+            f"  actors: {len(actors)} of {len(stats)} authority records clear "
+            f"{self.min_actor_items} items ({indexed} index records joined, "
+            f"{len(unresolved)} subject strings unresolved)")
+        return {
+            "generated_at": generate_timestamp(),
+            "min_items": self.min_actor_items,
+            "types": sorted(actor_types),
+            "decades": decades,
+            "actors": actors,
+            "index_records": indexed,
+            "unresolved": [
+                {"name": name, "count": n}
+                for name, n in unresolved.most_common(20)
+            ],
+            "unresolved_total": len(unresolved),
+            "note": (
+                "Curated authority records co-occurring with the dossier's "
+                "items, counted once per item. Subject headings are excluded: "
+                "they are catalogued research vocabulary, not actors."
+            ),
+        }
+
+    def build_arenas(self) -> Dict[str, Any]:
+        """What is actually being contested under the word (view 8).
+
+        Frame x decade x country, as the SHARE of that slice's dossier items
+        touching each frame. Shares, not counts, because the slices differ by
+        an order of magnitude in size and the question is about composition:
+        "in Burkina Faso in the 2010s, what proportion of the laïcité dossier
+        argues about schooling" is comparable across slices; the raw count is
+        not.
+
+        ``references`` are excluded for the same reason they are excluded
+        from the collocate decade slices: a reference is dated by when the
+        analysis was published, not by the period it analyses.
+        """
+        scans = self.scan_all()
+        usable = [s for s in scans if s.year and s.subset != "references"]
+        decades = sorted({self._decade(s.year) for s in usable if s.year})
+        # Membership frames are excluded: an item is in the dossier BECAUSE
+        # it says laïcité, so that panel reads ~95% in every decade — it is
+        # the selection criterion, not an arena. Keeping it also forced the
+        # shared y-axis to 100% and flattened the nine panels that are
+        # actually contested into a row of stubs.
+        excluded = list(self.lex.membership_frames)
+        frames = [f for f in self.lex.frames if f not in excluded]
+
+        def blank() -> Dict[str, List[int]]:
+            return {f: [0] * len(decades) for f in frames}
+
+        idx = {d: i for i, d in enumerate(decades)}
+        global_counts = blank()
+        global_totals = [0] * len(decades)
+        by_country: Dict[str, Dict[str, List[int]]] = {}
+        country_totals: Dict[str, List[int]] = {}
+        country_items: Counter = Counter()
+
+        for s in usable:
+            i = idx[self._decade(s.year)]
+            global_totals[i] += 1
+            touched = [f for f in frames if s.frame_counts.get(f)]
+            for frame in touched:
+                global_counts[frame][i] += 1
+            for country in s.countries:
+                country_items[country] += 1
+                if country not in by_country:
+                    by_country[country] = blank()
+                    country_totals[country] = [0] * len(decades)
+                country_totals[country][i] += 1
+                for frame in touched:
+                    by_country[country][frame][i] += 1
+
+        keep = {c for c, n in country_items.items() if n >= self.min_country_items}
+        dropped = sorted(set(country_items) - keep)
+        if dropped:
+            self.logger.info(
+                f"  arenas: dropped thin countries {dropped} "
+                f"(< {self.min_country_items} items)")
+
+        self.logger.info(
+            f"  arenas: {len(frames)} frames x {len(decades)} decades x "
+            f"{len(keep)} countries")
+        return {
+            "generated_at": generate_timestamp(),
+            "frames": frames,
+            "decades": decades,
+            "countries": sorted(keep),
+            "global": global_counts,
+            "global_totals": global_totals,
+            "by_country": {c: by_country[c] for c in sorted(keep)},
+            "country_totals": {c: country_totals[c] for c in sorted(keep)},
+            "dropped_countries": dropped,
+            "membership_excluded": excluded,
+            "scope": (
+                "Press, periodicals and archival documents; scholarship is "
+                "excluded from the decade axis because it is dated by when "
+                "the analysis was published, not by the period it analyses. "
+                "Membership frames are excluded as panels: they are the "
+                "dossier's selection criterion, not something contested "
+                "within it."
+            ),
+        }
+
+    def build_sentiment(self) -> Dict[str, Any]:
+        """AI framing of laïcité coverage (view 9).
+
+        `articles` only — the sentiment annotation exists on no other
+        subset. Three models are reported side by side rather than averaged:
+        they disagree, and an average would hide both the disagreement and
+        the fact that each figure is model output rather than catalogued
+        metadata.
+
+        Subjectivity ships as the full 1-5 distribution, never as a mean.
+        The corpus mean is about 3 and the distribution is bimodal — laicite
+        coverage splits into a factual register and a polemical one, and the
+        mean lands in the trough between them where almost nothing sits.
+
+        Every distribution is paired with the same distribution over the
+        whole `articles` corpus, so the panel can answer "is this coverage
+        unusual" rather than only "what does it look like".
+        """
+        scans = self.scan_all()
+        articles = [s for s in scans if s.subset == "articles"]
+        models = [m for m in SENTIMENT_MODELS if self._sentiment_cols.get(m)]
+
+        by_model: Dict[str, Any] = {}
+        for model in models:
+            polarity: Counter = Counter()
+            centrality: Counter = Counter()
+            subjectivity: Counter = Counter()
+            pol_by_decade: Dict[str, Counter] = defaultdict(Counter)
+            pol_by_paper: Dict[str, Counter] = defaultdict(Counter)
+            paper_items: Counter = Counter()
+            rated = 0
+
+            for s in articles:
+                entry = (s.extra.get("sentiment") or {}).get(model) or {}
+                if not entry:
+                    continue
+                rated += 1
+                decade = self._decade(s.year)
+                pol = entry.get("polarite")
+                if pol:
+                    polarity[pol] += 1
+                    if decade:
+                        pol_by_decade[decade][pol] += 1
+                    if s.newspaper:
+                        pol_by_paper[s.newspaper][pol] += 1
+                        paper_items[s.newspaper] += 1
+                if entry.get("centralite"):
+                    centrality[entry["centralite"]] += 1
+                level = self._subjectivity_level(entry.get("subjectivite"))
+                if level is not None:
+                    subjectivity[level] += 1
+
+            papers = [
+                {
+                    "newspaper": name,
+                    "items": paper_items[name],
+                    "polarity": dict(pol_by_paper[name]),
+                }
+                for name, n in paper_items.most_common()
+                if n >= self.min_newspaper_items
+            ]
+            base = self._baseline_sentiment.get(model, {})
+            by_model[model] = {
+                "rated": rated,
+                "polarity": dict(polarity),
+                "centrality": dict(centrality),
+                "subjectivity": [subjectivity.get(i, 0) for i in range(1, 6)],
+                "polarity_by_decade": {
+                    d: dict(c) for d, c in sorted(pol_by_decade.items())
+                },
+                "by_newspaper": papers,
+                "corpus": {
+                    "rated": base.get("rated", 0),
+                    "polarity": dict(base.get("polarity", {})),
+                    "subjectivity": [
+                        base.get("subjectivity", {}).get(i, 0) for i in range(1, 6)
+                    ],
+                },
+            }
+
+        self.logger.info(
+            "  sentiment: " + ", ".join(
+                f"{m} {by_model[m]['rated']}/{len(articles)}" for m in models)
+            or "  sentiment: no model columns present")
+        return {
+            "generated_at": generate_timestamp(),
+            "models": models,
+            "items": len(articles),
+            "corpus_items": self.subset_totals.get("articles", 0),
+            "min_newspaper_items": self.min_newspaper_items,
+            "by_model": by_model,
+            "ai_note": (
+                "These values are model output, not catalogued metadata. "
+                "Three models annotated the corpus in January-February 2026: "
+                "gemini-3-flash-preview, gpt-5-mini and ministral-14b-2512. "
+                "They are reported separately because they disagree."
+            ),
+        }
+
+    @staticmethod
+    def _subjectivity_level(value: Any) -> Optional[int]:
+        """The 1-5 subjectivity scale, from either a number or its label."""
+        if value is None:
+            return None
+        try:
+            level = int(float(str(value).strip().split()[0]))
+        except (TypeError, ValueError, IndexError):
+            return None
+        return level if 1 <= level <= 5 else None
+
+    def build_places(self) -> Dict[str, Any]:
+        """Geocoded places tagged on dossier items (view 10).
+
+        Joins ``spatial`` (a pipe list of ``index.Titre`` values) against the
+        index's ``Lieux`` records that carry parseable ``Coordonnées``.
+        Counted once per item, like the actors.
+        """
+        scans = self.scan_all()
+        by_name, _ = self._authority_index()
+        stats: Dict[int, Dict[str, Any]] = {}
+        unresolved: Counter = Counter()
+
+        for s in scans:
+            matched: Dict[int, Dict[str, Any]] = {}
+            for raw in s.spatial:
+                record = by_name.get(normalize_location_name(raw))
+                if record is None:
+                    unresolved[raw] += 1
+                    continue
+                if record["type"] == "Lieux" and record["coords"]:
+                    matched[record["o_id"]] = record
+            for o_id, record in matched.items():
+                st = stats.get(o_id)
+                if st is None:
+                    st = stats[o_id] = {
+                        "o_id": o_id,
+                        "name": record["name"],
+                        "lat": record["coords"][0],
+                        "lng": record["coords"][1],
+                        "items": 0,
+                        "tagged": 0,
+                        "by_frame": Counter(),
+                        "by_country": Counter(),
+                        "by_subset": Counter(),
+                        "by_decade": Counter(),
+                        "first_year": s.year,
+                        "last_year": s.year,
+                    }
+                st["items"] += 1
+                if s.is_tagged:
+                    st["tagged"] += 1
+                for frame, n in s.frame_counts.items():
+                    if n:
+                        st["by_frame"][frame] += 1
+                for country in s.countries:
+                    st["by_country"][country] += 1
+                st["by_subset"][s.subset] += 1
+                decade = self._decade(s.year)
+                if decade:
+                    st["by_decade"][decade] += 1
+                if s.year:
+                    lo, hi = st["first_year"], st["last_year"]
+                    st["first_year"] = s.year if lo is None else min(lo, s.year)
+                    st["last_year"] = s.year if hi is None else max(hi, s.year)
+
+        places = [{
+            "o_id": st["o_id"], "name": st["name"],
+            "lat": st["lat"], "lng": st["lng"],
+            "items": st["items"], "tagged": st["tagged"],
+            "first_year": st["first_year"], "last_year": st["last_year"],
+            "by_frame": dict(st["by_frame"]),
+            "by_country": dict(st["by_country"]),
+            "by_subset": dict(st["by_subset"]),
+            "by_decade": dict(st["by_decade"]),
+        } for st in stats.values() if st["items"] >= self.min_place_items]
+        places.sort(key=lambda p: (-p["items"], p["name"]))
+
+        self.logger.info(
+            f"  places: {len(places)} geocoded places clear "
+            f"{self.min_place_items} items ({len(unresolved)} spatial strings "
+            "unresolved or ungeocoded)")
+        return {
+            "generated_at": generate_timestamp(),
+            "min_items": self.min_place_items,
+            "frames": list(self.lex.frames),
+            "places": places,
+            "unresolved_total": len(unresolved),
+            "note": (
+                "Places tagged on dossier items, counted once per item. A "
+                "place appears only when the index holds coordinates for it, "
+                "so this maps what is catalogued, not everything mentioned."
+            ),
+        }
+
+    def build_references(self) -> Dict[str, Any]:
+        """The scholarship on laïcité in the collection (view 11).
+
+        Closes the loop between what the sources said and what has been
+        written about them. Reported on its own axis throughout, because a
+        reference's date is the date of the analysis, not of the events.
+        """
+        scans = self.scan_all()
+        refs = [s for s in scans if s.subset == "references"]
+
+        by_year: Counter = Counter()
+        by_type: Counter = Counter()
+        by_language: Counter = Counter()
+        by_country: Counter = Counter()
+        items: List[Dict[str, Any]] = []
+
+        for s in refs:
+            extra = s.extra or {}
+            languages = [lang for lang in extra.get("languages", []) if lang]
+            kind = extra.get("resource_class") or ""
+            if s.year:
+                by_year[s.year] += 1
+            if kind:
+                by_type[kind] += 1
+            for lang in languages:
+                by_language[lang] += 1
+            for country in s.countries:
+                by_country[country] += 1
+            items.append({
+                "o_id": s.o_id,
+                "title": s.title,
+                "author": extra.get("author", ""),
+                "year": s.year,
+                "type": kind,
+                "languages": languages,
+                "countries": s.countries,
+                "occurrences": sum(s.frame_counts.values()),
+                "tagged": s.is_tagged,
+            })
+
+        items.sort(key=lambda r: (-(r["year"] or 0), r["title"]))
+        years = sorted(by_year)
+        self.logger.info(
+            f"  references: {len(items)} works, {len(by_type)} types, "
+            f"{len(by_language)} languages")
+        return {
+            "generated_at": generate_timestamp(),
+            "count": len(items),
+            "tagged": sum(1 for r in items if r["tagged"]),
+            "years": years,
+            "by_year": [by_year[y] for y in years],
+            "by_type": dict(by_type.most_common()),
+            "by_language": dict(by_language.most_common()),
+            "by_country": dict(by_country.most_common()),
+            "items": items,
+            "note": (
+                "Dated by publication of the analysis, never by the period "
+                "analysed — this axis is not comparable with the timeline."
+            ),
+        }
+
     # -- concordance ------------------------------------------------------
 
     def build_concordance(self) -> Tuple[Dict[str, Any], Dict[str, Dict[str, Any]]]:
@@ -1624,6 +2278,19 @@ class LaiciteGenerator:
         save_json(self.build_seasonality(),
                   self.output_dir / "laicite-seasonality.json", minify=self.minify)
 
+        # Phase 3 — context. Same lazy-load contract as Phase 2: each is
+        # fetched only when its view first activates.
+        save_json(self.build_actors(),
+                  self.output_dir / "laicite-actors.json", minify=True)
+        save_json(self.build_arenas(),
+                  self.output_dir / "laicite-arenas.json", minify=True)
+        save_json(self.build_sentiment(),
+                  self.output_dir / "laicite-sentiment.json", minify=True)
+        save_json(self.build_places(),
+                  self.output_dir / "laicite-places.json", minify=True)
+        save_json(self.build_references(),
+                  self.output_dir / "laicite-references.json", minify=True)
+
         index, files = self.build_concordance()
         save_json(index, self.output_dir / "laicite-concordance.json",
                   minify=self.minify)
@@ -1699,7 +2366,21 @@ def main() -> None:
         type=int,
         default=5,
         help="Drop newspapers with fewer dossier items from the fingerprint "
-             "view (default: %(default)s).",
+             "and sentiment views (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-actor-items",
+        type=int,
+        default=4,
+        help="Drop authority records co-occurring with fewer dossier items "
+             "from the actors view (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-place-items",
+        type=int,
+        default=3,
+        help="Drop geocoded places tagged on fewer dossier items from the "
+             "map (default: %(default)s).",
     )
     add_standard_args(parser, minify_default=False)
     args = parse_standard_args(parser)
@@ -1714,6 +2395,8 @@ def main() -> None:
         min_slice_count=args.min_slice_count,
         min_document_frequency=args.min_document_frequency,
         min_newspaper_items=args.min_newspaper_items,
+        min_actor_items=args.min_actor_items,
+        min_place_items=args.min_place_items,
     ).run()
 
 

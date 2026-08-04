@@ -82,7 +82,7 @@ final class BlockRegistry
             'invokable'   => 'laicite',
             'class'       => BlockLayout\Laicite::class,
             'label'       => 'Laïcité', // @translate
-            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, primary-source documents and scholarship. Shows where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that generated them, the primary-source dossier, and a searchable concordance of the actual sentences. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
+            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, archival documents and scholarship. Eleven views — where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that generated them, the archival dossier, a searchable concordance of the actual sentences, collocates, the press-versus-periodicals comparison, the actors and institutions, the arenas being contested, the three-model AI framing, a map of the places named, and the bibliography. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'lexical-metrics' => [

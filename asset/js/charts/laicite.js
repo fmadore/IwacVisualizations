@@ -1,34 +1,41 @@
 /**
  * IWAC Visualizations — Laïcité block (orchestrator, issue #14)
  *
- * A dossier on secularism across the whole IWAC corpus, in six views:
+ * A dossier on secularism across the whole IWAC corpus, in eleven views:
  *
  *   - overview     KPIs, the tag-vs-text Venn, the per-corpus table,
  *                  the rights note and the frame legend
  *   - trends       annotated timeline, scoped globally / by country / by
  *                  corpus, with a Gregorian-vs-lunar seasonality axis
- *   - documents    the primary-source dossier
+ *   - documents    the archival dossier
  *   - concordance  KWIC lines, lazy-loaded per corpus
- *   - collocates   log-likelihood collocates, sliced by decade / country /
- *                  corpus, plus the implicit-lexicon result
+ *   - collocates   log-likelihood collocates, sliced by source type /
+ *                  corpus / decade / country, plus the implicit-lexicon
+ *                  result
  *   - corpora      press vs periodicals on token-normalised rates, plus the
  *                  per-outlet frame fingerprints
+ *   - actors       the authority records speaking laïcité, by decade
+ *   - arenas       frame × decade × country shares — what is contested
+ *   - sentiment    three-model AI framing against a whole-corpus baseline
+ *   - map          geocoded places tagged on dossier items
+ *   - references   the scholarship, on its own axis
  *
  * Data strategy: the four small bundles (metadata, trends, documents,
  * countries) plus the committed events sidecar load up front — about 60 KB
  * together. The concordance index is small too; the per-corpus KWIC bundles
  * are fetched only when that view first activates, and only for the corpus
- * being browsed. The four Phase 2 bundles load the same way, on first
- * activation of the view that needs them.
+ * being browsed. Every Phase 2 and Phase 3 bundle loads the same way, on
+ * first activation of the view that needs it.
  *
  * Missing files resolve to null so the block degrades gracefully on deploys
  * whose data predates them.
  *
  * Dependencies (in load order before this file):
  *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js → panels.js →
- *   pagination.js → facet-buttons.js → annotated-timeline.js →
+ *   pagination.js → facet-buttons.js → maplibre stack → annotated-timeline.js →
  *   concordance.js → laicite/{i18n,helpers,overview,trends,documents,
- *   concordance,controls}.js
+ *   concordance,collocates,corpora,actors,arenas,sentiment,map,references,
+ *   controls}.js
  */
 (function () {
     'use strict';
@@ -51,7 +58,12 @@
         collocates:  'laicite-collocates.json',
         implicit:    'laicite-implicit.json',
         corpora:     'laicite-corpora.json',
-        seasonality: 'laicite-seasonality.json'
+        seasonality: 'laicite-seasonality.json',
+        actors:      'laicite-actors.json',
+        arenas:      'laicite-arenas.json',
+        sentiment:   'laicite-sentiment.json',
+        places:      'laicite-places.json',
+        references:  'laicite-references.json'
     };
 
     P.bootBlock({
@@ -143,7 +155,13 @@
             kwicSubset: 'articles',
             kwicFrame: '',
             kwicCountry: '',
-            kwicQuery: ''
+            kwicQuery: '',
+            actorType: '',
+            arenaCountry: '',
+            sentModel: '',
+            mapFrame: '',
+            mapCountry: '',
+            refType: ''
         };
 
         var concordance = L.createConcordance({
@@ -236,6 +254,15 @@
                     // scholarship here would show an all-zero lunar panel.
                     return (byS[k].hijri_coverage || 0) > 0;
                 });
+            },
+            getActorTypes: function () { return L.actorTypes(lazy.actors); },
+            getArenaCountries: function () { return L.arenaCountries(lazy.arenas); },
+            getSentimentModels: function () {
+                return L.sentimentModels(lazy.sentiment);
+            },
+            getPlaceCountries: function () { return L.placeCountries(lazy.places); },
+            getReferenceTypes: function () {
+                return L.referenceTypes(lazy.references);
             }
         });
 
@@ -356,20 +383,73 @@
                     siteBase: siteBase
                 }));
             } else if (state.view === 'corpora') {
-                if (!ensure(['corpora'])) {
-                    viewHost.appendChild(P.buildLoadingState());
-                    return;
-                }
-                var built = L.buildCorpora({
-                    bundle: lazy.corpora,
-                    metadata: metadata,
-                    state: state,
-                    frameColors: frameColors
+                mountLazy('corpora', function () {
+                    return L.buildCorpora({
+                        bundle: lazy.corpora,
+                        metadata: metadata,
+                        state: state,
+                        frameColors: frameColors
+                    });
                 });
-                viewHost.appendChild(built.root);
-                // Charts must be in the document before ECharts sizes them.
-                built.mount();
+            } else if (state.view === 'actors') {
+                mountLazy('actors', function () {
+                    return L.buildActors({
+                        bundle: lazy.actors,
+                        state: state,
+                        siteBase: siteBase
+                    });
+                });
+            } else if (state.view === 'arenas') {
+                mountLazy('arenas', function () {
+                    return L.buildArenas({
+                        bundle: lazy.arenas,
+                        metadata: metadata,
+                        state: state,
+                        frameColors: frameColors
+                    });
+                });
+            } else if (state.view === 'sentiment') {
+                mountLazy('sentiment', function () {
+                    return L.buildSentiment({
+                        bundle: lazy.sentiment,
+                        state: state
+                    });
+                });
+            } else if (state.view === 'map') {
+                mountLazy('places', function () {
+                    return L.buildMap({
+                        bundle: lazy.places,
+                        metadata: metadata,
+                        state: state,
+                        frameColors: frameColors,
+                        siteBase: siteBase
+                    });
+                });
+            } else if (state.view === 'references') {
+                mountLazy('references', function () {
+                    return L.buildReferences({
+                        bundle: lazy.references,
+                        state: state,
+                        siteBase: siteBase
+                    });
+                });
             }
+        }
+
+        /**
+         * Fetch-then-build for the views whose bundle is lazy. `build`
+         * returns {root, mount}; mount runs only after the nodes are in the
+         * document, because ECharts and MapLibre both size themselves off a
+         * mounted container and would otherwise measure zero.
+         */
+        function mountLazy(bundleName, build) {
+            if (!ensure([bundleName])) {
+                viewHost.appendChild(P.buildLoadingState());
+                return;
+            }
+            var built = build();
+            viewHost.appendChild(built.root);
+            built.mount();
         }
 
         controls.render();

@@ -325,7 +325,13 @@
      * treatment (`iwac-vis-summary-card--featured`) — used for a single
      * headline stat such as "Total items" on the collection overview.
      *
-     * @param {Array<{value:number|null, labelKey:string, featured?:boolean}>} cards
+     * Values run through `formatNumber` by default, so callers must pass the
+     * RAW number, not a pre-formatted string — formatting twice yields "NaN".
+     * Pass `text: true` for a card whose value is not a figure (a year span,
+     * a language, an issue number) to render it verbatim instead.
+     *
+     * @param {Array<{value:number|string|null, labelKey:string,
+     *                featured?:boolean, text?:boolean}>} cards
      * @returns {HTMLElement}
      */
     P.buildSummaryCards = function (cards) {
@@ -336,7 +342,8 @@
             if (c.featured) cls += ' iwac-vis-summary-card--featured';
             var card = P.el('div', cls);
             card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(c.labelKey)));
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__value', P.formatNumber(c.value)));
+            card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
+                c.text ? String(c.value) : P.formatNumber(c.value)));
             cardsEl.appendChild(card);
         });
         return cardsEl;

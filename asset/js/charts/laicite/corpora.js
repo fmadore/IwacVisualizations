@@ -38,7 +38,11 @@
 
         root.appendChild(buildRateTable(bundle));
 
-        var trend = P.buildPanel('iwac-vis-laicite-corpora-trend',
+        // `iwac-vis-panel` first: iwac-core.css hangs the chart host's
+        // 320px height floor off `.iwac-vis-panel > .iwac-vis-chart`, so a
+        // panel built without it renders its ECharts instance at zero
+        // height and shows nothing at all.
+        var trend = P.buildPanel('iwac-vis-panel iwac-vis-laicite-corpora-trend',
             P.t('laicite.corpora_trend_title'), P.t('laicite.corpora_trend_desc'));
         root.appendChild(trend.panel);
         mounts.push(function () {
@@ -65,7 +69,8 @@
     function buildRateTable(bundle) {
         var panel = P.el('div', 'iwac-vis-panel');
         panel.appendChild(P.el('h4', null, P.t('laicite.corpora_title')));
-        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', bundle.note || ''));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
+            P.t('laicite.corpora_note')));
 
         var subsets = bundle.by_subset || {};
         var max = Object.keys(subsets).reduce(function (m, k) {
@@ -185,7 +190,7 @@
         var frames = bundle.frames || [];
         var metadata = cfg.metadata || {};
 
-        var built = P.buildPanel('iwac-vis-laicite-fingerprints',
+        var built = P.buildPanel('iwac-vis-panel iwac-vis-laicite-fingerprints',
             P.t('laicite.fingerprints_title'), P.t('laicite.fingerprints_desc'));
 
         var xLabels = frames.map(function (f) {

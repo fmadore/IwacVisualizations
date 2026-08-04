@@ -16,13 +16,20 @@
     var P = ns.panels;
     var L = ns.laicite = ns.laicite || {};
 
+    // Ordered by what a reader needs first, not by build phase: the dossier
+    // and the sources, then the language, then the context.
     var VIEWS = [
         { key: 'overview', labelKey: 'laicite.view_overview' },
         { key: 'trends', labelKey: 'laicite.view_trends' },
         { key: 'documents', labelKey: 'laicite.view_documents' },
         { key: 'concordance', labelKey: 'laicite.view_concordance' },
         { key: 'collocates', labelKey: 'laicite.view_collocates' },
-        { key: 'corpora', labelKey: 'laicite.view_corpora' }
+        { key: 'corpora', labelKey: 'laicite.view_corpora' },
+        { key: 'actors', labelKey: 'laicite.view_actors' },
+        { key: 'arenas', labelKey: 'laicite.view_arenas' },
+        { key: 'sentiment', labelKey: 'laicite.view_sentiment' },
+        { key: 'map', labelKey: 'laicite.view_map' },
+        { key: 'references', labelKey: 'laicite.view_references' }
     ];
 
     /**
@@ -70,6 +77,16 @@
                 renderConcordanceControls(row);
             } else if (state.view === 'collocates') {
                 renderCollocateControls(row);
+            } else if (state.view === 'actors') {
+                renderActorControls(row);
+            } else if (state.view === 'arenas') {
+                renderArenaControls(row);
+            } else if (state.view === 'sentiment') {
+                renderSentimentControls(row);
+            } else if (state.view === 'map') {
+                renderMapControls(row);
+            } else if (state.view === 'references') {
+                renderReferenceControls(row);
             }
 
             ctx.controlsEl.appendChild(row);
@@ -183,12 +200,11 @@
         }
 
         function renderCollocateControls(row) {
-            var scopes = [
-                { value: 'global', label: P.t('laicite.scope_global_all') },
-                { value: 'by_decade', label: P.t('laicite.scope_by_decade') },
-                { value: 'by_country', label: P.t('laicite.scope_by_country') },
-                { value: 'by_subset', label: P.t('laicite.scope_by_subset') }
-            ];
+            // `colscope_`, not `scope_`: `laicite.scope_global` is already
+            // the trends country selector's "All countries".
+            var scopes = (L.COLLOCATE_SCOPES || []).map(function (key) {
+                return { value: key, label: P.t('laicite.colscope_' + key) };
+            });
             row.appendChild(P.buildSelectControl({
                 label: P.t('laicite.scope_slice'),
                 options: scopes,
@@ -204,13 +220,14 @@
 
             var slices = ctx.getCollocateSlices(state.colScope) || [];
             if (slices.length) {
+                // Labelled "Showing", not "All": this picker chooses ONE
+                // slice, and labelling it "All" said the opposite.
                 row.appendChild(P.buildSelectControl({
-                    label: P.t('laicite.filter_all'),
+                    label: P.t('laicite.scope_showing'),
                     options: slices.map(function (k) {
                         return {
                             value: k,
-                            label: state.colScope === 'by_subset'
-                                ? L.subsetLabel(k) : k
+                            label: L.collocateSliceLabel(state.colScope, k)
                         };
                     }),
                     current: state.colSlice || slices[0],
@@ -221,6 +238,111 @@
                     }
                 }));
             }
+        }
+
+        /** Small helper for the Phase 3 facets, which are all one select
+         *  writing one state key and redrawing. */
+        function simpleSelect(row, cfg) {
+            if (!cfg.options.length) return;
+            row.appendChild(P.buildSelectControl({
+                label: cfg.label,
+                options: cfg.options,
+                current: state[cfg.stateKey] || '',
+                idPrefix: cfg.idPrefix,
+                onChange: function (value) {
+                    state[cfg.stateKey] = value;
+                    // `clears` makes two facets alternatives rather than a
+                    // matrix, for bundles that carry the two splits but not
+                    // their cross product.
+                    if (value && cfg.clears) state[cfg.clears] = '';
+                    render();
+                    ctx.draw();
+                }
+            }));
+        }
+
+        function withAll(values, label, labelFor) {
+            if (!values.length) return [];
+            return [{ value: '', label: label }].concat(values.map(function (v) {
+                return { value: v, label: labelFor ? labelFor(v) : v };
+            }));
+        }
+
+        function renderActorControls(row) {
+            simpleSelect(row, {
+                label: P.t('laicite.filter_type'),
+                options: withAll(ctx.getActorTypes() || [],
+                    P.t('laicite.filter_all'),
+                    function (t) { return P.t('laicite.actor_type_' + t); }),
+                stateKey: 'actorType',
+                idPrefix: 'laicite-actor-type'
+            });
+        }
+
+        function renderArenaControls(row) {
+            simpleSelect(row, {
+                label: P.t('laicite.filter_country'),
+                options: withAll(ctx.getArenaCountries() || [],
+                    P.t('laicite.scope_global')),
+                stateKey: 'arenaCountry',
+                idPrefix: 'laicite-arena-country'
+            });
+        }
+
+        function renderSentimentControls(row) {
+            var models = ctx.getSentimentModels() || [];
+            if (!models.length) return;
+            // No "all" option: the models disagree and averaging them would
+            // hide exactly what makes three of them worth shipping.
+            if (models.indexOf(state.sentModel) === -1) {
+                state.sentModel = models[0];
+            }
+            row.appendChild(P.buildSelectControl({
+                label: P.t('laicite.filter_model'),
+                options: models.map(function (m) {
+                    return { value: m, label: P.t('laicite.model_' + m) };
+                }),
+                current: state.sentModel,
+                idPrefix: 'laicite-sent-model',
+                onChange: function (value) {
+                    state.sentModel = value;
+                    ctx.draw();
+                }
+            }));
+        }
+
+        function renderMapControls(row) {
+            // Frame and country are alternatives, not a matrix: the bundle
+            // carries per-frame and per-country splits, not their cross
+            // product, so offering both at once would promise a filter the
+            // data cannot honour.
+            simpleSelect(row, {
+                label: P.t('laicite.filter_frame'),
+                options: withAll(metadata.frame_order || [],
+                    P.t('laicite.filter_all'),
+                    function (f) { return L.frameLabel(metadata, f); }),
+                stateKey: 'mapFrame',
+                idPrefix: 'laicite-map-frame',
+                clears: 'mapCountry'
+            });
+            simpleSelect(row, {
+                label: P.t('laicite.filter_country'),
+                options: withAll(ctx.getPlaceCountries() || [],
+                    P.t('laicite.scope_global')),
+                stateKey: 'mapCountry',
+                idPrefix: 'laicite-map-country',
+                clears: 'mapFrame'
+            });
+        }
+
+        function renderReferenceControls(row) {
+            simpleSelect(row, {
+                label: P.t('laicite.filter_type'),
+                options: withAll(ctx.getReferenceTypes() || [],
+                    P.t('laicite.filter_all')),
+                stateKey: 'refType',
+                idPrefix: 'laicite-ref-type'
+            });
         }
 
         function renderConcordanceControls(row) {

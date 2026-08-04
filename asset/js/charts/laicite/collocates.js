@@ -25,12 +25,24 @@
     var P = ns.panels;
     var L = ns.laicite = ns.laicite || {};
 
-    L.COLLOCATE_SCOPES = ['global', 'by_decade', 'by_country', 'by_subset'];
+    L.COLLOCATE_SCOPES = [
+        'global', 'by_source_type', 'by_subset', 'by_decade', 'by_country'
+    ];
 
     /** The slice keys available for the active scope. */
     L.collocateSlices = function (bundle, scope) {
         if (!bundle || scope === 'global') return [];
         return Object.keys(bundle[scope] || {}).sort();
+    };
+
+    /**
+     * Display label for one slice key. Corpus and source-type keys are
+     * translated; decades and country names are already display-ready.
+     */
+    L.collocateSliceLabel = function (scope, key) {
+        if (scope === 'by_subset') return L.subsetLabel(key);
+        if (scope === 'by_source_type') return P.t('laicite.source_' + key);
+        return key;
     };
 
     /** Rows for the active scope + slice. */
@@ -62,6 +74,7 @@
             return host;
         }
 
+        var scope = cfg.state.colScope;
         var rows = rowsFor(bundle, cfg.state);
         if (!rows.length) {
             panel.appendChild(P.buildEmptyState('laicite.collocates_empty'));
@@ -72,10 +85,32 @@
         // Method note. A keyness panel that does not say what it was scored
         // against is unreadable as evidence, so the reference corpus and the
         // temporal caveat are stated inline rather than left to the docs.
+        // The bundle carries an English prose copy of each note for anyone
+        // reading the JSON directly; the panel renders the catalog so the
+        // French site is not half-translated.
         var method = P.el('div', 'iwac-vis-laicite-method');
-        method.appendChild(P.el('p', null, bundle.reference || ''));
-        if (cfg.state.colScope === 'by_decade' && bundle.decade_scope) {
-            method.appendChild(P.el('p', null, bundle.decade_scope));
+        method.appendChild(P.el('p', null, P.t('laicite.collocates_reference')));
+        if (scope === 'by_source_type') {
+            method.appendChild(P.el('p', null,
+                P.t('laicite.collocates_source_scope')));
+        }
+        if (scope === 'by_decade') {
+            method.appendChild(P.el('p', null,
+                P.t('laicite.collocates_decade_scope')));
+        }
+        // A corpus that is offered nowhere in the picker has to be accounted
+        // for, or its absence reads as "nothing to see" instead of "too few
+        // documents to test". Same rule the generator follows when it logs
+        // its dropped slices.
+        var dropped = bundle.dropped_slices || {};
+        if (scope === 'by_subset' && (dropped.subsets || []).length) {
+            method.appendChild(P.el('p', 'iwac-vis-laicite-method-dropped',
+                P.t('laicite.collocates_dropped', {
+                    slices: dropped.subsets.map(function (k) {
+                        return L.subsetLabel(k);
+                    }).join(', '),
+                    docs: bundle.min_document_frequency
+                })));
         }
         method.appendChild(P.el('p', 'iwac-vis-laicite-method-stats',
             P.t('laicite.collocates_method', {

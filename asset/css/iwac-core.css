@@ -1017,6 +1017,26 @@ select.iwac-vis-control:hover {
     max-width: 18rem;
 }
 
+/*  Default group wrapper emitted by `P.buildSelectControl` when the caller
+ *  passes no `groupClass`. It had no rule at all until v1.36.0, so the
+ *  label and the select were two bare inline children of an unstyled div:
+ *  inside a wrapping flex row they broke onto separate lines and the
+ *  control sat off-baseline against every chip beside it. Blocks that pass
+ *  their own group class (org-cooccurrence, scary-terms) are unaffected. */
+
+.iwac-vis-select-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    flex: 0 0 auto;
+}
+
+.iwac-vis-select-label {
+    font-size: var(--text-sm, 0.9375rem);
+    color: var(--muted, #66696e);
+    white-space: nowrap;
+}
+
 
 /* =================================================================== */
 /*  Reusable table                                                       */
