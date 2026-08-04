@@ -22,6 +22,8 @@
  *             'facetButtons' => true,
  *             'table'        => true,
  *             'pagination'   => true,
+ *             'timeline'     => true,           // annotated time series
+ *             'concordance'  => true,           // KWIC list (implies pagination)
  *             'layout'       => true,           // declarative dashboard layout
  *             'renderers'    => [               // which shared renderers to load
  *                 'calendar-heatmap',
@@ -95,6 +97,12 @@ $needD3         = !empty($needs['d3']);
 $needPagination = !empty($needs['pagination']) || !empty($needs['table']);
 $needTable      = !empty($needs['table']);
 $needFacets     = !empty($needs['facetButtons']);
+$needTimeline   = !empty($needs['timeline']);
+// `concordance` implicitly needs pagination — the KWIC list is paginated.
+$needConcordance = !empty($needs['concordance']);
+if ($needConcordance) {
+    $needPagination = true;
+}
 // Renderers imply the dashboard-layout module they register against.
 $rendererList   = isset($needs['renderers']) ? (array) $needs['renderers'] : [];
 $needLayout     = !empty($needs['layout']) || !empty($rendererList);
@@ -212,6 +220,15 @@ if ($needTable) {
 if ($needFacets) {
     $scripts[] = $this->assetUrl('js/charts/shared/facet-buttons.min.js', $module);
     $scripts[] = $this->assetUrl('js/charts/shared/faceted-chart.min.js', $module);
+}
+// Annotated time series (event markLines + period markAreas), shared by the
+// Scary Terms and Laïcité blocks.
+if ($needTimeline) {
+    $scripts[] = $this->assetUrl('js/charts/shared/annotated-timeline.min.js', $module);
+}
+// KWIC / concordance list renderer — highlighted keyword-in-context lines.
+if ($needConcordance) {
+    $scripts[] = $this->assetUrl('js/charts/shared/concordance.min.js', $module);
 }
 if ($needMaplibre) {
     $scripts[] = $this->assetUrl('js/charts/shared/maplibre.min.js', $module);

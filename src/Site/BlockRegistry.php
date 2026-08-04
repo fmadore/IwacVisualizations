@@ -78,6 +78,13 @@ final class BlockRegistry
             'description' => 'Explore authority entities (persons, places, organisations, events, topics) and Dublin Core Subject + Spatial Coverage prevalence over time. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
+        'laicite' => [
+            'invokable'   => 'laicite',
+            'class'       => BlockLayout\Laicite::class,
+            'label'       => 'Laïcité', // @translate
+            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, primary-source documents and scholarship. Shows where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that generated them, the primary-source dossier, and a searchable concordance of the actual sentences. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
+            'embeddable'  => true,
+        ],
         'lexical-metrics' => [
             'invokable'   => 'lexicalMetrics',
             'class'       => BlockLayout\LexicalMetrics::class,

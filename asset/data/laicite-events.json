@@ -1,0 +1,134 @@
+{
+  "_comment": "Hand-curated historical event annotations for the Laïcité block timeline (GitHub issue #14). Committed to git (gitignore exception, like scary-terms-events.json and sentiment-arbiter.json) and shipped into the CI data archive from the checkout — generate_laicite.py does NOT write this file. scope 'global' events always render; scope 'country' events render only when the timeline is filtered to that country (canonical IWAC country names). 'source' is a provenance pointer for editorial audit; the UI does not render it. Entries carrying 'o_id' are IWAC authority records (index, Type = Événements) and the UI links them to their item page; entries carrying 'document_o_id' point at a primary source held in the collection, which is what makes the spike ↔ generative-document move possible. Dates for o_id 193 and 224 were read from the Omeka records (dcterms:date) rather than guessed.",
+
+  "point_events": [
+    {
+      "year": 1990,
+      "label_en": "Benin National Conference",
+      "label_fr": "Conférence nationale du Bénin",
+      "scope": "country",
+      "country": "Bénin",
+      "source": "https://en.wikipedia.org/wiki/National_Conference_(Benin)"
+    },
+    {
+      "year": 1991,
+      "label_en": "Fourth Republic constitution — Burkina Faso",
+      "label_fr": "Constitution de la IVe République — Burkina Faso",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "source": "https://en.wikipedia.org/wiki/Constitution_of_Burkina_Faso"
+    },
+    {
+      "year": 1991,
+      "label_en": "Togo National Conference",
+      "label_fr": "Conférence nationale du Togo",
+      "scope": "country",
+      "country": "Togo",
+      "source": "https://en.wikipedia.org/wiki/History_of_Togo"
+    },
+    {
+      "year": 1993,
+      "label_en": "Death of Houphouët-Boigny",
+      "label_fr": "Mort d'Houphouët-Boigny",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/F%C3%A9lix_Houphou%C3%ABt-Boigny"
+    },
+    {
+      "year": 2000,
+      "label_en": "New Ivorian constitution (referendum)",
+      "label_fr": "Nouvelle constitution ivoirienne (référendum)",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/2000_Ivorian_constitutional_referendum"
+    },
+    {
+      "year": 2001,
+      "label_en": "National Reconciliation Forum",
+      "label_fr": "Forum de réconciliation nationale",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/Politics_of_Ivory_Coast"
+    },
+    {
+      "year": 2002,
+      "label_en": "Start of the Ivorian civil war",
+      "label_fr": "Début de la guerre civile ivoirienne",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/First_Ivorian_Civil_War"
+    },
+    {
+      "year": 2008,
+      "label_en": "National colloquium on religious denominations and laïcité",
+      "label_fr": "Colloque national sur les confessions religieuses et laïcité",
+      "scope": "country",
+      "country": "Bénin",
+      "o_id": 224,
+      "source": "https://islam.zmo.de/s/afrique_ouest/item/224"
+    },
+    {
+      "year": 2012,
+      "label_en": "National Forum on Laïcité (Ouagadougou, 27–29 Sept.)",
+      "label_fr": "Forum national sur la laïcité (Ouagadougou, 27-29 sept.)",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "o_id": 193,
+      "document_o_id": 11382,
+      "source": "https://islam.zmo.de/s/afrique_ouest/item/193"
+    },
+    {
+      "year": 2014,
+      "label_en": "Seminar: Islam and the practice of laïcité in Benin",
+      "label_fr": "Séminaire : l'islam et la pratique de la laïcité au Bénin",
+      "scope": "country",
+      "country": "Bénin",
+      "document_o_id": 31903,
+      "source": "https://islam.zmo.de/s/afrique_ouest/item/31903"
+    },
+    {
+      "year": 2014,
+      "label_en": "Popular insurrection — Burkina Faso",
+      "label_fr": "Insurrection populaire — Burkina Faso",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "source": "https://en.wikipedia.org/wiki/2014_Burkinabe_uprising"
+    },
+    {
+      "year": 2016,
+      "label_en": "Ouagadougou attacks",
+      "label_fr": "Attentats de Ouagadougou",
+      "scope": "country",
+      "country": "Burkina Faso",
+      "source": "https://en.wikipedia.org/wiki/2016_Ouagadougou_attacks"
+    }
+  ],
+
+  "period_events": [
+    {
+      "start": 1990,
+      "end": 1993,
+      "label_en": "National conferences & democratic transitions",
+      "label_fr": "Conférences nationales et transitions démocratiques",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/National_Conference_(Benin)"
+    },
+    {
+      "start": 2002,
+      "end": 2011,
+      "label_en": "Ivorian crisis",
+      "label_fr": "Crise ivoirienne",
+      "scope": "country",
+      "country": "Côte d'Ivoire",
+      "source": "https://en.wikipedia.org/wiki/Ivorian_Civil_War"
+    },
+    {
+      "start": 2015,
+      "end": 2024,
+      "label_en": "Sahelian security crisis",
+      "label_fr": "Crise sécuritaire sahélienne",
+      "scope": "global",
+      "source": "https://en.wikipedia.org/wiki/Jihadist_insurgency_in_Burkina_Faso"
+    }
+  ]
+}

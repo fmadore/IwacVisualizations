@@ -27,6 +27,9 @@ echo $this->partial('common/iwac-block-shell', [
             'wordcloud'    => true,
             'facetButtons' => true,
             'maplibre'     => true,
+            // Trends view (issue #2) — the annotated time series now lives
+            // in shared/, shared with the Laïcité block (issue #14).
+            'timeline'     => true,
         ],
         // Companion modules: i18n strings + stateless builders + the three
         // view modules + the controls row. All must load before the

@@ -9,6 +9,7 @@ return [
             'distinctiveVocabulary' => Site\BlockLayout\DistinctiveVocabulary::class,
             'entityNetworks' => Site\BlockLayout\EntityNetworks::class,
             'indexOverview' => Site\BlockLayout\IndexOverview::class,
+            'laicite' => Site\BlockLayout\Laicite::class,
             'lexicalMetrics' => Site\BlockLayout\LexicalMetrics::class,
             'onThisDay' => Site\BlockLayout\OnThisDay::class,
             'orgCooccurrence' => Site\BlockLayout\OrgCooccurrence::class,

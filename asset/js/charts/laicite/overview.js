@@ -1,0 +1,187 @@
+/**
+ * IWAC Visualizations — Laïcité block: Overview view (issue #14, view 1).
+ *
+ * The dossier header: the tag-vs-text Venn, the per-corpus table, the rights
+ * note, and the frame legend.
+ *
+ * Two rules are enforced visually rather than only in the data:
+ *   - No number sums across corpora without saying so. The table has one row
+ *     per corpus and no total row, because a 300-page monograph and a
+ *     400-word news item are not commensurable units.
+ *   - The readable/withheld split is shown per corpus, never as one overall
+ *     percentage, because it ranges from 25/26 to 7/867.
+ */
+(function () {
+    'use strict';
+
+    var ns = window.IWACVis;
+    if (!ns || !ns.panels) {
+        console.warn('IWACVis.laicite overview: missing panels — check load order');
+        return;
+    }
+    var P = ns.panels;
+    var L = ns.laicite = ns.laicite || {};
+
+    /**
+     * The tag-vs-text Venn, as three proportional bands rather than circles:
+     * a real Venn with these ratios is unreadable, and the bands are also
+     * clickable targets and screen-reader text, which circles are not.
+     *
+     * @param {Object} metadata
+     * @param {function(string):void} onSelect  called with 'tagged_only' |
+     *        'both' | 'said_only'
+     */
+    L.buildVenn = function (metadata, onSelect) {
+        var totals = metadata.totals || {};
+        var subsets = metadata.subsets || {};
+        var tagOnly = 0, both = 0, saidOnly = 0;
+        L.SUBSETS.forEach(function (s) {
+            var v = subsets[s] || {};
+            tagOnly += v.tagged_only || 0;
+            both += v.tagged_and_said || 0;
+            saidOnly += v.said_only || 0;
+        });
+        var total = tagOnly + both + saidOnly || 1;
+
+        var panel = P.el('div', 'iwac-vis-panel iwac-vis-laicite-venn');
+        panel.appendChild(P.el('h4', null, P.t('laicite.venn_title')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.venn_hint')));
+
+        var bar = P.el('div', 'iwac-vis-laicite-venn-bar');
+        bar.setAttribute('role', 'group');
+        var cells = [
+            { key: 'tagged_only', n: tagOnly, labelKey: 'laicite.venn_tagged_only', cls: 'is-tagged' },
+            { key: 'both', n: both, labelKey: 'laicite.venn_both', cls: 'is-both' },
+            { key: 'said_only', n: saidOnly, labelKey: 'laicite.venn_said_only', cls: 'is-said' }
+        ];
+        cells.forEach(function (cell) {
+            var seg = P.el('button', 'iwac-vis-laicite-venn-seg ' + cell.cls);
+            seg.type = 'button';
+            seg.style.flexGrow = String(Math.max(cell.n, total * 0.06));
+            seg.appendChild(P.el('span', 'iwac-vis-laicite-venn-n',
+                P.formatNumber(cell.n)));
+            seg.appendChild(P.el('span', 'iwac-vis-laicite-venn-label',
+                P.t(cell.labelKey)));
+            seg.setAttribute('aria-label',
+                P.t(cell.labelKey) + ': ' + P.formatNumber(cell.n));
+            if (onSelect) {
+                seg.addEventListener('click', function () { onSelect(cell.key); });
+            } else {
+                seg.disabled = true;
+            }
+            bar.appendChild(seg);
+        });
+        panel.appendChild(bar);
+        void totals;
+        return panel;
+    };
+
+    /**
+     * One row per corpus. No total row — see the module docblock.
+     */
+    L.buildSubsetTable = function (metadata) {
+        var subsets = metadata.subsets || {};
+        var panel = P.el('div', 'iwac-vis-panel iwac-vis-laicite-subsets');
+        panel.appendChild(P.el('h4', null, P.t('laicite.subset_table_title')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.no_sum_note')));
+
+        var table = P.el('table', 'iwac-vis-table iwac-vis-laicite-table');
+        var thead = P.el('thead');
+        var hrow = P.el('tr');
+        ['laicite.col_corpus', 'laicite.col_members', 'laicite.col_tagged',
+            'laicite.col_said', 'laicite.col_occurrences', 'laicite.col_readable',
+            'laicite.col_span'
+        ].forEach(function (key) {
+            hrow.appendChild(P.el('th', null, P.t(key)));
+        });
+        thead.appendChild(hrow);
+        table.appendChild(thead);
+
+        var tbody = P.el('tbody');
+        L.SUBSETS.forEach(function (subset) {
+            var v = subsets[subset];
+            if (!v) return;
+            var tr = P.el('tr');
+            tr.appendChild(P.el('th', 'iwac-vis-laicite-corpus', L.subsetLabel(subset)));
+            tr.appendChild(P.el('td', null, P.formatNumber(v.members || 0)));
+            tr.appendChild(P.el('td', null, P.formatNumber(v.tagged || 0)));
+            tr.appendChild(P.el('td', null, P.formatNumber(v.said || 0)));
+            tr.appendChild(P.el('td', null, P.formatNumber(v.occurrences || 0)));
+
+            // The readable share, per corpus. A bare percentage would hide
+            // that references sit at 169/9167 while documents sit at 502/502.
+            var readable = P.el('td', 'iwac-vis-laicite-readable');
+            var q = v.quotable_occurrences || 0;
+            var o = v.occurrences || 0;
+            readable.appendChild(P.el('span', 'iwac-vis-laicite-readable-n',
+                P.formatNumber(q) + ' / ' + P.formatNumber(o)));
+            var meter = P.el('span', 'iwac-vis-laicite-meter');
+            var fill = P.el('span', 'iwac-vis-laicite-meter-fill');
+            fill.style.width = L.pct(q, o) + '%';
+            meter.appendChild(fill);
+            readable.appendChild(meter);
+            tr.appendChild(readable);
+
+            var span = v.year_range || [];
+            tr.appendChild(P.el('td', null,
+                span.length === 2 ? span[0] + '–' + span[1] : '—'));
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+
+        var wrap = P.el('div', 'iwac-vis-table-wrapper');
+        wrap.appendChild(table);
+        panel.appendChild(wrap);
+        return panel;
+    };
+
+    /**
+     * The frame legend. Membership frames are marked as such, and a frame
+     * that is nearly empty carries the note explaining why it was kept —
+     * the absence of the sociological register is a finding, so the panel
+     * says so rather than hiding the frame.
+     */
+    L.buildFrameLegend = function (metadata, frameColors) {
+        var panel = P.el('div', 'iwac-vis-panel iwac-vis-laicite-frames');
+        panel.appendChild(P.el('h4', null, P.t('laicite.frames_title')));
+        panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.frames_desc')));
+
+        var membership = (metadata.membership_rule || {}).frames || [];
+        var order = metadata.frame_order || [];
+        var byS = metadata.frame_by_subset || {};
+        var totalMembers = (metadata.totals || {}).members || 0;
+
+        var grid = P.el('div', 'iwac-vis-laicite-frame-grid');
+        order.forEach(function (frame) {
+            var card = P.el('div', 'iwac-vis-laicite-frame-card');
+            var swatch = P.el('span', 'iwac-vis-laicite-frame-swatch');
+            if (frameColors[frame]) swatch.style.backgroundColor = frameColors[frame];
+            var head = P.el('div', 'iwac-vis-laicite-frame-head');
+            head.appendChild(swatch);
+            head.appendChild(P.el('span', 'iwac-vis-laicite-frame-name',
+                L.frameLabel(metadata, frame)));
+            if (membership.indexOf(frame) !== -1) {
+                head.appendChild(L.chip(P.t('laicite.membership_note'),
+                    'is-membership'));
+            }
+            card.appendChild(head);
+
+            // Item share across the whole dossier — the cross-corpus
+            // comparable figure. Occurrence totals are per corpus only.
+            var items = 0;
+            L.SUBSETS.forEach(function (s) {
+                items += ((byS[s] || {}).items || {})[frame] || 0;
+            });
+            card.appendChild(P.el('p', 'iwac-vis-laicite-frame-share',
+                P.t('laicite.frame_share', { percent: L.pct(items, totalMembers) })));
+
+            var spec = (metadata.frames || {})[frame] || {};
+            if (spec.note) {
+                card.appendChild(P.el('p', 'iwac-vis-laicite-frame-note', spec.note));
+            }
+            grid.appendChild(card);
+        });
+        panel.appendChild(grid);
+        return panel;
+    };
+})();

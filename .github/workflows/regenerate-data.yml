@@ -66,14 +66,14 @@ jobs:
           pip install --require-hashes -r scripts/requirements.lock
 
       - name: Run generators
-        # The 29 HF-driven generators, with default flags (defaults already match
+        # The 30 HF-driven generators, with default flags (defaults already match
         # the committed output shapes/minify). Static geojson is read from
         # asset/geo/ (present from checkout). generate_sentiment_arbiter.py is
         # deliberately excluded: it reads the sibling IWAC-sentiment-analysis repo,
         # not HF, and sentiment-arbiter.json is committed + shipped in the archive
-        # from the checkout instead — as is the hand-curated
-        # scary-terms-events.json (issue #2). Fail-fast so a partial build is
-        # never published.
+        # from the checkout instead — as are the hand-curated
+        # scary-terms-events.json (issue #2) and laicite-events.json (issue #14).
+        # Fail-fast so a partial build is never published.
         env:
           # The IWAC dataset moved to a PRIVATE full mirror
           # (fmadore/islam-west-africa-collection-full); `datasets` reads this
@@ -89,7 +89,7 @@ jobs:
             spatial_exploration template_summary topic_explorer compare_newspapers
             article_dashboards person_dashboards entity_dashboards publication_dashboards
             org_cooccurrence term_trends reprints corpus_health keyness
-            reference_dashboards
+            reference_dashboards laicite
           )
           for g in "${gens[@]}"; do
             echo "::group::generate_${g}"
