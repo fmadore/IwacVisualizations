@@ -485,28 +485,6 @@
 }
 
 /* -------------------------------------------------------------------
- *  Article metrics row — machine-generated card marking
- *
- *  The module's convention (CLAUDE.md) is that model output gets
- *  explicit visual treatment so a reader can tell a computational
- *  artefact from human-authored archival metadata. The LDA topic card
- *  is the only generated value in this row, so it takes a quiet tinted
- *  block + a left marker rather than the primary-coloured wash the
- *  theme reserves for state.
- * ------------------------------------------------------------------- */
-.iwac-vis-summary-card--generated {
-    background: color-mix(in oklab, var(--primary, #ce4115) 5%, var(--surface, #fdfcfb));
-    border-left: var(--accent-line-sm, 2px) solid
-        color-mix(in oklab, var(--primary, #ce4115) 45%, transparent);
-}
-
-.iwac-vis-summary-card--generated .iwac-vis-summary-card__value {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: var(--text-sm, 0.875rem);
-    line-height: 1.4;
-}
-
-/* -------------------------------------------------------------------
  *  Spatial coverage panel — the map host needs an explicit height,
  *  since MapLibre canvases don't have intrinsic dimensions.
  * ------------------------------------------------------------------- */
