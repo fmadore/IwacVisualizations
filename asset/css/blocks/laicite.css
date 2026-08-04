@@ -5,9 +5,11 @@
 /*  Top-level layout: header → metric cards → authority link →           */
 /*  controls bar (view toggle + per-view facets) → view host.            */
 /*                                                                       */
-/*  Four views share the host: overview (Venn + per-corpus table +       */
-/*  rights note + frame legend), timeline, primary-source dossier, and   */
-/*  the KWIC concordance.                                                */
+/*  Six views share the host: overview (Venn + per-corpus table +        */
+/*  rights note + frame legend), timeline (year axis or Gregorian-vs-    */
+/*  lunar seasonality), primary-source dossier, KWIC concordance,        */
+/*  collocates (+ the implicit-lexicon result), and the corpus           */
+/*  comparison with per-outlet frame fingerprints.                       */
 /*                                                                       */
 /*  Depends on iwac-core.css for tokens, panel, summary cards, chip      */
 /*  controls, table and form controls.                                   */
@@ -638,4 +640,281 @@ a.iwac-vis-kwic-title:hover {
 .iwac-vis-timeline-details-link {
     color: var(--primary, #ce4115);
     font-size: 0.75rem;
+}
+
+
+/* =================================================================== */
+/*  Collocates (view 5)                                                  */
+/* =================================================================== */
+/*  A ranked list rather than a bar chart: a keyness row carries four
+ *  numbers (effect size, raw count, document spread, name flag) and a
+ *  bar chart would show one while hiding the rest. */
+
+.iwac-vis-laicite-collocates,
+.iwac-vis-laicite-corpora {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1.25rem);
+}
+
+.iwac-vis-laicite-collocate-list {
+    list-style: none;
+    margin: var(--space-3, 0.75rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3, 0.75rem);
+}
+
+@media (min-width: 640px) { /* sm */
+    .iwac-vis-laicite-collocate-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-laicite-collocate-list { grid-template-columns: repeat(3, 1fr); }
+}
+
+.iwac-vis-laicite-collocate {
+    padding: var(--space-3, 0.75rem);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border-light, #e2e5e8);
+    border-radius: var(--radius-sm, 0.375rem);
+}
+
+.iwac-vis-laicite-collocate-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-laicite-collocate-token {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--ink-strong, #05070c);
+    overflow-wrap: anywhere;
+}
+
+.iwac-vis-laicite-chip.is-name {
+    color: var(--ink-subtle, #5a5e63);
+    border: 1px solid var(--border, #ced1d6);
+    background: transparent;
+}
+
+.iwac-vis-laicite-collocate-bar {
+    height: var(--accent-line-md, 3px);
+    margin: var(--space-2, 0.5rem) 0 var(--space-1, 0.25rem);
+    background: var(--surface-sunken, #f4f1ef);
+    border-radius: var(--radius-full, 9999px);
+    overflow: hidden;
+}
+
+.iwac-vis-laicite-collocate-fill {
+    display: block;
+    height: 100%;
+    background: var(--primary, #ce4115);
+}
+
+.iwac-vis-laicite-collocate-meta {
+    margin: 0;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+/*  Method note. A keyness panel that does not state what it scored
+ *  against is unreadable as evidence, so this is body copy, not fine
+ *  print. */
+.iwac-vis-laicite-method {
+    margin-top: var(--space-4, 1rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-laicite-method p {
+    margin: 0 0 var(--space-2, 0.5rem);
+    max-width: var(--measure-base, 52.5rem);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-laicite-method-stats {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =================================================================== */
+/*  Implicit lexicon — the negative result                               */
+/* =================================================================== */
+
+.iwac-vis-laicite-implicit-sizes {
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-laicite-verdict {
+    padding: var(--space-4, 1rem);
+    background: var(--surface-sunken, #f4f1ef);
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+.iwac-vis-laicite-verdict-text {
+    margin: 0;
+    max-width: var(--measure-base, 52.5rem);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-laicite-verdict-stats {
+    margin: var(--space-2, 0.5rem) 0 0;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted, #66696e);
+}
+
+/*  The histogram carries the whole argument: significant terms piled on
+ *  "appears in exactly one document". */
+.iwac-vis-laicite-spread {
+    margin-top: var(--space-4, 1rem);
+}
+
+.iwac-vis-laicite-spread-title {
+    margin: 0 0 var(--space-2, 0.5rem);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-laicite-spread-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-3, 0.75rem);
+    height: 7rem;
+}
+
+.iwac-vis-laicite-spread-col {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-laicite-spread-bar {
+    display: block;
+    width: 100%;
+    max-width: 3rem;
+    background: var(--primary, #ce4115);
+    border-radius: var(--radius-sm, 0.375rem) var(--radius-sm, 0.375rem) 0 0;
+}
+
+.iwac-vis-laicite-spread-n,
+.iwac-vis-laicite-spread-label {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-laicite-spread-axis {
+    margin: var(--space-2, 0.5rem) 0 0;
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--muted, #66696e);
+}
+
+
+/* =================================================================== */
+/*  Corpora (view 6)                                                     */
+/* =================================================================== */
+
+.iwac-vis-laicite-rate-list {
+    list-style: none;
+    margin: var(--space-3, 0.75rem) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-laicite-rate-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-laicite-rate-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-laicite-rate-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-laicite-rate-bar {
+    height: var(--accent-line-md, 3px);
+    margin: var(--space-2, 0.5rem) 0 var(--space-1, 0.25rem);
+    background: var(--surface-sunken, #f4f1ef);
+    border-radius: var(--radius-full, 9999px);
+    overflow: hidden;
+}
+
+.iwac-vis-laicite-rate-fill {
+    display: block;
+    height: 100%;
+    background: var(--primary, #ce4115);
+}
+
+.iwac-vis-laicite-rate-meta {
+    margin: 0;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+/*  Interpretive caveat sits with the number it qualifies rather than in a
+ *  footnote: density is easy to over-read as attention. */
+.iwac-vis-laicite-caveat {
+    margin: var(--space-4, 1rem) 0 0;
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    max-width: var(--measure-base, 52.5rem);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+
+/* =================================================================== */
+/*  Seasonality note                                                     */
+/* =================================================================== */
+
+.iwac-vis-laicite-season-note {
+    margin-top: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-laicite-season-note p {
+    margin: 0 0 var(--space-2, 0.5rem);
+    max-width: var(--measure-base, 52.5rem);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+.iwac-vis-laicite-season-coverage {
+    font-variant-numeric: tabular-nums;
+    color: var(--muted, #66696e);
 }

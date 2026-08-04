@@ -20,7 +20,9 @@
         { key: 'overview', labelKey: 'laicite.view_overview' },
         { key: 'trends', labelKey: 'laicite.view_trends' },
         { key: 'documents', labelKey: 'laicite.view_documents' },
-        { key: 'concordance', labelKey: 'laicite.view_concordance' }
+        { key: 'concordance', labelKey: 'laicite.view_concordance' },
+        { key: 'collocates', labelKey: 'laicite.view_collocates' },
+        { key: 'corpora', labelKey: 'laicite.view_corpora' }
     ];
 
     /**
@@ -66,6 +68,8 @@
                 renderTrendsControls(row);
             } else if (state.view === 'concordance') {
                 renderConcordanceControls(row);
+            } else if (state.view === 'collocates') {
+                renderCollocateControls(row);
             }
 
             ctx.controlsEl.appendChild(row);
@@ -83,6 +87,50 @@
         }
 
         function renderTrendsControls(row) {
+            // Axis toggle first: seasonality is a different question from the
+            // year series, not a filter on it, and it takes a different set
+            // of controls entirely.
+            row.appendChild(P.buildSelectControl({
+                label: P.t('laicite.axis_years'),
+                options: [
+                    { value: 'years', label: P.t('laicite.axis_years') },
+                    { value: 'seasons', label: P.t('laicite.axis_seasons') }
+                ],
+                current: state.trendsAxis || 'years',
+                idPrefix: 'laicite-trends-axis',
+                onChange: function (value) {
+                    state.trendsAxis = value;
+                    render();
+                    ctx.draw();
+                }
+            }));
+
+            if (state.trendsAxis === 'seasons') {
+                // Only the corpus selector applies here. The country and
+                // year-scope controls would be inert — the seasonality
+                // bundle is per corpus — and rendering them anyway produced
+                // two competing "Corpus" dropdowns.
+                var seasonSubsets = ctx.getSeasonSubsets() || [];
+                if (seasonSubsets.length) {
+                    if (seasonSubsets.indexOf(state.seasonSubset) === -1) {
+                        state.seasonSubset = seasonSubsets[0];
+                    }
+                    row.appendChild(P.buildSelectControl({
+                        label: P.t('laicite.scope_subset'),
+                        options: seasonSubsets.map(function (k) {
+                            return { value: k, label: L.subsetLabel(k) };
+                        }),
+                        current: state.seasonSubset,
+                        idPrefix: 'laicite-season-subset',
+                        onChange: function (value) {
+                            state.seasonSubset = value;
+                            ctx.draw();
+                        }
+                    }));
+                }
+                return;
+            }
+
             // Country scope. Selecting a corpus clears it and vice versa —
             // the two scopes are alternatives, not a matrix, and offering
             // both at once would imply per-country-per-corpus series the
@@ -132,6 +180,47 @@
             evtWrap.appendChild(cb);
             evtWrap.appendChild(P.el('span', null, P.t('laicite.show_events')));
             row.appendChild(evtWrap);
+        }
+
+        function renderCollocateControls(row) {
+            var scopes = [
+                { value: 'global', label: P.t('laicite.scope_global_all') },
+                { value: 'by_decade', label: P.t('laicite.scope_by_decade') },
+                { value: 'by_country', label: P.t('laicite.scope_by_country') },
+                { value: 'by_subset', label: P.t('laicite.scope_by_subset') }
+            ];
+            row.appendChild(P.buildSelectControl({
+                label: P.t('laicite.scope_slice'),
+                options: scopes,
+                current: state.colScope,
+                idPrefix: 'laicite-col-scope',
+                onChange: function (value) {
+                    state.colScope = value;
+                    state.colSlice = null;
+                    render();
+                    ctx.draw();
+                }
+            }));
+
+            var slices = ctx.getCollocateSlices(state.colScope) || [];
+            if (slices.length) {
+                row.appendChild(P.buildSelectControl({
+                    label: P.t('laicite.filter_all'),
+                    options: slices.map(function (k) {
+                        return {
+                            value: k,
+                            label: state.colScope === 'by_subset'
+                                ? L.subsetLabel(k) : k
+                        };
+                    }),
+                    current: state.colSlice || slices[0],
+                    idPrefix: 'laicite-col-slice',
+                    onChange: function (value) {
+                        state.colSlice = value;
+                        ctx.draw();
+                    }
+                }));
+            }
         }
 
         function renderConcordanceControls(row) {

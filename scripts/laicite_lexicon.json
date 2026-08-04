@@ -150,6 +150,32 @@
     ]
   },
 
+  "_stopwords_en": "The IWAC corpus is BILINGUAL where it is scholarly: `references` carries English-language work on secularism, and a handful of articles are in English. iwac_utils.STOPWORDS is French-only, so without this list the English function words rank as top 'collocates' of any English-heavy slice — the first run of the 2020s decade slice returned literally `that, this, religious, with, from`, which measures the language of recent scholarship rather than anything about the 2020s. These are function words only: no content term, and nothing from the Islamic-domain research vocabulary the repo's CLAUDE.md explicitly forbids filtering (COSIM, FAIB, UIB, Ramadan, Tabaski, Maouloud and friends are research terms, not noise, in either language).",
+
+  "stopwords_en": [
+    "that", "this", "these", "those", "with", "from", "have", "has", "had",
+    "been", "being", "were", "was", "are", "will", "would", "should", "could",
+    "their", "there", "them", "they", "then", "than", "when", "where", "which",
+    "while", "what", "who", "whom", "whose", "into", "onto", "upon", "over",
+    "under", "between", "among", "about", "after", "before", "during", "such",
+    "some", "more", "most", "much", "many", "other", "others", "also", "only",
+    "even", "just", "both", "each", "every", "here", "however", "therefore",
+    "thus", "does", "did", "doing", "done", "make", "made", "take", "taken",
+    "same", "very", "well", "still", "since", "because", "however", "although",
+    "though", "through", "against", "within", "without", "yet", "own", "any",
+    "one", "two", "three", "first", "second", "third", "part", "case", "cases",
+    "york", "press", "university", "cambridge", "oxford", "eds", "vol", "pp",
+    "chapter", "journal", "review", "studies", "paper", "article", "book",
+    "isbn", "doi", "http", "https", "www", "com", "org", "pdf", "retrieved"
+  ],
+
+  "_ocr_noise": "Tokens that are artefacts of digitisation rather than of the text: scanning-app watermarks stamped onto every page of a scan. These are NOT domain filtering — a watermark is not vocabulary. `camscanner` reached the top of the first collocate run because one repeatedly-scanned periodical stamped it on every page. The document-frequency floor in the generator catches most such cases on its own; this list handles the ones that appear across many documents because the same scanner produced them.",
+
+  "ocr_noise": [
+    "camscanner", "scanner", "scannee", "scanned", "numerise", "numerisee",
+    "watermark", "adobe", "acrobat", "photocopie", "jpeg", "tiff"
+  ],
+
   "_authority": "The concept carries a curated Omeka authority record — index o:id 5, 'Laïcité', Type 'Sujets'. Two Événements records hang off it: 193 (Forum national sur la laïcité, Burkina Faso) and 224 (Colloque national sur les confessions religieuses et laïcité, Benin). The generator links to all three and cross-checks the subject label against the index at run time.",
 
   "authority": {

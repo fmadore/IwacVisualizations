@@ -11,6 +11,10 @@ block (GitHub issue #14) — a dossier on secularism in the IWAC corpus:
     asset/data/laicite-countries.json     # per-country aggregates
     asset/data/laicite-documents.json     # the primary-source dossier
     asset/data/laicite-concordance.json   # KWIC rows — RIGHTS-GATED (see below)
+    asset/data/laicite-collocates.json    # log-likelihood collocates, sliced
+    asset/data/laicite-implicit.json      # vocabulary of the tagged-but-unsaid
+    asset/data/laicite-corpora.json       # press vs periodicals, token-normalised
+    asset/data/laicite-seasonality.json   # Gregorian vs lunar month profile
 
 The hand-curated event annotations for the timeline live in
 ``asset/data/laicite-events.json`` — a committed file (gitignore exception,
@@ -112,9 +116,12 @@ from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 import pandas as pd
 
+from iwac_stats import keyness_for_slices
 from iwac_utils import (
     DATASET_ID,
+    STOPWORDS,
     add_standard_args,
+    extract_month_num,
     extract_year,
     generate_timestamp,
     load_dataset_safe,
@@ -142,16 +149,18 @@ SUBSET_FIELDS: Dict[str, List[Tuple[str, bool]]] = {
 SUBSET_COLUMNS: Dict[str, List[str]] = {
     "articles": [
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
-        "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI", "iwac_url",
+        "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI",
+        "iwac_url", "hijri_month",
     ],
     "publications": [
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
-        "language", "OCR", "OCR_is_public", "nb_mots", "tableOfContents", "iwac_url",
+        "language", "OCR", "OCR_is_public", "nb_mots", "tableOfContents",
+        "iwac_url", "hijri_month",
     ],
     "documents": [
         "o:id", "title", "author", "country", "pub_date", "subject", "spatial",
         "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI", "iwac_url",
-        "type", "nb_pages",
+        "type", "nb_pages", "hijri_month",
     ],
     "references": [
         "o:id", "title", "author", "country", "pub_date", "subject", "spatial",
@@ -172,6 +181,13 @@ PER_ITEM_SNIPPET_CAP: Dict[str, Optional[int]] = {
 
 SNIPPET_CONTEXT = 120   # characters either side of the match
 TOKEN_RE = re.compile(r"[a-z]+")
+
+# Half-width of the collocation window, in tokens. ±5 is the corpus-
+# linguistics default and the span the issue specifies.
+COLLOCATE_WINDOW = 5
+# Minimum token length kept in the collocate/keyness vocabularies, matching
+# iwac_utils.tokenize. Shorter tokens are function words in French.
+MIN_TOKEN_LEN = 4
 
 
 # =============================================================================
@@ -246,6 +262,23 @@ class Lexicon:
             name: {fold_plain(f) for f in spec.get("ambiguous", [])}
             for name, spec in self.frames.items()
         }
+
+        # Every word appearing in any curated form, as folded tokens. These
+        # are the selection criterion, so they are excluded from collocate
+        # and keyness vocabularies — otherwise every slice would return the
+        # selectors as their own top result.
+        self.all_form_tokens: Set[str] = set()
+        for spec in self.frames.values():
+            for form in spec["forms"]:
+                self.all_form_tokens.update(TOKEN_RE.findall(fold_plain(form)))
+        self.all_form_tokens.update(TOKEN_RE.findall(fold_plain(" ".join(self.frames))))
+
+        # Bilingual corpus: iwac_utils.STOPWORDS is French-only, and the
+        # scholarly subset is largely English. Plus digitisation artefacts,
+        # which are not vocabulary at all.
+        self.extra_stopwords: Set[str] = {
+            fold_plain(w) for w in raw.get("stopwords_en", [])
+        } | {fold_plain(w) for w in raw.get("ocr_noise", [])}
 
         d = raw["disambiguation"]
         self.state_left = {fold_plain(w) for w in d["state_left"]}
@@ -346,6 +379,14 @@ class ItemScan:
     occurrences: List[Occurrence] = field(default_factory=list)
     laity_demoted: int = 0
     extra: Dict[str, Any] = field(default_factory=dict)
+    #: Content tokens inside ±COLLOCATE_WINDOW of a membership-frame match…
+    window_tokens: Counter = field(default_factory=Counter)
+    #: …and every other content token in the item. The two partition the
+    #: item's vocabulary, which is what makes them a valid keyness pair.
+    rest_tokens: Counter = field(default_factory=Counter)
+    #: Gregorian and lunar month of publication, for the seasonality view.
+    month: Optional[int] = None
+    hijri_month: Optional[int] = None
 
     @property
     def said(self) -> bool:
@@ -367,6 +408,13 @@ class LaiciteGenerator:
         minify: bool = False,
         max_snippets: int = 3000,
         min_country_items: int = 3,
+        top_collocates: int = 40,
+        min_collocate_count: int = 8,
+        min_slice_count: int = 5,
+        min_document_frequency: int = 3,
+        min_implicit_documents: int = 4,
+        min_implicit_terms: int = 8,
+        min_newspaper_items: int = 5,
         seed: int = 20260804,
     ):
         self.output_dir = Path(output_dir)
@@ -375,6 +423,14 @@ class LaiciteGenerator:
         self.minify = minify
         self.max_snippets = max_snippets
         self.min_country_items = min_country_items
+        self.top_collocates = top_collocates
+        self.min_collocate_count = min_collocate_count
+        self.min_slice_count = min_slice_count
+        self.min_document_frequency = min_document_frequency
+        self.min_implicit_documents = min_implicit_documents
+        self.min_implicit_terms = min_implicit_terms
+        self.min_newspaper_items = min_newspaper_items
+        self._entities: Optional[Set[str]] = None
         self.rng = random.Random(seed)
         self.lex = Lexicon()
         self.logger = logging.getLogger(__name__)
@@ -440,6 +496,10 @@ class LaiciteGenerator:
         membership_hits = 0
         laity_demoted = 0
         texts: Dict[str, str] = {}
+        # Token index of every membership-frame hit, per field, so the
+        # collocate windows can be cut after the whole field is scanned.
+        hit_token_idx: Dict[str, List[int]] = defaultdict(list)
+        field_tokens: Dict[str, List[str]] = {}
 
         for column, is_public_column in fields:
             if column not in row:
@@ -453,6 +513,7 @@ class LaiciteGenerator:
             # disambiguator can look at neighbours without re-tokenizing
             # per match.
             tokens, token_at = self._tokenize_with_offsets(folded)
+            field_tokens[column] = tokens
             quotable = is_public_column or ocr_public
 
             claimed: List[Tuple[int, int]] = []
@@ -482,9 +543,15 @@ class LaiciteGenerator:
                     ))
                     if frame in self.lex.membership_frames:
                         membership_hits += 1
+                        idx = token_at.get(m.start())
+                        if idx is not None:
+                            hit_token_idx[column].append(idx)
 
         if not is_tagged and membership_hits == 0:
             return None
+
+        window_tokens, rest_tokens = self._split_window_vocabulary(
+            field_tokens, hit_token_idx)
 
         countries = normalize_country(row.get("country"), return_list=True)
         countries = [c for c in countries if c and c != "Unknown"]
@@ -507,6 +574,12 @@ class LaiciteGenerator:
             frame_counts=dict(frame_counts),
             occurrences=occurrences,
             laity_demoted=laity_demoted,
+            window_tokens=window_tokens,
+            rest_tokens=rest_tokens,
+            month=extract_month_num(row.get("pub_date")),
+            hijri_month=(int(row["hijri_month"])
+                         if "hijri_month" in row and pd.notna(row.get("hijri_month"))
+                         else None),
         )
         if subset == "documents":
             rec.extra = {
@@ -524,6 +597,95 @@ class LaiciteGenerator:
         self.texts[(subset, rec.o_id)] = texts
         return rec
 
+    def _entity_tokens(self) -> Set[str]:
+        """Tokens belonging to curated NAMED ENTITIES, from the index subset.
+
+        The IWAC ``index`` is the collection's authority file: 2,843
+        ``Personnes``, 686 ``Lieux``, 416 ``Organisations`` and 243
+        ``Événements``, each a real catalogued entity. Reading names off it
+        beats inferring them from capitalisation, which this generator tried
+        first and abandoned — newspaper OCR is full of headings and all-caps
+        tables of contents, so a mid-sentence-capitalisation test flagged
+        10,514 tokens as names, most of them ordinary words.
+
+        ``Sujets`` are deliberately NOT included: that is the research
+        vocabulary (*Laïcité*, *Djihad*, *Charia*, *Excision*), and the
+        repo's CLAUDE.md is explicit that it must never be filtered. Tokens
+        appearing in a Sujets heading are subtracted even when some
+        organisation's name also contains them, so the subject vocabulary
+        wins every collision.
+        """
+        if self._entities is not None:
+            return self._entities
+        df = load_dataset_safe(
+            "index", repo_id=self.repo_id, columns=["Titre", "Type"])
+        if df is None:
+            self.logger.warning(
+                "index subset unavailable — entity names will not be marked")
+            self._entities = set()
+            return self._entities
+
+        named_types = {"Personnes", "Lieux", "Organisations", "Événements"}
+        names: Set[str] = set()
+        subjects: Set[str] = set()
+        for _, row in df.iterrows():
+            title = row.get("Titre")
+            if not isinstance(title, str) or not title.strip():
+                continue
+            tokens = {
+                t for t in TOKEN_RE.findall(fold_plain(title))
+                if len(t) >= MIN_TOKEN_LEN
+            }
+            kind = str(row.get("Type") or "")
+            if kind in named_types:
+                names |= tokens
+            elif kind == "Sujets":
+                subjects |= tokens
+        self._entities = names - subjects
+        self.logger.info(
+            f"  authority names: {len(self._entities)} tokens from the index "
+            f"(Sujets research vocabulary preserved)")
+        return self._entities
+
+    def _split_window_vocabulary(
+        self,
+        field_tokens: Dict[str, List[str]],
+        hit_token_idx: Dict[str, List[int]],
+    ) -> Tuple[Counter, Counter]:
+        """Partition an item's content tokens into in-window and out-of-window.
+
+        The two counters are a *partition*, which is what makes them a valid
+        pair for a keyness test: every content token lands in exactly one.
+        The reference is therefore the rest of the same documents, not the
+        whole collection — so a collocate means "sits near the word, more
+        than elsewhere in writing already about the word", which is the
+        question the view asks. A whole-corpus reference would instead
+        rediscover every way laïcité documents differ from the archive at
+        large, which the other views already show.
+
+        The lexicon's own surface forms are excluded from both sides: they
+        are the selection criterion, so leaving them in would just echo the
+        selectors back as their own top collocates.
+        """
+        window: Counter = Counter()
+        rest: Counter = Counter()
+        for column, tokens in field_tokens.items():
+            hits = hit_token_idx.get(column) or []
+            in_window: Set[int] = set()
+            for idx in hits:
+                lo = max(0, idx - COLLOCATE_WINDOW)
+                hi = min(len(tokens), idx + COLLOCATE_WINDOW + 1)
+                in_window.update(range(lo, hi))
+            for i, token in enumerate(tokens):
+                if len(token) < MIN_TOKEN_LEN or token in STOPWORDS:
+                    continue
+                if token in self.lex.extra_stopwords:
+                    continue
+                if token in self.lex.all_form_tokens:
+                    continue
+                (window if i in in_window else rest)[token] += 1
+        return window, rest
+
     @staticmethod
     def _tokenize_with_offsets(folded: str) -> Tuple[List[str], Dict[int, int]]:
         """Token list plus a ``char offset → token index`` map."""
@@ -533,10 +695,6 @@ class LaiciteGenerator:
             tokens.append(m.group(0))
             token_at[m.start()] = i
         return tokens, token_at
-
-    # ---------------------------------------------------------------------
-    #  Bundles
-    # ---------------------------------------------------------------------
 
     def build_metadata(self) -> Dict[str, Any]:
         """KPIs, the tag-vs-text Venn, and the rights split — per subset."""
@@ -810,6 +968,463 @@ class LaiciteGenerator:
             "documents": docs,
         }
 
+    # -- Phase 2: corpus linguistics --------------------------------------
+
+    def build_collocates(self) -> Dict[str, Any]:
+        """Log-likelihood collocates of the core forms (issue #14, view 5).
+
+        Four slicings, all through ``iwac_stats.keyness_for_slices``:
+
+        ``global``      in-window vocabulary vs the rest of the same documents
+        ``by_decade``   each decade's window vocabulary vs the other decades'
+        ``by_country``  each country's vs the others'
+        ``by_subset``   each corpus's vs the others'
+
+        The last three answer "and when/where did that change", which a
+        single global list cannot. G² is the significance test only; ranking
+        is by log-ratio effect size, with Benjamini–Hochberg correction
+        inside each slice — ranking by G² is the classic keyness mistake
+        that just returns the corpus's most frequent words.
+
+        Scores are computed over **all** text, public or not: they are
+        derived statistics, not verbatim reproduction, and restricting them
+        to public rows would throw away most of the scholarship corpus for
+        no rights benefit. Reading the actual lines stays gated — that is
+        what the concordance is for, and the panel says so.
+        """
+        scans = self.scan_all()
+        self.logger.info("Scoring collocates…")
+
+        pooled_window: Counter = Counter()
+        pooled_rest: Counter = Counter()
+        by_decade: Dict[str, Counter] = defaultdict(Counter)
+        by_country: Dict[str, Counter] = defaultdict(Counter)
+        by_subset: Dict[str, Counter] = defaultdict(Counter)
+        decade_items: Counter = Counter()
+        country_items: Counter = Counter()
+        # Document frequency per slice: how many distinct items a token
+        # appears in, as opposed to how many times. See _apply_df_floor.
+        df: Dict[str, Counter] = defaultdict(Counter)
+
+        for s in scans:
+            if not s.window_tokens:
+                continue
+            distinct = set(s.window_tokens)
+            pooled_window.update(s.window_tokens)
+            pooled_rest.update(s.rest_tokens)
+            by_subset[s.subset].update(s.window_tokens)
+            df["window"].update(distinct)
+            df["subset:" + s.subset].update(distinct)
+            # `references` are deliberately absent from the temporal facet.
+            # A reference's pub_date is when the ANALYSIS was published, not
+            # when the discourse happened, so a 2022 monograph about the
+            # 1990s would contribute its vocabulary to the 2020s slice and
+            # misattribute it. (It also happens to be the mostly-anglophone
+            # corpus, which was making the 2020s slice read as a list of
+            # English function-adjacent words rather than a finding.)
+            # Scholarship keeps its own slice under `by_subset`.
+            if s.year and s.subset != "references":
+                decade = f"{s.year // 10 * 10}s"
+                by_decade[decade].update(s.window_tokens)
+                decade_items[decade] += 1
+                df["decade:" + decade].update(distinct)
+            for country in s.countries:
+                by_country[country].update(s.window_tokens)
+                country_items[country] += 1
+                df["country:" + country].update(distinct)
+
+        def score(slices: Dict[str, Counter], min_count: int) -> Dict[str, Any]:
+            # Two-slice comparisons need both sides populated; a slice with
+            # nothing to compare against is dropped by keyness_for_slices.
+            usable = {k: v for k, v in slices.items() if sum(v.values()) > 0}
+            if len(usable) < 2:
+                return {}
+            return keyness_for_slices(
+                usable, top_n=self.top_collocates, min_count=min_count)
+
+        global_scored = score(
+            {"window": pooled_window, "rest": pooled_rest}, self.min_collocate_count)
+        global_list = self._apply_df_floor(
+            global_scored.get("window", []), df["window"])
+
+        # Thin slices cannot support the corpus-wide min_count, so drop
+        # slices too small to test rather than reporting noise from them.
+        def prune(slices: Dict[str, Counter], items: Counter, floor: int
+                  ) -> Dict[str, Counter]:
+            return {k: v for k, v in slices.items() if items.get(k, 0) >= floor}
+
+        decades = prune(by_decade, decade_items, self.min_country_items)
+        countries = prune(by_country, country_items, self.min_country_items)
+
+        dropped_decades = sorted(set(by_decade) - set(decades))
+        dropped_countries = sorted(set(by_country) - set(countries))
+        if dropped_decades or dropped_countries:
+            # Never cap coverage silently: a slice missing from the panel
+            # must be explainable, not merely absent.
+            self.logger.info(
+                f"  collocates: dropped thin slices — decades {dropped_decades}, "
+                f"countries {dropped_countries} (< {self.min_country_items} items)")
+
+        out = {
+            "generated_at": generate_timestamp(),
+            "window": COLLOCATE_WINDOW,
+            "method": (
+                "Dunning log-likelihood as the significance test, "
+                "Benjamini-Hochberg corrected within each slice, ranked by "
+                "log-ratio effect size."
+            ),
+            "reference": (
+                "The rest of the same documents — a collocate sits near the "
+                "word more than it does elsewhere in writing already about it."
+            ),
+            "decade_scope": (
+                "Press, periodicals and primary sources only. Scholarship is "
+                "excluded from the temporal slices: a reference is dated by "
+                "when the analysis was published, not by the period it "
+                "analyses, so it would misattribute its vocabulary to the "
+                "decade it was written in."
+            ),
+            "min_count": self.min_collocate_count,
+            "top_n": self.top_collocates,
+            "min_document_frequency": self.min_document_frequency,
+            "global": global_list,
+            "by_decade": self._floor_slices(
+                score(decades, self.min_slice_count), df, "decade:"),
+            "by_country": self._floor_slices(
+                score(countries, self.min_slice_count), df, "country:"),
+            "by_subset": self._floor_slices(
+                score(by_subset, self.min_slice_count), df, "subset:"),
+            "slice_sizes": {
+                "decade": {k: decade_items[k] for k in decades},
+                "country": {k: country_items[k] for k in countries},
+                "subset": {k: sum(1 for s in scans if s.subset == k and s.window_tokens)
+                           for k in by_subset},
+            },
+            "dropped_slices": {
+                "decades": dropped_decades, "countries": dropped_countries,
+                "reason": f"fewer than {self.min_country_items} items",
+            },
+        }
+        self.logger.info(
+            f"  collocates: {len(out['global'])} global, "
+            f"{len(out['by_decade'])} decades, {len(out['by_country'])} countries "
+            f"(document-frequency floor {self.min_document_frequency})")
+        return out
+
+    def _apply_df_floor(
+        self, scored: List[Dict[str, Any]], df: Counter
+    ) -> List[Dict[str, Any]]:
+        """Drop tokens confined to too few documents, and record the DF.
+
+        A token repeated many times inside one or two items scores as
+        strongly as one used steadily across fifty — but the first is
+        usually an artefact (a scanner watermark stamped on every page, a
+        proper name recurring through one long interview, a mis-OCRed word
+        repeated down one bad scan) and the second is vocabulary. Requiring
+        presence in several distinct documents separates them without
+        touching domain terms, which recur across documents by nature.
+
+        Applied AFTER scoring, so the Benjamini-Hochberg denominator still
+        covers every token that was actually tested.
+        """
+        proper = self._entity_tokens()
+        out = []
+        for entry in scored:
+            n_docs = int(df.get(entry["token"], 0))
+            if n_docs < self.min_document_frequency:
+                continue
+            entry = dict(entry)
+            entry["documents"] = n_docs
+            # Catalogued entity names are kept and MARKED rather than
+            # dropped: "who was speaking laïcité in this decade" is a
+            # finding, not noise. They are excluded only from the implicit
+            # lexicon, where the slice is small enough that they crowd out
+            # everything else.
+            if entry["token"] in proper:
+                entry["proper"] = True
+            out.append(entry)
+        return out
+
+    def _floor_slices(
+        self, scored: Dict[str, List[Dict[str, Any]]], df: Dict[str, Counter],
+        prefix: str,
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """``_apply_df_floor`` across every slice of one facet."""
+        out = {}
+        for name, entries in scored.items():
+            kept = self._apply_df_floor(entries, df.get(prefix + name, Counter()))
+            if kept:
+                out[name] = kept
+        return out
+
+    def build_implicit(self) -> Dict[str, Any]:
+        """The vocabulary of the tagged-but-unsaid (review idea A).
+
+        Items an archivist indexed under *Laïcité* that never use the word
+        looked like a natural experiment: what vocabulary does the press use
+        to argue laïcité *without* the term? Keyness of that slice against
+        the items that do say it should answer directly.
+
+        **Measured, it does not.** The idea was proposed expecting ~232 such
+        articles, from the issue's arithmetic of 513 tagged minus 281 saying
+        "laïcité". Counting the full core lexicon (``laïque``, ``laïc``,
+        ``laïcisation``, …) rather than the single word leaves only **53**,
+        and at that size the test has nothing to find: of the terms reaching
+        significance, almost every one occurs in a single document. Requiring
+        presence in even three of the 53 leaves a handful, and those are
+        still names too local to be in the authority file, or one-off nouns
+        from one article.
+
+        So this builder reports a **negative result** rather than a ranked
+        list: the 53 items appear to be tagged for heterogeneous reasons —
+        each about its own matter — not because a consistent alternative
+        vocabulary for laïcité exists in them. That is worth stating, and it
+        is a far more defensible thing to publish than a list of surnames
+        dressed as a discovery. The diagnostics that support the verdict ship
+        alongside it so a reader can check the reasoning, and the moment the
+        slice grows the same code yields a real list.
+        """
+        scans = self.scan_all()
+        proper = self._entity_tokens()
+        tagged_only: Counter = Counter()
+        said: Counter = Counter()
+        df_tagged: Counter = Counter()
+        n_tagged_only = n_said = 0
+        for s in scans:
+            vocab = s.window_tokens + s.rest_tokens
+            if s.is_tagged and not s.said:
+                tagged_only.update(vocab)
+                df_tagged.update(set(vocab))
+                n_tagged_only += 1
+            elif s.said:
+                said.update(vocab)
+                n_said += 1
+
+        # Catalogued entity names are removed from BOTH sides here. With a slice this
+        # small every name is perfectly slice-specific, so an unfiltered run
+        # returns a list of people and organisations that appear in a handful
+        # of Beninese articles — true, but it answers "who is named in these
+        # 53 documents", not "how is laïcité argued without the word".
+        for counter in (tagged_only, said):
+            for token in list(counter):
+                if token in proper:
+                    del counter[token]
+
+        scored: Dict[str, Any] = {}
+        significant: List[Dict[str, Any]] = []
+        if n_tagged_only and n_said:
+            scored = keyness_for_slices(
+                {"tagged_only": tagged_only, "said": said},
+                top_n=max(self.top_collocates, 60),
+                min_count=max(3, self.min_slice_count // 2),
+            )
+            significant = [
+                dict(e, documents=int(df_tagged.get(e["token"], 0)))
+                for e in scored.get("tagged_only", [])
+            ]
+
+        # A term confined to one or two of ~50 documents is that document's
+        # subject matter, not the slice's signature.
+        surviving = [
+            e for e in significant
+            if e["documents"] >= self.min_implicit_documents
+        ]
+        spread = Counter(
+            min(e["documents"], 5) for e in significant
+        )
+        # The verdict the panel renders. "supported" only when enough terms
+        # recur across documents to describe a shared vocabulary at all.
+        has_vocabulary = len(surviving) >= self.min_implicit_terms
+        self.logger.info(
+            f"  implicit lexicon: {n_tagged_only} tagged-but-unsaid vs {n_said} "
+            f"saying items → {len(significant)} significant, {len(surviving)} "
+            f"in ≥{self.min_implicit_documents} documents → "
+            f"{'shared vocabulary' if has_vocabulary else 'NO shared vocabulary'}")
+        return {
+            "generated_at": generate_timestamp(),
+            "slice_sizes": {"tagged_only": n_tagged_only, "said": n_said},
+            "tokens_tested": {
+                "tagged_only": sum(tagged_only.values()),
+                "said": sum(said.values()),
+            },
+            "note": (
+                "Keyness of items tagged Laïcité that never use the word, "
+                "against those that do. Catalogued entity names are removed "
+                "from both sides, and a term must recur across distinct "
+                "documents to count — otherwise the list is just the names "
+                "and one-off nouns of a handful of items."
+            ),
+            "min_documents": self.min_implicit_documents,
+            "min_terms_for_verdict": self.min_implicit_terms,
+            "entity_names_excluded": True,
+            # The verdict, and the evidence for it. `has_vocabulary` is what
+            # the panel branches on: when false it states the negative result
+            # instead of rendering `terms`, because a ranked list of
+            # single-document words reads as a discovery when it is not one.
+            "has_vocabulary": has_vocabulary,
+            "diagnostics": {
+                "significant_terms": len(significant),
+                "surviving_terms": len(surviving),
+                # How many documents each significant term occurs in, capped
+                # at 5+. A distribution piled on 1 is the whole argument.
+                "document_spread": {str(k): spread.get(k, 0) for k in range(1, 6)},
+            },
+            "terms": surviving,
+            # Kept for audit even when the verdict is negative: a reader
+            # should be able to see exactly what was rejected and why.
+            "rejected_terms": [
+                e for e in significant
+                if e["documents"] < self.min_implicit_documents
+            ][:40],
+        }
+
+    def build_corpora(self) -> Dict[str, Any]:
+        """Press vs periodicals, normalised by tokens (issue #14, view 6).
+
+        The headline contrast is that Muslim periodicals write about laïcité
+        continuously while the mainstream press writes about it in crises.
+        Item counts cannot show that: a 100-page periodical issue and a
+        400-word news item are not commensurable, so every rate here is per
+        10,000 words of the matched items, using ``nb_mots``.
+
+        Also carries the per-newspaper frame fingerprints (review idea E) —
+        the same contrast one level down, at outlet rather than corpus level.
+        """
+        scans = self.scan_all()
+        frames = list(self.lex.frames.keys())
+
+        per_subset: Dict[str, Any] = {}
+        for subset in SUBSET_FIELDS:
+            sub = [s for s in scans if s.subset == subset]
+            if not sub:
+                continue
+            words = sum(s.nb_mots for s in sub)
+            occ = sum(len(s.occurrences) for s in sub)
+            frame_occ = {f: sum(s.frame_counts.get(f, 0) for s in sub) for f in frames}
+            by_year: Dict[str, Dict[str, float]] = {}
+            year_words: Counter = Counter()
+            year_occ: Counter = Counter()
+            for s in sub:
+                if not s.year:
+                    continue
+                year_words[s.year] += s.nb_mots
+                year_occ[s.year] += len(s.occurrences)
+            for year in sorted(year_words):
+                w = year_words[year]
+                by_year[str(year)] = {
+                    "items": sum(1 for s in sub if s.year == year),
+                    "occurrences": year_occ[year],
+                    "words": w,
+                    "per_10k": round(year_occ[year] / w * 10000, 2) if w else None,
+                }
+            per_subset[subset] = {
+                "items": len(sub),
+                "words": words,
+                "occurrences": occ,
+                "per_10k": round(occ / words * 10000, 2) if words else None,
+                "frame_per_10k": {
+                    f: (round(n / words * 10000, 2) if words else None)
+                    for f, n in frame_occ.items()
+                },
+                "frame_item_share": {
+                    f: round(sum(1 for s in sub if s.frame_counts.get(f))
+                             / len(sub), 4)
+                    for f in frames
+                },
+                "by_year": by_year,
+            }
+
+        # Per-newspaper frame fingerprints, row-normalised so outlets of very
+        # different sizes can be read on one scale.
+        paper_items: Counter = Counter()
+        paper_frames: Dict[str, Counter] = defaultdict(Counter)
+        paper_subset: Dict[str, str] = {}
+        paper_country: Dict[str, str] = {}
+        for s in scans:
+            if not s.newspaper:
+                continue
+            paper_items[s.newspaper] += 1
+            paper_subset[s.newspaper] = s.subset
+            if s.countries:
+                paper_country[s.newspaper] = s.countries[0]
+            for f in frames:
+                if s.frame_counts.get(f):
+                    paper_frames[s.newspaper][f] += 1
+
+        newspapers = []
+        for paper, n in paper_items.most_common():
+            if n < self.min_newspaper_items:
+                continue
+            newspapers.append({
+                "name": paper,
+                "items": n,
+                "subset": paper_subset.get(paper, ""),
+                "country": paper_country.get(paper, ""),
+                "frame_share": {
+                    f: round(paper_frames[paper].get(f, 0) / n, 4) for f in frames
+                },
+            })
+        self.logger.info(
+            f"  corpora: {len(per_subset)} corpora, "
+            f"{len(newspapers)} newspapers ≥ {self.min_newspaper_items} items")
+        return {
+            "generated_at": generate_timestamp(),
+            "note": (
+                "Rates are per 10,000 words of the matched items, not per "
+                "item: a periodical issue and a news article are not "
+                "commensurable units."
+            ),
+            "frames": frames,
+            "by_subset": per_subset,
+            "min_newspaper_items": self.min_newspaper_items,
+            "newspapers": newspapers,
+        }
+
+    def build_seasonality(self) -> Dict[str, Any]:
+        """Gregorian vs lunar month profile (review idea B).
+
+        Laïcité flashpoints are partly calendar-bound — hajj organisation,
+        jours fériés, Ramadan school and workplace friction — but a lunar
+        observance drifts ~11 days a year, so over sixty years it smears
+        across all twelve Gregorian months and a Gregorian axis structurally
+        cannot see it. The dataset ships ``hijri_month`` precomputed from the
+        Umm al-Qura tables, so both profiles are emitted side by side.
+
+        ``hijri_month`` is null wherever ``pub_date`` is not a complete
+        YYYY-MM-DD, and ``references`` do not carry it at all, so the
+        coverage denominator is reported per corpus rather than assumed.
+        """
+        scans = self.scan_all()
+        out: Dict[str, Any] = {}
+        for subset in SUBSET_FIELDS:
+            sub = [s for s in scans if s.subset == subset]
+            greg: Counter = Counter()
+            hijri: Counter = Counter()
+            for s in sub:
+                if s.month:
+                    greg[s.month] += 1
+                if s.hijri_month:
+                    hijri[s.hijri_month] += 1
+            if not greg and not hijri:
+                continue
+            out[subset] = {
+                "items": len(sub),
+                "gregorian": [greg.get(m, 0) for m in range(1, 13)],
+                "hijri": [hijri.get(m, 0) for m in range(1, 13)],
+                "gregorian_coverage": sum(greg.values()),
+                "hijri_coverage": sum(hijri.values()),
+            }
+        self.logger.info(f"  seasonality: {len(out)} corpora with dated items")
+        return {
+            "generated_at": generate_timestamp(),
+            "note": (
+                "Lunar months are read from the dataset's precomputed "
+                "hijri_month (Umm al-Qura), never re-derived in the browser: "
+                "ICU disagrees with it on most pre-2000 dates."
+            ),
+            "by_subset": out,
+        }
+
     # -- concordance ------------------------------------------------------
 
     def build_concordance(self) -> Tuple[Dict[str, Any], Dict[str, Dict[str, Any]]]:
@@ -999,6 +1614,16 @@ class LaiciteGenerator:
         trends = self.build_trends()
         save_json(trends, self.output_dir / "laicite-trends.json", minify=True)
 
+        # Phase 2 — corpus linguistics. Each is lazy-loaded by its own view.
+        save_json(self.build_collocates(),
+                  self.output_dir / "laicite-collocates.json", minify=True)
+        save_json(self.build_implicit(),
+                  self.output_dir / "laicite-implicit.json", minify=self.minify)
+        save_json(self.build_corpora(),
+                  self.output_dir / "laicite-corpora.json", minify=self.minify)
+        save_json(self.build_seasonality(),
+                  self.output_dir / "laicite-seasonality.json", minify=self.minify)
+
         index, files = self.build_concordance()
         save_json(index, self.output_dir / "laicite-concordance.json",
                   minify=self.minify)
@@ -1041,6 +1666,41 @@ def main() -> None:
         help="Drop countries with fewer than this many dossier items "
              "(default: %(default)s).",
     )
+    parser.add_argument(
+        "--top-collocates",
+        type=int,
+        default=40,
+        help="Collocates kept per slice (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-collocate-count",
+        type=int,
+        default=8,
+        help="Minimum in-window occurrences for a global collocate "
+             "(default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-slice-count",
+        type=int,
+        default=5,
+        help="Minimum occurrences for a per-decade / per-country / per-corpus "
+             "collocate (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-document-frequency",
+        type=int,
+        default=3,
+        help="Drop collocates confined to fewer than this many distinct "
+             "documents - kills scanner watermarks and one-off OCR noise "
+             "without touching domain vocabulary (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--min-newspaper-items",
+        type=int,
+        default=5,
+        help="Drop newspapers with fewer dossier items from the fingerprint "
+             "view (default: %(default)s).",
+    )
     add_standard_args(parser, minify_default=False)
     args = parse_standard_args(parser)
     LaiciteGenerator(
@@ -1049,6 +1709,11 @@ def main() -> None:
         minify=args.minify,
         max_snippets=args.max_snippets,
         min_country_items=args.min_country_items,
+        top_collocates=args.top_collocates,
+        min_collocate_count=args.min_collocate_count,
+        min_slice_count=args.min_slice_count,
+        min_document_frequency=args.min_document_frequency,
+        min_newspaper_items=args.min_newspaper_items,
     ).run()
 
 
