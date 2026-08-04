@@ -67,6 +67,13 @@
             // unfiltered view shows all of them rather than none. Filtering
             // to one country then narrows to that country's markers.
             includeAllCountries: true,
+            // Numbered badges rather than in-plot names. These markers are
+            // national conferences, constitutional revisions and colloquia,
+            // so their curated names are full institutional titles — there is
+            // no font size at which a dozen of those are legible inside the
+            // plot. The badges key into the list below, where the names are
+            // read in full and carry their links.
+            numberedEvents: true,
             compact: cfg.compact,
             valueAxisLabel: P.t('laicite.occurrences'),
             focusRange: metadata.focus_range
@@ -86,10 +93,10 @@
     };
 
     /**
-     * The `<details>` event list under the chart. Events carrying an IWAC
-     * o_id link to their authority record; those carrying document_o_id link
-     * to the primary source that generated the coverage — the move this
-     * block exists to make.
+     * The numbered event key under the chart — where the marker names are
+     * actually read. Events carrying an IWAC o_id link to their authority
+     * record; those carrying document_o_id link to the primary source that
+     * generated the coverage — the move this block exists to make.
      */
     L.buildEventsDetails = function (events, state, siteBase) {
         return P.buildTimelineEventsDetails(
@@ -99,7 +106,8 @@
                 summaryKey: 'Historical events',
                 className: 'iwac-vis-laicite-details',
                 siteBase: siteBase,
-                includeAllCountries: true
+                includeAllCountries: true,
+                numbered: true
             }
         );
     };

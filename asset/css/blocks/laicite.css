@@ -672,15 +672,11 @@ a.iwac-vis-kwic-title:hover {
     outline-offset: 2px;
 }
 
-.iwac-vis-timeline-details-list {
-    margin: var(--space-2, 0.5rem) 0 0;
-    padding-inline-start: var(--space-5, 1.25rem);
-    line-height: 1.6;
-}
+/*  `.iwac-vis-timeline-details-*` is emitted by shared/annotated-timeline.js
+ *  and lives in iwac-core.css; only the accent colour is block-local. */
 
 .iwac-vis-timeline-details-link {
     color: var(--primary, #ce4115);
-    font-size: 0.75rem;
 }
 
 

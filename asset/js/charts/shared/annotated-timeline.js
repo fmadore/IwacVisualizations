@@ -87,6 +87,30 @@
     };
 
     /**
+     * Merge point and period events into one year-sorted sequence and number
+     * them 1..N.
+     *
+     * Both the chart and the list beneath it read their numbering from here,
+     * so a marker's badge always matches its entry. That correspondence is
+     * the whole point of numbered mode: a curated event name is often a full
+     * institutional title ("Colloque national sur les confessions religieuses
+     * et laïcité") and there is no font size at which twelve of those are
+     * legible inside a plot area. Numbering moves the text to where it can be
+     * read in full — and read by a screen reader, and printed — while the
+     * chart keeps the one thing it is good at, which is showing *when*.
+     */
+    P.orderTimelineEvents = function (visible) {
+        var rows = (visible.periods || []).map(function (e) {
+            return { event: e, kind: 'period', sort: e.start };
+        }).concat((visible.points || []).map(function (e) {
+            return { event: e, kind: 'point', sort: e.year };
+        }));
+        rows.sort(function (a, b) { return (a.sort || 0) - (b.sort || 0); });
+        rows.forEach(function (row, i) { row.n = i + 1; });
+        return rows;
+    };
+
+    /**
      * Build the ECharts option for an annotated multi-series timeline.
      *
      * @param {Object} cfg
@@ -142,13 +166,15 @@
                 includeAllCountries: cfg.includeAllCountries
             });
             if (visible.points.length || visible.periods.length) {
-                chartSeries.push(buildAnnotationSeries(visible, {
-                    compact: cfg.compact,
-                    muted: mutedResolved,
-                    border: borderResolved,
-                    surface: surfaceResolved,
-                    primary: primaryResolved
-                }));
+                chartSeries.push(buildAnnotationSeries(
+                    P.orderTimelineEvents(visible), {
+                        compact: cfg.compact,
+                        numbered: !!cfg.numberedEvents,
+                        muted: mutedResolved,
+                        border: borderResolved,
+                        surface: surfaceResolved,
+                        primary: primaryResolved
+                    }));
             }
         }
 
@@ -222,11 +248,86 @@
      * UNDER the data lines (z: 0), point markers above (markLine z: 10).
      * Label positions alternate top/bottom across adjacent events so
      * closely-spaced years (2015/2016/2017) don't stack labels.
+     *
+     * In numbered mode the label is a badge carrying the event's number and
+     * the name lives in the list below; otherwise it is the (truncated) name
+     * itself. `rotate: 0` is load-bearing for the badge — markLine labels
+     * otherwise inherit the rotation of the line they sit on, and a sideways
+     * digit is worse than no digit.
      */
-    function buildAnnotationSeries(visible, style) {
-        var sorted = visible.points.slice().sort(function (a, b) {
-            return (a.year || 0) - (b.year || 0);
+    /**
+     * One markLine entry per point event — except in numbered mode, where
+     * events sharing a year collapse into a single marker whose badge carries
+     * both numbers ("3·4").
+     *
+     * Text labels alternate top and bottom so closely-spaced years don't
+     * stack. Badges do not: they sit in one row just inside the top of the
+     * grid, because the alternate anchor lands outside it and prints over the
+     * legend, and because a badge is small enough that adjacent years clear
+     * each other. What a badge cannot survive is two events in the SAME year
+     * (1991 has two here) — those would draw exactly on top of one another
+     * and silently hide one, so they are merged instead.
+     */
+    function markLineData(points, style) {
+        if (!style.numbered) {
+            return points.map(function (row, i) {
+                return {
+                    xAxis: String(row.event.year),
+                    iwacLabel: P.timelineEventLabel(row.event),
+                    iwacNumber: row.n,
+                    label: {
+                        position: i % 2 === 0 ? 'insideEndTop' : 'insideEndBottom'
+                    }
+                };
+            });
+        }
+        var years = [];
+        var byYear = {};
+        points.forEach(function (row) {
+            var year = String(row.event.year);
+            if (!byYear[year]) {
+                byYear[year] = [];
+                years.push(year);
+            }
+            byYear[year].push(row);
         });
+        return years.map(function (year) {
+            var rows = byYear[year];
+            return {
+                xAxis: year,
+                iwacLabel: rows.map(function (row) {
+                    return P.timelineEventLabel(row.event);
+                }).join(' · '),
+                iwacNumber: rows.map(function (row) {
+                    return row.n;
+                }).join('·'),
+                // `insideEndBottom`, counter-intuitively, is the one INSIDE
+                // the plot: on a vertical markLine "end" is the top of the
+                // line, so "Top" anchors above it — outside the grid, over
+                // the legend. Verified in the browser, not inferred.
+                label: { position: 'insideEndBottom' }
+            };
+        });
+    }
+
+    function buildAnnotationSeries(ordered, style) {
+        var points = ordered.filter(function (row) {
+            return row.kind === 'point';
+        });
+        var periods = ordered.filter(function (row) {
+            return row.kind === 'period';
+        });
+        // No fixed `width`: a merged badge carries two numbers and would be
+        // clipped by one. Padding sizes it to its content instead.
+        var badge = style.numbered ? {
+            rotate: 0,
+            fontWeight: 'bold',
+            align: 'center',
+            padding: [3, 5],
+            borderColor: style.border,
+            borderWidth: 1,
+            borderRadius: 9
+        } : {};
         return {
             name: '__events__',
             type: 'line',
@@ -239,43 +340,42 @@
                 symbol: ['none', 'none'],
                 silent: false,
                 z: 10,
-                label: {
+                label: Object.assign({
                     show: !style.compact,
                     formatter: function (p) {
-                        return truncateLabel(
-                            (p.data && p.data.iwacLabel) || '', LABEL_MAX_CHARS);
+                        var data = p.data || {};
+                        return style.numbered
+                            ? String(data.iwacNumber || '')
+                            : truncateLabel(data.iwacLabel || '', LABEL_MAX_CHARS);
                     },
                     color: style.muted,
                     fontSize: 11,
                     backgroundColor: style.surface,
                     padding: [2, 6],
                     borderRadius: 3
-                },
+                }, badge),
                 lineStyle: {
                     color: style.border,
                     type: 'dashed',
                     width: 1
                 },
                 emphasis: {
-                    // Hover restores the untruncated name — the one place the
-                    // reader can ask for it without leaving the chart.
-                    label: {
+                    // Hover reads the name out in place. In numbered mode the
+                    // badge stays put and the name appears beside it, so
+                    // pointing at a marker answers "which one is this" without
+                    // a trip to the list.
+                    label: Object.assign({
                         show: true,
                         formatter: function (p) {
                             return (p.data && p.data.iwacLabel) || '';
                         }
-                    },
+                    }, style.numbered
+                        ? { rotate: 0, borderWidth: 0, padding: [2, 6],
+                            color: style.muted }
+                        : {}),
                     lineStyle: { color: style.muted }
                 },
-                data: sorted.map(function (e, i) {
-                    return {
-                        xAxis: String(e.year),
-                        iwacLabel: P.timelineEventLabel(e),
-                        label: {
-                            position: i % 2 === 0 ? 'insideEndTop' : 'insideEndBottom'
-                        }
-                    };
-                })
+                data: markLineData(points, style)
             },
             markArea: {
                 silent: true,
@@ -284,18 +384,50 @@
                     color: style.primary,
                     opacity: 0.06
                 },
-                label: { show: false },
-                data: visible.periods.map(function (e) {
-                    return [{ xAxis: String(e.start) }, { xAxis: String(e.end) }];
+                // Shaded bands carry their number at the top-left in numbered
+                // mode, so a period is findable in the list the same way a
+                // point marker is. Unnumbered they stay unlabelled: a band's
+                // name has nowhere to sit without covering the data.
+                label: style.numbered
+                    ? Object.assign({
+                        show: true,
+                        // Centred over the band rather than pinned to its
+                        // left edge: a period almost always begins in the
+                        // same year as a point event (2002 opens both the
+                        // Ivorian civil war band and its own marker), and at
+                        // the edge the two badges land exactly on top of each
+                        // other. The band shows its own extent; the badge
+                        // only has to be findable.
+                        position: 'insideTop',
+                        formatter: function (p) {
+                            return String((p.data && p.data.iwacNumber) || '');
+                        },
+                        color: style.muted,
+                        fontSize: 11,
+                        backgroundColor: style.surface,
+                        padding: [2, 6],
+                        borderRadius: 3
+                    }, badge)
+                    : { show: false },
+                data: periods.map(function (row) {
+                    return [
+                        { xAxis: String(row.event.start), iwacNumber: row.n },
+                        { xAxis: String(row.event.end) }
+                    ];
                 })
             }
         };
     }
 
     /**
-     * `<details>` fallback listing every visible event as plain text — screen
-     * readers and no-hover readers get the full list without depending on
-     * chart interactivity.
+     * The event list under the chart: every visible event as plain text, so
+     * screen readers, no-hover readers and printouts get the full names
+     * without depending on chart interactivity.
+     *
+     * With `opts.numbered` this stops being a fallback and becomes the
+     * primary place the names are read: each entry carries the badge number
+     * its marker shows, and the disclosure opens by default — a numbered
+     * marker with its key folded away would be a puzzle rather than a legend.
      *
      * @param {Object} events        parsed events bundle
      * @param {string|null} country  active country scope
@@ -305,35 +437,41 @@
      * @param {string} [opts.siteBase]    when set, events carrying `o_id` or
      *                                    `document_o_id` link to their item page
      * @param {boolean} [opts.includeAllCountries]  see visibleTimelineEvents
+     * @param {boolean} [opts.numbered]   key each entry to its marker badge
      */
     P.buildTimelineEventsDetails = function (events, country, opts) {
         opts = opts || {};
         var visible = P.visibleTimelineEvents(events, country, {
             includeAllCountries: opts.includeAllCountries
         });
-        var all = visible.periods.map(function (e) {
-            return { sort: e.start, text: e.start + '–' + e.end + ' — '
-                + P.timelineEventLabel(e), event: e };
-        }).concat(visible.points.map(function (e) {
-            return { sort: e.year, text: e.year + ' — '
-                + P.timelineEventLabel(e), event: e };
-        }));
-        if (!all.length) return null;
-        all.sort(function (a, b) { return a.sort - b.sort; });
+        // Same ordering and numbering the chart uses — one source, so the
+        // badges cannot drift out of step with the list.
+        var ordered = P.orderTimelineEvents(visible);
+        if (!ordered.length) return null;
 
         var details = P.el('details', opts.className || 'iwac-vis-timeline-details');
+        if (opts.numbered) details.open = true;
         details.appendChild(P.el('summary', null,
             P.t(opts.summaryKey || 'Historical events')));
         var list = P.el('ul', 'iwac-vis-timeline-details-list');
-        all.forEach(function (entry) {
+        if (opts.numbered) list.classList.add('is-numbered');
+
+        ordered.forEach(function (row) {
+            var e = row.event;
             var li = P.el('li');
-            li.appendChild(document.createTextNode(entry.text));
+            if (opts.numbered) {
+                li.appendChild(P.el('span', 'iwac-vis-timeline-details-n',
+                    String(row.n)));
+            }
+            var when = row.kind === 'period' ? e.start + '–' + e.end : String(e.year);
+            li.appendChild(P.el('span', 'iwac-vis-timeline-details-year', when));
+            li.appendChild(document.createTextNode(' ' + P.timelineEventLabel(e)));
             // An event can carry both an authority record and the primary
             // source that generated the coverage; emit a link for each,
             // because collapsing them mislabels whichever one loses.
             [
-                { id: entry.event.o_id, key: 'Record' },
-                { id: entry.event.document_o_id, key: 'Source document' }
+                { id: e.o_id, key: 'Record' },
+                { id: e.document_o_id, key: 'Source document' }
             ].forEach(function (link) {
                 if (!opts.siteBase || !link.id) return;
                 li.appendChild(document.createTextNode(' · '));
