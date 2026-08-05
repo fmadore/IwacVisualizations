@@ -65,8 +65,22 @@
 // upgrade a deliberate, testable bump of these constants.
 $cdnEcharts     = 'https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js';
 $cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js';
-$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js';
-$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css';
+// MapLibre 6 is ESM-ONLY. There is no `dist/maplibre-gl.js` in the v6 package
+// any more (nor the CSP build) — only `.mjs`, with `"type": "module"` and an
+// exports map that offers `import` and nothing else. So this URL is loaded by
+// the lazy loader below through a dynamic `import()`, NOT as a classic
+// <script>, and the namespace is republished as `window.maplibregl` for the
+// map modules that still read that global. Keep the `.mjs` extension: pointing
+// this back at `.js` is a 404, not a fallback.
+//
+// The worker needs no configuration here. v6 derives it from `import.meta.url`
+// (→ `maplibre-gl-worker.mjs` next to the main chunk) and, because jsDelivr is
+// cross-origin, boots it from a blob shim that re-imports the absolute CDN URL.
+// That is the case bundler users must call `setWorkerUrl()` for; loading
+// straight from a CDN, as we do, resolves on its own. It does require `blob:`
+// in `worker-src` wherever the site enforces a CSP.
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.1.0/dist/maplibre-gl.mjs';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.1.0/dist/maplibre-gl.css';
 // d3-force for the item-page ego networks (~17 KB total, vs the 640 KB
 // ECharts bundle they used to lean on for a `graph`/`force` series).
 // ORDER IS LOAD-BEARING: the UMD builds all attach to one shared `d3`
@@ -154,6 +168,10 @@ foreach ((array) $blockCss as $sheet) {
 // $scripts preserves the previous load order exactly: CDN libs → IWAC
 // infra (i18n → theme → core) → shared primitives → conditional features →
 // dashboard-layout + renderers → block panels → orchestrator (last).
+//
+// MapLibre is the one exception and is NOT in this list — see $lazyMjs. Being
+// ESM-only since v6, it is imported and globalised before the classic chain
+// starts rather than taking a slot inside it.
 $scripts = [];
 
 // CDN libraries (echarts must precede the IWAC theme + panels).
@@ -167,8 +185,13 @@ if ($needD3) {
     }
 }
 $lazyCss = [];
+// MapLibre is deliberately NOT appended to $scripts: since v6 it is an ES
+// module, so a classic <script> tag would neither execute nor define the
+// `maplibregl` global. It travels as its own payload key and the loader
+// imports it ahead of the classic chain.
+$lazyMjs = null;
 if ($needMaplibre) {
-    $scripts[] = $cdnMaplibreJs;
+    $lazyMjs = $cdnMaplibreJs;
     // The map renders on-view only, so its stylesheets ride along with the loader
     // instead of render-blocking the whole page: the CDN maplibre CSS plus the
     // theme's map overrides (iwac-maplibre.min.css).
@@ -273,17 +296,35 @@ if ($orchestrator) {
 // into the same window.IWACVisLazy queue at runtime and only the first arms
 // the IntersectionObserver. json_encode keeps slashes escaped so the inline
 // payload can never break out of the <script> element.
-$payload = json_encode(['scripts' => $scripts, 'css' => $lazyCss]);
+$payload = json_encode(['scripts' => $scripts, 'css' => $lazyCss, 'mjs' => $lazyMjs]);
 $headScript->appendScript(
     '(function(){'
-    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:[],armed:false,done:false});'
+    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:[],mjs:null,armed:false,done:false});'
     . 'var p=' . $payload . ';'
     . 'p.scripts.forEach(function(u){if(S.q.indexOf(u)<0)S.q.push(u);});'
     . '(p.css||[]).forEach(function(u){if(S.css.indexOf(u)<0)S.css.push(u);});'
+    // One map-capable block on the page is enough to arm the import; blocks
+    // that merge in later share the single resolved namespace.
+    . 'if(p.mjs&&!S.mjs)S.mjs=p.mjs;'
     . 'if(S.armed)return;S.armed=true;'
     . 'function load(){if(S.done)return;S.done=true;'
     . 'S.css.forEach(function(href){var l=document.createElement("link");l.rel="stylesheet";l.href=href;document.head.appendChild(l);});'
-    . 'S.q.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});'
+    . 'function chain(){S.q.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});}'
+    // MapLibre 6 is an ES module and publishes no global, so it cannot ride the
+    // classic `async=false` queue: import it first, republish the namespace as
+    // `window.maplibregl`, and only then run the chain the map modules depend
+    // on. This serialises the chain behind one ~560 KB module, which is
+    // affordable because the loader already fires 400 px before the block
+    // reaches the viewport.
+    //
+    // A failed import still runs the chain. Every map module guards with
+    // `typeof maplibregl === "undefined"` and degrades to a "map unavailable"
+    // notice, so a CDN outage must cost the page its map — not its ECharts
+    // panels as well.
+    . 'if(!S.mjs){chain();return;}'
+    . 'import(S.mjs).then(function(m){window.maplibregl=m;},function(e){'
+    . 'if(window.console&&console.error)console.error("IWAC: MapLibre failed to load",e);'
+    . '}).then(chain,chain);'
     . '}'
     . 'function arm(){var b=document.querySelectorAll(".iwac-vis-block");'
     . 'if(!b.length||!("IntersectionObserver" in window)){load();return;}'

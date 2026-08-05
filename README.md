@@ -43,6 +43,20 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.37.0 — MapLibre 6, and the end of the UMD global
+
+MapLibre 6 is **ESM-only**. The v6 package contains no `dist/maplibre-gl.js` at all — the UMD bundle and the separate CSP build are both gone, `"type": "module"` is set, and the exports map offers `import` and nothing else. The pin we shipped (`maplibre-gl@5.24.0/dist/maplibre-gl.js`) has no v6 equivalent: pointing it at 6.x is a 404, not a degraded load.
+
+That breaks one specific thing, and it is not the API. All six constructors the module uses — `Map`, `Popup`, `LngLatBounds`, `NavigationControl`, `FullscreenControl`, `GlobeControl` — are unchanged in v6, and the two nastiest v6 breakages don't apply here: nothing registers a `styleimagemissing` listener (so the `setMissingStyleImageResolver()` migration is moot) and nothing does `instanceof` checks on map events. What breaks is *delivery*. An ES module publishes no global, so the eight modules that guard with `typeof maplibregl === 'undefined'` would all trip, and MapLibre can no longer take a slot in the on-view loader's classic `async=false` chain.
+
+So it comes out of `$scripts` and travels on its own payload key. The loader imports it, republishes the namespace as `window.maplibregl`, and only then runs the classic chain — leaving all twelve MapLibre-touching modules untouched. A failed import still runs the chain: every map module degrades to its "map unavailable" notice, so a MapLibre CDN outage costs the page its map rather than its ECharts panels. Blocks with no map issue no import at all. The cost is that the chain now serialises behind one ~560 KB module, which is affordable because the loader already fires 400 px before the block reaches the viewport.
+
+**The worker needs no configuration.** This is the part that trips up Vite/webpack users, and it is exactly the case we are not in: v6 derives the worker from `import.meta.url` (→ `maplibre-gl-worker.mjs` beside the main chunk) and, because jsDelivr is cross-origin, boots it from a blob shim that re-imports the absolute CDN URL. Bundler users must call `setWorkerUrl()` because `import.meta.url` doesn't survive a module graph; loading straight from a CDN resolves on its own. Verified end to end in Chromium against the real 6.1.0: worker spawned from `blob:`, `maplibre-gl-worker.mjs` fetched from jsDelivr unprompted, Carto positron up with 93 layers, no console errors.
+
+**Two operational notes.** Wherever the site enforces a CSP, `worker-src` needs `blob:` — the module only rewrites `frame-ancestors`, so that is an nginx-level change. And v6 flips `zoomLevelsToOverscale` on by default, changing vector-tile slicing on the Carto basemaps; `zoomLevelsToOverscale: undefined` at map init restores v5 behaviour if a map looks wrong.
+
+`tests/js/assets.test.js` parses the real partial, rebuilds the emitted loader JS and executes it, pinning the three properties that are invisible until a map block renders: the global exists before the first classic script runs, a failed import still runs the chain, and map-less blocks import nothing. It also fails if the pin ever goes back to a `.js` URL or if MapLibre re-enters `$scripts`.
+
 ### v1.36.1 — timeline events get a numbered key
 
 v1.36.0 stopped the curated event labels from overflowing the plot by truncating them, which made them fit without making them readable. markLine labels rotate to follow their vertical line, so label length is spent against the *grid height*, and these markers are national conferences, constitutional revisions and colloquia — their curated names are full institutional titles ("Colloque national sur les confessions religieuses et laïcité"). There is no font size at which a dozen of those are legible inside a plot area.
