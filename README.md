@@ -1134,6 +1134,12 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 - [ResourceVisualizations](https://github.com/fmadore/ResourceVisualizations) — the module this was scaffolded from
 - Hugging Face dataset: [`fmadore/islam-west-africa-collection`](https://huggingface.co/datasets/fmadore/islam-west-africa-collection)
 
+## Citation
+
+If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
+
+> Madore, Frédérick. *IWAC Visualizations* (version 1.37.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+
 ## License
 
-MIT
+[MIT](LICENSE) © Frédérick Madore
