@@ -1,0 +1,23 @@
+# Keep `git archive` output installable as-is.
+#
+# An Omeka S module is installed by unpacking a zip into `modules/`, so the
+# archive should carry only what the module needs at runtime: Module.php,
+# config/, src/, view/, asset/, language/. Everything below is development
+# tooling — the Python generators run in CI (issue #7), never on the server.
+#
+# Deliberately no `text`/`eol` attributes here: this repo has never had a
+# .gitattributes, and adding `* text=auto` now would renormalise every
+# tracked file in one commit.
+
+.github/            export-ignore
+scripts/            export-ignore
+tests/              export-ignore
+.gitattributes      export-ignore
+.gitignore          export-ignore
+playwright.config.js export-ignore
+package.json        export-ignore
+package-lock.json   export-ignore
+tokens.json         export-ignore
+CLAUDE.md           export-ignore
+REFACTORING.md      export-ignore
+ROADMAP.md          export-ignore
