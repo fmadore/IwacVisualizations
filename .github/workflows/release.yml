@@ -1,0 +1,133 @@
+name: Release
+
+# Publishes the installable module archive. Tag and push to trigger:
+#
+#     git tag v1.37.2 && git push origin v1.37.2
+#
+# Until this existed, every release zip was built by hand — `git archive` into
+# a temp file, then `gh release create` with it. v1.37.1 was cut that way. The
+# two sibling repos have automated it for a while (IWAC-theme, IwacSearch), so
+# this closes the gap and, more importantly, puts the version and stale-asset
+# guards in front of a release instead of relying on remembering them.
+#
+# The zip is assembled from `git archive`, so the `export-ignore` rules in
+# .gitattributes decide what ships. There is no composer.json here — the module
+# is PHP + committed JS/CSS — so unlike IwacSearch's workflow there is no
+# vendor/ step.
+#
+# WRITING RELEASE NOTES: releases in this repo carry a descriptive title
+# ("v1.37.0 — Laïcité block, MapLibre 6, and a repo that says who owns it").
+# This workflow does not take that away. Publish the release first (UI or
+# `gh release create`), then push the tag — the run finds the existing release
+# and only uploads the asset. Push the tag alone and it falls back to creating
+# one titled after the tag with auto-generated notes.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to (re)build the release asset for, e.g. v1.37.1'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish installable archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Resolve tag and version
+        id: v
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "zip=IwacVisualizations-${TAG#v}.zip" >> "$GITHUB_OUTPUT"
+
+      # Four declarations carry the version (package.json, both places in
+      # package-lock.json, config/module.ini). check-versions.js already proves
+      # they agree with each other; all this adds is the one thing it cannot
+      # know — whether they agree with the tag being released. A tag that
+      # disagrees ships a module whose admin screen lies about its version.
+      # Runs before `npm ci` so a mismatch fails in seconds; the guard needs
+      # only Node built-ins.
+      - name: Version must match config/module.ini, package.json and the lock
+        run: |
+          npm run lint:versions
+          WANT="${{ steps.v.outputs.version }}"
+          INI=$(sed -n 's/^version *= *"\(.*\)"/\1/p' config/module.ini)
+          echo "tag=$WANT  config/module.ini=$INI"
+          test "$INI" = "$WANT" || { echo "::error::config/module.ini says $INI, tag says $WANT"; exit 1; }
+
+      - run: npm ci
+
+      # asset/**/*.min.js and *.min.css are committed, because the production
+      # server has no Node toolchain and the templates reference the .min paths
+      # only. A tag whose minified assets are stale would ship stale CSS/JS to
+      # every install. Same guard build-check.yml runs on main, applied here to
+      # the exact tree being packaged.
+      - name: Committed build artifacts must be current
+        run: |
+          npm run build
+          if ! git diff --exit-code; then
+            echo "::error::minified assets are stale at this tag — run 'npm run build', commit the .min siblings and retag"
+            exit 1
+          fi
+
+      # The directory name inside the zip is the Omeka S module id. Sites at
+      # islam.zmo.de are configured against "IwacVisualizations", so the archive
+      # must extract to a directory of exactly that name or an in-place upgrade
+      # orphans them.
+      - name: Build installable archive
+        run: git archive --format=zip --prefix=IwacVisualizations/ -o "${{ steps.v.outputs.zip }}" HEAD
+
+      - name: Archive must be installable and free of dev tooling
+        run: |
+          ZIP="${{ steps.v.outputs.zip }}"
+          unzip -Z1 "$ZIP" > /tmp/list
+
+          # Everything Omeka needs to load the module.
+          for f in Module.php config/module.ini config/module.config.php \
+                   asset/css/iwac-core.min.css LICENSE README.md; do
+            grep -qx "IwacVisualizations/$f" /tmp/list || { echo "::error::missing $f"; exit 1; }
+          done
+
+          # Nothing that only exists to develop it. Mirrors .gitattributes —
+          # this fails loudly if an export-ignore rule is ever dropped.
+          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|CLAUDE\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
+            echo "::error::development files leaked into the release archive — check .gitattributes export-ignore"
+            exit 1
+          fi
+
+          echo "$(wc -l < /tmp/list) files, $(du -h "$ZIP" | cut -f1)"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.v.outputs.tag }}"
+          ZIP="${{ steps.v.outputs.zip }}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber
+          else
+            gh release create "$TAG" "$ZIP" --title "$TAG" --generate-notes
+          fi
