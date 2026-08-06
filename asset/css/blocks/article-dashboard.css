@@ -291,6 +291,19 @@
     min-width: 0;
     overflow-wrap: anywhere;
 }
+/*  The reading lives in a wrapper so the narrow-screen layout can slide
+ *  it along the scale (see the media query at the foot of this section).
+ *  On wide screens the wrapper is inert: it occupies the third column and
+ *  the label sits at its start, exactly as an unwrapped span did. */
+.iwac-vis-sent-lane__reading-row {
+    display: flex;
+    min-width: 0;
+}
+.iwac-vis-sent-lane__reading-row::before,
+.iwac-vis-sent-lane__reading-row::after {
+    content: '';
+    display: none;
+}
 .iwac-vis-sent-lane__reading {
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 500;
@@ -352,6 +365,17 @@
     height: 11px;
     background: var(--ink-strong, var(--ink, #13161c));
     box-shadow: 0 0 0 3px var(--panel-bg, var(--surface, #fdfcfb));
+}
+/*  The marker carries a title naming the model and its position, so give
+ *  it the cursor that advertises one and a hit area big enough to land on
+ *  — 11px of dot is a thin target to have to hover exactly. */
+.iwac-vis-sent-stop--on[title] {
+    cursor: help;
+}
+.iwac-vis-sent-stop--on[title]::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
 }
 /*  Polarity is the one diverging scale: its midpoint (Neutral) is a
  *  meaningful pivot, not just the third of five steps, so it carries a
@@ -433,8 +457,8 @@
 
 /* --------------------------------------------------------------------
  * Narrow screens — the three-column lane can't hold a scale under about
- * 34rem, so the track drops to its own full-width row with the model and
- * its reading paired above it.
+ * 34rem, so it stacks: model name, then the full-width track, then the
+ * reading positioned under its own marker.
  * ------------------------------------------------------------------ */
 @media (max-width: 560px) {
     .iwac-vis-sent-axis {
@@ -446,9 +470,26 @@
     .iwac-vis-sent-lane {
         row-gap: var(--space-1, 0.25rem);
     }
-    .iwac-vis-sent-lane__model   { grid-area: 1 / 1; }
-    .iwac-vis-sent-lane__reading { grid-area: 1 / 2; justify-self: end; text-align: end; }
-    .iwac-vis-sent-track         { grid-area: 2 / 1 / auto / -1; }
+    /*  The reading used to share row 1 with the model name, pinned to the
+     *  right edge — which put it directly under the "very positive" pole
+     *  and read as that rating even when the word said Neutral. It now
+     *  gets its own row under the track and rides along the scale: two
+     *  zero-basis flex spacers, weighted by the stops on either side of
+     *  the marker, park the label over its own point. Because the spacers
+     *  only claim free space, a label wider than the lane collapses them
+     *  rather than overflowing. */
+    .iwac-vis-sent-lane__model       { grid-area: 1 / 1 / auto / -1; }
+    .iwac-vis-sent-track             { grid-area: 2 / 1 / auto / -1; }
+    .iwac-vis-sent-lane__reading-row { grid-area: 3 / 1 / auto / -1; }
+    .iwac-vis-sent-lane__reading-row::before {
+        display: block;
+        flex: var(--iwac-vis-sent-lead, 0) 0 0;
+    }
+    .iwac-vis-sent-lane__reading-row::after {
+        display: block;
+        flex: var(--iwac-vis-sent-trail, 0) 0 0;
+    }
+    .iwac-vis-sent-lane__reading { text-align: center; }
     /*  Two columns here, so the poles get one each and need no width cap. */
     .iwac-vis-sent-axis__anchor { max-width: none; }
     .iwac-vis-sent-axis__anchor:first-child { grid-column: 1; }

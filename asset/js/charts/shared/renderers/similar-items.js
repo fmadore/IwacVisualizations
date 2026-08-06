@@ -41,6 +41,24 @@
         return;
     }
 
+    /**
+     * Card types arrive as raw labels, and which family they belong to
+     * depends on the strip: the corpus-level slugs the collection charts
+     * use (`article`, `image`, …) on some, the French resource-class label
+     * the bibliography ships (`Chapitre`, `Compte rendu`) on others. Try
+     * both key families before falling back to the raw value.
+     *
+     * `P.t` echoes an unknown key back verbatim, so the previous
+     * `P.t('item_type_' + type) || item.type` never reached its fallback —
+     * it printed the key itself ("item_type_Chapitre") on every reference
+     * card. `P.translateKeyed` does that comparison properly.
+     */
+    function typeLabel(type) {
+        var viaItem = P.translateKeyed('item_type_', type);
+        if (viaItem !== type) return viaItem;
+        return P.translateKeyed('ref_type_', type);
+    }
+
     function fmtScore(score) {
         if (typeof score !== 'number' || isNaN(score)) return '';
         var pct = Math.round(score * 100);
@@ -99,7 +117,7 @@
         body.appendChild(P.el('span', 'iwac-vis-similar-card__title', item.title || P.t('Untitled')));
 
         var bits = [];
-        if (item.type)    bits.push(P.t('item_type_' + item.type) || item.type);
+        if (item.type)    bits.push(typeLabel(item.type));
         if (item.source)  bits.push(item.source);
         if (item.country) bits.push(item.country);
         if (item.date)    bits.push(P.formatDate(item.date));

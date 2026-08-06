@@ -2,10 +2,12 @@
 /*  Reference dashboard — block-specific styles                          */
 /* =================================================================== */
 /*                                                                       */
-/*  Layout: stat cards → topic line → review line → sparkline →         */
-/*  bibliography neighbours → press neighbours. Cards, panels and the   */
-/*  similar-items strip all come from iwac-core.css; only the two prose  */
-/*  lines below are specific to this dashboard.                          */
+/*  Layout: topic line → review line → sparkline → bibliography          */
+/*  neighbours → press neighbours. The stat-card row that used to open   */
+/*  the block was dropped — it restated the bibliographic metadata       */
+/*  Omeka already prints in the item header. Panels and the similar-     */
+/*  items strip come from iwac-core.css; only the two prose lines below  */
+/*  are specific to this dashboard.                                      */
 /* =================================================================== */
 
 .iwac-vis-reference__body {

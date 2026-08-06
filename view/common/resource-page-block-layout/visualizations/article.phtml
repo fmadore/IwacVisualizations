@@ -85,14 +85,20 @@ $axes = [
 // The 1–5 scale as five stops, with the model's rating filled in. Purely
 // graphic: the rating is already spelled out in words in the same row, so
 // the track is aria-hidden rather than given a redundant label.
-$track = function (int $score, bool $diverging): string {
+//
+// `$hint` rides on the marker as a native title, so hovering the point
+// names the model and its position on the scale without the reader having
+// to trace the dot back to a lane label. Assistive tech reads the lane's
+// visible text instead — hence aria-hidden on the track as a whole.
+$track = function (int $score, bool $diverging, string $hint = '') use ($escapeAttr): string {
     $out = '<span class="iwac-vis-sent-track'
         . ($diverging ? ' iwac-vis-sent-track--diverging' : '')
         . '" aria-hidden="true">';
     for ($stop = 1; $stop <= 5; $stop++) {
-        $out .= '<span class="iwac-vis-sent-stop'
-            . ($stop === $score ? ' iwac-vis-sent-stop--on' : '')
-            . '"></span>';
+        $on = $stop === $score;
+        $out .= '<span class="iwac-vis-sent-stop' . ($on ? ' iwac-vis-sent-stop--on' : '') . '"'
+            . ($on && $hint !== '' ? ' title="' . $escapeAttr($hint) . '"' : '')
+            . '></span>';
     }
     return $out . '</span>';
 };
@@ -172,9 +178,24 @@ if ($hasSentiment) {
 
                 <ul class="iwac-vis-sent-lanes">
                     <?php foreach ($lanes as $lane):
-                        $info = $modelInfo[$lane['model']];
+                        $info    = $modelInfo[$lane['model']];
+                        $reading = $translate($lane['label']);
+                        $scored  = $lane['score'] >= 1;
+                        // Where the reading sits along the scale, as the two
+                        // flex weights the narrow-screen layout grows on
+                        // either side of it — see the `--iwac-vis-sent-lead`
+                        // block in article-dashboard.css. An unscored rating
+                        // has no point to sit over, so it stays at the start.
+                        $lead  = $scored ? $lane['score'] - 1 : 0;
+                        $trail = $scored ? 5 - $lane['score'] : 1;
+                        // Composed rather than templated: the model name is a
+                        // proper noun and the reading is already translated,
+                        // so this needs no msgid of its own.
+                        $hint = $scored
+                            ? $info['name'] . ' — ' . $reading . ' (' . $lane['score'] . '/5)'
+                            : '';
                     ?>
-                    <li class="iwac-vis-sent-lane<?= $lane['score'] < 1 ? ' iwac-vis-sent-lane--unscored' : '' ?>">
+                    <li class="iwac-vis-sent-lane<?= $scored ? '' : ' iwac-vis-sent-lane--unscored' ?>">
                         <span class="iwac-vis-sent-lane__model">
                             <img class="iwac-vis-sent-lane__logo"
                                  src="<?= $escapeAttr($assetUrl('img/ai-logos/' . $info['logo'], 'IwacVisualizations')) ?>"
@@ -182,8 +203,11 @@ if ($hasSentiment) {
                                  width="18" height="18" loading="lazy">
                             <span class="iwac-vis-sent-lane__name"><?= $escapeHtml($info['name']) ?></span>
                         </span>
-                        <?= $track($lane['score'], $axis['diverging']) ?>
-                        <span class="iwac-vis-sent-lane__reading"><?= $escapeHtml($translate($lane['label'])) ?></span>
+                        <?= $track($lane['score'], $axis['diverging'], $hint) ?>
+                        <span class="iwac-vis-sent-lane__reading-row"
+                              style="--iwac-vis-sent-lead:<?= (int) $lead ?>;--iwac-vis-sent-trail:<?= (int) $trail ?>">
+                            <span class="iwac-vis-sent-lane__reading"><?= $escapeHtml($reading) ?></span>
+                        </span>
                     </li>
                     <?php endforeach; ?>
                 </ul>
