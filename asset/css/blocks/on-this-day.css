@@ -136,14 +136,22 @@
 /*  Shared item furniture                                               */
 /* ------------------------------------------------------------------- */
 
-/*  The almanac figure: display serif, tabular so the years align down a
- *  column whatever their digits. */
+/*  The almanac figure: display serif, lining figures.
+ *
+ *  NOT tabular, despite the ledger register. Besley's `tnum` set is broken:
+ *  its tabular zero is frozen at a 55-unit advance on every weight while 1-9
+ *  track the weight axis (59.5 at 600), so the zero is the one digit that
+ *  never gets heavier and a year like 1990 renders it visibly thin. Nothing
+ *  is lost here — all three call sites (register stamp, decade stem, clipping
+ *  plate) set a lone year, never a column that has to align digit-for-digit.
+ *  font-feature-settings rather than font-variant-numeric because the theme's
+ *  body sets an inherited "onum"/"pnum" that outranks the high-level one. */
 .iwac-vis-otd-year {
     font-family: var(--font-headings, "Besley", Georgia, serif);
     font-weight: 600;
     line-height: 1;
     letter-spacing: var(--tracking-display, -0.01em);
-    font-variant-numeric: tabular-nums;
+    font-feature-settings: "kern" 1, "liga" 1, "lnum" 1;
     color: var(--ink-strong, #05070c);
 }
 
