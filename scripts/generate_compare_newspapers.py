@@ -69,6 +69,7 @@ from iwac_utils import (
     parse_pipe_separated,
     resolve_sentiment_columns,
     save_json,
+    subjectivite_ordinal,
 )
 
 SUBSETS = ("articles", "publications")
@@ -594,23 +595,22 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
         {
           "rated": 1234,
           "models": {
-            "gemini": {
+            "gpt_5_6_luna": {
               "polarite":   [ {label, count}, ... ],
               "centralite": [ {label, count}, ... ],
               "subjectivite_avg": 2.31,
               "subjectivite_n": 1220
             },
-            "chatgpt": {...},
-            "mistral": {...}
+            "mistral_small_2603": {...},
+            "deepseek_v4_flash_0731": {...}
           }
         }
     """
     result: Dict[str, Any] = {"rated": 0, "models": {}}
     rated_mask: Optional[pd.Series] = None
 
-    # HF column names are model-specific since the 2026-07-31 rename;
-    # SENTIMENT_MODELS stays vendor-keyed because that is what the emitted
-    # JSON, the block JS and the arbiter payload all key on.
+    # Canonical model ids double as the HF column prefixes and as the keys
+    # the emitted JSON and the block JS read.
     resolved = resolve_sentiment_columns(sub)
 
     for model in SENTIMENT_MODELS:
@@ -644,18 +644,22 @@ def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:
         subj_n = 0
         subj_buckets: List[Dict[str, Any]] = []
         if has_subj:
-            numeric = pd.to_numeric(sub[subj_col], errors="coerce").dropna()
-            subj_n = int(len(numeric))
+            # Subjectivité is a French label since generation 2, so
+            # pd.to_numeric would coerce the whole axis to NaN. Map each
+            # value onto its 1..5 ordinal instead. The bucket labels are
+            # the English source keys used in iwac-i18n.js
+            # (1="Very objective" … 5="Very subjective") so the JS can
+            # translate them the same way the person dashboard's
+            # sentiment panel does.
+            levels = [
+                level for level in
+                (subjectivite_ordinal(value) for value in sub[subj_col])
+                if level is not None
+            ]
+            subj_n = len(levels)
             if subj_n:
-                subj_avg = float(numeric.mean())
-                # Bucket each score into the nearest 1..5 integer so it
-                # renders as a distribution bar alongside polarite /
-                # centralite. Each label is the English source key used
-                # in iwac-i18n.js (1="Very objective" ... 5="Very subjective")
-                # so the JS can translate it the same way the sentiment
-                # panel in the person dashboard does.
-                rounded = numeric.round().clip(1, 5).astype(int)
-                bucket_counter = Counter(rounded.tolist())
+                subj_avg = sum(levels) / subj_n
+                bucket_counter = Counter(levels)
                 for score in range(1, 6):
                     count = bucket_counter.get(score, 0)
                     if count:

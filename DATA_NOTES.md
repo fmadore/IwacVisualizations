@@ -18,7 +18,7 @@ ds = load_dataset("fmadore/islam-west-africa-collection-full", name="articles") 
 
 | Subset | Rows | Has OCR | Has embeddings | Has AI sentiment | Purpose |
 |---|---:|:---:|:---:|:---:|---|
-| `articles` | **12,287** | ✓ | ✓ `embedding_OCR` (768) | ✓ (Gemini / ChatGPT / Mistral) | Digitized newspaper articles — richest subset |
+| `articles` | **12,287** | ✓ | ✓ `embedding_OCR` (768) | ✓ (GPT-5.6 Luna / Mistral Small 4 / DeepSeek V4 Flash) | Digitized newspaper articles — richest subset |
 | `publications` | **1,501** | ✓ | ✓ `embedding_tableOfContents` (768) | — | Books, pamphlets, periodicals (Islamic publications) |
 | `index` | **4,697** | — | — | — | Authority records (persons/places/orgs/events/subjects) with pre-computed frequency stats |
 | `references` | **864** | — | — | — | Bibliographic citations |
@@ -64,19 +64,25 @@ The `index` subset is **pre-aggregated** — each row already has:
 - **AI sentiment from 3 models**, each with:
   - `*_centralite_islam_musulmans` ∈ {Très central, Central, Secondaire, Marginal, Non abordé}
   - `*_polarite` ∈ {Très positif, Positif, Neutre, Négatif, Très négatif, Non applicable}
-  - `*_subjectivite_score` 1–5
+  - `*_subjectivite_score` ∈ {Très objectif, Plutôt objectif, Mixte, Plutôt subjectif, Très subjectif} — **a label, not a number** (see below)
   - `*_centralite_justification` / `*_polarite_justification` / `*_subjectivite_justification` free text (not aggregated by the generators — the item page renders these straight from Omeka)
   - → model-comparison charts, sentiment-over-time, sentiment-by-newspaper/country
 
-  **Column prefixes were renamed upstream on 2026-07-31** — they now name the exact model instead of the vendor slot, because the values carry no model annotation and nothing else recorded which model ran:
+  **The column prefix names the exact model**, and since v1.38.0 it is also our canonical id — one string for the HF column, the JSON key, the JS key and the CSS token:
 
-  | Canonical id (ours) | HF column prefix | Was (pre-2026-07-31) |
+  | Canonical id = HF column prefix | Model | Omeka properties |
   |---|---|---|
-  | `gemini` | `gemini_3_flash_preview_` | `gemini_` |
-  | `chatgpt` | `gpt_5_mini_` | `chatgpt_` |
-  | `mistral` | `ministral_14b_2512_` | `mistral_` |
+  | `gpt_5_6_luna_` | GPT-5.6 Luna | `iwac:gpt56Luna*` |
+  | `mistral_small_2603_` | Mistral Small 4 | `iwac:mistralSmall2603*` |
+  | `deepseek_v4_flash_0731_` | DeepSeek V4 Flash | `iwac:deepseekV4Flash0731*` |
 
-  The canonical ids on the left are **unchanged** and remain what everything downstream keys on: generated JSON payloads, block JS, i18n catalogs, the Omeka properties `SentimentExtractor.php` reads (`iwac:gemini*` etc. — Omeka was *not* renamed), and the sibling study's arbiter files. Never build these column names by hand: call `iwac_utils.resolve_sentiment_columns(df)`, which maps canonical id → live column and warns loudly if a model resolves to nothing.
+  Never build these names by hand: call `iwac_utils.resolve_sentiment_columns(df)`, which resolves canonical id → live column and warns loudly if a model resolves to nothing.
+
+  **Two annotation generations coexist on the Hub.** The January–February 2026 generation-1 columns (`gemini_3_flash_preview_`, `gpt_5_mini_`, `ministral_14b_2512_`, keyed on the vendor slots `gemini` / `chatgpt` / `mistral`) still ship, but nothing in this module reads them any more. Generation 2 annotated **only the French- and English-language articles** — 12,305 of 12,356; the ~51 Ewé / Kabiyè / Dendi / untagged articles were skipped deliberately, because the prompt is French and a French-prompted model returns confident but unusable output for them rather than failing visibly.
+
+  **Generation 2 changed subjectivité from a number to a label, and the column name gives no warning** — only the dtype does (`int64` → string). `pd.to_numeric` / `clean_float` on it silently yields NaN for every row, i.e. an empty chart rather than an error. Always go through `iwac_utils.subjectivite_ordinal()`, which maps either form onto the 1–5 scale and returns `None` where the model declined to rate (a few hundred rows per model, and never inferable from the presence of a justification).
+
+  **Treat `*_subjectivite_score` as weak evidence.** Inter-model agreement on this axis is near chance for some pairs and the models do not reproduce their own answers reliably; polarité and centralité are much stronger. The Mistral family is also a systematic outlier on centralité, so a two-of-three "consensus" there is really the other two outvoting it — say so rather than calling it agreement.
 - **Semantic embeddings** `embedding_OCR` → 2D projection (UMAP/t-SNE precomputed offline) for "article landscape" scatter
 
 ### Subject tags (all content types)

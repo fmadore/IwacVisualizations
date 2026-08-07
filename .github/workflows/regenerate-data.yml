@@ -68,11 +68,9 @@ jobs:
       - name: Run generators
         # The 30 HF-driven generators, with default flags (defaults already match
         # the committed output shapes/minify). Static geojson is read from
-        # asset/geo/ (present from checkout). generate_sentiment_arbiter.py is
-        # deliberately excluded: it reads the sibling IWAC-sentiment-analysis repo,
-        # not HF, and sentiment-arbiter.json is committed + shipped in the archive
-        # from the checkout instead — as are the hand-curated
-        # scary-terms-events.json (issue #2) and laicite-events.json (issue #14).
+        # asset/geo/ (present from checkout), as are the hand-curated
+        # scary-terms-events.json (issue #2) and laicite-events.json (issue #14),
+        # which ship in the archive from the checkout rather than being generated.
         # Fail-fast so a partial build is never published.
         env:
           # The IWAC dataset moved to a PRIVATE full mirror
@@ -123,7 +121,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f asset/data/collection-overview.json   # sanity: generators ran
-          test -f asset/data/sentiment-arbiter.json      # committed, rode in from checkout
+          test -f asset/data/laicite-events.json         # committed, rode in from checkout
           ( cd asset/data && zip -r -q -X "$GITHUB_WORKSPACE/iwac-data.zip" . )
           echo "Archive size:"; ls -lh iwac-data.zip
           echo "Entry count:"; unzip -l iwac-data.zip | tail -1

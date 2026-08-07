@@ -143,6 +143,7 @@ from iwac_utils import (
     resolve_sentiment_columns,
     save_json,
     sentiment_columns,
+    subjectivite_ordinal,
 )
 
 LEXICON_PATH = Path(__file__).with_name("laicite_lexicon.json")
@@ -165,11 +166,10 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
         "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI",
         "iwac_url", "hijri_month",
-        # The three-model AI sentiment (view 9). Both the current
-        # model-keyed names and the pre-2026-07-31 vendor-keyed ones are
-        # requested: load_dataset_safe keeps whichever exist and logs the
-        # rest, so the projection survives the rename in either direction.
-        # `articles` is the only subset carrying these columns.
+        # The three-model AI sentiment (view 9). load_dataset_safe keeps
+        # whichever of these exist and logs the rest, so a snapshot that
+        # predates a model swap still projects. `articles` is the only
+        # subset carrying these columns.
         *[c for m in SENTIMENT_MODELS for f in SENTIMENT_FIELD_SUFFIXES
           for c in sentiment_columns(m, f)],
     ],
@@ -1925,14 +1925,12 @@ class LaiciteGenerator:
 
     @staticmethod
     def _subjectivity_level(value: Any) -> Optional[int]:
-        """The 1-5 subjectivity scale, from either a number or its label."""
-        if value is None:
-            return None
-        try:
-            level = int(float(str(value).strip().split()[0]))
-        except (TypeError, ValueError, IndexError):
-            return None
-        return level if 1 <= level <= 5 else None
+        """The 1-5 subjectivity scale, from either a label or a number.
+
+        Thin wrapper so the two call sites keep reading as domain code;
+        the label table itself is shared with every other generator.
+        """
+        return subjectivite_ordinal(value)
 
     def build_places(self) -> Dict[str, Any]:
         """Geocoded places tagged on dossier items (view 10).

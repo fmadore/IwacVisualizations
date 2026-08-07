@@ -2,9 +2,9 @@
  * IWAC Visualizations — Person + Entity Dashboards: AI sentiment panel
  *
  * Shows the polarité + centralité distribution of articles mentioning
- * this entity, faceted by AI model (Gemini / ChatGPT / Mistral). The
- * model picker is a P.buildFacetButtons group inside the panel; the
- * polarité and centralité bars update in place.
+ * this entity, faceted by AI model (GPT-5.6 Luna / Mistral Small 4 /
+ * DeepSeek V4 Flash). The model picker is a P.buildFacetButtons group
+ * inside the panel; the polarité and centralité bars update in place.
  *
  * Only the articles subset carries sentiment fields; publications and
  * references are silently dropped at the precompute level.
@@ -24,6 +24,16 @@
         console.warn('IWACVis.person-dashboard/sentiment: missing deps (need C.segmentedBar + P.buildFacetButtons)');
         return;
     }
+
+    // Rating models, in picker order. Keys are the ids the precomputed
+    // bundle keys `sentiment.by_role[role].by_model` on — which are the
+    // Hugging Face column prefixes (see scripts/iwac_utils.py
+    // SENTIMENT_MODELS). Labels are proper nouns, so not translated.
+    var MODELS = [
+        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
+        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
+        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
+    ];
 
     /** Read a CSS custom property from document.body, trimmed. */
     function readVar(name) {
@@ -69,7 +79,7 @@
 
         // Sentiment panel has its OWN sub-facet (model picker). Tracked
         // locally so the role facet doesn't reset the chosen model.
-        var activeModel = 'gemini';
+        var activeModel = MODELS[0].key;
 
         function currentSlice() {
             return byRole[facet.role] || { models: [], by_model: {}, articles_total: 0 };
@@ -176,11 +186,9 @@
         }
 
         var picker = P.buildFacetButtons({
-            facets: [
-                { key: 'gemini',  label: P.t('Gemini') },
-                { key: 'chatgpt', label: P.t('ChatGPT') },
-                { key: 'mistral', label: P.t('Mistral') }
-            ],
+            facets: MODELS.map(function (m) {
+                return { key: m.key, label: m.label };
+            }),
             activeKey: activeModel,
             onChange: function (e) {
                 activeModel = e.facet;

@@ -71,16 +71,17 @@
     --iwac-vis-subj-4: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
     --iwac-vis-subj-5: var(--primary, #ce4115);
 
-    /* AI model accents — used by the article dashboard's sentiment
-     * radar so each model's polygon is visually distinct. Picked from
-     * the IWAC palette rather than brand colours so dark / light
-     * themes stay legible. Feel free to override per-site if you want
-     * to match the actual brand HSLs from each vendor. */
-    /* Per-model data-series accents (not theme chrome); each carries an
+    /* AI model accents — one per rating model, so the Sentiment Atlas's
+     * subjectivity trend keeps three visually distinct lines. Vendor
+     * brand colours, chosen because each is already legible on both the
+     * light and the dark surface; override per-site if a theme needs
+     * different ones. Token names are the model ids with underscores
+     * turned into hyphens (see sentiment-atlas.js modelColor).
+     * Per-model data-series accents (not theme chrome); each carries an
      * allow-hex marker so the theme-token guard permits the literals. */
-    --iwac-vis-model-gemini:  #3b82f6; /* allow-hex */
-    --iwac-vis-model-chatgpt: #10a37f; /* allow-hex */
-    --iwac-vis-model-mistral: #f97316; /* allow-hex */
+    --iwac-vis-model-gpt-5-6-luna:           #10a37f; /* allow-hex */
+    --iwac-vis-model-deepseek-v4-flash-0731: #4d6bfe; /* allow-hex */
+    --iwac-vis-model-mistral-small-2603:     #f97316; /* allow-hex */
 
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on

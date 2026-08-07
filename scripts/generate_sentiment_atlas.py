@@ -92,6 +92,7 @@ from iwac_utils import (
     parse_pipe_separated,
     resolve_sentiment_columns,
     save_json,
+    subjectivite_ordinal,
 )
 
 SUBSET = "articles"
@@ -299,9 +300,8 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         pair: [[0] * n_labels for _ in range(n_labels)] for pair in pairs
     }
 
-    # HF renamed these columns to model-specific prefixes on 2026-07-31;
-    # resolve_sentiment_columns maps the canonical ids in MODELS onto
-    # whatever the loaded snapshot actually carries.
+    # Canonical model ids are the HF column prefixes; this checks the
+    # loaded snapshot actually carries them and warns if it does not.
     resolved = resolve_sentiment_columns(df, models=MODELS)
     pol_cols = {m: resolved[m]["polarite"] for m in MODELS}
     cen_cols = {m: resolved[m]["centralite"] for m in MODELS}
@@ -353,14 +353,15 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
                 elif cen != NOT_APPLICABLE:
                     stray_labels[f"{m}:{cen}"] += 1
 
-            score = clean_float(row.get(subj_cols[m]))
-            if score is not None:
+            # Subjectivité is a French label since generation 2, so it
+            # goes through the ordinal map rather than clean_float.
+            subj_int = subjectivite_ordinal(row.get(subj_cols[m]))
+            if subj_int is not None:
                 acc = subj_year[m][year]
-                acc[0] += score
+                acc[0] += subj_int
                 acc[1] += 1
 
             # -- Derived per-model aggregates ---------------------------
-            subj_int = int(round(score)) if score is not None and 1 <= score <= 5 else None
 
             # Polarity × subjectivity correlation (NA excluded).
             if pol in _POLARITY_IDX and pol != NOT_APPLICABLE and subj_int is not None:

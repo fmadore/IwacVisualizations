@@ -129,11 +129,11 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         if col("embedding_OCR") is not None:
             metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
         # Labels name the exact model that produced the annotation, which
-        # is also what the HF columns key on since the 2026-07-31 rename.
+        # is also what the HF columns and the model ids key on.
         sentiment_cols = resolve_sentiment_columns(df)
-        for model, label in (("gemini", "Sentiment — Gemini 3 Flash"),
-                             ("chatgpt", "Sentiment — GPT-5 mini"),
-                             ("mistral", "Sentiment — Ministral 14B")):
+        for model, label in (("gpt_5_6_luna", "Sentiment — GPT-5.6 Luna"),
+                             ("mistral_small_2603", "Sentiment — Mistral Small 4"),
+                             ("deepseek_v4_flash_0731", "Sentiment — DeepSeek V4 Flash")):
             c = sentiment_cols[model]["polarite"]
             if c is not None:
                 metrics.append(metric(label, _nonempty(df[c]), n))

@@ -23,8 +23,8 @@ use Omeka\Module\AbstractModule;
  * Sentiment properties: the article dashboard renders its AI sentiment
  * panel from Omeka item metadata (iwac:<model><Axis>) rather than the
  * precomputed HF dataset. To keep the default item page clean we
- * attach a `rep.resource.display_values` listener that strips the 18
- * sentiment properties from the default metadata table. This mirrors
+ * attach a `rep.resource.display_values` listener that strips every
+ * sentiment property from the default metadata table. This mirrors
  * the pattern of the standalone `IwacSentiment` module whose logic is
  * now rolled into this module (v0.11.0+). See
  * `src/Site/ResourcePageBlockLayout/SentimentExtractor.php` for the
@@ -40,34 +40,36 @@ use Omeka\Module\AbstractModule;
 class Module extends AbstractModule
 {
     /**
-     * IWAC vocabulary properties holding the 3-model (Gemini / ChatGPT
-     * / Mistral) sentiment ratings + free-text justifications. Hidden
-     * from the default Omeka metadata table because the article
-     * dashboard surfaces them in a dedicated panel with model logos,
-     * polarity badges, centrality dots, and expandable rationales.
+     * Every annotator family in the `iwac:` sentiment vocabulary, as the
+     * camelCase stem its six properties share.
+     *
+     * Deliberately wider than the three models the article panel renders
+     * (`SentimentExtractor::MODELS`): the vocabulary also holds the
+     * January–February 2026 generation-1 slots and a retired DeepSeek
+     * preview that still carries ~11.5k real annotations. Every one of
+     * them must stay out of the default metadata table — listing only the
+     * models currently on display would dump 20-odd raw rating rows back
+     * onto every article page the moment the panel's model set changes.
      */
-    const SENTIMENT_PROPERTIES = [
-        // Gemini
-        'iwac:geminiCentralite',
-        'iwac:geminiCentraliteJustification',
-        'iwac:geminiPolarite',
-        'iwac:geminiPolariteJustification',
-        'iwac:geminiSubjectiviteScore',
-        'iwac:geminiSubjectiviteJustification',
-        // ChatGPT
-        'iwac:chatgptCentralite',
-        'iwac:chatgptCentraliteJustification',
-        'iwac:chatgptPolarite',
-        'iwac:chatgptPolariteJustification',
-        'iwac:chatgptSubjectiviteScore',
-        'iwac:chatgptSubjectiviteJustification',
-        // Mistral
-        'iwac:mistralCentralite',
-        'iwac:mistralCentraliteJustification',
-        'iwac:mistralPolarite',
-        'iwac:mistralPolariteJustification',
-        'iwac:mistralSubjectiviteScore',
-        'iwac:mistralSubjectiviteJustification',
+    const SENTIMENT_MODEL_STEMS = [
+        // Generation 1 — vendor slots, read-only, being retired upstream.
+        'gemini', 'chatgpt', 'mistral',
+        // Generation 2 — keyed by model. The three the panel renders,
+        // plus the families whose properties exist but hold no (or
+        // superseded) values.
+        'gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731',
+        'deepseekV4Flash', 'gemini35FlashLite', 'gemini36Flash',
+        'qwen35A3b', 'qwen35A10b',
+    ];
+
+    /** The six property suffixes each annotator family carries. */
+    const SENTIMENT_AXIS_SUFFIXES = [
+        'Centralite',
+        'CentraliteJustification',
+        'Polarite',
+        'PolariteJustification',
+        'SubjectiviteScore',
+        'SubjectiviteJustification',
     ];
 
     /**
@@ -301,15 +303,34 @@ class Module extends AbstractModule
     }
 
     /**
-     * Drop the 18 sentiment properties from the `values` array passed
-     * to the default resource-page metadata loop. Other modules /
-     * themes that want to display them can still reach them via
-     * `$item->value('iwac:geminiPolarite')` directly.
+     * Every `iwac:<model><Axis>` property term, one per model family ×
+     * axis. Built rather than spelled out: the vocabulary has grown from
+     * 18 to 66 sentiment properties across two annotation generations,
+     * and a hand-maintained list is exactly what falls behind.
+     *
+     * @return string[]
+     */
+    public static function sentimentProperties(): array
+    {
+        $terms = [];
+        foreach (self::SENTIMENT_MODEL_STEMS as $model) {
+            foreach (self::SENTIMENT_AXIS_SUFFIXES as $axis) {
+                $terms[] = "iwac:{$model}{$axis}";
+            }
+        }
+        return $terms;
+    }
+
+    /**
+     * Drop the sentiment properties from the `values` array passed to
+     * the default resource-page metadata loop. Other modules / themes
+     * that want to display them can still reach them via
+     * `$item->value('iwac:gpt56LunaPolarite')` directly.
      */
     public function filterSentimentValues(Event $event): void
     {
         $values = $event->getParam('values');
-        foreach (self::SENTIMENT_PROPERTIES as $prop) {
+        foreach (self::sentimentProperties() as $prop) {
             unset($values[$prop]);
         }
         $event->setParam('values', $values);

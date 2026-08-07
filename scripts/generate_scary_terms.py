@@ -23,7 +23,7 @@ and a place-mentions map.
 
 The hand-curated historical-event annotations for the trends view live in
 ``asset/data/scary-terms-events.json`` — a committed file (gitignore
-exception, like sentiment-arbiter.json) that this generator does NOT
+exception, like laicite-events.json) that this generator does NOT
 write; it rides into the CI data archive from the checkout.
 
 Derived from ``iwac-dashboard/scripts/generate_scary_terms.py`` and ported

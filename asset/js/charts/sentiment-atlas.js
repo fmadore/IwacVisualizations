@@ -5,16 +5,12 @@
  * subset. Loads a single precomputed JSON bundle from
  * `asset/data/sentiment-atlas.json` (built by
  * `scripts/generate_sentiment_atlas.py`) and renders all panels from
- * it — no runtime calls to the Hugging Face datasets-server. A second,
- * optional fetch of `asset/data/sentiment-arbiter.json` (built by
- * `scripts/generate_sentiment_arbiter.py` from the sibling
- * IWAC-sentiment-analysis study) powers the arbitration panels; if it is
- * absent the block renders everything else and quietly omits them.
+ * it — no runtime calls to the Hugging Face datasets-server.
  *
  * Every figure on this page is an AI-generated assessment (three rating
- * models: Gemini 3 Flash, GPT-5 mini, Ministral 14B; plus an independent
- * Gemini 3 Pro arbiter), not human-curated archival metadata — each panel
- * description repeats that caveat.
+ * models: GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash), not
+ * human-curated archival metadata — each panel description repeats that
+ * caveat.
  *
  * Sections / panels (render order):
  *   Intro      — summary cards + "period covered" subtitle
@@ -26,9 +22,7 @@
  *   Extremes   — top subject / place keywords in the most extreme-rated
  *                articles, with a sentiment-bucket + keyword-type facet
  *   Comparison — a model-pair facet driving cross-model agreement (cards +
- *                cross-tab heatmap) and, where the two models diverged
- *                sharply, the Gemini 3 Pro arbiter's verdict (overall +
- *                by dimension)
+ *                cross-tab heatmap)
  *
  * Load order: after shared/panels.js + shared/chart-options*.js +
  * shared/facet-buttons.js + sentiment-atlas/i18n.js (the block's en/fr
@@ -50,9 +44,9 @@
     // Model display names follow the article resource page
     // (view/common/resource-page-block-layout/visualizations/article.phtml).
     var MODELS = [
-        { key: 'gemini',  label: 'Gemini 3 Flash' },
-        { key: 'chatgpt', label: 'GPT-5 mini' },
-        { key: 'mistral', label: 'Ministral 14B' }
+        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
+        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
+        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
     ];
 
     function modelLabel(key) {
@@ -80,10 +74,17 @@
      * ECharts theme assigns its own series color.
      */
     function modelColor(key) {
-        var resolved = (ns.resolveCssVar && ns.resolveCssVar('--iwac-vis-model-' + key)) || '';
+        // Model ids carry underscores (they mirror the Hugging Face
+        // column prefixes); the CSS tokens are hyphenated.
+        var token = '--iwac-vis-model-' + key.replace(/_/g, '-');
+        var resolved = (ns.resolveCssVar && ns.resolveCssVar(token)) || '';
         if (resolved) return resolved;
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        var fallbackIdx = { gemini: 1, chatgpt: 2, mistral: 0 };
+        var fallbackIdx = {
+            gpt_5_6_luna: 0,
+            mistral_small_2603: 2,
+            deepseek_v4_flash_0731: 1
+        };
         return palette[fallbackIdx[key]] || palette[0];
     }
 
@@ -469,53 +470,6 @@
         };
     }
 
-    /**
-     * Arbiter overall-verdict donut for one pair. Slices use the pair's
-     * own blind model_a / model_b ids (mapped to display labels); zero
-     * slices are dropped so a lopsided verdict reads cleanly.
-     */
-    function buildArbiterVerdict(entry) {
-        if (!entry) return { series: [] };
-        var o = entry.overall || {};
-        var items = [
-            { name: modelLabel(entry.model_a), value: o.model_a || 0 },
-            { name: modelLabel(entry.model_b), value: o.model_b || 0 },
-            { name: P.t('sentiment.arbiter_both'), value: o.both || 0 },
-            { name: P.t('sentiment.arbiter_neither'), value: o.neither || 0 }
-        ].filter(function (it) { return it.value > 0; });
-        return C.pie(items, { nameKey: 'name', valueKey: 'value' });
-    }
-
-    /**
-     * Arbiter verdict broken down by dimension for one pair: a stacked
-     * bar over Polarity / Subjectivity / Centrality.
-     */
-    function buildArbiterDimensions(entry) {
-        if (!entry) return { series: [] };
-        var dims = ['polarity', 'subjectivity', 'centrality'];
-        var catLabels = [P.t('Polarity'), P.t('Subjectivity'), P.t('Centrality')];
-        var bd = entry.by_dimension || {};
-        function col(key) {
-            return dims.map(function (d) { return (bd[d] || {})[key] || 0; });
-        }
-        var la = modelLabel(entry.model_a);
-        var lb = modelLabel(entry.model_b);
-        var both = P.t('sentiment.arbiter_both');
-        var neither = P.t('sentiment.arbiter_neither');
-        var series = {};
-        series[la] = col('model_a');
-        series[lb] = col('model_b');
-        series[both] = col('both');
-        series[neither] = col('neither');
-        return C.stackedBar({
-            categories: catLabels,
-            stackKeys: [la, lb, both, neither],
-            series: series
-        }, {
-            valueName: P.t('Articles')
-        });
-    }
-
     /* ----------------------------------------------------------------- */
     /*  Agreement cards (pairwise % summary)                              */
     /* ----------------------------------------------------------------- */
@@ -553,12 +507,19 @@
 
         var summary = data.summary || {};
         var modelSummaries = summary.models || {};
-        root.appendChild(P.buildSummaryCards([
-            { value: summary.total, labelKey: 'Articles' },
-            { value: (modelSummaries.gemini || {}).rated,  labelKey: 'sentiment.rated_gemini' },
-            { value: (modelSummaries.chatgpt || {}).rated, labelKey: 'sentiment.rated_chatgpt' },
-            { value: (modelSummaries.mistral || {}).rated, labelKey: 'sentiment.rated_mistral' }
-        ]));
+        // Derived from MODELS rather than spelled out, so swapping the
+        // rating models stays a one-line edit at the top of this file
+        // (plus the matching `sentiment.rated_<key>` msgids).
+        root.appendChild(P.buildSummaryCards(
+            [{ value: summary.total, labelKey: 'Articles' }].concat(
+                MODELS.map(function (m) {
+                    return {
+                        value: (modelSummaries[m.key] || {}).rated,
+                        labelKey: 'sentiment.rated_' + m.key
+                    };
+                })
+            )
+        ));
 
         var subtitle = P.buildPeriodSubtitle(summary.year_min, summary.year_max);
         if (subtitle) root.appendChild(subtitle);
@@ -635,7 +596,7 @@
         extremesPanel.panel.appendChild(extremesNote);
         extremesGrid.appendChild(extremesPanel.panel);
 
-        // -- Section: model comparison & arbitration -------------------
+        // -- Section: model comparison ---------------------------------
         root.appendChild(sectionHeading(P.t('sentiment.sec_compare')));
         var pairFacetHost = P.el('div', 'iwac-vis-facet-host');
         root.appendChild(pairFacetHost);
@@ -662,7 +623,6 @@
             extremesControls:  extremesControls,
             extremesNote:      extremesNote,
             pairFacetHost:     pairFacetHost,
-            compareGrid:       compareGrid,
             agreementPanel:    agreementPanel,
             matrixCaption:     matrixCaption,
             naNote:            naNote
@@ -673,10 +633,7 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function render(container, results) {
-        var data = results[0];
-        var arbiter = results[1];
-
+    function render(container, data) {
         if (!data || !data.models || !data.summary || !data.summary.total) {
             container.innerHTML = '';
             container.appendChild(P.buildEmptyState());
@@ -686,24 +643,6 @@
         var firstCat = (data.extreme_categories || ['subjectivity_high'])[0];
         var state = { model: MODELS[0].key, pair: 0, exCategory: firstCat, exType: 'subject' };
         var h = buildLayout(container, data);
-
-        // Friendly name for the arbiter model id (gemini-3-pro-preview).
-        var arbiterModelLabel = (arbiter && /pro/i.test(arbiter.arbiter_model || ''))
-            ? 'Gemini 3 Pro'
-            : (arbiter && arbiter.arbiter_model) || 'Gemini 3 Pro';
-
-        // Index arbiter pairs by their unordered model-id set so we
-        // can look one up from an agreement pair's [a, b] order.
-        var arbiterIndex = {};
-        if (arbiter && arbiter.pairs) {
-            arbiter.pairs.forEach(function (entry) {
-                var k = [entry.model_a, entry.model_b].slice().sort().join('|');
-                arbiterIndex[k] = entry;
-            });
-        }
-        function arbiterEntryFor(models) {
-            return arbiterIndex[[].concat(models).sort().join('|')] || null;
-        }
 
         function updateNaNote() {
             var model = data.models[state.model] || {};
@@ -823,43 +762,12 @@
         });
         renderExtremes();
 
-        // -- Comparison & arbitration section ----------------------
+        // -- Comparison section ------------------------------------
         var agreement = data.agreement || [];
         if (agreement.length === 0) {
             h.agreementPanel.chart.appendChild(
                 P.buildEmptyState());
             return;
-        }
-
-        // Build the arbiter panels only when the bundle loaded.
-        var arbiterVerdictPanel = null;
-        var arbiterDimPanel = null;
-        var arbiterNote = null;
-        if (arbiter && arbiter.pairs && arbiter.pairs.length) {
-            arbiterVerdictPanel = P.buildPanel('iwac-vis-panel',
-                P.t('sentiment.arbiter_title'),
-                P.t('sentiment.arbiter_desc', { model: arbiterModelLabel }));
-            arbiterDimPanel = P.buildPanel('iwac-vis-panel',
-                P.t('sentiment.arbiter_dim_title'),
-                P.t('sentiment.arbiter_dim_desc', { model: arbiterModelLabel }));
-            arbiterNote = P.el('p', 'iwac-vis-muted');
-            arbiterVerdictPanel.panel.appendChild(arbiterNote);
-            h.compareGrid.appendChild(arbiterVerdictPanel.panel);
-            h.compareGrid.appendChild(arbiterDimPanel.panel);
-        }
-
-        function updateArbiterNote(entry) {
-            if (!arbiterNote) return;
-            var c = (entry && entry.confidence) || {};
-            arbiterNote.textContent = (entry
-                ? P.t('sentiment.arbiter_n', {
-                    count: P.formatNumber(entry.n || 0), model: arbiterModelLabel
-                }) + ' '
-                : '') + P.t('sentiment.arbiter_confidence', {
-                    high: P.formatNumber(c.high || 0),
-                    medium: P.formatNumber(c.medium || 0),
-                    low: P.formatNumber(c.low || 0)
-                });
         }
 
         function renderComparison() {
@@ -871,15 +779,6 @@
             });
             var liveM = ns.getLiveChart ? ns.getLiveChart(h.agreementPanel.chart) : null;
             if (liveM) liveM.setOption(buildAgreementMatrix(data, entry), true);
-
-            if (arbiterVerdictPanel) {
-                var ae = arbiterEntryFor(entry.models);
-                var liveV = ns.getLiveChart ? ns.getLiveChart(arbiterVerdictPanel.chart) : null;
-                if (liveV) liveV.setOption(buildArbiterVerdict(ae), true);
-                var liveD = ns.getLiveChart ? ns.getLiveChart(arbiterDimPanel.chart) : null;
-                if (liveD) liveD.setOption(buildArbiterDimensions(ae), true);
-                updateArbiterNote(ae);
-            }
         }
 
         // Pairwise % cards (all pairs) + caption above the matrix.
@@ -887,7 +786,7 @@
             buildAgreementCards(agreement), h.agreementPanel.chart);
         h.agreementPanel.panel.insertBefore(h.matrixCaption, h.agreementPanel.chart);
 
-        // One pair facet drives the matrix AND the arbiter panels.
+        // One pair facet drives the cross-tab matrix.
         if (P.buildFacetButtons && agreement.length > 1) {
             var pairFacets = {};
             agreement.forEach(function (entry, idx) {
@@ -913,15 +812,6 @@
         ns.registerChart(h.agreementPanel.chart, function (el, chart) {
             chart.setOption(buildAgreementMatrix(data, agreement[state.pair]), true);
         });
-        if (arbiterVerdictPanel) {
-            ns.registerChart(arbiterVerdictPanel.chart, function (el, chart) {
-                chart.setOption(buildArbiterVerdict(arbiterEntryFor(agreement[state.pair].models)), true);
-            });
-            ns.registerChart(arbiterDimPanel.chart, function (el, chart) {
-                chart.setOption(buildArbiterDimensions(arbiterEntryFor(agreement[state.pair].models)), true);
-            });
-            updateArbiterNote(arbiterEntryFor(agreement[state.pair].models));
-        }
 
         // Seed the comparison caption (charts self-render on register).
         renderComparison();
@@ -935,13 +825,8 @@
             var loadingLabel = container.querySelector('.iwac-vis-loading span');
             if (loadingLabel) loadingLabel.textContent = P.t('Loading sentiment atlas') + '…';
         },
-        // Atlas is required; the arbiter bundle is optional (the sibling study
-        // may not be deployed) — swallow its failure to null.
         load:           function (ctx) {
-            return Promise.all([
-                P.fetchJSON(ctx.dataBase + 'sentiment-atlas.json'),
-                P.fetchJSON(ctx.dataBase + 'sentiment-arbiter.json').catch(function () { return null; })
-            ]);
+            return P.fetchJSON(ctx.dataBase + 'sentiment-atlas.json');
         },
         render:         render
     });

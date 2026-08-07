@@ -18,15 +18,11 @@ wordcloud-panel.png
 # Precomputed visualization data (issue #7): built in CI, published as the
 # `data` release asset, and delivered into files/iwac-visualizations/ by the
 # admin "Pull latest data" job — never committed. Static map geometry lives in
-# asset/geo/ (committed). Exceptions: sentiment-arbiter.json is externally
-# sourced (sibling IWAC-sentiment-analysis study, not HF) and committed by
-# the curator; scary-terms-events.json is the hand-curated historical-event
-# annotation list for the Scary Terms trends view (issue #2). Both ride into
-# the CI archive from the checkout instead of being generated;
-# laicite-events.json is the same pattern for the Laïcité block (issue #14).
-# All three ride into the CI archive from the checkout instead of being
-# generated.
+# asset/geo/ (committed). Exceptions: scary-terms-events.json is the
+# hand-curated historical-event annotation list for the Scary Terms trends
+# view (issue #2), and laicite-events.json is the same pattern for the
+# Laïcité block (issue #14). Both ride into the CI archive from the
+# checkout instead of being generated.
 /asset/data/*
-!/asset/data/sentiment-arbiter.json
 !/asset/data/scary-terms-events.json
 !/asset/data/laicite-events.json

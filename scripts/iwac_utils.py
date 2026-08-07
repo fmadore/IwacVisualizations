@@ -24,7 +24,8 @@ Functions:
 - find_column: Find first matching column in DataFrame
 - sentiment_columns: Candidate HF column names for one model x field
 - resolve_sentiment_columns: Map canonical model ids onto the sentiment
-  columns actually present (absorbs the 2026-07-31 upstream rename)
+  columns actually present, warning when a model resolves to nothing
+- subjectivite_ordinal: Subjectivite label (or legacy number) -> 1..5
 - save_json: Save JSON with mkdir and optional minification
 - configure_logging: Standard logging setup
 """
@@ -824,34 +825,26 @@ def find_column(
 # AI sentiment columns
 # =============================================================================
 
-SENTIMENT_MODELS: Tuple[str, ...] = ("gemini", "chatgpt", "mistral")
+SENTIMENT_MODELS: Tuple[str, ...] = (
+    "gpt_5_6_luna",
+    "mistral_small_2603",
+    "deepseek_v4_flash_0731",
+)
 """Canonical model ids the whole module keys on.
 
-These are *vendor slots*, and they are deliberately stable: they are the
-keys in every generated JSON payload, in the block JS and i18n catalogs,
-in the Omeka properties ``SentimentExtractor.php`` reads (``iwac:gemini*``,
-``iwac:chatgpt*``, ``iwac:mistral*`` — Omeka was NOT renamed), and in the
-sibling study's arbiter files that ``generate_sentiment_arbiter.py``
-folds in. Only the Hugging Face *column names* changed; see
-:data:`SENTIMENT_HF_PREFIXES`.
-"""
+The id **is** the Hugging Face column prefix, and it names the exact model
+that produced the annotation. It is also the key in every generated JSON
+payload, in the block JS and i18n catalogs, and — camel-cased — in the
+Omeka properties ``SentimentExtractor.php`` reads (``iwac:gpt56Luna*``,
+``iwac:mistralSmall2603*``, ``iwac:deepseekV4Flash0731*``).
 
-SENTIMENT_HF_PREFIXES: Dict[str, Tuple[str, ...]] = {
-    "gemini": ("gemini_3_flash_preview", "gemini"),
-    "chatgpt": ("gpt_5_mini", "chatgpt"),
-    "mistral": ("ministral_14b_2512", "mistral"),
-}
-"""Canonical model id → Hugging Face column prefixes, preferred first.
-
-Renamed upstream on 2026-07-31: the columns now name the exact model that
-produced the annotation instead of the vendor slot. The values themselves
-carry no model annotation (unlike ``iwac:summaryModel`` / ``iwac:ocrModel``),
-so nothing else recorded which model ran — the corpus was annotated
-January–February 2026 by ``gemini-3-flash-preview``, ``gpt-5-mini`` and
-``ministral-14b-2512``.
-
-The legacy vendor-keyed name is kept as a second candidate so a stale local
-parquet cache still resolves; it no longer exists on either Hub repo.
+This replaced the earlier *vendor slot* ids (``gemini`` / ``chatgpt`` /
+``mistral``, resolving to the ``gemini_3_flash_preview`` /  ``gpt_5_mini``
+/ ``ministral_14b_2512`` columns of the January–February 2026 generation-1
+campaign). Those columns still exist on the Hub but are no longer read
+here: the vendor slot recorded which *company* ran, not which model, and
+the generation-2 campaign of July–August 2026 does not reuse the same
+three vendors.
 """
 
 SENTIMENT_FIELD_SUFFIXES: Dict[str, str] = {
@@ -862,10 +855,70 @@ SENTIMENT_FIELD_SUFFIXES: Dict[str, str] = {
 """Internal field key → HF column suffix, for the scored fields.
 
 Each scored field also has a free-text ``*_justification`` sibling on HF
-(e.g. ``gemini_3_flash_preview_polarite_justification``). The module does
-not aggregate those — the item page renders justifications straight from
+(e.g. ``gpt_5_6_luna_polarite_justification``). The module does not
+aggregate those — the item page renders justifications straight from
 Omeka — so they are deliberately absent here.
 """
+
+SUBJECTIVITE_LABELS: Dict[str, int] = {
+    "Très objectif": 1,
+    "Plutôt objectif": 2,
+    "Mixte": 3,
+    "Plutôt subjectif": 4,
+    "Très subjectif": 5,
+}
+"""Subjectivité label → ordinal 1-5, matching ``Module::SUBJECTIVITE_ITEMS``.
+
+Generation 2 changed this axis from a NUMBER to a LABEL: the HF column
+``{model}_subjectivite_score`` is a string here where generation 1 stored
+an ``int64``. Nothing in the column *name* signals that, so every reader
+must go through :func:`subjectivite_ordinal` rather than
+``pd.to_numeric`` / :func:`clean_float`, which silently coerce the whole
+axis to NaN and empty every subjectivity chart in the module.
+"""
+
+
+def subjectivite_ordinal(value: Any) -> Optional[int]:
+    """Ordinal 1-5 for a subjectivité value, from a label or a number.
+
+    Accepts the generation-2 French label, the generation-1 numeric score,
+    and the empty / NaN values both generations use where the model
+    declined to rate (~2-4% of rows even on a "complete" model — never
+    infer a score from the presence of a justification).
+
+    Args:
+        value: Raw cell from a ``{model}_subjectivite_score`` column
+
+    Returns:
+        1 (most objective) … 5 (most subjective), or None
+
+    Examples:
+        >>> subjectivite_ordinal("Plutôt objectif")
+        2
+        >>> subjectivite_ordinal(4)
+        4
+        >>> subjectivite_ordinal("") is None
+        True
+    """
+    if value is None:
+        return None
+    if isinstance(value, float) and pd.isna(value):
+        return None
+
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return None
+
+    if text in SUBJECTIVITE_LABELS:
+        return SUBJECTIVITE_LABELS[text]
+
+    # Legacy generation-1 numeric score (and the "3" / "3.0" strings a
+    # round-tripped JSON cache can produce).
+    try:
+        level = int(round(float(text)))
+    except (TypeError, ValueError):
+        return None
+    return level if 1 <= level <= 5 else None
 
 
 def sentiment_columns(model: str, field: str) -> List[str]:
@@ -876,14 +929,13 @@ def sentiment_columns(model: str, field: str) -> List[str]:
         field: Field key from :data:`SENTIMENT_FIELD_SUFFIXES`
 
     Returns:
-        Column names to try, current naming first, legacy second
+        Column names to try
 
     Examples:
-        >>> sentiment_columns("chatgpt", "polarite")
-        ['gpt_5_mini_polarite', 'chatgpt_polarite']
+        >>> sentiment_columns("gpt_5_6_luna", "polarite")
+        ['gpt_5_6_luna_polarite']
     """
-    suffix = SENTIMENT_FIELD_SUFFIXES[field]
-    return [f"{prefix}_{suffix}" for prefix in SENTIMENT_HF_PREFIXES[model]]
+    return [f"{model}_{SENTIMENT_FIELD_SUFFIXES[field]}"]
 
 
 _SENTIMENT_WARNED: set = set()
@@ -896,12 +948,10 @@ def resolve_sentiment_columns(
 ) -> Dict[str, Dict[str, Optional[str]]]:
     """Resolve the sentiment columns actually present in ``df``.
 
-    Absorbs the 2026-07-31 upstream rename so callers keep working in
-    canonical model ids. A model that resolves to nothing logs a warning
-    rather than failing silently — sentiment quietly vanishing from every
-    dashboard is exactly how that rename would otherwise land. Warnings are
-    emitted once per process, so this is safe to call inside a per-slice
-    loop.
+    A model that resolves to nothing logs a warning rather than failing
+    silently — sentiment quietly vanishing from every dashboard is exactly
+    how an upstream column rename lands otherwise. Warnings are emitted
+    once per process, so this is safe to call inside a per-slice loop.
 
     Args:
         df: DataFrame to inspect (normally the ``articles`` subset)
@@ -913,8 +963,8 @@ def resolve_sentiment_columns(
 
     Examples:
         >>> cols = resolve_sentiment_columns(df)
-        >>> cols["chatgpt"]["polarite"]
-        'gpt_5_mini_polarite'
+        >>> cols["gpt_5_6_luna"]["polarite"]
+        'gpt_5_6_luna_polarite'
     """
     logger = logging.getLogger(__name__)
     models = models or SENTIMENT_MODELS
@@ -931,8 +981,8 @@ def resolve_sentiment_columns(
                 _SENTIMENT_WARNED.add(model)
                 logger.warning(
                     f"No sentiment columns found for model '{model}' — tried "
-                    f"prefixes {SENTIMENT_HF_PREFIXES[model]}. Sentiment for "
-                    "this model will be empty in the generated output."
+                    f"{[c for f in fields for c in sentiment_columns(model, f)]}. "
+                    "Sentiment for this model will be empty in the generated output."
                 )
         elif any(v is None for v in found.values()):
             missing = sorted(k for k, v in found.items() if v is None)

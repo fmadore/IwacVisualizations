@@ -285,7 +285,7 @@ vocabulary of matching articles: global / by family / by country /
 `scary-terms-places.json` (geocoded `Lieux` joins via
 `articles.spatial`). The hand-curated `scary-terms-events.json`
 annotation sidecar is **committed**, not generated (gitignore
-exception, like `sentiment-arbiter.json`). Extra flags: `--max-words`
+exception, like `laicite-events.json`). Extra flags: `--max-words`
 (200), `--min-frequency` (5), `--min-place-articles` (3).
 
 ### `generate_org_cooccurrence.py`
@@ -420,13 +420,18 @@ Constants: `DATASET_ID = "fmadore/islam-west-africa-collection-full"` (the
 private full mirror; `--repo` on every generator overrides it) and
 `SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]`.
 
-Sentiment constants: `SENTIMENT_MODELS = ("gemini", "chatgpt", "mistral")` —
-the canonical ids every generated payload, block JS file, i18n catalog,
-Omeka property (`iwac:gemini*`) and arbiter file keys on — plus
-`SENTIMENT_HF_PREFIXES` mapping each onto the model-specific HF column
-prefix (`gemini_3_flash_preview`, `gpt_5_mini`, `ministral_14b_2512`) with
-the pre-2026-07-31 vendor name kept as a fallback for stale parquet
-caches. See [DATA_NOTES.md](../DATA_NOTES.md) for the full table.
+Sentiment constants: `SENTIMENT_MODELS = ("gpt_5_6_luna",
+"mistral_small_2603", "deepseek_v4_flash_0731")` — the canonical ids, which
+are also the Hugging Face column prefixes and the keys every generated
+payload, block JS file and i18n catalog uses. `resolve_sentiment_columns(df)`
+binds them to the columns actually present and warns when a model resolves
+to nothing.
+
+`subjectivite_ordinal(value)` is **not optional**: since generation 2 the
+`{model}_subjectivite_score` column holds a French label, not a number, so
+`clean_float` / `pd.to_numeric` empty the axis without raising. It accepts
+either form and returns 1–5 or `None`. See
+[DATA_NOTES.md](../DATA_NOTES.md) for the full table.
 
 ## Shared dashboard core — `dashboard_aggregator.py`
 

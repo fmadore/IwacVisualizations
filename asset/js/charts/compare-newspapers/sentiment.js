@@ -17,10 +17,13 @@
     var P = ns.panels;
     var CN = ns.compareNewspapers = ns.compareNewspapers || {};
 
+    // Keys are the ids the precomputed bundle keys `sentiment.models`
+    // on — the Hugging Face column prefixes (scripts/iwac_utils.py
+    // SENTIMENT_MODELS). Labels are proper nouns, so not translated.
     var SENTIMENT_MODELS = [
-        { key: 'gemini',  label: 'Gemini' },
-        { key: 'chatgpt', label: 'ChatGPT' },
-        { key: 'mistral', label: 'Mistral' }
+        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
+        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
+        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
     ];
 
     function buildSentiment(dataA, dataB) {
@@ -89,7 +92,7 @@
         function renderSentiment(instance, data, color) {
             if (!instance || instance.isDisposed()) return;
             var axis = axisSelect.value;     // polarite | centralite
-            var model = modelSelect.value;   // gemini | chatgpt | mistral
+            var model = modelSelect.value;   // one of SENTIMENT_MODELS[].key
             var entries = (((data.sentiment || {}).models || {})[model] || {})[axis] || [];
             if (!entries.length) {
                 instance.setOption(P.emptyChartOption('Not rated'), true);

@@ -225,38 +225,53 @@ namespace {
         'missing CSP did not receive a framing policy'
     );
 
+    // Both annotation generations must stay out of the default metadata
+    // table: generation 1 still exists on many items, so hiding only the
+    // models the panel renders would dump its raw ratings back onto the
+    // page the moment the panel's model set changes.
     $event = new Event(['values' => [
         'dcterms:title' => ['kept'],
         'iwac:geminiPolarite' => ['hidden'],
         'iwac:mistralSubjectiviteJustification' => ['hidden'],
+        'iwac:gpt56LunaPolarite' => ['hidden'],
+        'iwac:deepseekV4Flash0731SubjectiviteJustification' => ['hidden'],
+        'iwac:deepseekV4FlashCentralite' => ['hidden'],
     ]]);
     (new Module())->filterSentimentValues($event);
     $filtered = $event->getParam('values');
     check(isset($filtered['dcterms:title']), 'ordinary metadata was removed');
-    check(!isset($filtered['iwac:geminiPolarite']), 'sentiment metadata was not removed');
-    check(!isset($filtered['iwac:mistralSubjectiviteJustification']), 'sentiment rationale was not removed');
+    check(count($filtered) === 1, 'a sentiment property survived the metadata filter');
 
     // The extractor should resolve every property once, not repeat Omeka
     // value lookups for an ID and then again for its display label.
     $item = new FakeItem([
-        'iwac:geminiPolarite' => [new FakeValue('', new FakeLinkedResource(78040, 'Négatif'))],
-        'iwac:geminiCentralite' => [new FakeValue('', new FakeLinkedResource(78048, 'Très central'))],
-        'iwac:geminiSubjectiviteScore' => [new FakeValue('', new FakeLinkedResource(78047, 'Très subjectif'))],
-        'iwac:geminiPolariteJustification' => [new FakeValue('polarity reason')],
-        'iwac:geminiCentraliteJustification' => [new FakeValue('centrality reason')],
-        'iwac:geminiSubjectiviteJustification' => [new FakeValue('subjectivity reason')],
+        'iwac:gpt56LunaPolarite' => [new FakeValue('', new FakeLinkedResource(78040, 'Négatif'))],
+        'iwac:gpt56LunaCentralite' => [new FakeValue('', new FakeLinkedResource(78048, 'Très central'))],
+        'iwac:gpt56LunaSubjectiviteScore' => [new FakeValue('', new FakeLinkedResource(78047, 'Très subjectif'))],
+        'iwac:gpt56LunaPolariteJustification' => [new FakeValue('polarity reason')],
+        'iwac:gpt56LunaCentraliteJustification' => [new FakeValue('centrality reason')],
+        'iwac:gpt56LunaSubjectiviteJustification' => [new FakeValue('subjectivity reason')],
     ]);
     $bundle = SentimentExtractor::fromItem($item);
-    check($bundle['gemini']['polarite'] === 'Negative', 'extractor polarity label is wrong');
-    check($bundle['gemini']['polarite_fr'] === 'Négatif', 'extractor lost the raw French label');
-    check($bundle['gemini']['polarite_numeric'] === 2, 'extractor polarity score is wrong');
-    check($bundle['gemini']['centralite_numeric'] === 5, 'extractor centrality score is wrong');
-    check($bundle['gemini']['subjectivite_score'] === 5, 'extractor subjectivity score is wrong');
-    check($bundle['gemini']['rated'] === true, 'rated model was marked empty');
-    check($bundle['chatgpt']['rated'] === false, 'empty model was marked rated');
+    check($bundle['gpt56Luna']['polarite'] === 'Negative', 'extractor polarity label is wrong');
+    check($bundle['gpt56Luna']['polarite_fr'] === 'Négatif', 'extractor lost the raw French label');
+    check($bundle['gpt56Luna']['polarite_numeric'] === 2, 'extractor polarity score is wrong');
+    check($bundle['gpt56Luna']['centralite_numeric'] === 5, 'extractor centrality score is wrong');
+    check($bundle['gpt56Luna']['subjectivite_score'] === 5, 'extractor subjectivity score is wrong');
+    check($bundle['gpt56Luna']['rated'] === true, 'rated model was marked empty');
+    check($bundle['deepseekV4Flash0731']['rated'] === false, 'empty model was marked rated');
     check(SentimentExtractor::hasAny($bundle), 'rated bundle was considered empty');
     foreach ($item->calls as $property => $count) {
         check($count === 1, $property . ' was read more than once');
+    }
+
+    // Every model the panel renders must have its display chrome, and
+    // every logo it names must exist — a missing file renders as a
+    // broken image in every sentiment lane on the site.
+    foreach (SentimentExtractor::MODELS as $model) {
+        check(isset(SentimentExtractor::MODEL_INFO[$model]), "MODEL_INFO is missing '$model'");
+        $logo = $root . '/asset/img/ai-logos/' . SentimentExtractor::MODEL_INFO[$model]['logo'];
+        check(is_readable($logo), "logo for '$model' is missing: $logo");
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.

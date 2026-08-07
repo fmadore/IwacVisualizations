@@ -19,7 +19,7 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Periodicals Overview | page block | **Live** — 8 panels: runs gantt, issue-holdings matrix, issues/year, languages & countries donuts, top subjects, word cloud | Precompute (`generate_periodicals_overview.py`) |
 | Semantic Landscape | page block | **Live** — zoomable UMAP scatter of all 12,286 articles, Country/Decade/Topic facets, topic cluster labels | Precompute (`generate_semantic_landscape.py`) |
 | Periodicals Semantic Landscape | page block | **Live** — zoomable UMAP scatter of periodical issues by table-of-contents embedding, Country/Decade facets | Precompute (`generate_periodicals_landscape.py`) |
-| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, polarity by country / topic / newspaper, centralité-by-country heatmap, extreme-article keywords, cross-model agreement + Gemini 3 Pro arbiter | Precompute (`generate_sentiment_atlas.py` + `generate_sentiment_arbiter.py`) |
+| Sentiment Atlas | page block | **Live** — corpus-level 3-model AI sentiment: polarity/centralité over time, subjectivity trends, polarity×subjectivity, polarity by country / topic / newspaper, centralité-by-country heatmap, extreme-article keywords, cross-model agreement | Precompute (`generate_sentiment_atlas.py`) |
 | Press Language | page block | **Live** — readability / lexical richness / article length over time and by newspaper | Precompute (`generate_lexical_metrics.py`) |
 | Spatial Exploration | page block | **Live** — world bubble map + country / administrative choropleths + 6-country focus + entity picker (persons / organizations / events / subjects / places) with per-place item popovers | Precompute (`generate_spatial_exploration.py`) + existing per-entity dashboard fan-outs |
 | Entity Networks | page block | **Live** — cross-type co-occurrence graph (precomputed ForceAtlas2 layout) + geographic co-mention network, both rendered with MapLibre GL | Precompute (`generate_entity_networks.py`) |
@@ -42,6 +42,20 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.38.0 — a new generation of sentiment raters
+
+The three models behind every sentiment figure in the module are replaced. Out go `gemini-3-flash-preview`, `gpt-5-mini` and `ministral-14b-2512` — the January–February 2026 generation, whose Omeka properties are being retired upstream. In come **GPT-5.6 Luna**, **Mistral Small 4** (`mistral-small-2603`) and **DeepSeek V4 Flash** (`deepseek-v4-flash-0731`), which annotated the French- and English-language articles in July–August 2026.
+
+**Model ids are now the model, not the vendor.** The old ids were vendor slots — `gemini` / `chatgpt` / `mistral` — and the whole point of a slot is that its occupant can change without anyone noticing; nothing in the data recorded which model actually ran. The canonical id is now the exact Hugging Face column prefix (`gpt_5_6_luna`, `mistral_small_2603`, `deepseek_v4_flash_0731`), so the JSON key, the JS key, the CSS token and the column all name the same thing, and `SENTIMENT_HF_PREFIXES` — the alias table that existed only to absorb the 2026-07-31 vendor→model rename — is gone.
+
+**Subjectivité changed type, and nothing in the column name says so.** Generation 1 stored `{model}_subjectivite_score` as an `int64` 1–5; generation 2 stores a French label (`Très objectif` … `Très subjectif`). Every reader in the module was doing `clean_float` or `pd.to_numeric` on it, which coerces the whole axis to NaN — a silent empty chart, not an error. All five generators now route through one `iwac_utils.subjectivite_ordinal()`, which takes either form. The Laïcité block's own `_subjectivity_level` claimed in its docstring to accept "either a number or its label" and only ever parsed numbers; it delegates now.
+
+**The arbiter panels are removed.** Gemini 3 Pro's pairwise verdicts adjudicated *the old three models*, and they cannot be regenerated for the new set from this repo — they are paid-API output living in the sibling [IWAC-sentiment-analysis](https://github.com/fmadore/IWAC-sentiment-analysis) study. Leaving them beside three different models would have read as arbitration of models they never saw. `generate_sentiment_arbiter.py`, `asset/data/sentiment-arbiter.json`, its gitignore exception and its CI packaging check all go with them.
+
+**Hiding is now wider than displaying.** `Module::SENTIMENT_PROPERTIES` was a hand-written list of the 18 properties the panel read, doing double duty as the set hidden from the default item metadata table. Swapping the panel's models under that arrangement would have dumped generation 1's raw ratings — plus the retired DeepSeek preview's ~11.5k annotations — back onto every article page. The two concerns are now separate: `SentimentExtractor::MODELS` is the three models on display, while `Module::sentimentProperties()` enumerates all eleven annotator families × six axes in the `iwac:` vocabulary, so a future model swap cannot leak.
+
+DeepSeek's whale mark joins the logo set (wordmark stripped, viewBox tightened to the glyph); Gemini's is retired. `--iwac-vis-model-*` tokens follow the new ids. Because the model keys inside `sentiment-atlas.json`, `compare-newspapers/*` and the person/entity dashboards change, **the sentiment panels need a data regeneration** — run **Admin → IWAC Visualizations → Pull latest data** after the CI rebuild, or they render their empty state.
 
 ### v1.37.0 — MapLibre 6, and the end of the UMD global
 
@@ -533,7 +547,7 @@ Per-Person resource-page block that renders when attached to an item whose resou
 - **Top newspapers** — horizontal bar with year-range tooltip (panel elided when empty)
 - **Countries covered** — horizontal bar
 - **Top LDA topics** — horizontal bar (panel elided when empty)
-- **AI sentiment** — three-model comparison (Gemini / ChatGPT / Mistral, panel elided when empty)
+- **AI sentiment** — three-model comparison (GPT-5.6 Luna / Mistral Small 4 / DeepSeek V4 Flash, panel elided when empty)
 - **Associated entities network** — TF-IDF ranked force graph (`score = cooc × log(N_persons / df)`, `min_cooccurrence = 2`, top-50 cap), nodes colored by index `Type`, click → Omeka entity page; ships a custom toolbar (zoom +/−, reset, legend toggle, download)
 - **Subject co-occurrence** — pairwise co-occurrence among top 15 neighbors
 - **Associated locations map** — MapLibre bubbles from mentioned `Lieux` entities, sized by count
@@ -548,7 +562,7 @@ Same block layout, same template dispatch. When attached to an item whose templa
 
 Attaches to `bibo:Article` items (template id 8 on islam.zmo.de). `Visualizations::render()` routes to `article.phtml`, which loads the per-article JSON at `asset/data/article-dashboards/{o_id}.json` (generated by `scripts/generate_article_dashboards.py`, one file per article, ~12,287 files / ~120 MB). 4 panels:
 
-- **AI sentiment** — 3-model (Gemini / ChatGPT / Mistral) comparison for THIS article, read straight from the Omeka item metadata by `SentimentExtractor` (not from the precomputed bundle), so editorial changes on islam.zmo.de show immediately. One block per axis — polarity, centrality, subjectivity — each a five-stop ordinal scale with its poles named and one lane per model, so agreement reads as vertical alignment; a verdict line states the spread in words, and a per-axis drawer puts the three models' rationales for the same question side by side. Server-rendered CSS, no chart library. Panel elided entirely when no model rated the article; a lane is elided when that model left that axis empty, and an off-scale "Not applicable" polarity shows the word with an empty track rather than a rating of zero.
+- **AI sentiment** — 3-model (GPT-5.6 Luna / Mistral Small 4 / DeepSeek V4 Flash) comparison for THIS article, read straight from the Omeka item metadata by `SentimentExtractor` (not from the precomputed bundle), so editorial changes on islam.zmo.de show immediately. One block per axis — polarity, centrality, subjectivity — each a five-stop ordinal scale with its poles named and one lane per model, so agreement reads as vertical alignment; a verdict line states the spread in words, and a per-axis drawer puts the three models' rationales for the same question side by side. Server-rendered CSS, no chart library. Panel elided entirely when no model rated the article; a lane is elided when that model left that axis empty, and an off-scale "Not applicable" polarity shows the word with an empty track rather than a rating of zero.
 - **Context network** — the unified 3-layer force graph. Centre = the article, inner ring = its tagged persons / orgs / places / subjects, outer ring = the top 20 articles that share the most entities with it. Each related-article node is connected to every entity it shares with the centre, so ECharts' force layout clusters articles by the entities they overlap with. Click an entity to open its page; click an outer-ring article to jump to that article's dashboard (self-reinforcing feedback loop). The panel ships the same 6-button toolbar (zoom ±, reset, legend, download, fullscreen) as the person / entity networks.
 - **Similar articles** — top 10 articles by cosine similarity of the precomputed `embedding_OCR` (768-dim Gemini). Horizontal bar chart with similarity as a 0–100% x-axis so the long-tail drop-off is legible at a glance. Tooltip shows full title + newspaper + date + similarity; bar click routes to the article page.
 - **In the scholarship** (third tab of Further reading) — the top 5 works from the `references` subset by cosine similarity, i.e. the academic literature whose text most resembles this newspaper article. Possible because the 2026-07 pipeline gave the bibliography `embedding_OCR` from the *same* `gemini-embedding-2` model, in the same 768-dim space, so the dot product is meaningful across subsets. This archive is unusually well placed to answer that question — a press corpus and its own secondary literature in one embedding space. The panel copy calls it a lead to follow rather than a citation. The tab appears only when the key is present; the generator omits it entirely when the bibliography has no embeddings.
@@ -587,9 +601,9 @@ The publications counterpart to the Semantic Landscape: a zoomable UMAP scatter 
 
 ### Sentiment Atlas (page block)
 
-Corpus-level view of the 3-model AI sentiment (Gemini Flash 3.0 / ChatGPT GPT-5 mini / Mistral Ministral 14B) that until now was only visible item-by-item. A global model facet drives polarity and centralité-of-Islam over time, polarity by country, a polarity × subjectivity breakdown, and a centralité-by-country-and-year intensity heatmap; an extremes section shows the subject/place keywords most frequent among the articles a model rated at the ends of each scale; a subjectivity trend overlays all three models; and a model-pair facet drives cross-model agreement (pairwise rates + a polarity cross-tab) alongside the **Gemini 3 Pro arbiter** — an independent judge that, blind to which model was which, adjudicated the 366 articles where two models diverged sharply (≥ 3 points on a dimension). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts.
+Corpus-level view of the 3-model AI sentiment (GPT-5.6 Luna / Mistral Small 4 / DeepSeek V4 Flash) that would otherwise only be visible item-by-item. A global model facet drives polarity and centralité-of-Islam over time, polarity by country, a polarity × subjectivity breakdown, and a centralité-by-country-and-year intensity heatmap; an extremes section shows the subject/place keywords most frequent among the articles a model rated at the ends of each scale; a subjectivity trend overlays all three models; and a model-pair facet drives cross-model agreement (pairwise rates + a polarity cross-tab). Every panel is explicitly labelled as AI-generated assessment, per the module's convention for computational artefacts.
 
-The polarity/centrality/subjectivity/correlation/heatmap/extremes cuts all recompute from Hugging Face via `generate_sentiment_atlas.py` (≈ 40 KB bundle). The arbiter verdicts cannot be regenerated from HF (they are paid-API Gemini 3 Pro output), so `generate_sentiment_arbiter.py` reads the sibling [IWAC-sentiment-analysis](https://github.com/fmadore/IWAC-sentiment-analysis) study's per-article files once and reduces them to a counts-only 1.4 KB bundle — keeping the page-block payload tiny rather than fetching the study's multi-MB raw data at runtime. The block fetches the arbiter bundle optionally and omits the arbitration panels if it is absent.
+Every cut recomputes from Hugging Face via `generate_sentiment_atlas.py` (≈ 40 KB bundle).
 
 ### Press Language (page block)
 
@@ -914,9 +928,9 @@ The chart JS therefore fetches generated data same-origin from
 `{basePath}/files/iwac-visualizations/…`. The only data **still committed** to
 the module is `asset/geo/` (static map geometry the generators read as input and
 the client fetches from `{basePath}/modules/IwacVisualizations/asset/geo/…`) and
-the externally-sourced `asset/data/sentiment-arbiter.json` (regenerated by the
-curator from the sibling IWAC-sentiment-analysis study, then shipped in the
-archive). Before the first pull, blocks render a graceful “data not available
+the two hand-curated event annotation files, `asset/data/scary-terms-events.json`
+and `asset/data/laicite-events.json`, which ride into the archive from the
+checkout. Before the first pull, blocks render a graceful “data not available
 yet” state instead of a 404 error.
 
 ## Installation
@@ -1047,7 +1061,6 @@ python3 scripts/generate_periodicals_overview.py            # → asset/data/per
 python3 scripts/generate_semantic_landscape.py   --minify   # → asset/data/semantic-landscape.json (needs umap-learn)
 python3 scripts/generate_periodicals_landscape.py --minify  # → asset/data/periodicals-landscape.json (needs umap-learn)
 python3 scripts/generate_sentiment_atlas.py      --minify   # → asset/data/sentiment-atlas.json
-python3 scripts/generate_sentiment_arbiter.py    --minify   # → asset/data/sentiment-arbiter.json (reads ../IWAC-sentiment-analysis)
 python3 scripts/generate_lexical_metrics.py      --minify   # → asset/data/lexical-metrics.json
 
 # v1.19.0 blocks

@@ -22,7 +22,17 @@ use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
  */
 class SentimentExtractor
 {
-    const MODELS = ['gemini', 'chatgpt', 'mistral'];
+    /**
+     * The three rating models, as the camelCase stem of their `iwac:`
+     * properties. These are the July–August 2026 generation: the earlier
+     * `gemini` / `chatgpt` / `mistral` properties named a *vendor slot*
+     * rather than a model and recorded nothing about which model ran.
+     *
+     * The matching Hugging Face column prefixes — what the precomputed
+     * blocks key on — are the snake_case forms: `gpt_5_6_luna`,
+     * `mistral_small_2603`, `deepseek_v4_flash_0731`.
+     */
+    const MODELS = ['gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731'];
 
     /**
      * Presentation chrome for the three rating models: the precise model
@@ -42,23 +52,23 @@ class SentimentExtractor
      * rename, update this constant AND those two files together.
      */
     const MODEL_INFO = [
-        'gemini' => [
-            'name'  => 'Gemini 3 Flash',
-            'org'   => 'Google',
-            'short' => 'Gemini',
-            'logo'  => 'Gemini_logo.svg',
-        ],
-        'chatgpt' => [
-            'name'  => 'GPT-5 mini',
+        'gpt56Luna' => [
+            'name'  => 'GPT-5.6 Luna',
             'org'   => 'OpenAI',
-            'short' => 'GPT-5 mini',
+            'short' => 'GPT-5.6 Luna',
             'logo'  => 'ChatGPT_logo.svg',
         ],
-        'mistral' => [
-            'name'  => 'Ministral 14B',
+        'mistralSmall2603' => [
+            'name'  => 'Mistral Small 4',
             'org'   => 'Mistral AI',
-            'short' => 'Ministral 14B',
+            'short' => 'Mistral Small 4',
             'logo'  => 'Mistral_AI_logo.svg',
+        ],
+        'deepseekV4Flash0731' => [
+            'name'  => 'DeepSeek V4 Flash',
+            'org'   => 'DeepSeek',
+            'short' => 'DeepSeek V4 Flash',
+            'logo'  => 'DeepSeek_logo.svg',
         ],
     ];
 

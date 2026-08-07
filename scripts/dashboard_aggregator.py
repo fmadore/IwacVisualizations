@@ -65,7 +65,6 @@ import pandas as pd
 from iwac_utils import (
     DATASET_ID,
     SENTIMENT_MODELS,
-    clean_float,
     clean_str,
     extract_month_num,
     extract_year,
@@ -76,6 +75,7 @@ from iwac_utils import (
     parse_coordinates,
     parse_pipe_separated,
     resolve_sentiment_columns,
+    subjectivite_ordinal,
 )
 
 # Messages propagate to the root handlers installed by
@@ -114,9 +114,9 @@ SPATIAL_FIELDS = {
 # from publications/references contribute to mention counts but are
 # silently skipped by the sentiment / topics / heatmap aggregators.
 #
-# SENTIMENT_MODELS holds the canonical model ids the emitted JSON keys on;
-# the HF column names behind them are resolved via iwac_utils (they were
-# renamed to model-specific prefixes upstream on 2026-07-31).
+# SENTIMENT_MODELS holds the canonical model ids the emitted JSON keys on,
+# which are also the HF column prefixes; resolve_sentiment_columns checks
+# they are actually present in the loaded snapshot.
 
 # Polarité ordering — kept as the canonical IWAC scale so the chart
 # segments always render in this order regardless of dataset row order.
@@ -136,9 +136,10 @@ CENTRALITE_ORDER = [
     "Non abordé",
 ]
 
-# Subjectivité scores are integers 1..5 in the IWAC dataset. The
-# segmentedBar panel treats these as named categories so the same
-# {name, count} shape as polarité/centralité works unchanged.
+# Subjectivité arrives as a French label and is normalised to its 1..5
+# ordinal by iwac_utils.subjectivite_ordinal. The segmentedBar panel
+# treats the stops as named categories so the same {name, count} shape as
+# polarité/centralité works unchanged.
 SUBJECTIVITE_BUCKETS = ["1", "2", "3", "4", "5"]
 
 # How many top entities to keep in the cooccurrence chord matrix. The
@@ -479,9 +480,13 @@ class DashboardAggregator:
                     cols = sentiment_cols[model]
                     pol_c, cen_c = cols.get("polarite"), cols.get("centralite")
                     subj_c = cols.get("subjectivite")
-                    meta[f"{model}_polarite"]     = clean_str(row.get(pol_c))     if pol_c  else ""
-                    meta[f"{model}_centralite"]   = clean_str(row.get(cen_c))     if cen_c  else ""
-                    meta[f"{model}_subjectivite"] = clean_float(row.get(subj_c))  if subj_c else None
+                    meta[f"{model}_polarite"]     = clean_str(row.get(pol_c)) if pol_c  else ""
+                    meta[f"{model}_centralite"]   = clean_str(row.get(cen_c)) if cen_c  else ""
+                    # Label, not a number, since generation 2 — clean_float
+                    # would swallow the whole axis silently.
+                    meta[f"{model}_subjectivite"] = (
+                        subjectivite_ordinal(row.get(subj_c)) if subj_c else None
+                    )
                 self.items_meta[item_key] = meta
 
                 roles: Dict[str, List[int]] = {role: [] for role in self.ROLE_FIELDS}
@@ -763,10 +768,11 @@ class DashboardAggregator:
                     if cen:
                         cen_counter[cen] += 1
                     if sub is not None:
+                        # Already the 1..5 ordinal (subjectivite_ordinal
+                        # ran at read time), so it is both the value the
+                        # average is taken over and its own bucket.
                         sub_values.append(float(sub))
-                        # Bucket into integer 1..5 (IWAC domain).
-                        bucket = max(1, min(5, int(round(float(sub)))))
-                        sub_counter[str(bucket)] += 1
+                        sub_counter[str(sub)] += 1
                     if pol or cen or sub is not None:
                         rated += 1
                 # Force the canonical ordering even when categories are absent

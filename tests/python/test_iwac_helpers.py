@@ -52,22 +52,58 @@ class UtilityContractTests(unittest.TestCase):
         self.assertIsNone(iwac_utils.parse_coordinates("91, 0"))
         self.assertIsNone(iwac_utils.parse_coordinates("not coordinates"))
 
-    def test_sentiment_resolver_prefers_current_model_specific_names(self) -> None:
+    def test_sentiment_resolver_binds_every_model_to_its_own_columns(self) -> None:
+        # Both annotation generations ship on the Hub. Resolving must pick
+        # the generation-2 columns the module now reads and never fall
+        # back onto a generation-1 column that happens to be present.
         frame = pd.DataFrame(columns=[
             "gpt_5_mini_polarite",
-            "chatgpt_polarite",
-            "gpt_5_mini_centralite_islam_musulmans",
-            "gpt_5_mini_subjectivite_score",
+            "ministral_14b_2512_polarite",
+            *[
+                f"{model}_{suffix}"
+                for model in iwac_utils.SENTIMENT_MODELS
+                for suffix in iwac_utils.SENTIMENT_FIELD_SUFFIXES.values()
+            ],
         ])
-        resolved = iwac_utils.resolve_sentiment_columns(
-            frame,
-            models=("chatgpt",),
-        )
-        self.assertEqual(resolved["chatgpt"]["polarite"], "gpt_5_mini_polarite")
+        resolved = iwac_utils.resolve_sentiment_columns(frame)
+
         self.assertEqual(
-            resolved["chatgpt"]["centralite"],
-            "gpt_5_mini_centralite_islam_musulmans",
+            set(resolved),
+            {"gpt_5_6_luna", "mistral_small_2603", "deepseek_v4_flash_0731"},
         )
+        self.assertEqual(resolved["gpt_5_6_luna"]["polarite"], "gpt_5_6_luna_polarite")
+        self.assertEqual(
+            resolved["deepseek_v4_flash_0731"]["centralite"],
+            "deepseek_v4_flash_0731_centralite_islam_musulmans",
+        )
+        self.assertEqual(
+            resolved["mistral_small_2603"]["subjectivite"],
+            "mistral_small_2603_subjectivite_score",
+        )
+
+    def test_sentiment_resolver_reports_a_model_with_no_columns(self) -> None:
+        resolved = iwac_utils.resolve_sentiment_columns(
+            pd.DataFrame(columns=["title"]),
+            models=("gpt_5_6_luna",),
+        )
+        self.assertEqual(
+            resolved["gpt_5_6_luna"],
+            {"polarite": None, "centralite": None, "subjectivite": None},
+        )
+
+    def test_subjectivite_ordinal_reads_labels_and_legacy_numbers(self) -> None:
+        # Generation 2 stores a French label where generation 1 stored an
+        # int; both must land on the same 1-5 scale, and anything the
+        # model declined to rate must stay None rather than becoming 0.
+        self.assertEqual(iwac_utils.subjectivite_ordinal("Très objectif"), 1)
+        self.assertEqual(iwac_utils.subjectivite_ordinal("Plutôt objectif"), 2)
+        self.assertEqual(iwac_utils.subjectivite_ordinal("Mixte"), 3)
+        self.assertEqual(iwac_utils.subjectivite_ordinal("Plutôt subjectif"), 4)
+        self.assertEqual(iwac_utils.subjectivite_ordinal("Très subjectif"), 5)
+        self.assertEqual(iwac_utils.subjectivite_ordinal(4), 4)
+        self.assertEqual(iwac_utils.subjectivite_ordinal("2.0"), 2)
+        for empty in (None, "", "   ", np.nan, "nan", "Non abordé", 0, 6):
+            self.assertIsNone(iwac_utils.subjectivite_ordinal(empty), empty)
 
     def test_dataset_projection_avoids_materializing_heavy_columns(self) -> None:
         class Split:
