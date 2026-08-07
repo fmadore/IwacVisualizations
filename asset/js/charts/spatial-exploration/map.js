@@ -7,8 +7,10 @@
  *   - View source: every geocoded place in the collection, or — when
  *     an entity is selected — the places related to that entity (from
  *     its dashboard fan-out, including per-location article lists).
- *   - Country focus: a select above the map zooms to one of the six
- *     IWAC countries and filters the bubbles to places inside it.
+ *   - Country focus: a select above the map zooms to one of the IWAC
+ *     countries carrying boundary data and filters the bubbles to
+ *     places inside it. Niger and Nigeria are deliberately absent —
+ *     see focusableCountries().
  *   - Map mode: switch between place bubbles, the six-country
  *     choropleth, and an administrative-boundary choropleth for the
  *     countries ported from IWAC-spatial-overview's Country Focus view.
@@ -173,6 +175,31 @@
 
         var ctx = state.ctx;
 
+        /**
+         * Countries the focus control offers — not the same set as
+         * `focus_countries`.
+         *
+         * `focus_countries` is the index `locations[5]` points into, so
+         * it must keep all six IWAC countries for bubble labelling and
+         * the country choropleth. But focusing only means something
+         * where there is something to focus on, and two of the six have
+         * nothing: Nigeria resolves zero geocoded places and Niger four
+         * (of 544), and neither has administrative boundaries. Focusing
+         * either emptied the bubble map, and in administrative mode the
+         * map silently fell back to drawing Bénin's regions under a
+         * dropdown that still read "Niger".
+         *
+         * `country_focus.countries` is exactly the set with boundary
+         * files, so the generator already draws the line in the right
+         * place. Payloads predating that key fall back to all six.
+         */
+        function focusableCountries() {
+            var named = (((state.data.country_focus || {}).countries) || [])
+                .map(function (entry) { return entry && entry.name; })
+                .filter(Boolean);
+            return named.length ? named : (state.data.focus_countries || []);
+        }
+
         // --- Toolbar: map mode + country focus + status line -------------
         var toolbar = P.el('div', 'iwac-vis-spatial-toolbar');
 
@@ -200,7 +227,7 @@
         var worldOpt = P.el('option', null, P.t('Whole world'));
         worldOpt.value = '';
         focusSelect.appendChild(worldOpt);
-        (state.data.focus_countries || []).forEach(function (c) {
+        focusableCountries().forEach(function (c) {
             var opt = P.el('option', null, c);
             opt.value = c;
             focusSelect.appendChild(opt);

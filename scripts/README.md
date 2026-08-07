@@ -215,7 +215,12 @@ python3 scripts/generate_spatial_exploration.py --no-minify -v
   counts, per-level bounds, and lazy GeoJSON paths under
   `asset/geo/admin-boundaries/`. Counts are derived from the same
   geocoded `locations` rows so rerunning this generator refreshes both
-  bubble and administrative choropleth data.
+  bubble and administrative choropleth data. `country_focus.countries`
+  is also the block's "Country focus" menu, which is why it lists four
+  countries where `focus_countries` lists six: Niger resolves 4
+  geocoded places and Nigeria none, so neither has boundaries here or
+  anything to zoom to. Making a country focusable means adding it to
+  `COUNTRY_FOCUS_ADMIN` with its GeoJSON, not to `FOCUS_COUNTRIES`.
 
 ### `generate_entity_networks.py`
 

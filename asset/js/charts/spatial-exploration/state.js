@@ -11,7 +11,8 @@
  *     (person-dashboards/{id}.json or entity-dashboards/{id}.json) —
  *     the same per-entity JSON the resource-page blocks consume, so
  *     locations + per-location article lists are never duplicated
- *   - the country-focus filter (one of the six IWAC countries)
+ *   - the country-focus filter (one of the IWAC countries the map
+ *     panel offers — see map.js::focusableCountries)
  *   - a fly-to request channel (picker list → map)
  *
  * Subscribers receive the changed key: 'type' | 'selection' |

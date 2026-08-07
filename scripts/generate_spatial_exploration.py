@@ -26,7 +26,12 @@ behind the "Spatial Exploration" page block:
     * ``country_focus`` — administrative choropleth metadata for Bénin,
       Burkina Faso, Côte d'Ivoire and Togo. Counts are derived from the
       same geocoded ``locations`` rows, while the polygons remain in
-      separate lazy-loaded GeoJSON files.
+      separate lazy-loaded GeoJSON files. ``country_focus.countries``
+      doubles as the block's "Country focus" menu: a country without
+      boundary files here is not offered, which keeps Niger (4 geocoded
+      places) and Nigeria (0) out of a control that would zoom to an
+      empty map. Add a country to ``COUNTRY_FOCUS_ADMIN`` — not just to
+      ``FOCUS_COUNTRIES`` — to make it focusable.
 
 Usage
 -----
