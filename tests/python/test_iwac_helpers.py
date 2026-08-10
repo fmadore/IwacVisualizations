@@ -160,6 +160,25 @@ class StatisticsTests(unittest.TestCase):
         )
         self.assertLess(iwac_stats.dunning_g2(0, 10, 1000, 1000), 0)
 
+    def test_dunning_g2_scores_equal_rates_as_no_keyness(self) -> None:
+        self.assertAlmostEqual(iwac_stats.dunning_g2(10, 10, 1000, 1000), 0.0)
+
+    def test_dunning_g2_rejects_counts_outside_their_corpus(self) -> None:
+        # A caller bug must surface, not become a p-value of 1.0 in the BH
+        # family. Kept in step with IWAC-Hugging-Face's keyness_bursts.py.
+        for a, b, total_a, total_b in [
+            (10, 10, 0, 1000),      # empty corpus A
+            (10, 10, 1000, 0),      # empty corpus B
+            (10, 10, -1000, 1000),  # negative total
+            (-1, 10, 1000, 1000),   # negative count
+            (10, -1, 1000, 1000),
+            (1001, 10, 1000, 1000),  # count exceeds its corpus
+            (10, 1001, 1000, 1000),
+        ]:
+            with self.subTest(a=a, b=b, total_a=total_a, total_b=total_b):
+                with self.assertRaises(ValueError):
+                    iwac_stats.dunning_g2(a, b, total_a, total_b)
+
     def test_benjamini_hochberg_adjustment_is_aligned_and_monotone(self) -> None:
         adjusted = iwac_stats.bh_adjust([0.01, 0.04, 0.03])
         np.testing.assert_allclose(adjusted, [0.03, 0.04, 0.04])

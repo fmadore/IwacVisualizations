@@ -97,10 +97,22 @@ def dunning_g2(a: int, b: int, total_a: int, total_b: int) -> float:
     ratio is computed over the complete 2×2 table (token / not-token ×
     corpus A / corpus B). Omitting the two not-token cells understates the
     evidence, especially for common terms.
+
+    Raises:
+        ValueError: if either corpus total is non-positive, or a count falls
+            outside its corpus (``0 <= a <= total_a``, ``0 <= b <= total_b``).
+            Such inputs are a caller bug, not a token with no signal — a
+            silent 0.0 would enter the BH family as a p-value of 1.0 and
+            hide the mistake.
     """
-    if (total_a <= 0 or total_b <= 0
-            or a < 0 or b < 0 or a > total_a or b > total_b):
-        return 0.0
+    if total_a <= 0 or total_b <= 0:
+        raise ValueError(
+            f"corpus totals must be positive (total_a={total_a}, total_b={total_b})"
+        )
+    if not 0 <= a <= total_a:
+        raise ValueError(f"count a={a} outside its corpus [0, {total_a}]")
+    if not 0 <= b <= total_b:
+        raise ValueError(f"count b={b} outside its corpus [0, {total_b}]")
 
     grand_total = total_a + total_b
     token_total = a + b
@@ -113,12 +125,14 @@ def dunning_g2(a: int, b: int, total_a: int, total_b: int) -> float:
         total_b * not_token_total / grand_total,
     )
 
+    # obs == 0 contributes nothing (lim O·log O = 0 as O → 0). exp == 0 only
+    # ever coincides with obs == 0 here, so the skip also guards obs / exp.
     g2 = 0.0
     for obs, exp in zip(observed, expected):
-        if obs > 0 and exp > 0:
+        if obs > 0:
             g2 += obs * math.log(obs / exp)
     g2 *= 2.0
-    return g2 if (a / total_a) > ((b / total_b) if total_b else 0) else -g2
+    return g2 if (a / total_a) > (b / total_b) else -g2
 
 
 def log_ratio(a: int, b: int, total_a: int, total_b: int) -> float:
