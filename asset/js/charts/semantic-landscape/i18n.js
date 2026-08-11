@@ -18,15 +18,15 @@
         ns.addTranslations('en', {
             'Loading semantic landscape': 'Loading semantic landscape',
             'Semantic landscape': 'Semantic landscape',
-            'desc_semantic_landscape': 'Every article in the collection, placed by the semantic similarity of its full text (UMAP projection of AI text embeddings — axes have no meaning, only proximity does). Quiet labels mark each major topic’s densest region. Drag to pan, scroll to zoom, click a point to open the article.',
-            'Color by': 'Color by',
+            'desc_semantic_landscape': 'Every article in the collection, placed according to how similar its full text is to the others. An AI model compares the texts, and a technique called UMAP flattens those comparisons onto two dimensions, so the axes carry no meaning and only nearness does. Faint labels mark where each major topic is densest. Drag to move around the map, scroll to zoom, and click a point to open the article.',
+            'Color by': 'Colour by',
             'Decade': 'Decade',
             'Topic': 'Topic',
             'Other': 'Other',
             'Unknown year': 'Unknown year',
             'landscape_points': '{count} articles placed',
             'Periodicals semantic landscape': 'Periodicals semantic landscape',
-            'desc_periodicals_landscape': 'Every Islamic-periodical issue in the collection, placed by the semantic similarity of its table of contents (UMAP projection of AI text embeddings — axes have no meaning, only proximity does). Drag to pan, scroll to zoom, click a point to open the issue.',
+            'desc_periodicals_landscape': 'Every Islamic periodical issue in the collection, placed according to how similar its table of contents is to the others. An AI model compares the contents lists, and a technique called UMAP flattens those comparisons onto two dimensions, so the axes carry no meaning and only nearness does. Drag to move around the map, scroll to zoom, and click a point to open the issue.',
             'landscape_points_issues': '{count} issues placed'
         });
         ns.addTranslations('fr', {

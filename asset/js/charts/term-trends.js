@@ -37,7 +37,7 @@
         ns.addTranslations('en', {
             'Loading term trends':   'Loading term trends',
             'ngram.title':           'Term trends',
-            'ngram.description':     'How often a word appears in the digitized press over time — the share (or count) of articles each year whose text contains the term. Vocabulary: the {n} most frequent dictionary forms (lemmas), so “terroriste” and “terroristes” count as one term.',
+            'ngram.description':     'How often a word appears in the digitised press over time: the share of each year’s articles whose text contains the term, or the number of them. The vocabulary is the {n} most frequent dictionary forms, so “terroriste” and “terroristes” count as one term.',
             'ngram.search':          'Search a term…',
             'ngram.no_matches':      'No matching term',
             'ngram.selected':        'Terms (up to {max})',
@@ -48,7 +48,7 @@
             'ngram.axis_count':      'Articles',
             'ngram.tip_share':       '{pct} % of {total} articles',
             'ngram.tip_count':       '{count} of {total} articles',
-            'ngram.empty':           'Search for a term above to plot it.',
+            'ngram.empty':           'Search for a term above to chart it.',
             'ngram.in_articles':     'in {count} articles'
         });
         ns.addTranslations('fr', {

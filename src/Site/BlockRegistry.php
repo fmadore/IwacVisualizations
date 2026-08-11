@@ -47,7 +47,7 @@ final class BlockRegistry
             'invokable'   => 'collectionOverview',
             'class'       => BlockLayout\CollectionOverview::class,
             'label'       => 'Collection Overview', // @translate
-            'description' => 'Aggregate visualizations across the entire collection. No configuration needed.', // @translate
+            'description' => 'Aggregate visualisations across the entire collection. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'compare-newspapers' => [
@@ -68,7 +68,7 @@ final class BlockRegistry
             'invokable'   => 'entityNetworks',
             'class'       => BlockLayout\EntityNetworks::class,
             'label'       => 'Entity Networks', // @translate
-            'description' => 'Co-occurrence networks across the collection: an entity graph linking persons, organizations, events, subjects and places that appear in the same items (layout precomputed), and a geographic network of co-mentioned places drawn over the basemap. No configuration needed.', // @translate
+            'description' => 'Co-occurrence networks across the collection: an entity graph linking persons, organisations, events, subjects and places that appear in the same items (layout precomputed), and a geographic network of co-mentioned places drawn over the basemap. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'index-overview' => [
@@ -82,7 +82,7 @@ final class BlockRegistry
             'invokable'   => 'laicite',
             'class'       => BlockLayout\Laicite::class,
             'label'       => 'Laïcité', // @translate
-            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, archival documents and scholarship. Eleven views — where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that generated them, the archival dossier, a searchable concordance of the actual sentences, collocates, the press-versus-periodicals comparison, the actors and institutions, the arenas being contested, the three-model AI framing, a map of the places named, and the bibliography. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
+            'description' => 'A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, archival documents and scholarship. Eleven views: where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that prompted them, the archival dossier, a searchable concordance of the actual sentences, collocates, the press-versus-periodicals comparison, the actors and institutions, the arenas being contested, the three-model AI framing, a map of the places named, and the bibliography. Readable snippets are limited to items whose full text is public. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'lexical-metrics' => [
@@ -96,7 +96,7 @@ final class BlockRegistry
             'invokable'   => 'onThisDay',
             'class'       => BlockLayout\OnThisDay::class,
             'label'       => 'On This Day', // @translate
-            'description' => 'Items published on today\'s date across the collection\'s decades — newspaper articles and periodical issues with full publication dates, with page scans and a line of the text where they exist. Readers can read the day in the Gregorian or the Hijri calendar (each picks its own documents), switch between three layouts, and unfold the full list for the day. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset.', // @translate
+            'description' => 'Items published on today\'s date across the collection\'s decades: newspaper articles and periodical issues with full publication dates, with page scans and a line of the text where they exist. Readers can read the day in the Gregorian or the Hijri calendar (each picks its own documents), switch between three layouts, and unfold the full list for the day. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset.', // @translate
             'embeddable'  => true,
         ],
         'org-cooccurrence' => [
@@ -110,7 +110,7 @@ final class BlockRegistry
             'invokable'   => 'periodicalsLandscape',
             'class'       => BlockLayout\PeriodicalsLandscape::class,
             'label'       => 'Periodicals Semantic Landscape', // @translate
-            'description' => 'Zoomable map of the Islamic-periodical corpus: every issue placed by the semantic similarity of its table of contents (UMAP over AI embeddings), color-faceted by country or decade. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Zoomable map of the Islamic-periodical corpus: every issue placed by the semantic similarity of its table of contents (UMAP over AI embeddings), colour-faceted by country or decade. Data is precomputed. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'periodicals-overview' => [
@@ -131,7 +131,7 @@ final class BlockRegistry
             'invokable'   => 'pressReprints',
             'class'       => BlockLayout\PressReprints::class,
             'label'       => 'Press Reprints', // @translate
-            'description' => 'Pairs of near-identical articles printed by different newspapers — syndicated wire copy (PANA, AFP), shared communiqués and reprints — found by comparing how closely articles are worded. Shows which outlets circulated the same copy, with the full pair list. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
+            'description' => 'Pairs of near-identical articles printed by different newspapers: syndicated wire copy (PANA, AFP), shared communiqués and reprints, found by comparing how closely articles are worded. Shows which outlets circulated the same copy, with the full pair list. Data is precomputed from the IWAC articles. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'references-overview' => [
@@ -145,14 +145,14 @@ final class BlockRegistry
             'invokable'   => 'scaryTerms',
             'class'       => BlockLayout\ScaryTerms::class,
             'label'       => 'Scary Terms', // @translate
-            'description' => 'Radical / extremism-related terms across the IWAC collection in seven views: an animated bar-chart race, time trends with historical-event markers, by country, global, a co-occurrence matrix, a word cloud of the surrounding vocabulary, and a map of the places mentioned. No configuration needed.', // @translate
+            'description' => 'Terms related to radicalism and extremism across the IWAC collection in seven views: an animated bar-chart race, time trends with historical-event markers, by country, global, a co-occurrence matrix, a word cloud of the surrounding vocabulary, and a map of the places mentioned. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'semantic-landscape' => [
             'invokable'   => 'semanticLandscape',
             'class'       => BlockLayout\SemanticLandscape::class,
             'label'       => 'Semantic Landscape', // @translate
-            'description' => 'Zoomable map of the whole press corpus: every article placed by the semantic similarity of its full text (UMAP over AI embeddings), color-faceted by country, decade, or topic. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Zoomable map of the whole press corpus: every article placed by the semantic similarity of its full text (UMAP over AI embeddings), colour-faceted by country, decade or topic. Data is precomputed. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'sentiment-atlas' => [
@@ -166,14 +166,14 @@ final class BlockRegistry
             'invokable'   => 'spatialExploration',
             'class'       => BlockLayout\SpatialExploration::class,
             'label'       => 'Spatial Exploration', // @translate
-            'description' => 'Interactive world map of every place mentioned in the collection, with country focus and an entity picker (persons, organizations, events, subjects, places) that maps the locations related to the selected entity. Data is precomputed. No configuration needed.', // @translate
+            'description' => 'Interactive world map of every place mentioned in the collection, with country focus and an entity picker (persons, organisations, events, subjects, places) that maps the locations related to the selected entity. Data is precomputed. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'term-trends' => [
             'invokable'   => 'termTrends',
             'class'       => BlockLayout\TermTrends::class,
             'label'       => 'Term Trends', // @translate
-            'description' => 'The IWAC "Ngram viewer": plot the per-year share of articles whose full text contains any frequent term. Search the vocabulary, overlay up to eight terms, switch between share and absolute counts. Data is precomputed from the articles subset. No configuration needed.', // @translate
+            'description' => 'The IWAC "Ngram viewer": chart the per-year share of articles whose full text contains any frequent term. Search the vocabulary, overlay up to eight terms, and switch between shares and absolute counts. Data is precomputed from the articles subset. No configuration needed.', // @translate
             'embeddable'  => true,
         ],
         'topic-explorer' => [

@@ -36,11 +36,11 @@
             'bylines.card_unique':    'Distinct bylines',
             'bylines.card_prolific':  'Bylines with 10+ articles',
             'bylines.trend_title':    'Signed articles over time',
-            'bylines.trend_desc':     'Share of each year’s articles carrying a byline — journalists and press agencies alike. The remainder ran unsigned.',
+            'bylines.trend_desc':     'The share of each year’s articles carrying a byline, counting journalists and press agencies alike. The rest ran unsigned.',
             'bylines.trend_axis':     'Signed share (%)',
             'bylines.trend_tip':      '{signed} of {total} articles signed',
             'bylines.top_title':      'Most prolific bylines',
-            'bylines.top_desc':       'The {n} most frequent bylines across the corpus — journalists and press agencies. Click a bar to open the byline’s authority record where one exists.',
+            'bylines.top_desc':       'The {n} most frequent bylines across the corpus, journalists and press agencies alike. Click a bar to open the byline’s authority record where one exists.',
             'bylines.active':         'Active {first}–{last}',
             'bylines.papers':         'Newspapers',
             'bylines.topics':         'Frequent subjects'

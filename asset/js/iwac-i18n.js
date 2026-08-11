@@ -49,17 +49,19 @@
      */
     var DICTIONARY = {
         en: {
-            // UI chrome
+            // UI chrome. The source key keeps the American spelling the call
+            // sites already pass; the English value is what readers see.
+            'Visualization data is not available yet.': 'The data for this visualisation has not been published yet.',
 
             // Chart axis / tooltip
 
             // Collection overview — summary labels
 
             // Publication (periodical issue) dashboard
-            'desc_publication_run': 'Issues of this periodical per year — the dot marks this issue.',
-            'desc_publication_similar': 'Closest issues by table-of-contents similarity (Gemini embeddings).',
+            'desc_publication_run': 'Issues of this periodical per year. The dot marks this issue.',
+            'desc_publication_similar': 'Issues whose tables of contents most resemble this one, compared by an AI model (Gemini).',
             'desc_publication_wordcloud': 'The words that appear most often in this issue’s text.',
-            'desc_word_cloud': 'Most frequent words, sized by how often they appear.',
+            'desc_word_cloud': 'The most frequent words, sized by how often they appear.',
 
             // Collection overview — chart titles
             'period_covered': 'Period covered: {min} – {max}',
@@ -68,23 +70,23 @@
             // Entity type tabs (must match INDEX_TYPES in the generator)
 
             // References overview
-            'references_provenance_desc': 'Geocoded places linked to reference provenance metadata when the Hugging Face bundle exposes resolvable origins.',
-            'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same bibliographic reference.',
+            'references_provenance_desc': 'Places of publication recorded on the references, shown wherever the place could be matched to map coordinates.',
+            'references_subject_cooccurrence_desc': 'Pairs of subject tags that appear together on the same reference.',
 
             // References overview — full text + topics (2026-07 pipeline)
             'Full-text coverage': 'Full-text coverage',
-            'references_coverage_desc': 'How many references have machine-readable full text extracted, by genre of scholarship.',
-            'references_coverage_desc_full': 'Full text has been extracted for {withOcr} of {total} references ({pct}%), {words} words in total, {median} in a typical reference. The topic panels below describe that digitised subset, not the whole bibliography. Bars show the digitised count per genre against its total. Separately, {published} of these references have their text published on islam.zmo.de — the rest inform the aggregate analysis here without being readable in full.',
+            'references_coverage_desc': 'How many references have their full text available as searchable text, by kind of publication.',
+            'references_coverage_desc_full': 'Full text has been extracted for {withOcr} of {total} references ({pct}%): {words} words in all, and {median} in a typical reference. The topic panels below describe that digitised part of the bibliography rather than the whole of it. Each bar shows the digitised count for one kind of publication against its total. Of these references, {published} also have their text published on islam.zmo.de; the others feed the aggregate figures here without being readable in full.',
             'references_coverage_tooltip': '{withOcr} of {total} with full text ({pct}%)',
 
             // References overview — semantic landscape panel
             'Semantic landscape of the literature': 'Semantic landscape of the literature',
-            'references_landscape_desc': 'Each point is one reference, placed by the semantic similarity of its full text. Neighbouring points are works the embedding model reads as being about the same thing. Drag to pan, scroll to zoom, click a point to open the reference.',
-            'references_landscape_desc_full': 'Each point is one reference, placed by the semantic similarity of its full text (UMAP over AI embeddings); neighbouring points are works the model reads as being about the same thing. Distances between clusters carry no meaning, and the axes have no units — only who sits near whom. This map covers the {embedded} of {total} references ({pct}%) that have extracted full text, and that half is not a random sample: it is what the collection could obtain and digitise. Drag to pan, scroll to zoom, click a point to open the reference.',
-            'references_landscape_empty': 'No semantic projection available for this bibliography',
-            'references_landscape_empty_umap': 'The semantic projection was not computed — umap-learn is not installed in the generating environment',
-            'references_landscape_empty_few': 'Too few references have extracted full text to project a meaningful map',
-            'Color by': 'Color by',
+            'references_landscape_desc': 'Each point is one reference, placed according to how similar its full text is to the others. Works sitting close together are ones the AI model reads as being about the same thing. Drag to move around the map, scroll to zoom, and click a point to open the reference.',
+            'references_landscape_desc_full': 'Each point is one reference, placed according to how similar its full text is to the others: an AI model compares the texts, and a technique called UMAP flattens those comparisons onto two dimensions. Works sitting close together are ones the model reads as being about the same thing. The axes have no units, and the distance between two clusters means nothing; only which points sit near which. The map covers the {embedded} of {total} references ({pct}%) whose full text has been extracted, and that subset reflects what the collection was able to obtain and digitise rather than a representative sample. Drag to move around the map, scroll to zoom, and click a point to open the reference.',
+            'references_landscape_empty': 'No semantic map is available for this bibliography',
+            'references_landscape_empty_umap': 'The semantic map was not computed: the umap-learn package was missing when this data was built',
+            'references_landscape_empty_few': 'Too few references have extracted full text to draw a meaningful map',
+            'Color by': 'Colour by',
             'Decade': 'Decade',
             'Type': 'Type',
 
@@ -93,7 +95,7 @@
             // the interpolated label comes from the shared `lang_*` keys and
             // arrives capitalised, which only reads correctly standalone.
             'references_topics_title_lang': 'Scholarly topics ({language})',
-            'references_topics_desc': 'Topics found by an LDA model over the full text of {count} references, grouped into {topics} topics. Labels are a topic’s most characteristic words — machine-generated, not curated. Each language has its own model, so topic numbers are not comparable between these panels. Hover a bar for the references most typical of that topic.',
+            'references_topics_desc': 'Themes found automatically in the full text of {count} references by a statistical model (LDA), which sorted them into {topics} topics. Each label lists the words most characteristic of its topic; the labels come from the model rather than from a cataloguer. Each language has its own model, so topic numbers cannot be compared between these panels. Hover over a bar for the references most typical of that topic.',
             'references_topic_tooltip': '{count} references ({pct}% of this model’s corpus). Most representative:',
 
             'Languages studied': 'Languages',
@@ -161,14 +163,14 @@
             'desc_mentions_timeline':      'Articles, publications and references mentioning this person each year, stacked by country of publication.',
             'desc_top_newspapers':         'News and periodical sources where this person appears most often (top 15).',
             'desc_countries_covered':      'Distribution of mentions by country of publication of the source.',
-            'desc_associated_entities':    'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this person is named. Thick lines run from this person to each entity; the faint dashed ones join entities that keep turning up together. Drag a node to rearrange the graph, click one to see its connections.',
-            'desc_associated_locations':   'Geographic places mentioned in items where this person appears as creator or subject, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
+            'desc_associated_entities':    'The 50 entities (persons, organisations, places, subjects, events) that appear most distinctively alongside this person. The ranking (TF-IDF) favours names peculiar to this person over names that turn up everywhere in the collection. Thick lines run from this person to each entity; faint dashed lines join entities that keep appearing together. Drag a node to rearrange the graph, or click one to see its connections.',
+            'desc_associated_locations':   'Places mentioned in items where this person appears as creator or subject, taken from each item\u2019s spatial coverage field and from place tags matched against the IWAC authority list.',
 
             // New shared panels (person + entity)
-            'desc_year_month_heatmap':     'Mention counts per year and month, drawn only from items with a parseable YYYY-MM date. Cells stay blank when no date can be resolved.',
-            'desc_lda_topics':             'Top 12 LDA-30 topic labels for items mentioning this entity, by article count. Topics come from the precomputed LDA model on the articles subset; publications and references contribute to mention counts but not to the topic mix.',
-            'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, with a side-by-side comparison of the three AI raters (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). The model picker switches between them; the bars update in place. Articles only — publications and references are not rated.',
-            'desc_subject_cooccurrence':   'Pairwise co-occurrence among the top 15 entities mentioned alongside this one. Distinct from the Associated entities network: that one is ego-centric (this entity at the centre), this one is pair-wise (which neighbours always travel together?).',
+            'desc_year_month_heatmap':     'Mentions per year and month, counted only for items whose date gives at least a year and a month. Cells stay blank where no date could be read.',
+            'desc_lda_topics':             'The 12 most common themes among articles mentioning this entity, by article count. The themes come from a statistical model (LDA) run over the articles in the collection; publications and references add to the mention counts but not to the topic mix.',
+            'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, with a side-by-side comparison of the three AI raters (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). The model picker switches between them and the bars update in place. Articles only: publications and references are not rated.',
+            'desc_subject_cooccurrence':   'How often each pair among the 15 entities most often mentioned alongside this one appears together. The Associated entities panel puts this entity at the centre and measures the links to it; this panel sets the centre aside and asks which neighbours keep travelling together.',
 
             // AI sentiment — axis labels. The model names are proper
             // nouns rendered verbatim from the MODELS tables in the
@@ -200,8 +202,8 @@
             'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
             'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
             'desc_entity_countries_covered':    'Distribution of mentions by country of publication of the source.',
-            'desc_entity_associated_entities':  'Top 50 co-occurring entities (persons, organisations, places, subjects, events) ranked by TF-IDF distinctiveness across the items where this entity is named. Thick lines run from this entity to each of them; the faint dashed ones join entities that keep turning up together. Drag a node to rearrange the graph, click one to see its connections.',
-            'desc_entity_associated_locations': 'Geographic places mentioned in the same items as this entity, drawn from each item\u2019s spatial coverage and from named-place tags joined to the IWAC authority list.',
+            'desc_entity_associated_entities':  'The 50 entities (persons, organisations, places, subjects, events) that appear most distinctively alongside this one. The ranking (TF-IDF) favours names peculiar to this entity over names that turn up everywhere in the collection. Thick lines run from this entity to each of them; faint dashed lines join entities that keep appearing together. Drag a node to rearrange the graph, or click one to see its connections.',
+            'desc_entity_associated_locations': 'Places mentioned in the same items as this entity, taken from each item\u2019s spatial coverage field and from place tags matched against the IWAC authority list.',
 
             // Network panel toolbar + canvas force graph.
             // English keys are their own value, so only the parameterised
@@ -214,9 +216,13 @@
             'and_n_more':         'and {count} more',
 
             // Entity type labels (legend + tooltips of the entity graphs)
-            'entity_type_center': 'Center',
+            'entity_type_center': 'Centre',
             'entity_type_Personnes': 'Persons',
-            'entity_type_Organisations': 'Organizations',
+            'entity_type_Organisations': 'Organisations',
+            // Bare entity-type label used as a card/axis caption; the English
+            // spelling has to be overridden because the call sites key on the
+            // American form.
+            'Organizations': 'Organisations',
             'entity_type_Lieux': 'Places',
             'entity_type_Sujets': 'Subjects',
             'entity_type_\u00c9v\u00e9nements': 'Events',
@@ -228,13 +234,13 @@
             // general audience; no jargon like "cosine similarity" or
             // "thematic siblings").
             'desc_article_context_network':
-                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Drag a node to rearrange the graph, click one to see its connections and a link to its page.',
+                'This article sits at the centre, surrounded by the people, places, organisations and subjects tagged in it. Articles that share several of those tags appear around the edge. Drag a node to rearrange the graph, or click one to see its connections and a link to its page.',
             'desc_article_further_reading':
-                'Other material from the collection that connects to this article. Switch between the ways of finding it.',
+                'Other material from the collection that connects to this article. Use the tabs to switch between the ways of finding it.',
             'desc_further_reading_tags':
                 'Articles tagged with the same people, places, organisations or subjects as this one. The badge shows how many tags they share.',
             'desc_further_reading_scholarship':
-                'Scholarly works in the IWAC bibliography whose text reads similarly to this article — the academic literature around what the article covers. The same AI comparison as the previous tab, run across the two collections. Treat it as a lead to follow rather than a citation: the works are long and were compared in summary, so a broad survey can look close to many articles.',
+                'Scholarly works in the IWAC bibliography whose text reads like this article: the academic literature around what it covers. This uses the same AI comparison as the previous tab, run across the two collections. Treat each result as a lead to follow rather than a citation, since a long work compared in summary can look close to many articles at once.',
             'desc_further_reading_content':
                 'Articles whose full text reads similarly to this one, even when they don\u2019t share any tags. The match is computed by an AI language model that turns each article into a numeric fingerprint (a \u201csemantic embedding\u201d) and compares them. The badge shows how close the match is.',
 
@@ -248,10 +254,12 @@
             // Compare newspapers block
             'Only in A':                     'Only in {name}',
             'Only in B':                     'Only in {name}',
+            'Single-newspaper corpus — no breakdown': 'Single-newspaper corpus: no breakdown',
+            'Sentiment only on articles':    'Sentiment ratings cover articles only',
             'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
-                'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.',
+                'Places mentioned in each corpus, matched against the IWAC authority index. The larger the bubble, the more items tagged that place.',
             'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
-                'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.',
+                'How polarity and centrality are distributed across the articles of each corpus, as rated by three AI models. Use the picker to change model; publications are not rated.',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
@@ -264,22 +272,23 @@
                 'Scales: polarity 1 (very negative) \u2013 5 (very positive) \u00B7 centrality 1 (not addressed) \u2013 5 (very central) \u00B7 subjectivity 1 (objective) \u2013 5 (subjective)',
 
             // MapLibre choropleth toggle (shared/choropleth.js)
+            'Diverging A minus B':          'Difference: A minus B',
 
             // Minimal item dashboard (Audio / Video / Document / Photograph)
             'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
             'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
-            'desc_minimal_similar_semantic':     'Photographs closest to this one in a multimodal AI embedding of the image itself — visual and thematic resemblance, not shared metadata. The percentage is the similarity score.',
+            'desc_minimal_similar_semantic':     'Photographs an AI model reads as closest to this one. It compares the images themselves, so the resemblance is visual and thematic rather than a matter of shared catalogue records. The percentage is the similarity score.',
 
             // Topic Explorer — labels + descriptions
             'desc_horizontal_bar':          'Top values by count, ranked from highest to lowest.',
-            'desc_topic_treemap':           'Each rectangle is one of the 30 LDA topics; the area scales with how many articles the model assigned to that topic. Click a rectangle to drill into the topic’s detail view.',
+            'desc_topic_treemap':           'Each rectangle is one of the 30 topics found by the model; its area reflects how many articles were assigned to that topic. Click a rectangle to open the topic in detail.',
             'cal_panel_title':              'Publication calendar',
-            'desc_topic_calendar':          'When articles classified into this topic were published. Only articles carrying a full day-precision date are placed — year-only and year-month dates are left out rather than parked on 1 January.',
+            'desc_topic_calendar':          'When articles classified into this topic were published. Only articles with a full date, down to the day, appear here; those dated to a year or a month alone are left out rather than placed on 1 January.',
             'topic_copy_link':              'Copy link to this topic',
             'topic_link_copied':            'Link copied',
             'desc_topic_countries':         'Distribution of articles in this topic by country of publication.',
             'desc_topic_newspapers':        'Newspapers and periodicals where this topic appears most often.',
-            'desc_topic_top_articles':      'Articles whose text the LDA model attached most strongly to this topic, ranked by topic probability.',
+            'desc_topic_top_articles':      'Articles the model attached most strongly to this topic, ranked by how confident it was.',
             // Article dashboard — spatial panel
             'desc_article_spatial':         'Places tagged on this article, located through the IWAC authority index. Every pin is one place mentioned once, so all pins are the same size. Click a pin to open the place’s record.',
             'article_place_subtitle':       'Mentioned in this article',
@@ -294,7 +303,7 @@
             'Press coverage this resembles': 'Press coverage this resembles',
             'desc_reference_activity':      'Where this work sits in the IWAC bibliography’s own publication timeline. The dot marks its year.',
             'desc_reference_similar':       'Works in the bibliography whose text reads most like this one, compared by an AI language model rather than by shared subject headings. Only works with extracted full text can appear, which is about half the bibliography.',
-            'desc_reference_press':         'Newspaper articles from the collection whose text reads like this work — the press coverage around what it studies. A scholarly work is long and was compared in summary, so read these as leads rather than as citations.',
+            'desc_reference_press':         'Newspaper articles from the collection whose text reads like this work: the press coverage around what it studies. A scholarly work is long and was compared in summary, so read these as leads rather than as citations.',
             'reference_topic_label':        'Topic',
             'reference_topic_model':        'Machine-generated topic words, from the model “{model}”. Each language has its own model, so topic numbers are not comparable across them.',
             'reference_topic_generated':    'Machine-generated topic words, not curated subject headings.',
@@ -305,57 +314,57 @@
             'Loading distinctive vocabulary': 'Loading distinctive vocabulary',
             'Distinctive vocabulary':       'Distinctive vocabulary',
             'Coverage bursts':              'Coverage bursts',
-            'keyness_title':                'Words that set this subcorpus apart',
-            'keyness_desc':                 'Words used at least {ratio}× more often here than in the rest of the collection. Bars are the size of that difference; the label gives the multiplier. Only differences unlikely to be chance are shown (false-discovery rate {alpha}, words needing at least {min} occurrences in the subcorpus). This is not the same as “most frequent”: a word can be common everywhere and distinctive nowhere.',
+            'keyness_title':                'Words that set this part of the collection apart',
+            'keyness_desc':                 'Words used at least {ratio}× more often here than in the rest of the collection. Each bar shows the size of that difference, and the label gives the multiplier. Only differences unlikely to be down to chance appear (false-discovery rate {alpha}; a word needs at least {min} occurrences here to qualify). Distinctive is not the same as frequent: a word can be common everywhere and stand out nowhere.',
             'keyness_slice_caption':        '{slice}: {docs} articles, {tokens} words, {terms} distinctive terms.',
             'keyness_axis':                 'Times more frequent than elsewhere (log₂)',
             'keyness_tooltip_ratio':        'Used {ratio}× as often as in the rest of the collection',
             'keyness_tooltip_count':        '{count} occurrences in {slice}',
             'keyness_tooltip_stats':        'Log-likelihood G² {g2}, corrected p {q}',
-            'bursts_title':                 'When coverage of a subject erupted',
-            'bursts_desc':                  'Periods when a subject was tagged on far more articles than its own long-run rate — roughly {s}× or above, found without being told what to look for. Each bar is one episode: the same subject can erupt more than once. Subjects need at least {min} tagged articles before their base rate is stable enough to test against. A subject simply entering the index and staying in use does not count: that is its arrival in the vocabulary, not a change in coverage.',
+            'bursts_title':                 'When coverage of a subject surged',
+            'bursts_desc':                  'Periods when a subject was tagged on far more articles than its own long-run rate, roughly {s}× that rate or above. The episodes are found automatically, without the software being told what to look for. Each bar is one episode, and the same subject can surge more than once. A subject needs at least {min} tagged articles before its baseline is steady enough to test against. A subject that simply enters the index and stays in use does not count: that is its arrival in the cataloguing vocabulary rather than a change in coverage.',
             'bursts_caption':               '{bursts} episodes across {subjects} subjects ({found} of {tested} tested subjects burst at all).',
             'bursts_tooltip_span':          'Burst: {start}–{end}',
             'bursts_tooltip_mentions':      '{mentions} of the subject’s {total} articles fall in this burst',
             'bursts_tooltip_weight':        'Burst strength {weight}',
 
             'topics_over_time_title':       'Topics over time',
-            'topics_over_time_desc':        'How the press’s attention shifted across themes (largest 12 topics; the rest fold into “Other topics”). Click a band to drill into the topic.',
+            'topics_over_time_desc':        'How the attention of the press shifted across themes (the 12 largest topics; the rest fold into “Other topics”). Click a band to open that topic.',
             'topic_other':                  'Other topics',
             'topics_weighting_dominant':    'Dominant topic',
             'topics_weighting_weighted':    'Probability-weighted',
             'topics_over_time_dominant_note': 'Each band is a topic’s share of the articles it was the single best label for that year, so every year sums to 100%. An article the model split evenly between three topics counts wholly for one of them.',
-            'topics_over_time_weighted_note': 'Each band is the average probability the model assigned to that topic across the year’s articles, so an evenly-split article contributes to all three of its topics. Only each article’s top {k} topics are available, so the stack tops out around {mass}% rather than 100% — the headroom is topic mass too thinly spread to be recorded, not unclassified articles.',
+            'topics_over_time_weighted_note': 'Each band is the average probability the model assigned to that topic across the year’s articles, so an evenly split article contributes to all three of its topics. Only the top {k} topics of each article are recorded, so the stack tops out around {mass}% rather than 100%. The gap is thematic weight spread too thinly to be stored, and not articles left unclassified.',
 
             // Shared renderer labels (calendar heatmap, chord, radar,
             // sibling sparkline, similar-items strip, sunburst, treemap)
-            'desc_calendar_heatmap':    'Publication density over time. Colour intensity scales with the count, on the same theme palette as the other heatmaps so they read together.',
+            'desc_calendar_heatmap':    'How densely publications fall over time. The darker the cell, the higher the count. The colours match the other heatmaps on this site so the two can be read side by side.',
             'cal_view_month':           'By month',
             'cal_view_day':             'By day',
             'cal_view_hijri':           'By Hijri month',
             'cal_hijri_era':            'AH',
             'cal_month_note':           'One column per year, one row per calendar month.',
-            'cal_day_note':             'One cell per day, one block per year. Good for spotting the burst around a single event, at the cost of a lot of empty grid.',
+            'cal_day_note':             'One cell per day, one block per year. Useful for spotting the surge around a single event, at the cost of a lot of empty grid.',
             'cal_hijri_note':           'Publication dates converted to the Islamic calendar with the Umm al-Qura tables, so Ramadan and Dhu al-Hijja hold still as rows instead of drifting eleven days a year across the Gregorian grid. Month boundaries in West Africa were set by local moon sighting and often fell a day either side of the tabular date, so a cell at the very start or end of a month may belong to its neighbour.',
             'cal_skipped_note':         '{count} could not be converted and are not shown.',
             'cal_hijri_coverage':       'Only a complete day-precision date converts to a lunar one, so this grid covers {shown} of the {total} mentions the Gregorian view shows.',
-            'desc_chord':               'Pairwise links between the top entities mentioned in this set, laid out in a circle. Edge thickness encodes co-occurrence weight; the layout caps at the 30 most central nodes so the chord stays legible.',
-            'desc_radar_profile':       'Side-by-side comparison along three or more scaled axes. Each axis is rescaled independently so the shapes can be compared even when one metric dwarfs the others on absolute scale.',
-            'desc_sibling_sparkline':   'Activity over time for the parent collection (e.g. this article in its newspaper’s timeline). The dot marks the current item.',
-            'desc_similar_items':       'Articles whose full text is closest to this one in semantic embedding space, ranked by cosine similarity. Shown only above a low-signal threshold so very short articles don’t produce noisy neighbours.',
-            'desc_sunburst':            'Hierarchical breakdown shown as concentric rings. Each ring is one level of the hierarchy; arc length scales with the count.',
-            'desc_treemap':             'Hierarchical breakdown shown as nested rectangles. Click a parent to drill in; the breadcrumb at the bottom navigates back up.',
+            'desc_chord':               'Links between the entities most often mentioned in this set, laid out in a circle. The thicker the ribbon, the more often the two are mentioned together. Only the 30 best-connected entities are drawn, so the diagram stays legible.',
+            'desc_radar_profile':       'Side-by-side comparison along three or more axes. Each axis is scaled on its own, so the shapes stay comparable even when one measure is far larger than the others.',
+            'desc_sibling_sparkline':   'Activity over time for the parent collection, such as this article within its newspaper’s timeline. The dot marks the current item.',
+            'desc_similar_items':       'Articles whose full text an AI model reads as closest to this one, ranked by how close the match is. Weak matches are hidden, so very short articles do not produce misleading neighbours.',
+            'desc_sunburst':            'A breakdown by level, drawn as concentric rings. Each ring is one level, and the longer the arc, the higher the count.',
+            'desc_treemap':             'A breakdown by level, drawn as nested rectangles. Click a rectangle to open it; the trail at the bottom leads back up.',
 
             // Index overview — block + section labels
             'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
-                'Prevalence of Dublin Core Subject and Spatial Coverage tags over time. Counts reflect item-level tagging, not text occurrence: an item tagged "Terrorism" contributes one mention to that year, no matter how many times the word appears in the body.',
+                'How often the collection’s Subject and Spatial Coverage tags are used over time. The counts measure cataloguing rather than wording: an item tagged “Terrorism” adds one mention to its year, however many times the word appears in the text.',
 
             // Index overview — Section A panel titles
             'Top entities':              'Most frequent entities in Dublin Core Subject and Spatial Coverage',
 
             // Index overview — Section A panel descriptions
             'desc_top_entities':   'Authority records that appear most often in item-level Dublin Core Subject (dcterms:subject) and Spatial Coverage (dcterms:spatial) fields. Click a bar to open the entity\u2019s page.',
-            'desc_lifespan':       'Each point is one entity: horizontal axis is the span in years between its first and last occurrence, vertical axis is its total mention count, color encodes entity type. Click a point to open the entity.',
+            'desc_lifespan':       'Each point is one entity. The horizontal axis is the span in years between its first and last appearance, the vertical axis its total number of mentions, and the colour shows the entity type. Click a point to open the entity.',
             'desc_temporal_extent': 'First and last year each top entity appears in the corpus (up to 30 per type, ranked by frequency). Each bar spans from earliest to latest mention.',
             'desc_places_map':     'Two complementary layers on the same map. Authority pins: every place in the IWAC authority index that has geographic coordinates. Mention bubbles: how often each place is tagged in an item\u2019s Dublin Core Spatial Coverage field, joined back to the authority pin by name. Click a pin to open the place\u2019s page.',
 
@@ -364,6 +373,7 @@
             // Index overview — map layer facets + index table search
 
             // Keyword Explorer — filters + tabs
+            'Top frequent':              'Most frequent',
             'top_n_keywords':            '{count} keywords',
             'select_up_to_n':            'Select up to {count} keywords',
 
@@ -371,16 +381,16 @@
             'top_n_over_time':           'Top {count} keywords over time',
 
             // Keyword Explorer — derived panels (ROADMAP 9.7 / 9.8)
-            'desc_subjects_bump':        'Rank of the leading subjects per decade — a climbing line took attention away from a sinking one. A line breaks where the subject drops out of the decade top 8; hover a decade for ranks and counts.',
-            'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage — whatever year you are viewing.',
+            'desc_subjects_bump':        'Rank of the leading subjects in each decade. A line that climbs is a subject gaining ground on those below it. A line breaks where the subject drops out of the decade’s top eight; hover over a decade for ranks and counts.',
+            'desc_geo_attention':        'How much attention the press gave each country over time, measured by how often articles were catalogued as being about it. Drag the year slider or press play. The colour scale is the same in every year, so a darker country always means heavier coverage, whatever year you are viewing.',
             // Spatial Exploration block
             'spatial_pick_hint':         'Pick an entity to map the places mentioned alongside it. Without a selection, the map shows every place in the collection.',
             'places_count':              '{count} places',
-            'spatial_map_description':   'Bubble size reflects how often a place is mentioned. Hover a place for a preview; click it for the full list of items.',
+            'spatial_map_description':   'The larger the bubble, the more often the place is mentioned. Hover over a place for a preview, or click it for the full list of items.',
             'admin_units_count':         '{count} units',
             'more_items_click':          '{count} more \u2014 click for the full list',
             // Entity Networks block
-            'networks_description':      'Entities appearing in the same items, positioned by co-occurrence strength. Click a node to inspect its connections.',
+            'networks_description':      'Entities that appear in the same items, placed closer together the more often they are mentioned together. Click a node to see its connections.',
             'network_select_hint':       'Click a node to see its strongest co-occurrences; click the background to clear.',
             'network_stats_entities':    '{nodes} entities \u00b7 {links} links',
             'network_stats_places':      '{nodes} places \u00b7 {links} links',
@@ -434,7 +444,7 @@
             'This issue in its periodical run': 'Ce numéro dans la collection du périodique',
             'desc_publication_run': 'Numéros de ce périodique par année — le point marque ce numéro.',
             'Similar issues': 'Numéros similaires',
-            'desc_publication_similar': 'Numéros les plus proches par similarité des sommaires (plongements Gemini).',
+            'desc_publication_similar': 'Numéros dont le sommaire ressemble le plus à celui-ci, rapprochés par un modèle d’IA (Gemini).',
             'Most frequent words in this issue': 'Mots les plus fréquents de ce numéro',
             'desc_publication_wordcloud': 'Les mots qui reviennent le plus souvent dans le texte de ce numéro.',
             'Word cloud': 'Nuage de mots',
@@ -467,7 +477,7 @@
             'Top publishers': '\u00c9diteurs les plus cit\u00e9s',
             'Top subjects': 'Sujets r\u00e9currents',
             'Reference provenance': 'Provenance des r\u00e9f\u00e9rences',
-            'references_provenance_desc': 'Lieux g\u00e9ocod\u00e9s li\u00e9s aux m\u00e9tadonn\u00e9es de provenance des r\u00e9f\u00e9rences lorsque le jeu Hugging Face fournit des origines r\u00e9solvables.',
+            'references_provenance_desc': 'Lieux de publication indiqu\u00e9s sur les r\u00e9f\u00e9rences, affich\u00e9s lorsque le lieu a pu \u00eatre associ\u00e9 \u00e0 des coordonn\u00e9es cartographiques.',
             'references_subject_cooccurrence_desc': 'Paires de sujets apparaissant ensemble sur une m\u00eame r\u00e9f\u00e9rence bibliographique.',
             'No provenance locations available': 'Aucun lieu de provenance disponible',
             'No subject co-occurrence available': 'Aucune cooccurrence de sujets disponible',
@@ -803,7 +813,7 @@
             'Diverging A minus B':          'Carte divergente A moins B',
 
             // Minimal item dashboard \u2014 French
-            'Loading visualizations':            'Chargement des visualisations',
+            'Loading visualisations':            'Chargement des visualisations',
             'Activity over time':                'Activit\u00e9 dans le temps',
             'Other items in this collection':    'Autres \u00e9l\u00e9ments de cette collection',
             'Visually similar photographs':      'Photographies visuellement similaires',
@@ -910,7 +920,7 @@
             'Entity Index Explorer':     'Explorateur d\u2019entit\u00e9s',
             'Keyword Explorer':          'Explorateur de mots-cl\u00e9s',
             'Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.':
-                'Pr\u00e9valence des indexations Dublin Core Sujet et Couverture spatiale dans le temps. Les comptes refl\u00e8tent l\u2019indexation au niveau de la notice, pas l\u2019occurrence dans le texte : une notice index\u00e9e \u00ab Terrorisme \u00bb compte pour une seule mention cette ann\u00e9e-l\u00e0, peu importe combien de fois le mot appara\u00eet dans le corps du texte.',
+                '\u00c0 quelle fr\u00e9quence les mots-cl\u00e9s Sujet et Couverture spatiale de la collection sont employ\u00e9s au fil du temps. Ces comptes mesurent l\u2019indexation et non la formulation : une notice index\u00e9e \u00ab Terrorisme \u00bb ajoute une seule mention \u00e0 son ann\u00e9e, quel que soit le nombre d\u2019occurrences du mot dans le texte.',
 
             // Index overview — Section A panel titles
             'Entities by type':          'Entit\u00e9s par type',

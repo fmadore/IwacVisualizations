@@ -47,7 +47,7 @@
             'Top subjects': 'Top subjects',
             'Spatial coverage': 'Spatial coverage',
             'Most frequent words': 'Most frequent words',
-            'desc_item_set_corpus': 'Aggregated from the IWAC corpus precompute for this collection.'
+            'desc_item_set_corpus': 'Compiled in advance from the IWAC corpus for this collection.'
         });
         ns.addTranslations('fr', {
             'Items': 'Éléments',

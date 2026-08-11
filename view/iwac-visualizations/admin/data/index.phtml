@@ -23,7 +23,7 @@ $health = isset($health) ? $health : null;
 
     <p>
         <?= $escape($translate(
-            'Download the latest precomputed visualization data and unpack it into '
+            'Download the latest precomputed visualisation data and unpack it into '
             . 'the site files. The heavy generation runs in GitHub Actions, off this '
             . 'server; this only pulls the published archive. Progress and any errors '
             . 'are logged under Admin → Jobs.'
@@ -63,8 +63,8 @@ $health = isset($health) ? $health : null;
     <h3><?= $escape($translate('Corpus health')) ?></h3>
     <p>
         <?= $escape($translate(
-            'Coverage of the upstream enrichment pipelines, computed from the Hugging Face '
-            . 'dataset at data-build time. Use these meters to steer digitization and '
+            'How far the enrichment pipelines have got, measured against the Hugging Face '
+            . 'dataset when the data was built. Use these meters to set digitisation and '
             . 'annotation priorities; they refresh with every data pull.'
         )) ?>
         <?php if (!empty($health['generated_at'])): ?>
@@ -130,7 +130,7 @@ $health = isset($health) ? $health : null;
     <h3><?= $escape($translate('Iframe embeds')) ?></h3>
     <p>
         <?= $escape($translate(
-            'Open a site-specific embed gallery to preview each page-block visualization and copy its iframe snippet.'
+            'Open a site-specific embed gallery to preview each page-block visualisation and copy its iframe snippet.'
         )) ?>
     </p>
     <?php if (!empty($sites)): ?>

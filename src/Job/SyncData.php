@@ -5,7 +5,7 @@ use Omeka\Job\AbstractJob;
 use ZipArchive;
 
 /**
- * Pull the precomputed visualization data into the Omeka file store.
+ * Pull the precomputed visualisation data into the Omeka file store.
  *
  * Background to issue #7: the heavy Python generators (UMAP, ForceAtlas2,
  * numpy kNN over the Hugging Face dataset) run in GitHub Actions, never on

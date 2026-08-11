@@ -30,25 +30,25 @@
     if (ns.addTranslations) {
         ns.addTranslations('en', {
             'Loading press reprints':  'Loading press reprints',
-            'reprints.title':          'Press reprints & wire copy',
-            'reprints.description':    'Pairs of articles from different newspapers whose text is almost the same — the traces of press-agency dispatches (PANA, AFP), shared communiqués, and outright reprints passing between titles. The pairing is done by software that measures how closely two articles are worded; a very close match usually means one was copied from the other, or both ran the same agency dispatch. Because a computer proposes these matches rather than a person confirming them, treat each pair as a lead to check, not a settled fact.',
+            'reprints.title':          'Press reprints and wire copy',
+            'reprints.description':    'Pairs of articles from different newspapers whose text is almost the same: the traces of press-agency dispatches (PANA, AFP), shared communiqués, and outright reprints passing between titles. The pairing is done by software that measures how closely two articles are worded, and a very close match usually means one was copied from the other, or that both ran the same agency dispatch. Because a computer proposes these matches rather than a person confirming them, treat each pair as a lead to check rather than a settled fact.',
             'reprints.card_pairs':     'Reprint pairs',
             'reprints.card_papers':    'Newspapers involved',
             'reprints.card_gap':       'Median gap (days)',
             'reprints.card_scanned':   'Articles compared',
             'reprints.network_title':  'Circulation network',
-            'reprints.network_desc':   'Line width is the number of near-identical texts two outlets share; node size is the outlet’s total. Colors follow the outlet’s country.',
+            'reprints.network_desc':   'The thicker the line, the more near-identical texts the two outlets share. Node size is the outlet’s total, and the colours follow the outlet’s country.',
             'reprints.network_tip':    '{a} ↔ {b}: {n} shared texts',
             'reprints.node_tip':       '{name}: {n} shared texts',
             'reprints.table_title':    'Reprint pairs',
-            'reprints.table_desc':     'Sorted by similarity. A gap of 0–2 days is the wire-copy signature; longer gaps suggest deliberate reprints.',
+            'reprints.table_desc':     'Sorted by similarity. A gap of 0–2 days is the signature of wire copy, while longer gaps suggest a deliberate reprint.',
             'reprints.col_sim':        'Similarity',
             'reprints.col_gap':        'Gap (days)',
             'reprints.col_article_a':  'Article A',
             'reprints.col_paper_a':    'Newspaper A',
             'reprints.col_article_b':  'Article B',
             'reprints.col_paper_b':    'Newspaper B',
-            'reprints.truncated':      'Showing the {n} strongest pairs — the full set continues below the threshold.'
+            'reprints.truncated':      'Showing the {n} strongest pairs; the full set continues below the threshold.'
         });
         ns.addTranslations('fr', {
             'Loading press reprints':  'Chargement des reprises de presse',

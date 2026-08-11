@@ -29,8 +29,8 @@
     if (ns.addTranslations) {
         ns.addTranslations('en', {
             'Loading organisation co-occurrences': 'Loading organisation co-occurrences',
-            'orgcooc.title':        'Islamic organisations — discursive neighbourhoods',
-            'orgcooc.description':  'Which ideas cluster around an organisation in the West African press. For the chosen organisation we gather the words that appear near its name (within about {window} words), then count how often each pair of those words turns up together in the same article. Darker cells are pairs that recur across many articles — the recurring threads in how the press writes about the group. The diagonal is blank, since pairing a word with itself says nothing.',
+            'orgcooc.title':        'Islamic organisations and the words around them',
+            'orgcooc.description':  'Which ideas gather around an organisation in the West African press. For the organisation you choose, the panel collects the words that appear near its name, within about {window} words, then counts how often each pair of those words turns up together in the same article. The darker the cell, the more articles the pair recurs in, marking a thread that runs through how the press writes about the group. The diagonal is blank, since pairing a word with itself says nothing.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Sort',
             'orgcooc.sort_freq':    'Frequency',
@@ -39,15 +39,15 @@
             'orgcooc.card_vocab':    'Distinct context words',
             'orgcooc.card_maxpair':  'Strongest pair (articles)',
             'orgcooc.card_span':     'Coverage span',
-            'orgcooc.matrix_title':  'Co-occurrence matrix — {org}',
+            'orgcooc.matrix_title':  'Co-occurrence matrix: {org}',
             'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} shared articles',
             'orgcooc.term_total':    '{term}: in {count} matching articles',
             'orgcooc.view_record':   'View authority record'
         });
         ns.addTranslations('fr', {
             'Loading organisation co-occurrences': 'Chargement des co-occurrences',
-            'orgcooc.title':        'Organisations islamiques — voisinages discursifs',
-            'orgcooc.description':  'Quelles idées se regroupent autour d’une organisation dans la presse ouest-africaine. Pour l’organisation choisie, on rassemble les mots qui apparaissent près de son nom (à environ {window} mots), puis on compte combien de fois chaque paire de ces mots se retrouve ensemble dans un même article. Les cellules plus sombres sont les paires qui reviennent dans de nombreux articles — les fils récurrents de la manière dont la presse traite le groupe. La diagonale est vide, car associer un mot à lui-même n’apporte rien.',
+            'orgcooc.title':        'Les organisations islamiques et les mots qui les entourent',
+            'orgcooc.description':  'Quelles idées se regroupent autour d’une organisation dans la presse ouest-africaine. Pour l’organisation choisie, le panneau rassemble les mots qui apparaissent près de son nom, à environ {window} mots, puis compte combien de fois chaque paire de ces mots se retrouve ensemble dans un même article. Plus la cellule est sombre, plus la paire revient dans un grand nombre d’articles, signe d’un fil qui traverse la manière dont la presse traite le groupe. La diagonale est vide, car associer un mot à lui-même n’apporte rien.',
             'orgcooc.organisation': 'Organisation',
             'orgcooc.sort':         'Tri',
             'orgcooc.sort_freq':    'Fréquence',
@@ -56,7 +56,7 @@
             'orgcooc.card_vocab':    'Mots de contexte distincts',
             'orgcooc.card_maxpair':  'Paire la plus forte (articles)',
             'orgcooc.card_span':     'Période couverte',
-            'orgcooc.matrix_title':  'Matrice de co-occurrence — {org}',
+            'orgcooc.matrix_title':  'Matrice de co-occurrence : {org}',
             'orgcooc.pair_tooltip':  '{a} × {b}<br>{count} articles partagés',
             'orgcooc.term_total':    '{term} : dans {count} articles correspondants',
             'orgcooc.view_record':   'Voir la notice d’autorité'

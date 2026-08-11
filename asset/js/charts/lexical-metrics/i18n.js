@@ -15,19 +15,19 @@
 
         ns.addTranslations('en', {
             'Loading press language metrics': 'Loading press language metrics',
-            'lexical.mean_readability':       'Mean readability (Flesch)',
-            'lexical.mean_richness':          'Mean lexical richness',
-            'lexical.mean_words':             'Mean words per article',
+            'lexical.mean_readability':       'Average readability (Flesch)',
+            'lexical.mean_richness':          'Average lexical richness',
+            'lexical.mean_words':             'Average words per article',
             'lexical.readability_title':      'Readability over time',
-            'lexical.readability_desc':       'Mean Flesch reading-ease score (French adaptation) of the articles published each year, computed from the OCR text. Higher = easier to read.',
+            'lexical.readability_desc':       'Average Flesch reading-ease score (French adaptation) of the articles published each year, computed from the scanned text. The higher the score, the easier the article is to read.',
             'lexical.richness_title':         'Lexical richness over time',
-            'lexical.richness_desc':          'Mean MATTR (moving-average type-token ratio, 50-word window) of the articles published each year, computed from the OCR text. Higher = more varied vocabulary. Unlike a plain type-token ratio, MATTR does not fall as articles get longer, so long and short articles are directly comparable; articles under 50 words are left unscored.',
+            'lexical.richness_desc':          'Average lexical richness of the articles published each year, computed from the scanned text. The measure is MATTR, which counts how many different words appear in each 50-word stretch of an article. The higher the value, the more varied the vocabulary. MATTR holds steady as an article gets longer, so long and short articles are directly comparable; articles under 50 words are left unscored.',
             'lexical.words_title':            'Article length over time',
-            'lexical.words_desc':             'Mean number of words per article published each year, counted from the OCR text.',
+            'lexical.words_desc':             'Average number of words per article published each year, counted from the scanned text.',
             'lexical.np_read_title':          'Newspapers by readability',
-            'lexical.np_read_desc':           'Newspapers with at least {min} articles, ranked by mean Flesch reading-ease score computed from the OCR text (top {top}). Higher = easier to read.',
+            'lexical.np_read_desc':           'Newspapers with at least {min} articles, ranked by their average Flesch reading-ease score, computed from the scanned text (top {top}). The higher the score, the easier the articles are to read.',
             'lexical.np_rich_title':          'Newspapers by lexical richness',
-            'lexical.np_rich_desc':           'Newspapers with at least {min} articles, ranked by mean MATTR (moving-average type-token ratio, 50-word window) computed from the OCR text (top {top}). Higher = more varied vocabulary.',
+            'lexical.np_rich_desc':           'Newspapers with at least {min} articles, ranked by their average lexical richness (MATTR), computed from the scanned text (top {top}). The higher the value, the more varied the vocabulary.',
             'lexical.axis_readability':       'Flesch score',
             'lexical.axis_richness':          'MATTR'
         });

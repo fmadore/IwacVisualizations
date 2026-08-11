@@ -43,6 +43,18 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.40.0 — a copy edit of every user-facing string
+
+No behaviour change and no new data. Every string a reader can see — panel titles, chart descriptions, tooltips, empty states, the embed gallery, the admin data page — was edited for British spelling, plain language, and the removal of machine-writing tics.
+
+**British English throughout.** `Color by` → `Colour by`, `Center` → `Centre`, `Organizations` → `Organisations`, with `colored` / `color-faceted` / `digitized` / `digitization` / `lemmatized` following. Public-facing `visualization(s)` becomes `visualisation(s)`; the module's own name stays `IWAC Visualizations` in the admin nav and `config/module.ini`, because that is what it is called. Two of these are keyed on the American spelling at the call sites, so the English override lives in the `en` table rather than in a renamed key.
+
+**Method descriptions written for readers who are not digital humanists.** The panels that explained themselves in the vocabulary of the method now explain the method: "ranked by TF-IDF distinctiveness" became "the ranking favours names peculiar to this person over names that turn up everywhere in the collection"; "ranked by cosine similarity in semantic embedding space" became "ranked by how close the match is"; "UMAP over AI embeddings" became "an AI model compares the texts, and a technique called UMAP flattens those comparisons onto two dimensions". `row-normalised`, `topic mass`, `subcorpus`, `LDA-30`, `multimodal embedding`, `geocoded provenance metadata` and `MATTR` each gained a gloss or a plainer replacement. The precise field names stay where they earn their place — the index panels still name `dcterms:subject` and `dcterms:spatial`, because that is who reads them.
+
+**Machine-writing tics removed**, the Laïcité block most of all, since it carried the most prose. Out go the negative parallelisms (`The corpus is not empty — it is untestable at this size`, `Bylines, not people`, `they differ in genre, not in evidentiary status`), the manufactured fragments (`Never as a mean.`, `Read it two ways.`), the self-description (`the view that makes the block a research instrument rather than an overview`), the dead metaphor (`closing the loop`), the performed candour (`reported rather than dressed up`), and a tacked-on `— a window onto what drives the strongest assessments`. Em dashes fall to 13 across 805 English strings, all of them label separators (`Reading ease — dossier`) rather than prose pauses. The claims themselves are unchanged: every caveat about denominators, sampling and model output that these panels carried, they still carry.
+
+**Nineteen msgids changed**, so `language/fr.po` and `language/template.pot` were rewritten entry by entry and `fr.mo` recompiled — 124 messages before and after, no translation lost. The On This Day description in the catalogue had drifted behind `BlockRegistry` at some earlier point; it matches again, with the French for the sentences that were missing. Where an English edit changed *what* a string says rather than how it says it, the French was updated alongside it, including the same tics in French (`Jamais en moyenne.`, `bouclant la boucle`, `L'absence est le résultat.`).
+
 ### v1.39.0 — the Laïcité block grows three views, and a panel stops lying about missing data
 
 Closes [#19](https://github.com/fmadore/IwacVisualizations/issues/19) and the remaining half of [#15](https://github.com/fmadore/IwacVisualizations/issues/15).

@@ -136,7 +136,7 @@ if ($hasSentiment) {
              data-iwac-no-panel-toolbar="1">
         <h4><?= $translate('AI sentiment') ?></h4>
         <p class="iwac-vis-panel-desc">
-            <?= $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). Read directly from the Omeka item metadata.') ?>
+            <?= $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). Read directly from this item’s record.') ?>
         </p>
 
         <div class="iwac-vis-sent">
@@ -267,7 +267,7 @@ echo $this->partial('common/iwac-block-shell', [
         'orchestrator' => 'article-dashboard',
     ],
     'blockClass'   => 'iwac-vis-article',
-    'heading'      => $this->translate('Visualizations'),
+    'heading'      => $this->translate('Visualisations'),
     'loading'      => $this->translate('Loading dashboard'),
     'loadingClass' => 'iwac-vis-article__loading',
     'data'         => ['item-id' => $resource->id()],

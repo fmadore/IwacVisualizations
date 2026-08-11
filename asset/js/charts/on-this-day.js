@@ -40,7 +40,7 @@
             'Loading on this day': 'Loading on this day',
             'otd.title':      'On this day',
             'otd.desc':       'Published on {date}, across the decades of the collection.',
-            'otd.desc_h':     'Published on {date}, across the decades of the collection — the same lunar date, one Gregorian year to the next.',
+            'otd.desc_h':     'Published on {date}, across the decades of the collection: the same lunar date, one Gregorian year to the next.',
             'otd.type_a':     'Article',
             'otd.type_p':     'Periodical',
             'otd.ago':        '{count} years ago',
