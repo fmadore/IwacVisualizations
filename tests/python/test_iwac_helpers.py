@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+import dashboard_aggregator  # noqa: E402
 import generate_topic_explorer  # noqa: E402
 import iwac_embeddings  # noqa: E402
 import iwac_stats  # noqa: E402
@@ -204,6 +205,45 @@ class TopicExplorerTests(unittest.TestCase):
                 {"hijri_year": "hy", "hijri_month": "hm"},
             )
         )
+
+    def test_hijri_reader_rejects_the_nulls_partial_dates_leave(self) -> None:
+        # Only a complete YYYY-MM-DD converts upstream, so the normal
+        # miss is a NaN in a float64 column — not a missing column.
+        cols = {"hijri_year": "hy", "hijri_month": "hm"}
+        self.assertIsNone(
+            iwac_utils.read_hijri_month(pd.Series({"hy": float("nan"), "hm": 9.0}), cols)
+        )
+        # ...and a float-typed hit still reads as an int pair.
+        self.assertEqual(
+            iwac_utils.read_hijri_month(pd.Series({"hy": 1445.0, "hm": 9.0}), cols),
+            (1445, 9),
+        )
+        # References carry no such columns at all.
+        self.assertIsNone(
+            iwac_utils.read_hijri_month(pd.Series({"hy": 1445}), {"hijri_year": None})
+        )
+
+
+class DashboardHeatmapTests(unittest.TestCase):
+    def test_month_grid_fills_gap_years_and_totals_its_own_items(self) -> None:
+        grid = dashboard_aggregator.DashboardAggregator._month_grid(
+            {(1999, 1): 2, (2001, 12): 3},
+            {1999, 2000, 2001},
+        )
+        # A category axis of [1999, 2001] would render the silent year as
+        # one column step and read as continuous coverage.
+        self.assertEqual(grid["years"], [1999, 2000, 2001])
+        self.assertEqual(sorted(grid["cells"]), [[0, 0, 2], [2, 11, 3]])
+        # The panel subtracts these two totals to state the Hijri view's
+        # smaller denominator, so it has to count items and not cells.
+        self.assertEqual(grid["items"], 5)
+
+    def test_empty_slice_is_a_grid_shape_not_none(self) -> None:
+        grid = dashboard_aggregator.DashboardAggregator._month_grid({}, set())
+        self.assertEqual(grid["years"], [])
+        self.assertEqual(grid["cells"], [])
+        self.assertEqual(grid["items"], 0)
+        self.assertEqual(grid["months"], list(range(1, 13)))
 
 
 if __name__ == "__main__":

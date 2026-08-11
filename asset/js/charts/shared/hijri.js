@@ -19,11 +19,11 @@
  *      locales — the scholarly convention for Hijri dates, and the reason
  *      this formats by hand instead of asking Intl for a long date.
  *
- * Exposed as `IWACVis.hijri`.
- *
- * NOTE: `shared/renderers/calendar-heatmap.js` still carries its own copy of
- * this logic (it predates this module). The two agree today; folding that
- * renderer onto this module would remove the chance of them drifting.
+ * Exposed as `IWACVis.hijri`, and enqueued unconditionally by
+ * `view/common/iwac-assets.phtml` — `MONTHS` is the module's single copy of
+ * the table, read by the calendar-heatmap renderer and the dashboards'
+ * year × month panel as well as by On This Day. Both of those used to carry
+ * private duplicates.
  */
 (function () {
     'use strict';

@@ -522,6 +522,40 @@
     max-width: var(--measure-narrow, 44rem);
 }
 
+/*  Link from one block to a sibling that treats the same material from
+ *  another angle (Laïcité's `concurrence` frame ⇄ Scary Terms). Built by
+ *  `embed.js::crossBlockLink`.
+ *
+ *  Primary-coloured because this IS the theme's sanctioned use of brand
+ *  colour — an interactive affordance — rather than decoration. Kept to
+ *  a text link with an underline offset instead of a button: it is an
+ *  aside pointing sideways, not the panel's main action, and a button
+ *  would compete with the controls it sits above. */
+.iwac-vis-cross-block {
+    display: inline-block;
+    align-self: flex-start;
+    margin: 0;
+    color: var(--primary, #ce4115);
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    text-decoration-thickness: 1px;
+    transition: color 150ms ease;
+}
+
+.iwac-vis-cross-block:hover,
+.iwac-vis-cross-block:focus-visible {
+    color: color-mix(in oklab, var(--primary, #ce4115), var(--ink-strong, #05070c) 30%);
+    text-decoration-thickness: 2px;
+}
+
+.iwac-vis-cross-block:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+    border-radius: var(--radius-sm, 0.375rem);
+}
+
 /*  Aside / sidebar surface card — the raised-panel shell shared by the
  *  entity-networks aside, the spatial-exploration sidebar, the Keyword
  *  Explorer sidebar and the org-cooccurrence controls row. Blocks add

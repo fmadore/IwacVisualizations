@@ -97,6 +97,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    HIJRI_COLUMNS,
     canonical_country,
     clean_float,
     clean_str,
@@ -105,6 +106,7 @@ from iwac_utils import (
     extract_year,
     find_column,
     load_dataset_safe,
+    read_hijri_month,
     save_json,
 )
 
@@ -179,32 +181,10 @@ def extract_iso_day(value: Any) -> Optional[str]:
     return s[:10]
 
 
-# The Hijri columns the dataset ships beside `pub_date`, written upstream
-# from the Umm al-Qura tables. Read, never recomputed: the browser's ICU
-# tables disagree with these on ~75% of this collection's pre-2000 days,
-# which at the Hijri facet's month granularity moved 0.78% of items into
-# the wrong lunar month back when the client did the conversion itself.
-HIJRI_COLUMNS = ('hijri_year', 'hijri_month', 'hijri_day')
-
-
-def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
-                     ) -> Optional[Tuple[int, int]]:
-    """The row's stored ``(hijri_year, hijri_month)``, or None.
-
-    None means the dataset left the conversion empty, which it does for
-    every ``pub_date`` that is not a complete ``YYYY-MM-DD`` — the same
-    rows ``extract_iso_day`` already drops.
-    """
-    y_col, m_col = cols.get('hijri_year'), cols.get('hijri_month')
-    if not y_col or not m_col:
-        return None
-    try:
-        h_year, h_month = int(row.get(y_col)), int(row.get(m_col))
-    except (TypeError, ValueError):
-        return None
-    if not (1 <= h_month <= 12 and h_year > 0):
-        return None
-    return h_year, h_month
+# HIJRI_COLUMNS / read_hijri_month moved to iwac_utils in v1.39.0, when
+# the person + entity dashboards became a second consumer. Re-exported
+# here so this module's own name keeps working for existing callers and
+# tests.
 
 
 def aggregate_per_topic(

@@ -147,6 +147,26 @@
     };
 
     /**
+     * Link from a frame card to the sibling block that covers the same
+     * material from another angle, when the lexicon declares one.
+     * `E.crossBlockLink` owns the URL and the where-am-I checks.
+     *
+     * The link TEXT rides in the lexicon beside the target, same as
+     * note_en / note_fr — a msgid per slug would have to be added in
+     * lockstep with every new `cross_block` and renders the raw key when
+     * that is missed.
+     */
+    function crossBlockLink(spec) {
+        var E = ns.embed;
+        if (!spec || !E || !E.crossBlockLink) return null;
+        var label = (ns.locale === 'fr' ? spec.cross_fr : spec.cross_en)
+            || spec.cross_en;
+        var link = E.crossBlockLink(spec.cross_block, label);
+        if (link) link.className += ' iwac-vis-laicite-frame-cross';
+        return link;
+    }
+
+    /**
      * The frame legend. Membership frames are marked as such, and a frame
      * that is nearly empty carries the note explaining why it was kept —
      * the absence of the sociological register is a finding, so the panel
@@ -192,6 +212,8 @@
             if (note) {
                 card.appendChild(P.el('p', 'iwac-vis-laicite-frame-note', note));
             }
+            var cross = crossBlockLink(spec);
+            if (cross) card.appendChild(cross);
             grid.appendChild(card);
         });
         panel.appendChild(grid);

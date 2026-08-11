@@ -341,7 +341,13 @@
             var cls = 'iwac-vis-summary-card';
             if (c.featured) cls += ' iwac-vis-summary-card--featured';
             var card = P.el('div', cls);
-            card.appendChild(P.el('div', 'iwac-vis-summary-card__label', P.t(c.labelKey)));
+            // `labelParams` lets a caller interpolate into the msgid —
+            // needed wherever the label names something that varies at
+            // runtime (an AI model, say), which otherwise forces one
+            // msgid per possible value and breaks the moment a new value
+            // appears in the data.
+            card.appendChild(P.el('div', 'iwac-vis-summary-card__label',
+                P.t(c.labelKey, c.labelParams)));
             card.appendChild(P.el('div', 'iwac-vis-summary-card__value',
                 c.text ? String(c.value) : P.formatNumber(c.value)));
             cardsEl.appendChild(card);

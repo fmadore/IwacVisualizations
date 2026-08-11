@@ -766,18 +766,35 @@
      * Colors are read from IWAC theme tokens via getChartTokens so the
      * ramp follows --primary and flips for dark mode.
      *
+     * The grid is calendar-agnostic: `opts.calendar = 'hijri'` swaps the
+     * twelve row labels for the lunar months and tags the tooltip year
+     * with an era marker. Nothing here converts a date — Hijri cells
+     * arrive already bucketed by the generator from the dataset's stored
+     * `hijri_*` columns, because ICU (what a browser would convert with)
+     * disagrees with those tables on ~75% of this collection's pre-2000
+     * days.
+     *
      * @param {{years:number[], months:number[], cells:Array}} data
+     * @param {Object} [opts]
+     * @param {string} [opts.calendar]  'hijri' for the lunar row labels
      */
     C.heatmap = function (data, opts) {
         opts = opts || {};
         var years = (data && data.years) || [];
         var cells = (data && data.cells) || [];
+        var hijri = opts.calendar === 'hijri';
         var monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         if (ns.locale === 'fr') {
             monthLabels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
                            'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
         }
+        // Single copy of the lunar table lives in shared/hijri.js.
+        if (hijri && ns.hijri && ns.hijri.MONTHS) {
+            monthLabels = ns.hijri.MONTHS[ns.locale === 'fr' ? 'fr' : 'en']
+                || ns.hijri.MONTHS.en;
+        }
+        var era = hijri ? ' ' + t('cal_hijri_era') : '';
         var max = 1;
         cells.forEach(function (c) { if (c[2] > max) max = c[2]; });
 
@@ -810,14 +827,23 @@
                 formatter: function (p) {
                     var year = years[p.data[0]];
                     var month = monthLabels[p.data[1]];
-                    return '<strong>' + month + ' ' + year + '</strong><br>' +
+                    return '<strong>' + esc(month + ' ' + year + era) + '</strong><br>' +
                         t('mentions_count', { count: fmt(p.data[2]) });
                 }
             },
-            grid: C._grid({ top: 24, bottom: 40, left: 64, right: 72 }),
+            // Hijri month names run two to three times longer than "Jan",
+            // so the y-axis gutter widens to match instead of truncating.
+            grid: C._grid({ top: 24, bottom: 40, left: hijri ? 96 : 64, right: 72 }),
             xAxis: {
                 type: 'category',
                 data: years.map(String),
+                // The year axis is unlabelled in Gregorian (four digits
+                // starting with 19/20 need no gloss) but carries the era
+                // marker in Hijri, where a bare 1441 would otherwise read
+                // as a typo.
+                name: hijri ? t('cal_hijri_era') : '',
+                nameLocation: 'end',
+                nameGap: 8,
                 // Auto-skip labels when many years crowd the x axis
                 axisLabel: { interval: 'auto', fontSize: 10 },
                 splitArea: { show: true },

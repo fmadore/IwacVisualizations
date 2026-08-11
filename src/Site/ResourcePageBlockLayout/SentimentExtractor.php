@@ -45,11 +45,19 @@ class SentimentExtractor
      * and the radar legend cannot drift apart on a model rename. Not
      * `@translate`-marked: these are proper nouns.
      *
-     * NOTE: the JS side carries its own copy for the Sentiment Atlas block
-     * (`asset/js/charts/sentiment-atlas.js` MODELS and the
-     * `sentiment.rated_*` strings in `sentiment-atlas/i18n.js`) — PHP
-     * constants aren't reachable from a precomputed-JSON block. On a model
-     * rename, update this constant AND those two files together.
+     * NOTE: the precomputed blocks cannot reach a PHP constant, so the JS
+     * side has its own display-name table in
+     * `asset/js/charts/shared/panels-controls.js`
+     * (`P.sentimentModelLabel`). That table is now the ONLY JS copy, and
+     * it is a label lookup rather than a model list: the panels take
+     * which models to show from their payload's own `models` field, so a
+     * rater-panel change no longer has to be mirrored into JS at all —
+     * only a display name for the new id, and even that degrades to a
+     * readable fallback if it is missed.
+     *
+     * This class is different: it reads Omeka properties directly, so
+     * MODELS here is a genuine list of which `iwac:` properties to look
+     * at and does have to be updated on a rater-panel change.
      */
     const MODEL_INFO = [
         'gpt56Luna' => [

@@ -225,6 +225,15 @@ $scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
 // (after panel-toolbar, whose toolbar container it reuses).
 $scripts[] = $this->assetUrl('js/charts/shared/embed.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/responsive.min.js', $module);
+// hijri.js owns the Umm al-Qura month-name table AND the probe-then-trust
+// Intl conversion of *today*. Unconditional for the same reason as
+// responsive.js above — it is 1.2 KB and has no dependencies — but here the
+// duplication argument matters more than the size one: three consumers need
+// the month names (the calendar-heatmap renderer, the dashboards' year ×
+// month panel, On This Day), and gating it on $needs is exactly how those
+// consumers ended up carrying private copies that could drift apart. One
+// table, always present, no coordination.
+$scripts[] = $this->assetUrl('js/charts/shared/hijri.min.js', $module);
 if ($needChartOpts) {
     // chart-options core must load before its four family builders, which
     // extend the same IWACVis.chartOptions namespace in any order.

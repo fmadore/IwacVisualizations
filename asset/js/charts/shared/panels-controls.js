@@ -18,6 +18,59 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels = ns.panels || {};
 
+    /* ----------------------------------------------------------------- */
+    /*  AI sentiment model labels                                         */
+    /* ----------------------------------------------------------------- */
+    //
+    // Display names for the sentiment model ids, which are the Hugging
+    // Face column prefixes (scripts/iwac_utils.py SENTIMENT_MODELS) and
+    // the keys every precomputed sentiment payload is keyed on.
+    //
+    // BOTH generations are listed, and that is the point. The module
+    // ships independently of its data (issue #7: code goes out as a
+    // release, data as a CI-built archive the admin pulls separately), so
+    // there is always a window in which a freshly-updated module is
+    // reading a bundle generated before the change. When the rater panel
+    // moved from the generation-1 vendor slots to the generation-2 model
+    // ids, three panels held a hardcoded list of the new ids, matched
+    // nothing in the deployed bundle, and rendered "no data available"
+    // over payloads that were full of perfectly good numbers.
+    //
+    // So: panels take their model list from the payload's own `models`
+    // array and come here only for a label. An id with no entry gets a
+    // readable fallback rather than being dropped — an unknown model is
+    // still a model, and hiding it would repeat the same failure.
+    var SENTIMENT_MODEL_LABELS = {
+        // Generation 2 — live (July–August 2026)
+        'gpt_5_6_luna':           'GPT-5.6 Luna',
+        'mistral_small_2603':     'Mistral Small 4',
+        'deepseek_v4_flash_0731': 'DeepSeek V4 Flash',
+        // Generation 1 — frozen (January–February 2026). Kept so an
+        // older bundle still renders with the right names on screen.
+        'gemini_3_flash_preview': 'Gemini 3 Flash',
+        'gpt_5_mini':             'GPT-5 mini',
+        'ministral_14b_2512':     'Ministral 14B',
+        // Generation 1, vendor-slot ids. These named a *company* rather
+        // than a model — nothing recorded which model actually ran — so
+        // the label says only that much.
+        'gemini':                 'Gemini (2026-01)',
+        'chatgpt':                'ChatGPT (2026-01)',
+        'mistral':                'Mistral (2026-01)'
+    };
+
+    /**
+     * Display name for a sentiment model id. Falls back to the id with
+     * separators normalised, so an id added upstream before this table
+     * knows about it still reads as a name.
+     *
+     * @param {string} key  model id / HF column prefix
+     * @returns {string}
+     */
+    P.sentimentModelLabel = function (key) {
+        if (!key) return '';
+        return SENTIMENT_MODEL_LABELS[key] || String(key).replace(/_/g, ' ');
+    };
+
     /**
      * Labelled `<select>` control: `<div><label>text:</label><select>…</select></div>`
      * with a generated id wiring the label to the select. Replaces the

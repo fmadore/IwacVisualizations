@@ -17,19 +17,37 @@
     var P = ns.panels;
     var CN = ns.compareNewspapers = ns.compareNewspapers || {};
 
-    // Keys are the ids the precomputed bundle keys `sentiment.models`
-    // on — the Hugging Face column prefixes (scripts/iwac_utils.py
-    // SENTIMENT_MODELS). Labels are proper nouns, so not translated.
-    var SENTIMENT_MODELS = [
-        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
-        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
-        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
-    ];
+    // Model ids come from the PAYLOAD's own `sentiment.models` map, never
+    // from a constant here — a hardcoded list silently stops matching the
+    // moment the rater panel changes upstream, and the module ships
+    // separately from its data, so that window is routine rather than
+    // exceptional. P.sentimentModelLabel supplies the display names.
+    //
+    // Union of both corpora: A and B are independent bundles and may have
+    // been generated against different rater panels, in which case the
+    // picker should offer everything either side can answer rather than
+    // silently intersecting them down to nothing.
+    function modelKeys(dataA, dataB) {
+        var seen = {};
+        var out = [];
+        [dataA, dataB].forEach(function (d) {
+            var models = ((d || {}).sentiment || {}).models || {};
+            Object.keys(models).forEach(function (key) {
+                if (seen[key]) return;
+                seen[key] = true;
+                out.push(key);
+            });
+        });
+        return out;
+    }
 
     function buildSentiment(dataA, dataB) {
         var hasA = dataA.type === 'articles' && dataA.sentiment && dataA.sentiment.models;
         var hasB = dataB.type === 'articles' && dataB.sentiment && dataB.sentiment.models;
         if (!hasA && !hasB) return null;
+
+        var sentimentModels = modelKeys(hasA ? dataA : null, hasB ? dataB : null);
+        if (!sentimentModels.length) return null;
 
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('AI sentiment comparison')));
@@ -56,9 +74,9 @@
         modelLabel.htmlFor = 'iwac-cmp-sent-model-' + CN.nextUid();
         var modelSelect = P.el('select');
         modelSelect.id = modelLabel.htmlFor;
-        SENTIMENT_MODELS.forEach(function (m) {
-            var opt = P.el('option', null, m.label);
-            opt.value = m.key;
+        sentimentModels.forEach(function (key) {
+            var opt = P.el('option', null, P.sentimentModelLabel(key));
+            opt.value = key;
             modelSelect.appendChild(opt);
         });
 

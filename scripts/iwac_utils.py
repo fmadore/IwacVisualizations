@@ -13,6 +13,7 @@ Functions:
 - extract_year: Extract year from various date formats
 - extract_month: Extract YYYY-MM from date values
 - extract_month_num: Pull the 1–12 month number out of a "YYYY-MM[-DD]" date
+- read_hijri_month: The row's stored (hijri_year, hijri_month), or None
 - parse_coordinates: Parse "lat, lng" or "lat lng" strings (or tuple/list)
 - normalize_location_name: Unicode NFC normalization for matching
 - parse_pipe_separated: Parse multivalue fields
@@ -409,6 +410,45 @@ def extract_month_num(date_str: Any) -> Optional[int]:
     if 1 <= n <= 12:
         return n
     return None
+
+
+# The Hijri columns the dataset ships beside ``pub_date``, written
+# upstream by ``calculate_hijri_dates.py`` from the Umm al-Qura tables.
+# Read, never recomputed: the browser's ICU tables disagree with these on
+# ~75% of this collection's pre-2000 days, which at a month-granularity
+# grid moved 0.78% of items into the wrong lunar month back when the
+# client did the conversion itself.
+#
+# Present on ``articles``, ``publications``, ``documents``,
+# ``audiovisual`` and ``images``. ``references`` is excluded upstream on
+# purpose — an academic imprint date has no meaningful lunar reading.
+HIJRI_COLUMNS = ("hijri_year", "hijri_month", "hijri_day")
+
+
+def read_hijri_month(row: Any, cols: Dict[str, Optional[str]]
+                     ) -> Optional[Tuple[int, int]]:
+    """The row's stored ``(hijri_year, hijri_month)``, or None.
+
+    None means the dataset left the conversion empty, which it does for
+    every ``pub_date`` that is not a complete ``YYYY-MM-DD`` — the same
+    rows a day-precision extractor already drops.
+
+    Goes through ``int()`` inside the guard rather than trusting the
+    column dtype: these are stored ``int64`` on most subsets but
+    ``float64`` on ``articles``, and pandas widens the rest to float on
+    read anyway because the partial dates leave nulls. ``int(nan)``
+    raises ``ValueError``, which is caught here.
+    """
+    y_col, m_col = cols.get("hijri_year"), cols.get("hijri_month")
+    if not y_col or not m_col:
+        return None
+    try:
+        h_year, h_month = int(row.get(y_col)), int(row.get(m_col))
+    except (TypeError, ValueError):
+        return None
+    if not (1 <= h_month <= 12 and h_year > 0):
+        return None
+    return h_year, h_month
 
 
 def extract_month(value: Any) -> Optional[str]:
