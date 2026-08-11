@@ -41,19 +41,30 @@
 
     var NOT_APPLICABLE = 'Non applicable';
 
-    // Model display names follow the article resource page
-    // (view/common/resource-page-block-layout/visualizations/article.phtml).
-    var MODELS = [
-        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
-        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
-        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
-    ];
+    // Filled from the payload's own `data.models` map by syncModels()
+    // before anything reads it, NOT hardcoded.
+    //
+    // A fixed list here stops matching the moment the rater panel changes
+    // upstream, and because this module ships as a release while its data
+    // arrives via a separate CI archive the admin pulls, there is always a
+    // window where the two disagree. When that happened the panels looked
+    // up three keys the deployed bundle did not carry and reported no
+    // data over a fully populated payload.
+    //
+    // Order is the payload's, which is the generator's SENTIMENT_MODELS
+    // order — the order the corpus was actually rated in.
+    var MODELS = [];
+
+    function syncModels(data) {
+        var models = (data && data.models) || {};
+        MODELS = Object.keys(models).map(function (key) {
+            return { key: key, label: P.sentimentModelLabel(key) };
+        });
+        return MODELS;
+    }
 
     function modelLabel(key) {
-        for (var i = 0; i < MODELS.length; i++) {
-            if (MODELS[i].key === key) return MODELS[i].label;
-        }
-        return key;
+        return P.sentimentModelLabel(key);
     }
 
     /** Panel description + the mandatory AI-provenance caveat. */
@@ -507,15 +518,18 @@
 
         var summary = data.summary || {};
         var modelSummaries = summary.models || {};
-        // Derived from MODELS rather than spelled out, so swapping the
-        // rating models stays a one-line edit at the top of this file
-        // (plus the matching `sentiment.rated_<key>` msgids).
+        // One parameterised msgid rather than `sentiment.rated_<key>` per
+        // model: a msgid per model needs a translation added in lockstep
+        // with every rater-panel change, and renders the raw key when
+        // that is missed. The model name is a proper noun and is not
+        // translated anyway.
         root.appendChild(P.buildSummaryCards(
             [{ value: summary.total, labelKey: 'Articles' }].concat(
                 MODELS.map(function (m) {
                     return {
                         value: (modelSummaries[m.key] || {}).rated,
-                        labelKey: 'sentiment.rated_' + m.key
+                        labelKey: 'sentiment.rated_by',
+                        labelParams: { model: m.label }
                     };
                 })
             )
@@ -635,6 +649,14 @@
 
     function render(container, data) {
         if (!data || !data.models || !data.summary || !data.summary.total) {
+            container.innerHTML = '';
+            container.appendChild(P.buildEmptyState());
+            return;
+        }
+
+        // Must run before buildLayout and every option builder below —
+        // they all read the module-level MODELS.
+        if (!syncModels(data).length) {
             container.innerHTML = '';
             container.appendChild(P.buildEmptyState());
             return;

@@ -29,6 +29,15 @@
         { key: 'arenas', labelKey: 'laicite.view_arenas' },
         { key: 'sentiment', labelKey: 'laicite.view_sentiment' },
         { key: 'map', labelKey: 'laicite.view_map' },
+        // After the map and before the bibliography: like the map it
+        // places items in a space, and like the map it is a way into the
+        // corpus rather than a claim about it.
+        { key: 'semantic', labelKey: 'laicite.view_semantic' },
+        // Circulation and bylines both answer "where did this text come
+        // from", so they sit together, after the views about what it says
+        // and before the bibliography.
+        { key: 'circulation', labelKey: 'laicite.view_circulation' },
+        { key: 'bylines', labelKey: 'laicite.view_bylines' },
         { key: 'references', labelKey: 'laicite.view_references' }
     ];
 

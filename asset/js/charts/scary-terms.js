@@ -137,6 +137,17 @@
         var header = P.el('div', 'iwac-vis-block-header iwac-vis-scary-header');
         header.appendChild(P.el('h3', 'iwac-vis-block-header__title', P.t('scary.title')));
         header.appendChild(P.el('p', 'iwac-vis-block-header__desc', P.t('scary.description')));
+        // Reciprocal of the link the Laïcité block's `concurrence` frame
+        // card carries. These bundles are anonymous aggregates with no
+        // o:id, so this block cannot say in WHICH items intégrisme and
+        // laïcité co-occur — the Laïcité generator re-counts the same
+        // three word families per item precisely so that question has an
+        // answer somewhere. Without a path between the two blocks that
+        // answer sits in a place no reader of this one would find.
+        var toLaicite = ns.embed && ns.embed.crossBlockLink
+            ? ns.embed.crossBlockLink('laicite', P.t('scary.cross_laicite'))
+            : null;
+        if (toLaicite) header.appendChild(toLaicite);
         root.appendChild(header);
 
         // 2. Metric cards

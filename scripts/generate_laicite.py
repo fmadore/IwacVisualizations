@@ -20,6 +20,9 @@ block (GitHub issue #14) — a dossier on secularism in the IWAC corpus:
     asset/data/laicite-sentiment.json     # three-model AI framing vs a baseline
     asset/data/laicite-places.json        # geocoded spatial mentions
     asset/data/laicite-references.json    # the scholarship, on its own axis
+    asset/data/laicite-semantic.json      # UMAP map of the press half
+    asset/data/laicite-circulation.json   # near-duplicate cross-outlet pairs
+    asset/data/laicite-bylines.json       # who signs the beat, with denominators
 
 The hand-curated event annotations for the timeline live in
 ``asset/data/laicite-events.json`` — a committed file (gitignore exception,
@@ -124,6 +127,7 @@ from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 import pandas as pd
 
+from iwac_embeddings import coerce_embedding, pairs_above_threshold
 from iwac_stats import keyness_for_slices
 from iwac_utils import (
     DATASET_ID,
@@ -131,6 +135,7 @@ from iwac_utils import (
     SENTIMENT_MODELS,
     STOPWORDS,
     add_standard_args,
+    clean_float,
     extract_month_num,
     extract_year,
     generate_timestamp,
@@ -166,6 +171,12 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
         "o:id", "title", "newspaper", "country", "pub_date", "subject", "spatial",
         "language", "OCR", "OCR_is_public", "nb_mots", "descriptionAI",
         "iwac_url", "hijri_month",
+        # Bylines: who writes the beat, as against view 7's who it names.
+        "author",
+        # Register (view 9's second half): Flesch reading-ease and MATTR
+        # lexical richness, both precomputed upstream. Two floats per row,
+        # so no meaningful memory cost next to the columns above.
+        "Lisibilite_OCR", "Richesse_Lexicale_OCR",
         # The three-model AI sentiment (view 9). load_dataset_safe keeps
         # whichever of these exist and logs the rest, so a snapshot that
         # predates a model swap still projects. `articles` is the only
@@ -214,6 +225,102 @@ PER_ITEM_SNIPPET_CAP: Dict[str, Optional[int]] = {
     "articles": 6,
     "references": 4,
 }
+
+# -----------------------------------------------------------------------
+# Register accumulators (view 9's second half)
+# -----------------------------------------------------------------------
+#
+# Two upstream columns, and the caveats attached to each are the reason
+# this is a running sum rather than a list of values:
+#
+#   Lisibilite_OCR        Flesch reading-ease, French adaptation.
+#   Richesse_Lexicale_OCR MATTR over a sliding 50-token window.
+#
+# MATTR is ALREADY length-robust — that is the entire reason upstream uses
+# it instead of raw TTR — so nothing here may length-normalise it or bin
+# it by `nb_mots` before comparing. It is also None below the 50-token
+# window, which is a legitimate "unscored", not a zero.
+#
+# Both are lexicon-fitted to French, so they mis-score the collection's
+# ~45 Ewé / Kabiyè / Dendi items. Those rows are unscored upstream and
+# stay unscored here; a missing metric is never read as a low one. Since
+# the generation-2 sentiment only annotates French and English articles
+# anyway, and register is only computed within a subjectivity level, the
+# non-French items drop out of this view twice over.
+#
+# Each metric counts its OWN n: an article scored for readability but not
+# for richness contributes to the first mean and not the second.
+
+def _register_bucket() -> Dict[str, float]:
+    return {"n": 0, "read_sum": 0.0, "read_n": 0, "rich_sum": 0.0, "rich_n": 0}
+
+
+def _register_add(
+    bucket: Dict[str, float],
+    readability: Optional[float],
+    richness: Optional[float],
+) -> None:
+    bucket["n"] += 1
+    if readability is not None:
+        bucket["read_sum"] += readability
+        bucket["read_n"] += 1
+    if richness is not None:
+        bucket["rich_sum"] += richness
+        bucket["rich_n"] += 1
+
+
+def _register_means(bucket: Dict[str, float]) -> Dict[str, Any]:
+    """Bucket → the shape the panel reads, with n beside every mean.
+
+    The n travels with the mean because these buckets get thin fast: a
+    dossier of ~1,300 items split five ways leaves levels 1 and 5 with
+    few dozen articles each, and a mean over 30 items rendered the same
+    way as a mean over 400 invites a reading the data will not support.
+    """
+    return {
+        "items": int(bucket["n"]),
+        "readability": (round(bucket["read_sum"] / bucket["read_n"], 1)
+                        if bucket["read_n"] else None),
+        "readability_n": int(bucket["read_n"]),
+        "richness": (round(bucket["rich_sum"] / bucket["rich_n"], 4)
+                     if bucket["rich_n"] else None),
+        "richness_n": int(bucket["rich_n"]),
+    }
+
+
+# -----------------------------------------------------------------------
+# Semantic map (issue #19 C)
+# -----------------------------------------------------------------------
+# Smaller neighbourhood than the 12k-article Semantic Landscape block's
+# default: at ~1,300 points, n_neighbors=15 starts smoothing away exactly
+# the local structure a small map exists to show. Same reasoning, same
+# values as the references-overview landscape.
+SEMANTIC_N_NEIGHBORS = 10
+SEMANTIC_MIN_DIST = 0.15
+SEMANTIC_MIN_POINTS = 30
+SEMANTIC_TITLE_LEN = 60
+
+# -----------------------------------------------------------------------
+# Circulation (issue #19 D)
+# -----------------------------------------------------------------------
+# 0.97 is generate_reprints.py's publication threshold, kept identical so
+# "reprint" means the same thing in both blocks. That script re-derives
+# the cut-off empirically on every data refresh (it logs a similarity
+# histogram from 0.90 up); if it ever moves, move this with it.
+CIRCULATION_THRESHOLD = 0.97
+# Cap on the pair list the bundle ships as browsable rows. Every
+# aggregate — the outlet network, the per-decade counts, the reprinted-item
+# total — is computed over ALL detected pairs before this cut, so the cap
+# shortens a list without ever shrinking a number.
+CIRCULATION_MAX_LISTED = 300
+
+# -----------------------------------------------------------------------
+# Bylines (issue #19 F)
+# -----------------------------------------------------------------------
+# Enough to show the shape of a beat without turning the panel into a
+# directory; the per-name floor (--min-byline-items) does the real
+# filtering, and this only bounds the payload.
+BYLINE_TOP_N = 40
 
 SNIPPET_CONTEXT = 120   # characters either side of the match
 TOKEN_RE = re.compile(r"[a-z]+")
@@ -341,6 +448,15 @@ class Lexicon:
                 "fr": spec.get("label_fr", name),
                 "note_en": spec.get("note_en", ""),
                 "note_fr": spec.get("note_fr", ""),
+                # Optional sibling block this frame overlaps with, as a
+                # registry slug. Data rather than a JS conditional so the
+                # "which frame points where" judgement stays beside the
+                # word list that motivates it; the panel renders a link
+                # for any frame that declares one and nothing for the
+                # rest.
+                "cross_block": spec.get("cross_block", ""),
+                "cross_en": spec.get("cross_en", ""),
+                "cross_fr": spec.get("cross_fr", ""),
             }
             for name, spec in self.frames.items()
         }
@@ -432,6 +548,15 @@ class ItemScan:
     #: Gregorian and lunar month of publication, for the seasonality view.
     month: Optional[int] = None
     hijri_month: Optional[int] = None
+    #: Flesch reading-ease and MATTR lexical richness, for the register
+    #: view. `articles` only, and None wherever upstream declined to score
+    #: — which it legitimately does for texts under the 50-token MATTR
+    #: window and for the non-French items (see build_register).
+    readability: Optional[float] = None
+    richness: Optional[float] = None
+    #: Byline names, pipe-split. `articles` only. Includes press agencies
+    #: alongside journalists — these are bylines, not people.
+    authors: List[str] = field(default_factory=list)
 
     @property
     def said(self) -> bool:
@@ -462,6 +587,7 @@ class LaiciteGenerator:
         min_newspaper_items: int = 5,
         min_actor_items: int = 4,
         min_place_items: int = 3,
+        min_byline_items: int = 3,
         seed: int = 20260804,
     ):
         self.output_dir = Path(output_dir)
@@ -479,7 +605,10 @@ class LaiciteGenerator:
         self.min_newspaper_items = min_newspaper_items
         self.min_actor_items = min_actor_items
         self.min_place_items = min_place_items
+        self.min_byline_items = min_byline_items
         self._entities: Optional[Set[str]] = None
+        #: Cached (X, scans) from _member_embeddings — two views need it.
+        self._member_vectors: Optional[Tuple[Any, List["ItemScan"]]] = None
         self._index_df: Optional[pd.DataFrame] = None
         self._index_loaded = False
         #: Resolved per-model sentiment column names, filled while scanning
@@ -642,6 +771,10 @@ class LaiciteGenerator:
             hijri_month=(int(row["hijri_month"])
                          if "hijri_month" in row and pd.notna(row.get("hijri_month"))
                          else None),
+            readability=clean_float(row.get("Lisibilite_OCR")),
+            richness=clean_float(row.get("Richesse_Lexicale_OCR")),
+            authors=(parse_pipe_separated(row.get("author"))
+                     if subset == "articles" else []),
         )
         if subset == "documents":
             rec.extra = {
@@ -694,16 +827,25 @@ class LaiciteGenerator:
         baseline is what "laïcité coverage is more polemical than the press
         at large" is measured against.
         """
+        readability = clean_float(row.get("Lisibilite_OCR"))
+        richness = clean_float(row.get("Richesse_Lexicale_OCR"))
         for model, entry in self._row_sentiment(row).items():
             base = self._baseline_sentiment.setdefault(
                 model, {"rated": 0, "polarity": Counter(),
-                        "subjectivity": Counter()})
+                        "subjectivity": Counter(),
+                        "register": defaultdict(_register_bucket)})
             base["rated"] += 1
             if entry.get("polarite"):
                 base["polarity"][entry["polarite"]] += 1
             level = self._subjectivity_level(entry.get("subjectivite"))
             if level is not None:
                 base["subjectivity"][level] += 1
+                # The register comparison needs the corpus split by the
+                # same subjectivity level as the dossier, not a single
+                # corpus mean: the question is whether the polemical
+                # register differs from the factual one *within* the
+                # press at large too, or only inside this dossier.
+                _register_add(base["register"][level], readability, richness)
 
     def _index_records(self) -> Optional[pd.DataFrame]:
         """The IWAC ``index`` authority file, loaded at most once.
@@ -1841,6 +1983,14 @@ class LaiciteGenerator:
         Every distribution is paired with the same distribution over the
         whole `articles` corpus, so the panel can answer "is this coverage
         unusual" rather than only "what does it look like".
+
+        The `register` block extends that with the obvious follow-up: the
+        subjectivity distribution says the dossier splits into two
+        registers, and says nothing about whether they differ in anything
+        else. Flesch readability and MATTR lexical richness, per
+        subjectivity level, against the corpus at the same level, are the
+        two columns that can answer it — see the accumulator notes above
+        for what may and may not be done to them.
         """
         scans = self.scan_all()
         articles = [s for s in scans if s.subset == "articles"]
@@ -1854,6 +2004,7 @@ class LaiciteGenerator:
             pol_by_decade: Dict[str, Counter] = defaultdict(Counter)
             pol_by_paper: Dict[str, Counter] = defaultdict(Counter)
             paper_items: Counter = Counter()
+            register: Dict[int, Dict[str, float]] = defaultdict(_register_bucket)
             rated = 0
 
             for s in articles:
@@ -1875,6 +2026,7 @@ class LaiciteGenerator:
                 level = self._subjectivity_level(entry.get("subjectivite"))
                 if level is not None:
                     subjectivity[level] += 1
+                    _register_add(register[level], s.readability, s.richness)
 
             papers = [
                 {
@@ -1895,6 +2047,20 @@ class LaiciteGenerator:
                     d: dict(c) for d, c in sorted(pol_by_decade.items())
                 },
                 "by_newspaper": papers,
+                # Register: is the polemical half of the bimodal
+                # subjectivity distribution also lexically distinct? Five
+                # levels, each carrying both metrics for the dossier and
+                # for the whole corpus at that same level.
+                "register": [
+                    {
+                        "level": level,
+                        "dossier": _register_means(register[level]),
+                        "corpus": _register_means(
+                            base.get("register", {}).get(level) or _register_bucket()
+                        ),
+                    }
+                    for level in range(1, 6)
+                ],
                 "corpus": {
                     "rated": base.get("rated", 0),
                     "polarity": dict(base.get("polarity", {})),
@@ -1915,11 +2081,20 @@ class LaiciteGenerator:
             "corpus_items": self.subset_totals.get("articles", 0),
             "min_newspaper_items": self.min_newspaper_items,
             "by_model": by_model,
+            # Derived from SENTIMENT_MODELS rather than spelled out: this
+            # sentence named the January-February 2026 generation-1 models
+            # for one release after the generator had already been
+            # repointed at the generation-2 columns, i.e. it told readers
+            # the wrong three models had produced the numbers on screen.
+            # A hand-maintained list beside a constant is a list that goes
+            # stale.
             "ai_note": (
                 "These values are model output, not catalogued metadata. "
-                "Three models annotated the corpus in January-February 2026: "
-                "gemini-3-flash-preview, gpt-5-mini and ministral-14b-2512. "
-                "They are reported separately because they disagree."
+                "Three models annotated the corpus independently: "
+                + ", ".join(m.replace("_", "-") for m in models[:-1])
+                + (" and " if len(models) > 1 else "")
+                + (models[-1].replace("_", "-") if models else "")
+                + ". They are reported separately because they disagree."
             ),
         }
 
@@ -1931,6 +2106,510 @@ class LaiciteGenerator:
         the label table itself is shared with every other generator.
         """
         return subjectivite_ordinal(value)
+
+    # ---------------------------------------------------------------------
+    #  Semantic map (issue #19 C)
+    # ---------------------------------------------------------------------
+
+    @staticmethod
+    def _empty_semantic(reason: str, embedded: int = 0, total: int = 0
+                        ) -> Dict[str, Any]:
+        """Empty-state contract, same shape as a populated bundle.
+
+        The panel is optional and UMAP is this script's only optional
+        dependency; a dossier refresh must not fail because it is
+        missing. Same convention as
+        ``generate_references_overview._empty_landscape``.
+        """
+        return {
+            "generated_at": generate_timestamp(),
+            "frames": [],
+            "countries": [],
+            "decades": [],
+            "points": {
+                "o_id": [], "x": [], "y": [], "title": [],
+                "frame": [], "country": [], "decade": [], "year": [],
+            },
+            "meta": {
+                "embedded": int(embedded),
+                "total": int(total),
+                "reason": reason,
+                "subsets": ["articles"],
+                "umap": None,
+            },
+        }
+
+    def _member_embeddings(self) -> Tuple[Any, List[ItemScan]]:
+        """``(X, scans)`` — unit-normalised vectors for dossier articles.
+
+        Loaded once and cached: two views need it (the semantic map and
+        circulation) and the column is 768 floats a row.
+
+        Read HERE rather than in the main scan because ``SUBSET_COLUMNS``
+        is deliberately narrow — the pandas conversion of an embedding
+        column, not the download, is where the memory goes. A second
+        two-column read filtered straight down to dossier members costs
+        less than carrying the column through the whole scan.
+
+        ``X[k]`` is the vector of ``scans[k]``, so callers index the two
+        together and never need the DataFrame again.
+        """
+        if self._member_vectors is not None:
+            return self._member_vectors
+
+        import numpy as np
+
+        empty = (np.zeros((0, 0), dtype=np.float32), [])
+        members = {s.o_id: s for s in self.scan_all() if s.subset == "articles"}
+        if not members:
+            self._member_vectors = empty
+            return empty
+
+        df = load_dataset_safe(
+            "articles", repo_id=self.repo_id,
+            columns=["o:id", "embedding_OCR"],
+        )
+        if df is None or "embedding_OCR" not in df.columns:
+            self.logger.warning(
+                "articles carries no embedding_OCR — the semantic map and "
+                "circulation views will render their empty states")
+            self._member_vectors = empty
+            return empty
+
+        vectors: List[Any] = []
+        scans: List[ItemScan] = []
+        dim: Optional[int] = None
+        for _, row in df.iterrows():
+            scan = members.get(str(row.get("o:id") or "").strip())
+            if scan is None:
+                continue
+            vec = coerce_embedding(row.get("embedding_OCR"))
+            if vec is None:
+                continue
+            if dim is None:
+                dim = len(vec)
+            elif len(vec) != dim:
+                continue
+            vectors.append(vec)
+            scans.append(scan)
+
+        if not vectors:
+            self._member_vectors = empty
+            return empty
+
+        X = np.vstack(vectors)
+        norms = np.linalg.norm(X, axis=1, keepdims=True)
+        X = X / np.where(norms == 0.0, 1.0, norms)
+        self.logger.info(
+            "  embeddings: %d of %d dossier articles carry a usable vector",
+            len(scans), len(members))
+        self._member_vectors = (X, scans)
+        return self._member_vectors
+
+    def build_semantic(self) -> Dict[str, Any]:
+        """2-D UMAP projection of the dossier's press half.
+
+        Two jobs. It is a discovery view — discourse clusters that cut
+        across the hand-crafted frames — and a robustness check on the
+        frame taxonomy itself: if the embedding clusters do not roughly
+        recover the curated frames, that is worth knowing before anyone
+        publishes the arena counts from the arenas view.
+
+        **`articles` only, and the panel says so.** This is a constraint
+        of the data, not a shortcut:
+
+        * ``articles`` carry ``embedding_OCR`` — a vector of the text.
+        * ``publications`` carry ``embedding_tableOfContents`` and no
+          ``embedding_OCR``. It is the same 768-dim gemini space, so the
+          arithmetic would work, which is exactly the trap: a magazine's
+          contents page and an article's body are different objects, and
+          co-projecting them would place a periodical by its index rather
+          than by what it argues. This block's own rule is that no bundle
+          sums across subsets without labelling it; silently mixing two
+          kinds of vector would break that rule invisibly.
+        * ``documents`` carry no embedding at all.
+        * ``references`` do carry ``embedding_OCR``, but they are
+          scholarship *about* the sources rather than sources, which is
+          why every temporal facet in this block already excludes them.
+          They keep their own axis in the bibliography view.
+
+        So the map covers the press, ``meta.subsets`` names it, and
+        ``meta.embedded`` / ``meta.total`` carry the denominators.
+        """
+        total = sum(1 for s in self.scan_all() if s.subset == "articles")
+        if total < SEMANTIC_MIN_POINTS:
+            return self._empty_semantic("too_few_items", 0, total)
+
+        try:
+            import umap  # type: ignore
+        except ImportError:
+            self.logger.warning(
+                "umap-learn is not installed — the semantic map panel will "
+                "render its empty state (pip install umap-learn)")
+            return self._empty_semantic("umap_not_installed", 0, total)
+
+        X, scans = self._member_embeddings()
+        embedded = len(scans)
+        if embedded < SEMANTIC_MIN_POINTS:
+            return self._empty_semantic(
+                "missing_embedding_column" if embedded == 0 else "too_few_embeddings",
+                embedded, total)
+
+        records: List[Dict[str, Any]] = []
+        keep: List[int] = []
+        for k, scan in enumerate(scans):
+            # Every point is a click-through to /item/<id>, so a row
+            # without a usable Omeka id has nowhere to link.
+            try:
+                point_id = int(scan.o_id)
+            except (TypeError, ValueError):
+                continue
+            title = scan.title
+            if len(title) > SEMANTIC_TITLE_LEN:
+                title = title[: SEMANTIC_TITLE_LEN - 1].rstrip() + "…"
+            keep.append(k)
+            records.append({
+                "o_id": point_id,
+                "title": title,
+                "frame": self._dominant_annotation_frame(scan),
+                "country": scan.countries[0] if scan.countries else "",
+                "year": scan.year,
+                "decade": self._decade(scan.year) or "",
+            })
+
+        embedded = len(records)
+        if embedded < SEMANTIC_MIN_POINTS:
+            return self._empty_semantic("too_few_embeddings", embedded, total)
+        X = X[keep]
+
+        neighbors = max(2, min(SEMANTIC_N_NEIGHBORS, embedded - 1))
+        self.logger.info(
+            "  semantic map: UMAP over %d of %d dossier articles "
+            "(n_neighbors=%d, metric=cosine)",
+            embedded, total, neighbors)
+        reducer = umap.UMAP(
+            n_components=2,
+            n_neighbors=neighbors,
+            min_dist=SEMANTIC_MIN_DIST,
+            metric="cosine",
+            random_state=42,
+        )
+        coords = reducer.fit_transform(X)
+
+        def _table(key: str, sort_key: Any) -> Tuple[List[str], Dict[str, int]]:
+            names = sorted({r[key] for r in records if r[key]}, key=sort_key)
+            return names, {name: i for i, name in enumerate(names)}
+
+        frame_names, frame_index = _table("frame", lambda v: v.lower())
+        country_names, country_index = _table("country", lambda v: v.lower())
+        decade_names, decade_index = _table("decade", lambda v: v)
+
+        points: Dict[str, List[Any]] = {
+            "o_id": [], "x": [], "y": [], "title": [],
+            "frame": [], "country": [], "decade": [], "year": [],
+        }
+        for i, record in enumerate(records):
+            points["o_id"].append(record["o_id"])
+            points["x"].append(round(float(coords[i, 0]), 2))
+            points["y"].append(round(float(coords[i, 1]), 2))
+            points["title"].append(record["title"])
+            points["frame"].append(frame_index.get(record["frame"], -1))
+            points["country"].append(country_index.get(record["country"], -1))
+            points["decade"].append(decade_index.get(record["decade"], -1))
+            points["year"].append(record["year"])
+
+        return {
+            "generated_at": generate_timestamp(),
+            "frames": frame_names,
+            "countries": country_names,
+            "decades": decade_names,
+            "points": points,
+            "meta": {
+                "embedded": embedded,
+                "total": total,
+                "reason": "",
+                "subsets": ["articles"],
+                "umap": {
+                    "n_neighbors": neighbors,
+                    "min_dist": SEMANTIC_MIN_DIST,
+                    "metric": "cosine",
+                    "random_state": 42,
+                },
+            },
+        }
+
+    # ---------------------------------------------------------------------
+    #  Bylines (issue #19 F)
+    # ---------------------------------------------------------------------
+
+    def build_bylines(self) -> Dict[str, Any]:
+        """Who writes the laïcité beat, per outlet and per decade.
+
+        The complement to the actors view, which answers who the coverage
+        *names*. Together they are the actor picture the dossier needs:
+        one is the subject of the writing, this is its source.
+
+        **The denominator is the whole panel.** Byline coverage in the
+        corpus is uneven — it varies by outlet and, sharply, by decade,
+        because older material is more often unsigned and because OCR of
+        a signature line is less reliable than OCR of body text. A ranked
+        list of names on its own would read as "these journalists owned
+        the beat" when part of the answer is "we do not know who wrote
+        the rest". So every figure ships beside the count it is drawn
+        from: ``signed`` against ``articles`` globally, and the same pair
+        per decade and per outlet, so a reader can see where the record
+        is thin before reading anything into a ranking over it.
+
+        ``articles`` only: an issue of a periodical has no single byline,
+        an archival document's author is a different kind of claim, and a
+        reference's author is its scholar rather than a journalist.
+
+        Bylines are NOT people. Press agencies (Agence Togolaise de
+        Presse, PANA) sign alongside journalists and are left in, labelled
+        as bylines, because an agency signature is exactly the circulation
+        signal the neighbouring view measures another way.
+        """
+        articles = [s for s in self.scan_all() if s.subset == "articles"]
+        total = len(articles)
+
+        counts: Counter = Counter()
+        first_year: Dict[str, int] = {}
+        last_year: Dict[str, int] = {}
+        by_paper: Dict[str, Counter] = defaultdict(Counter)
+        by_decade_name: Dict[str, Counter] = defaultdict(Counter)
+        # Coverage denominators, which are the point of the view.
+        decade_signed: Counter = Counter()
+        decade_total: Counter = Counter()
+        paper_signed: Counter = Counter()
+        paper_total: Counter = Counter()
+        signed = 0
+
+        for s in articles:
+            decade = self._decade(s.year)
+            if decade:
+                decade_total[decade] += 1
+            if s.newspaper:
+                paper_total[s.newspaper] += 1
+            if not s.authors:
+                continue
+            signed += 1
+            if decade:
+                decade_signed[decade] += 1
+            if s.newspaper:
+                paper_signed[s.newspaper] += 1
+            for name in s.authors:
+                counts[name] += 1
+                if s.year is not None:
+                    if name not in first_year or s.year < first_year[name]:
+                        first_year[name] = s.year
+                    if name not in last_year or s.year > last_year[name]:
+                        last_year[name] = s.year
+                if s.newspaper:
+                    by_paper[name][s.newspaper] += 1
+                if decade:
+                    by_decade_name[name][decade] += 1
+
+        top = [
+            {
+                "name": name,
+                "count": int(count),
+                "first": first_year.get(name),
+                "last": last_year.get(name),
+                "newspapers": [
+                    {"name": paper, "count": int(n)}
+                    for paper, n in by_paper[name].most_common(3)
+                ],
+                "by_decade": dict(sorted(by_decade_name[name].items())),
+            }
+            for name, count in counts.most_common(BYLINE_TOP_N)
+            if count >= self.min_byline_items
+        ]
+
+        self.logger.info(
+            "  bylines: %d of %d dossier articles signed (%d distinct names, "
+            "%d at or above the %d-item floor)",
+            signed, total, len(counts), len(top), self.min_byline_items)
+
+        return {
+            "generated_at": generate_timestamp(),
+            "articles": total,
+            "signed": signed,
+            "unique": len(counts),
+            "min_items": self.min_byline_items,
+            "by_decade": [
+                {
+                    "decade": decade,
+                    "articles": int(decade_total[decade]),
+                    "signed": int(decade_signed[decade]),
+                }
+                for decade in sorted(decade_total)
+            ],
+            "by_newspaper": [
+                {
+                    "name": paper,
+                    "articles": int(paper_total[paper]),
+                    "signed": int(paper_signed[paper]),
+                }
+                for paper, _ in paper_total.most_common()
+                if paper_total[paper] >= self.min_newspaper_items
+            ],
+            "top": top,
+        }
+
+    # ---------------------------------------------------------------------
+    #  Circulation (issue #19 D)
+    # ---------------------------------------------------------------------
+
+    def build_circulation(self) -> Dict[str, Any]:
+        """Near-duplicate laïcité articles across different outlets.
+
+        The question none of the other views can answer: does this
+        coverage **circulate**? A communiqué reprinted verbatim by eleven
+        papers, a PANA dispatch picked up across a border, and eleven
+        newsrooms independently covering the same controversy are
+        indistinguishable on a per-year item count — and they are not the
+        same finding. It matters directly for the argument the dossier
+        backs: a claim about the volume of debate is weaker if the volume
+        is one press release printed eleven times.
+
+        Method is ``generate_reprints.py``'s, scoped to the dossier:
+        cosine similarity over L2-normalised ``embedding_OCR``, publish
+        pairs above a high threshold whose two articles carry different
+        newspaper names. Scoped rather than joined because that block's
+        published bundle is capped at its top-N pairs by similarity and
+        would silently under-report a small slice; and because ~1,300
+        members is a cheap all-pairs scan where the full corpus is not.
+
+        **A within-dossier scan can only see reprints where BOTH copies
+        are members.** In practice a verbatim reprint of a laïcité
+        article matches the same lexicon and joins the dossier too, so
+        the pairs are near-complete — but a copy whose OCR is too poor to
+        match would be missed, and the panel says the count is a floor
+        rather than a census.
+        """
+        X, scans = self._member_embeddings()
+        if len(scans) < 2:
+            return {
+                "generated_at": generate_timestamp(),
+                "threshold": CIRCULATION_THRESHOLD,
+                "scanned": len(scans),
+                "listed": 0,
+                "total_pairs": 0,
+                "pairs": [],
+                "links": [],
+                "newspapers": [],
+                "reprinted_items": 0,
+                "median_year_gap": None,
+                "by_decade": {},
+            }
+
+        pairs: List[Dict[str, Any]] = []
+        for i, j, sim in pairs_above_threshold(X, CIRCULATION_THRESHOLD):
+            a, b = scans[i], scans[j]
+            # Same outlet is not circulation — it is a correction, a
+            # second edition, or the same piece indexed twice.
+            if not a.newspaper or not b.newspaper or a.newspaper == b.newspaper:
+                continue
+            pairs.append({
+                "similarity": round(sim, 4),
+                "a": self._circulation_side(a),
+                "b": self._circulation_side(b),
+                "year_gap": self._year_gap(a, b),
+            })
+
+        pairs.sort(key=lambda p: -p["similarity"])
+
+        # Aggregates run over EVERY detected pair, before the display cap
+        # below: a "12% of the dossier is reprinted copy" figure computed
+        # from a truncated list would be wrong in the one direction a
+        # reader cannot detect.
+        link_counts: Dict[frozenset, int] = defaultdict(int)
+        paper_counts: Counter = Counter()
+        reprinted: Set[str] = set()
+        by_decade: Counter = Counter()
+        for p in pairs:
+            pa, pb = p["a"]["newspaper"], p["b"]["newspaper"]
+            link_counts[frozenset((pa, pb))] += 1
+            paper_counts[pa] += 1
+            paper_counts[pb] += 1
+            reprinted.add(p["a"]["o_id"])
+            reprinted.add(p["b"]["o_id"])
+            for side in ("a", "b"):
+                decade = self._decade(p[side]["year"])
+                if decade:
+                    by_decade[decade] += 1
+
+        links = []
+        for pair, count in sorted(link_counts.items(),
+                                  key=lambda kv: (-kv[1], sorted(kv[0]))):
+            left, right = sorted(pair)
+            links.append([left, right, count])
+
+        gaps = sorted(p["year_gap"] for p in pairs if p["year_gap"] is not None)
+        median_gap = gaps[len(gaps) // 2] if gaps else None
+
+        self.logger.info(
+            "  circulation: %d cross-outlet pairs ≥ %.2f over %d embedded "
+            "articles, touching %d items",
+            len(pairs), CIRCULATION_THRESHOLD, len(scans), len(reprinted))
+
+        return {
+            "generated_at": generate_timestamp(),
+            "threshold": CIRCULATION_THRESHOLD,
+            # The denominator every share on the panel is taken against.
+            "scanned": len(scans),
+            "listed": min(len(pairs), CIRCULATION_MAX_LISTED),
+            "total_pairs": len(pairs),
+            "reprinted_items": len(reprinted),
+            "median_year_gap": median_gap,
+            "by_decade": dict(sorted(by_decade.items())),
+            "newspapers": [
+                {"name": name, "pairs": int(count)}
+                for name, count in sorted(paper_counts.items(),
+                                          key=lambda kv: (-kv[1], kv[0]))
+            ],
+            "links": links,
+            "pairs": pairs[:CIRCULATION_MAX_LISTED],
+        }
+
+    @staticmethod
+    def _circulation_side(scan: ItemScan) -> Dict[str, Any]:
+        return {
+            "o_id": scan.o_id,
+            "title": scan.title,
+            "newspaper": scan.newspaper,
+            "country": scan.countries[0] if scan.countries else "",
+            "year": scan.year,
+        }
+
+    @staticmethod
+    def _year_gap(a: ItemScan, b: ItemScan) -> Optional[int]:
+        """Years between two items, or None when either is undated.
+
+        Years rather than days: the scan works off ``ItemScan``, which
+        keeps the parsed year and not the raw date, and a great many of
+        these items are ``YYYY``-only anyway. A day-level gap would be
+        precision the dossier's dates do not support.
+        """
+        if a.year is None or b.year is None:
+            return None
+        return abs(a.year - b.year)
+
+    def _dominant_annotation_frame(self, scan: ItemScan) -> str:
+        """The frame that best characterises this item, or "".
+
+        Membership frames are excluded: an item is in the dossier
+        *because* it says laïcité, so colouring by `laicite` would paint
+        almost every point one colour and encode the selection criterion
+        instead of anything about the item. The arenas view excludes them
+        from its small multiples for the same reason.
+        """
+        membership = set(self.lex.membership_frames)
+        counts = {f: n for f, n in scan.frame_counts.items()
+                  if f not in membership and n > 0}
+        if not counts:
+            return ""
+        return max(sorted(counts), key=lambda f: counts[f])
 
     def build_places(self) -> Dict[str, Any]:
         """Geocoded places tagged on dossier items (view 10).
@@ -2286,6 +2965,12 @@ class LaiciteGenerator:
                   self.output_dir / "laicite-sentiment.json", minify=True)
         save_json(self.build_places(),
                   self.output_dir / "laicite-places.json", minify=True)
+        save_json(self.build_semantic(),
+                  self.output_dir / "laicite-semantic.json", minify=True)
+        save_json(self.build_circulation(),
+                  self.output_dir / "laicite-circulation.json", minify=True)
+        save_json(self.build_bylines(),
+                  self.output_dir / "laicite-bylines.json", minify=self.minify)
         save_json(self.build_references(),
                   self.output_dir / "laicite-references.json", minify=True)
 
@@ -2380,6 +3065,13 @@ def main() -> None:
         help="Drop geocoded places tagged on fewer dossier items from the "
              "map (default: %(default)s).",
     )
+    parser.add_argument(
+        "--min-byline-items",
+        type=int,
+        default=3,
+        help="Drop bylines signing fewer dossier articles from the bylines "
+             "view (default: %(default)s).",
+    )
     add_standard_args(parser, minify_default=False)
     args = parse_standard_args(parser)
     LaiciteGenerator(
@@ -2395,6 +3087,7 @@ def main() -> None:
         min_newspaper_items=args.min_newspaper_items,
         min_actor_items=args.min_actor_items,
         min_place_items=args.min_place_items,
+        min_byline_items=args.min_byline_items,
     ).run()
 
 

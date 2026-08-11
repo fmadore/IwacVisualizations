@@ -114,6 +114,22 @@
             });
         });
 
+        // Register — the follow-up the subjectivity panel above provokes
+        // and cannot answer. Sits directly after it because it is only
+        // legible as a continuation of that finding.
+        if (hasRegister(data)) {
+            var register = P.buildPanel('iwac-vis-panel iwac-vis-laicite-register',
+                P.t('laicite.register_title'), P.t('laicite.register_desc'));
+            register.panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
+                P.t('laicite.register_note')));
+            root.appendChild(register.panel);
+            mounts.push(function () {
+                ns.registerChart(register.chart, function (el, instance) {
+                    instance.setOption(registerOption(data), { notMerge: true });
+                });
+            });
+        }
+
         var decades = P.buildPanel('iwac-vis-panel iwac-vis-laicite-pol-decade',
             P.t('laicite.polarity_decade_title'),
             P.t('laicite.polarity_decade_desc'));
@@ -292,6 +308,142 @@
             ]
         };
         return R && R.withMedia ? R.withMedia(base_, {}) : base_;
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Register                                                          */
+    /* ----------------------------------------------------------------- */
+
+    /** Any level with at least one scored article on either metric. */
+    function hasRegister(data) {
+        return (data.register || []).some(function (row) {
+            var d = row.dossier || {};
+            return (d.readability_n || 0) > 0 || (d.richness_n || 0) > 0;
+        });
+    }
+
+    /**
+     * Readability and lexical richness across the five subjectivity
+     * levels, dossier against the whole press corpus.
+     *
+     * The subjectivity panel above establishes that the dossier is
+     * bimodal — a factual register and a polemical one. It cannot say
+     * whether those two registers differ in anything except the rating
+     * that defined them. These are the two columns that can: Flesch
+     * reading-ease and MATTR lexical richness, both precomputed upstream.
+     *
+     * Two y-axes because the scales are unrelated (Flesch runs roughly
+     * 0–100, MATTR 0–1) — sharing one would flatten richness into a line
+     * along the floor. Encoding is metric = colour, source = dash, so the
+     * four series read as two pairs rather than four unrelated lines.
+     *
+     * The corpus reference is what makes it a finding rather than a
+     * number: if readability falls with subjectivity in the press at
+     * large too, then the dossier's polemical register is just what
+     * polemic looks like, and only a divergence between the two lines
+     * says anything about laïcité coverage specifically.
+     */
+    function registerOption(data) {
+        var rows = data.register || [];
+        if (!rows.length) return P.emptyChartOption();
+
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        var muted = readVar('--iwac-vis-sent-neutral', '#66696e');
+        var levels = rows.map(function (r) { return String(r.level); });
+
+        function pick(source, metric) {
+            return rows.map(function (r) {
+                var slice = r[source] || {};
+                // null, never 0: a level nobody wrote in is a gap in the
+                // line, and 0 on a Flesch axis is a legible reading score.
+                var value = slice[metric];
+                return (value == null) ? null : value;
+            });
+        }
+        function counts(source, metric) {
+            return rows.map(function (r) {
+                return ((r[source] || {})[metric + '_n']) || 0;
+            });
+        }
+
+        var series = [
+            { key: 'readability', source: 'dossier', axis: 0, color: palette[0],
+              nameKey: 'laicite.register_read_dossier', dashed: false },
+            { key: 'readability', source: 'corpus',  axis: 0, color: muted,
+              nameKey: 'laicite.register_read_corpus',  dashed: true },
+            { key: 'richness',    source: 'dossier', axis: 1, color: palette[1],
+              nameKey: 'laicite.register_rich_dossier', dashed: false },
+            { key: 'richness',    source: 'corpus',  axis: 1, color: muted,
+              nameKey: 'laicite.register_rich_corpus',  dashed: true }
+        ].map(function (s) {
+            return {
+                name: P.t(s.nameKey),
+                type: 'line',
+                yAxisIndex: s.axis,
+                connectNulls: false,
+                symbol: 'circle',
+                symbolSize: 6,
+                itemStyle: { color: s.color },
+                lineStyle: {
+                    color: s.color,
+                    width: 2,
+                    type: s.dashed ? 'dashed' : 'solid'
+                },
+                data: pick(s.source, s.key),
+                // Carried through so the tooltip can put n beside every
+                // mean. The end levels thin out fast — a mean over thirty
+                // articles drawn like a mean over four hundred invites a
+                // reading the data will not carry.
+                _n: counts(s.source, s.key)
+            };
+        });
+
+        var R = ns.responsive;
+        var option = {
+            grid: (ns.chartOptions && ns.chartOptions._grid)
+                ? ns.chartOptions._grid({ left: 56, right: 64, top: 56, bottom: 52 })
+                : { left: 56, right: 64, top: 56, bottom: 52, containLabel: true },
+            legend: { type: 'scroll', top: 4 },
+            tooltip: {
+                trigger: 'axis',
+                confine: true,
+                formatter: function (params) {
+                    if (!params || !params.length) return '';
+                    var lines = ['<strong>' +
+                        P.escapeHtml(P.t('laicite.register_level',
+                            { level: params[0].axisValue })) + '</strong>'];
+                    params.forEach(function (p) {
+                        var s = series[p.seriesIndex] || {};
+                        var n = (s._n || [])[p.dataIndex] || 0;
+                        var value = (p.value == null)
+                            ? '—'
+                            : P.t('laicite.register_value', {
+                                value: P.formatNumber(p.value),
+                                count: P.formatNumber(n)
+                            });
+                        lines.push(p.marker + ' ' +
+                            P.escapeHtml(p.seriesName) + ': ' + value);
+                    });
+                    return lines.join('<br>');
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: levels,
+                name: P.t('laicite.subjectivity_axis'),
+                nameLocation: 'middle',
+                nameGap: 30
+            },
+            yAxis: [
+                { type: 'value', name: P.t('laicite.register_readability'),
+                  nameLocation: 'end', nameGap: 12, scale: true },
+                { type: 'value', name: P.t('laicite.register_richness'),
+                  nameLocation: 'end', nameGap: 12, scale: true,
+                  splitLine: { show: false } }
+            ],
+            series: series
+        };
+        return R && R.withMedia ? R.withMedia(option, {}) : option;
     }
 
     /**

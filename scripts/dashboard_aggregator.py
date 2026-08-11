@@ -64,6 +64,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    HIJRI_COLUMNS,
     SENTIMENT_MODELS,
     clean_str,
     extract_month_num,
@@ -74,6 +75,7 @@ from iwac_utils import (
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    read_hijri_month,
     resolve_sentiment_columns,
     subjectivite_ordinal,
 )
@@ -437,6 +439,12 @@ class DashboardAggregator:
             ])
 
             date_col = find_column(df, ["pub_date", "dcterms:date"])
+            # Lunar dates are READ, never derived — see read_hijri_month.
+            # Absent on `references` by design (an academic imprint date
+            # has no meaningful lunar reading), so these resolve to None
+            # there and the Hijri grid skips those items exactly as it
+            # skips a partial date.
+            hijri_cols = {c: find_column(df, [c]) for c in HIJRI_COLUMNS}
             country_col = find_column(df, ["country", "countries"])
             # Title column — the locations map popup (map.js) needs it
             # to render an article list per location. Fall through the
@@ -475,6 +483,7 @@ class DashboardAggregator:
                     "country": self._first_country(row.get(country_col)) if country_col else "",
                     "newspaper": str(row.get(newspaper_col) or "").strip() if newspaper_col else "",
                     "lda_label": clean_str(row.get(lda_label_col)) if lda_label_col else "",
+                    "hijri": read_hijri_month(row, hijri_cols),
                 }
                 for model in SENTIMENT_MODELS:
                     cols = sentiment_cols[model]
@@ -802,21 +811,74 @@ class DashboardAggregator:
             }
         return {"by_role": by_role}
 
-    def compute_heatmap(self, target_id: int) -> Dict[str, Any]:
-        """Year × month mention counts as ECharts heatmap cells.
+    @staticmethod
+    def _month_grid(
+        buckets: Dict[Tuple[int, int], int],
+        axis_years: Set[int],
+    ) -> Dict[str, Any]:
+        """Fold (year, month) counts into an ECharts year × month grid.
 
-        The y-axis spans the FULL year range (min..max inclusive) of
-        items mentioning this target — same range the "Years" summary
-        card shows — so the two panels stay consistent even when most
-        dates are YYYY-only. Cells only populate for items with a
-        parseable YYYY-MM date; gap years render as an empty row.
+        The year axis is filled to a contiguous min..max run rather than
+        listing only the years that carry items: a category axis of
+        [1975, 2011] would render a 36-year silence as one column step
+        and read as continuous coverage.
+        """
+        if not axis_years:
+            return {"years": [], "months": list(range(1, 13)), "cells": [], "items": 0}
+        years = list(range(min(axis_years), max(axis_years) + 1))
+        year_index = {y: i for i, y in enumerate(years)}
+        return {
+            "years": years,
+            "months": list(range(1, 13)),
+            "cells": [
+                [year_index[y], m - 1, count]
+                for (y, m), count in buckets.items()
+            ],
+            "items": sum(buckets.values()),
+        }
+
+    def compute_heatmap(self, target_id: int) -> Dict[str, Any]:
+        """Year × month mention counts as ECharts heatmap cells, twice.
+
+        The Gregorian grid stays at the top level of each role slice,
+        where it has always been; the lunar one is a nested ``hijri``
+        key. That split is what lets the panel treat the Hijri view as a
+        question about the data rather than about the module version —
+        a bundle generated before this existed simply carries no
+        ``hijri`` key and the facet is not offered.
+
+        The Gregorian y-axis spans the FULL year range (min..max
+        inclusive) of items mentioning this target — same range the
+        "Years" summary card shows — so the two panels stay consistent
+        even when most dates are YYYY-only. Cells only populate for
+        items with a parseable YYYY-MM date; gap years render as an
+        empty row.
+
+        **The two grids have different denominators, on purpose.** A
+        lunar month straddles two Gregorian ones, so upstream converts
+        only complete ``YYYY-MM-DD`` dates and leaves the rest null —
+        and ``references`` is excluded from the conversion entirely.
+        The Gregorian grid, by contrast, counts anything with a
+        resolvable ``YYYY-MM``. Each grid therefore carries its own
+        ``items`` total so the panel can state the gap instead of
+        letting a reader compare two grids that silently count
+        different corpora.
         """
         by_role: Dict[str, Any] = {}
         for role, item_keys in self._role_slices(target_id):
             buckets: Dict[Tuple[int, int], int] = Counter()
+            hijri_buckets: Dict[Tuple[int, int], int] = Counter()
             all_years: Set[int] = set()  # any year we can extract (YYYY or finer)
+            hijri_years: Set[int] = set()
             for key in item_keys:
-                date = self.items_meta.get(key, {}).get("pub_date") or ""
+                meta = self.items_meta.get(key, {})
+
+                lunar = meta.get("hijri")
+                if lunar:
+                    hijri_buckets[lunar] += 1
+                    hijri_years.add(lunar[0])
+
+                date = meta.get("pub_date") or ""
                 year = extract_year(date)
                 if year is None:
                     continue
@@ -825,21 +887,14 @@ class DashboardAggregator:
                 if month is None:
                     continue  # still count the year on the axis, just no cell
                 buckets[(year, month)] += 1
-            if not all_years:
-                by_role[role] = {"years": [], "months": list(range(1, 13)), "cells": []}
-                continue
-            # Full contiguous range so empty years render as blank rows.
-            years = list(range(min(all_years), max(all_years) + 1))
-            year_index = {y: i for i, y in enumerate(years)}
-            cells = [
-                [year_index[y], m - 1, count]
-                for (y, m), count in buckets.items()
-            ]
-            by_role[role] = {
-                "years": years,
-                "months": list(range(1, 13)),
-                "cells": cells,
-            }
+
+            slice_out = self._month_grid(buckets, all_years)
+            # Omitted rather than emitted empty: the renderer offers the
+            # facet on presence, and an empty grid would advertise a view
+            # with nothing in it.
+            if hijri_buckets:
+                slice_out["hijri"] = self._month_grid(hijri_buckets, hijri_years)
+            by_role[role] = slice_out
         return {"by_role": by_role}
 
     def compute_cooccurrence(self, target_id: int) -> Dict[str, Any]:

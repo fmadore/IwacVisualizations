@@ -198,6 +198,9 @@
       "label_en": "Radicalism vocabulary",
       "label_fr": "Vocabulaire du radicalisme",
       "note": "The pole the Scary Terms block already covers. RE-COUNTED here in the same pass rather than joined from the scary-terms bundles: those bundles are anonymous aggregates carrying no o:id, so they cannot answer 'in WHICH items do laïcité and intégrisme co-occur'. Counting three extra families in a pass that is already running is nearly free and yields the per-item cross-tab the laïcité ↔ intégrisme finding needs.",
+      "cross_block": "scary-terms",
+      "cross_en": "See these terms in their own right — Scary Terms →",
+      "cross_fr": "Voir ces termes pour eux-mêmes — Vocabulaire de la peur →",
       "forms": [
         "intégrisme",
         "intégriste",
@@ -524,5 +527,5 @@
       }
     ]
   },
-  "_frame_notes": "`note` is an INTERNAL rationale for whoever edits this file and is never emitted into a bundle. `note_en` / `note_fr` are the reader-facing caption under the frame card, and both must be supplied or neither."
+  "_frame_notes": "`note` is an INTERNAL rationale for whoever edits this file and is never emitted into a bundle. `note_en` / `note_fr` are the reader-facing caption under the frame card, and both must be supplied or neither. `cross_block` is optional: a block slug from src/Site/BlockRegistry.php that treats the same material from another angle, rendered as a link on the frame card. Only set it where the overlap is real enough that a reader following it is not sent on a detour — `concurrence` has it because laïcité and intégrisme co-occurring is a finding in its own right, and the other nine frames do not."
 }

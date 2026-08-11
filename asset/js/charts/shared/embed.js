@@ -58,6 +58,46 @@
         return origin + (siteBase || '') + '/iwac-embed/' + slug + (panelSlug ? '/' + panelSlug : '');
     };
 
+    /**
+     * An `<a>` pointing at a sibling block, or null when one cannot
+     * honestly be built.
+     *
+     * Blocks that treat the same material from different angles want to
+     * point at each other — Laïcité's `concurrence` frame and Scary Terms
+     * are the same three word families counted for two different
+     * questions, and a reader who finds one has no way to reach the
+     * other. The obstacle is that a page block cannot know where an admin
+     * mounted another block: that is per-site editorial placement, and
+     * nothing in the block's own data records it.
+     *
+     * So the target is the module's own `/iwac-embed/<slug>` route, which
+     * this module serves and which therefore always resolves. Both ends
+     * of any such pair must be registered `embeddable` in BlockRegistry.
+     *
+     * Null inside an embed: forwarding a reader from one chrome-less
+     * iframe page to another is not a kindness, and an embed dropped in
+     * someone else's site should not grow outbound navigation.
+     *
+     * @param {string} slug   block slug from src/Site/BlockRegistry.php
+     * @param {string} label  already-translated, reader-facing link text
+     * @returns {HTMLElement|null}
+     */
+    E.crossBlockLink = function (slug, label) {
+        if (!slug || !label) return null;
+        if (document.body && document.body.classList.contains('iwac-embed-body')) return null;
+        var blockEl = document.querySelector('.iwac-vis-block[data-embed-base]')
+            || document.querySelector('.iwac-vis-block');
+        if (!blockEl) return null;
+        var base = blockEl.getAttribute('data-embed-base')
+            || blockEl.getAttribute('data-site-base') || '';
+
+        var link = document.createElement('a');
+        link.className = 'iwac-vis-cross-block';
+        link.href = E.url(base, slug);
+        link.textContent = label;
+        return link;
+    };
+
     function fallbackCopy(text) {
         var ta = document.createElement('textarea');
         ta.value = text;

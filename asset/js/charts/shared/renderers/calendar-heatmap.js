@@ -87,21 +87,20 @@
              'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
     };
 
-    // Transliterations follow the forms used in the IWAC corpus's own
-    // francophone press (Ramadan, Tabaski season) rather than a strict
-    // academic scheme, so a reader moving between the archive and the
-    // chart sees the same words.
-    var HIJRI_MONTHS = {
-        en: ['Muharram', 'Safar', 'Rabiʻ I', 'Rabiʻ II',
-             'Jumada I', 'Jumada II', 'Rajab', 'Shaʻban',
-             'Ramadan', 'Shawwal', 'Dhu al-Qaʻda', 'Dhu al-Hijja'],
-        fr: ['Mouharram', 'Safar', 'Rabia I', 'Rabia II',
-             'Joumada I', 'Joumada II', 'Rajab', 'Chaabane',
-             'Ramadan', 'Chawwal', 'Dhou al-qiʻda', 'Dhou al-hijja']
-    };
+    // Hijri month names come from `shared/hijri.js`, which is the module's
+    // one copy of the table — this renderer carried a duplicate until the
+    // dashboards' year × month panel became a third consumer and made the
+    // drift risk concrete. Transliterations there follow the forms used in
+    // the IWAC corpus's own francophone press rather than a strict academic
+    // scheme, so a reader moving between the archive and the chart sees the
+    // same words.
 
     function labelsFor(table) {
         return table[ns.locale === 'fr' ? 'fr' : 'en'] || table.en;
+    }
+
+    function hijriMonths() {
+        return labelsFor((ns.hijri && ns.hijri.MONTHS) || {});
     }
 
     /* ----------------------------------------------------------------- */
@@ -238,7 +237,7 @@
         if (!agg) return null;
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var months = labelsFor(hijri ? HIJRI_MONTHS : GREGORIAN_MONTHS);
+        var months = hijri ? hijriMonths() : labelsFor(GREGORIAN_MONTHS);
         var unitKey = opts.unitKey || 'mentions_count';
         var era = hijri ? ' ' + P.t('cal_hijri_era') : '';
 
@@ -435,7 +434,11 @@
         // appears when the producer shipped precomputed Hijri cells.
         var offered = opts.views || ['month', 'day', 'hijri'];
         var views = offered.filter(function (v) {
-            if (v === 'hijri') return hijriCellsOf(data).length > 0;
+            // Month names are the one thing the Hijri grid cannot draw
+            // without: unlabelled rows 1–12 would be a worse answer than
+            // no facet. hijri.js is enqueued unconditionally, so this
+            // only trips if the asset partial is bypassed.
+            if (v === 'hijri') return hijriCellsOf(data).length > 0 && hijriMonths().length === 12;
             return v === 'month' || v === 'day';
         });
         if (!views.length) views = ['month'];

@@ -25,15 +25,29 @@
         return;
     }
 
-    // Rating models, in picker order. Keys are the ids the precomputed
-    // bundle keys `sentiment.by_role[role].by_model` on — which are the
-    // Hugging Face column prefixes (see scripts/iwac_utils.py
-    // SENTIMENT_MODELS). Labels are proper nouns, so not translated.
-    var MODELS = [
-        { key: 'gpt_5_6_luna',           label: 'GPT-5.6 Luna' },
-        { key: 'mistral_small_2603',     label: 'Mistral Small 4' },
-        { key: 'deepseek_v4_flash_0731', label: 'DeepSeek V4 Flash' }
-    ];
+    // The model list comes from the PAYLOAD, not from a constant here.
+    //
+    // Each role slice carries its own `models` array naming exactly what
+    // its `by_model` map holds. This panel used to hardcode the three
+    // generation-2 ids instead, which meant that between a module release
+    // and the admin's next "Pull latest data" run — a window the data
+    // decoupling in issue #7 makes routine — it looked up three keys the
+    // deployed bundle did not have and showed "no data available" over a
+    // fully populated payload. Reading the payload's own list cannot
+    // desynchronise from the payload.
+    //
+    // P.sentimentModelLabel maps id → display name and knows both
+    // generations; unknown ids still get a readable label.
+    function modelsOf(slice) {
+        var keys = (slice && slice.models) || [];
+        var byModel = (slice && slice.by_model) || {};
+        // Fall back to the map's own keys if `models` is absent: older
+        // bundles predate that field, and the data is still there.
+        if (!keys.length) keys = Object.keys(byModel);
+        return keys.map(function (key) {
+            return { key: key, label: P.sentimentModelLabel(key) };
+        });
+    }
 
     /** Read a CSS custom property from document.body, trimmed. */
     function readVar(name) {
@@ -77,9 +91,19 @@
     function render(panelEl, data, facet) {
         var byRole = (data && data.sentiment && data.sentiment.by_role) || {};
 
+        // Every role slice declares the same models; take the first that
+        // declares any, so the picker stays put as the reader moves
+        // between roles instead of rebuilding under them.
+        var models = [];
+        var roles = Object.keys(byRole);
+        for (var ri = 0; ri < roles.length; ri++) {
+            var candidate = modelsOf(byRole[roles[ri]]);
+            if (candidate.length) { models = candidate; break; }
+        }
+
         // Sentiment panel has its OWN sub-facet (model picker). Tracked
         // locally so the role facet doesn't reset the chosen model.
-        var activeModel = MODELS[0].key;
+        var activeModel = models.length ? models[0].key : '';
 
         function currentSlice() {
             return byRole[facet.role] || { models: [], by_model: {}, articles_total: 0 };
@@ -185,17 +209,23 @@
             caption.textContent = P.t('articles_count', { count: rated });
         }
 
-        var picker = P.buildFacetButtons({
-            facets: MODELS.map(function (m) {
-                return { key: m.key, label: m.label };
-            }),
-            activeKey: activeModel,
-            onChange: function (e) {
-                activeModel = e.facet;
-                refresh();
-            }
-        });
-        pickerHost.appendChild(picker.root);
+        // A single model needs no picker, and zero means the payload
+        // carries no sentiment at all — `refresh` below puts up the empty
+        // state for that case, which is the honest answer. Neither should
+        // render a row of buttons.
+        if (models.length > 1) {
+            var picker = P.buildFacetButtons({
+                facets: models.map(function (m) {
+                    return { key: m.key, label: m.label };
+                }),
+                activeKey: activeModel,
+                onChange: function (e) {
+                    activeModel = e.facet;
+                    refresh();
+                }
+            });
+            pickerHost.appendChild(picker.root);
+        }
 
         refresh();
         facet.subscribe(function () { refresh(); });

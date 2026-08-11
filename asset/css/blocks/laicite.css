@@ -5,12 +5,12 @@
 /*  Top-level layout: header → metric cards → authority link →           */
 /*  controls bar (view toggle + per-view facets) → view host.            */
 /*                                                                       */
-/*  Eleven views share the host: overview (Venn + per-corpus table +     */
+/*  Fourteen views share the host: overview (Venn + per-corpus table +   */
 /*  rights note + frame legend), timeline (year axis or Gregorian-vs-    */
 /*  lunar seasonality), archival dossier, KWIC concordance, collocates   */
 /*  (+ the implicit-lexicon result), the corpus comparison with          */
-/*  per-outlet frame fingerprints, actors, arenas, AI framing, map and   */
-/*  bibliography.                                                        */
+/*  per-outlet frame fingerprints, actors, arenas, AI framing, map,      */
+/*  semantic map, circulation, bylines and bibliography.                 */
 /*                                                                       */
 /*  Depends on iwac-core.css for tokens, panel, summary cards, chip      */
 /*  controls, table and form controls.                                   */
@@ -460,6 +460,14 @@
     font-size: 0.75rem;
     line-height: 1.5;
     color: var(--muted, #66696e);
+}
+
+/*  Cross-link to Scary Terms on the `concurrence` card. Inherits the
+ *  shared `.iwac-vis-cross-block` treatment from iwac-core.css; this only
+ *  fits it to the card's tighter type scale. */
+.iwac-vis-laicite-frame-cross {
+    margin-top: var(--space-2, 0.5rem);
+    font-size: 0.75rem;
 }
 
 
@@ -1281,4 +1289,161 @@ a.iwac-vis-laicite-work-title:focus-visible {
     flex-wrap: wrap;
     gap: var(--space-1, 0.25rem);
     margin: var(--space-1, 0.25rem) 0 0;
+}
+
+
+/* =================================================================== */
+/*  Semantic map (issue #19 C)                                          */
+/* =================================================================== */
+
+/*  Taller than the default chart host: a scatter of ~1,300 points needs
+ *  room to separate into clusters, and the whole value of the view is
+ *  whether those clusters are there. Matches the map view's 30rem so the
+ *  two spatial views feel like siblings. */
+.iwac-vis-laicite-semantic-panel > .iwac-vis-chart {
+    min-height: 30rem;
+}
+
+/*  The coverage line states which of the dossier's four corpora are on
+ *  the map. Given a left rule so it reads as a standing condition on the
+ *  chart rather than as more description — this is a structural
+ *  data-scope marker, which is the one case the theme allows a side
+ *  stripe for. */
+.iwac-vis-laicite-semantic-coverage {
+    padding-left: var(--space-3, 0.75rem);
+    border-left: var(--accent-line-sm, 2px) solid
+        color-mix(in oklab, var(--primary, #ce4115), transparent 60%);
+    color: var(--ink-subtle, #5a5e63);
+    font-size: 0.8125rem;
+}
+
+
+/* =================================================================== */
+/*  Circulation (issue #19 D)                                           */
+/* =================================================================== */
+
+/*  The detection floor and its blind spot. Muted and small: it is a
+ *  standing caveat on every number above it, not a finding. */
+.iwac-vis-laicite-circ-note {
+    color: var(--ink-subtle, #5a5e63);
+    font-size: 0.8125rem;
+}
+
+/*  "No duplicates found" is a RESULT, not an empty state — this coverage
+ *  was written independently — so it gets the panel's normal ink rather
+ *  than the greyed-out treatment a missing-data notice would carry. */
+.iwac-vis-laicite-circ-none {
+    margin: var(--space-3, 0.75rem) 0 0;
+    color: var(--ink, #13161c);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+}
+
+.iwac-vis-laicite-circ-link-list,
+.iwac-vis-laicite-circ-pair-list {
+    list-style: none;
+    margin: var(--space-3, 0.75rem) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-laicite-circ-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2, 0.5rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+    font-size: 0.875rem;
+}
+
+.iwac-vis-laicite-circ-link-n {
+    color: var(--ink-subtle, #5a5e63);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/*  One card per duplicate pair: the similarity, then both sides stacked
+ *  so a reader can compare titles and outlets at a glance and open
+ *  either. */
+.iwac-vis-laicite-circ-pair {
+    padding: var(--space-3, 0.75rem);
+    background: var(--surface, #fdfcfb);
+    border: 1px solid var(--border-light, #e2e5e8);
+    border-radius: var(--radius-sm, 0.375rem);
+}
+
+.iwac-vis-laicite-circ-sim {
+    display: inline-block;
+    margin-bottom: var(--space-2, 0.5rem);
+    padding: 0.1rem var(--space-2, 0.5rem);
+    background: color-mix(in oklab, var(--primary, #ce4115)
+                var(--accent-mix-subtle, 25%), var(--surface, #fdfcfb));
+    border-radius: var(--radius-full, 9999px);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-strong, #05070c);
+}
+
+.iwac-vis-laicite-circ-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: var(--space-1, 0.25rem) 0;
+}
+
+.iwac-vis-laicite-circ-side + .iwac-vis-laicite-circ-side {
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    margin-top: var(--space-1, 0.25rem);
+    padding-top: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-laicite-circ-title {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--ink-strong, #05070c);
+}
+
+a.iwac-vis-laicite-circ-title {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+a.iwac-vis-laicite-circ-title:hover {
+    color: var(--primary, #ce4115);
+}
+
+a.iwac-vis-laicite-circ-title:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+.iwac-vis-laicite-circ-meta {
+    font-size: 0.8125rem;
+    color: var(--ink-subtle, #5a5e63);
+}
+
+
+/* =================================================================== */
+/*  Bylines (issue #19 F)                                               */
+/* =================================================================== */
+
+/*  The denominator caveat. Same treatment as the semantic map's coverage
+ *  line — a structural data-scope marker, which is the one case the
+ *  theme allows a side stripe for — because it governs how everything
+ *  below it may be read. */
+.iwac-vis-laicite-bylines-note {
+    padding-left: var(--space-3, 0.75rem);
+    border-left: var(--accent-line-sm, 2px) solid
+        color-mix(in oklab, var(--primary, #ce4115), transparent 60%);
+    color: var(--ink-subtle, #5a5e63);
+    font-size: 0.8125rem;
+}
+
+/*  The ranking is a horizontal bar per byline; 20 rows need the room. */
+.iwac-vis-laicite-bylines-top > .iwac-vis-chart {
+    min-height: 32rem;
 }

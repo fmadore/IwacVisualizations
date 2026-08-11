@@ -1,7 +1,7 @@
 /**
  * IWAC Visualizations — Laïcité block (orchestrator, issue #14)
  *
- * A dossier on secularism across the whole IWAC corpus, in eleven views:
+ * A dossier on secularism across the whole IWAC corpus, in fourteen views:
  *
  *   - overview     KPIs, the tag-vs-text Venn, the per-corpus table,
  *                  the rights note and the frame legend
@@ -18,6 +18,9 @@
  *   - arenas       frame × decade × country shares — what is contested
  *   - sentiment    three-model AI framing against a whole-corpus baseline
  *   - map          geocoded places tagged on dossier items
+ *   - semantic     UMAP map of the press half, and a check on the frames
+ *   - circulation  near-duplicate copy across outlets: does it circulate?
+ *   - bylines      who signs the beat, always beside its denominator
  *   - references   the scholarship, on its own axis
  *
  * Data strategy: the four small bundles (metadata, trends, documents,
@@ -34,8 +37,8 @@
  *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js → panels.js →
  *   pagination.js → facet-buttons.js → maplibre stack → annotated-timeline.js →
  *   concordance.js → laicite/{i18n,helpers,overview,trends,documents,
- *   concordance,collocates,corpora,actors,arenas,sentiment,map,references,
- *   controls}.js
+ *   concordance,collocates,corpora,actors,arenas,sentiment,map,semantic,
+ *   circulation,bylines,references,controls}.js
  */
 (function () {
     'use strict';
@@ -63,7 +66,10 @@
         arenas:      'laicite-arenas.json',
         sentiment:   'laicite-sentiment.json',
         places:      'laicite-places.json',
-        references:  'laicite-references.json'
+        references:  'laicite-references.json',
+        semantic:    'laicite-semantic.json',
+        circulation: 'laicite-circulation.json',
+        bylines:     'laicite-bylines.json'
     };
 
     P.bootBlock({
@@ -424,6 +430,27 @@
                         frameColors: frameColors,
                         siteBase: siteBase
                     });
+                });
+            } else if (state.view === 'semantic') {
+                mountLazy('semantic', function () {
+                    return L.buildSemantic({
+                        bundle: lazy.semantic,
+                        metadata: metadata,
+                        state: state,
+                        frameColors: frameColors,
+                        siteBase: siteBase
+                    });
+                });
+            } else if (state.view === 'circulation') {
+                mountLazy('circulation', function () {
+                    return L.buildCirculation({
+                        bundle: lazy.circulation,
+                        siteBase: siteBase
+                    });
+                });
+            } else if (state.view === 'bylines') {
+                mountLazy('bylines', function () {
+                    return L.buildBylines({ bundle: lazy.bylines });
                 });
             } else if (state.view === 'references') {
                 mountLazy('references', function () {
