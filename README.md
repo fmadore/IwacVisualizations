@@ -43,6 +43,16 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.41.0 — the same copy edit, on the French side
+
+v1.40.0 edited the English and synced only the French strings whose *claim* had changed. That left the two locales unequal in a way that mattered: the method vocabulary was glossed in English and bare in French, so a French reader got the harder version of the same panel. Since the francophone site is the one West African researchers actually use, this release closes that gap. No behaviour change and no new data.
+
+**The gloss now exists in both locales.** "classées par score TF-IDF" became "le classement (TF-IDF) privilégie les noms qui lui sont propres sur ceux qui reviennent partout dans la collection"; "projection UMAP des plongements de texte IA" became "un modèle d'IA compare les textes, puis une technique appelée UMAP ramène ces comparaisons à deux dimensions"; "les 12 étiquettes de thèmes LDA" became "les 12 thèmes les plus fréquents … d'un modèle statistique (LDA)". `MATTR` gains its one-line definition, and `océrisé` gives way to `numérisé` throughout. As in English, the method names stay visible rather than being hidden — they are glossed on first use in each panel, so a reader who wants to look one up still can.
+
+**It is not a translation of the English edit.** The vault's French register discourages piling up colons, semicolons and parentheses, and many of the English fixes replaced an em dash with a colon. The French needed its own solutions, mostly recast clauses and full stops: `— les deux sont des alternatives, non un croisement` became `; les deux filtres sont des alternatives et ne se combinent pas`.
+
+Em dashes fall from 47 to 13 across 1,124 French strings, matching the English count exactly, and the 13 that remain are the same label separators in both locales (`La laïcité dans le temps — {country}`, `Lisibilité — dossier`). Negative parallelism drops from 11 to 3, all three short factual contrasts that the English carries too. The three pompous copulas (`constitue`, `représente`) are gone. Two French `msgstr` entries in `language/fr.po` lose their em dashes; the catalogue is otherwise unchanged, since no msgid moved.
+
 ### v1.40.0 — a copy edit of every user-facing string
 
 No behaviour change and no new data. Every string a reader can see — panel titles, chart descriptions, tooltips, empty states, the embed gallery, the admin data page — was edited for British spelling, plain language, and the removal of machine-writing tics.

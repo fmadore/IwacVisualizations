@@ -54,7 +54,7 @@
         ns.addTranslations('fr', {
             'Loading term trends':   'Chargement des tendances lexicales',
             'ngram.title':           'Tendances lexicales',
-            'ngram.description':     'Fréquence d’un mot dans la presse numérisée au fil du temps — la part (ou le nombre) d’articles de chaque année dont le texte contient le terme. Vocabulaire : les {n} formes lexicales (lemmes) les plus fréquentes, donc « terroriste » et « terroristes » comptent comme un seul terme.',
+            'ngram.description':     'Fr\u00e9quence d\u2019un mot dans la presse num\u00e9ris\u00e9e au fil du temps : la part des articles de chaque ann\u00e9e dont le texte contient le terme, ou leur nombre. Le vocabulaire retenu est celui des {n} formes de dictionnaire les plus fr\u00e9quentes, si bien que \u00ab terroriste \u00bb et \u00ab terroristes \u00bb comptent comme un seul terme.',
             'ngram.search':          'Rechercher un terme…',
             'ngram.no_matches':      'Aucun terme correspondant',
             'ngram.selected':        'Termes (jusqu’à {max})',

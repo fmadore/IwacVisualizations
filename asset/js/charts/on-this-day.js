@@ -61,7 +61,7 @@
             'Loading on this day': 'Chargement de « ce jour-là »',
             'otd.title':      'Ce jour-là',
             'otd.desc':       'Publiés un {date}, au fil des décennies de la collection.',
-            'otd.desc_h':     'Publiés un {date}, au fil des décennies de la collection — la même date lunaire, d’une année grégorienne à l’autre.',
+            'otd.desc_h':     'Publi\u00e9s un {date}, au fil des d\u00e9cennies de la collection : la m\u00eame date lunaire, d\u2019une ann\u00e9e gr\u00e9gorienne \u00e0 l\u2019autre.',
             'otd.type_a':     'Article',
             'otd.type_p':     'Périodique',
             'otd.ago':        'il y a {count} ans',

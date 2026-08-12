@@ -52,11 +52,11 @@
             'bylines.card_unique':    'Signatures distinctes',
             'bylines.card_prolific':  'Signatures avec 10 articles ou plus',
             'bylines.trend_title':    'Articles signés au fil du temps',
-            'bylines.trend_desc':     'Part des articles de chaque année portant une signature — journalistes comme agences de presse. Le reste a paru non signé.',
+            'bylines.trend_desc':     'Part des articles de chaque ann\u00e9e portant une signature, journalistes comme agences de presse. Le reste a paru non sign\u00e9.',
             'bylines.trend_axis':     'Part signée (%)',
             'bylines.trend_tip':      '{signed} articles signés sur {total}',
             'bylines.top_title':      'Signatures les plus prolifiques',
-            'bylines.top_desc':       'Les {n} signatures les plus fréquentes du corpus — journalistes et agences de presse. Cliquez sur une barre pour ouvrir la notice d’autorité quand elle existe.',
+            'bylines.top_desc':       'Les {n} signatures les plus fr\u00e9quentes du corpus, journalistes comme agences de presse. Cliquez sur une barre pour ouvrir la notice d\u2019autorit\u00e9 quand elle existe.',
             'bylines.active':         'En activité {first}–{last}',
             'bylines.papers':         'Journaux',
             'bylines.topics':         'Sujets fréquents'

@@ -53,24 +53,24 @@
         ns.addTranslations('fr', {
             'Loading press reprints':  'Chargement des reprises de presse',
             'reprints.title':          'Reprises de presse et dépêches',
-            'reprints.description':    'Des paires d’articles de journaux différents dont le texte est presque identique — les traces de dépêches d’agence (PANA, AFP), de communiqués partagés et de reprises passant d’un titre à l’autre. L’appariement est réalisé par un logiciel qui mesure à quel point deux articles sont rédigés de la même façon ; une correspondance très proche signifie généralement que l’un a été copié sur l’autre, ou que les deux reprennent la même dépêche d’agence. Comme c’est un ordinateur qui propose ces rapprochements, et non une personne qui les confirme, considérez chaque paire comme une piste à vérifier, et non comme un fait établi.',
+            'reprints.description':    'Des paires d\u2019articles de journaux diff\u00e9rents dont le texte est presque identique : les traces de d\u00e9p\u00eaches d\u2019agence (PANA, AFP), de communiqu\u00e9s partag\u00e9s et de reprises passant d\u2019un titre \u00e0 l\u2019autre. L\u2019appariement est r\u00e9alis\u00e9 par un logiciel qui mesure \u00e0 quel point deux articles sont r\u00e9dig\u00e9s de la m\u00eame fa\u00e7on, et une correspondance tr\u00e8s proche signifie g\u00e9n\u00e9ralement que l\u2019un a \u00e9t\u00e9 copi\u00e9 sur l\u2019autre, ou que les deux reprennent la m\u00eame d\u00e9p\u00eache d\u2019agence. Comme ces rapprochements sont propos\u00e9s par un ordinateur plut\u00f4t que confirm\u00e9s par une personne, consid\u00e9rez chaque paire comme une piste \u00e0 v\u00e9rifier plut\u00f4t que comme un fait \u00e9tabli.',
             'reprints.card_pairs':     'Paires de reprises',
             'reprints.card_papers':    'Journaux concernés',
             'reprints.card_gap':       'Écart médian (jours)',
             'reprints.card_scanned':   'Articles comparés',
             'reprints.network_title':  'Réseau de circulation',
-            'reprints.network_desc':   'L’épaisseur du lien correspond au nombre de textes quasi identiques partagés par deux journaux ; la taille du nœud au total du journal. Les couleurs suivent le pays du journal.',
+            'reprints.network_desc':   'Plus le lien est \u00e9pais, plus les deux journaux partagent de textes quasi identiques. La taille du n\u0153ud correspond au total du journal et les couleurs suivent son pays.',
             'reprints.network_tip':    '{a} ↔ {b} : {n} textes partagés',
             'reprints.node_tip':       '{name} : {n} textes partagés',
             'reprints.table_title':    'Paires de reprises',
-            'reprints.table_desc':     'Triées par similarité. Un écart de 0 à 2 jours est la signature des dépêches ; un écart plus long suggère une reprise délibérée.',
+            'reprints.table_desc':     'Tri\u00e9es par similarit\u00e9. Un \u00e9cart de 0 \u00e0 2 jours est la signature des d\u00e9p\u00eaches d\u2019agence, tandis qu\u2019un \u00e9cart plus long sugg\u00e8re une reprise d\u00e9lib\u00e9r\u00e9e.',
             'reprints.col_sim':        'Similarité',
             'reprints.col_gap':        'Écart (jours)',
             'reprints.col_article_a':  'Article A',
             'reprints.col_paper_a':    'Journal A',
             'reprints.col_article_b':  'Article B',
             'reprints.col_paper_b':    'Journal B',
-            'reprints.truncated':      'Affichage des {n} paires les plus fortes — l’ensemble continue sous le seuil.'
+            'reprints.truncated':      'Affichage des {n} paires les plus fortes ; l\u2019ensemble continue sous le seuil.'
         });
     }
 

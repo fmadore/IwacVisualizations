@@ -32,7 +32,7 @@
         ns.addTranslations('fr', {
             'Loading semantic landscape': 'Chargement du paysage sémantique',
             'Semantic landscape': 'Paysage sémantique',
-            'desc_semantic_landscape': 'Chaque article de la collection, positionné selon la similarité sémantique de son texte intégral (projection UMAP des plongements de texte IA — les axes n’ont pas de sens, seule la proximité compte). Des libellés discrets marquent la zone la plus dense de chaque grand thème. Glissez pour déplacer, molette pour zoomer, cliquez sur un point pour ouvrir l’article.',
+            'desc_semantic_landscape': 'Chaque article de la collection, positionn\u00e9 selon la ressemblance de son texte int\u00e9gral avec celui des autres. Un mod\u00e8le d\u2019IA compare les textes, puis une technique appel\u00e9e UMAP ram\u00e8ne ces comparaisons \u00e0 deux dimensions ; les axes n\u2019ont donc pas de sens et seul compte le voisinage. Des libell\u00e9s discrets marquent la zone la plus dense de chaque grand th\u00e8me. Faites glisser pour vous d\u00e9placer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir l\u2019article.',
             'Color by': 'Colorer par',
             'Decade': 'Décennie',
             'Topic': 'Thème',
@@ -40,7 +40,7 @@
             'Unknown year': 'Année inconnue',
             'landscape_points': '{count} articles positionnés',
             'Periodicals semantic landscape': 'Paysage sémantique des périodiques',
-            'desc_periodicals_landscape': 'Chaque numéro de périodique islamique de la collection, positionné selon la similarité sémantique de sa table des matières (projection UMAP des plongements de texte IA — les axes n’ont pas de sens, seule la proximité compte). Glissez pour déplacer, molette pour zoomer, cliquez sur un point pour ouvrir le numéro.',
+            'desc_periodicals_landscape': 'Chaque num\u00e9ro de p\u00e9riodique islamique de la collection, positionn\u00e9 selon la ressemblance de son sommaire avec celui des autres. Un mod\u00e8le d\u2019IA compare les sommaires, puis une technique appel\u00e9e UMAP ram\u00e8ne ces comparaisons \u00e0 deux dimensions ; les axes n\u2019ont donc pas de sens et seul compte le voisinage. Faites glisser pour vous d\u00e9placer sur la carte, utilisez la molette pour zoomer et cliquez sur un point pour ouvrir le num\u00e9ro.',
             'landscape_points_issues': '{count} numéros positionnés'
         });
 })();
