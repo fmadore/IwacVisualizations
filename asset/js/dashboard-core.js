@@ -141,10 +141,22 @@
 
     /**
      * Return the currently-live ECharts instance for a given container,
-     * or null if the chart is not tracked or has been disposed. Theme
-     * swaps dispose + re-init the instance, so any caller that needs to
-     * read data from the chart after registration time must go through
-     * this lookup rather than closing over the original return value.
+     * or null if the chart is not tracked or has been disposed.
+     *
+     * Theme swaps do NOT replace the instance: `applyThemeToCharts` calls
+     * `setTheme()` and re-runs the render callback on the same object, so a
+     * reference captured from `registerChart()` — and anything bound to it
+     * with `.on()` — stays valid across a light/dark toggle. Bind those
+     * handlers outside the render callback, though: the callback re-runs on
+     * every swap, so an `.on()` inside it stacks a duplicate listener each
+     * time.
+     *
+     * What this lookup guards against is teardown. A block that rebuilds a
+     * subtree disposes every instance inside it and drops the entries (see
+     * `disposeCharts` in compare-newspapers.js), and `pruneCharts` evicts
+     * anything disposed or detached. Callers that reach for a chart well
+     * after registration — download buttons, deferred UI handlers — should
+     * resolve through here so they can't read from a dead instance.
      */
     ns.getLiveChart = function (el) {
         for (var i = 0; i < ns._charts.length; i++) {

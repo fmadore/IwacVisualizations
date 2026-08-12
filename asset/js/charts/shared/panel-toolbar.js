@@ -43,8 +43,8 @@
 
     /**
      * Return the PNG data URL for an ECharts instance, resolved through
-     * the live entry in `ns._charts` so we never read from a disposed
-     * instance after a theme swap. Returns null if the chart cannot be
+     * the live entry in `ns._charts` so we never read from an instance
+     * disposed by a panel teardown. Returns null if the chart cannot be
      * located.
      */
     function echartsDataUrl(el) {

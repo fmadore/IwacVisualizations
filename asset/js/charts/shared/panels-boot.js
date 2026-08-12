@@ -309,7 +309,7 @@
         }
 
         // Look the live instance up through ns.getLiveChart so we never
-        // call getDataURL on an instance disposed by a theme swap.
+        // call getDataURL on an instance disposed by a panel teardown.
         bar.appendChild(btn('⭳', P.t('Download chart'), function () {
             var live = ns.getLiveChart && ns.getLiveChart(panelEl.chart);
             if (!live) return;
