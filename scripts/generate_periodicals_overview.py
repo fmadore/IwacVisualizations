@@ -32,6 +32,13 @@ Payload shape (top-level keys):
     wordcloud         — top-N [word, count] pairs from the issues'
                         lemmatized full text (lemma_nostop), shaped for
                         the C.wordcloud builder
+    topics            — LDA topic **mixtures** over lda_topic_topk, never
+                        dominant labels: per-topic probability mass,
+                        representative issues ranked by that topic's own
+                        share, a probability-weighted per-year prevalence
+                        series, and the coverage / captured-mass
+                        denominators the panel needs to state its limits.
+                        See compute_topics.
 
 Usage
 -----
@@ -57,6 +64,7 @@ import pandas as pd
 
 from iwac_utils import (
     DATASET_ID,
+    aggregate_prevalence,
     canonicalize_country_field,
     configure_logging,
     create_metadata_block,
@@ -65,6 +73,8 @@ from iwac_utils import (
     is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
+    parse_top_words,
+    parse_topk,
     save_json,
     tokenize,
 )
@@ -80,6 +90,26 @@ TOP_N_SUBJECTS = 20
 # comparable density.
 WORDCLOUD_MAX_WORDS = 150
 WORDCLOUD_MIN_FREQUENCY = 5
+
+# Representative issues kept per topic. Matches the articles Topic
+# Explorer's card grid; past a dozen the panel crowds without adding
+# information.
+TOPIC_ITEMS = 10
+
+# Cap on how many of those may come from any one periodical.
+#
+# Without it the strip is a monoculture: measured on the live data, 8 of
+# 20 topics returned ten issues of a single title, and a theme carried by
+# 588 issues across a dozen periodicals rendered as if it belonged to one
+# magazine. The cause is real rather than a ranking bug — a devotional
+# weekly's issues genuinely are more topically pure than a general
+# newsmagazine's — but "most representative issues" that silently exclude
+# every other title misdescribe the theme's reach.
+#
+# The cap is a floor, not a ceiling: if the capped pass cannot fill the
+# grid, the remainder is topped up in pure share order, so a theme that
+# really is carried by one periodical still shows ten of its issues.
+TOPIC_ITEMS_PER_PERIODICAL = 3
 
 
 def _str_or_none(value: Any) -> Optional[str]:
@@ -310,6 +340,283 @@ def compute_wordcloud(
 
 
 # ---------------------------------------------------------------------------
+#  LDA topics
+# ---------------------------------------------------------------------------
+
+def _topic_id(value: Any) -> Optional[int]:
+    """Dominant topic id as an int, or None when the issue is unmodelled.
+
+    ``lda_topic_id`` is float64 on every modelled subset (nulls force the
+    widening). On ``publications`` an unmodelled issue is **null**, not
+    ``-1`` — the ``references`` convention rather than the ``articles``
+    one — but ``-1`` is rejected here too, so a change of upstream
+    convention degrades to "uncovered" instead of inventing topic -1.
+    """
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    try:
+        topic_id = int(float(value))
+    except (TypeError, ValueError):
+        return None
+    return topic_id if topic_id >= 0 else None
+
+
+def _issue_record(row: pd.Series) -> Dict[str, Any]:
+    """The fields a representative-issue card needs, and nothing more."""
+    return {
+        "o_id":      _str_or_none(row.get("o:id")),
+        "title":     _str_or_none(row.get("title")),
+        "newspaper": _str_or_none(row.get("newspaper")),
+        "issue":     _str_or_none(row.get("issue")),
+        "date":      (_str_or_none(row.get("pub_date")) or "")[:10],
+        "year":      extract_year(row.get("pub_date")),
+        "thumbnail": _str_or_none(row.get("thumbnail")),
+    }
+
+
+def _select_items(
+    candidates: List[Any], limit: int, per_periodical: int,
+) -> List[Any]:
+    """Top issues by share, without letting one periodical fill the grid.
+
+    Two passes over the same share-ordered list: the first takes at most
+    ``per_periodical`` from each title, the second tops up from whatever
+    the cap skipped. So a theme spread over many periodicals shows that
+    spread, and a theme genuinely carried by one still fills its grid
+    with that one — the cap never shrinks the result, only reorders it.
+    """
+    ranked = sorted(candidates, key=lambda entry: -entry[0])
+    if per_periodical <= 0:
+        return ranked[:limit]
+
+    seen: Counter = Counter()
+    picked: List[Any] = []
+    deferred: List[Any] = []
+    for entry in ranked:
+        name = entry[2].get("newspaper") or ""
+        if seen[name] < per_periodical:
+            seen[name] += 1
+            picked.append(entry)
+            if len(picked) == limit:
+                return picked
+        else:
+            deferred.append(entry)
+
+    picked.extend(deferred[:limit - len(picked)])
+    return picked
+
+
+def _empty_topics(reason: str, total: int) -> Dict[str, Any]:
+    """Empty-state contract, same shape as a populated section.
+
+    Follows ``generate_references_overview._empty_landscape``: the topic
+    panels are optional — an older dataset snapshot predates the
+    2026-08-11 LDA fit entirely — so their absence must render as a stated
+    reason, not a crashed build or a silently missing panel.
+    """
+    return {
+        "models":             [],
+        "n_topics":           0,
+        "topics":             [],
+        "prevalence":         None,
+        "mean_dominant_prob": None,
+        "captured_mass":      None,
+        "coverage": {
+            "modelled": 0,
+            "total":    int(total),
+            "share":    0.0,
+            "reason":   reason,
+        },
+        "source_field": "OCR",
+    }
+
+
+def compute_topics(
+    rows: pd.DataFrame,
+    items_per_topic: int,
+    items_per_periodical: int = TOPIC_ITEMS_PER_PERIODICAL,
+) -> Dict[str, Any]:
+    """Topic *mixtures* over the issues, never dominant labels.
+
+    **This reads ``lda_topic_topk``, and the choice is load-bearing.**
+    Mean dominant-topic probability on ``publications`` is 0.345 — a
+    typical row is ``"14:0.2749|16:0.1160|11:0.0890"``, where the top
+    three topics carry under half the mass. A whole periodical issue is a
+    miscellany, so the dominant-label treatment the articles Topic
+    Explorer uses (correct there — whole-document LDA on single news
+    stories is far peakier) would be wrong about two thirds of the time
+    here. Every topic in an issue's mixture scores its own share.
+
+    Three quantities, deliberately kept apart rather than blended:
+
+    ``mass`` / ``mean_mass``   summed probability mass — "how much of the
+                              corpus's attention went to this topic".
+                              The ranking key.
+    ``issues``                 issues carrying the topic anywhere in their
+                              top-k.
+    ``dominant_count``         issues where it is the single best label.
+                              Carried *so the panel can show the gap*
+                              against ``issues``: the divergence is the
+                              evidence for reading mixtures, and hiding it
+                              would make the argument unfalsifiable.
+    ``periodicals``            distinct titles carrying it. A theme in 588
+                              issues of one magazine and a theme in 588
+                              issues of twelve are different findings, and
+                              the representative-issue grid alone cannot
+                              tell them apart — see ``_select_items``.
+
+    Masses are truncated — only the top k=3 are on the Hub — so they sum
+    to ``captured_mass``, well under 1.0. They are not renormalised; see
+    ``iwac_utils.aggregate_prevalence`` for why.
+
+    Topics come from the issues' **OCR text**. The subset's embedding
+    column is ``embedding_tableOfContents``, a different object built from
+    the contents page — ``source_field`` records which one this is so the
+    panel can say so rather than leaving a reader to assume they match.
+    """
+    logger = logging.getLogger(__name__)
+    total = int(len(rows))
+
+    if "lda_topic_topk" not in rows.columns:
+        logger.warning(
+            "  publications carries no lda_topic_topk — topic panels will "
+            "render their empty state. The chunked LDA fit landed 2026-08-11; "
+            "an older snapshot predates it."
+        )
+        return _empty_topics("no lda_topic_topk column", total)
+
+    labels: Dict[int, str] = {}
+    model_names: Counter = Counter()
+    mass: Dict[int, float] = defaultdict(float)
+    in_mixture: Counter = Counter()
+    dominant: Counter = Counter()
+    periodicals: Dict[int, set] = defaultdict(set)
+    candidates: Dict[int, List[Any]] = defaultdict(list)
+    dominant_probs: List[float] = []
+    modelled = 0
+    total_mass = 0.0
+
+    for _, row in rows.iterrows():
+        pairs = parse_topk(row.get("lda_topic_topk"))
+        if not pairs:
+            # Null, not -1: the 2 Arabic issues and those without usable
+            # OCR are simply outside the model.
+            continue
+
+        modelled += 1
+        name = _str_or_none(row.get("lda_model_name"))
+        if name:
+            model_names[name] += 1
+
+        dominant_id = _topic_id(row.get("lda_topic_id"))
+        if dominant_id is not None:
+            dominant[dominant_id] += 1
+            label = _str_or_none(row.get("lda_topic_label"))
+            if label and dominant_id not in labels:
+                labels[dominant_id] = label
+        prob = row.get("lda_topic_prob")
+        if prob is not None and not (isinstance(prob, float) and pd.isna(prob)):
+            try:
+                dominant_probs.append(float(prob))
+            except (TypeError, ValueError):
+                pass
+
+        # One record per row, shared across the topics it contributes to;
+        # only the survivors of the top-N cut get copied below.
+        record = _issue_record(row)
+        for topic_id, topic_prob in pairs:
+            mass[topic_id] += topic_prob
+            total_mass += topic_prob
+            in_mixture[topic_id] += 1
+            if record["newspaper"]:
+                periodicals[topic_id].add(record["newspaper"])
+            candidates[topic_id].append((topic_prob, dominant_id == topic_id, record))
+
+    if not modelled:
+        logger.warning("  no issue carries a parseable lda_topic_topk")
+        return _empty_topics("no parseable topic mixtures", total)
+
+    # Ids are comparable only within one model. publications is fitted
+    # once (lda_model_publications, k=20), unlike references' FR+EN pair —
+    # but say so loudly rather than silently merging two numbering schemes
+    # into one nonsense bucket if that ever changes upstream.
+    if len(model_names) > 1:
+        logger.error(
+            "  %d LDA models present on publications (%s) — topic ids are "
+            "NOT comparable across models and this section aggregates them "
+            "as if they were. Split by lda_model_name before shipping.",
+            len(model_names), ", ".join(sorted(model_names)),
+        )
+
+    topics: List[Dict[str, Any]] = []
+    for topic_id in sorted(mass, key=lambda t: -mass[t]):
+        # Ranked by *this* topic's share, so an issue where the topic runs
+        # a strong second can surface. Ranking on lda_topic_prob would only
+        # ever return issues the topic already won, which is the
+        # dominant-label view wearing a different hat.
+        items = _select_items(candidates[topic_id], items_per_topic, items_per_periodical)
+        label = labels.get(topic_id, "")
+        topics.append({
+            "id":              topic_id,
+            "label":           label,
+            "words":           parse_top_words(label),
+            "mass":            round(mass[topic_id], 4),
+            "mean_mass":       round(mass[topic_id] / modelled, 4),
+            "issues":          int(in_mixture[topic_id]),
+            "dominant_count":  int(dominant.get(topic_id, 0)),
+            "periodicals":     len(periodicals[topic_id]),
+            "items": [
+                {**record, "share": round(share, 4), "is_dominant": is_dom}
+                for share, is_dom, record in items
+            ],
+        })
+
+    unlabelled = [t["id"] for t in topics if not t["label"]]
+    if unlabelled:
+        # lda_topic_label rides on the dominant assignment, so a topic
+        # that never wins an issue arrives without one.
+        logger.warning(
+            "  %d topic(s) carry no label (never any issue's dominant "
+            "topic): %s", len(unlabelled), unlabelled,
+        )
+
+    prevalence = aggregate_prevalence(
+        rows,
+        {"topic_topk": "lda_topic_topk", "date": "pub_date"},
+        labels=labels,
+    )
+    if prevalence is not None and prevalence["docs"] < modelled:
+        # The per-year series can only carry dated issues; the topic
+        # rankings above use every modelled issue. Two denominators, so
+        # both travel in the payload rather than one being assumed.
+        logger.info(
+            "  %d of %d modelled issues carry a parseable year and reach "
+            "the prevalence series", prevalence["docs"], modelled,
+        )
+
+    return {
+        "models":             [name for name, _ in model_names.most_common()],
+        "n_topics":           len(topics),
+        "topics":             topics,
+        "prevalence":         prevalence,
+        # Surfaced from the data rather than hardcoded: this is the number
+        # that makes the mixture reading necessary, and the panel states it.
+        "mean_dominant_prob": (
+            round(sum(dominant_probs) / len(dominant_probs), 4)
+            if dominant_probs else None
+        ),
+        "captured_mass":      round(total_mass / modelled, 4),
+        "coverage": {
+            "modelled": int(modelled),
+            "total":    total,
+            "share":    round(modelled / total, 4) if total else 0.0,
+            "reason":   "",
+        },
+        "source_field": "OCR",
+    }
+
+
+# ---------------------------------------------------------------------------
 #  Top-level builder
 # ---------------------------------------------------------------------------
 
@@ -319,6 +626,8 @@ def build_periodicals_overview(
     top_n_subjects: int,
     wordcloud_max_words: int,
     wordcloud_min_frequency: int,
+    topic_items: int,
+    topic_items_per_periodical: int,
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading IWAC publications subset from %s", repo_id)
@@ -339,6 +648,11 @@ def build_periodicals_overview(
     top_subjects = _top_n_pipe(df, "subject", top_n_subjects)
     countries = _top_n_pipe(df, "country", None)
     wordcloud = compute_wordcloud(df, wordcloud_max_words, wordcloud_min_frequency)
+    topics = compute_topics(
+        df,
+        items_per_topic=topic_items,
+        items_per_periodical=topic_items_per_periodical,
+    )
 
     holdings = compute_holdings(df, runs)
 
@@ -352,11 +666,33 @@ def build_periodicals_overview(
         len(holdings["cells"]),
     )
 
+    coverage = topics["coverage"]
+    if topics["n_topics"]:
+        logger.info(
+            "  %d LDA topics over %d/%d issues (%.1f%% modelled); mean "
+            "dominant-topic prob %.3f, mean captured mass %.3f",
+            topics["n_topics"], coverage["modelled"], coverage["total"],
+            100 * coverage["share"], topics["mean_dominant_prob"] or 0.0,
+            topics["captured_mass"] or 0.0,
+        )
+        # The reason the panels read mixtures. Log it every run so a
+        # future re-fit that peaks the model shows up in CI output
+        # rather than quietly invalidating the panel's framing.
+        if (topics["mean_dominant_prob"] or 0.0) >= 0.5:
+            logger.warning(
+                "  mean dominant-topic probability is %.3f — at or above "
+                "0.5 the mixture framing is worth revisiting; it was 0.345 "
+                "when these panels were designed",
+                topics["mean_dominant_prob"],
+            )
+    else:
+        logger.warning("  no topic section: %s", coverage["reason"])
+
     metadata = create_metadata_block(
         total_records=summary["total"],
         data_source=repo_id,
         script="generate_periodicals_overview.py",
-        script_version="0.3.0",
+        script_version="0.4.0",
     )
 
     return {
@@ -369,6 +705,7 @@ def build_periodicals_overview(
         "top_subjects":    top_subjects,
         "countries":       countries,
         "wordcloud":       wordcloud,
+        "topics":          topics,
     }
 
 
@@ -397,6 +734,15 @@ def main() -> None:
         help="Drop word-cloud terms below this count (default: %(default)s)",
     )
     parser.add_argument(
+        "--topic-items", type=int, default=TOPIC_ITEMS,
+        help="Representative issues kept per LDA topic (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--topic-items-per-periodical", type=int, default=TOPIC_ITEMS_PER_PERIODICAL,
+        help="Max representative issues from any one periodical per topic; "
+             "0 disables the cap (default: %(default)s)",
+    )
+    parser.add_argument(
         "--minify",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -413,6 +759,8 @@ def main() -> None:
         top_n_subjects=args.top_n_subjects,
         wordcloud_max_words=args.wordcloud_max_words,
         wordcloud_min_frequency=args.wordcloud_min_frequency,
+        topic_items=args.topic_items,
+        topic_items_per_periodical=args.topic_items_per_periodical,
     )
 
     output_path = Path(args.output)

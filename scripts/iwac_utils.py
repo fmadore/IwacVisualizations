@@ -19,6 +19,10 @@ Functions:
 - parse_pipe_separated: Parse multivalue fields
 - tokenize: Word-cloud tokenizer (lowercase, strip punctuation, drop
   stopwords and short tokens)
+- parse_topk: Parse an "id:prob|id:prob|..." LDA mixture cell
+- parse_top_words: Split an lda_topic_label chain into its top words
+- aggregate_prevalence: Probability-weighted per-year topic prevalence
+  from lda_topic_topk, with the captured mass reported un-normalised
 - clean_str: Strip-and-cast a DataFrame cell, treating NaN/None as ""
 - clean_float: Cast a DataFrame cell to float, or None for garbage
 - load_dataset_safe: Load HuggingFace dataset with error handling
@@ -38,6 +42,7 @@ import json
 import logging
 import re
 import unicodedata
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -743,6 +748,168 @@ def tokenize(text: Any) -> List[str]:
         tok for tok in TOKEN_RE.findall(text.lower())
         if len(tok) >= 4 and tok not in STOPWORDS
     ]
+
+
+# =============================================================================
+# LDA Topic Mixtures
+# =============================================================================
+#
+# Moved here from generate_topic_explorer.py when the periodicals topics
+# panels became a second consumer — same reasoning as HIJRI_COLUMNS /
+# read_hijri_month in v1.39.0. The distinction these two encode matters
+# more on some subsets than others: `publications` measures a mean
+# dominant-topic probability of 0.345, so a full periodical issue is a
+# genuine mixture and a dominant-label view of it would be wrong about
+# two thirds of the time.
+
+def parse_topk(value: Any) -> List[Tuple[int, float]]:
+    """Parse an ``lda_topic_topk`` cell into ``[(topic_id, prob), …]``.
+
+    Format is ``"id:prob|id:prob|…"``, descending by probability, written
+    by the upstream LDA pass. Entries below the model's
+    ``minimum_probability`` are already dropped upstream, so a cell can
+    hold fewer than k pairs — never assume exactly three. Malformed
+    fragments are skipped rather than guessed at.
+    """
+    text = clean_str(value)
+    if not text:
+        return []
+    pairs: List[Tuple[int, float]] = []
+    for fragment in text.split('|'):
+        head, _, tail = fragment.partition(':')
+        if not tail:
+            continue
+        try:
+            topic_id = int(head)
+            prob = float(tail)
+        except (TypeError, ValueError):
+            continue
+        if topic_id < 0 or not (0.0 <= prob <= 1.0):
+            continue
+        pairs.append((topic_id, prob))
+    return pairs
+
+
+def parse_top_words(label: str, max_words: int = 10) -> List[str]:
+    """Split a ``lda_topic_label`` string into individual top words.
+
+    The labels are written as space- or hyphen-separated chains
+    (``"religion - islam - musulman - ..."``) — splitting on either
+    one produces a clean word list. Trims surrounding whitespace and
+    drops empty fragments.
+    """
+    if not label:
+        return []
+    # Replace en-dash / em-dash variants with a hyphen so the split
+    # below catches them regardless of source.
+    s = (label
+         .replace('–', '-')   # en-dash
+         .replace('—', '-'))  # em-dash
+    # Split on either ' - ' (space-dash-space) or ',' to be defensive
+    # about whatever separator the upstream model emitted.
+    parts: List[str] = []
+    for chunk in s.split(','):
+        parts.extend(p.strip() for p in chunk.split(' - ') if p.strip())
+    return parts[:max_words] if parts else [s.strip()]
+
+
+def aggregate_prevalence(
+    df: pd.DataFrame,
+    columns: Dict[str, Optional[str]],
+    labels: Dict[int, str],
+) -> Optional[Dict[str, Any]]:
+    """Probability-weighted topic prevalence per year, from ``lda_topic_topk``.
+
+    Counting dominant topics answers "how many documents is this topic the
+    single best label for". That is a coarse question: a document the model
+    splits 0.34 / 0.33 / 0.33 counts fully for one topic and not at all for
+    two near-equal others, which makes a genuinely mixed corpus look
+    sharper than it is. Weighting by probability mass instead asks "how
+    much of the corpus's attention went to this topic", which is the
+    quantity a prevalence-over-time claim actually needs.
+
+    **The mass is truncated, and the payload says so rather than hiding
+    it.** Only the top *k* topics per document are on the Hub (k=3 by
+    default; the full theta matrix is dropped before the push), so the
+    per-year masses sum to ``captured_mass`` — typically well under 1.0 —
+    not to 1.0. The obvious "fix" of renormalising each document to sum to
+    1 would inflate every number by the missing tail and quietly convert a
+    known partial measurement into a fake complete one, so it is not done.
+    The front end plots the un-normalised stack, which makes the shortfall
+    visible as headroom instead of a footnote.
+
+    ``columns`` is the caller's column map, read for ``topic_topk`` and
+    ``date`` (same convention as ``read_hijri_month``). Returns None when
+    the topk column is absent — a dataset predating the 2026-07 LDA re-run,
+    or a subset that was never modelled — so the caller simply keeps
+    whatever dominant-topic view it already had.
+    """
+    topk_col = columns.get('topic_topk')
+    date_col = columns.get('date')
+    if not topk_col or topk_col not in df.columns:
+        return None
+
+    year_docs: Counter = Counter()                    # year → contributing docs
+    year_mass: Dict[int, float] = {}                  # year → captured mass
+    year_topic: Dict[int, Dict[int, float]] = {}      # year → topic → mass
+    topic_mass: Dict[int, float] = {}                 # topic → total mass
+    docs = 0
+    total_mass = 0.0
+    max_k = 0
+
+    for _, row in df.iterrows():
+        pairs = parse_topk(row.get(topk_col))
+        if not pairs:
+            continue
+        year = extract_year(row.get(date_col)) if date_col else None
+        if year is None:
+            continue
+
+        docs += 1
+        max_k = max(max_k, len(pairs))
+        year_docs[year] += 1
+        per_topic = year_topic.setdefault(year, {})
+        for topic_id, prob in pairs:
+            per_topic[topic_id] = per_topic.get(topic_id, 0.0) + prob
+            topic_mass[topic_id] = topic_mass.get(topic_id, 0.0) + prob
+            year_mass[year] = year_mass.get(year, 0.0) + prob
+            total_mass += prob
+
+    if not docs:
+        return None
+
+    years = sorted(year_docs)
+
+    # Every topic gets a series: the front end folds its own long tail into
+    # an "Other topics" band, and that band is only exact if it is summing
+    # real numbers rather than a pre-truncated remainder.
+    series: List[Dict[str, Any]] = []
+    for topic_id in sorted(topic_mass, key=lambda t: -topic_mass[t]):
+        values = []
+        for year in years:
+            mass = year_topic.get(year, {}).get(topic_id, 0.0)
+            values.append(round(mass / year_docs[year], 4) if year_docs[year] else 0.0)
+        series.append({
+            'id':    topic_id,
+            'label': labels.get(topic_id, f'Topic {topic_id}'),
+            'mean':  round(topic_mass[topic_id] / docs, 4),
+            'values': values,
+        })
+
+    return {
+        'years':   years,
+        'n_docs':  [int(year_docs[y]) for y in years],
+        # Mean total probability mass the top-k pairs account for, per
+        # year. The gap to 1.0 is the tail the Hub does not carry.
+        'captured_mass': [
+            round(year_mass.get(y, 0.0) / year_docs[y], 4) if year_docs[y] else 0.0
+            for y in years
+        ],
+        'series':  series,
+        'k_max':   max_k,
+        'docs':    docs,
+        'mean_captured_mass': round(total_mass / docs, 4),
+    }
 
 
 # =============================================================================

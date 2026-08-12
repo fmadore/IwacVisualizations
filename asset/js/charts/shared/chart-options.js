@@ -195,6 +195,13 @@
                 if (skip(p, i)) return;
                 lines.push(opts.row(p, i));
             });
+            // Optional trailing line for a per-category denominator — the
+            // n of the bucket, which is what tells a reader whether a
+            // dramatic-looking share rests on 2 documents or 200.
+            if (opts.footer) {
+                var footer = opts.footer(i, params);
+                if (footer) lines.push(footer);
+            }
             return lines.join('<br>');
         };
     };

@@ -1,0 +1,69 @@
+/**
+ * IWAC Visualizations — Periodicals Overview block styles
+ *
+ * Layered over `iwac-core.css`, which already provides the panel shell,
+ * the chart hosts and the `iwac-vis-similar-*` card grid this block
+ * reuses for representative issues.
+ *
+ * Only the theme (LDA topic) panels need block-local rules: a selected-
+ * topic heading, a marker for cards where the theme is NOT the issue's
+ * dominant one, and the method note that carries the coverage and
+ * truncation caveats.
+ *
+ * Tokens come from the IWAC theme at runtime; every custom property here
+ * keeps the theme's own fallback so the block degrades gracefully when
+ * dropped into a site that doesn't ship them.
+ */
+
+/* Selected-topic heading above the representative-issue strip. */
+.iwac-vis-topic-selected {
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 600;
+    color: var(--ink-strong, var(--ink, #13161c));
+    line-height: 1.4;
+}
+
+/**
+ * Marker for an issue where the theme is present but is not the issue's
+ * strongest. These are the informative cards — a theme running a strong
+ * second is exactly what a dominant-label view would hide — so the badge
+ * reads as a neutral qualifier rather than a warning. Deliberately not
+ * primary-coloured: the theme reserves brand colour for state, and this
+ * is a data attribute.
+ */
+.iwac-vis-topic-card-secondary {
+    align-self: flex-start;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-full, 9999px);
+    background: var(--surface-sunken, var(--surface-raised, #faf8f6));
+    color: var(--ink-light, #3f4349);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+}
+
+/**
+ * Method note: coverage denominator, the mixture rationale, and the
+ * truncation caveat. Sits below the cards, separated by a rule rather
+ * than a tinted box — this is apparatus, not a callout.
+ */
+.iwac-vis-topic-method {
+    margin-top: var(--space-4, 1rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-topic-method p {
+    margin: 0;
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    color: var(--ink-subtle, var(--muted, #66696e));
+    max-width: var(--measure-narrow, 44rem);
+}

@@ -16,6 +16,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 import dashboard_aggregator  # noqa: E402
+import generate_periodicals_overview  # noqa: E402
 import generate_topic_explorer  # noqa: E402
 import iwac_embeddings  # noqa: E402
 import iwac_stats  # noqa: E402
@@ -222,6 +223,220 @@ class TopicExplorerTests(unittest.TestCase):
         self.assertIsNone(
             iwac_utils.read_hijri_month(pd.Series({"hy": 1445}), {"hijri_year": None})
         )
+
+
+class TopicMixtureTests(unittest.TestCase):
+    """Contracts for the shared lda_topic_topk helpers.
+
+    These moved out of generate_topic_explorer when the periodicals
+    topics panels became a second consumer. They matter more on
+    `publications` than on `articles`: mean dominant-topic probability
+    there is 0.345, so the mixture is the measurement and a dominant
+    label would misdescribe most issues.
+    """
+
+    COLUMNS = {"topic_topk": "lda_topic_topk", "date": "pub_date"}
+
+    def test_topk_parser_skips_malformed_pairs_rather_than_guessing(self) -> None:
+        self.assertEqual(
+            iwac_utils.parse_topk("14:0.2749|16:0.1160|11:0.0890"),
+            [(14, 0.2749), (16, 0.1160), (11, 0.0890)],
+        )
+        # Fewer than k pairs is normal: entries below the model's
+        # minimum_probability are dropped upstream.
+        self.assertEqual(iwac_utils.parse_topk("3:0.5"), [(3, 0.5)])
+        # Junk, a bare id, an outlier id and an out-of-range prob all drop
+        # out; the survivors are still returned.
+        self.assertEqual(
+            iwac_utils.parse_topk("x:y|7|-1:0.4|2:1.4|5:0.3"),
+            [(5, 0.3)],
+        )
+        self.assertEqual(iwac_utils.parse_topk(float("nan")), [])
+
+    def test_prevalence_is_absent_rather_than_faked_without_the_column(self) -> None:
+        df = pd.DataFrame({"pub_date": ["1998-03-01"]})
+        self.assertIsNone(iwac_utils.aggregate_prevalence(df, self.COLUMNS, {}))
+        # Present but empty is the same answer, not a zero-filled bundle.
+        df["lda_topic_topk"] = [""]
+        self.assertIsNone(iwac_utils.aggregate_prevalence(df, self.COLUMNS, {}))
+
+    def test_truncated_mass_is_reported_not_renormalised(self) -> None:
+        # Two 1998 issues capturing 0.6 and 0.5 of their mass. Renormalising
+        # each to 1.0 would inflate every series and turn a known partial
+        # measurement into a fake complete one.
+        df = pd.DataFrame({
+            "pub_date": ["1998-03-01", "1998-09-01"],
+            "lda_topic_topk": ["0:0.4|1:0.2", "0:0.5"],
+        })
+        out = iwac_utils.aggregate_prevalence(df, self.COLUMNS, {0: "islam"})
+        self.assertEqual(out["years"], [1998])
+        self.assertEqual(out["n_docs"], [2])
+        self.assertAlmostEqual(out["captured_mass"][0], 0.55)
+        self.assertAlmostEqual(out["mean_captured_mass"], 0.55)
+        # The stack sums to the captured mass, leaving the tail as visible
+        # headroom rather than closing the gap.
+        self.assertAlmostEqual(
+            sum(s["values"][0] for s in out["series"]), 0.55
+        )
+
+    def test_every_topic_in_the_mixture_scores_not_just_the_dominant_one(self) -> None:
+        df = pd.DataFrame({
+            "pub_date": ["1998-03-01", "1998-09-01"],
+            "lda_topic_topk": ["0:0.4|1:0.2", "0:0.5"],
+        })
+        out = iwac_utils.aggregate_prevalence(df, self.COLUMNS, {0: "islam"})
+        by_id = {s["id"]: s for s in out["series"]}
+        # Topic 1 is never any issue's dominant label; a dominant-topic
+        # count would score it zero. Its runner-up mass still counts.
+        self.assertAlmostEqual(by_id[1]["mean"], 0.1)
+        self.assertAlmostEqual(by_id[0]["mean"], 0.45)
+        # Unlabelled topics get a placeholder rather than an empty legend.
+        self.assertEqual(by_id[0]["label"], "islam")
+        self.assertEqual(by_id[1]["label"], "Topic 1")
+        self.assertEqual(out["k_max"], 2)
+
+    def test_undated_rows_are_skipped_by_the_per_year_aggregation(self) -> None:
+        df = pd.DataFrame({
+            "pub_date": ["1998-03-01", ""],
+            "lda_topic_topk": ["0:0.4", "0:0.9"],
+        })
+        out = iwac_utils.aggregate_prevalence(df, self.COLUMNS, {})
+        self.assertEqual(out["docs"], 1)
+        self.assertAlmostEqual(out["series"][0]["mean"], 0.4)
+
+
+class PeriodicalsTopicsTests(unittest.TestCase):
+    """Contracts for the Periodicals Overview topic-mixture section."""
+
+    @staticmethod
+    def _frame(**overrides) -> pd.DataFrame:
+        data = {
+            "o:id": ["101", "102", "103", "104"],
+            "title": ["Issue 1", "Issue 2", "Issue 3", "Arabic issue"],
+            "newspaper": ["Al Islam", "Al Islam", "La Voix", "Al Manar"],
+            "issue": ["12", "13", "4", "1"],
+            "pub_date": ["1998-03-01", "1998-09-01", "2001-06-04", "1999-01-01"],
+            "thumbnail": ["t1", "t2", "t3", None],
+            # float64 with a NaN, exactly as the subset arrives.
+            "lda_topic_id": [14.0, 16.0, 14.0, float("nan")],
+            "lda_topic_prob": [0.2749, 0.31, 0.40, float("nan")],
+            "lda_topic_label": ["islam - religion", "ecole - laicite", "islam - religion", None],
+            "lda_topic_topk": [
+                "14:0.2749|16:0.1160|11:0.0890", "16:0.31|14:0.12", "14:0.40|11:0.09", None,
+            ],
+            "lda_model_name": ["lda_model_publications"] * 3 + [None],
+        }
+        data.update(overrides)
+        return pd.DataFrame(data)
+
+    def test_unmodelled_issues_are_null_not_outliers(self) -> None:
+        # publications follows the references convention: an issue without
+        # usable OCR is null, NOT -1. Treating a null as topic -1 would
+        # invent a topic; counting it as modelled would overstate coverage.
+        out = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
+        self.assertEqual(out["coverage"], {
+            "modelled": 3, "total": 4, "share": 0.75, "reason": "",
+        })
+        self.assertNotIn(-1, [t["id"] for t in out["topics"]])
+
+    def test_an_outlier_sentinel_would_degrade_to_uncovered(self) -> None:
+        # If upstream ever switched publications to the articles convention,
+        # -1 must read as "no topic" rather than becoming topic -1.
+        self.assertIsNone(generate_periodicals_overview._topic_id(-1.0))
+        self.assertIsNone(generate_periodicals_overview._topic_id(float("nan")))
+        self.assertEqual(generate_periodicals_overview._topic_id(14.0), 14)
+
+    def test_representative_issues_rank_on_the_topics_own_share(self) -> None:
+        out = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
+        by_id = {t["id"]: t for t in out["topics"]}
+
+        # Topic 16 is dominant for issue 102 (0.31) and a runner-up in
+        # issue 101 (0.116). Ranking on lda_topic_prob would return only
+        # the issue it won; the runner-up must still surface.
+        shares = [(i["o_id"], i["share"], i["is_dominant"]) for i in by_id[16]["items"]]
+        self.assertEqual(shares, [("102", 0.31, True), ("101", 0.116, False)])
+
+        # Topic 11 never wins an issue, so a dominant-topic count scores it
+        # zero — yet it carries real mass across two issues.
+        self.assertEqual(by_id[11]["dominant_count"], 0)
+        self.assertEqual(by_id[11]["issues"], 2)
+        self.assertAlmostEqual(by_id[11]["mass"], 0.179)
+
+    def test_one_periodical_cannot_fill_the_representative_grid(self) -> None:
+        # Measured on the live data, 8 of 20 topics returned ten issues of
+        # a single title — a theme spanning many periodicals rendered as
+        # if it belonged to one magazine.
+        df = self._frame(
+            **{
+                "o:id": ["1", "2", "3", "4"],
+                "newspaper": ["Al Islam", "Al Islam", "Al Islam", "La Voix"],
+                "lda_topic_topk": ["14:0.9", "14:0.8", "14:0.7", "14:0.1"],
+                "lda_topic_id": [14.0] * 4,
+                "lda_topic_prob": [0.9, 0.8, 0.7, 0.1],
+                "lda_topic_label": ["islam - religion"] * 4,
+                "lda_model_name": ["lda_model_publications"] * 4,
+            }
+        )
+        out = generate_periodicals_overview.compute_topics(
+            df, items_per_topic=3, items_per_periodical=2,
+        )
+        items = out["topics"][0]["items"]
+        # The 0.1 issue outranks Al Islam's third despite a far lower
+        # share, because the cap has already spent that title's budget.
+        self.assertEqual([i["o_id"] for i in items], ["1", "2", "4"])
+        self.assertEqual(out["topics"][0]["periodicals"], 2)
+
+    def test_the_cap_never_shrinks_a_single_periodical_theme(self) -> None:
+        # A theme genuinely carried by one title must still fill its grid,
+        # or the cap would punish a real finding.
+        df = self._frame(
+            **{
+                "o:id": ["1", "2", "3", "4"],
+                "newspaper": ["Al Islam"] * 4,
+                "lda_topic_topk": ["14:0.9", "14:0.8", "14:0.7", "14:0.6"],
+                "lda_topic_id": [14.0] * 4,
+                "lda_topic_prob": [0.9, 0.8, 0.7, 0.6],
+                "lda_topic_label": ["islam - religion"] * 4,
+                "lda_model_name": ["lda_model_publications"] * 4,
+            }
+        )
+        out = generate_periodicals_overview.compute_topics(
+            df, items_per_topic=4, items_per_periodical=2,
+        )
+        items = out["topics"][0]["items"]
+        self.assertEqual([i["o_id"] for i in items], ["1", "2", "3", "4"])
+        self.assertEqual(out["topics"][0]["periodicals"], 1)
+
+    def test_the_dominant_gap_is_carried_not_hidden(self) -> None:
+        # issues vs dominant_count is the evidence for reading mixtures at
+        # all; collapsing them would make the panel's framing unfalsifiable.
+        out = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
+        by_id = {t["id"]: t for t in out["topics"]}
+        self.assertEqual((by_id[14]["issues"], by_id[14]["dominant_count"]), (3, 2))
+        self.assertEqual((by_id[16]["issues"], by_id[16]["dominant_count"]), (2, 1))
+
+    def test_topics_rank_by_mass_and_report_the_truncated_total(self) -> None:
+        out = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
+        self.assertEqual([t["id"] for t in out["topics"]], [14, 16, 11])
+        # Three modelled issues capturing 0.4799 + 0.43 + 0.49 of their mass.
+        self.assertAlmostEqual(out["captured_mass"], 0.4666, places=4)
+        self.assertLess(out["captured_mass"], 1.0)
+        # Surfaced from the data, not hardcoded — this is the number the
+        # whole mixture treatment rests on.
+        self.assertAlmostEqual(out["mean_dominant_prob"], 0.3283, places=4)
+        self.assertEqual(out["models"], ["lda_model_publications"])
+        self.assertEqual(out["source_field"], "OCR")
+
+    def test_a_snapshot_without_topics_renders_a_reason_not_a_crash(self) -> None:
+        df = self._frame().drop(columns=["lda_topic_topk"])
+        out = generate_periodicals_overview.compute_topics(df, items_per_topic=5)
+        self.assertEqual(out["topics"], [])
+        self.assertIsNone(out["prevalence"])
+        self.assertEqual(out["coverage"]["reason"], "no lda_topic_topk column")
+        # Empty state must be the same shape as a populated one, or the
+        # panel has to branch on key presence.
+        populated = generate_periodicals_overview.compute_topics(self._frame(), items_per_topic=5)
+        self.assertEqual(set(out), set(populated))
 
 
 class DashboardHeatmapTests(unittest.TestCase):

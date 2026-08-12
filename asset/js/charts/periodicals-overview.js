@@ -16,6 +16,7 @@
  *   6. Countries — donut
  *   7. Top subjects — horizontal bar (wide)
  *   8. Most frequent terms — word cloud over lemmatized text (wide)
+ *   9. Themes — LDA topic mixtures (3 panels, periodicals-overview/topics.js)
  *
  * Load order: after shared/panels.js + shared/chart-options.js.
  */
@@ -100,6 +101,7 @@
         grid.appendChild(wordcloudPanel.panel);
 
         return {
+            grid:           grid,
             runs:           runsPanel.chart,
             holdings:       holdingsPanel.chart,
             holdingsPanel:  holdingsPanel.panel,
@@ -115,7 +117,7 @@
     /*  Main controller                                                   */
     /* ----------------------------------------------------------------- */
 
-    function render(container, data) {
+    function render(container, data, ctx) {
         if (!data || !data.summary || !data.summary.total) {
             container.innerHTML = '';
             container.appendChild(P.buildEmptyState());
@@ -202,6 +204,13 @@
                 chart.setOption(C.wordcloud(wordcloud));
             });
         }
+
+        // 7. Themes — LDA topic mixtures over lda_topic_topk. Appends its
+        // own panels (over-time, ranking, representative issues) rather
+        // than filling a reserved host, since the section elides entirely
+        // on a bundle that predates the model.
+        var topicsPanel = ns.periodicalsOverview && ns.periodicalsOverview.topics;
+        if (topicsPanel) topicsPanel.render(h.grid, data, ctx);
     }
 
     P.bootBlock({

@@ -10,7 +10,9 @@
  *
  * Panels: summary cards, period subtitle, periodical-runs Gantt, issues
  * per year stacked by country, languages donut, countries donut, top
- * subjects bar, and a word cloud of the most frequent lemmatized terms.
+ * subjects bar, a word cloud of the most frequent lemmatized terms, and
+ * the LDA theme panels (mixtures over `lda_topic_topk`, never dominant
+ * labels — see asset/js/charts/periodicals-overview/topics.js).
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
@@ -24,9 +26,11 @@ echo $this->partial('common/iwac-block-shell', [
         ],
         'panels' => [
             'periodicals-overview/i18n',
+            'periodicals-overview/topics',
         ],
         'orchestrator' => 'periodicals-overview',
     ],
+    'blockCss'   => 'periodicals-overview',
     'blockClass' => 'iwac-vis-periodicals-overview',
     'embedSlug'  => 'periodicals-overview',
     'loading'    => $this->translate('Loading periodicals overview'),
