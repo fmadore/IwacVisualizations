@@ -5,3 +5,4 @@
 require('./i18n.test.js');
 require('./panels.test.js');
 require('./assets.test.js');
+require('./sentiment.test.js');

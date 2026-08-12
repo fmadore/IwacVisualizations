@@ -49,10 +49,14 @@
         });
     }
 
-    /** Read a CSS custom property from document.body, trimmed. */
-    function readVar(name) {
-        if (typeof getComputedStyle === 'undefined' || !document.body) return '';
-        return getComputedStyle(document.body).getPropertyValue(name).trim();
+    /**
+     * Read a CSS colour token in the legacy rgb() form ECharts can parse
+     * during hover emphasis. The browser can paint OKLCH / color-mix()
+     * directly, but zrender cannot lift those modern strings and otherwise
+     * redraws the hovered segment without a fill.
+     */
+    function readColor(name) {
+        return typeof ns.readColorVar === 'function' ? ns.readColorVar(name) : '';
     }
 
     /**
@@ -63,27 +67,27 @@
     function readPalettes() {
         return {
             polarite: {
-                'Très positif':   readVar('--iwac-vis-sent-pos-strong'),
-                'Positif':        readVar('--iwac-vis-sent-pos'),
-                'Neutre':         readVar('--iwac-vis-sent-neutral'),
-                'Négatif':        readVar('--iwac-vis-sent-neg'),
-                'Très négatif':   readVar('--iwac-vis-sent-neg-strong'),
-                'Non applicable': readVar('--iwac-vis-sent-na')
+                'Très positif':   readColor('--iwac-vis-sent-pos-strong'),
+                'Positif':        readColor('--iwac-vis-sent-pos'),
+                'Neutre':         readColor('--iwac-vis-sent-neutral'),
+                'Négatif':        readColor('--iwac-vis-sent-neg'),
+                'Très négatif':   readColor('--iwac-vis-sent-neg-strong'),
+                'Non applicable': readColor('--iwac-vis-sent-na')
             },
             centralite: {
-                'Très central': readVar('--iwac-vis-cent-1'),
-                'Central':      readVar('--iwac-vis-cent-2'),
-                'Secondaire':   readVar('--iwac-vis-cent-3'),
-                'Marginal':     readVar('--iwac-vis-cent-4'),
-                'Non abordé':   readVar('--iwac-vis-cent-na')
+                'Très central': readColor('--iwac-vis-cent-1'),
+                'Central':      readColor('--iwac-vis-cent-2'),
+                'Secondaire':   readColor('--iwac-vis-cent-3'),
+                'Marginal':     readColor('--iwac-vis-cent-4'),
+                'Non abordé':   readColor('--iwac-vis-cent-na')
             },
             // Subjectivité 1..5 — sequential, 1 = objective, 5 = very subjective.
             subjectivite: {
-                '1': readVar('--iwac-vis-subj-1'),
-                '2': readVar('--iwac-vis-subj-2'),
-                '3': readVar('--iwac-vis-subj-3'),
-                '4': readVar('--iwac-vis-subj-4'),
-                '5': readVar('--iwac-vis-subj-5')
+                '1': readColor('--iwac-vis-subj-1'),
+                '2': readColor('--iwac-vis-subj-2'),
+                '3': readColor('--iwac-vis-subj-3'),
+                '4': readColor('--iwac-vis-subj-4'),
+                '5': readColor('--iwac-vis-subj-5')
             }
         };
     }
@@ -151,7 +155,7 @@
                         // the palette keyed on the raw French names so
                         // --iwac-vis-sent-* lookups still work.
                         labelFor: function (name) { return P.t(name); },
-                        fallbackColor: readVar('--iwac-vis-sent-neutral')
+                        fallbackColor: readColor('--iwac-vis-sent-neutral')
                     }),
                     true
                 );

@@ -43,6 +43,12 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.42.1 — sentiment bars keep their colour on hover
+
+The person and entity dashboards' three AI sentiment bars no longer disappear when a reader hovers them. The panel was handing ECharts the theme's raw `oklch()` and `color-mix()` token strings. Canvas could paint them normally, but zrender could not parse them when deriving an emphasis colour, so the hovered segment lost its fill while the tooltip remained visible.
+
+The panel now routes all polarité, centralité and subjectivité colours through the module's existing `readColorVar()` resolver before building the segmented bars. That preserves the IWAC theme's light/dark and admin-configurable palettes while giving ECharts the legacy `rgb()` values its hover path requires. A VM regression test fails if this panel ever bypasses the resolver again.
+
 ### v1.42.0 — periodical themes, as mixtures
 
 Closes the last box of [#10](https://github.com/fmadore/IwacVisualizations/issues/10). `publications.lda_topic_*` landed upstream on 2026-08-11 (`lda_model_publications`, k=20, chunked, 1,451 of 1,501 issues), so Periodicals Overview gains three theme panels: prevalence over time, a per-theme ranking, and representative issues. They live here rather than in a new block or in the articles Topic Explorer, following the References Overview precedent — the block that owns a subset owns its topic panels.
