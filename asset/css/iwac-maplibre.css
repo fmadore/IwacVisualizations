@@ -41,9 +41,11 @@
     font-size: var(--text-sm, 0.9375rem);
     line-height: 1.45;
     font-family: inherit;
-    /* Let the inner .iwac-vis-map-popup cap its own height with
-     * internal scroll; the wrapper just needs to not clip it. */
-    max-height: min(75vh, 460px);
+    box-sizing: border-box;
+    /* P.createIwacPopup replaces the fallback with a map-relative cap
+     * after the popup opens. Unlike vh, that remains correct in short
+     * panels, embeds, and fullscreen maps. */
+    max-height: min(var(--iwac-vis-popup-content-max-height, 75vh), 460px);
     overflow: hidden;
 }
 
@@ -122,13 +124,20 @@
      * 320px-wide phones. Max-width shrinks to fit the viewport with a
      * small gutter so the popup never clips off-screen when a marker
      * near the map edge is tapped. */
-    min-width: min(200px, calc(100vw - 3rem));
-    max-width: min(320px, calc(100vw - 1.5rem));
-    /* Cap the popup height so long article lists scroll internally
-     * instead of overflowing past the map container. Tracks the
-     * viewport on mobile and pins at ~420px on desktop so the
-     * visible content doesn't dwarf the map itself. */
-    max-height: min(70vh, 420px);
+    min-width: min(
+        200px,
+        var(--iwac-vis-popup-inner-max-width, 320px),
+        calc(100vw - 3rem)
+    );
+    max-width: min(
+        320px,
+        var(--iwac-vis-popup-inner-max-width, 320px),
+        calc(100vw - 1.5rem)
+    );
+    /* The JS factory derives this from the map container, reserving
+     * room for MapLibre's tip and this content box's padding/border.
+     * The viewport fallback only applies during the first layout. */
+    max-height: min(var(--iwac-vis-popup-body-max-height, 70vh), 420px);
     overflow-y: auto;
     /* Touch momentum scrolling inside the article list on iOS Safari. */
     -webkit-overflow-scrolling: touch;

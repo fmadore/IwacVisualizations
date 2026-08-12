@@ -295,27 +295,69 @@
         return map;
     };
 
+    /* ----------------------------------------------------------------- */
+    /*  Popup bounds                                                      */
+    /* ----------------------------------------------------------------- */
+
+    // MapLibre's automatic anchor chooses above/below from the popup's
+    // measured height, but cannot keep a popup inside the map when it is
+    // taller than the available space on both sides of its marker. The
+    // same geometric limit exists horizontally around narrow embedded
+    // maps. These are layout constants from MapLibre 6.3's distributed
+    // CSS and our own popup-content rule.
+    var POPUP_TIP_SIZE = 10;
+    var POPUP_CONTENT_CHROME_Y = 30;
+    var POPUP_CONTENT_CHROME_X = 60;
+    var POPUP_MAX_CONTENT_HEIGHT = 460;
+
+    function popupPadding(value) {
+        value = value || {};
+        function edge(name) {
+            var number = Number(value[name]);
+            return isFinite(number) && number > 0 ? number : 0;
+        }
+        return {
+            top: edge('top'),
+            right: edge('right'),
+            bottom: edge('bottom'),
+            left: edge('left')
+        };
+    }
+
+    function elementSize(element, clientKey, rectKey) {
+        if (!element) return 0;
+        var size = Number(element[clientKey]) || 0;
+        if (!size && typeof element.getBoundingClientRect === 'function') {
+            size = Number(element.getBoundingClientRect()[rectKey]) || 0;
+        }
+        return size;
+    }
+
+    function pixelWidth(value) {
+        var match = /^\s*(\d+(?:\.\d+)?)px\s*$/i.exec(String(value || ''));
+        return match ? Number(match[1]) : Infinity;
+    }
+
     /**
      * Create a MapLibre popup pre-scoped to the IWAC stylesheet hooks.
      * Stacks an `iwac-vis-maplibre-popup` class onto the popup root so
      * our CSS can target the close button, tip, and content without
      * fighting with MapLibre's built-in rules.
      *
-     * Two MapLibre PopupOptions defaults that fix a recurring "popup
-     * spills outside the map" complaint:
+     * The factory also keeps the popup inside its map container. The
+     * documented `padding` option helps MapLibre choose an anchor, but it
+     * does not resize content that cannot fit on either side of a marker.
+     * Once a popup opens, its content height is capped at half of the map's
+     * usable height (minus the 10px tip), which guarantees that either the
+     * top or bottom anchor fits. Its width is capped at two thirds of the
+     * usable map width, the corresponding guarantee for MapLibre's
+     * left/centre/right anchor thresholds. Rich bodies scroll internally.
+     * Bounds are recomputed after late content insertion and every map
+     * resize, including fullscreen changes.
      *
-     *   - `maxWidth: '320px'` — matches the inner `.iwac-vis-map-popup`
-     *     CSS cap so MapLibre's auto-anchor calculation reflects the
-     *     real popup width. The MapLibre default is 240px, which made
-     *     the auto-anchor pick "top" or "bottom" even when the popup
-     *     would actually overflow the side of the map container.
-     *   - `padding: 16` — uniform pixel padding from the map container
-     *     edges that MapLibre keeps free when picking an anchor. With
-     *     this set, a click on a marker near the edge anchors away
-     *     from that edge, keeping the entire popup in the viewport.
-     *     PaddingOptions on Popup is supported in MapLibre 5+.
-     *
-     * Callers can override either by passing the same key in `options`.
+     * Callers can still request a smaller maxWidth or different padding.
+     * An explicit `anchor` remains the caller's responsibility because it
+     * opts out of MapLibre's automatic placement.
      *
      * @param {Object} [options]  Same shape as maplibregl.Popup options
      * @returns {maplibregl.Popup}
@@ -336,6 +378,110 @@
             if (Object.prototype.hasOwnProperty.call(opts, k)) merged[k] = opts[k];
         }
         merged.className = className;
-        return new maplibregl.Popup(merged);
+
+        var popup = new maplibregl.Popup(merged);
+        var requestedMaxWidth = merged.maxWidth;
+        var requestedPadding = merged.padding;
+        var activeMap = null;
+        var originalAddTo = popup.addTo;
+        var originalSetMaxWidth = popup.setMaxWidth;
+        var originalSetPadding = popup.setPadding;
+
+        function syncBounds() {
+            if (!activeMap || !popup.isOpen || !popup.isOpen()) return;
+            var mapElement = activeMap.getContainer && activeMap.getContainer();
+            var popupElement = popup.getElement && popup.getElement();
+            if (!mapElement || !popupElement) return;
+
+            var mapWidth = elementSize(mapElement, 'clientWidth', 'width');
+            var mapHeight = elementSize(mapElement, 'clientHeight', 'height');
+            if (!mapWidth || !mapHeight) return;
+
+            var padding = popupPadding(requestedPadding);
+            var usableWidth = Math.max(0, mapWidth - padding.left - padding.right);
+            var usableHeight = Math.max(0, mapHeight - padding.top - padding.bottom);
+
+            // MapLibre uses the popup root's full size, including its tip,
+            // when choosing the anchor. Reserve that tip here so the measured
+            // result never crosses the half-height proof above.
+            var contentHeight = Math.min(
+                POPUP_MAX_CONTENT_HEIGHT,
+                Math.max(0, Math.floor(usableHeight / 2) - POPUP_TIP_SIZE)
+            );
+            var bodyHeight = Math.max(0, contentHeight - POPUP_CONTENT_CHROME_Y);
+
+            // For the horizontal algorithm, 2/3 of the usable map width is
+            // the largest box that can always fit at its left, centred, or
+            // right anchor for every possible marker x-coordinate.
+            var geometricWidth = Math.max(0, Math.floor(usableWidth * 2 / 3));
+            var constrainedWidth = Math.min(pixelWidth(requestedMaxWidth), geometricWidth);
+            if (!isFinite(constrainedWidth)) constrainedWidth = geometricWidth;
+
+            popupElement.style.setProperty(
+                '--iwac-vis-popup-content-max-height', contentHeight + 'px'
+            );
+            popupElement.style.setProperty(
+                '--iwac-vis-popup-body-max-height', bodyHeight + 'px'
+            );
+            popupElement.style.setProperty(
+                '--iwac-vis-popup-inner-max-width',
+                Math.max(0, constrainedWidth - POPUP_CONTENT_CHROME_X) + 'px'
+            );
+
+            // Both public setters call MapLibre's placement update. Apply the
+            // width after the CSS variables exist, then let the padding update
+            // make the final anchor decision against the constrained box.
+            originalSetMaxWidth.call(popup, constrainedWidth + 'px');
+            originalSetPadding.call(popup, requestedPadding);
+        }
+
+        function detachResize() {
+            if (activeMap && typeof activeMap.off === 'function') {
+                activeMap.off('resize', syncBounds);
+            }
+            activeMap = null;
+        }
+
+        popup.addTo = function (map) {
+            detachResize();
+            var result = originalAddTo.call(popup, map);
+            activeMap = map;
+            syncBounds();
+            if (map && typeof map.on === 'function') map.on('resize', syncBounds);
+            return result;
+        };
+
+        // Spatial Exploration opens its pinned popup before asynchronous
+        // article content is attached. Re-run the constraint after every
+        // public content setter so that path receives the same guarantee as
+        // the usual setDOMContent(...).addTo(map) chain.
+        ['setDOMContent', 'setHTML', 'setText'].forEach(function (method) {
+            var original = popup[method];
+            if (typeof original !== 'function') return;
+            popup[method] = function () {
+                var result = original.apply(popup, arguments);
+                syncBounds();
+                return result;
+            };
+        });
+
+        // Preserve the public setters while retaining the requested value for
+        // future resize calculations. Internal syncs call the originals above
+        // so these wrappers cannot recurse.
+        popup.setMaxWidth = function (value) {
+            requestedMaxWidth = value;
+            var result = originalSetMaxWidth.call(popup, value);
+            syncBounds();
+            return result;
+        };
+        popup.setPadding = function (value) {
+            requestedPadding = value;
+            var result = originalSetPadding.call(popup, value);
+            syncBounds();
+            return result;
+        };
+
+        if (typeof popup.on === 'function') popup.on('close', detachResize);
+        return popup;
     };
 })();

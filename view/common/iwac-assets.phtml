@@ -79,8 +79,8 @@ $cdnWordcloud   = 'https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/ech
 // That is the case bundler users must call `setWorkerUrl()` for; loading
 // straight from a CDN, as we do, resolves on its own. It does require `blob:`
 // in `worker-src` wherever the site enforces a CSP.
-$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.1.0/dist/maplibre-gl.mjs';
-$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.1.0/dist/maplibre-gl.css';
+$cdnMaplibreJs  = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs';
+$cdnMaplibreCss = 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.css';
 // d3-force for the item-page ego networks (~17 KB total, vs the 640 KB
 // ECharts bundle they used to lean on for a `graph`/`force` series).
 // ORDER IS LOAD-BEARING: the UMD builds all attach to one shared `d3`

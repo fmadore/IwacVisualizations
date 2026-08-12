@@ -49,7 +49,7 @@
         var aPts = filterSelf(dataA.geo_points || [], dataA);
         var bPts = filterSelf(dataB.geo_points || [], dataB);
         if (!aPts.length && !bPts.length) return null;
-        if (typeof maplibregl === 'undefined' || !P.createIwacMap) return null;
+        if (typeof maplibregl === 'undefined' || !P.createIwacMap || !P.createIwacPopup) return null;
 
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('Geographic comparison')));
@@ -261,7 +261,7 @@
                             html += '<br><a href="' + ctx.siteBase + '/item/' + oid + '">'
                                 + P.t('Open entity') + '</a>';
                         }
-                        (P.createIwacPopup ? P.createIwacPopup() : new maplibregl.Popup())
+                        P.createIwacPopup()
                             .setLngLat(e.lngLat)
                             .setHTML(html)
                             .addTo(m);

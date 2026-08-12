@@ -133,7 +133,7 @@ const flush = () => new Promise((resolve) => setImmediate(resolve));
 const MAP_PAYLOAD = {
     scripts: ['/js/iwac-theme.min.js', '/js/charts/shared/maplibre.min.js'],
     css: ['/css/iwac-maplibre.min.css'],
-    mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.1.0/dist/maplibre-gl.mjs',
+    mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs',
 };
 
 test('MapLibre pin is a v6 ES module, and JS and CSS agree on the version', () => {

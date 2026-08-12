@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC MapLibre popup fixture</title>
+    <style>
+        :root {
+            --primary: #a33312;
+            --ink: #171717;
+            --ink-light: #3f4349;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --space-1: .25rem;
+            --space-2: .5rem;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 20px; background: #ece8e4; }
+        .maplibregl-popup {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            pointer-events: none;
+        }
+        .maplibregl-popup-anchor-top,
+        .maplibregl-popup-anchor-top-left,
+        .maplibregl-popup-anchor-top-right { flex-direction: column; }
+        .maplibregl-popup-anchor-bottom,
+        .maplibregl-popup-anchor-bottom-left,
+        .maplibregl-popup-anchor-bottom-right { flex-direction: column-reverse; }
+        .maplibregl-popup-tip {
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+        .maplibregl-popup-anchor-top .maplibregl-popup-tip {
+            align-self: center;
+            border-top: none;
+            border-bottom-color: white;
+        }
+        .maplibregl-popup-anchor-top-left .maplibregl-popup-tip {
+            align-self: flex-start;
+            border-top: none;
+            border-left: none;
+            border-bottom-color: white;
+        }
+        .maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+            align-self: flex-end;
+            border-top: none;
+            border-right: none;
+            border-bottom-color: white;
+        }
+        .maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+            align-self: center;
+            border-bottom: none;
+            border-top-color: white;
+        }
+        .maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip {
+            align-self: flex-start;
+            border-bottom: none;
+            border-left: none;
+            border-top-color: white;
+        }
+        .maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+            align-self: flex-end;
+            border-bottom: none;
+            border-right: none;
+            border-top-color: white;
+        }
+        .maplibregl-popup-content {
+            position: relative;
+            padding: 15px 10px;
+            pointer-events: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/iwac-maplibre.min.css">
+</head>
+<body>
+    <div id="map" class="iwac-vis-map" aria-label="Popup boundary fixture"></div>
+    <script>
+        window.IWACVis = {
+            locale: 'en',
+            t(key, params) {
+                if (key === 'Page') return 'Page';
+                if (key === 'Previous') return 'Previous';
+                if (key === 'Next') return 'Next';
+                return params && params.count != null ? String(params.count) : key;
+            },
+            formatNumber(value) { return String(value); },
+        };
+
+        const translations = {
+            top: 'translate(-50%,0)',
+            'top-left': 'translate(0,0)',
+            'top-right': 'translate(-100%,0)',
+            bottom: 'translate(-50%,-100%)',
+            'bottom-left': 'translate(0,-100%)',
+            'bottom-right': 'translate(-100%,-100%)',
+        };
+
+        class FixturePopup {
+            constructor(options) {
+                this.options = Object.assign({
+                    closeButton: true,
+                    maxWidth: '240px',
+                    padding: undefined,
+                }, options || {});
+                this.listeners = {};
+            }
+            on(type, handler) {
+                (this.listeners[type] ||= []).push(handler);
+                return { unsubscribe: () => this.off(type, handler) };
+            }
+            off(type, handler) {
+                this.listeners[type] = (this.listeners[type] || []).filter((fn) => fn !== handler);
+                return this;
+            }
+            fire(type) {
+                for (const handler of this.listeners[type] || []) handler({ type, target: this });
+            }
+            isOpen() { return Boolean(this.map); }
+            getElement() { return this.container; }
+            setLngLat(value) { this.point = { x: value[0], y: value[1] }; this.update(); return this; }
+            setMaxWidth(value) { this.options.maxWidth = value; this.update(); return this; }
+            setPadding(value) { this.options.padding = value; this.update(); }
+            setDOMContent(node) {
+                if (!this.content) this.content = document.createElement('div');
+                this.content.className = 'maplibregl-popup-content';
+                this.content.replaceChildren(node);
+                if (this.options.closeButton) {
+                    const close = document.createElement('button');
+                    close.type = 'button';
+                    close.className = 'maplibregl-popup-close-button';
+                    close.textContent = '×';
+                    close.addEventListener('click', () => this.remove());
+                    this.content.appendChild(close);
+                }
+                this.update();
+                return this;
+            }
+            addTo(map) {
+                if (this.map) this.remove();
+                this.map = map;
+                this.update();
+                this.fire('open');
+                return this;
+            }
+            remove() {
+                if (this.container) this.container.remove();
+                this.container = null;
+                this.map = null;
+                this.fire('close');
+                return this;
+            }
+            update() {
+                if (!this.map || !this.point || !this.content) return;
+                if (!this.container) {
+                    this.container = document.createElement('div');
+                    this.container.className = 'maplibregl-popup';
+                    this.tip = document.createElement('div');
+                    this.tip.className = 'maplibregl-popup-tip';
+                    this.container.append(this.tip, this.content);
+                    for (const name of String(this.options.className || '').split(' ')) {
+                        if (name) this.container.classList.add(name);
+                    }
+                    this.map.getContainer().appendChild(this.container);
+                }
+                this.container.style.maxWidth = this.options.maxWidth;
+
+                const width = this.container.offsetWidth;
+                const height = this.container.offsetHeight;
+                const pad = Object.assign({ top: 0, right: 0, bottom: 0, left: 0 }, this.options.padding);
+                const map = this.map.getContainer();
+                const point = this.point;
+                let parts;
+                if (point.y < height + pad.top) parts = ['top'];
+                else if (point.y > map.clientHeight - height - pad.bottom) parts = ['bottom'];
+                else parts = [];
+                if (point.x < width / 2 + pad.left) parts.push('left');
+                else if (point.x > map.clientWidth - width / 2 - pad.right) parts.push('right');
+                const anchor = parts.length ? parts.join('-') : 'bottom';
+
+                for (const name of [...this.container.classList]) {
+                    if (name.startsWith('maplibregl-popup-anchor-')) this.container.classList.remove(name);
+                }
+                this.container.classList.add(`maplibregl-popup-anchor-${anchor}`);
+                this.container.style.transform =
+                    `${translations[anchor]} translate(${point.x}px,${point.y}px)`;
+            }
+        }
+
+        window.maplibregl = { Popup: FixturePopup };
+    </script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script src="/asset/js/charts/shared/maplibre.min.js"></script>
+    <script src="/asset/js/charts/shared/map-popup.min.js"></script>
+    <script>
+        const mapElement = document.getElementById('map');
+        const resizeHandlers = [];
+        const map = {
+            getContainer() { return mapElement; },
+            on(type, handler) { if (type === 'resize') resizeHandlers.push(handler); },
+            off(type, handler) {
+                if (type !== 'resize') return;
+                const index = resizeHandlers.indexOf(handler);
+                if (index >= 0) resizeHandlers.splice(index, 1);
+            },
+        };
+        let currentPopup;
+        window.openTestPopup = function (x, y) {
+            if (currentPopup) currentPopup.remove();
+            const articles = Array.from({ length: 12 }, (_, index) => ({
+                o_id: index + 1,
+                title: `A deliberately long article title ${index + 1} that exercises the popup scroll area`,
+                publisher: 'Le Patriote',
+                date: '2017-08-14',
+            }));
+            const body = IWACVis.panels.buildMapPopup({
+                title: 'Togo',
+                subtitleLines: ['11 mentions'],
+                articles,
+                siteBase: '/s/iwac',
+            });
+            currentPopup = IWACVis.panels.createIwacPopup()
+                .setLngLat([x, y])
+                .setDOMContent(body)
+                .addTo(map);
+            return currentPopup;
+        };
+    </script>
+</body>
+</html>
