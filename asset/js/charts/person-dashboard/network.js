@@ -203,6 +203,12 @@
         return palette[Math.max(0, slot) % palette.length];
     }
 
+    /**
+     * A labelled control row. The wrapper exists only to carry the
+     * label↔group relationship: the CSS gives it `display: contents` so the
+     * eyebrow lands in the bar's label gutter and the choices in the column
+     * beside it, keeping every row on one aligned baseline.
+     */
     function choiceGroup(label, className) {
         var root = P.el('div', 'iwac-vis-associated__control ' + className);
         var labelEl = P.el('span', 'iwac-vis-associated__control-label', label);
@@ -214,6 +220,24 @@
         root.appendChild(labelEl);
         root.appendChild(choices);
         return { root: root, choices: choices };
+    }
+
+    /** Same two-column row, but the second cell is a caller-filled strip. */
+    function fieldGroup(label, className) {
+        var root = P.el('div', 'iwac-vis-associated__control ' + className);
+        var labelEl = P.el('label', 'iwac-vis-associated__control-label', label);
+        var body = P.el('div', 'iwac-vis-associated__fields');
+        root.appendChild(labelEl);
+        root.appendChild(body);
+        return { root: root, label: labelEl, body: body };
+    }
+
+    function labelledSelect(label, className) {
+        var root = P.el('label', 'iwac-vis-associated__field');
+        root.appendChild(P.el('span', 'iwac-vis-associated__field-label', label));
+        var select = P.el('select', 'iwac-vis-control ' + className);
+        root.appendChild(select);
+        return { root: root, select: select };
     }
 
     function choiceButton(label, onClick) {
@@ -302,9 +326,15 @@
         });
         controls.appendChild(typeGroup.root);
 
-        var limitControl = P.el('label', 'iwac-vis-associated__control iwac-vis-associated__control--limit');
-        limitControl.appendChild(P.el('span', 'iwac-vis-associated__control-label', P.t('Number shown')));
+        /*  Both sizing controls share the last row: the gutter label belongs
+         *  to the top-N select, and the period select carries its own inline
+         *  eyebrow so that showing / hiding it (time view only) never moves
+         *  anything above it. */
+        var displayGroup = fieldGroup(P.t('Number shown'), 'iwac-vis-associated__control--display');
+
         var limitSelect = P.el('select', 'iwac-vis-control iwac-vis-associated__limit');
+        limitSelect.id = 'iwac-vis-associated-limit-' + (++controlId);
+        displayGroup.label.htmlFor = limitSelect.id;
         LIMITS.forEach(function (limit) {
             var option = P.el('option', null, String(limit));
             option.value = String(limit);
@@ -314,27 +344,27 @@
             viewLimits[activeView] = parseInt(limitSelect.value, 10) || viewLimits[activeView];
             apply(true);
         });
-        limitControl.appendChild(limitSelect);
-        controls.appendChild(limitControl);
+        displayGroup.body.appendChild(limitSelect);
 
-        var periodControl = P.el('label', 'iwac-vis-associated__control iwac-vis-associated__control--period');
-        periodControl.appendChild(P.el('span', 'iwac-vis-associated__control-label', P.t('Period')));
-        var periodSelect = P.el('select', 'iwac-vis-control iwac-vis-associated__period');
+        var period = labelledSelect(P.t('Period'), 'iwac-vis-associated__period');
+        var periodControl = period.root;
+        var periodSelect = period.select;
         [
             { value: 5, label: P.t('Five-year periods') },
             { value: 10, label: P.t('Decades') }
-        ].forEach(function (period) {
-            var option = P.el('option', null, period.label);
-            option.value = String(period.value);
-            periodSelect.appendChild(option);
+        ].forEach(function (option) {
+            var el = P.el('option', null, option.label);
+            el.value = String(option.value);
+            periodSelect.appendChild(el);
         });
         periodSelect.addEventListener('change', function () {
             periodSize = parseInt(periodSelect.value, 10) === 10 ? 10 : 5;
             apply(true);
         });
-        periodControl.appendChild(periodSelect);
         periodControl.hidden = true;
-        controls.appendChild(periodControl);
+        displayGroup.body.appendChild(periodControl);
+
+        controls.appendChild(displayGroup.root);
         host.appendChild(controls);
 
         /* ---- Three views + one empty state --------------------------- */

@@ -93,6 +93,34 @@ test('localizes the new controls in French', async ({ page }) => {
     await expect(page.getByLabel('Période')).toBeVisible();
 });
 
+test('lines every control up on one label gutter and holds its height', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(FIXTURE);
+
+    const readBar = () => page.evaluate(() => {
+        const bar = document.querySelector('.iwac-vis-associated__controls');
+        const labels = [...bar.querySelectorAll('.iwac-vis-associated__control-label')];
+        return {
+            height: Math.round(bar.getBoundingClientRect().height),
+            lefts: labels.map((el) => Math.round(el.getBoundingClientRect().left)),
+            tops: labels.map((el) => Math.round(el.getBoundingClientRect().top)),
+        };
+    });
+
+    // View, entity type and top-N: one gutter column, one row each.
+    const network = await readBar();
+    expect(network.lefts).toHaveLength(3);
+    expect(new Set(network.lefts).size).toBe(1);
+    expect(new Set(network.tops).size).toBe(3);
+
+    // The period select joins the top-N row, so no view switch reflows the bar.
+    await page.getByRole('button', { name: 'Over time' }).click();
+    await expect(page.getByLabel('Period')).toBeVisible();
+    const time = await readBar();
+    expect(time.tops).toEqual(network.tops);
+    expect(time.height).toBe(network.height);
+});
+
 test('keeps the temporal matrix inside a horizontal scroller on narrow screens', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 760 });
     await page.goto(`${FIXTURE}?theme=dark`);
