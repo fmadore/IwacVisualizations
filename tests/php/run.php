@@ -289,6 +289,35 @@ namespace {
     );
     check($visualizations->render($view, new FakeTemplateResource(999)) === '', 'unknown template should render nothing');
 
+    // Class 38 spans two templates since 2026-08-12: 19 (deposited
+    // recordings) and 23 (YouTube uploads). Template 23 went unmapped at
+    // first, so every YouTube item page rendered the block as nothing.
+    check(
+        $visualizations->render($view, new FakeTemplateResource(23))
+            === 'common/resource-page-block-layout/visualizations/minimal-item',
+        'YouTube video template (23) no longer dispatches to minimal-item'
+    );
+    check(
+        $visualizations->render($view, new FakeTemplateResource(19))
+            === 'common/resource-page-block-layout/visualizations/minimal-item',
+        'video recording template (19) no longer dispatches to minimal-item'
+    );
+
+    // Every mapped template must resolve to a partial that exists on
+    // disk. A template added to the map with a typo'd or missing partial
+    // 500s the item page rather than rendering nothing, which is the
+    // failure mode the block's "unmapped templates are silent" rule does
+    // NOT protect against.
+    foreach (Visualizations::TEMPLATE_PARTIALS as $templateId => $partial) {
+        $path = $root . '/view/common/resource-page-block-layout/visualizations/' . $partial . '.phtml';
+        check(is_readable($path), "template $templateId maps to a missing partial: $partial.phtml");
+        check(
+            $visualizations->render($view, new FakeTemplateResource((int) $templateId))
+                === 'common/resource-page-block-layout/visualizations/' . $partial,
+            "template $templateId did not dispatch to $partial"
+        );
+    }
+
     // ZIP extraction boundary.
     foreach ([
         'collection-overview.json',

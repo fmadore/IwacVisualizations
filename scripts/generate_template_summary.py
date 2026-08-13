@@ -4,82 +4,87 @@ generate_template_summary.py
 ============================
 
 Light-weight precompute for the per-item "minimal" Visualizations
-block (drives Audio / Video / Document / Photograph resource pages,
-dispatched through ``Visualizations::TEMPLATE_PARTIALS``).
+block (drives Audio / Video recording / YouTube video / Document /
+Photograph resource pages, dispatched through
+``Visualizations::TEMPLATE_PARTIALS``).
 
-The audiovisual subset (47 items) splits by ``medium`` into audio
-(template 9) and video (template 19). The documents subset (26 items)
-is heterogeneous — official letters, communiqués, sermons, posters —
-and uses free-text ``type`` as the discriminator; Document is template
-22. Photographs (template 15) read the ``images`` subset: they are
-class 58 ``bibo:Image`` and were exported to Hugging Face in 2026-07,
-which is what retires the pre-v1.3.0 hack of serving them the
-unrelated ``documents.by_type[photographie]`` slice.
+Three HF subsets feed it:
 
-``images`` is also the first subset here to carry an embedding
-(``embedding_image`` — a multimodal ``gemini-embedding-2`` vector of the
-photograph *itself*, not of its metadata), so photograph pages get real
-similarity neighbours in ``similar_by_id`` instead of the recency list
-the other subsets fall back to.
+* ``audiovisual`` — class 38, **two populations on two templates**.
+  Template 19 (*Video recording*) holds recordings deposited with the
+  project on physical media; template 23 (*YouTube video*, added
+  2026-08-12) holds videos ingested from public channels. The dataset
+  distinguishes them with ``source_type`` (``deposited`` / ``youtube``),
+  which is the only reliable key: raw ``medium`` mixes carrier labels
+  (``DVD``, ``CD``, ``Vidéo sur le web``) that answer "what was it
+  stored on", not "where does it come from", and an ``audio`` / ``video``
+  split cannot be recovered from them at all.
+* ``documents`` — heterogeneous (official letters, communiqués,
+  sermons, posters), split on free-text ``type``; Document is template 22.
+* ``images`` — photographs (class 58 ``bibo:Image``), template 15. The
+  only subset here carrying an embedding (``embedding_image``, a
+  multimodal ``gemini-embedding-2`` vector of the photograph *itself*),
+  so photograph pages get real similarity neighbours in
+  ``similar_by_id`` instead of the recency list the others fall back to.
+
+Every count below is generated, never asserted in prose: the corpus
+grew from 47 to four figures in a single afternoon when the YouTube
+backfill ran, and any number frozen into a docstring or a test was
+wrong within hours.
 
 Output bundle: ``asset/data/template-summary.json`` keyed by subset:
 
 .. code-block:: json
 
     {
-      "version": "1.0",
-      "generated_at": "...",
-      "metadata": { "total_records": 71, ... },
+      "metadata": { "totalRecords": 1202, "subset_totals": {...}, ... },
       "subsets": {
         "audiovisual": {
-          "total": 45,
-          "year_min": 1990, "year_max": 2024,
-          "years": [{"year": 1990, "count": 1}, ...],
+          "total": 1146,
+          "year_min": 1999, "year_max": 2026,
+          "years": [{"year": 1999, "count": 30}, ...],
+          "duration": {"count": 1146, "total_seconds": 984752,
+                       "median_seconds": 183},
           "top_items": [
-            {"o_id": 12345, "title": "...", "date": "2018-03",
-             "country": "Nigeria", "source": "BBC Hausa",
-             "language": "ha", "thumbnail": "...", "medium": "audio"},
+            {"o_id": 12345, "title": "...", "date": "2026-08-11",
+             "country": "Burkina Faso", "publisher": "RTB",
+             "language": "Français", "thumbnail": "...",
+             "duration": 154, "url": "https://www.youtube.com/watch?v=…",
+             "source_type": "youtube"},
             ...30 most recent
           ],
-          "by_medium": {
-            "audio": { ...same shape... },
-            "video": { ...same shape... }
-          }
-        },
-        "documents": {
-          "total": 26,
-          ...,
-          "by_type": {
-            "communique":   { ... },
+          "by_source_type": {
+            "youtube":   { ...same shape... },
+            "deposited": { ...same shape... }
+          },
+          "by_publisher": {
+            "rtb - radiodiffusion télévision du burkina": {
+              "label": "RTB - Radiodiffusion Télévision du Burkina",
+              "source_type": "youtube",
+              ...same shape...
+            },
             ...
           }
         },
-        "images": {
-          "total": 30,
-          ...,
-          "similar_by_id": {
-            "12345": [
-              {"o_id": 23456, "title": "...", "score": 0.8123, ...},
-              ...top 6 by cosine similarity
-            ]
-          }
-        }
+        "documents": { "total": 26, ..., "by_type": {...} },
+        "images":    { "total": 30, ..., "similar_by_id": {...} }
       }
     }
 
-The front-end orchestrator (``minimal-item-dashboard.js``) takes the
-container's ``data-subset`` + ``data-subtype-facet`` + ``data-subtype``
-attributes and reads the matching slice. It prefers
-``similar_by_id[<item o:id>]`` when the subset has one; otherwise
-``top_items`` is filtered on the client to drop the current item and
-show the rest as "more items in this collection" cards via the existing
-``similar-items`` renderer (sans similarity score).
+The front-end orchestrator (``minimal-item-dashboard.js``) reads the
+container's ``data-subset`` and, for audiovisual pages, ``data-channel``
+(the item's own publisher) — scoping the panels to that channel's
+uploads when a matching ``by_publisher`` slice exists and falling back
+to the whole subset when it doesn't. That fallback is what keeps the
+block working on a dataset generated before this split existed, and on
+any item whose publisher is missing.
 
-Slice keys are normalised to NFC + lowercased so the front-end can
-look them up case-insensitively even when the source ``type`` field
-mixes "Photographie" / "photographie" / "photo" — the generator
-emits the canonical lowercase key alongside the original display
-label.
+Slice keys are normalised to NFC + lowercased so the front-end can look
+them up case-insensitively even when the source field mixes
+capitalisation or accents; each slice carries the most common raw form
+as ``label`` for display. The client normalises its own lookup key the
+same way (``String.prototype.normalize('NFC').toLowerCase()``), so the
+PHP side never has to reproduce this normalisation.
 
 Usage::
 
@@ -90,6 +95,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import statistics
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -107,6 +113,7 @@ from iwac_utils import (
     extract_year,
     find_column,
     load_dataset_safe,
+    parse_duration_seconds,
     save_json,
 )
 
@@ -138,6 +145,29 @@ EMBEDDING_COLUMNS: Dict[str, str] = {"images": "embedding_image"}
 # whose target has since been unpublished.
 SIMILAR_TOP_K = 6
 
+# Facet columns per subset, in the order the front-end should try them.
+# ``audiovisual`` gets two: the population split (deposited recordings vs
+# YouTube uploads) and the channel/publisher split the per-item block
+# scopes itself to. ``medium`` is deliberately absent — see the module
+# docstring; it names the carrier, not the source, and grouping ``DVD``,
+# ``CD`` and ``Vidéo sur le web`` as if they were one dimension produced
+# the uneven 43/1 slices no partial could use.
+FACET_COLUMNS: Dict[str, Dict[str, str]] = {
+    "audiovisual": {"by_source_type": "source_type", "by_publisher": "publisher"},
+    "documents":   {"by_type": "type"},
+}
+
+# Card `type` token per subset. These are i18n keys (``item_type_*`` in
+# iwac-i18n.js), not data: the raw column would put "Enregistrement
+# vidéo" on the cards of an English page, since the dataset's `type` is
+# French free text. The facet split still reads the raw column — only
+# the card label is normalised.
+SUBSET_ITEM_TYPE: Dict[str, str] = {
+    "audiovisual": "audiovisual",
+    "documents":   "document",
+    "images":      "image",
+}
+
 
 logger: Optional[logging.Logger] = None
 
@@ -161,22 +191,81 @@ def slice_key(value: str) -> str:
     return s
 
 
-def find_columns(df: pd.DataFrame) -> Dict[str, Optional[str]]:
+def find_columns(df: pd.DataFrame, subset_name: str = "") -> Dict[str, Optional[str]]:
     """Resolve column names defensively across subsets — some carry
     `creator` (audiovisual), others `author` (documents); some have
-    `publisher` only on audiovisual; etc."""
+    `publisher` only on audiovisual; etc.
+
+    ``_item_type`` is the one entry that is not a column name: it is the
+    i18n token every card in this subset carries (see
+    ``SUBSET_ITEM_TYPE``). It rides along here so ``build_item`` keeps a
+    single resolution argument.
+    """
     return {
-        "id":        find_column(df, ["o:id", "id"]),
-        "title":     find_column(df, ["title", "Titre", "dcterms:title"]),
-        "date":      find_column(df, ["pub_date", "dcterms:date", "date"]),
-        "country":   find_column(df, ["country", "countries"]),
-        "creator":   find_column(df, ["creator", "author", "publisher"]),
-        "publisher": find_column(df, ["publisher", "source", "newspaper"]),
-        "language":  find_column(df, ["language", "dcterms:language"]),
-        "thumbnail": find_column(df, ["thumbnail"]),
-        "medium":    find_column(df, ["medium"]),
-        "type":      find_column(df, ["type", "dcterms:type"]),
-        "extent":    find_column(df, ["extent"]),
+        "_item_type":  SUBSET_ITEM_TYPE.get(subset_name) or None,
+        "id":          find_column(df, ["o:id", "id"]),
+        "title":       find_column(df, ["title", "Titre", "dcterms:title"]),
+        "date":        find_column(df, ["pub_date", "dcterms:date", "date"]),
+        "country":     find_column(df, ["country", "countries"]),
+        "creator":     find_column(df, ["creator", "author", "publisher"]),
+        # `publisher` and `source` are NOT interchangeable and must not be
+        # collapsed: on audiovisual `publisher` is the depositing body or
+        # the YouTube channel (populated for effectively the whole subset)
+        # while `source` is dcterms:source, which only the deposited
+        # recordings carry. Resolve them separately and let the card show
+        # both when they differ.
+        "publisher":   find_column(df, ["publisher"]),
+        "source":      find_column(df, ["source", "dcterms:source", "newspaper"]),
+        "language":    find_column(df, ["language", "dcterms:language"]),
+        "thumbnail":   find_column(df, ["thumbnail"]),
+        "type":        find_column(df, ["type", "dcterms:type"]),
+        # Where the item lives outside IWAC — the canonical watch URL for
+        # the YouTube cohort.
+        "url":         find_column(df, ["URL", "url"]),
+        "source_type": find_column(df, ["source_type"]),
+        # Duration, preferring the explicit seconds column the 2026-08
+        # mapper added; `extent` (ISO 8601) is the fallback for rows and
+        # snapshots that predate it.
+        "duration":    find_column(df, ["duration_seconds"]),
+        "extent":      find_column(df, ["extent"]),
+    }
+
+
+def row_duration_seconds(row: Any, columns: Dict[str, Optional[str]]) -> Optional[int]:
+    """Runtime of one row in seconds, or None when it has no usable value.
+
+    Reads the explicit ``duration_seconds`` column first and falls back to
+    parsing ISO 8601 ``extent``. Both are checked per row rather than
+    per subset because the two audiovisual populations were mapped at
+    different times — a snapshot can carry the column for the YouTube
+    cohort and nothing but ``extent`` for the deposited one.
+    """
+    if columns.get("duration"):
+        seconds = parse_duration_seconds(row.get(columns["duration"]))
+        if seconds:
+            return seconds
+    if columns.get("extent"):
+        seconds = parse_duration_seconds(row.get(columns["extent"]))
+        if seconds:
+            return seconds
+    return None
+
+
+def duration_summary(values: List[int]) -> Optional[Dict[str, int]]:
+    """Total + median runtime over a slice, or None when nothing has one.
+
+    The median is reported alongside the total because the two answer
+    different questions on a corpus this uneven: a channel of ~3-minute
+    news clips and a handful of multi-hour deposited sermons produce the
+    same total from wildly different material.
+    """
+    usable = [v for v in values if v and v > 0]
+    if not usable:
+        return None
+    return {
+        "count":          len(usable),
+        "total_seconds":  int(sum(usable)),
+        "median_seconds": int(round(statistics.median(usable))),
     }
 
 
@@ -208,13 +297,32 @@ def build_item(row: Any, columns: Dict[str, Optional[str]]) -> Optional[Dict[str
     # Optional fields — kept only when present so the JSON stays
     # narrow per-item and the client doesn't have to filter empty
     # strings out of the meta line.
-    for key in ("creator", "publisher", "medium", "type", "extent"):
+    #
+    # Three fields the row carries are deliberately NOT on the card:
+    # `medium` and `extent` (the carrier label and the raw ISO string —
+    # superseded by the normalised `duration` the client formats) and
+    # `source_type` (constant within a slice, which records it once).
+    #
+    # `url` IS carried, though today's strip does not render it: the
+    # card is a single anchor to the IWAC record, and a second link
+    # nested inside it would be invalid markup. Landing a reader on the
+    # record — which carries the canonical watch URL itself — is also
+    # the better default than scattering eight cards' worth of traffic
+    # to a third-party site. The current video's watch link is rendered
+    # server-side by the partial instead.
+    if columns.get("_item_type"):
+        item["type"] = columns["_item_type"]
+    for key in ("creator", "publisher", "source", "url"):
         col = columns[key]
         if not col:
             continue
         value = clean_str(row.get(col))
         if value:
             item[key] = value
+
+    seconds = row_duration_seconds(row, columns)
+    if seconds:
+        item["duration"] = seconds
     return item
 
 
@@ -226,12 +334,17 @@ def slice_summary(df: pd.DataFrame, columns: Dict[str, Optional[str]]) -> Dict[s
     total = len(df)
     year_counter: Counter = Counter()
     items: List[Dict[str, Any]] = []
+    durations: List[int] = []
 
     for _, row in df.iterrows():
         date_raw = clean_str(row.get(date_col)) if date_col else ""
         year = extract_year(date_raw) if date_raw else None
         if year:
             year_counter[year] += 1
+
+        seconds = row_duration_seconds(row, columns)
+        if seconds:
+            durations.append(seconds)
 
         item = build_item(row, columns)
         if item is not None:
@@ -241,13 +354,17 @@ def slice_summary(df: pd.DataFrame, columns: Dict[str, Optional[str]]) -> Dict[s
     items.sort(key=lambda i: i.get("date") or "", reverse=True)
 
     years_sorted = sorted(year_counter.items())
-    return {
+    summary: Dict[str, Any] = {
         "total":     total,
         "year_min":  years_sorted[0][0]  if years_sorted else None,
         "year_max":  years_sorted[-1][0] if years_sorted else None,
         "years":     [{"year": y, "count": c} for y, c in years_sorted],
         "top_items": items[:TOP_ITEMS],
     }
+    duration = duration_summary(durations)
+    if duration:
+        summary["duration"] = duration
+    return summary
 
 
 def split_by_facet(
@@ -262,6 +379,11 @@ def split_by_facet(
     inherits an additional ``label`` field carrying the most common
     raw display form for the group, so the UI can render the original
     capitalisation / accents.
+
+    When the frame carries ``source_type``, each slice also records the
+    population it belongs to, so a channel panel can say whether it is
+    describing YouTube uploads or deposited recordings without the
+    client having to infer it from the cards.
     """
     groups: Dict[str, List[int]] = defaultdict(list)
     raw_label_counters: Dict[str, Counter] = defaultdict(Counter)
@@ -276,6 +398,8 @@ def split_by_facet(
         groups[key].append(idx)
         raw_label_counters[key][raw] += 1
 
+    source_type_col = columns.get("source_type")
+
     out: Dict[str, Any] = {}
     for key, rows in groups.items():
         sub = df.loc[rows]
@@ -283,6 +407,12 @@ def split_by_facet(
         # Use the most-common raw label as the display form.
         label = raw_label_counters[key].most_common(1)[0][0]
         summary["label"] = label
+        if source_type_col and source_type_col != facet_col:
+            kinds = Counter(
+                clean_str(value) for value in sub[source_type_col] if clean_str(value)
+            )
+            if kinds:
+                summary["source_type"] = kinds.most_common(1)[0][0]
         out[key] = summary
     return out
 
@@ -332,22 +462,29 @@ def build_subset_summary(
     subset_name: str,
     df: pd.DataFrame,
 ) -> Dict[str, Any]:
-    """Top-level summary + appropriate facet split per subset."""
-    columns = find_columns(df)
+    """Top-level summary + appropriate facet splits per subset.
+
+    The whole-subset summary is always emitted and is what the block
+    falls back to, so a subset whose facet columns are missing (an older
+    snapshot, a source without a publisher) still renders.
+    """
+    columns = find_columns(df, subset_name)
     summary = slice_summary(df, columns)
 
-    if subset_name == "audiovisual" and columns["medium"]:
-        # audio | video — drives templates 9 and 19 respectively.
-        summary["by_medium"] = split_by_facet(df, columns["medium"], columns)
-
-    if subset_name == "documents" and columns["type"]:
-        # Free-text. Photographs left this subset in 2026-07 (they are
-        # class 58 with their own `images` subset now), so no partial
-        # reads a `by_type` slice today — it stays for the granular
-        # per-document-type splits the block can grow into. The keys
-        # carried in the JSON are NFC-normalised lowercase forms of
-        # whatever the source data contains.
-        summary["by_type"] = split_by_facet(df, columns["type"], columns)
+    # `by_source_type` separates deposited recordings from YouTube
+    # uploads; `by_publisher` is the channel scope the per-item block
+    # reads. On `documents` the single facet is free-text `type` —
+    # photographs left that subset in 2026-07 (they are class 58 with
+    # their own `images` subset now), so no partial reads a `by_type`
+    # slice today; it stays for the granular splits the block can grow
+    # into.
+    for facet_key, column_key in FACET_COLUMNS.get(subset_name, {}).items():
+        column = columns.get(column_key)
+        if not column:
+            continue
+        slices = split_by_facet(df, column, columns)
+        if slices:
+            summary[facet_key] = slices
 
     embed_col = EMBEDDING_COLUMNS.get(subset_name)
     if embed_col:
@@ -378,6 +515,7 @@ def main() -> int:
     logger = configure_logging(level=logging.DEBUG if args.verbose else logging.INFO)
 
     subsets_out: Dict[str, Any] = {}
+    subset_totals: Dict[str, int] = {}
     total_records = 0
 
     for subset_name in SUBSETS:
@@ -389,6 +527,7 @@ def main() -> int:
 
         summary = build_subset_summary(subset_name, df)
         subsets_out[subset_name] = summary
+        subset_totals[subset_name] = int(summary.get("total", 0))
         total_records += summary.get("total", 0)
         logger.info(
             "  %s: %d items (%s–%s)",
@@ -397,12 +536,20 @@ def main() -> int:
             summary.get("year_min") or "?",
             summary.get("year_max") or "?",
         )
-        if "by_medium" in summary:
-            for k, v in summary["by_medium"].items():
-                logger.info(f"    medium='{k}' ({v.get('label','?')}): {v['total']} items")
-        if "by_type" in summary:
-            for k, v in summary["by_type"].items():
-                logger.info(f"    type='{k}' ({v.get('label','?')}): {v['total']} items")
+        duration = summary.get("duration")
+        if duration:
+            logger.info(
+                "    runtime: %.1f h over %d items (median %d s)",
+                duration["total_seconds"] / 3600.0,
+                duration["count"],
+                duration["median_seconds"],
+            )
+        for facet_key in FACET_COLUMNS.get(subset_name, {}):
+            for key, slice_ in (summary.get(facet_key) or {}).items():
+                logger.info(
+                    "    %s['%s'] (%s): %d items",
+                    facet_key, key, slice_.get("label", "?"), slice_["total"],
+                )
         if "similar_by_id" in summary:
             logger.info(
                 "    semantic neighbours for %d/%d items (%s)",
@@ -415,6 +562,9 @@ def main() -> int:
         total_records=total_records,
         data_source=DATASET_ID,
         subsets=list(subsets_out.keys()),
+        # Per-subset totals so consumers (docs, tests, the block's own
+        # copy) read a generated number instead of one frozen in prose.
+        subset_totals=subset_totals,
     )
     bundle["subsets"] = subsets_out
 

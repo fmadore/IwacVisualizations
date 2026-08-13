@@ -31,8 +31,13 @@ strings, or Svelte/Sigma/Graphology dependency chain.
   `publications` = template **21** (bibo:Issue, 1,501 issues),
   `documents` = template **22** (own template now; legacy items were on 8),
   `index` = templates 2/3/5/6/7, `references` = templates 10–14/17–18,
-  `audiovisual` = templates 9/19. Photographs (template 15, class 58)
-  are **not** exported to HF at all.
+  `audiovisual` = templates 9/19/**23**. Photographs (template 15, class
+  58) were **not** exported to HF when this note was written; they are the
+  `images` subset since 2026-07.
+- Template **23 (YouTube video)** joined class 38 on 2026-08-12 — same
+  resource class as template 19, different provenance (ingested channel
+  uploads rather than deposited media). Split the two on `source_type`,
+  never on `medium`. See DATA_NOTES.md.
 
 ## Precompute reference
 
@@ -568,8 +573,12 @@ merge). The issues predated the data decoupling (issue #7), so their
 
 ## Open questions
 
-1. **`audiovisual` (45) / `documents` (26)** are tiny — keep
-   minimal-item only, or fold into collection-level stats entirely?
+1. ~~**`audiovisual` (45) / `documents` (26)** are tiny — keep
+   minimal-item only, or fold into collection-level stats entirely?~~ —
+   **answered by the data (2026-08-13)**: `audiovisual` is no longer
+   tiny. The YouTube ingest took it past a thousand rows in an
+   afternoon, and v1.46.0 made the minimal-item block source-scoped
+   rather than folding it away. `documents` (26) still qualifies.
 2. ~~Topic Explorer outliers~~ — **moot (2026-07-03)**: the current
    dataset ships **0** `lda_topic_id == -1` rows (upstream now assigns
    every article a topic). The outlier-handling code stays as a guard

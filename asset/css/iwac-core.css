@@ -1446,12 +1446,34 @@ select.iwac-vis-control:hover {
 
 .iwac-vis-similar-card__thumb {
     display: block;
+    position: relative;
     height: 84px;
     background-color: var(--surface-sunken, var(--surface-raised, #faf8f6));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-bottom: 1px solid var(--border-light, #e2e5e8);
+}
+
+/*  Runtime badge on a video thumbnail. A dark scrim with white figures,
+ *  not a themed tint: it sits over an arbitrary video still rather than
+ *  over the page, so it has no surface token to inherit and needs its
+ *  own contrast floor in both light and dark. Same reasoning as the
+ *  sanctioned model-colour literals at the top of this file — hence the
+ *  allow-hex marker. Mono, tabular figures keep the digits from
+ *  shifting width from card to card. */
+.iwac-vis-similar-card__duration {
+    position: absolute;
+    right: var(--space-xs, 0.25rem);
+    bottom: var(--space-xs, 0.25rem);
+    padding: 0.125rem 0.3125rem;
+    border-radius: var(--radius-sm, 0.375rem);
+    background: rgba(0, 0, 0, 0.78);
+    color: #ffffff; /* allow-hex */
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
 }
 
 .iwac-vis-similar-card__body {

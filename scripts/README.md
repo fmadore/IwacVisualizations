@@ -94,8 +94,9 @@ python3 scripts/generate_collection_overview.py --minify     # compact JSON
   },
   "summary": {
     "articles": 12287, "publications": 1501, "documents": 26,
-    "audiovisual": 45, "references": 864, "index_entries": 4697,
+    "audiovisual": 1146, "references": 864, "index_entries": 4697,
     "total_content": 13859, "total_words": 12345678,
+    "audiovisual_minutes": 16412, "video_channels": 5,
     "countries": 6, "languages": 8,
     "year_min": 1960, "year_max": 2025
   },
@@ -341,6 +342,35 @@ this meter is about what an outside researcher can reproduce from the
 citable dataset, and it moves when rights are cleared on Omeka rather than
 when a script is re-run.
 
+### `generate_template_summary.py`
+
+Writes `asset/data/template-summary.json` — the single corpus-level bundle
+behind every *minimal-item* resource-page dashboard (Omeka templates 9
+Audio, 19 Video recording, 23 YouTube video, 22 Document, 15 Photograph).
+Per-subset year histograms, runtime figures, the 30 most-recent items as
+cards, and facet slices the block scopes itself to.
+
+Three subsets: `audiovisual`, `documents`, `images`. The audiovisual half
+is **source-aware** since v1.46.0, because class 38 stopped being one kind
+of thing on 2026-08-12: it now holds recordings deposited on physical media
+alongside videos ingested from public YouTube channels. The split key is
+`source_type` (`deposited` / `youtube`), never `medium` — the carrier
+labels (`DVD`, `CD`, `Vidéo sur le web`) answer a different question and
+never supported the audio/video split the earlier `by_medium` facet implied.
+
+Emits `by_source_type` and `by_publisher` (the channel or depositing body)
+for audiovisual, `by_type` for documents, and `similar_by_id` wherever the
+subset carries an embedding — today only `images`, whose multimodal
+`embedding_image` makes its neighbours genuine visual similarity rather
+than a recency list. Slice keys are NFC-lowercased so the front-end can
+look them up case-insensitively; each slice carries its most common raw
+label for display, and a `duration` block (`count` / `total_seconds` /
+`median_seconds`) wherever runtimes exist.
+
+Every facet is optional and the whole-subset summary is always present, so
+a bundle generated before this split — or an item whose publisher has no
+slice — degrades to whole-subset context instead of an empty block.
+
 ### `generate_keyness.py`
 
 Writes `asset/data/keyness.json` — the Distinctive Vocabulary block. Two
@@ -408,6 +438,7 @@ classic `"lat, lng"` form.
 | `parse_multi_value(value, separators)` | Like above but tries `\|;,/` in order. |
 | `clean_str(value)` | Strip-and-cast a DataFrame cell, treating NaN/None as `""`. |
 | `clean_float(value)` | Cast a DataFrame cell to float, or `None` for NaN / missing / garbage. |
+| `parse_duration_seconds(value)` | ISO 8601 (`PT2M34S`, `PT571M`), `HH:MM:SS` / `MM:SS`, or a bare number → whole **seconds**; `None` when unparseable. A bare number is read as seconds, deliberately: the earlier per-generator copy left units to a "median > 500 ⇒ seconds" guess, which reads a corpus of three-minute videos as three-hour ones. Know your column's unit and convert it yourself rather than routing a numeric through here. |
 | `find_column(df, candidates, required)` | Return the first matching column name, optionally raise. |
 | `sentiment_columns(model, field)` | Candidate HF column names for one canonical model id × field, current naming first. |
 | `resolve_sentiment_columns(df, models, fields)` | `{model: {field: column_or_None}}` for the sentiment columns actually present. **Use this instead of building `f"{model}_polarite"` by hand** — HF renamed the prefixes to model-specific names on 2026-07-31 and hand-built names now silently resolve to nothing. Warns once per process when a model resolves to nothing. |

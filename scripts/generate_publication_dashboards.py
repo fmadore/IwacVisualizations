@@ -25,11 +25,12 @@ Each file carries these blocks:
                              for the same ``newspaper`` (the periodical
                              title in this subset), zero-filled across
                              the run's year span, with this issue's year
-                             as the sparkline highlight. Unlike the
-                             audiovisual ``medium`` caveat that keeps
-                             the minimal-item dashboards on whole-subset
-                             siblings, ``newspaper`` is clean here, so
-                             the per-periodical slice is honest.
+                             as the sparkline highlight. ``newspaper``
+                             is a clean per-title key here, so the
+                             per-periodical slice is honest — the same
+                             reasoning that put the minimal-item
+                             dashboards on ``publisher`` rather than
+                             ``medium`` in v1.46.0.
   * ``semantic_neighbors`` — top-K issues by cosine similarity over
                              ``embedding_tableOfContents`` (768-dim
                              Gemini), in the exact card shape the shared

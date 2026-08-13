@@ -22,8 +22,17 @@ ds = load_dataset("fmadore/islam-west-africa-collection-full", name="articles") 
 | `publications` | **1,501** | ✓ | ✓ `embedding_tableOfContents` (768) | — | Books, pamphlets, periodicals (Islamic publications) |
 | `index` | **4,697** | — | — | — | Authority records (persons/places/orgs/events/subjects) with pre-computed frequency stats |
 | `references` | **864** | — | — | — | Bibliographic citations |
-| `audiovisual` | 45 | — | — | — | Audio/video, Nigeria-only |
+| `audiovisual` | **1,146**† | ✓ (transcription, sparse) | — | — | Two populations on one class: recordings deposited on physical media (Nigeria, Benin) and videos ingested from public YouTube channels (Burkina Faso). Split on `source_type`, never on `medium`. |
 | `documents` | 26 | ✓ | — | — | Archival materials, non-periodical |
+
+† `audiovisual` was 47 rows until 2026-08-12, when the YouTube ingest
+([IWAC-automation `Audiovisual/youtube_sync.py`](https://github.com/fmadore/IWAC-automation/tree/master/Audiovisual))
+began adding channel uploads on Omeka resource template 23. The figure above
+was true on 2026-08-13 and is a floor, not a total — treat every count in this
+file as a snapshot and read the generated `metadata` block of the JSON bundles
+for the live numbers. The cohort brought four fields with it: `source_type`
+(`youtube` / `deposited`), `URL` (canonical watch URL), `duration_seconds`, and
+a per-row `country` in place of the previous hardcoded `"Nigeria"`.
 
 ## Shared column conventions
 
@@ -169,4 +178,4 @@ These are retained only as early-design provenance; they are no longer active ro
 2. **Subject → index join**: Resolved by the current generator-specific exact-match and normalization patterns.
 3. **v1 priority**: Superseded — collection overview, per-entity, per-person, per-article, publication, and item-set dashboards are live.
 4. **Hosting**: Resolved — committed `asset/data/` bundles and fan-outs are the deployed contract.
-5. **audiovisual (45) / documents (26)**: Resolved — lightweight minimal-item dashboards plus collection-level stats.
+5. **audiovisual / documents**: Resolved — lightweight minimal-item dashboards plus collection-level stats. The audiovisual half was revisited in v1.46.0 when the subset grew by an order of magnitude and became source-aware.

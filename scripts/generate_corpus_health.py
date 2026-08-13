@@ -178,6 +178,39 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         metrics.extend(_enrichment_metrics(df, n, "Transcription"))
         if col("medium") is not None:
             metrics.append(metric("Medium", _nonempty(df["medium"]), n))
+        # The fields the 2026-08 YouTube ingest brought in. Worth their
+        # own meters because this subset stopped being homogeneous: it
+        # now holds deposited recordings and channel uploads together,
+        # and a curator's first question about any figure here is which
+        # population it describes. `source_type` answers that; runtime
+        # and the watch URL are what the per-item block needs to render
+        # a channel view at all, so a drop in either is a visible
+        # regression on the site, not just a gap in the dataset.
+        if col("source_type") is not None:
+            # Metric labels on the admin page are English-only by design,
+            # so spell the raw dataset tokens out rather than printing
+            # them; unknown future populations fall back to the token.
+            population_labels = {
+                "youtube":   "Source — YouTube channels",
+                "deposited": "Source — deposited media",
+            }
+            for population in sorted(
+                {str(v).strip() for v in df["source_type"] if str(v).strip()}
+            ):
+                covered = int((df["source_type"].astype(str).str.strip() == population).sum())
+                metrics.append(metric(
+                    population_labels.get(population, f"Source — {population}"),
+                    covered, n,
+                ))
+        if col("duration_seconds") is not None:
+            covered = int(
+                (pd.to_numeric(df["duration_seconds"], errors="coerce").fillna(0) > 0).sum()
+            )
+            metrics.append(metric("Duration", covered, n))
+        if col("URL") is not None:
+            metrics.append(metric("External URL", _nonempty(df["URL"]), n))
+        if col("publisher") is not None:
+            metrics.append(metric("Publisher / channel", _nonempty(df["publisher"]), n))
         if col("spatial") is not None:
             metrics.append(metric("Spatial tags", _nonempty(df["spatial"]), n))
         if col("pub_date") is not None:

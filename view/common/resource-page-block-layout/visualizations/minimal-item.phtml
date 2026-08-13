@@ -8,22 +8,26 @@
  *
  *   * 9  Audio              → ``audiovisual`` subset
  *   * 19 Video recording    → ``audiovisual`` subset
+ *   * 23 YouTube video      → ``audiovisual`` subset
  *   * 22 Document           → ``documents`` subset
  *   * 15 Photograph         → ``images`` subset
  *
  * The orchestrator (``minimal-item-dashboard.js``) loads
  * ``files/iwac-visualizations/template-summary.json``, picks the matching subset's
- * slice, and renders two slots through the v0.16.0 dashboardLayout
- * system:
+ * slice, and renders through the v0.16.0 dashboardLayout system:
  *
- *   1. Sibling sparkline — year histogram for the whole subset, with
- *      a dot at the current item's year (no ECharts; pure inline SVG).
+ *   1. Sibling sparkline — year histogram for the slice, with a dot at
+ *      the current item's year (no ECharts; pure inline SVG).
  *   2. Similar-items strip — for ``images``, the nearest photographs by
  *      ``embedding_image`` cosine similarity (``similar_by_id``); for
  *      the other subsets, the most-recent N items excluding this one.
  *      The strip is the same renderer the Topic Explorer + per-article
  *      dashboard use; absent similarity scores it just renders plain
  *      link cards.
+ *
+ * Audiovisual pages additionally scope both to the item's own
+ * publisher when the bundle has a slice for it, and lead with a row of
+ * channel figures (uploads, span, total and median runtime).
  *
  * Server side renders only the asynchronous container — Omeka already
  * shows the item's bibliographic metadata above the block, so we don't
@@ -35,23 +39,20 @@
 
 // Template ID → HF subset that drives the sibling context.
 //
-// audiovisual (45 items) is small enough that we use the WHOLE subset
-// as siblings for both Audio (9) and Video (19) pages — the
-// HF `medium` column carries physical-format labels (DVD / CD) rather
-// than a clean audio/video split, so a per-medium filter would yield
-// uneven slices (43 vs 1). When the upstream pipeline emits cleaner
-// per-template tagging we can switch to the by_medium / by_type
-// slices already present in template-summary.json.
+// Class 38 spans two templates and two populations: recordings
+// deposited on physical media (9 Audio, 19 Video recording) and videos
+// ingested from public YouTube channels (23, added 2026-08-12). Both
+// read `audiovisual`; which slice of it they read is decided by the
+// item's publisher below, not by the template — the template chooses
+// the presentation, the data boundary stays the resource class.
 //
-// documents (26 items) is fully typed `Document` in the current
-// dataset, so Document (22) reads from the whole documents subset.
-//
-// Photograph (15) reads `images` — its own subset since the 2026-07
-// pipeline export. It was mapped to `documents` until v1.3.0 (wrong:
-// unrelated slice) and unmapped between v1.3.0 and now.
+// documents (template 22) and images (template 15) each map to their
+// own subset. Photograph was mapped to `documents` until v1.3.0
+// (wrong: unrelated slice) and unmapped between v1.3.0 and then.
 $templateMap = [
     9  => 'audiovisual',
     19 => 'audiovisual',
+    23 => 'audiovisual',
     22 => 'documents',
     15 => 'images',
 ];
@@ -69,6 +70,47 @@ if ($dateValue) {
     $dateStr = (string) $dateValue;
     if (preg_match('/^(\d{4})/', $dateStr, $m)) {
         $pubYear = $m[1];
+    }
+}
+
+/**
+ * Display text of a value that may be a literal, a URI, or a link to
+ * another item. `(string) $value` only covers the literal case — a
+ * linked authority record stringifies to "" — and dcterms:publisher is
+ * exactly that case here: YouTube channels are foaf:Organization items.
+ */
+$displayValue = function ($value): string {
+    if (!$value) {
+        return '';
+    }
+    $linked = $value->valueResource();
+    if ($linked) {
+        return trim((string) $linked->displayTitle());
+    }
+    $literal = trim((string) $value->value());
+    return $literal !== '' ? $literal : trim((string) $value->uri());
+};
+
+// The channel / depositing body. The client normalises this the same
+// way the generator normalises its slice keys (NFC + lowercase), so
+// nothing here has to reproduce that normalisation — and an item whose
+// publisher has no slice simply falls back to the whole subset.
+$channel = $subset === 'audiovisual' ? $displayValue($resource->value('dcterms:publisher')) : '';
+
+// Canonical watch URL (fabio:hasURL on template 23). Only YouTube
+// targets are surfaced: this becomes an outbound link, so the host is
+// checked here rather than trusting whatever a record happens to hold.
+$watchUrl = '';
+if ($subset === 'audiovisual') {
+    $candidate = $displayValue($resource->value('fabio:hasURL'));
+    $parts = $candidate !== '' ? parse_url($candidate) : false;
+    if (is_array($parts)) {
+        $scheme = strtolower($parts['scheme'] ?? '');
+        $host   = strtolower($parts['host'] ?? '');
+        $hosts  = ['www.youtube.com', 'youtube.com', 'm.youtube.com', 'youtu.be'];
+        if ($scheme === 'https' && in_array($host, $hosts, true)) {
+            $watchUrl = $candidate;
+        }
     }
 }
 
@@ -94,5 +136,7 @@ echo $this->partial('common/iwac-block-shell', [
         'template-id' => $templateId,
         'subset'      => $subset,
         'pub-year'    => $pubYear,
+        'channel'     => $channel,
+        'watch-url'   => $watchUrl,
     ],
 ]);

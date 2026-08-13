@@ -634,6 +634,86 @@ def clean_int(value: Any) -> Optional[int]:
         return None
 
 
+# Matches ISO 8601 durations like ``PT1H30M15S``, ``PT571M``, ``PT2M34S``.
+# ``dcterms:extent`` on the audiovisual subset is written in this form for
+# both populations — the deposited recordings (``PT571M``) and the YouTube
+# cohort (``PT2M34S``).
+_ISO8601_DURATION_RE = re.compile(
+    r"^P(?:(?P<days>\d+(?:\.\d+)?)D)?"
+    r"(?:T"
+    r"(?:(?P<hours>\d+(?:\.\d+)?)H)?"
+    r"(?:(?P<minutes>\d+(?:\.\d+)?)M)?"
+    r"(?:(?P<seconds>\d+(?:\.\d+)?)S)?"
+    r")?$"
+)
+
+# Matches ``HH:MM:SS`` or ``MM:SS``.
+_HMS_DURATION_RE = re.compile(r"^(?:(\d+):)?(\d{1,2}):(\d{2})$")
+
+
+def parse_duration_seconds(value: Any) -> Optional[int]:
+    """Parse a duration into whole seconds, or None when unparseable.
+
+    Accepts the three shapes the collection actually carries:
+
+    * ISO 8601 — ``PT1H30M15S``, ``PT571M``, ``PT2M34S`` (``dcterms:extent``)
+    * ``HH:MM:SS`` / ``MM:SS``
+    * a bare number, **read as seconds**
+
+    The bare-number contract is deliberate. An earlier local copy of this
+    parser returned numerics unit-agnostically and let the caller guess
+    ("median > 500 ⇒ seconds, else minutes"), which turns a corpus of short
+    clips into a 60× overcount the moment a numeric column appears: the
+    YouTube cohort's median runtime is ~183 s, so that heuristic would have
+    read three-minute videos as three-hour ones. Callers that hold a column
+    whose unit they know should convert it themselves rather than route it
+    through here.
+
+    Returns None (not 0) for garbage, so callers can distinguish "no
+    duration recorded" from "zero-length".
+    """
+    if value is None:
+        return None
+    try:
+        if bool(pd.isna(value)):
+            return None
+    except (TypeError, ValueError):
+        pass
+
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return int(round(float(value))) if value >= 0 else None
+
+    s = str(value).strip()
+    if not s:
+        return None
+
+    try:
+        numeric = float(s)
+    except ValueError:
+        pass
+    else:
+        return int(round(numeric)) if numeric >= 0 else None
+
+    m = _ISO8601_DURATION_RE.match(s)
+    if m and any(m.group(g) for g in ("days", "hours", "minutes", "seconds")):
+        days = float(m.group("days") or 0)
+        hours = float(m.group("hours") or 0)
+        minutes = float(m.group("minutes") or 0)
+        seconds = float(m.group("seconds") or 0)
+        return int(round(days * 86400 + hours * 3600 + minutes * 60 + seconds))
+
+    m = _HMS_DURATION_RE.match(s)
+    if m:
+        hours = float(m.group(1) or 0)
+        minutes = float(m.group(2) or 0)
+        seconds = float(m.group(3) or 0)
+        return int(round(hours * 3600 + minutes * 60 + seconds))
+
+    return None
+
+
 def is_unknown(value: Any) -> bool:
     """True for empty / 'unknown'-like labels (matches the JS-side P.isUnknown).
 

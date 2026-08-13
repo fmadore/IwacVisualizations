@@ -16,7 +16,9 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 import dashboard_aggregator  # noqa: E402
+import generate_collection_overview  # noqa: E402
 import generate_periodicals_overview  # noqa: E402
+import generate_template_summary  # noqa: E402
 import generate_topic_explorer  # noqa: E402
 import iwac_embeddings  # noqa: E402
 import iwac_stats  # noqa: E402
@@ -544,6 +546,193 @@ class DashboardNetworkTests(unittest.TestCase):
         self.assertEqual(
             timeline["entities"]["3"],
             [[1999, 1], [2001, 1], [2006, 1]],
+        )
+
+
+class DurationParsingTests(unittest.TestCase):
+    """`parse_duration_seconds` — the one place runtimes are read.
+
+    The audiovisual subset carries both ISO 8601 `extent` (`PT571M` on the
+    deposited recordings, `PT2M34S` on the YouTube cohort) and an explicit
+    `duration_seconds` column, and the figures on the homepage hero are
+    summed from them.
+    """
+
+    def test_iso8601_forms(self) -> None:
+        self.assertEqual(iwac_utils.parse_duration_seconds("PT2M34S"), 154)
+        self.assertEqual(iwac_utils.parse_duration_seconds("PT571M"), 34260)
+        self.assertEqual(iwac_utils.parse_duration_seconds("PT1H30M15S"), 5415)
+        self.assertEqual(iwac_utils.parse_duration_seconds("PT45S"), 45)
+        self.assertEqual(iwac_utils.parse_duration_seconds("P1DT2H"), 93600)
+
+    def test_clock_forms(self) -> None:
+        self.assertEqual(iwac_utils.parse_duration_seconds("2:34"), 154)
+        self.assertEqual(iwac_utils.parse_duration_seconds("1:30:15"), 5415)
+
+    def test_bare_numbers_are_seconds_never_minutes(self) -> None:
+        # The unit contract that replaced the "median > 500 ⇒ seconds"
+        # heuristic. Reading 183 as minutes turns a three-minute video
+        # into a three-hour one, and nothing downstream would notice.
+        self.assertEqual(iwac_utils.parse_duration_seconds(183), 183)
+        self.assertEqual(iwac_utils.parse_duration_seconds("183"), 183)
+        self.assertEqual(iwac_utils.parse_duration_seconds(183.4), 183)
+
+    def test_unparseable_is_none_not_zero(self) -> None:
+        for value in (None, "", "   ", "PT", "P", "nope", float("nan"), -5, True):
+            self.assertIsNone(iwac_utils.parse_duration_seconds(value), value)
+
+
+def _audiovisual_frame() -> pd.DataFrame:
+    """A miniature class-38 corpus: both populations, mixed coverage.
+
+    Deliberately awkward in the ways the real subset is — one row whose
+    runtime lives only in `extent`, one with no publisher at all, accents
+    and mixed case in a channel name, an empty `source` on every YouTube
+    row (dcterms:source is a deposited-media field).
+    """
+    return pd.DataFrame([
+        {"o:id": "1", "title": "Journal", "pub_date": "2025-04-02", "country": "Burkina Faso",
+         "publisher": "RTB - Radiodiffusion Télévision du Burkina", "source": "",
+         "language": "Français", "thumbnail": "t1.jpg", "medium": "Vidéo sur le web",
+         "type": "Enregistrement vidéo", "URL": "https://www.youtube.com/watch?v=a",
+         "source_type": "youtube", "duration_seconds": 154, "extent": "PT2M34S"},
+        {"o:id": "2", "title": "Débat", "pub_date": "2026-01-15", "country": "Burkina Faso",
+         "publisher": "rtb - radiodiffusion télévision du burkina", "source": "",
+         "language": "Français", "thumbnail": "t2.jpg", "medium": "Vidéo sur le web",
+         "type": "Enregistrement vidéo", "URL": "https://www.youtube.com/watch?v=b",
+         "source_type": "youtube", "duration_seconds": 200, "extent": "PT3M20S"},
+        {"o:id": "3", "title": "Formation", "pub_date": "2024-06-01", "country": "Burkina Faso",
+         "publisher": "L'Autregard", "source": "",
+         "language": "Français", "thumbnail": "t3.jpg", "medium": "Vidéo sur le web",
+         "type": "Enregistrement vidéo", "URL": "https://www.youtube.com/watch?v=c",
+         "source_type": "youtube", "duration_seconds": 0, "extent": "PT10M"},
+        {"o:id": "4", "title": "Sermon", "pub_date": "1999-01-01", "country": "Nigeria",
+         "publisher": "Daarul Hadeethis Salafiyyah", "source": "Zaria archive",
+         "language": "Haoussa|Arabe", "thumbnail": "t4.jpg", "medium": "DVD",
+         "type": "Enregistrement vidéo", "URL": "",
+         "source_type": "deposited", "duration_seconds": 34260, "extent": "PT571M"},
+        {"o:id": "5", "title": "Sans éditeur", "pub_date": "2020", "country": "Bénin",
+         "publisher": "", "source": "", "language": "Français", "thumbnail": "",
+         "medium": "CD", "type": "", "URL": "", "source_type": "deposited",
+         "duration_seconds": 60, "extent": "PT1M"},
+    ])
+
+
+class TemplateSummaryAudiovisualTests(unittest.TestCase):
+    """The source-aware precompute behind the minimal-item block.
+
+    Assertions are invariants, not counts: this subset went from 47 rows
+    to four figures in one afternoon, and every number frozen into a test
+    was stale within hours.
+    """
+
+    def setUp(self) -> None:
+        self.summary = generate_template_summary.build_subset_summary(
+            "audiovisual", _audiovisual_frame()
+        )
+
+    def test_populations_partition_the_subset(self) -> None:
+        by_source = self.summary["by_source_type"]
+        self.assertEqual(set(by_source), {"youtube", "deposited"})
+        self.assertEqual(
+            sum(slice_["total"] for slice_ in by_source.values()),
+            self.summary["total"],
+        )
+
+    def test_publisher_slices_fold_case_and_keep_a_display_label(self) -> None:
+        channels = self.summary["by_publisher"]
+        key = "rtb - radiodiffusion télévision du burkina"
+        self.assertIn(key, channels)
+        # Both spellings of the channel land in one slice…
+        self.assertEqual(channels[key]["total"], 2)
+        # …and the slice keeps a raw form to display.
+        self.assertEqual(
+            channels[key]["label"],
+            "RTB - Radiodiffusion Télévision du Burkina",
+        )
+        # A row with no publisher belongs to no channel, so the slices
+        # sum to less than the subset rather than inventing a bucket.
+        self.assertLess(
+            sum(slice_["total"] for slice_ in channels.values()),
+            self.summary["total"],
+        )
+
+    def test_each_publisher_slice_names_its_population(self) -> None:
+        channels = self.summary["by_publisher"]
+        self.assertEqual(channels["l'autregard"]["source_type"], "youtube")
+        self.assertEqual(channels["daarul hadeethis salafiyyah"]["source_type"], "deposited")
+
+    def test_medium_is_not_a_facet(self) -> None:
+        # DVD / CD / "Vidéo sur le web" name the carrier, not the source.
+        self.assertNotIn("by_medium", self.summary)
+
+    def test_runtime_falls_back_from_seconds_to_iso_extent(self) -> None:
+        duration = self.summary["duration"]
+        self.assertEqual(duration["count"], self.summary["total"])
+        # Row 3 has duration_seconds == 0 and only `extent: PT10M`.
+        self.assertEqual(duration["total_seconds"], 154 + 200 + 600 + 34260 + 60)
+        self.assertEqual(duration["median_seconds"], 200)
+
+    def test_cards_carry_what_the_strip_renders(self) -> None:
+        card = next(c for c in self.summary["top_items"] if c["o_id"] == 1)
+        self.assertEqual(card["publisher"], "RTB - Radiodiffusion Télévision du Burkina")
+        self.assertEqual(card["duration"], 154)
+        self.assertEqual(card["country"], "Burkina Faso")
+        # `type` is an i18n token, not the French free text, or an English
+        # page prints "Enregistrement vidéo" on every card.
+        self.assertEqual(card["type"], "audiovisual")
+        # The watch target rides along for any consumer that wants it…
+        self.assertEqual(card["url"], "https://www.youtube.com/watch?v=a")
+        # …while fields nothing reads stay off the card — 30 of these
+        # ship per slice, times a slice per channel.
+        for absent in ("medium", "extent", "source_type", "URL"):
+            self.assertNotIn(absent, card)
+        # dcterms:source is only present where the record actually has one.
+        deposited = next(c for c in self.summary["top_items"] if c["o_id"] == 4)
+        self.assertEqual(deposited["source"], "Zaria archive")
+        self.assertNotIn("source", card)
+
+    def test_older_snapshots_degrade_to_whole_subset(self) -> None:
+        # A bundle generated before the mapper added source_type/publisher
+        # must still produce the whole-subset context the block falls
+        # back to, rather than raising or emitting empty facets.
+        legacy = _audiovisual_frame().drop(
+            columns=["source_type", "publisher", "URL", "duration_seconds"]
+        )
+        summary = generate_template_summary.build_subset_summary("audiovisual", legacy)
+        self.assertEqual(summary["total"], 5)
+        self.assertNotIn("by_source_type", summary)
+        self.assertNotIn("by_publisher", summary)
+        # `extent` alone still yields runtime figures.
+        self.assertEqual(summary["duration"]["count"], 5)
+
+
+class CollectionOverviewAudiovisualTests(unittest.TestCase):
+    """The `audiovisual_minutes` KPI on the homepage hero."""
+
+    def test_prefers_explicit_seconds_and_backfills_from_extent(self) -> None:
+        df = _audiovisual_frame()
+        expected = (154 + 200 + 600 + 34260 + 60) / 60.0
+        self.assertAlmostEqual(
+            generate_collection_overview._audiovisual_duration_minutes(df),
+            expected,
+            places=4,
+        )
+
+    def test_iso_extent_alone_gives_the_same_answer(self) -> None:
+        df = _audiovisual_frame()
+        self.assertAlmostEqual(
+            generate_collection_overview._audiovisual_duration_minutes(
+                df.drop(columns=["duration_seconds"])
+            ),
+            generate_collection_overview._audiovisual_duration_minutes(df),
+            places=4,
+        )
+
+    def test_empty_and_missing_frames_are_zero(self) -> None:
+        self.assertEqual(generate_collection_overview._audiovisual_duration_minutes(None), 0.0)
+        self.assertEqual(
+            generate_collection_overview._audiovisual_duration_minutes(pd.DataFrame()), 0.0
         )
 
 

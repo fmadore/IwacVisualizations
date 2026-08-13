@@ -69,7 +69,14 @@
 
     /** Normalize either generator output (`o_id`, `similarity`,
      *  `newspaper`) or generic-shape (`id`, `score`, `source`) into a
-     *  single internal field set so the card builder doesn't branch. */
+     *  single internal field set so the card builder doesn't branch.
+     *
+     *  `source` and `publisher` stay separate rather than collapsing
+     *  into one "where it came from" field: on the audiovisual subset
+     *  they are genuinely different properties — dcterms:source (which
+     *  only the deposited recordings carry) and the depositing body or
+     *  YouTube channel — and a card that prints one under the other's
+     *  meaning is telling the reader something untrue. */
     function normalize(item) {
         if (!item) return null;
         return {
@@ -78,8 +85,10 @@
             score:     item.score != null ? item.score : item.similarity,
             type:      item.type,
             source:    item.source || item.newspaper,
+            publisher: item.publisher,
             country:   item.country,
             date:      item.date,
+            duration:  item.duration,
             snippet:   item.snippet,
             thumbnail: item.thumbnail
         };
@@ -98,9 +107,17 @@
         }
         card.rel = 'noopener';
 
+        // Runtime rides on the thumbnail when there is one — the video
+        // convention, and it keeps the meta line free for provenance.
+        // Cards without a thumbnail fall back to a meta bit below.
+        var runtime = P.formatDuration ? P.formatDuration(item.duration) : '';
+
         if (item.thumbnail) {
             var thumb = P.el('span', 'iwac-vis-similar-card__thumb');
             thumb.style.backgroundImage = 'url(' + JSON.stringify(item.thumbnail).slice(1, -1) + ')';
+            if (runtime) {
+                thumb.appendChild(P.el('span', 'iwac-vis-similar-card__duration', runtime));
+            }
             card.appendChild(thumb);
         }
 
@@ -119,8 +136,10 @@
         var bits = [];
         if (item.type)    bits.push(typeLabel(item.type));
         if (item.source)  bits.push(item.source);
+        if (item.publisher && item.publisher !== item.source) bits.push(item.publisher);
         if (item.country) bits.push(item.country);
         if (item.date)    bits.push(P.formatDate(item.date));
+        if (runtime && !item.thumbnail) bits.push(runtime);
         if (bits.length) {
             body.appendChild(P.el('span', 'iwac-vis-similar-card__meta', bits.join(' · ')));
         }

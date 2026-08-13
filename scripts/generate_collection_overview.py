@@ -36,7 +36,6 @@ from __future__ import annotations
 import argparse
 import logging
 import os
-import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -53,6 +52,7 @@ from iwac_utils import (
     is_unknown,
     load_dataset_safe,
     normalize_location_name,
+    parse_duration_seconds,
     parse_pipe_separated,
     parse_coordinates,
     save_json,
@@ -128,79 +128,56 @@ DOC_TYPE_COLUMN_CANDIDATES = (
     "type",
 )
 
-# Candidate column names for audiovisual "duration". The HF dataset exposes
-# ``extent`` with ISO 8601 values like ``PT571M`` — but we also fall back to
-# more conventional names for robustness.
+# Textual duration columns on the audiovisual subset, in priority order.
+# ``extent`` holds ISO 8601 (``PT571M`` on the deposited recordings,
+# ``PT2M34S`` on the YouTube cohort) and is the fallback for rows the
+# explicit ``duration_seconds`` column does not cover; parsing runs
+# through ``iwac_utils.parse_duration_seconds``.
+#
+# Bare ``duration`` / ``runtime`` were dropped from this list in v1.46.0.
+# They named no column in the dataset, and the "is the median above 500?"
+# unit heuristic that guarded them became a liability the moment a real
+# seconds column appeared: the YouTube cohort's median runtime is ~183 s,
+# so that rule would have read every three-minute clip as three minutes'
+# worth of *hours*. Units are now known per column, never guessed.
 DURATION_COLUMN_CANDIDATES = (
-    "duration",
     "dcterms:extent",
     "dcterms__extent",
     "extent",
-    "runtime",
 )
 
-# Matches ISO 8601 duration strings like ``PT1H30M15S``, ``PT571M``, ``PT45S``.
-_ISO8601_DURATION_RE = re.compile(
-    r"^P(?:(?P<days>\d+(?:\.\d+)?)D)?"
-    r"(?:T"
-    r"(?:(?P<hours>\d+(?:\.\d+)?)H)?"
-    r"(?:(?P<minutes>\d+(?:\.\d+)?)M)?"
-    r"(?:(?P<seconds>\d+(?:\.\d+)?)S)?"
-    r")?$"
-)
 
-# Matches ``HH:MM:SS`` or ``MM:SS``.
-_HMS_RE = re.compile(r"^(?:(\d+):)?(\d{1,2}):(\d{2})$")
+def _audiovisual_duration_minutes(av_df: pd.DataFrame) -> float:
+    """Total audiovisual runtime in minutes.
 
-
-def _parse_duration_to_minutes(value: Any) -> float:
-    """Parse a duration value into minutes.
-
-    Handles:
-
-    * Numeric values — returns them as-is (caller applies seconds/minutes
-      heuristic on the aggregate).
-    * ISO 8601 durations such as ``PT1H30M``, ``PT571M``, ``PT45S``.
-    * ``HH:MM:SS`` / ``MM:SS`` strings.
-
-    Returns ``0.0`` for anything unparseable.
+    Resolves each row's runtime independently — the explicit
+    ``duration_seconds`` column first, ISO 8601 ``extent`` for whatever
+    it leaves at zero. Per-row rather than per-column because class 38
+    holds two populations mapped at different times, so a snapshot can
+    carry seconds for one and only ``extent`` for the other.
     """
-    if value is None:
-        return 0.0
-    if isinstance(value, float) and pd.isna(value):
-        return 0.0
-    # Numeric path — return as-is; aggregate heuristic decides units.
-    if isinstance(value, (int, float)):
-        return float(value)
-
-    s = str(value).strip()
-    if not s:
+    if av_df is None or av_df.empty:
         return 0.0
 
-    # Pure numeric string
-    try:
-        return float(s)
-    except ValueError:
-        pass
+    seconds = pd.Series(0.0, index=av_df.index)
+    if "duration_seconds" in av_df.columns:
+        seconds = (
+            pd.to_numeric(av_df["duration_seconds"], errors="coerce")
+            .fillna(0.0)
+            .clip(lower=0.0)
+        )
 
-    # ISO 8601 duration (PnDTnHnMnS, with any combination)
-    m = _ISO8601_DURATION_RE.match(s)
-    if m and any(m.group(g) for g in ("days", "hours", "minutes", "seconds")):
-        days = float(m.group("days") or 0)
-        hours = float(m.group("hours") or 0)
-        minutes = float(m.group("minutes") or 0)
-        seconds = float(m.group("seconds") or 0)
-        return days * 24 * 60 + hours * 60 + minutes + seconds / 60.0
+    gaps = seconds <= 0
+    if gaps.any():
+        text_col = _first_present_column(av_df, DURATION_COLUMN_CANDIDATES)
+        if text_col is not None:
+            parsed = av_df.loc[gaps, text_col].map(
+                lambda value: float(parse_duration_seconds(value) or 0)
+            )
+            seconds = seconds.astype(float)
+            seconds.loc[gaps] = parsed
 
-    # HH:MM:SS or MM:SS
-    m = _HMS_RE.match(s)
-    if m:
-        hours = float(m.group(1) or 0)
-        minutes = float(m.group(2) or 0)
-        seconds = float(m.group(3) or 0)
-        return hours * 60 + minutes + seconds / 60.0
-
-    return 0.0
+    return float(seconds.sum()) / 60.0
 
 
 def _first_present_column(
@@ -864,6 +841,15 @@ def compute_sources_map(
     source labels to geocoded authority records in `index.Coordonnées`, and
     applies a small curated override table for well-known source platforms or
     repositories not represented as coordinate-bearing authority records.
+
+    "Source" here means **dcterms:source** and nothing else. On audiovisual
+    that is a deposited-media field — the YouTube cohort leaves it empty and
+    identifies its origin through `publisher` (the channel) instead. Folding
+    channels in would put ~1,100 items behind names this map cannot place:
+    a channel is an organisation authority record, not a coordinate-bearing
+    Lieu, so every one would land in `sources_without_coordinates` while
+    inflating the denominator of a map about where material comes from.
+    Channels are counted separately, as `summary.video_channels`.
     """
     coord_lookup, id_lookup = _build_source_coordinate_lookups(index_df)
     custom_lookup = {
@@ -1189,27 +1175,25 @@ def compute_summary(
                     doc_types.add(v)
 
     # Audiovisual duration (minutes)
-    av_minutes = 0.0
+    av_minutes = _audiovisual_duration_minutes(dataframes.get("audiovisual"))
+
+    # Video channels — distinct publishers behind the YouTube cohort.
+    # Kept apart from `unique_sources` deliberately: that figure counts
+    # dcterms:source, which on audiovisual only the deposited recordings
+    # carry, while a channel is dcterms:publisher. Folding the two
+    # together would inflate "sources" with values the sources map (which
+    # geocodes dcterms:source against the place authority) never sees.
+    channels: set = set()
     av_df = dataframes.get("audiovisual")
-    if av_df is not None and not av_df.empty:
-        duration_col = _first_present_column(av_df, DURATION_COLUMN_CANDIDATES)
-        if duration_col is not None:
-            # First try purely numeric (legacy datasets may store seconds or
-            # minutes directly).
-            numeric = pd.to_numeric(av_df[duration_col], errors="coerce")
-            numeric_sum = float(numeric.fillna(0).sum())
-            if numeric_sum > 0 and numeric.notna().any():
-                positive = numeric[numeric > 0]
-                median = float(positive.median()) if not positive.empty else 0.0
-                # Heuristic: if the median > 500, assume seconds; else minutes
-                if median > 500:
-                    av_minutes = numeric_sum / 60.0
-                else:
-                    av_minutes = numeric_sum
-            else:
-                # String path — ISO 8601 (``PT571M``), ``HH:MM:SS``, etc.
-                parsed = av_df[duration_col].map(_parse_duration_to_minutes)
-                av_minutes = float(parsed.fillna(0).sum())
+    if av_df is not None and not av_df.empty and "publisher" in av_df.columns:
+        rows = av_df
+        if "source_type" in av_df.columns:
+            rows = av_df[av_df["source_type"].astype(str).str.strip() == "youtube"]
+        for value in rows["publisher"].dropna():
+            for name in parse_pipe_separated(value):
+                name = name.strip()
+                if name and not is_unknown(name):
+                    channels.add(name)
 
     years = timeline.get("years") or []
     summary: Dict[str, Any] = {
@@ -1223,6 +1207,7 @@ def compute_summary(
         ),
         "document_types": len(doc_types),
         "audiovisual_minutes": int(av_minutes),
+        "video_channels": len(channels),
         "references_count": counts.get("references", 0),
         "photographs": counts.get("images", 0),
         "newspapers": newspapers.get("total", 0),

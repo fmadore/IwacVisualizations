@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC minimal-item fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        document.documentElement.lang = fixtureParams.get('lang') || 'en';
+    </script>
+    <style>
+        :root {
+            --primary: #a33312;
+            --ink: #171717;
+            --ink-strong: #090909;
+            --ink-light: #45484d;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --surface-sunken: #f4f0ed;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --space-xs: .25rem;
+            --space-sm: .5rem;
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+        }
+        body {
+            margin: 0;
+            padding: 1rem;
+            background: #f1eeea;
+            color: var(--ink);
+            font-family: "Public Sans", system-ui, sans-serif;
+        }
+        body[data-theme="dark"] {
+            --primary: #ec653f;
+            --ink: #e7e4df;
+            --ink-strong: #f7f5f1;
+            --ink-light: #b5b0aa;
+            --muted: #aaa49f;
+            --surface: #110c08;
+            --surface-raised: #1a1510;
+            --surface-sunken: #0c0805;
+            --border: #554b41;
+            --border-light: #352f28;
+            background: #080503;
+        }
+        main { max-width: 1180px; margin: 0 auto; }
+    </style>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/minimal-item.min.css">
+</head>
+<body>
+    <script>
+        if (fixtureParams.get('theme') === 'dark') document.body.dataset.theme = 'dark';
+
+        // The bundle the Sync Data job publishes, cut down to what this
+        // block reads. `scope=none` drops the facet so the fixture can
+        // exercise the whole-subset fallback an older data pull produces.
+        const CHANNEL = 'RTB - Radiodiffusion Télévision du Burkina';
+        function card(id, title, date, duration, thumb) {
+            return {
+                o_id: id, title: title, date: date, country: 'Burkina Faso',
+                language: 'Français', thumbnail: thumb ? '/asset/img/ai-logos/' + thumb : '',
+                publisher: CHANNEL, type: 'audiovisual', duration: duration
+            };
+        }
+        const audiovisual = {
+            total: 1146,
+            year_min: 1999, year_max: 2026,
+            years: [
+                { year: 1999, count: 30 }, { year: 2012, count: 1 },
+                { year: 2024, count: 45 }, { year: 2025, count: 123 },
+                { year: 2026, count: 150 }
+            ],
+            duration: { count: 1146, total_seconds: 984752, median_seconds: 183 },
+            top_items: [card(9001, 'Whole-subset item', '2026-08-01', 200, '')]
+        };
+        if (fixtureParams.get('scope') !== 'none') {
+            audiovisual.by_publisher = {
+                'rtb - radiodiffusion télévision du burkina': {
+                    label: CHANNEL,
+                    source_type: 'youtube',
+                    total: 639,
+                    year_min: 2012, year_max: 2026,
+                    years: [
+                        { year: 2012, count: 1 }, { year: 2019, count: 24 },
+                        { year: 2024, count: 45 }, { year: 2025, count: 123 },
+                        { year: 2026, count: 150 }
+                    ],
+                    duration: { count: 639, total_seconds: 129600, median_seconds: 154 },
+                    top_items: [
+                        card(1001, 'Journal télévisé du 2 août', '2026-08-02', 154, 'ChatGPT_logo.svg'),
+                        card(1002, 'Débat sur la laïcité', '2026-07-30', 3725, 'ChatGPT_logo.svg'),
+                        card(42, 'This very item', '2026-07-01', 200, 'ChatGPT_logo.svg')
+                    ]
+                }
+            };
+        }
+        const BUNDLE = { subsets: { audiovisual: audiovisual } };
+
+        // The block fetches its bundle from files/iwac-visualizations/;
+        // serve it from memory so the fixture stays hermetic.
+        window.fetch = function (url) {
+            if (String(url).indexOf('template-summary.json') !== -1) {
+                return Promise.resolve({
+                    ok: true, status: 200,
+                    json: function () { return Promise.resolve(BUNDLE); }
+                });
+            }
+            return Promise.reject(new Error('unexpected fetch: ' + url));
+        };
+    </script>
+    <main>
+        <div class="iwac-vis-block iwac-vis-minimal-item"
+             data-base-path=""
+             data-site-base="/s/iwac"
+             data-item-id="42"
+             data-template-id="23"
+             data-subset="audiovisual"
+             data-pub-year="2026"
+             data-channel="RTB - Radiodiffusion Télévision du Burkina"
+             data-watch-url="https://www.youtube.com/watch?v=xcGWG5msEEs">
+            <h3>Visualisations</h3>
+            <div class="iwac-vis-loading iwac-vis-minimal-item__loading" role="status" aria-live="polite">
+                <div class="iwac-vis-spinner" aria-hidden="true"></div>
+                <span>Loading visualisations&hellip;</span>
+            </div>
+        </div>
+    </main>
+    <script src="/asset/js/iwac-i18n.min.js"></script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script src="/asset/js/charts/shared/dashboard-layout.min.js"></script>
+    <script src="/asset/js/charts/shared/renderers/sibling-sparkline.min.js"></script>
+    <script src="/asset/js/charts/shared/renderers/similar-items.min.js"></script>
+    <script src="/asset/js/charts/minimal-item-dashboard.min.js"></script>
+</body>
+</html>

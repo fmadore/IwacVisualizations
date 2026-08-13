@@ -187,6 +187,26 @@
     };
 
     /**
+     * Runtime in clock form: `M:SS` under an hour, `H:MM:SS` above it —
+     * the convention every video player uses, so a reader recognises it
+     * without a unit label. Input is seconds (the `duration` field the
+     * template-summary generator emits, normalised from ISO-8601
+     * `dcterms:extent`). Returns '' for anything non-positive so callers
+     * can treat "no runtime recorded" as "render nothing".
+     */
+    P.formatDuration = function (seconds) {
+        var total = Math.round(Number(seconds));
+        if (!isFinite(total) || total <= 0) return '';
+        var h = Math.floor(total / 3600);
+        var m = Math.floor((total % 3600) / 60);
+        var s = total % 60;
+        var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+        return h > 0
+            ? h + ':' + pad(m) + ':' + pad(s)
+            : m + ':' + pad(s);
+    };
+
+    /**
      * Translate a raw (French-source) label via a prefixed i18n key,
      * falling back to the raw value when no translation exists. Centralizes
      * the pattern used for reference types (`ref_type_<name>`), language

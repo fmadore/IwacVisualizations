@@ -296,10 +296,15 @@
             // MapLibre choropleth toggle (shared/choropleth.js)
             'Diverging A minus B':          'Difference: A minus B',
 
-            // Minimal item dashboard (Audio / Video / Document / Photograph)
+            // Minimal item dashboard (Audio / Video / YouTube / Document / Photograph)
             'desc_minimal_sparkline':            'Where this item sits in its collection’s activity over time. The dot marks the year of the current item.',
             'desc_minimal_similar':              'Other items in the same IWAC subset, most recent first. Click an item to open its page.',
             'desc_minimal_similar_semantic':     'Photographs an AI model reads as closest to this one. It compares the images themselves, so the resemblance is visual and thematic rather than a matter of shared catalogue records. The percentage is the similarity score.',
+            'desc_minimal_sparkline_scoped':     'When this channel or collection published, year by year. The dot marks the year of the current item.',
+            'desc_minimal_similar_scoped':       'Other recordings from the same channel or collection, most recent first. Click one to open its page.',
+            'items_from_source':                 '{count} items from {source}',
+            'hours_count':                       '{count} h',
+            'minutes_count':                     '{count} min',
 
             // Topic Explorer — labels + descriptions
             'desc_horizontal_bar':          'Top values by count, ranked from highest to lowest.',
@@ -863,6 +868,18 @@
             'desc_minimal_sparkline':            'O\u00f9 cet \u00e9l\u00e9ment se situe dans la chronologie d\u2019activit\u00e9 de sa collection. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
             'desc_minimal_similar':              'Autres \u00e9l\u00e9ments du m\u00eame sous-ensemble IWAC, du plus r\u00e9cent au plus ancien. Cliquez sur un \u00e9l\u00e9ment pour ouvrir sa fiche.',
             'desc_minimal_similar_semantic':     'Photographies qu\u2019un mod\u00e8le d\u2019IA lit comme les plus proches de celle-ci. Il compare les images elles-m\u00eames, si bien que la ressemblance est visuelle et th\u00e9matique plut\u00f4t qu\u2019une affaire de notices communes. Le pourcentage indique le score de similarit\u00e9.',
+            'Activity of this source over time': 'Activit\u00e9 de cette source dans le temps',
+            'More from this source':             'Autres contenus de cette source',
+            'desc_minimal_sparkline_scoped':     'Le rythme de publication de cette cha\u00eene ou de cette collection, ann\u00e9e par ann\u00e9e. Le point indique l\u2019ann\u00e9e de l\u2019\u00e9l\u00e9ment courant.',
+            'desc_minimal_similar_scoped':       'Autres enregistrements de la m\u00eame cha\u00eene ou de la m\u00eame collection, du plus r\u00e9cent au plus ancien. Cliquez sur l\u2019un d\u2019eux pour ouvrir sa fiche.',
+            'items_from_source':                 '{count} \u00e9l\u00e9ments de {source}',
+            'hours_count':                       '{count} h',
+            'minutes_count':                     '{count} min',
+            'Items':                             '\u00c9l\u00e9ments',
+            'Videos':                            'Vid\u00e9os',
+            'Total runtime':                     'Dur\u00e9e totale',
+            'Median length':                     'Dur\u00e9e m\u00e9diane',
+            'Watch on YouTube':                  'Regarder sur YouTube',
 
             // Topic Explorer \u2014 French
             'Loading Topic Explorer':       'Chargement de l\u2019explorateur de th\u00e8mes',

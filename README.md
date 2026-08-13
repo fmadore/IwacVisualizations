@@ -30,8 +30,9 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Term Trends | page block | **Live** — the "IWAC Ngram viewer": search any of 5,000 lemmas, overlay up to 8, share-of-articles vs counts | Precompute (`generate_term_trends.py`; per-letter shards fetched lazily) |
 | Distinctive Vocabulary | page block | **Live** — keyness (log-likelihood + BH correction, ranked by log-ratio effect size) per country / decade, plus Kleinberg burst detection on subject coverage | Precompute (`generate_keyness.py`) |
 | Press Reprints | page block | **Live** — cross-newspaper near-duplicate pairs (wire copy / reprints), circulation network + pair table | Precompute (`generate_reprints.py` over `embedding_OCR`) |
-| Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (sibling sparkline + similar-items strip) | Precompute (`generate_template_summary.py`) |
-| Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset | Precompute (`generate_template_summary.py`) |
+| Visualizations / Audio (template 9) | resource-page block | **Live** — minimal-item dashboard (runtime figures + sibling sparkline + similar-items strip), scoped to the item's publisher | Precompute (`generate_template_summary.py`) |
+| Visualizations / Video recording (template 19) | resource-page block | **Live** — same minimal-item dashboard, audiovisual subset, scoped to the depositing body | Precompute (`generate_template_summary.py`) |
+| Visualizations / YouTube video (template 23) | resource-page block | **Live** — same minimal-item dashboard scoped to the item's **channel**: that channel's uploads over time, its totals and median runtime, its recent videos with thumbnails and durations, plus a link to the canonical watch URL | Precompute (`generate_template_summary.py`) |
 | Visualizations / Document (template 22) | resource-page block | **Live** — same minimal-item dashboard, documents subset | Precompute (`generate_template_summary.py`) |
 | Visualizations / Photograph (template 15) | resource-page block | **Live** — minimal-item dashboard over the `images` subset, with *real* neighbours: multimodal `embedding_image` cosine similarity instead of a recency list | Precompute (`generate_template_summary.py`) |
 | Visualizations / Person | resource-page block | **Live** — 11 panels | Precompute (`generate_person_dashboards.py`) |
@@ -42,6 +43,18 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.46.0 — YouTube videos get a block, and the audiovisual corpus stops being one thing
+
+Omeka resource template **23 (YouTube video)** arrived on 2026-08-12 with an ingest that pulls public channels into the archive, and the audiovisual corpus went from 47 items to four figures in an afternoon. Because the dispatch table in `Visualizations::TEMPLATE_PARTIALS` did not list the new template, every one of those item pages rendered the Visualizations block as nothing at all. Template 23 now routes to the minimal-item dashboard, and `tests/php/run.php` asserts every mapped template still resolves to a readable partial, so the next template cannot be lost the same way.
+
+**The block is now scoped to a source rather than to a whole subset.** On an audiovisual page it reads the item's own `dcterms:publisher` — its YouTube channel, or the body that deposited the recording — and shows that source's activity: how many items, how much material and how long a typical one runs; the publishing rhythm year by year with the current item marked; and the source's recent items as cards carrying thumbnail, date and runtime. YouTube items also get a plain link to the canonical watch URL, validated server-side for scheme and host. Deliberately a link and not an embedded player: an iframe would fire third-party requests on page load for every visitor, whether or not they intend to watch. Scoping is best-effort — an item with no publisher, a channel with no slice, or a data bundle generated before this change all fall back to whole-subset context rather than emptying the block.
+
+**Class 38 is still the data boundary; the template only chooses the presentation.** The split that matters is `source_type` (`deposited` / `youtube`), which the upstream mapper now carries. `generate_template_summary.py` emits `by_source_type` and `by_publisher` slices in its place, each with runtime figures, and the old `by_medium` facet is gone: `DVD`, `CD` and `Vidéo sur le web` name what a recording was stored on, not where it came from, and never supported the audio/video split that facet implied.
+
+Collection-level figures pick the cohort up as well. The **audiovisual-minutes** KPI on the homepage hero — and every other figure fed by `collection-overview.json` — reads the new explicit `duration_seconds` column, falling back per row to ISO 8601 `dcterms:extent`. That replaces a "median above 500 ⇒ the column is seconds" heuristic which, on a corpus whose median video runs 183 seconds, would have reported three-minute clips as three-hour ones. Total words, total items, countries and languages now include the Burkina Faso cohort by construction, since the mapper derives `country` per row instead of hardcoding `"Nigeria"`. A new `video_channels` count sits **beside** `unique_sources` rather than inside it: a channel is `dcterms:publisher`, while that figure counts `dcterms:source`, and the source-locations map geocodes the latter against the place authority. Collapsing them would have inflated a map's denominator with values it can never plot. The curator-facing corpus-health page gains meters for source population, runtime, external URL and publisher coverage.
+
+Counts are not frozen anywhere this time. The bundle carries a generated `subset_totals` block, the docs point at it, and the tests assert invariants (the two populations partition the subset; slice totals sum to the whole) rather than numbers that were true for one afternoon.
 
 ### v1.45.0 — associated entities over time
 
@@ -840,7 +853,7 @@ IwacVisualizations/
 │   │       ├── article-dashboard.js        # Article orchestrator
 │   │       ├── article-dashboard/          # Panel modules (network, further-reading, map)
 │   │       ├── publication-dashboard.js    # Publication-issue orchestrator (v1.5.0)
-│   │       ├── minimal-item-dashboard.js   # Audio / Video / Document two-slot dashboard
+│   │       ├── minimal-item-dashboard.js   # Audio / Video / YouTube / Document / Photo, source-scoped
 │   │       ├── compare-newspapers.js       # Compare Newspapers orchestrator (split in v1.4.0)
 │   │       ├── compare-newspapers/         # Panel modules (helpers, picker, map, sentiment, …)
 │   │       ├── spatial-exploration.js      # Spatial Exploration orchestrator (v1.7.0)
