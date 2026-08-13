@@ -135,7 +135,7 @@
     color: var(--primary, #ce4115);
 }
 
-/*  The outer `.iwac-vis-chart` is the two-view controller, not itself a
+/*  The outer `.iwac-vis-chart` is the three-view controller, not itself a
  *  canvas. It keeps the graph marker only to opt out of the generic panel
  *  toolbar; the actual force-graph floor belongs to its network child. */
 .iwac-vis-panel > .iwac-vis-chart.iwac-vis-associated {
@@ -153,6 +153,8 @@
 
 .iwac-vis-associated__network[hidden],
 .iwac-vis-associated__list[hidden],
+.iwac-vis-associated__time[hidden],
+.iwac-vis-associated__control[hidden],
 .iwac-vis-associated > .iwac-vis-empty[hidden] {
     display: none !important;
 }
@@ -161,7 +163,7 @@
 
 .iwac-vis-associated__controls {
     display: grid;
-    grid-template-columns: auto minmax(16rem, 1fr) auto;
+    grid-template-columns: auto minmax(16rem, 1fr) auto auto;
     gap: var(--space-3, 0.75rem) var(--space-5, 1.25rem);
     align-items: end;
     padding: var(--space-3, 0.75rem);
@@ -249,6 +251,10 @@
 
 .iwac-vis-associated__limit {
     min-width: 5.25rem;
+}
+
+.iwac-vis-associated__period {
+    min-width: 9.5rem;
 }
 
 /* ---- Ranked relational list -------------------------------------- */
@@ -387,9 +393,224 @@
     text-align: right;
 }
 
+/* ---- Associated entities over time ------------------------------- */
+
+.iwac-vis-associated__time {
+    min-width: 0;
+}
+
+.iwac-vis-time-matrix__intro {
+    max-width: 72ch;
+    margin: 0 0 var(--space-2, 0.5rem);
+    color: var(--ink-light, #3f4349);
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.5;
+}
+
+.iwac-vis-time-matrix__notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem) var(--space-4, 1rem);
+    margin: 0 0 var(--space-3, 0.75rem);
+    color: var(--muted, #66696e);
+    font-size: var(--text-xs, 0.8125rem);
+    line-height: 1.4;
+}
+
+.iwac-vis-time-matrix__key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-time-matrix__key::before {
+    width: 2.5rem;
+    height: 0.625rem;
+    flex: 0 0 auto;
+    border: 1px solid color-mix(in oklab, var(--primary, #ce4115) 28%, var(--border-light, #e2e5e8));
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--primary, #ce4115) 10%, var(--surface, #fdfcfb)),
+        color-mix(in oklab, var(--primary, #ce4115) 82%, var(--surface, #fdfcfb))
+    );
+    content: '';
+}
+
+.iwac-vis-time-matrix__caveat {
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-time-matrix__scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border, #ced1d6);
+    border-radius: var(--radius-md, 0.5rem);
+    background: var(--surface, #fdfcfb);
+    scrollbar-color: var(--border, #ced1d6) transparent;
+    scrollbar-width: thin;
+}
+
+.iwac-vis-time-matrix__scroll:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+}
+
+.iwac-vis-time-matrix__table {
+    width: 100%;
+    min-width: max-content;
+    border-spacing: 0;
+    border-collapse: separate;
+    color: var(--ink, #13161c);
+    font-size: var(--text-xs, 0.8125rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-time-matrix__caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.iwac-vis-time-matrix__period-head,
+.iwac-vis-time-matrix__entity-head {
+    height: 2.75rem;
+    padding: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border, #ced1d6);
+    background: var(--surface-sunken, var(--surface-raised, #faf8f6));
+    color: var(--muted, #66696e);
+    font-weight: 650;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.iwac-vis-time-matrix__period-head {
+    min-width: 4.75rem;
+    border-left: 1px solid var(--border-light, #e2e5e8);
+}
+
+.iwac-vis-time-matrix__period-head abbr {
+    text-decoration: none;
+}
+
+.iwac-vis-time-matrix__entity-head,
+.iwac-vis-time-matrix__entity {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: clamp(17rem, 32vw, 28rem);
+    min-width: clamp(17rem, 32vw, 28rem);
+    max-width: clamp(17rem, 32vw, 28rem);
+}
+
+.iwac-vis-time-matrix__entity-head {
+    z-index: 2;
+    padding-left: var(--space-3, 0.75rem);
+    text-align: left;
+}
+
+.iwac-vis-time-matrix__entity {
+    display: grid;
+    grid-template-columns: 0.75rem 2rem minmax(0, 1fr) 3.25rem;
+    gap: var(--space-2, 0.5rem);
+    align-items: center;
+    height: 2.85rem;
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+    background: var(--surface, #fdfcfb);
+    text-align: left;
+    transition: background-color var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-time-matrix__dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: var(--iwac-vis-entity-color, var(--primary, #ce4115));
+}
+
+.iwac-vis-time-matrix__rank,
+.iwac-vis-time-matrix__mentions {
+    color: var(--muted, #66696e);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.iwac-vis-time-matrix__mentions {
+    text-align: right;
+}
+
+.iwac-vis-time-matrix__name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-strong, var(--ink, #13161c));
+    font-size: var(--text-sm, 0.9375rem);
+    font-weight: 550;
+    line-height: 1.35;
+    text-decoration-thickness: 1px;
+    text-overflow: ellipsis;
+    text-underline-offset: 0.18em;
+    white-space: nowrap;
+}
+
+.iwac-vis-time-matrix__name:hover {
+    color: var(--primary, #ce4115);
+}
+
+.iwac-vis-time-matrix__name:focus-visible {
+    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.iwac-vis-time-matrix__cell {
+    position: relative;
+    min-width: 4.75rem;
+    height: 2.85rem;
+    padding: var(--space-1, 0.25rem);
+    border-bottom: 1px solid var(--border-light, #e2e5e8);
+    border-left: 1px solid var(--border-light, #e2e5e8);
+    background: var(--surface, #fdfcfb);
+    color: var(--ink-strong, var(--ink, #13161c));
+    font-weight: 650;
+    text-align: center;
+    isolation: isolate;
+}
+
+.iwac-vis-time-matrix__cell::before {
+    position: absolute;
+    inset: 0.22rem;
+    z-index: -1;
+    border-radius: 0.22rem;
+    background: var(--iwac-vis-entity-color, var(--primary, #ce4115));
+    content: '';
+    opacity: var(--iwac-vis-time-opacity, 0);
+    transition: opacity var(--transition-fast, 150ms ease);
+}
+
+.iwac-vis-time-matrix__cell--zero {
+    color: color-mix(in oklab, var(--muted, #66696e) 62%, transparent);
+    font-weight: 400;
+}
+
+.iwac-vis-time-matrix__table tbody tr:hover .iwac-vis-time-matrix__entity,
+.iwac-vis-time-matrix__table tbody tr:focus-within .iwac-vis-time-matrix__entity {
+    background: color-mix(in oklab, var(--primary, #ce4115) 7%, var(--surface, #fdfcfb));
+}
+
+.iwac-vis-time-matrix__table tbody tr:hover .iwac-vis-time-matrix__cell::before,
+.iwac-vis-time-matrix__table tbody tr:focus-within .iwac-vis-time-matrix__cell::before {
+    outline: 1px solid color-mix(in oklab, var(--iwac-vis-entity-color, var(--primary, #ce4115)) 45%, transparent);
+    outline-offset: -1px;
+}
+
 @media (max-width: 900px) {
     .iwac-vis-associated__controls {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
     }
     .iwac-vis-associated__control--type {
         grid-column: 1 / -1;
@@ -412,6 +633,9 @@
     .iwac-vis-associated__limit {
         width: 100%;
     }
+    .iwac-vis-associated__period {
+        width: 100%;
+    }
     /* Curves need horizontal room to remain interpretable. On phones the
      * ranked DOM list is the accessible, exact view and no relationship is
      * implied by a clipped decorative fragment. */
@@ -429,5 +653,26 @@
     }
     .iwac-vis-arc-list__type {
         display: none;
+    }
+    .iwac-vis-time-matrix__notes {
+        display: grid;
+    }
+    .iwac-vis-time-matrix__entity-head,
+    .iwac-vis-time-matrix__entity {
+        width: 13rem;
+        min-width: 13rem;
+        max-width: 13rem;
+    }
+    .iwac-vis-time-matrix__entity {
+        grid-template-columns: 0.65rem 1.65rem minmax(0, 1fr);
+        gap: 0.35rem;
+        padding-inline: var(--space-2, 0.5rem);
+    }
+    .iwac-vis-time-matrix__mentions {
+        display: none;
+    }
+    .iwac-vis-time-matrix__period-head,
+    .iwac-vis-time-matrix__cell {
+        min-width: 4.25rem;
     }
 }

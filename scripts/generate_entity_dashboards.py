@@ -167,7 +167,7 @@ class EntityDashboardGenerator(DashboardAggregator):
     def build_entity_json(self, entity_o_id: int) -> Dict[str, Any]:
         info = self.targets[entity_o_id]
         data: Dict[str, Any] = {
-            "version": 3,
+            "version": 4,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "entity": {
                 "o_id": entity_o_id,

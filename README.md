@@ -43,6 +43,14 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.45.0 — associated entities over time
+
+The **Associated entities / Entités associées** panel gains a third reading, **Over time / Dans le temps**, on person, organisation, place, subject and event authority pages. It keeps the exact TF-IDF row order of the relational list and places the publication periods across the columns. A cell is the raw number of shared items in that period; its colour follows the row's authority type and its intensity follows the count. Five-year periods are the default, with a decade switch for longer spans. The existing role, authority-type and 10 / 20 / 30 / 50 controls apply without changing the measure.
+
+This is a semantic HTML table rather than another chart canvas: authority names remain links, every count has a screen-reader label, the entity column stays visible while a wide period range scrolls, and a 375 px viewport does not acquire a document-level scrollbar. Zeroes remain visible as dashes instead of disappearing. Items without a readable year are excluded from the cells and reported immediately above the matrix, so the temporal view never silently claims full date coverage.
+
+Payload version 4 adds one compact `over_time` object to each role's root graph. It stores sparse yearly item counts for the union of the mixed and type-specific top-50 rankings, avoiding five repeated copies while ensuring a filtered authority type has its complete history. One source item counts once per associated entity even if its metadata repeats a value. Older payloads remain usable: Network and Relational list still render, and the unavailable third-view control is omitted. Regenerate the person and entity dashboard fan-outs to populate the new view.
+
 ### v1.44.0 — two ways to read associated entities
 
 The **Associated entities / Entités associées** panel on person, organisation, place, subject and event authority pages now treats the force graph and an exact ranked reading as two views of the same analysis. **Network** remains the default for discovering clusters. **Relational list** lays the TF-IDF ranking out as linked authority names with raw mention counts; arcs on its left preserve the neighbour-to-neighbour co-occurrences that structure the force graph. Hovering or focusing a row isolates its arcs and connected rows. On narrow screens the ranked list remains and the decorative curves leave, rather than being squeezed into an unreadable strip.

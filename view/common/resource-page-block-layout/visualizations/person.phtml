@@ -17,8 +17,9 @@ echo $this->partial('common/iwac-block-shell', [
         'blockCss' => 'person-dashboard',
         'needs' => [
             'maplibre'     => true,
-            // Associated entities offers a d3-force canvas and a DOM/SVG
-            // relational list — neither is an ECharts series.
+            // Associated entities offers a d3-force canvas, a DOM/SVG
+            // relational list, and a semantic temporal table. None is an
+            // ECharts series.
             'd3'           => true,
             'chartOptions' => true,
             'facetButtons' => true,

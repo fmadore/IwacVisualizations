@@ -464,7 +464,7 @@ class DashboardHeatmapTests(unittest.TestCase):
 class DashboardNetworkTests(unittest.TestCase):
     class MiniAggregator(dashboard_aggregator.DashboardAggregator):
         def _role_slices(self, _target_id):
-            yield "all", ["item-1"]
+            yield "all", getattr(self, "item_keys", ["item-1"])
 
         def _item_neighbor_ids(self, item_key, _exclude):
             return self.neighbours[item_key]
@@ -487,6 +487,7 @@ class DashboardNetworkTests(unittest.TestCase):
         }
         agg.df = {o_id: 1 for o_id in organisation_ids + [person_id]}
         agg.n_targets = 100
+        agg.items_meta = {"item-1": {"pub_date": "2001-04-12"}}
 
         graph = agg.compute_network(target_id)["by_role"]["all"]
         mixed_ids = {node["o_id"] for node in graph["nodes"]}
@@ -501,6 +502,48 @@ class DashboardNetworkTests(unittest.TestCase):
         self.assertEqual(
             list(graph["by_type"]),
             list(dashboard_aggregator.NETWORK_ENTITY_TYPES),
+        )
+        self.assertEqual(graph["over_time"]["entities"][str(person_id)], [[2001, 1]])
+
+    def test_temporal_profile_counts_items_once_and_discloses_undated_items(self) -> None:
+        agg = self.MiniAggregator(ROOT, min_cooccurrence=1)
+        agg.item_keys = ["item-1", "item-2", "item-3", "item-4"]
+        agg.neighbours = {
+            "item-1": [2, 2, 3],  # malformed duplicate must count once
+            "item-2": [2, 3],
+            "item-3": [2],
+            "item-4": [3],
+        }
+        agg.targets = {
+            1: {"o_id": 1, "title": "Centre", "type": "Personnes"}
+        }
+        agg.id_to_entity = {
+            2: {"o_id": 2, "title": "Person", "type": "Personnes"},
+            3: {"o_id": 3, "title": "Organisation", "type": "Organisations"},
+        }
+        agg.df = {2: 1, 3: 1}
+        agg.n_targets = 10
+        agg.items_meta = {
+            "item-1": {"pub_date": "1999-03-01"},
+            "item-2": {"pub_date": "2001"},
+            "item-3": {"pub_date": ""},
+            "item-4": {"pub_date": "2006-12"},
+        }
+
+        graph = agg.compute_network(1)["by_role"]["all"]
+        timeline = graph["over_time"]
+        nodes = {node["o_id"]: node for node in graph["nodes"]}
+
+        self.assertEqual(nodes[2]["cooc"], 3)
+        self.assertEqual(nodes[3]["cooc"], 3)
+        self.assertEqual(timeline["year_min"], 1999)
+        self.assertEqual(timeline["year_max"], 2006)
+        self.assertEqual(timeline["dated_items"], 3)
+        self.assertEqual(timeline["undated_items"], 1)
+        self.assertEqual(timeline["entities"]["2"], [[1999, 1], [2001, 1]])
+        self.assertEqual(
+            timeline["entities"]["3"],
+            [[1999, 1], [2001, 1], [2006, 1]],
         )
 
 

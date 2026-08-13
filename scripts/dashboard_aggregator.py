@@ -57,7 +57,7 @@ from __future__ import annotations
 
 import logging
 import math
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 
 import pandas as pd
@@ -952,7 +952,7 @@ class DashboardAggregator:
         return {"by_role": by_role}
 
     def compute_network(self, target_id: int) -> Dict[str, Any]:
-        """TF-IDF ranked neighbor graph, per role.
+        """TF-IDF ranked neighbor graph and temporal profile, per role.
 
         Nodes[0] is the target itself (type='center', score=null).
         Neighbors are scored as ``cooc * log(N / df_x)`` and sorted by
@@ -972,6 +972,13 @@ class DashboardAggregator:
 
         Consumers must treat ``kind`` as optional: dashboards generated
         before v1.28 carry ego edges only and no ``kind`` field at all.
+
+        Payload v4 adds one ``over_time`` object to the role's root graph.
+        It stores sparse per-year item counts for the union of nodes exposed
+        by the mixed and type-specific top-50 rankings. Keeping it beside the
+        variants avoids repeating the same temporal series up to six times.
+        Counts remain item-level: one item contributes at most once to one
+        neighbour in one year, regardless of duplicate metadata values.
         """
         target_info = self.targets[target_id]
         by_role: Dict[str, Any] = {}
@@ -982,9 +989,26 @@ class DashboardAggregator:
             # one-shot iterable.
             item_keys = list(item_keys)
             cooc: Counter = Counter()
+            cooc_by_year: Dict[int, Counter] = defaultdict(Counter)
+            dated_items = 0
             for key in item_keys:
-                for o_id in self._item_neighbor_ids(key, target_id):
+                # Hooks promise a deduplicated iterable, but enforcing that
+                # contract here protects the temporal counts from malformed
+                # pipe fields without changing first-encounter tie-breaking.
+                neighbours = list(dict.fromkeys(
+                    self._item_neighbor_ids(key, target_id)
+                ))
+                for o_id in neighbours:
                     cooc[o_id] += 1
+
+                year = extract_year(
+                    self.items_meta.get(key, {}).get("pub_date") or ""
+                )
+                if year is None:
+                    continue
+                dated_items += 1
+                for o_id in neighbours:
+                    cooc_by_year[o_id][year] += 1
 
             # Filter + score
             scored: List[Dict[str, Any]] = []
@@ -1020,18 +1044,39 @@ class DashboardAggregator:
                 item_keys,
                 scored[:TOP_N_NEIGHBORS],
             )
+            ranked_by_type = {
+                entity_type: [
+                    node for node in scored
+                    if node["type"] == entity_type
+                ][:TOP_N_NEIGHBORS]
+                for entity_type in NETWORK_ENTITY_TYPES
+            }
             root_graph["by_type"] = {
                 entity_type: self._build_network_graph(
                     target_id,
                     target_info,
                     item_keys,
-                    [
-                        node for node in scored
-                        if node["type"] == entity_type
-                    ][:TOP_N_NEIGHBORS],
+                    ranked_by_type[entity_type],
                 )
                 for entity_type in NETWORK_ENTITY_TYPES
             }
+
+            # A type-specific top 50 can contain nodes outside the mixed top
+            # 50. Emit the union so every filter has its complete history,
+            # while retaining scored order for deterministic JSON output.
+            temporal_ids = {
+                node["o_id"]
+                for node in scored[:TOP_N_NEIGHBORS]
+            }
+            for type_nodes in ranked_by_type.values():
+                temporal_ids.update(node["o_id"] for node in type_nodes)
+            root_graph["over_time"] = self._build_network_timeline(
+                item_keys,
+                scored,
+                temporal_ids,
+                cooc_by_year,
+                dated_items,
+            )
 
             by_role[role] = root_graph
 
@@ -1074,6 +1119,48 @@ class DashboardAggregator:
             )
         )
         return {"nodes": nodes, "edges": edges}
+
+    def _build_network_timeline(
+        self,
+        item_keys: List[str],
+        scored: List[Dict[str, Any]],
+        kept: Set[int],
+        cooc_by_year: Dict[int, Counter],
+        dated_items: int,
+    ) -> Dict[str, Any]:
+        """Sparse year counts for the associated-entity temporal matrix.
+
+        ``year_min`` / ``year_max`` describe the focal record's complete
+        dated item span, rather than only years in which a currently visible
+        neighbour occurs. This keeps empty periods honest and makes the time
+        view line up with the dashboard's mentions timeline. Undated items
+        are reported explicitly so their absence from the matrix is visible.
+        """
+        years = [
+            year
+            for key in item_keys
+            if (year := extract_year(
+                self.items_meta.get(key, {}).get("pub_date") or ""
+            )) is not None
+        ]
+        entities: Dict[str, List[List[int]]] = {}
+        for node in scored:
+            o_id = node["o_id"]
+            if o_id not in kept:
+                continue
+            yearly = cooc_by_year.get(o_id, {})
+            entities[str(o_id)] = [
+                [int(year), int(count)]
+                for year, count in sorted(yearly.items())
+            ]
+
+        return {
+            "year_min": min(years) if years else None,
+            "year_max": max(years) if years else None,
+            "dated_items": dated_items,
+            "undated_items": max(0, len(item_keys) - dated_items),
+            "entities": entities,
+        }
 
     def _neighbour_edges(
         self,

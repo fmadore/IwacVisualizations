@@ -162,6 +162,23 @@
                 mixed.nodes = mixed.nodes.concat(byType[type].nodes.slice(1));
                 mixed.edges = mixed.edges.concat(byType[type].edges);
             });
+            var years = [1992, 1997, 2002, 2007, 2012, 2017, 2022];
+            var temporal = {
+                year_min: 1990,
+                year_max: 2024,
+                dated_items: 32,
+                undated_items: 2,
+                entities: {}
+            };
+            mixed.nodes.slice(1).forEach(function (node, index) {
+                var points = [
+                    [years[index % years.length], (index % 4) + 1],
+                    [years[(index + 3) % years.length], 1]
+                ];
+                points.sort(function (a, b) { return a[0] - b[0]; });
+                temporal.entities[String(node.o_id)] = points;
+            });
+            if (fixtureParams.get('legacy') !== '1') mixed.over_time = temporal;
 
             var data = { network: { by_role: { all: mixed } } };
             var facet = { role: 'all', subscribe: function (fn) { this.listener = fn; } };

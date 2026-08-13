@@ -1,16 +1,20 @@
 /**
  * IWAC Visualizations — Person + Entity Dashboards: Associated entities
  *
- * One analysis, two reading modes:
+ * One analysis, three reading modes:
  *
  *   - Network: the existing live canvas force graph for finding clusters.
  *   - Relational list: an exact TF-IDF ranking whose left-hand arcs retain
  *     the neighbour↔neighbour co-occurrence structure.
+ *   - Over time: the same ranking as a period matrix, with raw shared-item
+ *     counts in each cell and undated source items disclosed explicitly.
  *
  * A shared single-choice entity-type filter and per-view top-N control drive
- * both. Since payload version 3 each type is ranked from the full scored pool
+ * all three. Since payload version 3 each type is ranked from the full scored pool
  * under `by_type`; older bundles still work by filtering their mixed
  * root top 50 client-side (necessarily a weaker answer, but never a crash).
+ * Payload version 4 adds sparse yearly counts under `over_time`. The third
+ * view is simply omitted for older payloads.
  *
  * Depends on: panels.js, shared/entity-graph.js.
  */
@@ -89,6 +93,93 @@
         };
     }
 
+    function timeDataOf(roleGraph) {
+        return roleGraph && roleGraph.over_time ? roleGraph.over_time : null;
+    }
+
+    function hasTemporalData(temporal) {
+        var entities = temporal && temporal.entities;
+        if (!entities) return false;
+        return Object.keys(entities).some(function (id) {
+            return (entities[id] || []).some(function (point) {
+                return Array.isArray(point) && Number(point[1]) > 0;
+            });
+        });
+    }
+
+    function buildPeriods(temporal, requestedSize) {
+        var size = requestedSize === 10 ? 10 : 5;
+        var years = [];
+        var hasMin = temporal && temporal.year_min !== null && temporal.year_min !== undefined;
+        var hasMax = temporal && temporal.year_max !== null && temporal.year_max !== undefined;
+        var min = hasMin ? Number(temporal.year_min) : NaN;
+        var max = hasMax ? Number(temporal.year_max) : NaN;
+        if (!Number.isFinite(min) || !Number.isFinite(max)) {
+            var entities = (temporal && temporal.entities) || {};
+            Object.keys(entities).forEach(function (id) {
+                (entities[id] || []).forEach(function (point) {
+                    var year = Number(point && point[0]);
+                    if (Number.isFinite(year)) years.push(year);
+                });
+            });
+            if (!years.length) return [];
+            min = Math.min.apply(null, years);
+            max = Math.max.apply(null, years);
+        }
+        var first = Math.floor(min / size) * size;
+        var last = Math.floor(max / size) * size;
+        var periods = [];
+        for (var start = first; start <= last; start += size) {
+            var end = start + size - 1;
+            periods.push({
+                start: start,
+                end: end,
+                label: size === 10
+                    ? String(start) + 's'
+                    : String(start) + '\u2013' + String(end).slice(-2),
+                fullLabel: String(start) + '\u2013' + String(end)
+            });
+        }
+        return periods;
+    }
+
+    /** Build a presentation-neutral period matrix in the graph's rank order. */
+    function buildTimeMatrix(graph, temporal, periodSize) {
+        var periods = buildPeriods(temporal, periodSize);
+        var periodIndex = {};
+        periods.forEach(function (period, index) {
+            periodIndex[String(period.start)] = index;
+        });
+        var entities = (temporal && temporal.entities) || {};
+        var maxCount = 0;
+        var rows = neighboursOf(graph).map(function (node) {
+            var values = periods.map(function () { return 0; });
+            (entities[String(node.o_id)] || []).forEach(function (point) {
+                var year = Number(point && point[0]);
+                var count = Number(point && point[1]);
+                if (!Number.isFinite(year) || !Number.isFinite(count) || count <= 0) return;
+                var start = Math.floor(year / (periodSize === 10 ? 10 : 5)) *
+                    (periodSize === 10 ? 10 : 5);
+                var index = periodIndex[String(start)];
+                if (index === undefined) return;
+                values[index] += count;
+                if (values[index] > maxCount) maxCount = values[index];
+            });
+            return {
+                node: node,
+                values: values,
+                total: values.reduce(function (sum, count) { return sum + count; }, 0)
+            };
+        });
+        return {
+            periods: periods,
+            rows: rows,
+            maxCount: maxCount,
+            datedItems: Number((temporal && temporal.dated_items) || 0),
+            undatedItems: Number((temporal && temporal.undated_items) || 0)
+        };
+    }
+
     function buildVariants(byRole) {
         var variants = {};
         Object.keys(byRole).forEach(function (role) {
@@ -151,9 +242,13 @@
         }
 
         var variants = buildVariants(byRole);
+        var hasTemporalView = roles.some(function (role) {
+            return hasTemporalData(timeDataOf(byRole[role]));
+        });
         var activeView = 'network';
         var activeType = 'all';
-        var viewLimits = { network: 50, list: 20 };
+        var viewLimits = { network: 50, list: 20, time: 10 };
+        var periodSize = 5;
         var arcResizeObserver = null;
         var drawCurrentArcs = function () {};
 
@@ -170,10 +265,12 @@
 
         var viewGroup = choiceGroup(P.t('View'), 'iwac-vis-associated__control--view');
         var viewButtons = {};
-        [
+        var viewOptions = [
             { key: 'network', label: P.t('Network view') },
             { key: 'list', label: P.t('Relational list') }
-        ].forEach(function (option) {
+        ];
+        if (hasTemporalView) viewOptions.push({ key: 'time', label: P.t('Over time') });
+        viewOptions.forEach(function (option) {
             var button = choiceButton(option.label, function () {
                 if (activeView === option.key) return;
                 activeView = option.key;
@@ -219,16 +316,37 @@
         });
         limitControl.appendChild(limitSelect);
         controls.appendChild(limitControl);
+
+        var periodControl = P.el('label', 'iwac-vis-associated__control iwac-vis-associated__control--period');
+        periodControl.appendChild(P.el('span', 'iwac-vis-associated__control-label', P.t('Period')));
+        var periodSelect = P.el('select', 'iwac-vis-control iwac-vis-associated__period');
+        [
+            { value: 5, label: P.t('Five-year periods') },
+            { value: 10, label: P.t('Decades') }
+        ].forEach(function (period) {
+            var option = P.el('option', null, period.label);
+            option.value = String(period.value);
+            periodSelect.appendChild(option);
+        });
+        periodSelect.addEventListener('change', function () {
+            periodSize = parseInt(periodSelect.value, 10) === 10 ? 10 : 5;
+            apply(true);
+        });
+        periodControl.appendChild(periodSelect);
+        periodControl.hidden = true;
+        controls.appendChild(periodControl);
         host.appendChild(controls);
 
-        /* ---- Two views + one empty state ----------------------------- */
+        /* ---- Three views + one empty state --------------------------- */
 
         var graphHost = P.el('div', 'iwac-vis-associated__network');
         var listHost = P.el('div', 'iwac-vis-associated__list');
+        var timeHost = P.el('div', 'iwac-vis-associated__time');
         var empty = P.buildEmptyState();
         empty.hidden = true;
         host.appendChild(graphHost);
         host.appendChild(listHost);
+        host.appendChild(timeHost);
         host.appendChild(empty);
 
         var mounted = P.mountEntityGraph({ panel: panelEl.panel, chart: graphHost }, ctx, {
@@ -253,7 +371,7 @@
                     typeButtons[type].style.setProperty('--iwac-vis-entity-color', colorForType(type));
                 }
             });
-            var rows = listHost.querySelectorAll('[data-entity-type]');
+            var rows = host.querySelectorAll('[data-entity-type]');
             for (var i = 0; i < rows.length; i++) {
                 rows[i].style.setProperty(
                     '--iwac-vis-entity-color',
@@ -287,6 +405,8 @@
                     ' ' + P.formatNumber(count);
             });
             limitSelect.value = String(viewLimits[activeView]);
+            periodControl.hidden = activeView !== 'time';
+            periodSelect.value = String(periodSize);
             paintTypes();
         }
 
@@ -430,22 +550,135 @@
             }
         }
 
+        function renderTimeMatrix(graph, temporal) {
+            timeHost.innerHTML = '';
+            var matrix = buildTimeMatrix(graph, temporal, periodSize);
+            if (!matrix.rows.length || !matrix.periods.length) return;
+
+            timeHost.appendChild(P.el(
+                'p',
+                'iwac-vis-time-matrix__intro',
+                P.t('Rows retain the overall distinctiveness ranking. Each cell counts shared items with a readable year.')
+            ));
+
+            var notes = P.el('div', 'iwac-vis-time-matrix__notes');
+            notes.appendChild(P.el(
+                'span',
+                'iwac-vis-time-matrix__key',
+                P.t('Darker cells represent more shared items.')
+            ));
+            if (matrix.undatedItems > 0) {
+                notes.appendChild(P.el(
+                    'span',
+                    'iwac-vis-time-matrix__caveat',
+                    P.t('Items without a readable year are omitted: {count}.', {
+                        count: P.formatNumber(matrix.undatedItems)
+                    })
+                ));
+            }
+            timeHost.appendChild(notes);
+
+            var scroll = P.el('div', 'iwac-vis-time-matrix__scroll');
+            scroll.tabIndex = 0;
+            scroll.setAttribute('role', 'region');
+            scroll.setAttribute('aria-label', P.t('Associated entities over time'));
+            var table = P.el('table', 'iwac-vis-time-matrix__table');
+            var caption = P.el('caption', 'iwac-vis-time-matrix__caption',
+                P.t('Associated entities over time'));
+            table.appendChild(caption);
+
+            var thead = document.createElement('thead');
+            var headRow = document.createElement('tr');
+            var entityHead = P.el('th', 'iwac-vis-time-matrix__entity-head',
+                P.t('Distinctiveness ranking'));
+            entityHead.scope = 'col';
+            headRow.appendChild(entityHead);
+            matrix.periods.forEach(function (period) {
+                var th = P.el('th', 'iwac-vis-time-matrix__period-head');
+                th.scope = 'col';
+                var abbr = P.el('abbr', null, period.label);
+                abbr.title = period.fullLabel;
+                th.appendChild(abbr);
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            var tbody = document.createElement('tbody');
+            matrix.rows.forEach(function (rowData, index) {
+                var node = rowData.node;
+                var type = node.type || 'Sujets';
+                var tr = document.createElement('tr');
+                tr.dataset.entityType = type;
+
+                var entity = P.el('th', 'iwac-vis-time-matrix__entity');
+                entity.scope = 'row';
+                entity.dataset.entityType = type;
+                entity.style.setProperty('--iwac-vis-entity-color', colorForType(type));
+                entity.appendChild(P.el('span', 'iwac-vis-time-matrix__dot'));
+                var rank = String(index + 1);
+                if (rank.length < 2) rank = '0' + rank;
+                entity.appendChild(P.el('span', 'iwac-vis-time-matrix__rank', rank));
+                var name = P.el('a', 'iwac-vis-time-matrix__name',
+                    node.title || ('#' + node.o_id));
+                name.href = ((ctx && ctx.siteBase) || '') + '/item/' + node.o_id;
+                name.setAttribute('aria-label',
+                    (node.title || ('#' + node.o_id)) + ', ' +
+                    P.t('entity_type_' + type) + ', ' +
+                    P.t('mentions_count', { count: P.formatNumber(node.cooc || 0) }));
+                entity.appendChild(name);
+                var mentions = P.el('span', 'iwac-vis-time-matrix__mentions',
+                    P.formatNumber(node.cooc || 0));
+                mentions.title = P.t('Overall mentions');
+                entity.appendChild(mentions);
+                tr.appendChild(entity);
+
+                rowData.values.forEach(function (count, periodIndex) {
+                    var period = matrix.periods[periodIndex];
+                    var cell = P.el('td', 'iwac-vis-time-matrix__cell');
+                    cell.dataset.entityType = type;
+                    cell.style.setProperty('--iwac-vis-entity-color', colorForType(type));
+                    var opacity = count > 0 && matrix.maxCount > 0
+                        ? 0.14 + Math.sqrt(count / matrix.maxCount) * 0.72
+                        : 0;
+                    cell.style.setProperty('--iwac-vis-time-opacity', String(opacity));
+                    cell.classList.toggle('iwac-vis-time-matrix__cell--zero', count === 0);
+                    cell.textContent = count ? P.formatNumber(count) : '\u2014';
+                    cell.setAttribute('aria-label', P.t('shared_items_in_period', {
+                        count: P.formatNumber(count),
+                        period: period.fullLabel
+                    }));
+                    tr.appendChild(cell);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            scroll.appendChild(table);
+            timeHost.appendChild(scroll);
+            paintTypes();
+        }
+
         function apply(warm) {
             refreshControls();
             var graph = selectedGraph(false);
             var hasNodes = neighboursOf(graph).length > 0;
+            var temporal = timeDataOf(roleGraph());
+            var hasVisibleData = hasNodes &&
+                (activeView !== 'time' || hasTemporalData(temporal));
 
             host.classList.toggle('iwac-vis-associated--list', activeView === 'list');
-            host.classList.toggle('iwac-vis-associated--empty', !hasNodes);
-            empty.hidden = hasNodes;
+            host.classList.toggle('iwac-vis-associated--time', activeView === 'time');
+            host.classList.toggle('iwac-vis-associated--empty', !hasVisibleData);
+            empty.hidden = hasVisibleData;
 
             if (activeView === 'network') {
-                graphHost.hidden = !hasNodes;
+                graphHost.hidden = !hasVisibleData;
                 listHost.hidden = true;
+                timeHost.hidden = true;
                 if (mounted) {
                     var roleKey = byRole[facet.role] ? facet.role
                         : (byRole.all ? 'all' : roles[0]);
-                    var ok = hasNodes && mounted.show(
+                    var ok = hasVisibleData && mounted.show(
                         graphKey(roleKey, activeType, viewLimits.network),
                         !!warm
                     );
@@ -453,11 +686,18 @@
                     graphHost.classList.toggle('iwac-vis-graph-host--empty', !ok);
                     if (ok) requestAnimationFrame(function () { mounted.graph.resize(); });
                 }
+            } else if (activeView === 'list') {
+                graphHost.hidden = true;
+                listHost.hidden = !hasVisibleData;
+                timeHost.hidden = true;
+                if (hasVisibleData) renderArcList(graph);
+                else listHost.innerHTML = '';
             } else {
                 graphHost.hidden = true;
-                listHost.hidden = !hasNodes;
-                if (hasNodes) renderArcList(graph);
-                else listHost.innerHTML = '';
+                listHost.hidden = true;
+                timeHost.hidden = !hasVisibleData;
+                if (hasVisibleData) renderTimeMatrix(graph, temporal);
+                else timeHost.innerHTML = '';
             }
         }
 
@@ -478,6 +718,7 @@
     ns.personDashboard.network = {
         render: render,
         graphForType: graphForType,
-        limitGraph: limitGraph
+        limitGraph: limitGraph,
+        buildTimeMatrix: buildTimeMatrix
     };
 })();
