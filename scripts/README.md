@@ -538,9 +538,13 @@ python3 scripts/generate_person_dashboards.py --repo myuser/fork  # alternate da
 ```
 
 Neighbor ranking is TF-IDF (`score = cooc × log(N_persons / df)`) with
-a minimum co-occurrence floor of 2 (override via `--min-cooccurrence`)
-and a top-50 cap per role slice, so distinctive relationships outrank
-globally-common entities.
+a minimum co-occurrence floor of 2 (override via `--min-cooccurrence`).
+The mixed graph keeps a top-50 cap per role slice. Payload version 3 also
+emits `by_type` graphs for Personnes / Organisations / Lieux / Sujets /
+Événements, each capped only after filtering the complete scored pool, so
+the panel's type control means "top 50 of this type" rather than "members
+of this type that happened to enter the mixed top 50". The root `nodes` /
+`edges` keys stay unchanged for older clients.
 
 The generator joins back into content subsets via string-match on
 `subject` (role: `subject`) and `author` (role: `creator`) fields
@@ -571,4 +575,6 @@ section in a `by_role.all` envelope so the person panel JS modules can
 be reused unchanged with a no-op facet. Like the person generator,
 this is a thin subclass of `dashboard_aggregator.DashboardAggregator`
 — it overrides the target filter (`--type`) and the collapsed
-subject+spatial reference set, nothing else.
+subject+spatial reference set, nothing else. Its payload version 3 network
+therefore carries the same correctly ranked `by_type` variants described
+above.

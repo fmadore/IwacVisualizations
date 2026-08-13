@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC associated entities fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        document.documentElement.lang = fixtureParams.get('lang') || 'en';
+    </script>
+    <style>
+        :root {
+            --primary: #a33312;
+            --secondary: #394f68;
+            --ink: #171717;
+            --ink-strong: #090909;
+            --ink-light: #45484d;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --surface-sunken: #f4f0ed;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+        }
+        body {
+            margin: 0;
+            padding: 1rem;
+            background: #f1eeea;
+            color: var(--ink);
+            font-family: "Public Sans", system-ui, sans-serif;
+        }
+        body[data-theme="dark"] {
+            --primary: #ec653f;
+            --secondary: #708093;
+            --ink: #e7e4df;
+            --ink-strong: #f7f5f1;
+            --ink-light: #b5b0aa;
+            --muted: #aaa49f;
+            --surface: #110c08;
+            --surface-raised: #1a1510;
+            --surface-sunken: #0c0805;
+            --border: #554b41;
+            --border-light: #352f28;
+            background: #080503;
+        }
+        main { max-width: 1180px; margin: 0 auto; }
+        .iwac-vis-panel { background: var(--surface); }
+        .fixture-force {
+            display: grid;
+            place-items: center;
+            height: 100%;
+            border: 1px dashed var(--border);
+            color: var(--muted);
+        }
+    </style>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+    <link rel="stylesheet" href="/asset/css/blocks/person-dashboard.min.css">
+</head>
+<body>
+    <script>
+        if (fixtureParams.get('theme') === 'dark') document.body.dataset.theme = 'dark';
+    </script>
+    <main>
+        <article class="iwac-vis-panel iwac-vis-panel--wide" id="fixture-panel">
+            <h4 data-title-en="Associated entities" data-title-fr="Entités associées">Associated entities</h4>
+            <p class="iwac-vis-panel-desc">
+                The authority records that appear most distinctively alongside this one.
+            </p>
+            <div class="iwac-vis-chart" id="fixture-chart"></div>
+        </article>
+    </main>
+    <script src="/asset/js/iwac-i18n.min.js"></script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script>
+        (function () {
+            var ns = window.IWACVis;
+            ns.getPalette = function () {
+                return ['#a33312', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574'];
+            };
+            ns.entityGraph = {
+                colorForType: function (type) {
+                    var types = ['center', 'Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];
+                    return ns.getPalette()[Math.max(0, types.indexOf(type))];
+                }
+            };
+            ns.registerRenderer = function (_el, repaint) {
+                window.__fixtureThemeRepaint = repaint;
+                return { remove: function () {} };
+            };
+            ns.panels.mountEntityGraph = function (panelEl, _ctx, opts) {
+                window.__mountedVariants = opts.variants;
+                panelEl.chart.classList.add('iwac-vis-graph-host', 'iwac-vis-graph-host--force');
+                var placeholder = document.createElement('div');
+                placeholder.className = 'fixture-force';
+                placeholder.textContent = 'Force graph fixture';
+                panelEl.chart.appendChild(placeholder);
+                return {
+                    graph: { resize: function () {} },
+                    show: function (key) {
+                        panelEl.chart.dataset.variant = key;
+                        return !!(opts.variants[key] && opts.variants[key].nodes.length > 1);
+                    },
+                    clear: function () {
+                        panelEl.chart.dataset.variant = '';
+                    }
+                };
+            };
+        })();
+    </script>
+    <script src="/asset/js/charts/person-dashboard/network.min.js"></script>
+    <script>
+        (function () {
+            var TYPES = ['Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];
+            var starts = {
+                'Personnes': 100,
+                'Organisations': 300,
+                'Lieux': 400,
+                'Sujets': 500,
+                'Événements': 600
+            };
+            var counts = {
+                'Personnes': 24,
+                'Organisations': 4,
+                'Lieux': 3,
+                'Sujets': 2,
+                'Événements': 1
+            };
+            var centre = { o_id: 1, title: 'Authority record', type: 'center', cooc: null, score: null };
+
+            function graphFor(type) {
+                var nodes = [centre];
+                var edges = [];
+                for (var i = 0; i < counts[type]; i++) {
+                    var id = starts[type] + i;
+                    nodes.push({
+                        o_id: id,
+                        title: type + ' ' + String(i + 1).padStart(2, '0'),
+                        type: type,
+                        cooc: counts[type] - i + 2,
+                        score: 100 - i
+                    });
+                    edges.push({ source: 1, target: id, weight: 100 - i, cooc: counts[type] - i + 2, kind: 'ego' });
+                    if (i > 0) {
+                        edges.push({ source: id - 1, target: id, weight: (i % 4) + 2, cooc: (i % 4) + 2, kind: 'cross' });
+                    }
+                    if (i > 3 && i % 3 === 0) {
+                        edges.push({ source: id - 3, target: id, weight: 2, cooc: 2, kind: 'cross' });
+                    }
+                }
+                return { nodes: nodes, edges: edges };
+            }
+
+            var byType = {};
+            TYPES.forEach(function (type) { byType[type] = graphFor(type); });
+            var mixed = { nodes: [centre], edges: [], by_type: byType };
+            TYPES.forEach(function (type) {
+                mixed.nodes = mixed.nodes.concat(byType[type].nodes.slice(1));
+                mixed.edges = mixed.edges.concat(byType[type].edges);
+            });
+
+            var data = { network: { by_role: { all: mixed } } };
+            var facet = { role: 'all', subscribe: function (fn) { this.listener = fn; } };
+            window.IWACVis.personDashboard.network.render(
+                {
+                    panel: document.getElementById('fixture-panel'),
+                    chart: document.getElementById('fixture-chart')
+                },
+                data,
+                facet,
+                { siteBase: '/s/iwac' }
+            );
+
+            if (document.documentElement.lang.toLowerCase().indexOf('fr') === 0) {
+                document.querySelector('#fixture-panel h4').textContent = 'Entités associées';
+            }
+        })();
+    </script>
+</body>
+</html>

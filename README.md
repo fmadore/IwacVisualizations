@@ -43,6 +43,14 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.44.0 — two ways to read associated entities
+
+The **Associated entities / Entités associées** panel on person, organisation, place, subject and event authority pages now treats the force graph and an exact ranked reading as two views of the same analysis. **Network** remains the default for discovering clusters. **Relational list** lays the TF-IDF ranking out as linked authority names with raw mention counts; arcs on its left preserve the neighbour-to-neighbour co-occurrences that structure the force graph. Hovering or focusing a row isolates its arcs and connected rows. On narrow screens the ranked list remains and the decorative curves leave, rather than being squeezed into an unreadable strip.
+
+Both views share single-choice authority-type filters for Persons, Organisations, Places, Subjects and Events, plus a 10 / 20 / 30 / 50 limit. The generator now ranks each type from the full qualified-neighbour pool before taking its top 50. That avoids the misleading shortcut of filtering the mixed top 50, which could omit a highly ranked person merely because organisations occupied all fifty mixed slots. Payload version 3 adds these `by_type` graphs without changing the legacy root `nodes` / `edges` shape, so new module code degrades safely against an older data bundle.
+
+The implementation stays within the existing shared person/entity panel: one request, one panel title and description, one set of type semantics and theme colours. The relational view is DOM + SVG rather than a screenshot or a second charting dependency, so names are links, controls are keyboard operable, row focus is visible, and the structure works in French and English. Generator and browser regression tests cover true per-type ranking, old-bundle fallback behavior, both view modes, filters, limits, highlighting, localization, dark mode and the mobile no-overflow layout.
+
 ### v1.43.0 — MapLibre popups stay inside their maps
 
 Map popups now size themselves against the map container rather than the browser viewport. MapLibre's documented `padding` option influences automatic anchor selection, but cannot place a box that is taller than the space on both sides of its marker; the person-dashboard popup in particular could therefore open below a West African marker and continue past the panel edge. The shared popup factory now caps rich content at the largest height its automatic top/bottom anchor can always place, applies the corresponding width constraint for narrow embeds, and recalculates both after late content insertion, resize, and fullscreen changes. Long article lists keep their existing internal scroll and pagination.

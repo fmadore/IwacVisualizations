@@ -244,7 +244,7 @@ class PersonDashboardGenerator(DashboardAggregator):
         person_info = self.targets[person_o_id]
 
         data: Dict[str, Any] = {
-            "version": 2,
+            "version": 3,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "person": self._build_person_header(person_info),
         }

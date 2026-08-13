@@ -159,6 +159,18 @@ DEFAULT_MIN_COOCCURRENCE = 2
 # Top cap per target, per role slice, for the neighbor network panel.
 TOP_N_NEIGHBORS = 50
 
+# Authority types offered by the Associated entities panel's shared filter.
+# Keep this order aligned with shared/entity-graph.js TYPE_SLOTS (minus the
+# centre): the JSON keys are raw index ``Type`` values, while the client owns
+# their translated display labels and palette slots.
+NETWORK_ENTITY_TYPES = (
+    "Personnes",
+    "Organisations",
+    "Lieux",
+    "Sujets",
+    "Événements",
+)
+
 # Minimum co-occurrence between two NEIGHBOURS before the network draws an
 # edge between them. The ego edges (target → neighbour) are the panel's
 # primary layer and keep their own DEFAULT_MIN_COOCCURRENCE floor; this
@@ -943,8 +955,12 @@ class DashboardAggregator:
         """TF-IDF ranked neighbor graph, per role.
 
         Nodes[0] is the target itself (type='center', score=null).
-        Neighbors are scored as ``cooc * log(N / df_x)``, sorted by
-        score descending, capped at ``TOP_N_NEIGHBORS``.
+        Neighbors are scored as ``cooc * log(N / df_x)`` and sorted by
+        score descending. The legacy root graph keeps the top
+        ``TOP_N_NEIGHBORS`` overall; additive ``by_type`` graphs each take
+        their own top N from the COMPLETE scored pool. That distinction is
+        essential: filtering the already-truncated overall top 50 would mean
+        "persons that happened to make the mixed top 50", not "top persons".
 
         Two layers of edges:
 
@@ -994,31 +1010,70 @@ class DashboardAggregator:
                 })
 
             scored.sort(key=lambda e: e["score"], reverse=True)
-            scored = scored[:TOP_N_NEIGHBORS]
 
-            nodes: List[Dict[str, Any]] = [{
-                "o_id": target_id,
-                "title": target_info["title"],
-                "type": "center",
-                "cooc": None,
-                "score": None,
-            }]
-            nodes.extend(scored)
-
-            edges: List[Dict[str, Any]] = [{
-                "source": target_id,
-                "target": n["o_id"],
-                "weight": n["score"],
-                "cooc": n["cooc"],
-                "kind": "ego",
-            } for n in scored]
-            edges.extend(
-                self._neighbour_edges(target_id, item_keys, {n["o_id"] for n in scored})
+            # The root stays byte-shape compatible with pre-v1.44 clients.
+            # New clients discover ``by_type`` and can switch to a correctly
+            # ranked single-type graph without another request.
+            root_graph = self._build_network_graph(
+                target_id,
+                target_info,
+                item_keys,
+                scored[:TOP_N_NEIGHBORS],
             )
+            root_graph["by_type"] = {
+                entity_type: self._build_network_graph(
+                    target_id,
+                    target_info,
+                    item_keys,
+                    [
+                        node for node in scored
+                        if node["type"] == entity_type
+                    ][:TOP_N_NEIGHBORS],
+                )
+                for entity_type in NETWORK_ENTITY_TYPES
+            }
 
-            by_role[role] = {"nodes": nodes, "edges": edges}
+            by_role[role] = root_graph
 
         return {"by_role": by_role}
+
+    def _build_network_graph(
+        self,
+        target_id: int,
+        target_info: Dict[str, Any],
+        item_keys: List[str],
+        scored: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Assemble one already-ranked network slice.
+
+        Kept separate from :meth:`compute_network` so the mixed graph and the
+        five type-specific variants share exactly the same node/edge contract.
+        ``scored`` is not copied: callers select and cap it before entering.
+        """
+        nodes: List[Dict[str, Any]] = [{
+            "o_id": target_id,
+            "title": target_info["title"],
+            "type": "center",
+            "cooc": None,
+            "score": None,
+        }]
+        nodes.extend(scored)
+
+        edges: List[Dict[str, Any]] = [{
+            "source": target_id,
+            "target": node["o_id"],
+            "weight": node["score"],
+            "cooc": node["cooc"],
+            "kind": "ego",
+        } for node in scored]
+        edges.extend(
+            self._neighbour_edges(
+                target_id,
+                item_keys,
+                {node["o_id"] for node in scored},
+            )
+        )
+        return {"nodes": nodes, "edges": edges}
 
     def _neighbour_edges(
         self,

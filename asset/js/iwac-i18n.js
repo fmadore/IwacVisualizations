@@ -163,7 +163,7 @@
             'desc_mentions_timeline':      'Articles, publications and references mentioning this person each year, stacked by country of publication.',
             'desc_top_newspapers':         'News and periodical sources where this person appears most often (top 15).',
             'desc_countries_covered':      'Distribution of mentions by country of publication of the source.',
-            'desc_associated_entities':    'The 50 entities (persons, organisations, places, subjects, events) that appear most distinctively alongside this person. The ranking (TF-IDF) favours names peculiar to this person over names that turn up everywhere in the collection. Thick lines run from this person to each entity; faint dashed lines join entities that keep appearing together. Drag a node to rearrange the graph, or click one to see its connections.',
+            'desc_associated_entities':    'The entities that appear most distinctively alongside this person. The ranking (TF-IDF) favours names peculiar to this person over names that turn up everywhere in the collection. Network view reveals clusters; Relational list gives the exact ranking and joins entities that repeatedly appear together. Filter by authority type or change how many are shown.',
             'desc_associated_locations':   'Places mentioned in items where this person appears as creator or subject, taken from each item\u2019s spatial coverage field and from place tags matched against the IWAC authority list.',
 
             // New shared panels (person + entity)
@@ -202,7 +202,7 @@
             'desc_entity_mentions_timeline':    'Articles, publications and references mentioning this entity each year, stacked by country of publication.',
             'desc_entity_top_newspapers':       'News and periodical sources where this entity is named most often (top 15).',
             'desc_entity_countries_covered':    'Distribution of mentions by country of publication of the source.',
-            'desc_entity_associated_entities':  'The 50 entities (persons, organisations, places, subjects, events) that appear most distinctively alongside this one. The ranking (TF-IDF) favours names peculiar to this entity over names that turn up everywhere in the collection. Thick lines run from this entity to each of them; faint dashed lines join entities that keep appearing together. Drag a node to rearrange the graph, or click one to see its connections.',
+            'desc_entity_associated_entities':  'The entities that appear most distinctively alongside this one. The ranking (TF-IDF) favours names peculiar to this entity over names that turn up everywhere in the collection. Network view reveals clusters; Relational list gives the exact ranking and joins entities that repeatedly appear together. Filter by authority type or change how many are shown.',
             'desc_entity_associated_locations': 'Places mentioned in the same items as this entity, taken from each item\u2019s spatial coverage field and from place tags matched against the IWAC authority list.',
 
             // Network panel toolbar + canvas force graph.
@@ -214,6 +214,15 @@
             'connections_count':  '{count} connections',
             'one_connection':     '1 connection',
             'and_n_more':         'and {count} more',
+
+            // Associated entities — dual-view controls + arc list.
+            'Network view': 'Network',
+            'Relational list': 'Relational list',
+            'All entities': 'All',
+            'Number shown': 'Number shown',
+            'Distinctiveness ranking': 'Distinctiveness ranking',
+            'Ranked by distinctiveness. Curves connect entities that repeatedly appear together.':
+                'Ranked by distinctiveness. Curves connect entities that repeatedly appear together.',
 
             // Entity type labels (legend + tooltips of the entity graphs)
             'entity_type_center': 'Centre',
@@ -625,14 +634,14 @@
             'desc_mentions_timeline':      'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette personne par ann\u00e9e, empil\u00e9 par pays de publication.',
             'desc_top_newspapers':         'Journaux et p\u00e9riodiques o\u00f9 cette personne appara\u00eet le plus souvent (top 15).',
             'desc_countries_covered':      'R\u00e9partition des mentions par pays de publication de la source.',
-            'desc_associated_entities':    'Les 50 entit\u00e9s (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) qui apparaissent le plus distinctement aux c\u00f4t\u00e9s de cette personne. Le classement (TF-IDF) privil\u00e9gie les noms qui lui sont propres sur ceux qui reviennent partout dans la collection. Les traits \u00e9pais relient cette personne \u00e0 chaque entit\u00e9 ; les pointill\u00e9s discrets relient les entit\u00e9s qui reviennent ensemble. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe ou cliquez dessus pour voir ses liens.',
+            'desc_associated_entities':    'Les entit\u00e9s qui apparaissent le plus distinctement aux c\u00f4t\u00e9s de cette personne. Le classement (TF-IDF) privil\u00e9gie les noms qui lui sont propres sur ceux qui reviennent partout dans la collection. La vue R\u00e9seau r\u00e9v\u00e8le les groupes ; la Liste relationnelle donne le classement exact et relie les entit\u00e9s qui reviennent ensemble. Filtrez par type de notice d\u2019autorit\u00e9 ou modifiez le nombre affich\u00e9.',
             'desc_associated_locations':   'Lieux mentionn\u00e9s dans les notices o\u00f9 cette personne appara\u00eet comme cr\u00e9ateur ou sujet, tir\u00e9s du champ de couverture spatiale et des balises de lieux rapproch\u00e9es de la liste d\u2019autorit\u00e9 IWAC.',
 
             // Entity dashboard (Lieux / Organisations / Sujets / Événements) — panel descriptions
             'desc_entity_mentions_timeline':    'Nombre d\u2019articles, publications et r\u00e9f\u00e9rences mentionnant cette entit\u00e9 par ann\u00e9e, empil\u00e9 par pays de publication.',
             'desc_entity_top_newspapers':       'Journaux et p\u00e9riodiques o\u00f9 cette entit\u00e9 est nomm\u00e9e le plus souvent (top 15).',
             'desc_entity_countries_covered':    'R\u00e9partition des mentions par pays de publication de la source.',
-            'desc_entity_associated_entities':  'Les 50 entit\u00e9s (personnes, organisations, lieux, sujets, \u00e9v\u00e9nements) qui apparaissent le plus distinctement aux c\u00f4t\u00e9s de celle-ci. Le classement (TF-IDF) privil\u00e9gie les noms qui lui sont propres sur ceux qui reviennent partout dans la collection. Les traits \u00e9pais relient cette entit\u00e9 \u00e0 chacune d\u2019elles ; les pointill\u00e9s discrets relient les entit\u00e9s qui reviennent ensemble. Faites glisser un n\u0153ud pour r\u00e9organiser le graphe ou cliquez dessus pour voir ses liens.',
+            'desc_entity_associated_entities':  'Les entit\u00e9s qui apparaissent le plus distinctement aux c\u00f4t\u00e9s de celle-ci. Le classement (TF-IDF) privil\u00e9gie les noms qui lui sont propres sur ceux qui reviennent partout dans la collection. La vue R\u00e9seau r\u00e9v\u00e8le les groupes ; la Liste relationnelle donne le classement exact et relie les entit\u00e9s qui reviennent ensemble. Filtrez par type de notice d\u2019autorit\u00e9 ou modifiez le nombre affich\u00e9.',
             'desc_entity_associated_locations': 'Lieux mentionn\u00e9s dans les m\u00eames notices que cette entit\u00e9, tir\u00e9s du champ de couverture spatiale et des balises de lieux rapproch\u00e9es de la liste d\u2019autorit\u00e9 IWAC.',
 
             // New shared panels (person + entity)
@@ -693,6 +702,14 @@
             'connections_count':            '{count} liens',
             'one_connection':               '1 lien',
             'and_n_more':                   'et {count} autres',
+            'View':                         'Vue',
+            'Network view':                 'R\u00e9seau',
+            'Relational list':              'Liste relationnelle',
+            'All entities':                 'Toutes',
+            'Number shown':                 'Nombre affich\u00e9',
+            'Distinctiveness ranking':      'Classement par sp\u00e9cificit\u00e9',
+            'Ranked by distinctiveness. Curves connect entities that repeatedly appear together.':
+                'Classement par sp\u00e9cificit\u00e9. Les courbes relient les entit\u00e9s qui reviennent ensemble.',
             'Network graph. Use the arrow keys to move between connected entities and Enter to select one.':
                 'Graphe de r\u00e9seau. Utilisez les fl\u00e8ches pour circuler entre les entit\u00e9s reli\u00e9es et Entr\u00e9e pour en s\u00e9lectionner une.',
             'Network of the entities most associated with this record. Use the arrow keys to move between them and Enter to select one.':

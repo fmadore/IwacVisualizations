@@ -324,8 +324,14 @@
             return null;
         }
 
-        var legend = buildLegend(graph, categories, colorOf);
-        host.appendChild(legend.el);
+        // Some panels provide a stronger, shared type control above both a
+        // graph and an alternate reading view. In that case the control is
+        // already the legend and rendering a second row of category toggles
+        // would present two different filtering models for the same data.
+        var legend = spec.showLegend === false
+            ? { el: null, refresh: function () {} }
+            : buildLegend(graph, categories, colorOf);
+        if (legend.el) host.appendChild(legend.el);
 
         var card = buildCard(graph, spec);
         stage.appendChild(card.el);

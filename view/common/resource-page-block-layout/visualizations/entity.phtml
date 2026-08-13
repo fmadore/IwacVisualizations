@@ -18,8 +18,8 @@ echo $this->partial('common/iwac-block-shell', [
         'blockCss' => 'person-dashboard',
         'needs' => [
             'maplibre'     => true,
-            // Associated entities is a canvas force graph (d3-force), not an
-            // ECharts series — see person-dashboard/network.js.
+            // Associated entities offers a d3-force canvas and a DOM/SVG
+            // relational list — neither is an ECharts series.
             'd3'           => true,
             'chartOptions' => true,
             'facetButtons' => true,

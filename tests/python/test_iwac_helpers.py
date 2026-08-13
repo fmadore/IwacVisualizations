@@ -461,5 +461,48 @@ class DashboardHeatmapTests(unittest.TestCase):
         self.assertEqual(grid["months"], list(range(1, 13)))
 
 
+class DashboardNetworkTests(unittest.TestCase):
+    class MiniAggregator(dashboard_aggregator.DashboardAggregator):
+        def _role_slices(self, _target_id):
+            yield "all", ["item-1"]
+
+        def _item_neighbor_ids(self, item_key, _exclude):
+            return self.neighbours[item_key]
+
+    def test_type_rankings_use_the_full_pool_not_the_mixed_top_fifty(self) -> None:
+        agg = self.MiniAggregator(ROOT, min_cooccurrence=1)
+        target_id = 1
+        organisation_ids = list(range(100, 151))  # 51 ties, inserted first
+        person_id = 999
+        agg.neighbours = {"item-1": organisation_ids + [person_id]}
+        agg.targets = {
+            target_id: {"o_id": target_id, "title": "Centre", "type": "Personnes"}
+        }
+        agg.id_to_entity = {
+            **{
+                o_id: {"o_id": o_id, "title": f"Organisation {o_id}", "type": "Organisations"}
+                for o_id in organisation_ids
+            },
+            person_id: {"o_id": person_id, "title": "Person outside mixed top 50", "type": "Personnes"},
+        }
+        agg.df = {o_id: 1 for o_id in organisation_ids + [person_id]}
+        agg.n_targets = 100
+
+        graph = agg.compute_network(target_id)["by_role"]["all"]
+        mixed_ids = {node["o_id"] for node in graph["nodes"]}
+        person_ids = {node["o_id"] for node in graph["by_type"]["Personnes"]["nodes"]}
+
+        # Root shape/cap stays compatible with older clients: centre + top 50.
+        self.assertEqual(len(graph["nodes"]), 51)
+        self.assertNotIn(person_id, mixed_ids)
+        # The Persons filter answers "top persons", not "persons among that
+        # mixed top 50", so the tied person remains discoverable.
+        self.assertEqual(person_ids, {target_id, person_id})
+        self.assertEqual(
+            list(graph["by_type"]),
+            list(dashboard_aggregator.NETWORK_ENTITY_TYPES),
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

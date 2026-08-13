@@ -52,6 +52,14 @@
         'article'
     ];
 
+    /** Current theme-aware colour for one raw IWAC entity type. */
+    function colorForType(type) {
+        var palette = (ns.getPalette && ns.getPalette()) || ['#ce4115'];
+        var slot = TYPE_SLOTS.indexOf(type);
+        if (slot < 0) slot = TYPE_SLOTS.length;
+        return palette[slot % palette.length];
+    }
+
     /** Node radius in px (diameter), from its distinctiveness score. */
     function sizeOf(node, maxScore) {
         if (node.type === 'center') return 56;
@@ -233,6 +241,7 @@
             categoryName: typeLabel,
             itemUrl: function (node) { return node.url; },
             announce: announce,
+            showLegend: opts.showLegend,
             downloadName: opts.downloadName,
             ariaLabel: opts.ariaLabel
         });
@@ -262,5 +271,9 @@
         };
     };
 
-    ns.entityGraph = { TYPE_SLOTS: TYPE_SLOTS, sizeOf: sizeOf };
+    ns.entityGraph = {
+        TYPE_SLOTS: TYPE_SLOTS,
+        sizeOf: sizeOf,
+        colorForType: colorForType
+    };
 })();
