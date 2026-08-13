@@ -96,7 +96,7 @@ python3 scripts/generate_collection_overview.py --minify     # compact JSON
     "articles": 12287, "publications": 1501, "documents": 26,
     "audiovisual": 1146, "references": 864, "index_entries": 4697,
     "total_content": 13859, "total_words": 12345678,
-    "audiovisual_minutes": 16412, "video_channels": 5,
+    "audiovisual_minutes": 16412, "video_channels": 4,
     "countries": 6, "languages": 8,
     "year_min": 1960, "year_max": 2025
   },
