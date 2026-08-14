@@ -17,7 +17,7 @@ block (GitHub issue #14) — a dossier on secularism in the IWAC corpus:
     asset/data/laicite-seasonality.json   # Gregorian vs lunar month profile
     asset/data/laicite-actors.json        # co-occurring persons / organisations
     asset/data/laicite-arenas.json        # frame x decade x country shares
-    asset/data/laicite-sentiment.json     # three-model AI framing vs a baseline
+    asset/data/laicite-sentiment.json     # per-model AI framing vs a baseline
     asset/data/laicite-places.json        # geocoded spatial mentions
     asset/data/laicite-references.json    # the scholarship, on its own axis
     asset/data/laicite-semantic.json      # UMAP map of the press half
@@ -145,6 +145,7 @@ from iwac_utils import (
     parse_coordinates,
     parse_pipe_separated,
     parse_standard_args,
+    present_sentiment_models,
     resolve_sentiment_columns,
     save_json,
     sentiment_columns,
@@ -177,7 +178,7 @@ SUBSET_COLUMNS: Dict[str, List[str]] = {
         # lexical richness, both precomputed upstream. Two floats per row,
         # so no meaningful memory cost next to the columns above.
         "Lisibilite_OCR", "Richesse_Lexicale_OCR",
-        # The three-model AI sentiment (view 9). load_dataset_safe keeps
+        # The per-model AI sentiment (view 9). load_dataset_safe keeps
         # whichever of these exist and logs the rest, so a snapshot that
         # predates a model swap still projects. `articles` is the only
         # subset carrying these columns.
@@ -797,7 +798,7 @@ class LaiciteGenerator:
         return rec
 
     def _row_sentiment(self, row: pd.Series) -> Dict[str, Any]:
-        """Pull the three-model AI sentiment off one `articles` row.
+        """Pull the per-model AI sentiment off one `articles` row.
 
         Only the scored fields; the free-text justifications are never
         aggregated (the item page renders those straight from Omeka).
@@ -1970,7 +1971,7 @@ class LaiciteGenerator:
         """AI framing of laïcité coverage (view 9).
 
         `articles` only — the sentiment annotation exists on no other
-        subset. Three models are reported side by side rather than averaged:
+        subset. Models are reported side by side rather than averaged:
         they disagree, and an average would hide both the disagreement and
         the fact that each figure is model output rather than catalogued
         metadata.
@@ -1994,7 +1995,12 @@ class LaiciteGenerator:
         """
         scans = self.scan_all()
         articles = [s for s in scans if s.subset == "articles"]
-        models = [m for m in SENTIMENT_MODELS if self._sentiment_cols.get(m)]
+        # `self._sentiment_cols[m]` is a dict of three Nones for a model
+        # with no columns, and a non-empty dict is truthy — the obvious
+        # `if self._sentiment_cols.get(m)` kept every model in
+        # SENTIMENT_MODELS and gave the block a picker entry backed by
+        # nothing. present_sentiment_models tests the values.
+        models = present_sentiment_models(self._sentiment_cols)
 
         by_model: Dict[str, Any] = {}
         for model in models:
@@ -2081,16 +2087,16 @@ class LaiciteGenerator:
             "corpus_items": self.subset_totals.get("articles", 0),
             "min_newspaper_items": self.min_newspaper_items,
             "by_model": by_model,
-            # Derived from SENTIMENT_MODELS rather than spelled out: this
-            # sentence named the January-February 2026 generation-1 models
-            # for one release after the generator had already been
+            # Derived from the resolved roster rather than spelled out:
+            # this sentence named the January-February 2026 generation-1
+            # models for one release after the generator had already been
             # repointed at the generation-2 columns, i.e. it told readers
-            # the wrong three models had produced the numbers on screen.
-            # A hand-maintained list beside a constant is a list that goes
-            # stale.
+            # the wrong models had produced the numbers on screen. A
+            # hand-maintained list beside a constant is a list that goes
+            # stale — and so is a hand-written count, hence no "Three".
             "ai_note": (
                 "These values are model output, not catalogued metadata. "
-                "Three models annotated the corpus independently: "
+                "Each of these models annotated the corpus independently: "
                 + ", ".join(m.replace("_", "-") for m in models[:-1])
                 + (" and " if len(models) > 1 else "")
                 + (models[-1].replace("_", "-") if models else "")

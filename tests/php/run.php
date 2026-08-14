@@ -236,6 +236,11 @@ namespace {
         'iwac:gpt56LunaPolarite' => ['hidden'],
         'iwac:deepseekV4Flash0731SubjectiviteJustification' => ['hidden'],
         'iwac:deepseekV4FlashCentralite' => ['hidden'],
+        // Gemma joined the panel mid-campaign. A stem missing from
+        // SENTIMENT_MODEL_STEMS is not a quiet degradation: its six raw
+        // rating rows, justification prose included, appear on every
+        // article the run has reached.
+        'iwac:gemma431bItCentraliteJustification' => ['hidden'],
     ]]);
     (new Module())->filterSentimentValues($event);
     $filtered = $event->getParam('values');

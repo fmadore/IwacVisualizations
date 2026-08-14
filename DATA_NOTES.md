@@ -70,7 +70,7 @@ The `index` subset is **pre-aggregated** — each row already has:
 
 - **LDA topics** (30): `lda_topic_id`, `lda_topic_prob`, `lda_topic_label` → topic-over-time stacked area, topic co-occurrence
 - **Lexical metrics**: `Richesse_Lexicale_OCR` (**MATTR** — moving-average TTR, 50-token window, `None` below it; *not* raw TTR, so do not length-normalise it or bin by `nb_mots`), `Lisibilite_OCR` (Flesch FR), `nb_mots` → scatter/distribution charts
-- **AI sentiment from 3 models**, each with:
+- **AI sentiment from several models** (`iwac_utils.SENTIMENT_MODELS`; a model is annotated on Omeka before its HF columns exist, so this list runs ahead of the Hub), each with:
   - `*_centralite_islam_musulmans` ∈ {Très central, Central, Secondaire, Marginal, Non abordé}
   - `*_polarite` ∈ {Très positif, Positif, Neutre, Négatif, Très négatif, Non applicable}
   - `*_subjectivite_score` ∈ {Très objectif, Plutôt objectif, Mixte, Plutôt subjectif, Très subjectif} — **a label, not a number** (see below)
@@ -104,7 +104,7 @@ The `index` subset is **pre-aggregated** — each row already has:
 - Top 20 persons / orgs / places / subjects (from `index`, sorted by `frequency`)
 - Choropleth of the 6 countries + optional marker map from `Lieux` entries
 - Language distribution donut
-- Sentiment distribution (articles) — 3 models side by side
+- Sentiment distribution (articles) — one model at a time, never averaged
 - LDA topic proportions over time (stacked area)
 - Collection growth curve (by `added_date`)
 
@@ -117,7 +117,7 @@ For an authority record, show its "life in the collection":
 - Related entities (from `Relation` / `Partie de` / `A une partie` fields)
 
 ### Article-level (per-article page block)
-- Sentiment panel: 3-model comparison (centrality, polarity, subjectivity bars)
+- Sentiment panel: per-model comparison (centrality, polarity, subjectivity bars)
 - LDA topic badge
 - Readability/word-count mini-stats
 - Entities mentioned (parse `subject`, link to authority pages)

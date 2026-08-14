@@ -52,7 +52,7 @@
         var panel = P.el('div', 'iwac-vis-panel iwac-vis-panel--wide');
         panel.appendChild(P.el('h4', null, P.t('AI sentiment comparison')));
         panel.appendChild(P.el('p', 'iwac-vis-panel-desc',
-            P.t('Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.')));
+            P.t('Distribution of polarity and centrality in articles of each corpus, as rated by the AI models. The picker swaps the model; publications are not rated.')));
 
         // Toolbar — axis + model picker
         var toolbar = P.el('div', 'iwac-vis-compare-sentiment__toolbar');

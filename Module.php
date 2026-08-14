@@ -43,21 +43,26 @@ class Module extends AbstractModule
      * Every annotator family in the `iwac:` sentiment vocabulary, as the
      * camelCase stem its six properties share.
      *
-     * Deliberately wider than the three models the article panel renders
+     * Deliberately wider than the models the article panel renders
      * (`SentimentExtractor::MODELS`): the vocabulary also holds the
      * January–February 2026 generation-1 slots and a retired DeepSeek
      * preview that still carries ~11.5k real annotations. Every one of
      * them must stay out of the default metadata table — listing only the
      * models currently on display would dump 20-odd raw rating rows back
      * onto every article page the moment the panel's model set changes.
+     *
+     * This list must gain a stem BEFORE that model's first annotation
+     * lands upstream, not after. A stem missing here is not a quiet
+     * degradation: the six raw rating rows appear on every article page
+     * the run has reached, justification prose included.
      */
     const SENTIMENT_MODEL_STEMS = [
         // Generation 1 — vendor slots, read-only, being retired upstream.
         'gemini', 'chatgpt', 'mistral',
-        // Generation 2 — keyed by model. The three the panel renders,
+        // Generation 2 — keyed by model. The four the panel renders,
         // plus the families whose properties exist but hold no (or
         // superseded) values.
-        'gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731',
+        'gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731', 'gemma431bIt',
         'deepseekV4Flash', 'gemini35FlashLite', 'gemini36Flash',
         'qwen35A3b', 'qwen35A10b',
     ];

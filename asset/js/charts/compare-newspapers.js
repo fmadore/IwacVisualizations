@@ -18,7 +18,7 @@
  *   5. Geographic map — MapLibre bubbles for each side
  *   6. Top subjects bar chart (side by side)
  *   7. Wordclouds — side by side
- *   8. Sentiment comparison (articles only, three-model picker)
+ *   8. Sentiment comparison (articles only, per-model picker)
  *   9. Newspapers breakdown (country-scope sides only)
  *
  * The panel builders + shared helpers live in companion files under

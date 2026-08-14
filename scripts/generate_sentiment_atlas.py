@@ -7,13 +7,15 @@ Generate ``asset/data/sentiment-atlas.json`` for the IwacVisualizations
 module's Sentiment Atlas page block — the corpus-level view of the AI
 sentiment ratings on the IWAC ``articles`` subset.
 
-Three language models (gemini = Gemini 3 Flash, chatgpt = GPT-5 mini,
-mistral = Ministral 14B) rated each article's *polarité*, *centralité de
+Several language models rated each article's *polarité*, *centralité de
 l'islam et des musulmans*, and *subjectivité* (1 = très objectif … 5 =
-très subjectif). Not every article is rated; the per-model ``rated``
-counts make that explicit. These are AI-generated assessments, not
-human-curated archival metadata — the block JS surfaces that caveat on
-every panel.
+très subjectif). The roster is ``iwac_utils.SENTIMENT_MODELS``, narrowed
+to whichever ids the loaded snapshot has columns for — named there and
+nowhere else, because this docstring spent two annotation generations
+advertising the retired January 2026 models. Not every article is rated;
+the per-model ``rated`` counts make that explicit. These are AI-generated
+assessments, not human-curated archival metadata — the block JS surfaces
+that caveat on every panel.
 
 Articles whose ``pub_date`` yields no parseable year are excluded from
 all aggregates (their count is recorded in ``metadata.excludedNoYear``).
@@ -90,6 +92,7 @@ from iwac_utils import (
     is_unknown,
     load_dataset_safe,
     parse_pipe_separated,
+    present_sentiment_models,
     resolve_sentiment_columns,
     save_json,
     subjectivite_ordinal,
@@ -98,7 +101,9 @@ from iwac_utils import (
 SUBSET = "articles"
 
 # Canonical model ids — the keys the block JS and i18n catalogs use. The
-# matching HF column names are resolved at read time (see iwac_utils).
+# matching HF column names are resolved at read time (see iwac_utils), and
+# only the ids that resolve reach the payload: this constant is the roster
+# the project is annotating with, which runs ahead of what the Hub carries.
 MODELS: Tuple[str, ...] = SENTIMENT_MODELS
 
 # Canonical scale orders — the JS renders stacks / matrix axes in this
@@ -257,55 +262,70 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
 
     years: List[int] = sorted(int(y) for y in df["_year"].unique())
 
+    # Canonical model ids are the HF column prefixes; resolving against the
+    # full wish list is what produces the "no columns for model X" warning,
+    # and `models` then narrows it to what this snapshot can actually
+    # populate. Everything below — accumulators, the pairwise agreement
+    # grid, the payload — is sized from `models`, so a model annotated on
+    # Omeka but not yet uploaded to the Hub costs an empty facet button
+    # rather than appearing as a picker entry over an empty chart.
+    resolved = resolve_sentiment_columns(df, models=MODELS)
+    models: List[str] = present_sentiment_models(resolved, models=MODELS)
+    if not models:
+        logger.warning(
+            "  no sentiment columns for any of %s — the atlas will have "
+            "no model panels", ", ".join(MODELS))
+    pol_cols = {m: resolved[m]["polarite"] for m in models}
+    cen_cols = {m: resolved[m]["centralite"] for m in models}
+    subj_cols = {m: resolved[m]["subjectivite"] for m in models}
+
     # -- Accumulators -------------------------------------------------------
     # model → label → Counter(year)
-    pol_year: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
-    cen_year: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    pol_year: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
+    cen_year: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
     # model → label → Counter(country)
-    pol_country: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    pol_country: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
     country_totals: Counter = Counter()
     # model → label → Counter(topic_id) / Counter(newspaper)  (ROADMAP 9.2/9.3)
-    pol_topic: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
-    pol_newspaper: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    pol_topic: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
+    pol_newspaper: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
     topic_articles: Counter = Counter()
     topic_labels: Dict[int, str] = {}
     newspaper_articles: Counter = Counter()
     # model → year → [sum, n]
     subj_year: Dict[str, Dict[int, List[float]]] = {
-        m: defaultdict(lambda: [0.0, 0]) for m in MODELS
+        m: defaultdict(lambda: [0.0, 0]) for m in models
     }
     rated: Counter = Counter()
     not_applicable: Counter = Counter()
     stray_labels: Counter = Counter()
 
     # model → polarity label → Counter(subjectivity 1..5)
-    corr: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in MODELS}
+    corr: Dict[str, Dict[str, Counter]] = {m: defaultdict(Counter) for m in models}
     # model → (country, year) → [sum_centrality_score, n]
     cen_heat: Dict[str, Dict[Tuple[str, int], List[int]]] = {
-        m: defaultdict(lambda: [0, 0]) for m in MODELS
+        m: defaultdict(lambda: [0, 0]) for m in models
     }
     # model → category → kind ('subject'/'spatial') → Counter(keyword)
     ex_kw: Dict[str, Dict[str, Dict[str, Counter]]] = {
         m: {cat: {"subject": Counter(), "spatial": Counter()} for cat in EXTREME_CATEGORIES}
-        for m in MODELS
+        for m in models
     }
     # model → category → article count
-    ex_n: Dict[str, Counter] = {m: Counter() for m in MODELS}
+    ex_n: Dict[str, Counter] = {m: Counter() for m in models}
 
-    pairs: List[Tuple[str, str]] = list(combinations(MODELS, 2))
+    # Every unordered pair, so the count grows quadratically: 3 models give
+    # 3 comparison cards, 4 give 6. The JS drives the cross-tab matrix off a
+    # facet button per pair and reads the roster from the payload, so this
+    # needs no ceiling here — but it is why the comparison section gets
+    # visibly denser with each rater added.
+    pairs: List[Tuple[str, str]] = list(combinations(models, 2))
     co_rated: Counter = Counter()
     agree: Counter = Counter()
     n_labels = len(POLARITY_ORDER)
     matrices: Dict[Tuple[str, str], List[List[int]]] = {
         pair: [[0] * n_labels for _ in range(n_labels)] for pair in pairs
     }
-
-    # Canonical model ids are the HF column prefixes; this checks the
-    # loaded snapshot actually carries them and warns if it does not.
-    resolved = resolve_sentiment_columns(df, models=MODELS)
-    pol_cols = {m: resolved[m]["polarite"] for m in MODELS}
-    cen_cols = {m: resolved[m]["centralite"] for m in MODELS}
-    subj_cols = {m: resolved[m]["subjectivite"] for m in MODELS}
 
     for _, row in df.iterrows():
         year = int(row["_year"])
@@ -327,7 +347,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
             newspaper = ""
 
         row_pol: Dict[str, Optional[str]] = {}
-        for m in MODELS:
+        for m in models:
             pol = _label(row.get(pol_cols[m]))
             row_pol[m] = pol
             if pol is not None:
@@ -407,7 +427,7 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
     ]
 
     models_payload: Dict[str, Any] = {}
-    for m in MODELS:
+    for m in models:
         models_payload[m] = {
             "rated": int(rated[m]),
             "not_applicable": int(not_applicable[m]),
@@ -470,11 +490,11 @@ def build_sentiment_atlas(repo_id: str, token: Optional[str]) -> Dict[str, Any]:
         "year_max": years[-1] if years else None,
         "models": {
             m: {"rated": int(rated[m]), "not_applicable": int(not_applicable[m])}
-            for m in MODELS
+            for m in models
         },
     }
 
-    for m in MODELS:
+    for m in models:
         logging.getLogger(__name__).info(
             "  %s: %d rated, %d 'Non applicable'", m, rated[m], not_applicable[m]
         )

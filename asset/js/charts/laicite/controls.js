@@ -302,14 +302,19 @@
             var models = ctx.getSentimentModels() || [];
             if (!models.length) return;
             // No "all" option: the models disagree and averaging them would
-            // hide exactly what makes three of them worth shipping.
+            // hide exactly what makes running several of them worth the cost.
             if (models.indexOf(state.sentModel) === -1) {
                 state.sentModel = models[0];
             }
             row.appendChild(P.buildSelectControl({
                 label: P.t('laicite.filter_model'),
+                // Shared label table, not a `laicite.model_*` msgid per
+                // model: these are proper nouns, so the block's en and fr
+                // catalogs held byte-identical copies of the same three
+                // strings, and a model added upstream got its raw id
+                // printed into the picker until someone noticed.
                 options: models.map(function (m) {
-                    return { value: m, label: P.t('laicite.model_' + m) };
+                    return { value: m, label: P.sentimentModelLabel(m) };
                 }),
                 current: state.sentModel,
                 idPrefix: 'laicite-sent-model',

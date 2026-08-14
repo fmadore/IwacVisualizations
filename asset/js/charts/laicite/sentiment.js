@@ -1,9 +1,10 @@
 /**
  * IWAC Visualizations — Laïcité block: Framing (issue #14, view 9).
  *
- * How the press frames laïcité, through the three-model AI sentiment
+ * How the press frames laïcité, through the multi-model AI sentiment
  * annotation already in the dataset. `articles` only — no other subset
- * carries it.
+ * carries it. The rater roster comes from the bundle's own `models`
+ * array, so a model added upstream appears here without a code change.
  *
  * Three decisions the panel is built around:
  *
@@ -15,7 +16,7 @@
  *      near 3, and almost nothing does — the ratings pile at 2 and at 4. The
  *      mean lands in the trough between a factual register and a polemical
  *      one and describes neither.
- *   3. **The three models are shown one at a time, never averaged.** They
+ *   3. **The models are shown one at a time, never averaged.** They
  *      disagree; averaging would hide both the disagreement and the fact
  *      that these are model outputs rather than catalogued metadata.
  *
@@ -187,7 +188,7 @@
             P.t('laicite.ai_note')));
         box.appendChild(P.el('p', 'iwac-vis-laicite-ai-stats',
             P.t('laicite.sentiment_coverage', {
-                model: P.t('laicite.model_' + model),
+                model: P.sentimentModelLabel(model),
                 rated: P.formatNumber(data.rated || 0),
                 items: P.formatNumber(bundle.items || 0),
                 corpus: P.formatNumber((data.corpus || {}).rated || 0)

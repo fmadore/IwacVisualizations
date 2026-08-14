@@ -9,8 +9,8 @@
  *   1. Sentiment          — extracted server-side from Omeka item
  *                           metadata (iwac:<model><Axis>) via
  *                           SentimentExtractor. Rendered here as three
- *                           dot plots (one per axis, one lane per model);
- *                           no chart library involved.
+ *                           dot plots (one per axis, one lane per rating
+ *                           model); no chart library involved.
  *
  *   2. Everything else    — fetched client-side from the precomputed
  *                           files/iwac-visualizations/article-dashboards/{o_id}.json:
@@ -41,11 +41,11 @@ $modelInfo = SentimentExtractor::MODEL_INFO;
 // ---- Axis definitions -------------------------------------------------
 //
 // The panel is organised BY AXIS, not by model: the question a reader
-// actually has is "do the three models read this article the same way?",
-// and that is only answerable when the three ratings for one axis sit on
-// one shared scale, vertically aligned. Grouping by model (the old card
-// layout) put the comparable numbers in three separate boxes and then
-// needed a radar chart underneath to undo that.
+// actually has is "do the models read this article the same way?", and
+// that is only answerable when every rating for one axis sits on one
+// shared scale, vertically aligned. Grouping by model (the old card
+// layout) put the comparable numbers in separate boxes and then needed a
+// radar chart underneath to undo that.
 //
 // `low` / `high` are the two poles of each 1–5 vocabulary. They reuse the
 // controlled-vocabulary msgids (Module::POLARITE_ITEMS and friends), so no
@@ -125,6 +125,19 @@ foreach (SentimentExtractor::MODELS as $m) {
     if (!empty($sentiment[$m]['rated'])) $ratedModels[] = $m;
 }
 
+// The panel description names its raters, and the names are composed from
+// $ratedModels rather than written into the msgid. Two reasons, both
+// learned the hard way: a hand-written list beside a constant goes stale
+// on the next rater-panel change (the sentence named the retired
+// generation-1 models for a full release after the panel had moved on),
+// and a corpus pass in progress means this article may carry three
+// ratings while the next carries four — a fixed sentence would be wrong
+// on one of them whichever way it was written.
+$ratedNames = [];
+foreach ($ratedModels as $m) {
+    $ratedNames[] = $modelInfo[$m]['name'];
+}
+
 // The AI sentiment panel is server-rendered (it reads Omeka item metadata, not
 // the precomputed bundle) and coexists with the async dashboard, so it rides
 // the shell's `append` slot rather than replacing the spinner. Buffer it here.
@@ -136,7 +149,10 @@ if ($hasSentiment) {
              data-iwac-no-panel-toolbar="1">
         <h4><?= $translate('AI sentiment') ?></h4>
         <p class="iwac-vis-panel-desc">
-            <?= $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced by three AI models (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). Read directly from this item’s record.') ?>
+            <?= $escapeHtml(sprintf(
+                $translate('Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced independently by %s. Read directly from this item’s record.'),
+                implode(', ', $ratedNames)
+            )) ?>
         </p>
 
         <div class="iwac-vis-sent">
