@@ -231,7 +231,7 @@
 }
 
 .iwac-vis-keywords-attention-slider:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -257,6 +257,6 @@
     overflow: hidden;
 }
 
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-keywords-attention-map { height: 320px; }
 }

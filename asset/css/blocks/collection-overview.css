@@ -85,7 +85,7 @@
     min-height: clamp(280px, 40vh, 360px);
 }
 
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-overview-grid .iwac-vis-chart {
         min-height: 240px;
     }
@@ -209,7 +209,7 @@
 }
 
 /* Tablet: reduce padding, shrink thumbnail, hide source column */
-@media (max-width: 768px) { /* md */
+@media (max-width: 767px) { /* md */
     .iwac-vis-recent-additions .iwac-vis-table {
         font-size: var(--text-xs, 0.8125rem);
     }
@@ -234,7 +234,7 @@
 }
 
 /* Mobile: also hide the Added date column so only thumb + title remain */
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-recent-additions .iwac-vis-table__header,
     .iwac-vis-recent-additions .iwac-vis-table__cell {
         padding: 0.5rem 0.6rem;

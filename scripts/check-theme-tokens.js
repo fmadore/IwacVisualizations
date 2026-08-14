@@ -28,12 +28,35 @@
  *      must equal the canonical light / dark values.
  *   6. Every `var(--…)` must NAME a token that exists: one published in
  *      `tokens.json`'s `names` (the theme's full vocabulary), one this module
- *      declares itself, or one in the module-owned `--iwac-` namespace.
+ *      declares itself, or one in the module-owned `--iwac-vis-` namespace.
  *      Rules 3-4 only ever checked hex *values*, so a reference to a token the
  *      theme never defined — or has since removed — passed cleanly while
  *      rendering from its fallback forever, silently decoupled from the scale
  *      it appeared to track. `--panel-border-color` sat here undetected that
  *      way until the theme published `names` (IWAC-theme 2.9.1).
+ *
+ *      The exemption is the DOCUMENTED prefix, `--iwac-vis-`, not the looser
+ *      `--iwac-`: the module namespace is the one place a competing variable
+ *      can legally live, so it should be exactly as wide as §4 of
+ *      DESIGN-SYSTEM.md says it is. The loose form had already let
+ *      `--iwac-compare-color-a/b` and `--iwac-otd-axis-gap` drift out of it.
+ *
+ * Rules added 2026-08 (design review F1 / F3 / F5) — the whole class of drift
+ * that no guard could see, because every rule above is about colour:
+ *   7. Non-colour fallbacks must equal `tokens.json`'s generated
+ *      `values.light`: type steps, spacing, radii, control sizes,
+ *      line-heights, font stacks, shadows, transitions. Several here were a
+ *      generation behind, including a `--font-headings` fallback still naming
+ *      the removed "Noto Serif" — in the one property whose quoting bug had
+ *      already silently rendered ~30 declarations in the wrong face.
+ *   8. A fallback may not itself contain `var()`. It only renders when the
+ *      theme is absent, in which case the nested token is absent too.
+ *   9. `font-size` must come from a `--text-*` token, not a literal. ~91
+ *      literals ran a second, undeclared scale here on the 12/14/18px steps
+ *      of a generic utility framework rather than the theme's 11/13/15/17/19.
+ *  10. Media-query widths must be one of the theme's published breakpoints.
+ *      `blocks/laicite.css` reflowed at 640px under a `/* sm *​/` comment
+ *      while the theme's `$sm` — and every other block on the page — is 600.
  * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
  *
  * Usage: node scripts/check-theme-tokens.js
@@ -103,8 +126,130 @@ const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
 const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
 const VAR_USE = /var\(\s*(--[\w-]+)/g;
 const DECL = /(--[\w-]+)\s*:/g;
+const MEDIA_WIDTH = /\((min|max)-width\s*:\s*([\d.]+)px\)/g;
+// Absolute font-size literals only: em / % / unitless scale WITH whatever
+// token the cascade already set, so they don't fork the scale.
+const ABS_FONT_SIZE = /font-size:\s*(-?[\d.]+(?:px|rem|pt))\b/i;
 // Module-owned namespace: data-series colours and properties set at runtime.
-const MODULE_PREFIX = /^--iwac-/;
+// Exactly the prefix DESIGN-SYSTEM.md §4 documents — see rule 6.
+const MODULE_PREFIX = /^--iwac-vis-/;
+
+/**
+ * Every `var(--token, <fallback>)` on a line, fallback extracted by balancing
+ * parens so a nested `var()` is captured whole rather than truncated.
+ */
+function varFallbacks(line) {
+    const out = [];
+    for (let i = 0; (i = line.indexOf('var(', i)) !== -1;) {
+        let depth = 0, j = i + 3;
+        for (; j < line.length; j++) {
+            if (line[j] === '(') depth++;
+            else if (line[j] === ')') { depth--; if (depth === 0) break; }
+        }
+        if (j >= line.length) break; // spans lines — not our business
+        const inner = line.slice(i + 4, j);
+        const comma = inner.indexOf(',');
+        if (comma !== -1) out.push({ name: inner.slice(0, comma).trim(), fallback: inner.slice(comma + 1).trim() });
+        i = j + 1;
+    }
+    return out;
+}
+
+/**
+ * Is the position after `before` inside the fallback slot of an open `var()`?
+ *
+ * Not "does a comma immediately precede it": a fallback is a whole CSS value,
+ * so `var(--panel-border, 1px solid #ced1d6)` puts the hex three tokens past
+ * the comma. Requiring adjacency reported every composite fallback as bare
+ * chrome — a standing incentive to write the nested-var() chains rule 8
+ * forbids.
+ */
+function isInVarFallback(before) {
+    let depth = 0, varDepth = -1, sawComma = false;
+    for (let i = 0; i < before.length; i++) {
+        if (before[i] === '(') {
+            if (before.slice(Math.max(0, i - 3), i) === 'var' && varDepth === -1) {
+                varDepth = depth; sawComma = false;
+            }
+            depth++;
+        } else if (before[i] === ')') {
+            depth--;
+            if (varDepth !== -1 && depth <= varDepth) varDepth = -1;
+        } else if (before[i] === ',' && varDepth !== -1 && depth === varDepth + 1) {
+            sawComma = true;
+        }
+    }
+    return varDepth !== -1 && sawComma;
+}
+
+/** Compare CSS values ignoring case, spacing, quote style and leading zeros. */
+function normValue(s) {
+    return s.trim().toLowerCase().replace(/'/g, '"').replace(/\s+/g, ' ')
+        .replace(/\s*,\s*/g, ',').replace(/(^|[\s,(])\.(\d)/g, '$10.$2');
+}
+
+/** Rules 7 + 8 — the non-colour half of the fallback contract. */
+function checkNonColourFallbacks(file, raw, n) {
+    if (!TOKENS || !TOKENS.values || !TOKENS.values.light || /allow-hex/.test(raw)) return;
+    for (const { name, fallback } of varFallbacks(raw)) {
+        if (fallback.includes('var(')) {
+            // Only wrong when the OUTER token is a THEME token: that fallback
+            // renders exactly when the theme is absent, in which case the
+            // nested theme token is absent too — so the chain rescues nothing
+            // and asserts a substitution nobody meant.
+            //
+            // For a MODULE-OWNED property the chain is correct and load-
+            // bearing: `--iwac-vis-compare-color-a` is set on the compare
+            // block's own scope, so `var(--iwac-vis-compare-color-a,
+            // var(--primary, #ce4115))` means "outside a compare block, use
+            // the brand" — a scope question, not a theme-absent question.
+            if (!MODULE_PREFIX.test(name)) {
+                flag(file, n, `nested var() in the fallback for ${name} — a theme-token fallback only renders when the theme is absent, so the inner var() is absent too; write the literal`, raw);
+            }
+            continue;
+        }
+        if (fallback.startsWith('#')) continue; // rule 4 owns hex
+        const canon = TOKENS.values.light[name];
+        if (canon && normValue(fallback) !== normValue(canon)) {
+            flag(file, n, `fallback "${fallback}" for ${name} ≠ canonical ${canon} (tokens.json values.light)`, raw);
+        }
+    }
+}
+
+/** Rule 9 — font-size comes from the published type scale. */
+function checkTypeScale(file, raw, n) {
+    const m = ABS_FONT_SIZE.exec(raw);
+    if (m) flag(file, n, `font-size: ${m[1]} — use a --text-* token (--text-2xs is the floor)`, raw);
+}
+
+/**
+ * Rule 10 — media-query widths are one of the theme's breakpoints.
+ *
+ * `@media` only. A `@container` query measures its own container, not the
+ * viewport, so the viewport scale does not apply to it — on-this-day's
+ * `@container iwac-otd (max-width: 900px)` is a legitimate 900px.
+ */
+function checkBreakpoints(file, raw, n) {
+    if (!TOKENS || !TOKENS.breakpoints || !/@media\b/.test(raw)) return;
+    const bps = Object.values(TOKENS.breakpoints).map(parseFloat);
+    // `min-width` sits ON the breakpoint; `max-width` sits JUST BELOW it, so
+    // the two halves of a pair never both match. `max-width: 600px` alongside
+    // `min-width: 600px` means both rules fire in a 1px sliver at exactly
+    // 600px — which is how a "reflows at sm" pair quietly stops being one.
+    const minOk = new Set(bps);
+    const maxOk = new Set(bps.flatMap((v) => [v - 1, v - 0.02]));
+    const names = Object.entries(TOKENS.breakpoints).map(([k, v]) => `${k} ${v}`).join(', ');
+    MEDIA_WIDTH.lastIndex = 0;
+    let m;
+    while ((m = MEDIA_WIDTH.exec(raw)) !== null) {
+        const [, kind, px] = m;
+        const v = parseFloat(px);
+        if (kind === 'min' ? !minOk.has(v) : !maxOk.has(v)) {
+            const hint = kind === 'max' && minOk.has(v) ? ` — use ${v - 1}px so it doesn't overlap min-width: ${v}px` : '';
+            flag(file, n, `${kind}-width: ${px}px is not one of the theme's breakpoints (${names})${hint}`, raw);
+        }
+    }
+}
 
 const violations = [];
 function flag(file, line, msg, snippet) {
@@ -203,17 +348,16 @@ function scanLines(file, numbered, { hexCheck }) {
         }
         checkVarFallbackValues(file, raw, n);
         checkVarNames(file, raw, n);
+        checkNonColourFallbacks(file, raw, n);
+        checkBreakpoints(file, raw, n);
+        if (hexCheck) checkTypeScale(file, raw, n);
         if (!hexCheck || /allow-hex/.test(raw)) return;
 
         let m;
         HEX.lastIndex = 0;
         while ((m = HEX.exec(raw)) !== null) {
             const before = raw.slice(0, m.index);
-            // Allowed only as a var() fallback: the hex follows a comma and
-            // there is an unterminated `var(` opened earlier on the line.
-            const isFallback = /,\s*$/.test(before)
-                && (before.match(/var\(/g) || []).length > (before.match(/\)/g) || []).length;
-            if (!isFallback) {
+            if (!isInVarFallback(before)) {
                 flag(file, n, 'bare hex outside a var() fallback (use a theme token, or mark /* allow-hex */)', raw);
                 break; // one report per line is enough
             }

@@ -23,33 +23,26 @@ The skill catches the kind of subtle mistakes that have already cost real time h
 
 ## Match the IWAC theme — design integration
 
-This module is built to drop into the **[IWAC theme](https://github.com/fmadore/IWAC-theme)**. Every visual choice here must compose with the theme rather than fight it.
+This module drops into the **[IWAC theme](https://github.com/fmadore/IWAC-theme)**, which owns the visual stance and every design token. **Read the stance there, and restate none of it here:**
 
-**Design philosophy** (from theme v2.0.0): *research instrument, not editorial product.* Cool-leaning near-white surfaces (chroma ~0.002), cool-neutral inks, OKLCH-based palette, primary used **rarely** (focus / current-state / intentional accents only — never as decorative wash, never as gradient bar, never coloring h2s). No body atmospheric gradients. Visual neighborhood: MIT Press / Stripe Press / eLife / Linear docs — not a small museum's website. Read the theme's CLAUDE.md before doing any visual work.
+- [`docs/DESIGN-PHILOSOPHY.md`](https://github.com/fmadore/IWAC-theme/blob/master/docs/DESIGN-PHILOSOPHY.md) — the register, the core principles, what to avoid.
+- [`docs/DESIGN-SYSTEM.md`](https://github.com/fmadore/IWAC-theme/blob/master/docs/DESIGN-SYSTEM.md) — the token contract: what may be consumed, the fallback rule, the sanctioned module-owned namespace, the breakpoints.
+- `tokens.json` (synced into this repo) — the machine-readable truth. It wins over any prose, anywhere, including this file. `npm run lint:theme` enforces it.
 
-**Token budget** — read these from the theme at runtime via `iwac-theme.js::readTokens()`; never hardcode equivalents:
+> This section used to carry its own copy of the philosophy and a hand-maintained token budget. Both went stale exactly the way copies do. It quoted the **v2.0.0** stance ("visual neighbourhood: MIT Press / Stripe Press / eLife / Linear docs") a full redesign after the theme moved to the press-archive register — while the June 2026 rebuild of *this module's own blocks* to that register was already shipped. It told authors to keep `"Noto Serif"` as the `--font-headings` fallback, a family the design system lists as removed. It named `--tracking-tight` for display headings, when v2.6 added `--tracking-display` precisely because slab serifs clog at the tighter value. And it stated that `--focus-ring` / `--ring-focus` "do NOT exist — phantom names from older docs", when both are defined in the theme, published in `tokens.json`, and listed as consumable — so anyone following it was steered off two real tokens and onto a literal, which is how one focus declaration came to be hand-copied 44 times across these stylesheets. The code was on v2.6 and the instructions for changing it were on v2.0.0.
 
-- **Colors** — `--primary` (admin-overridable hex; do NOT redeclare), `--ink-strong`, `--ink`, `--ink-light`, `--ink-subtle`, `--muted`, `--surface`, `--surface-raised`, `--surface-sunken`, `--background`, `--border`, `--border-light`, `--border-strong`, `--focus-color`. The theme owns dark/light derivations via Sass mixins; do not consume `--primary-hue` / `--primary-sat` (those HSL components were removed in v2.0.0 — derive variants from `--primary` via `color-mix(in oklab, ...)` instead). When these docs and `tokens.json` disagree about a token name, `tokens.json` is the ground truth (`npm run lint:theme` enforces it).
-- **Spacing** — `--space-{xs,sm,md,lg,xl,2xl,3xl}` (0.25 / 0.5 / 1 / 1.5 / 2 / 3 / 4 rem).
-- **Radii** — `--radius-{sm,md,lg,xl,full}` (0.375 → 1 rem; `--radius-full = 9999px` for pills). Note: `--radius-md` was tightened from 12px → 8px in v2.0.0 for an institutional register.
-- **Control sizing** — `--size-control-{xs,sm,md,lg,xl}` (28 → 48 px). `lg` (44px) is the WCAG tap target.
-- **Measure** — `--measure-{narrow,base,wide}` (44 / 52.5 / 72.5 rem) for prose width caps.
-- **Tracking** — `--tracking-tight` (display headings), `--tracking-wide` (small caps), `--tracking-wider` (eyebrow / metadata labels).
-- **Fonts** — consume `--font-headings` / `--font-body` / `--font-mono` from the theme; do NOT hardcode Inter / Noto Serif. In CSS wrap as `var(--font-headings, "Noto Serif", …)` keeping the prior stack as fallback; in chart JS read `tokens.fontFamily` (from `iwac-theme.js::readTokens()`, which mirrors the body `font-family`).
-- **Shadows** — `--shadow-{xs,sm,md,lg,xl}` (neutral cool, NOT warm-tinted). `--glow-*` ramp is primary-tinted, derived from `--primary` via `color-mix(in oklab, ...)`.
-- **Accent line widths** — `--accent-line-sm` (2px), `--accent-line-md` (3px).
-- **Color mixing** — always `color-mix(in oklab, ...)` (sRGB mixing produces muddy mid-tones). Use `--accent-mix-{subtle,medium,strong}` (25 / 40 / 60%) for standard primary tints rather than baking hex values.
+### Module-specific gotchas
 
-**Theme switching:** the theme owns `body[data-theme="light|dark"]` and `localStorage['iwac-theme-preference']`. `dashboard-core.js` already wires a `MutationObserver` on `body[data-theme]` and rebuilds the ECharts theme + reinits every tracked chart on toggle. MapLibre instances `setStyle()` between Carto positron / dark-matter URLs. **Don't add a separate theme listener** in new panels — register charts via `IWACVis.registerChart()` and they auto-handle the swap.
+These are the things the shared docs can't tell you, because they are about *this* module.
 
-**Visual conventions to match:**
-
-- **Resource tag pills** — `border-radius: var(--radius-full)`, `text-transform: uppercase`, `letter-spacing: 0.06em`. The theme rule lives at `base/elements/_resource-tag.scss`; reuse the look on any chip / tag in chart UI.
-- **Section headings** — `--tracking-tight` for display titles; small-caps + `--tracking-wide` for metadata labels. Default h2 color is `--ink-strong`, NOT `--primary` (theme v2.0.0 reserves brand color for state, not section markers).
-- **Hover affordances** — fast purposeful transitions (150-200 ms). No bouncing / elastic curves. No card lift > 2px.
-- **Focus** — visible focus rings via `--focus-color` (light `#ce4115`, dark `#ec653f` — the dark value deliberately differs from `--primary`; the canonical pattern is `outline: 2px solid var(--focus-color, var(--primary, #ce4115))`). `--focus-ring` / `--ring-focus` do NOT exist — phantom names from older docs. Never `outline: none` without a replacement.
-- **Side-stripe borders** — `border-left/right` ≥ 2px is allowed ONLY for structural data-marker affordances (e.g. multi-color sentiment-card model indicator, compare-corpus A/B). Never as a decorative accent on cards or callouts.
-- **AI-generated values** — when surfacing model output (sentiment scores, generated labels, summaries) give it explicit visual treatment (sparkle / badge / tinted block) so readers can distinguish computational artefacts from human-authored archival metadata. The theme's `.property--ai` block (resource-show) is the reference pattern.
+- **Charts can't inherit CSS.** A `<canvas>` is outside the cascade, so `iwac-theme.js::readTokens()` reads tokens at runtime via `getComputedStyle` and converts modern colour syntax to legacy `rgb()` for zrender. Add new token-driven chart colours by reading them there — never by hardcoding.
+- **Theme switching is already wired.** `dashboard-core.js` observes `body[data-theme]` and rebuilds the ECharts theme + reinits every tracked chart; MapLibre `setStyle()`s between Carto positron / dark-matter. **Don't add a separate theme listener** — register charts via `IWACVis.registerChart()`.
+- **Focus is one token now.** `outline: var(--focus-outline, 2px solid #ce4115)`. Reach for `--ring-focus` (box-shadow) only where an outline would be clipped — inside `overflow: hidden` or a scroll container. Never `outline: none` without a replacement.
+- **Side-stripe borders** — `border-left/right` ≥ 2px is allowed ONLY for structural data-marker affordances (multi-colour sentiment-card model indicator, compare-corpus A/B). Never as a decorative accent on cards or callouts; the philosophy bans them generally.
+- **AI-generated values** get explicit visual treatment (badge / tinted block) so readers can tell computational artefacts from human-authored archival metadata. The theme's `.property--ai` block is the reference pattern.
+- **The module namespace is `--iwac-vis-`, and only that.** It is for values the theme should not carry — data-encoding colours (§4 of DESIGN-SYSTEM.md) and module-local layout constants with no theme equivalent. It is **not** a place to re-declare a theme token: `--iwac-vis-icon-btn-sm: 28px` was `--size-control-xs` to the pixel, and the shadow tints re-derived from `--ink` what `--shadow-color*` already publishes. Both are gone. `lint:theme` only exempts the full `--iwac-vis-` prefix, so a shortened one (`--iwac-otd-…`) now fails.
+- **Model accents are role slots**, `--iwac-vis-model-1..4`, not model ids. The id → slot map lives in `MODEL_SLOT` (charts/sentiment-atlas.js) and nowhere else. Upgrading a model is one line there; it must never rename a token.
+- **CSS is hand-edited, then minified.** `npm run build:css` (csso) writes the `*.min.css` templates actually load. Edit the source, never the `.min`.
 
 **Block-CSS structure already in place:** `iwac-core.css` (tokens / panel / chip controls / table / form controls / section heading) → `iwac-maplibre.css` (only when the block uses a map) → `asset/css/blocks/<block>.css`. Add new block-local selectors to `blocks/<block>.css`; promote shared patterns into `iwac-core.css`. The README's "Build & development" section has the canonical breakdown.
 

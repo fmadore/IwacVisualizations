@@ -78,27 +78,41 @@
     /* ----------------------------------------------------------------- */
 
     /**
+     * Model id → accent SLOT. The single place a model id meets a colour.
+     *
+     * The CSS tokens are `--iwac-vis-model-1..4`, named by position rather
+     * than by release: the token name used to be derived from the model id
+     * itself (`'--iwac-vis-model-' + key.replace(/_/g, '-')`), so every
+     * model upgrade renamed a design token and orphaned the rule that
+     * referenced it. Swapping a model is now one line here — and because
+     * the slot is explicit, the remaining models keep their colours instead
+     * of shuffling up.
+     *
+     * Ids carry underscores because they mirror the Hugging Face column
+     * prefixes (see SentimentExtractor.php).
+     */
+    var MODEL_SLOT = {
+        gpt_5_6_luna: 1,
+        deepseek_v4_flash_0731: 2,
+        mistral_small_2603: 3,
+        gemma_4_31b_it: 4
+    };
+
+    /**
      * Per-model line color from the iwac-core.css tokens
-     * (`--iwac-vis-model-*`), resolved through dashboard-core so
+     * (`--iwac-vis-model-N`), resolved through dashboard-core so
      * color-mix()/oklch values come back ECharts-parseable. Falls back
-     * to stable IWAC palette slots (same mapping as the article
-     * dashboard radar). No hex literals — if the palette is empty the
-     * ECharts theme assigns its own series color.
+     * to the matching IWAC palette slot. No hex literals — if the palette
+     * is empty the ECharts theme assigns its own series color.
      */
     function modelColor(key) {
-        // Model ids carry underscores (they mirror the Hugging Face
-        // column prefixes); the CSS tokens are hyphenated.
-        var token = '--iwac-vis-model-' + key.replace(/_/g, '-');
-        var resolved = (ns.resolveCssVar && ns.resolveCssVar(token)) || '';
-        if (resolved) return resolved;
+        var slot = MODEL_SLOT[key];
+        if (slot) {
+            var resolved = (ns.resolveCssVar && ns.resolveCssVar('--iwac-vis-model-' + slot)) || '';
+            if (resolved) return resolved;
+        }
         var palette = (ns.getPalette && ns.getPalette()) || [];
-        var fallbackIdx = {
-            gpt_5_6_luna: 0,
-            mistral_small_2603: 2,
-            deepseek_v4_flash_0731: 1,
-            gemma_4_31b_it: 3
-        };
-        return palette[fallbackIdx[key]] || palette[0];
+        return palette[(slot || 1) - 1] || palette[0];
     }
 
     /* ----------------------------------------------------------------- */

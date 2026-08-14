@@ -77,11 +77,11 @@
     font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.06em);
+    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-orgcooc-record-link:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -92,7 +92,7 @@
     min-height: 680px;
 }
 
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-orgcooc-chart { min-height: 520px; }
     .iwac-vis-orgcooc-panel-header { padding-right: 0; }
 }

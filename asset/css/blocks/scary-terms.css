@@ -55,10 +55,10 @@
     flex-direction: column;
     gap: var(--space-3, 0.75rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, var(--surface, #fdfcfb));
+    background: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-xs, 0 1px 2px 0 var(--iwac-vis-shadow-subtle));
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
 }
 
 .iwac-vis-scary-controls-row {
@@ -117,9 +117,9 @@
     font-weight: 500;
     cursor: pointer;
     transition:
-        background-color var(--transition-fast, 150ms ease),
-        color            var(--transition-fast, 150ms ease),
-        border-color     var(--transition-fast, 150ms ease);
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        color            var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-view-btn:hover {
@@ -128,7 +128,7 @@
 }
 
 .iwac-vis-scary-view-btn:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -185,9 +185,9 @@
     font-family: inherit;
     cursor: pointer;
     transition:
-        background-color var(--transition-fast, 150ms ease),
-        border-color     var(--transition-fast, 150ms ease),
-        color            var(--transition-fast, 150ms ease);
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        color            var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-ctrl-btn:hover {
@@ -197,7 +197,7 @@
 }
 
 .iwac-vis-scary-ctrl-btn:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -264,14 +264,14 @@
         var(--iwac-vis-scary-track)       100%
     );
     box-shadow:
-        inset 0 1px 2px var(--iwac-vis-shadow-subtle),
+        inset 0 1px 2px var(--shadow-color-subtle),
         0 0 0 1px var(--border-light, #e2e5e8);
-    transition: box-shadow var(--transition-fast, 150ms ease);
+    transition: box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-slider:hover {
     box-shadow:
-        inset 0 1px 2px var(--iwac-vis-shadow-soft),
+        inset 0 1px 2px var(--shadow-color),
         0 0 0 1px color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
 }
 
@@ -286,16 +286,16 @@
     border: 3px solid var(--primary, #ce4115);
     border-radius: 50%;
     box-shadow:
-        0 2px 6px var(--iwac-vis-shadow-soft),
+        0 2px 6px var(--shadow-color),
         0 0 0 0 color-mix(in oklab, var(--primary, #ce4115) 40%, transparent);
     cursor: grab;
-    transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
+    transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-slider::-webkit-slider-thumb:hover {
     transform: scale(1.12);
     box-shadow:
-        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 3px 10px var(--shadow-color-strong),
         0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
 }
 
@@ -303,13 +303,13 @@
     cursor: grabbing;
     transform: scale(1.08);
     box-shadow:
-        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 3px 10px var(--shadow-color-strong),
         0 0 0 8px color-mix(in oklab, var(--primary, #ce4115) 25%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-webkit-slider-thumb {
     box-shadow:
-        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 3px 10px var(--shadow-color-strong),
         0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 32%, transparent);
 }
 
@@ -324,22 +324,22 @@
     border: 3px solid var(--primary, #ce4115);
     border-radius: 50%;
     box-shadow:
-        0 2px 6px var(--iwac-vis-shadow-soft),
+        0 2px 6px var(--shadow-color),
         0 0 0 0 color-mix(in oklab, var(--primary, #ce4115) 40%, transparent);
     cursor: grab;
-    transition: transform var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
+    transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-slider::-moz-range-thumb:hover {
     transform: scale(1.12);
     box-shadow:
-        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 3px 10px var(--shadow-color-strong),
         0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 18%, transparent);
 }
 
 .iwac-vis-scary-slider:focus-visible::-moz-range-thumb {
     box-shadow:
-        0 3px 10px var(--iwac-vis-shadow-strong),
+        0 3px 10px var(--shadow-color-strong),
         0 0 0 6px color-mix(in oklab, var(--primary, #ce4115) 32%, transparent);
 }
 
@@ -421,7 +421,7 @@
 .iwac-vis-scary-panel--map .iwac-vis-scary-chart { display: none; }
 .iwac-vis-scary-panel--map .iwac-vis-scary-map   { display: block; }
 
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-scary-chart { min-height: 380px; }
     .iwac-vis-scary-panel--matrix .iwac-vis-scary-chart { min-height: 480px; }
     .iwac-vis-scary-map { height: 380px; }
@@ -450,7 +450,7 @@
 }
 
 .iwac-vis-scary-check input:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -474,11 +474,11 @@
     color: var(--muted, #66696e);
     font-size: var(--text-xs, 0.8125rem);
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.06em);
+    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-scary-details summary:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -542,11 +542,11 @@
 }
 
 .iwac-vis-scary-def-card {
-    background: var(--panel-bg, var(--surface, #fdfcfb));
+    background: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease);
+    transition: border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)), background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-scary-def-card:hover {

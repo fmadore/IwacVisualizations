@@ -62,15 +62,15 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    background: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="A"]::before {
-    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    background: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="B"]::before {
-    background: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    background: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-picker__eyebrow {
@@ -82,11 +82,11 @@
 }
 
 .iwac-vis-compare-picker[data-side="A"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-picker[data-side="B"] .iwac-vis-compare-picker__eyebrow {
-    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    color: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-picker__row {
@@ -122,7 +122,7 @@
 }
 
 .iwac-vis-compare-picker__select:focus {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -204,7 +204,7 @@
 }
 
 .iwac-vis-compare-metric__value {
-    font-family: var(--font-headings, "Besley", Georgia, serif);
+    font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
     font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
     font-weight: 600;
     line-height: 1.05;
@@ -245,11 +245,11 @@
 }
 
 .iwac-vis-compare-metric__value[data-side="A"]::before {
-    background: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    background: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-metric__value[data-side="B"]::before {
-    background: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    background: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 
@@ -335,11 +335,11 @@
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__title {
-    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    color: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-overlap__count {
@@ -386,11 +386,11 @@
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-a, var(--primary, #ce4115)) 35%, var(--border, #ced1d6));
+    border-color: color-mix(in oklab, var(--iwac-vis-compare-color-a, var(--primary, #ce4115)) 35%, var(--border, #ced1d6));
 }
 
 .iwac-vis-compare-overlap__col[data-kind="only-b"] .iwac-vis-compare-overlap__tag {
-    border-color: color-mix(in oklab, var(--iwac-compare-color-b, var(--secondary, #394f68)) 35%, var(--border, #ced1d6));
+    border-color: color-mix(in oklab, var(--iwac-vis-compare-color-b, var(--secondary, #394f68)) 35%, var(--border, #ced1d6));
 }
 
 
@@ -426,11 +426,11 @@
 }
 
 .iwac-vis-compare-wordcloud[data-side="A"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-wordcloud[data-side="B"] .iwac-vis-compare-wordcloud__label {
-    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    color: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-wordcloud__chart {
@@ -483,8 +483,8 @@
      * system dark (prefers-color-scheme). The ECharts/MapLibre series read
      * these props in compare-newspapers.js, so charts match the CSS swatches
      * in both themes. */
-    --iwac-compare-color-a: var(--primary, #ce4115);
-    --iwac-compare-color-b: var(--secondary, #394f68);
+    --iwac-vis-compare-color-a: var(--primary, #ce4115);
+    --iwac-vis-compare-color-b: var(--secondary, #394f68);
 }
 
 
@@ -497,9 +497,9 @@ a.iwac-vis-compare-overlap__tag {
     text-decoration: none;
     cursor: pointer;
     transition:
-        border-color var(--transition-fast, 150ms ease),
-        background    var(--transition-fast, 150ms ease),
-        transform     var(--transition-fast, 150ms ease);
+        border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        background    var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        transform     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 a.iwac-vis-compare-overlap__tag:hover,
@@ -509,7 +509,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -548,8 +548,8 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     opacity: 0.7;
 }
 
-.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-compare-color-a, var(--primary, #ce4115)); }
-.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-compare-color-b, var(--secondary, #394f68)); }
+.iwac-vis-compare-map-legend__dot--a { background: var(--iwac-vis-compare-color-a, var(--primary, #ce4115)); }
+.iwac-vis-compare-map-legend__dot--b { background: var(--iwac-vis-compare-color-b, var(--secondary, #394f68)); }
 
 
 /* =================================================================== */
@@ -583,11 +583,11 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 .iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-a, var(--primary, #ce4115));
+    color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
 
 .iwac-vis-compare-sentiment__col[data-side="B"] .iwac-vis-compare-sentiment__heading {
-    color: var(--iwac-compare-color-b, var(--secondary, #394f68));
+    color: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
 .iwac-vis-compare-sentiment__chart {

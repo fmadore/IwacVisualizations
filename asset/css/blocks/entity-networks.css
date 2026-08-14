@@ -36,7 +36,7 @@
     height: 580px;
 }
 
-@media (max-width: 768px) { /* md */
+@media (max-width: 767px) { /* md */
     .iwac-vis-networks-canvas {
         height: 440px;
     }
@@ -83,10 +83,10 @@
     font-weight: 500;
     cursor: pointer;
     transition:
-        background-color var(--transition-fast, 150ms ease),
-        color            var(--transition-fast, 150ms ease),
-        border-color     var(--transition-fast, 150ms ease),
-        opacity          var(--transition-fast, 150ms ease);
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        color            var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        opacity          var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-networks-typechip:hover {
@@ -94,7 +94,7 @@
 }
 
 .iwac-vis-networks-typechip:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -147,7 +147,7 @@
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-md, 0 4px 12px 0 var(--iwac-vis-shadow-soft));
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
     padding: var(--space-1, 0.25rem);
     display: flex;
     flex-direction: column;
@@ -217,7 +217,7 @@
 .iwac-vis-networks-details__title {
     font-size: var(--text-base, 1.0625rem);
     font-weight: 600;
-    color: var(--ink-strong, var(--ink, #13161c));
+    color: var(--ink-strong, #05070c);
 }
 
 .iwac-vis-networks-details__meta,
@@ -261,7 +261,7 @@
     color: var(--ink, #13161c);
     text-align: left;
     cursor: pointer;
-    transition: background-color var(--transition-fast, 150ms ease);
+    transition: background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-networks-details__item:hover {
@@ -269,7 +269,7 @@
 }
 
 .iwac-vis-networks-details__item:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 1px;
 }
 

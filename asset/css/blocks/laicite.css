@@ -43,7 +43,7 @@
 
 .iwac-vis-laicite-authority {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
 }
 
 .iwac-vis-laicite-authority-link {
@@ -66,7 +66,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, var(--surface, #fdfcfb));
+    background: var(--panel-bg, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
 }
@@ -87,7 +87,7 @@
 .iwac-vis-laicite-view-desc {
     margin: 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.5;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -101,9 +101,9 @@
 
 .iwac-vis-laicite-view-btn {
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-    min-height: var(--size-control-md, 2.25rem);
+    min-height: var(--size-control-md, 2.5rem);
     font: inherit;
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #3f4349);
     background: transparent;
     border: 1px solid var(--border, #ced1d6);
@@ -125,7 +125,7 @@
 }
 
 .iwac-vis-laicite-view-btn:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -133,7 +133,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2, 0.5rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #3f4349);
     cursor: pointer;
 }
@@ -203,7 +203,7 @@
 }
 
 .iwac-vis-laicite-venn-seg:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -217,7 +217,7 @@
 }
 
 .iwac-vis-laicite-venn-n {
-    font-size: 1.375rem;
+    font-size: var(--text-xl, 1.5rem);
     font-weight: 600;
     line-height: 1.1;
     color: var(--ink-strong, #05070c);
@@ -225,7 +225,7 @@
 }
 
 .iwac-vis-laicite-venn-label {
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.3;
     color: var(--ink-subtle, #5a5e63);
     overflow-wrap: anywhere;
@@ -238,7 +238,7 @@
 
 .iwac-vis-laicite-table {
     width: 100%;
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
 }
 
 .iwac-vis-laicite-corpus {
@@ -257,7 +257,7 @@
     display: block;
     max-width: 18rem;
     margin-top: var(--space-1, 0.25rem);
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 400;
     line-height: 1.35;
     color: var(--ink-subtle, #5a5e63);
@@ -266,7 +266,7 @@
 .iwac-vis-laicite-table-note {
     margin: var(--space-3, 0.75rem) 0 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.5;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -278,7 +278,7 @@
 .iwac-vis-laicite-readable-n {
     display: block;
     font-variant-numeric: tabular-nums;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-light, #3f4349);
 }
 
@@ -312,7 +312,7 @@
 
 .iwac-vis-laicite-rights-title {
     margin: 0 0 var(--space-2, 0.5rem);
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -322,7 +322,7 @@
 .iwac-vis-laicite-rights-body {
     margin: 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
     color: var(--ink-light, #3f4349);
 }
@@ -336,7 +336,7 @@
     display: inline-flex;
     align-items: center;
     padding: 0.125rem var(--space-2, 0.5rem);
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs, 0.6875rem);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -383,7 +383,7 @@
 
 .iwac-vis-laicite-chip.is-year {
     font: inherit;
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs, 0.6875rem);
     font-variant-numeric: tabular-nums;
     border: 1px solid var(--border, #ced1d6);
     cursor: pointer;
@@ -396,7 +396,7 @@
 }
 
 .iwac-vis-laicite-chip.is-year:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -412,7 +412,7 @@
     margin-top: var(--space-3, 0.75rem);
 }
 
-@media (min-width: 640px) { /* sm */
+@media (min-width: 600px) { /* sm */
     .iwac-vis-laicite-frame-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -444,20 +444,20 @@
 
 .iwac-vis-laicite-frame-name {
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-strong, #05070c);
 }
 
 .iwac-vis-laicite-frame-share {
     margin: var(--space-1, 0.25rem) 0 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-subtle, #5a5e63);
 }
 
 .iwac-vis-laicite-frame-note {
     margin: var(--space-2, 0.5rem) 0 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.5;
     color: var(--muted, #66696e);
 }
@@ -467,7 +467,7 @@
  *  fits it to the card's tighter type scale. */
 .iwac-vis-laicite-frame-cross {
     margin-top: var(--space-2, 0.5rem);
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
 }
 
 
@@ -493,7 +493,7 @@
 
 .iwac-vis-laicite-doc-title {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: var(--text-base, 1.0625rem);
     line-height: 1.4;
     color: var(--ink-strong, #05070c);
 }
@@ -504,7 +504,7 @@ a.iwac-vis-laicite-doc-title:hover {
 
 .iwac-vis-laicite-doc-meta {
     margin: var(--space-1, 0.25rem) 0 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -529,7 +529,7 @@ a.iwac-vis-laicite-doc-title:hover {
 .iwac-vis-laicite-ai-badge {
     display: inline-block;
     margin-bottom: var(--space-1, 0.25rem);
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs, 0.6875rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -539,7 +539,7 @@ a.iwac-vis-laicite-doc-title:hover {
 .iwac-vis-laicite-doc-desc {
     margin: 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
     color: var(--ink-light, #3f4349);
 }
@@ -568,7 +568,7 @@ a.iwac-vis-laicite-doc-title:hover {
  *  gap — stated plainly rather than hidden. */
 .iwac-vis-laicite-kwic-withheld {
     margin: 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.5;
     color: var(--muted, #66696e);
 }
@@ -591,7 +591,7 @@ a.iwac-vis-laicite-doc-title:hover {
 
 .iwac-vis-kwic-line {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.65;
     color: var(--ink, #13161c);
     overflow-wrap: anywhere;
@@ -617,7 +617,7 @@ a.iwac-vis-laicite-doc-title:hover {
     align-items: center;
     gap: var(--space-2, 0.5rem);
     margin: var(--space-2, 0.5rem) 0 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -639,7 +639,7 @@ a.iwac-vis-kwic-title:hover {
     display: inline-flex;
     align-items: center;
     padding: 0.125rem var(--space-2, 0.5rem);
-    font-size: 0.6875rem;
+    font-size: var(--text-2xs, 0.6875rem);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     background: var(--surface-sunken, #f4f1ef);
@@ -666,7 +666,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-details {
     margin-top: var(--space-3, 0.75rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-light, #3f4349);
 }
 
@@ -676,7 +676,7 @@ a.iwac-vis-kwic-title:hover {
 }
 
 .iwac-vis-laicite-details > summary:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -717,7 +717,7 @@ a.iwac-vis-kwic-title:hover {
     gap: var(--space-3, 0.75rem);
 }
 
-@media (min-width: 640px) { /* sm */
+@media (min-width: 600px) { /* sm */
     .iwac-vis-laicite-collocate-list { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -741,7 +741,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-collocate-token {
     font-weight: 600;
-    font-size: 0.9375rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-strong, #05070c);
     overflow-wrap: anywhere;
 }
@@ -768,7 +768,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-collocate-meta {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -785,7 +785,7 @@ a.iwac-vis-kwic-title:hover {
 .iwac-vis-laicite-method p {
     margin: 0 0 var(--space-2, 0.5rem);
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.55;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -810,7 +810,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-implicit-sizes {
     margin: 0 0 var(--space-3, 0.75rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-light, #3f4349);
 }
@@ -824,14 +824,14 @@ a.iwac-vis-kwic-title:hover {
 .iwac-vis-laicite-verdict-text {
     margin: 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.6;
     color: var(--ink-light, #3f4349);
 }
 
 .iwac-vis-laicite-verdict-stats {
     margin: var(--space-2, 0.5rem) 0 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--muted, #66696e);
 }
@@ -844,7 +844,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-spread-title {
     margin: 0 0 var(--space-2, 0.5rem);
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -878,14 +878,14 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-spread-n,
 .iwac-vis-laicite-spread-label {
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-subtle, #5a5e63);
 }
 
 .iwac-vis-laicite-spread-axis {
     margin: var(--space-2, 0.5rem) 0 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     text-align: center;
     color: var(--muted, #66696e);
 }
@@ -913,12 +913,12 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-rate-name {
     font-weight: 600;
-    font-size: 0.9375rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-strong, #05070c);
 }
 
 .iwac-vis-laicite-rate-value {
-    font-size: 1.125rem;
+    font-size: var(--text-lg, 1.1875rem);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     color: var(--ink-strong, #05070c);
@@ -940,7 +940,7 @@ a.iwac-vis-kwic-title:hover {
 
 .iwac-vis-laicite-rate-meta {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -952,7 +952,7 @@ a.iwac-vis-kwic-title:hover {
     padding-top: var(--space-3, 0.75rem);
     border-top: 1px solid var(--border-light, #e2e5e8);
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.55;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -969,7 +969,7 @@ a.iwac-vis-kwic-title:hover {
 .iwac-vis-laicite-season-note p {
     margin: 0 0 var(--space-2, 0.5rem);
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.55;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -1023,7 +1023,7 @@ a.iwac-vis-laicite-actor-name:hover {
 }
 
 a.iwac-vis-laicite-actor-name:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
@@ -1043,7 +1043,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-actor-meta {
     margin: 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -1103,12 +1103,12 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-ai-badge {
     color: var(--primary, #ce4115);
-    font-size: 1rem;
+    font-size: var(--text-base, 1.0625rem);
     line-height: 1;
 }
 
 .iwac-vis-laicite-ai-title {
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -1119,7 +1119,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 .iwac-vis-laicite-ai-stats {
     margin: var(--space-2, 0.5rem) 0 0;
     max-width: var(--measure-base, 52.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     line-height: 1.55;
     color: var(--ink-subtle, #5a5e63);
 }
@@ -1134,7 +1134,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-polarity-title {
     margin: 0 0 var(--space-1, 0.25rem);
-    font-size: 0.9375rem;
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-strong, #05070c);
 }
 
@@ -1147,7 +1147,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-polarity-label {
     flex: 0 0 11rem;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-light, #3f4349);
 }
 
@@ -1169,7 +1169,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
     flex-wrap: wrap;
     gap: var(--space-3, 0.75rem);
     margin: var(--space-3, 0.75rem) 0 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -1186,7 +1186,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
     border-radius: var(--radius-full, 9999px);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 599px)  /* < sm */ {
     .iwac-vis-laicite-polarity-row {
         flex-direction: column;
         align-items: stretch;
@@ -1233,7 +1233,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-breakdown-label {
     flex: 0 0 6rem;
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -1248,7 +1248,7 @@ a.iwac-vis-laicite-actor-name:focus-visible {
 
 .iwac-vis-laicite-works-count {
     margin: var(--space-4, 1rem) 0 var(--space-2, 0.5rem);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--muted, #66696e);
 }
@@ -1274,13 +1274,13 @@ a.iwac-vis-laicite-work-title:hover {
 }
 
 a.iwac-vis-laicite-work-title:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
 .iwac-vis-laicite-work-meta {
     margin: var(--space-1, 0.25rem) 0 0;
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -1314,7 +1314,7 @@ a.iwac-vis-laicite-work-title:focus-visible {
     border-left: var(--accent-line-sm, 2px) solid
         color-mix(in oklab, var(--primary, #ce4115), transparent 60%);
     color: var(--ink-subtle, #5a5e63);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
 }
 
 
@@ -1326,7 +1326,7 @@ a.iwac-vis-laicite-work-title:focus-visible {
  *  standing caveat on every number above it, not a finding. */
 .iwac-vis-laicite-circ-note {
     color: var(--ink-subtle, #5a5e63);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
 }
 
 /*  "No duplicates found" is a RESULT, not an empty state — this coverage
@@ -1335,7 +1335,7 @@ a.iwac-vis-laicite-work-title:focus-visible {
 .iwac-vis-laicite-circ-none {
     margin: var(--space-3, 0.75rem) 0 0;
     color: var(--ink, #13161c);
-    font-size: 0.9375rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.55;
 }
 
@@ -1357,12 +1357,12 @@ a.iwac-vis-laicite-work-title:focus-visible {
     gap: var(--space-2, 0.5rem);
     padding-bottom: var(--space-2, 0.5rem);
     border-bottom: 1px solid var(--border-light, #e2e5e8);
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
 }
 
 .iwac-vis-laicite-circ-link-n {
     color: var(--ink-subtle, #5a5e63);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
 }
 
@@ -1383,7 +1383,7 @@ a.iwac-vis-laicite-work-title:focus-visible {
     background: color-mix(in oklab, var(--primary, #ce4115)
                 var(--accent-mix-subtle, 25%), var(--surface, #fdfcfb));
     border-radius: var(--radius-full, 9999px);
-    font-size: 0.75rem;
+    font-size: var(--text-xs, 0.8125rem);
     font-variant-numeric: tabular-nums;
     color: var(--ink-strong, #05070c);
 }
@@ -1402,7 +1402,7 @@ a.iwac-vis-laicite-work-title:focus-visible {
 }
 
 .iwac-vis-laicite-circ-title {
-    font-size: 0.875rem;
+    font-size: var(--text-sm, 0.9375rem);
     line-height: 1.4;
     color: var(--ink-strong, #05070c);
 }
@@ -1417,12 +1417,12 @@ a.iwac-vis-laicite-circ-title:hover {
 }
 
 a.iwac-vis-laicite-circ-title:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
 }
 
 .iwac-vis-laicite-circ-meta {
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
     color: var(--ink-subtle, #5a5e63);
 }
 
@@ -1440,7 +1440,7 @@ a.iwac-vis-laicite-circ-title:focus-visible {
     border-left: var(--accent-line-sm, 2px) solid
         color-mix(in oklab, var(--primary, #ce4115), transparent 60%);
     color: var(--ink-subtle, #5a5e63);
-    font-size: 0.8125rem;
+    font-size: var(--text-xs, 0.8125rem);
 }
 
 /*  The ranking is a horizontal bar per byline; 20 rows need the room. */

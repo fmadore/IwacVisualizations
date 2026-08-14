@@ -21,7 +21,7 @@
  *  module's convention of marking computational artefacts visually. */
 .iwac-vis-reference__topic {
     margin: 0;
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink-light, #3f4349);
 }
 
@@ -34,7 +34,7 @@
 }
 
 .iwac-vis-reference__topic-words {
-    font-family: var(--font-mono, ui-monospace, monospace);
+    font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
 }
 
 /*  Review relation: a bibliographic fact about two works, set as prose
@@ -51,6 +51,6 @@
 
 .iwac-vis-reference__reviews p {
     margin: 0;
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-sm, 0.9375rem);
     color: var(--ink, #13161c);
 }

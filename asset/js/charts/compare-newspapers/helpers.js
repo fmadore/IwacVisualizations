@@ -22,7 +22,7 @@
     /*  Side colors                                                       */
     /*                                                                    */
     /*  Corpus A tracks the theme --primary (via getChartTokens). Corpus  */
-    /*  B is the slate-blue accent declared as --iwac-compare-color-b on  */
+    /*  B is the slate-blue accent declared as --iwac-vis-compare-color-b on  */
     /*  the block, which the CSS flips to a lighter shade in dark mode.   */
     /*  Read that custom property off the live block element so the       */
     /*  ECharts / MapLibre series match the CSS swatches in BOTH themes   */
@@ -38,7 +38,7 @@
         var b = '#394f68';
         var block = document.querySelector('.iwac-vis-compare-newspapers');
         if (block && window.getComputedStyle) {
-            var vb = getComputedStyle(block).getPropertyValue('--iwac-compare-color-b');
+            var vb = getComputedStyle(block).getPropertyValue('--iwac-vis-compare-color-b');
             if (vb && vb.trim()) b = vb.trim();
         }
         return { a: tokens.primary || '#e64a19', b: b };

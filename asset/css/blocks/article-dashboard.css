@@ -53,14 +53,14 @@
     text-decoration: none;
     color: inherit;
     transition:
-        transform var(--transition-fast, 150ms ease),
-        box-shadow var(--transition-fast, 150ms ease),
-        border-color var(--transition-fast, 150ms ease);
+        transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        box-shadow var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-article-card:hover,
 .iwac-vis-article-card:focus-visible {
     border-color: color-mix(in oklab, var(--primary, #ce4115) 45%, var(--border, #ced1d6));
-    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(9, 11, 15, 0.12), 0 2px 4px -2px rgba(20, 22, 27, 0.06));
     /*  Restrained 2px lift — matches the IWAC theme's --lift-xs token
      *  used on primary buttons / linked resource cards. Bigger lifts
      *  feel dated (material-design era); 2px is the current editorial
@@ -190,7 +190,7 @@
     /*  The theme's ledger line: a 2px ink rule opening each section.
      *  Same device as .iwac-vis-summary-card, so the article page reads
      *  as one instrument rather than a stack of unrelated widgets. */
-    border-top: 2px solid var(--ink-strong, var(--ink, #13161c));
+    border-top: 2px solid var(--ink-strong, #05070c);
     padding-top: var(--space-3, 0.75rem);
 }
 
@@ -205,8 +205,8 @@
     margin: 0;
     font-size: var(--text-sm, 0.9375rem);
     font-weight: 600;
-    color: var(--ink-strong, var(--ink, #13161c));
-    letter-spacing: var(--tracking-tight, -0.015em);
+    color: var(--ink-strong, #05070c);
+    letter-spacing: var(--tracking-tight, -0.02em);
 }
 /*  The verdict is the panel's headline finding — whether the three
  *  readings converge — so it gets the theme's metadata eyebrow
@@ -222,7 +222,7 @@
     color: var(--muted, #66696e);
 }
 .iwac-vis-sent-axis__verdict--differ {
-    color: var(--ink-light, var(--ink, #13161c));
+    color: var(--ink-light, #3f4349);
 }
 
 /*  Scale poles, sitting in the track column so they read as the ends of
@@ -233,7 +233,7 @@
     grid-template-columns: var(--iwac-vis-sent-cols);
     gap: var(--space-3, 0.75rem);
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--ink-subtle, var(--muted, #66696e));
+    color: var(--ink-subtle, #5a5e63);
     text-transform: lowercase;
     line-height: 1.2;
 }
@@ -286,7 +286,7 @@
 }
 .iwac-vis-sent-lane__name {
     font-size: var(--text-xs, 0.8125rem);
-    color: var(--ink-light, var(--ink, #13161c));
+    color: var(--ink-light, #3f4349);
     line-height: 1.2;
     min-width: 0;
     overflow-wrap: anywhere;
@@ -363,8 +363,8 @@
 .iwac-vis-sent-stop--on {
     width: 11px;
     height: 11px;
-    background: var(--ink-strong, var(--ink, #13161c));
-    box-shadow: 0 0 0 3px var(--panel-bg, var(--surface, #fdfcfb));
+    background: var(--ink-strong, #05070c);
+    box-shadow: 0 0 0 3px var(--panel-bg, #fdfcfb);
 }
 /*  The marker carries a title naming the model and its position, so give
  *  it the cursor that advertises one and a hit area big enough to land on
@@ -407,14 +407,14 @@
     font-size: var(--text-xs, 0.8125rem);
     color: var(--muted, #66696e);
     list-style: none;
-    transition: color var(--transition-fast, 150ms ease);
+    transition: color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-sent-axis__why > summary::-webkit-details-marker { display: none; }
 .iwac-vis-sent-axis__why > summary::before {
     content: '▸';
     display: inline-block;
     margin-right: 0.35rem;
-    transition: transform var(--transition-fast, 150ms ease);
+    transition: transform var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 .iwac-vis-sent-axis__why[open] > summary::before {
     transform: rotate(90deg);
@@ -423,7 +423,7 @@
     color: var(--ink, #13161c);
 }
 .iwac-vis-sent-axis__why > summary:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 2px;
     border-radius: var(--radius-sm, 0.375rem);
 }
@@ -442,7 +442,7 @@
 .iwac-vis-sent-why__model {
     display: block;
     margin-bottom: 0.25rem;
-    color: var(--ink-light, var(--ink, #13161c));
+    color: var(--ink-light, #3f4349);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
@@ -451,7 +451,7 @@
     margin: 0;
     color: var(--muted, #66696e);
     padding-left: var(--space-2, 0.5rem);
-    border-left: 2px solid var(--border-light, var(--border, #ced1d6));
+    border-left: 2px solid var(--border-light, #e2e5e8);
     overflow-wrap: anywhere;
 }
 
@@ -460,7 +460,7 @@
  * 34rem, so it stacks: model name, then the full-width track, then the
  * reading positioned under its own marker.
  * ------------------------------------------------------------------ */
-@media (max-width: 560px) {
+@media (max-width: 599px)  /* < sm */ {
     .iwac-vis-sent-axis {
         --iwac-vis-sent-cols: minmax(0, 1fr) minmax(0, 1fr);
     }
@@ -533,6 +533,6 @@
     min-height: 340px;
 }
 
-@media (max-width: 600px) { /* sm */
+@media (max-width: 599px) { /* sm */
     .iwac-vis-article .iwac-vis-map { min-height: 280px; }
 }

@@ -37,7 +37,7 @@
     height: 560px;
 }
 
-@media (max-width: 768px) { /* md */
+@media (max-width: 767px) { /* md */
     .iwac-vis-spatial-map-panel .iwac-vis-map {
         height: 420px;
     }
@@ -109,8 +109,8 @@
     text-align: left;
     cursor: pointer;
     transition:
-        background-color var(--transition-fast, 150ms ease),
-        border-color     var(--transition-fast, 150ms ease);
+        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
+        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .iwac-vis-spatial-picker__item:hover {
@@ -118,7 +118,7 @@
 }
 
 .iwac-vis-spatial-picker__item:focus-visible {
-    outline: 2px solid var(--focus-color, var(--primary, #ce4115));
+    outline: var(--focus-outline, 2px solid #ce4115);
     outline-offset: 1px;
 }
 
@@ -221,7 +221,7 @@
     background: var(--surface, #fdfcfb);
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-sm, 0 2px 4px 0 var(--iwac-vis-shadow-soft));
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06));
     font-size: var(--text-xs, 0.8125rem);
     color: var(--ink, #13161c);
     pointer-events: none;
