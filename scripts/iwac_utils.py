@@ -30,6 +30,8 @@ Functions:
 - sentiment_columns: Candidate HF column names for one model x field
 - resolve_sentiment_columns: Map canonical model ids onto the sentiment
   columns actually present, warning when a model resolves to nothing
+- present_sentiment_models: The subset of those ids that actually resolved,
+  for a payload's `models` array
 - subjectivite_ordinal: Subjectivite label (or legacy number) -> 1..5
 - save_json: Save JSON with mkdir and optional minification
 - configure_logging: Standard logging setup
@@ -1116,6 +1118,7 @@ SENTIMENT_MODELS: Tuple[str, ...] = (
     "gpt_5_6_luna",
     "mistral_small_2603",
     "deepseek_v4_flash_0731",
+    "gemma_4_31b_it",
 )
 """Canonical model ids the whole module keys on.
 
@@ -1123,7 +1126,17 @@ The id **is** the Hugging Face column prefix, and it names the exact model
 that produced the annotation. It is also the key in every generated JSON
 payload, in the block JS and i18n catalogs, and — camel-cased — in the
 Omeka properties ``SentimentExtractor.php`` reads (``iwac:gpt56Luna*``,
-``iwac:mistralSmall2603*``, ``iwac:deepseekV4Flash0731*``).
+``iwac:mistralSmall2603*``, ``iwac:deepseekV4Flash0731*``,
+``iwac:gemma431bIt*``).
+
+This is a *wish list*, not a promise that the columns exist. A model
+joins the panel on Omeka first and reaches Hugging Face only once the
+upstream uploader has been taught it, so ``gemma_4_31b_it`` sits here
+resolving to nothing until that lands. Every generator therefore filters
+this tuple through :func:`resolve_sentiment_columns` and emits only the
+models it actually found — listing an id in a payload's ``models`` array
+with no data behind it hands the block a model picker whose entry draws
+an empty chart, which reads as breakage rather than as "not yet".
 
 This replaced the earlier *vendor slot* ids (``gemini`` / ``chatgpt`` /
 ``mistral``, resolving to the ``gemini_3_flash_preview`` /  ``gpt_5_mini``
@@ -1281,6 +1294,40 @@ def resolve_sentiment_columns(
                 )
         resolved[model] = found
     return resolved
+
+
+def present_sentiment_models(
+    resolved: Dict[str, Dict[str, Optional[str]]],
+    models: Optional[Tuple[str, ...]] = None,
+) -> List[str]:
+    """The models in ``resolved`` that carry at least one real column.
+
+    The counterpart to :func:`resolve_sentiment_columns`, and the thing a
+    generator should put in its payload's ``models`` array. Note the trap
+    this exists to close: ``resolved[model]`` is a dict of *three None
+    values* for a model with no columns, and a non-empty dict is truthy,
+    so the obvious ``[m for m in SENTIMENT_MODELS if resolved.get(m)]``
+    keeps every model — including the ones with nothing behind them.
+
+    Order follows :data:`SENTIMENT_MODELS`, so the block's model picker
+    opens on the same model from one regeneration to the next.
+
+    Args:
+        resolved: Output of :func:`resolve_sentiment_columns`
+        models: Ids to consider, in order (default :data:`SENTIMENT_MODELS`)
+
+    Returns:
+        Model ids with at least one resolved column
+
+    Examples:
+        >>> present_sentiment_models({"a": {"polarite": "a_polarite"},
+        ...                           "b": {"polarite": None}})
+        ['a']
+    """
+    return [
+        model for model in (models or SENTIMENT_MODELS)
+        if any((resolved.get(model) or {}).values())
+    ]
 
 
 # =============================================================================

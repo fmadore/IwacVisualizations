@@ -16,7 +16,7 @@
  *                  per-outlet frame fingerprints
  *   - actors       the authority records speaking laïcité, by decade
  *   - arenas       frame × decade × country shares — what is contested
- *   - sentiment    three-model AI framing against a whole-corpus baseline
+ *   - sentiment    per-model AI framing against a whole-corpus baseline
  *   - map          geocoded places tagged on dossier items
  *   - semantic     UMAP map of the press half, and a check on the frames
  *   - circulation  near-duplicate copy across outlets: does it circulate?

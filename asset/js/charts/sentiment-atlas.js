@@ -16,7 +16,8 @@
  *   Intro      — summary cards + "period covered" subtitle
  *   [Model]    — a single facet bar; the model lens for the panels below
  *   Over time  — polarity over time, centrality over time (both faceted),
- *                subjectivity trend (all three models at once)
+ *                subjectivity trend (every model at once — the only panel
+ *                here that does, hence the per-model colour tokens)
  *   Breakdown  — polarity by country, polarity × subjectivity, and the
  *                centrality-by-country-and-year heatmap (all faceted)
  *   Extremes   — top subject / place keywords in the most extreme-rated
@@ -94,7 +95,8 @@
         var fallbackIdx = {
             gpt_5_6_luna: 0,
             mistral_small_2603: 2,
-            deepseek_v4_flash_0731: 1
+            deepseek_v4_flash_0731: 1,
+            gemma_4_31b_it: 3
         };
         return palette[fallbackIdx[key]] || palette[0];
     }

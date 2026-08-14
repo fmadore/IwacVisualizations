@@ -75,6 +75,7 @@ from iwac_utils import (
     normalize_location_name,
     parse_coordinates,
     parse_pipe_separated,
+    present_sentiment_models,
     read_hijri_month,
     resolve_sentiment_columns,
     subjectivite_ordinal,
@@ -118,7 +119,12 @@ SPATIAL_FIELDS = {
 #
 # SENTIMENT_MODELS holds the canonical model ids the emitted JSON keys on,
 # which are also the HF column prefixes; resolve_sentiment_columns checks
-# they are actually present in the loaded snapshot.
+# they are actually present in the loaded snapshot, and
+# `self.sentiment_models` narrows the list to the ones that were. Emit
+# that, never SENTIMENT_MODELS itself — the constant runs ahead of the
+# Hub (a model is annotated on Omeka well before its column is uploaded),
+# so publishing it verbatim gives the panel a picker entry that draws an
+# empty chart.
 
 # Polarité ordering — kept as the canonical IWAC scale so the chart
 # segments always render in this order regardless of dataset row order.
@@ -257,6 +263,10 @@ class DashboardAggregator:
         # item_key -> subclass-shaped entity references (see _register_item)
         self.item_entities: Dict[str, Any] = {}
         self.items_meta: Dict[str, Dict[str, Any]] = {}       # item_key -> {o_id, pub_date, newspaper, country, subset, ...}
+        # Rating models the loaded snapshot actually carries columns for,
+        # narrowed from SENTIMENT_MODELS while scanning `articles`. This,
+        # not the constant, is what compute_sentiment publishes.
+        self.sentiment_models: List[str] = list(SENTIMENT_MODELS)
         self.df: Dict[int, int] = {}  # document frequency for TF-IDF
         self.n_targets: int = 0      # denominator for IDF
 
@@ -478,6 +488,8 @@ class DashboardAggregator:
                 resolve_sentiment_columns(df) if subset == "articles" else
                 {model: {} for model in SENTIMENT_MODELS}
             )
+            if subset == "articles":
+                self.sentiment_models = present_sentiment_models(sentiment_cols)
 
             for _, row in df.iterrows():
                 raw_id = row.get(id_col)
@@ -758,12 +770,13 @@ class DashboardAggregator:
         return {"by_role": by_role}
 
     def compute_sentiment(self, target_id: int) -> Dict[str, Any]:
-        """Polarité / centralité / subjectivité counts for the 3 AI models.
+        """Polarité / centralité / subjectivité counts per AI rating model.
 
         Returns a structure the JS panel can flip between models without
         re-fetching. Categories are forced into IWAC display order so
         the stacked bar segments stay consistent.
         """
+        models = self.sentiment_models
         by_role: Dict[str, Any] = {}
         for role, item_keys in self._role_slices(target_id):
             by_model: Dict[str, Any] = {}
@@ -771,7 +784,7 @@ class DashboardAggregator:
             for key in item_keys:
                 if self.items_meta.get(key, {}).get("subset") == "articles":
                     articles_total += 1
-            for model in SENTIMENT_MODELS:
+            for model in models:
                 pol_counter: Counter = Counter()
                 cen_counter: Counter = Counter()
                 sub_counter: Counter = Counter()
@@ -817,7 +830,7 @@ class DashboardAggregator:
                     "rated_articles": rated,
                 }
             by_role[role] = {
-                "models": list(SENTIMENT_MODELS),
+                "models": list(models),
                 "by_model": by_model,
                 "articles_total": articles_total,
             }

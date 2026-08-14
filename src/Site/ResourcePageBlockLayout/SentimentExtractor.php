@@ -5,7 +5,7 @@ use IwacVisualizations\Module;
 use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 
 /**
- * Pull 3-model AI sentiment data off an Omeka item.
+ * Pull the multi-model AI sentiment data off an Omeka item.
  *
  * Reads the `iwac:<model><Axis>` vocabulary properties (linked-resource
  * values that point at items in the authority controlled vocabulary)
@@ -23,19 +23,33 @@ use Omeka\Api\Representation\AbstractResourceEntityRepresentation;
 class SentimentExtractor
 {
     /**
-     * The three rating models, as the camelCase stem of their `iwac:`
+     * The rating models, as the camelCase stem of their `iwac:`
      * properties. These are the July–August 2026 generation: the earlier
      * `gemini` / `chatgpt` / `mistral` properties named a *vendor slot*
      * rather than a model and recorded nothing about which model ran.
      *
      * The matching Hugging Face column prefixes — what the precomputed
      * blocks key on — are the snake_case forms: `gpt_5_6_luna`,
-     * `mistral_small_2603`, `deepseek_v4_flash_0731`.
+     * `mistral_small_2603`, `deepseek_v4_flash_0731`, `gemma_4_31b_it`.
+     *
+     * A model appears here as soon as its corpus pass STARTS, not when it
+     * finishes. This class reads Omeka per item, so a partially-annotated
+     * model simply has no lane on the articles it has not reached yet —
+     * `fromItem` marks it unrated and the partial drops it. The
+     * precomputed side behaves differently and lags: it reads Hugging
+     * Face columns that only exist once the uploader's panel has been
+     * taught the model, so expect a window in which the item page shows
+     * four raters and the corpus-level blocks still show three.
      */
-    const MODELS = ['gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731'];
+    const MODELS = [
+        'gpt56Luna',
+        'mistralSmall2603',
+        'deepseekV4Flash0731',
+        'gemma431bIt',
+    ];
 
     /**
-     * Presentation chrome for the three rating models: the precise model
+     * Presentation chrome for the rating models: the precise model
      * name (release / parameter detail included — readers of a research
      * instrument want to know exactly which model produced a rating), the
      * organisation, a short form for chart legends, and the logo filename
@@ -77,6 +91,18 @@ class SentimentExtractor
             'org'   => 'DeepSeek',
             'short' => 'DeepSeek V4 Flash',
             'logo'  => 'DeepSeek_logo.svg',
+        ],
+        // The Google slot since 2026-08-14, replacing a Gemini 3.5 Flash
+        // Lite entry that was declared upstream and never wrote a value.
+        // Raster rather than SVG like the other three: the mark is a
+        // gradient-filled glyph over a construction grid, and a hand-traced
+        // approximation of someone's logo is worse than a 96px bitmap
+        // rendered into an 18px slot.
+        'gemma431bIt' => [
+            'name'  => 'Gemma 4 31B',
+            'org'   => 'Google DeepMind',
+            'short' => 'Gemma 4 31B',
+            'logo'  => 'Gemma_logo.png',
         ],
     ];
 
@@ -156,9 +182,9 @@ class SentimentExtractor
     }
 
     /**
-     * True if at least one of the three models rated any axis.
-     * The article partial uses this to elide the whole panel for
-     * unrated items rather than showing three empty model cards.
+     * True if at least one model rated any axis. The article partial
+     * uses this to elide the whole panel for unrated items rather than
+     * showing a column of empty model lanes.
      */
     public static function hasAny(array $bundle): bool
     {

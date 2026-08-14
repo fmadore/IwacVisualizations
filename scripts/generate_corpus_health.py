@@ -129,11 +129,16 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         if col("embedding_OCR") is not None:
             metrics.append(metric("Text embeddings", _embeddings(df["embedding_OCR"]), n))
         # Labels name the exact model that produced the annotation, which
-        # is also what the HF columns and the model ids key on.
+        # is also what the HF columns and the model ids key on. A model
+        # with no column yields no row at all rather than a 0% one — this
+        # panel reports how complete the enrichment is, and "0% annotated"
+        # would read as a stalled run rather than as a column the snapshot
+        # simply does not have yet.
         sentiment_cols = resolve_sentiment_columns(df)
         for model, label in (("gpt_5_6_luna", "Sentiment — GPT-5.6 Luna"),
                              ("mistral_small_2603", "Sentiment — Mistral Small 4"),
-                             ("deepseek_v4_flash_0731", "Sentiment — DeepSeek V4 Flash")):
+                             ("deepseek_v4_flash_0731", "Sentiment — DeepSeek V4 Flash"),
+                             ("gemma_4_31b_it", "Sentiment — Gemma 4 31B")):
             c = sentiment_cols[model]["polarite"]
             if c is not None:
                 metrics.append(metric(label, _nonempty(df[c]), n))

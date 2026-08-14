@@ -452,11 +452,21 @@ private full mirror; `--repo` on every generator overrides it) and
 `SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]`.
 
 Sentiment constants: `SENTIMENT_MODELS = ("gpt_5_6_luna",
-"mistral_small_2603", "deepseek_v4_flash_0731")` — the canonical ids, which
-are also the Hugging Face column prefixes and the keys every generated
-payload, block JS file and i18n catalog uses. `resolve_sentiment_columns(df)`
-binds them to the columns actually present and warns when a model resolves
-to nothing.
+"mistral_small_2603", "deepseek_v4_flash_0731", "gemma_4_31b_it")` — the
+canonical ids, which are also the Hugging Face column prefixes and the keys
+every generated payload, block JS file and i18n catalog uses.
+`resolve_sentiment_columns(df)` binds them to the columns actually present
+and warns when a model resolves to nothing.
+
+That tuple is a **roster, not a guarantee**. A model starts annotating on
+Omeka well before the upstream uploader gives it a Hugging Face column, so
+it sits here resolving to nothing for a while. Publish
+`present_sentiment_models(resolved)` in a payload's `models` array, never
+`SENTIMENT_MODELS` itself — an id with no data behind it gives the block a
+model picker whose entry draws an empty chart, which reads as breakage
+rather than as "not yet". Note the trap the helper exists to close:
+`resolved[model]` is a dict of `None` values for an absent model, and a
+non-empty dict is truthy, so `if resolved.get(model)` filters nothing.
 
 `subjectivite_ordinal(value)` is **not optional**: since generation 2 the
 `{model}_subjectivite_score` column holds a French label, not a number, so

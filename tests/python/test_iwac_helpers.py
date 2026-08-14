@@ -71,10 +71,7 @@ class UtilityContractTests(unittest.TestCase):
         ])
         resolved = iwac_utils.resolve_sentiment_columns(frame)
 
-        self.assertEqual(
-            set(resolved),
-            {"gpt_5_6_luna", "mistral_small_2603", "deepseek_v4_flash_0731"},
-        )
+        self.assertEqual(set(resolved), set(iwac_utils.SENTIMENT_MODELS))
         self.assertEqual(resolved["gpt_5_6_luna"]["polarite"], "gpt_5_6_luna_polarite")
         self.assertEqual(
             resolved["deepseek_v4_flash_0731"]["centralite"],
@@ -93,6 +90,41 @@ class UtilityContractTests(unittest.TestCase):
         self.assertEqual(
             resolved["gpt_5_6_luna"],
             {"polarite": None, "centralite": None, "subjectivite": None},
+        )
+
+    def test_present_models_drops_the_all_none_dict(self) -> None:
+        # The whole point of the helper: `{...: None}` is truthy, so a
+        # plain `if resolved.get(model)` keeps a model with no columns and
+        # publishes a picker entry backed by nothing. A model is annotated
+        # on Omeka before its Hugging Face column exists, so this is the
+        # normal state of affairs mid-campaign, not an error case.
+        frame = pd.DataFrame(columns=[
+            f"gpt_5_6_luna_{suffix}"
+            for suffix in iwac_utils.SENTIMENT_FIELD_SUFFIXES.values()
+        ])
+        resolved = iwac_utils.resolve_sentiment_columns(
+            frame, models=("gpt_5_6_luna", "gemma_4_31b_it"))
+
+        self.assertTrue(all(resolved["gemma_4_31b_it"][f] is None
+                            for f in resolved["gemma_4_31b_it"]))
+        self.assertEqual(
+            iwac_utils.present_sentiment_models(
+                resolved, models=("gpt_5_6_luna", "gemma_4_31b_it")),
+            ["gpt_5_6_luna"],
+        )
+
+    def test_present_models_keeps_the_canonical_order(self) -> None:
+        # The block's model picker opens on models[0]; deriving the list
+        # from a set would make that jump between regenerations.
+        frame = pd.DataFrame(columns=[
+            f"{model}_{suffix}"
+            for model in iwac_utils.SENTIMENT_MODELS
+            for suffix in iwac_utils.SENTIMENT_FIELD_SUFFIXES.values()
+        ])
+        resolved = iwac_utils.resolve_sentiment_columns(frame)
+        self.assertEqual(
+            iwac_utils.present_sentiment_models(resolved),
+            list(iwac_utils.SENTIMENT_MODELS),
         )
 
     def test_subjectivite_ordinal_reads_labels_and_legacy_numbers(self) -> None:

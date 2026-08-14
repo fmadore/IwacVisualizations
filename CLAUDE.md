@@ -12,7 +12,7 @@ For the architectural overview — block layouts, asset partial, data strategy, 
 
 When writing or modifying any Python that reads the HF dataset (anything under `scripts/generate_*.py`, anything that calls `load_dataset(…)` on the IWAC dataset or its `-full` mirror, or any new generator added next to them), invoke the **`iwac-dataset` skill** before touching code. It carries:
 
-- Verified per-subset schema (field names, types, `embedding_OCR` vs `embedding_tableOfContents`, the three-model AI sentiment shape, `lda_topic_*` columns, etc.)
+- Verified per-subset schema (field names, types, `embedding_OCR` vs `embedding_tableOfContents`, the multi-model AI sentiment shape, `lda_topic_*` columns, etc.)
 - Conventions: pipe-separated multi-values, ISO dates, `lda_topic_id == -1` outliers, country canonicalization
 - Authority-record join pattern (`articles.subject` ↔ `index.Titre`)
 - Place geocoding via `index.Coordonnées`

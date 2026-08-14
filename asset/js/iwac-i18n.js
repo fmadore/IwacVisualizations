@@ -169,7 +169,10 @@
             // New shared panels (person + entity)
             'desc_year_month_heatmap':     'Mentions per year and month, counted only for items whose date gives at least a year and a month. Cells stay blank where no date could be read.',
             'desc_lda_topics':             'The 12 most common themes among articles mentioning this entity, by article count. The themes come from a statistical model (LDA) run over the articles in the collection; publications and references add to the mention counts but not to the topic mix.',
-            'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, with a side-by-side comparison of the three AI raters (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). The model picker switches between them and the bars update in place. Articles only: publications and references are not rated.',
+            // Names no raters. The picker directly above lists them, and
+            // the roster changes — this sentence still named the retired
+            // January 2026 models for a release after the panel moved on.
+            'desc_ai_sentiment':           'Polarity and centrality of articles mentioning this entity, as rated by each AI model in turn. The model picker switches between them and the bars update in place. Articles only: publications and references are not rated.',
             'desc_subject_cooccurrence':   'How often each pair among the 15 entities most often mentioned alongside this one appears together. The Associated entities panel puts this entity at the centre and measures the links to it; this panel sets the centre aside and asks which neighbours keep travelling together.',
 
             // AI sentiment — axis labels. The model names are proper
@@ -280,8 +283,8 @@
             'Sentiment only on articles':    'Sentiment ratings cover articles only',
             'Places mentioned in each corpus, joined to the IWAC authority index. Bubble size scales with the number of items that tagged each place.':
                 'Places mentioned in each corpus, matched against the IWAC authority index. The larger the bubble, the more items tagged that place.',
-            'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
-                'How polarity and centrality are distributed across the articles of each corpus, as rated by three AI models. Use the picker to change model; publications are not rated.',
+            'Distribution of polarity and centrality in articles of each corpus, as rated by the AI models. The picker swaps the model; publications are not rated.':
+                'How polarity and centrality are distributed across the articles of each corpus, as rated by the AI models. Use the picker to change model; publications are not rated.',
 
             // Sentiment panel (server-rendered) — English source labels
             // match the IwacSentiment module's vocabulary maps so
@@ -669,7 +672,7 @@
             'Subject co-occurrence':       'Co-occurrence de sujets',
             'desc_year_month_heatmap':     'Nombre de mentions par ann\u00e9e et par mois, calcul\u00e9 uniquement \u00e0 partir des notices dont la date donne au moins une ann\u00e9e et un mois. Les cellules restent vides l\u00e0 o\u00f9 aucune date n\u2019a pu \u00eatre lue.',
             'desc_lda_topics':             'Les 12 th\u00e8mes les plus fr\u00e9quents parmi les articles mentionnant cette entit\u00e9, par nombre d\u2019articles. Ces th\u00e8mes proviennent d\u2019un mod\u00e8le statistique (LDA) appliqu\u00e9 aux articles de la collection ; publications et r\u00e9f\u00e9rences alimentent le nombre de mentions mais pas la r\u00e9partition th\u00e9matique.',
-            'desc_ai_sentiment':           'Polarit\u00e9 et centralit\u00e9 des articles mentionnant cette entit\u00e9, avec comparaison des trois mod\u00e8les d\u2019IA (GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash). Le s\u00e9lecteur de mod\u00e8le bascule entre eux et les barres se mettent \u00e0 jour sur place. Articles uniquement, les publications et les r\u00e9f\u00e9rences n\u2019\u00e9tant pas \u00e9valu\u00e9es.',
+            'desc_ai_sentiment':           'Polarit\u00e9 et centralit\u00e9 des articles mentionnant cette entit\u00e9, \u00e9valu\u00e9es tour \u00e0 tour par chaque mod\u00e8le d\u2019IA. Le s\u00e9lecteur de mod\u00e8le bascule entre eux et les barres se mettent \u00e0 jour sur place. Articles uniquement, les publications et les r\u00e9f\u00e9rences n\u2019\u00e9tant pas \u00e9valu\u00e9es.',
             'desc_subject_cooccurrence':   'Fr\u00e9quence \u00e0 laquelle chaque paire, parmi les 15 entit\u00e9s les plus souvent mentionn\u00e9es aux c\u00f4t\u00e9s de celle-ci, appara\u00eet ensemble. Le panneau Entit\u00e9s associ\u00e9es place cette entit\u00e9 au centre et mesure les liens qui y aboutissent ; celui-ci \u00e9carte le centre et demande quels voisins voyagent toujours ensemble.',
 
             // AI sentiment — axis labels. The model names are proper
@@ -817,8 +820,8 @@
             'mentions':                      'mentions',
             'Open entity':                   'Ouvrir la fiche',
             'AI sentiment comparison':       'Comparaison des sentiments (IA)',
-            'Distribution of polarity and centrality in articles of each corpus, as rated by three AI models. The picker swaps the model; publications are not rated.':
-                'Distribution de la polarit\u00e9 et de la centralit\u00e9 des articles de chaque corpus, \u00e9valu\u00e9es par trois mod\u00e8les d\u2019IA. Le s\u00e9lecteur change de mod\u00e8le\u00a0; les publications ne sont pas \u00e9valu\u00e9es.',
+            'Distribution of polarity and centrality in articles of each corpus, as rated by the AI models. The picker swaps the model; publications are not rated.':
+                'Distribution de la polarit\u00e9 et de la centralit\u00e9 des articles de chaque corpus, \u00e9valu\u00e9es par les mod\u00e8les d\u2019IA. Le s\u00e9lecteur change de mod\u00e8le\u00a0; les publications ne sont pas \u00e9valu\u00e9es.',
             'Axis':                          'Axe',
             'Model':                         'Mod\u00e8le',
             'Sentiment only on articles':    'Sentiments uniquement sur les articles',

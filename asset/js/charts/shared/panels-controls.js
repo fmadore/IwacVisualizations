@@ -45,6 +45,12 @@
         'gpt_5_6_luna':           'GPT-5.6 Luna',
         'mistral_small_2603':     'Mistral Small 4',
         'deepseek_v4_flash_0731': 'DeepSeek V4 Flash',
+        // The Google slot since 2026-08-14. Its label is here well before
+        // any bundle carries the id: the annotations land on Omeka first
+        // and reach a precomputed payload only once the Hugging Face
+        // uploader has been taught the model, so this entry sits unused
+        // for a while and then starts resolving on its own.
+        'gemma_4_31b_it':         'Gemma 4 31B',
         // Generation 1 — frozen (January–February 2026). Kept so an
         // older bundle still renders with the right names on screen.
         'gemini_3_flash_preview': 'Gemini 3 Flash',
