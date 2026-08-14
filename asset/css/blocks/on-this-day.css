@@ -270,7 +270,7 @@
 }
 
 .iwac-vis-otd-register__row:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
 }
 
@@ -340,7 +340,7 @@
 }
 
 .iwac-vis-otd-decades__card:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 3px;
 }
 
@@ -419,7 +419,7 @@
 }
 
 .iwac-vis-otd-clippings__cut:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 3px;
 }
 
@@ -497,7 +497,7 @@
 }
 
 .iwac-vis-otd-foot__toggle:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
     border-radius: var(--radius-sm, 0.375rem);
 }
@@ -528,7 +528,7 @@
 }
 
 .iwac-vis-otd-index__row:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: -2px;
 }
 

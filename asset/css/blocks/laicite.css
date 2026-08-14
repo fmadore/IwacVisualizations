@@ -66,7 +66,7 @@
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, #fdfcfb);
+    background: var(--panel-bg, var(--surface, #fdfcfb));
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
 }
@@ -125,7 +125,7 @@
 }
 
 .iwac-vis-laicite-view-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -203,7 +203,7 @@
 }
 
 .iwac-vis-laicite-venn-seg:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -396,7 +396,7 @@
 }
 
 .iwac-vis-laicite-chip.is-year:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -676,7 +676,7 @@ a.iwac-vis-kwic-title:hover {
 }
 
 .iwac-vis-laicite-details > summary:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -1023,7 +1023,7 @@ a.iwac-vis-laicite-actor-name:hover {
 }
 
 a.iwac-vis-laicite-actor-name:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -1274,7 +1274,7 @@ a.iwac-vis-laicite-work-title:hover {
 }
 
 a.iwac-vis-laicite-work-title:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -1417,7 +1417,7 @@ a.iwac-vis-laicite-circ-title:hover {
 }
 
 a.iwac-vis-laicite-circ-title:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 

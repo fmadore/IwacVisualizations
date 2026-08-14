@@ -55,7 +55,7 @@
     flex-direction: column;
     gap: var(--space-3, 0.75rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-    background: var(--panel-bg, #fdfcfb);
+    background: var(--panel-bg, var(--surface, #fdfcfb));
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
@@ -128,7 +128,7 @@
 }
 
 .iwac-vis-scary-view-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -197,7 +197,7 @@
 }
 
 .iwac-vis-scary-ctrl-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -450,7 +450,7 @@
 }
 
 .iwac-vis-scary-check input:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -478,7 +478,7 @@
 }
 
 .iwac-vis-scary-details summary:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -542,7 +542,7 @@
 }
 
 .iwac-vis-scary-def-card {
-    background: var(--panel-bg, #fdfcfb);
+    background: var(--panel-bg, var(--surface, #fdfcfb));
     border: 1px solid var(--border, #ced1d6);
     border-radius: var(--radius-md, 0.5rem);
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem);

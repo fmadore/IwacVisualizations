@@ -263,7 +263,7 @@
 }
 
 .iwac-vis-associated__choice:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -427,7 +427,7 @@
 }
 
 .iwac-vis-arc-list__name:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
     border-radius: 2px;
 }
@@ -504,7 +504,7 @@
 }
 
 .iwac-vis-time-matrix__scroll:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -614,7 +614,7 @@
 }
 
 .iwac-vis-time-matrix__name:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
     border-radius: 2px;
 }

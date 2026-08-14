@@ -110,7 +110,7 @@
        used `outline: none` plus a box-shadow ring whose rgba() fallback —
        rgba(230, 74, 25, .4) — was the pre-v2.0.0 brand orange written in a
        form no hex-based lint rule can see. */
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 /* Confirmation is the one sanctioned use of --primary here: state, not chrome. */

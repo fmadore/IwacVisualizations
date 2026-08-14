@@ -364,7 +364,7 @@
     width: 11px;
     height: 11px;
     background: var(--ink-strong, #05070c);
-    box-shadow: 0 0 0 3px var(--panel-bg, #fdfcfb);
+    box-shadow: 0 0 0 3px var(--panel-bg, var(--surface, #fdfcfb));
 }
 /*  The marker carries a title naming the model and its position, so give
  *  it the cursor that advertises one and a hit area big enough to land on
@@ -423,7 +423,7 @@
     color: var(--ink, #13161c);
 }
 .iwac-vis-sent-axis__why > summary:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
     border-radius: var(--radius-sm, 0.375rem);
 }

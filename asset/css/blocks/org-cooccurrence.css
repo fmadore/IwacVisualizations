@@ -81,7 +81,7 @@
 }
 
 .iwac-vis-orgcooc-record-link:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 

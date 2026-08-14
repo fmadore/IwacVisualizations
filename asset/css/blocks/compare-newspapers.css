@@ -122,7 +122,7 @@
 }
 
 .iwac-vis-compare-picker__select:focus {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
@@ -509,7 +509,7 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
 }
 
 a.iwac-vis-compare-overlap__tag:focus-visible {
-    outline: var(--focus-outline, 2px solid #ce4115);
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 2px;
 }
 
