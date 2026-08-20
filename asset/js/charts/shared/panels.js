@@ -318,18 +318,29 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Build a `.iwac-vis-panel` wrapper with an `<h4>` title, an
+     * Build a `.iwac-vis-panel` wrapper with a title heading, an
      * optional description paragraph, and a `.iwac-vis-chart` child
      * that the controller can pass to `IWACVis.registerChart`.
+     *
+     * The heading defaults to `<h4>`, which is right for one panel among
+     * several inside a dashboard whose own `<h3>` names the section. A block
+     * that is the only thing on its own patch of page — a page block dropped
+     * straight under the page's `<h1>` — passes `{ heading: 'h2' }` so the
+     * document outline does not skip two levels. The LOOK does not follow the
+     * level: `.iwac-vis-panel > h2` is styled alongside `.iwac-vis-block h4`
+     * in iwac-core.css precisely so promoting a heading stays an outline
+     * decision and never a type-scale one.
      *
      * @param {string} className e.g. "iwac-vis-panel" or "iwac-vis-panel iwac-vis-panel--wide"
      * @param {string} titleText already-translated title
      * @param {string} [descriptionText] already-translated description shown below the title
+     * @param {Object} [opts]
+     * @param {string} [opts.heading='h4'] element for the panel title
      * @returns {{panel: HTMLElement, chart: HTMLElement}}
      */
-    P.buildPanel = function (className, titleText, descriptionText) {
+    P.buildPanel = function (className, titleText, descriptionText, opts) {
         var panel = P.el('div', className);
-        panel.appendChild(P.el('h4', null, titleText));
+        panel.appendChild(P.el((opts && opts.heading) || 'h4', null, titleText));
         if (descriptionText) {
             panel.appendChild(P.el('p', 'iwac-vis-panel-desc', descriptionText));
         }

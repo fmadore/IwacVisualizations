@@ -165,7 +165,18 @@
     word-break: break-word;
 }
 
-.iwac-vis-block h4 {
+/*  A panel title, at whichever heading level the outline needs. `buildPanel`
+ *  emits <h4> by default and <h2> for a page block that sits directly under
+ *  the page's <h1> (On This Day) — the level is a document-structure decision,
+ *  so the two are styled together and render identically. Without the second
+ *  selector a promoted heading would inherit the theme's h2: serif, --text-2xl,
+ *  its own margins.
+ *
+ *  Kept at one class of specificity (0,1,1) so a block sheet's own
+ *  `.iwac-vis-<block>-panel > h2` rule, which loads after this file, still
+ *  wins — the OTD masthead treatment depends on that. */
+.iwac-vis-block h4,
+.iwac-vis-panel > h2 {
     font-size: var(--text-base, 1.0625rem);
     font-weight: 600;
     color: var(--ink, #13161c);
@@ -203,6 +214,30 @@
     color: var(--error, #c9222b);
 }
 
+/*  No-JS note — iwac-block-shell's `noscript` slot, which also hides the
+ *  spinner it stands in for. Every block in this module is client-rendered, so
+ *  with scripting off there is nothing on the page but this line and whatever
+ *  link the block hands the reader. Quiet on purpose: it is an explanation of
+ *  how the page works, not a report that something broke. Left-aligned, in the
+ *  reading face, because it is prose — unlike the centred status banners above,
+ *  which are captions on a missing widget. */
+.iwac-vis-noscript {
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-noscript p {
+    margin: 0 0 var(--space-2, 0.5rem);
+}
+
+.iwac-vis-noscript p:last-child {
+    margin-bottom: 0;
+}
+
 .iwac-vis-spinner {
     width: 32px;
     height: 32px;
@@ -216,6 +251,19 @@
     to { transform: rotate(360deg); }
 }
 
+/* Slow the ring rather than stop it — the intent being that a spinner frozen
+   mid-arc reads as a broken image, where a slow one still reads as waiting.
+   MEASURED CAVEAT: under the IWAC theme this declaration never wins. The
+   theme's utilities/_accessibility.scss carries the conventional global
+   reset — `*, *::before, *::after { animation-duration: 0.01ms !important;
+   animation-iteration-count: 1 !important }` — and `!important` beats this
+   rule, so a reduced-motion reader on the live site gets a static ring, not a
+   2 s one. That is a defensible outcome (no motion at all is what the
+   preference asks for) and this rule is left as the fallback for a host theme
+   with no such reset; what is NOT defensible is a comment claiming behaviour
+   the cascade contradicts, which is what stood here. Either way the ring is
+   not perpetual: every block that can wait indefinitely bounds its own fetch
+   (see LOAD_TIMEOUT_MS in charts/on-this-day.js). */
 @media (prefers-reduced-motion: reduce) {
     .iwac-vis-spinner { animation-duration: 2s; }
 }
@@ -224,10 +272,8 @@
    chip hovers, toolbar fades). !important is the sanctioned a11y override:
    it must beat every block sheet's own transition declarations. Durations
    go near-zero rather than `none` so anything styled via transition still
-   reaches its end state. Animations are NOT blanket-zeroed: the spinner
-   above deliberately slows instead of freezing into a broken-looking ring,
-   and chart motion is disabled centrally in the ECharts theme
-   (iwac-theme.js). */
+   reaches its end state. Chart motion is disabled centrally in the ECharts
+   theme (iwac-theme.js). */
 @media (prefers-reduced-motion: reduce) {
     [class*="iwac-vis-"],
     [class*="iwac-vis-"]::before,

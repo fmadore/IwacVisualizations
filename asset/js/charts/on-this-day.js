@@ -13,13 +13,19 @@
  * the same solar date. The reader chooses the layout (Register / Decades /
  * Clippings); the page editor chooses which one it opens on.
  *
- * Pure DOM — no ECharts. When the day file is missing (pre-first data sync)
- * or empty, the whole block removes itself silently, like the Item Set
- * Dashboard: an engagement hook must never render an error state. The Hijri
- * file is optional on exactly the same grounds — module code ships
- * independently of the data fan-out, so a module updated before the admin's
- * next "Pull latest data" run simply hides the calendar toggle rather than
- * offering a tab that 404s.
+ * Pure DOM — no ECharts. When the day file is ABSENT (404 — pre-first data
+ * sync) or empty, the whole block removes itself silently, like the Item Set
+ * Dashboard: an engagement hook must never render an error state over content
+ * that was never published. The Hijri file is optional on exactly the same
+ * grounds — module code ships independently of the data fan-out, so a module
+ * updated before the admin's next "Pull latest data" run simply hides the
+ * calendar toggle rather than offering a tab that 404s.
+ *
+ * A day file that exists but does not ARRIVE is a different thing, and gets a
+ * different answer: the fetch is bounded (LOAD_TIMEOUT_MS) and a stalled or
+ * failed request swaps the spinner for a quiet note and a retry control. See
+ * `fail()`. The server-rendered `<noscript>` line that covers the third case —
+ * no scripting at all — lives in the block template.
  *
  * The daily selection is deterministic: every visitor sees the same
  * spread-across-the-decades picks for a given date, and the picks change
@@ -55,7 +61,9 @@
             'otd.one_more':   'One more item in the collection carries this date.',
             'otd.more':       '{count} more items in the collection carry this date.',
             'otd.show_all':   'See all {count}',
-            'otd.collapse':   'Close the list'
+            'otd.collapse':   'Close the list',
+            'otd.err':        'Couldn’t load today’s items.',
+            'otd.retry':      'Try again'
         });
         ns.addTranslations('fr', {
             'Loading on this day': 'Chargement de « ce jour-là »',
@@ -76,7 +84,9 @@
             'otd.one_more':   'Un autre document de la collection porte cette date.',
             'otd.more':       '{count} autres documents de la collection portent cette date.',
             'otd.show_all':   'Tout voir ({count})',
-            'otd.collapse':   'Fermer la liste'
+            'otd.collapse':   'Fermer la liste',
+            'otd.err':        'Impossible de charger les documents du jour.',
+            'otd.retry':      'Réessayer'
         });
     }
 
@@ -94,6 +104,29 @@
     ];
     var DEFAULT_LAYOUT = 'register';
     var STORE_KEY = 'iwac-vis-otd-layout';
+
+    /**
+     * How long the block waits for its day file before saying so.
+     *
+     * `fetch` carries no timeout of its own, so a request that never answers —
+     * a captive portal, a proxy that swallows the connection, a phone that
+     * lost the network between the HTML and the JSON — leaves the promise
+     * pending for as long as the tab is open, and the spinner spinning for
+     * exactly that long. That was the block's only failure mode without a
+     * visible end: a 404 removes the block, a 500 removes the block, an
+     * unanswered request span forever.
+     *
+     * Twelve seconds is well past what a 7 KB same-origin file needs and still
+     * inside the span a reader will wait before deciding a page is broken.
+     *
+     * It is also what bounds the spinner for a reduced-motion reader. Measured
+     * on the live stack: the theme's global `prefers-reduced-motion` reset
+     * (`animation-duration: 0.01ms !important`) outranks iwac-core.css's own
+     * 2 s spinner rule, so that reader gets a STATIC ring — which is fine for
+     * a wait that ends, and was the one thing this block could not promise.
+     * Now it can.
+     */
+    var LOAD_TIMEOUT_MS = 12000;
 
     function layoutFor(key) {
         for (var i = 0; i < LAYOUTS.length; i++) {
@@ -213,7 +246,15 @@
         container.innerHTML = '';
         var panel = P.buildPanel(
             'iwac-vis-panel iwac-vis-panel--wide iwac-vis-otd-panel',
-            P.t('otd.title')
+            P.t('otd.title'),
+            null,
+            // <h2>, not the panel default <h4>. This block is a page block on
+            // a homepage whose only other heading is the masthead <h1>, so an
+            // <h4> here left the outline reading h1 → h4 — two empty levels a
+            // screen-reader user has to step over, and a false claim that the
+            // almanac is subordinate to some h3 that does not exist. The look
+            // is unchanged: see the panel-title rule in iwac-core.css.
+            { heading: 'h2' }
         );
         container.appendChild(panel.panel);
 
@@ -225,15 +266,15 @@
         var subline = P.el('span', 'iwac-vis-otd-head__sub');
         var desc = P.el('p', 'iwac-vis-otd-head__desc');
 
-        // The panel's <h4> is the block's accessible heading; the date
+        // The panel's heading is the block's accessible heading; the date
         // belongs inside it so the heading reads "On this day, 29 July"
         // rather than leaving the date as an orphaned display line. The two
         // are separate flex lines visually, but the heading is announced as
         // one string — hence the explicit separator, without which it read
         // as "On this day29 July".
-        var h4 = panel.panel.querySelector('h4');
-        h4.appendChild(document.createTextNode(' '));
-        h4.appendChild(headline);
+        var title = panel.panel.querySelector('h2');
+        title.appendChild(document.createTextNode(' '));
+        title.appendChild(headline);
 
         var titles = P.el('div', 'iwac-vis-otd-head__titles');
         titles.appendChild(subline);
@@ -301,33 +342,148 @@
         draw();
     }
 
-    // `onError: 'remove'` is the engagement-hook contract: before the first data
-    // sync there is no per-day file, and a homepage block must vanish rather
-    // than render an error banner.
+    /* ----------------------------------------------------------------- */
+    /*  Load — and the two different ways it can fail                     */
+    /* ----------------------------------------------------------------- */
+
+    /** Today's two day files. */
+    function loadDay(ctx, signal) {
+        var gregKey = S.gregKey();
+        var hijriKey = S.hijriKey();
+        var opts = signal ? { signal: signal } : null;
+        return Promise.all([
+            P.fetchJSON(ctx.dataBase + 'on-this-day/' + gregKey + '.json', opts),
+            // Optional by design — see the header note. Resolving the
+            // rejection here rather than letting Promise.all reject keeps
+            // a missing Hijri fan-out from taking the block down with it.
+            hijriKey
+                ? P.fetchJSON(ctx.dataBase + 'on-this-day/h/' + hijriKey + '.json', opts)
+                    .catch(function () { return null; })
+                : null
+        ]).then(function (both) {
+            return {
+                greg: both[0], hijri: both[1],
+                gregKey: gregKey, hijriKey: hijriKey
+            };
+        });
+    }
+
+    /**
+     * `loadDay`, bounded by LOAD_TIMEOUT_MS.
+     *
+     * The pending request is aborted rather than merely ignored, so a stalled
+     * connection stops holding one of the browser's per-origin slots while the
+     * rest of the homepage is still loading. A late resolution after the
+     * timeout is dropped: `settled` makes this promise answer exactly once.
+     */
+    function loadDayBounded(ctx) {
+        var controller = typeof AbortController !== 'undefined'
+            ? new AbortController()
+            : null;
+        return new Promise(function (resolve, reject) {
+            var settled = false;
+            var timer = window.setTimeout(function () {
+                if (settled) return;
+                settled = true;
+                if (controller) controller.abort();
+                reject(new Error('timed out after ' + LOAD_TIMEOUT_MS + ' ms'));
+            }, LOAD_TIMEOUT_MS);
+            function finish(fn) {
+                return function (value) {
+                    if (settled) return;
+                    settled = true;
+                    window.clearTimeout(timer);
+                    fn(value);
+                };
+            }
+            loadDay(ctx, controller && controller.signal)
+                .then(finish(resolve), finish(reject));
+        });
+    }
+
+    /**
+     * What the block says when the day never arrived.
+     *
+     * Deliberately NOT the shared `.iwac-vis-error` banner: that is a 180 px
+     * centred box in `--error` red, which on a homepage shouts "this site is
+     * broken" about a feature nobody asked for. This is a note in the block's
+     * own register instead — one hairline rule, one line of text, one quiet
+     * control — and it REPLACES the spinner rather than joining it.
+     */
+    function buildFallback(container, ctx) {
+        var box = P.el('div', 'iwac-vis-otd-fallback');
+        // It stands where a live region stood, so it has to be one: a
+        // screen-reader user who heard "Loading on this day…" would otherwise
+        // get silence where the outcome belongs.
+        box.setAttribute('role', 'status');
+        box.setAttribute('aria-live', 'polite');
+
+        // The block keeps its standing head in every state it renders. Without
+        // it the failure is an unattributed line on a homepage — the reader is
+        // told that something did not load, but not what — and the <h2> the
+        // outline gained would quietly disappear on exactly the path where a
+        // screen-reader user most needs to know which block is speaking.
+        box.appendChild(P.el('h2', 'iwac-vis-otd-fallback__eyebrow', P.t('otd.title')));
+
+        var row = P.el('div', 'iwac-vis-otd-fallback__row');
+        row.appendChild(P.el('p', 'iwac-vis-otd-fallback__msg', P.t('otd.err')));
+
+        // A bare <button> is the QUIET control in this theme — outlined, flat,
+        // no halo (2.10 inverted the default). `.iwac-vis-btn` is the module's
+        // own spelling of that grammar. Nothing here may render as a submit
+        // control, which the theme still paints filled and glowing: a failed
+        // engagement hook does not get to be the loudest thing on the page.
+        var retry = P.el('button', 'iwac-vis-btn iwac-vis-otd-fallback__retry',
+            P.t('otd.retry'));
+        retry.type = 'button';
+        retry.addEventListener('click', function () { attempt(container, ctx); });
+        row.appendChild(retry);
+
+        box.appendChild(row);
+        return box;
+    }
+
+    /**
+     * Route a failure to the right outcome.
+     *
+     * A 404 still removes the block outright — that is the engagement-hook
+     * contract, and it means something specific: the per-day fan-out has not
+     * been published into files/ yet (a fresh install before the admin's first
+     * "Pull latest data" run). There is nothing the reader can retry.
+     *
+     * Everything else — a stalled request, a dropped connection, a 500, a
+     * truncated body — is a failure that a second attempt can plausibly fix,
+     * and the reader is better served by being told than by watching a
+     * spinner. That distinction is why `onError: 'remove'` alone was not
+     * enough: it treated both as "leave no trace", so the one case where the
+     * block COULD recover was the one case it never offered to.
+     */
+    function fail(container, ctx, err) {
+        if (/\bHTTP 404\b/.test(String((err && err.message) || ''))) {
+            P.removeBlock(container);
+            return;
+        }
+        console.warn('IWACVis on this day:', err);
+        container.innerHTML = '';
+        container.appendChild(buildFallback(container, ctx));
+    }
+
+    /** One attempt, spinner included — also the retry button's whole job. */
+    function attempt(container, ctx) {
+        container.innerHTML = '';
+        container.appendChild(P.buildLoadingState('Loading on this day'));
+        loadDayBounded(ctx).then(
+            function (data) { render(container, data, ctx); },
+            function (err) { fail(container, ctx, err); }
+        );
+    }
+
     P.bootBlock({
         selector:       '.iwac-vis-on-this-day',
         warnLabel:      'IWACVis on this day',
         requireECharts: false,
-        load:           function (ctx) {
-            var gregKey = S.gregKey();
-            var hijriKey = S.hijriKey();
-            return Promise.all([
-                P.fetchJSON(ctx.dataBase + 'on-this-day/' + gregKey + '.json'),
-                // Optional by design — see the header note. Resolving the
-                // rejection here rather than letting Promise.all reject keeps
-                // a missing Hijri fan-out from taking the block down with it.
-                hijriKey
-                    ? P.fetchJSON(ctx.dataBase + 'on-this-day/h/' + hijriKey + '.json')
-                        .catch(function () { return null; })
-                    : null
-            ]).then(function (both) {
-                return {
-                    greg: both[0], hijri: both[1],
-                    gregKey: gregKey, hijriKey: hijriKey
-                };
-            });
-        },
+        load:           loadDayBounded,
         render:         render,
-        onError:        'remove'
+        onError:        function (container, err, ctx) { fail(container, ctx, err); }
     });
 })();

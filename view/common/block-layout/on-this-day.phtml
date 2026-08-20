@@ -17,11 +17,46 @@
  * what an installation sees between a module update and the admin's next
  * "Pull latest data" run.
  *
+ * The one state the client cannot render is the one where there is no client:
+ * with scripting off, the whole almanac is a spinner that never stops. The
+ * `noscript` slot below is the block's only server-rendered content — a line
+ * saying so, and a way into the collection that needs no JavaScript at all.
+ *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var \Omeka\Api\Representation\SitePageBlockRepresentation|null $block
  * @var string|null $layout  Editor's default layout; absent on the embed
  *                           route, which renders the partial without a block.
  */
+
+$escapeHtml = $this->plugin('escapeHtml');
+$escapeAttr = $this->plugin('escapeHtmlAttr');
+
+// Core's site item-browse route, not the site's curated browse PAGE: the page
+// slug is per-site editorial content, and measurably not the same on the two
+// IWAC sites — /s/westafrica/page/browse resolves, /s/afrique_ouest/page/browse
+// is a 404 — so it is not something this partial can know. `/s/{slug}/item`
+// exists on every Omeka S site and needs no JavaScript. Guarded because the
+// embed route renders this partial outside a site page context.
+$browseUrl = '';
+try {
+    $browseUrl = $this->url('site/resource', [
+        'site-slug'  => $this->currentSite()->slug(),
+        'controller' => 'item',
+        'action'     => 'browse',
+    ]);
+} catch (\Throwable $e) {
+    $browseUrl = '';
+}
+
+// Two msgids rather than one with markup in it: a translator should never have
+// to carry an <a href> through a .po file to move a link inside a sentence.
+$noscript = '<p>' . $escapeHtml($this->translate(
+    'This block assembles today’s items in your browser, so it needs JavaScript.'
+)) . '</p>';
+if ($browseUrl !== '') {
+    $noscript .= '<p><a href="' . $escapeAttr($browseUrl) . '">'
+        . $escapeHtml($this->translate('Browse the collection')) . '</a></p>';
+}
 
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
@@ -40,6 +75,7 @@ echo $this->partial('common/iwac-block-shell', [
     'blockClass' => 'iwac-vis-on-this-day',
     'embedSlug'  => 'on-this-day',
     'loading'    => $this->translate('Loading on this day'),
+    'noscript'   => $noscript,
     'data'       => [
         'layout' => isset($layout) && $layout
             ? $layout

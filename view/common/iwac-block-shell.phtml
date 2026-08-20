@@ -50,6 +50,19 @@
  *                                 coexists with it (the article dashboard's AI
  *                                 sentiment panel, read from Omeka metadata
  *                                 rather than the precomputed bundle).
+ * @var string|null $noscript      Already-escaped HTML shown INSTEAD of the
+ *                                 loading spinner when scripting is off. The
+ *                                 spinner is a promise only script can keep:
+ *                                 with no JS it spins for as long as the tab is
+ *                                 open, and its `aria-live` region announces
+ *                                 "Loading…" for content that will never come.
+ *                                 So the same <noscript> that carries the copy
+ *                                 also hides the spinner — scoped to THIS
+ *                                 block's own class, so a block that ships no
+ *                                 noscript slot keeps its current behaviour
+ *                                 rather than silently going blank.
+ *                                 Ignored when $prerendered is set: that block
+ *                                 already has a server-rendered answer.
  * @var array|null  $data          Extra data attributes (key => value; the
  *                                 `data-` prefix is added automatically).
  * @var bool|null   $siteBase      Emit data-site-base (default true).
@@ -72,6 +85,7 @@ $loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
 $extraData    = isset($data)         ? (array) $data : [];
 $prerendered  = isset($prerendered)  ? (string) $prerendered : '';
 $append       = isset($append)       ? (string) $append : '';
+$noscript     = isset($noscript)     ? (string) $noscript : '';
 $withSiteBase = !isset($siteBase) || $siteBase;
 $embedSlug    = isset($embedSlug)    ? (string) $embedSlug : '';
 
@@ -110,6 +124,16 @@ foreach ($extraData as $key => $value) {
 
 $wrapperClass = trim('iwac-vis-block ' . $blockClass);
 $loadingCls   = trim('iwac-vis-loading ' . $loadingClass);
+
+// The <noscript> stylesheet targets one class and is built here, never
+// interpolated from caller input: reduce the block's own first class token to
+// [A-Za-z0-9_-] so nothing can escape the selector. Falls back to the shared
+// wrapper class for a caller that passes $noscript without a $blockClass.
+$noscriptSel = '';
+if ($noscript !== '' && $prerendered === '') {
+    $token = preg_replace('/[^A-Za-z0-9_-]/', '', explode(' ', trim($blockClass))[0]);
+    $noscriptSel = '.' . ($token !== '' ? $token : 'iwac-vis-block');
+}
 ?>
 
 <div class="<?= $escapeAttr($wrapperClass) ?>"<?php foreach ($attrs as $name => $value): ?>
@@ -127,6 +151,13 @@ $loadingCls   = trim('iwac-vis-loading ' . $loadingClass);
         <div class="iwac-vis-spinner" aria-hidden="true"></div>
         <span><?= $escapeHtml($loading) ?>&hellip;</span>
     </div>
+<?php endif; ?>
+<?php if ($noscriptSel !== ''): ?>
+
+    <noscript>
+        <style><?= $noscriptSel ?> > .iwac-vis-loading { display: none; }</style>
+        <div class="iwac-vis-noscript"><?= $noscript ?></div>
+    </noscript>
 <?php endif; ?>
 <?php if ($append !== ''): ?>
 

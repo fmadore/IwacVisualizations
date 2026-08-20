@@ -26,8 +26,26 @@
         return s.length < 2 ? '0' + s : s;
     }
 
-    function locale() {
-        return ns.locale === 'fr' ? 'fr-FR' : 'en-US';
+    /**
+     * The locale every Gregorian dateline in this block is formatted in —
+     * `en-GB` for English, deliberately not the module-wide `en-US` that
+     * `IWACVis.formatNumber` and `P.formatDate` use.
+     *
+     * The dateline is a typographic device here, not a data cell: the register
+     * rows carry it under a masthead, in the grammar of a press archive. In
+     * `en-US` that device rendered `08/18/1976` — a form the collection's
+     * francophone West African and European readership reads as 8 December,
+     * and which no scholarly citation style uses. Day-month-year is also the
+     * order the corpus itself is written in, and the project's house style is
+     * British English, so the two agree.
+     *
+     * Scoped to this file on purpose. Chart axis ticks and table cells go
+     * through `P.formatDate`, whose `en-US` medium form is a different
+     * decision in a different register — changing it here would silently
+     * reformat twenty other blocks.
+     */
+    function datelineLocale() {
+        return ns.locale === 'fr' ? 'fr-FR' : 'en-GB';
     }
 
     /* ----------------------------------------------------------------- */
@@ -71,19 +89,21 @@
         return h ? pad2(h.month) + '-' + pad2(h.day) : null;
     }
 
-    /** "29 juillet" / "July 29" — today, no year. */
+    /** "29 juillet" / "29 July" — today, no year. */
     function gregToday() {
         try {
-            return today().toLocaleDateString(locale(), { day: 'numeric', month: 'long' });
+            return today().toLocaleDateString(datelineLocale(), {
+                day: 'numeric', month: 'long'
+            });
         } catch (e) {
             return gregKey();
         }
     }
 
-    /** "29 juillet 2026" / "July 29, 2026". */
+    /** "29 juillet 2026" / "29 July 2026". */
     function gregTodayFull() {
         try {
-            return today().toLocaleDateString(locale(), {
+            return today().toLocaleDateString(datelineLocale(), {
                 day: 'numeric', month: 'long', year: 'numeric'
             });
         } catch (e) {
@@ -113,14 +133,35 @@
         return h ? H.format(h.day, h.month) : '';
     }
 
-    /** An item's own publication date, in the locale's numeric form. */
+    /**
+     * An item's own publication date, abbreviated: "18 Aug 1976" /
+     * "18 août 1976".
+     *
+     * Named months rather than a numeric triple. The all-numeric form is the
+     * one place a dateline can be actively misread — `08/18/1976` is a US
+     * convention that a European or West African reader parses as an invalid
+     * 8 December, and there is no cue in the string to tell them otherwise.
+     * An abbreviated month name is unambiguous in every locale, and it is
+     * also the form the theme's press-archive register asks for: a dateline
+     * under a masthead reads as type, not as a field value.
+     *
+     * The formatter is built once — the "see all" disclosure formats up to 91
+     * of these in a single pass, and constructing an `Intl.DateTimeFormat` is
+     * the expensive half of the operation.
+     */
+    var datelineFormat;
+
     function gregDate(year, dayKey) {
         var bits = String(dayKey || gregKey()).split('-');
         try {
-            return new Date(year, parseInt(bits[0], 10) - 1, parseInt(bits[1], 10))
-                .toLocaleDateString(locale(), {
-                    day: '2-digit', month: '2-digit', year: 'numeric'
+            if (!datelineFormat) {
+                datelineFormat = new Intl.DateTimeFormat(datelineLocale(), {
+                    day: 'numeric', month: 'short', year: 'numeric'
                 });
+            }
+            return datelineFormat.format(
+                new Date(year, parseInt(bits[0], 10) - 1, parseInt(bits[1], 10))
+            );
         } catch (e) {
             return bits[1] + '.' + bits[0] + '.' + year;
         }

@@ -43,10 +43,17 @@
 /*  Masthead                                                            */
 /* ------------------------------------------------------------------- */
 
-/*  The panel's own <h4> becomes the eyebrow + date pair, so the block's
+/*  The panel's own heading becomes the eyebrow + date pair, so the block's
  *  accessible heading reads "On this day, 29 July" rather than leaving the
- *  date as an orphaned display line. */
-.iwac-vis-otd-panel > h4 {
+ *  date as an orphaned display line.
+ *
+ *  <h2>, not the panel default <h4>: this block sits directly under the page's
+ *  <h1>. The level changed in isolation — every property that draws the
+ *  masthead is declared here, so the rendered eyebrow is identical to what the
+ *  <h4> produced. (The theme's own h2 — serif, --text-2xl, its own margins —
+ *  is what this rule and the panel-title rule in iwac-core.css between them
+ *  hold off.) */
+.iwac-vis-otd-panel > h2 {
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 0.25rem);
@@ -540,6 +547,66 @@
 
 .iwac-vis-otd-index__title {
     min-width: 0;
+}
+
+
+/* ------------------------------------------------------------------- */
+/*  The day did not arrive                                              */
+/* ------------------------------------------------------------------- */
+
+/*  A stalled or failed day file, after the orchestrator's 12 s bound. It opens
+ *  on the same 2 px ink rule the masthead does, so the note reads in this
+ *  block's own voice rather than as a system banner bolted over it — and it
+ *  carries the one control that can still help. Nothing here uses --error: the
+ *  almanac failing to load is not a broken site, and colouring it red on a
+ *  homepage claims otherwise. */
+.iwac-vis-otd-fallback {
+    padding-top: var(--space-3, 0.75rem);
+    border-top: var(--accent-line-sm, 2px) solid var(--ink-strong, #05070c);
+}
+
+/*  The masthead eyebrow, restated. Every property the panel's own heading rule
+ *  sets is repeated here because this <h2> is NOT inside `.iwac-vis-panel` —
+ *  the panel is what failed to build — so without them it would fall through to
+ *  the theme's h2: display serif at --text-2xl with --space-8 above it. */
+.iwac-vis-otd-fallback__eyebrow {
+    margin: 0;
+    font-family: var(--font-body, "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    text-transform: uppercase;
+    color: var(--muted, #66696e);
+}
+
+.iwac-vis-otd-fallback__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4, 1rem);
+    flex-wrap: wrap;
+    margin-top: var(--space-2, 0.5rem);
+}
+
+.iwac-vis-otd-fallback__msg {
+    margin: 0;
+    max-width: 62ch;
+    font-family: var(--font-serif-text, "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif);
+    font-size: var(--text-sm, 0.9375rem);
+    line-height: 1.55;
+    color: var(--ink-light, #3f4349);
+}
+
+/*  Geometry and colour come from `.iwac-vis-btn` — the module's quiet outlined
+ *  control, which is also what a bare <button> renders as since theme 2.10.
+ *  Only the label's type is set here, to the same uppercase micro-label the
+ *  block's other controls use. */
+.iwac-vis-otd-fallback__retry {
+    flex: none;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
 }
 
 
