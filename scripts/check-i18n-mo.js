@@ -54,8 +54,9 @@ for (const { key, value } of compiled.entries) {
     catalogue.set(key, value);
 }
 
-// libintl binary-searches the original-string table when a .mo carries no
-// hash table, as this one does; an unsorted table quietly fails lookups.
+// The format requires the original-string table to be sorted, and with no
+// hash table — which is what this repo's .mo carries — a lookup is a binary
+// search over it. An unsorted table returns misses, not errors.
 for (let i = 1; i < compiled.entries.length; i++) {
     const previous = Buffer.from(compiled.entries[i - 1].key, 'utf8');
     const current = Buffer.from(compiled.entries[i].key, 'utf8');
@@ -91,11 +92,62 @@ for (const key of catalogue.keys()) {
     if (!source.has(key)) stale.push(key);
 }
 
-if (missing.length || stale.length || different.length || problems.length) {
+/**
+ * How much of two msgids is common head and common tail.
+ *
+ * An edit sits in the middle of an otherwise identical string, so prefix plus
+ * suffix covers nearly all of a reworded pair and very little of an unrelated
+ * one. `prefix` doubles as the offset of the edit.
+ */
+function similarity(a, b) {
+    let prefix = 0;
+    while (prefix < a.length && prefix < b.length && a[prefix] === b[prefix]) prefix++;
+
+    let suffix = 0;
+    const room = Math.min(a.length, b.length) - prefix;
+    while (suffix < room && a[a.length - 1 - suffix] === b[b.length - 1 - suffix]) suffix++;
+
+    return { prefix, shared: prefix + suffix };
+}
+
+// A reworded msgid arrives as one missing key plus one dead one, and in this
+// catalogue those are block descriptions that agree for their first three
+// hundred characters — reported separately they are two indistinguishable
+// walls of text. Pair them so the report shows the edit itself.
+const reworded = [];
+for (const key of [...missing]) {
+    let best = null;
+    for (const candidate of stale) {
+        const { prefix, shared } = similarity(key, candidate);
+        if (prefix < 24 || shared < Math.min(key.length, candidate.length) * 0.6) continue;
+        if (!best || shared > best.shared) best = { candidate, prefix, shared };
+    }
+    if (!best) continue;
+    reworded.push({ po: key, mo: best.candidate, at: best.prefix });
+    missing.splice(missing.indexOf(key), 1);
+    stale.splice(stale.indexOf(best.candidate), 1);
+}
+
+if (missing.length || stale.length || different.length || reworded.length || problems.length) {
     console.error('\n✗ mo guard: language/fr.mo does not match language/fr.po\n');
 
+    const rest = missing.length || stale.length || different.length || reworded.length;
     for (const problem of problems) console.error(`  ${problem}`);
-    if (problems.length && (missing.length || stale.length || different.length)) console.error('');
+    if (problems.length && rest) console.error('');
+
+    if (reworded.length) {
+        console.error(`  reworded in fr.po, still the old wording in fr.mo (${reworded.length}):`);
+        for (const { po, mo, at } of reworded) {
+            const window = (text) => {
+                const start = Math.max(0, at - 30);
+                const end = at + 70;
+                return `${start > 0 ? '…' : ''}${text.slice(start, end)}${end < text.length ? '…' : ''}`;
+            };
+            console.error(`    fr.po: ${JSON.stringify(window(po))}`);
+            console.error(`    fr.mo: ${JSON.stringify(window(mo))}`);
+        }
+        console.error('');
+    }
 
     const report = (heading, keys, detail) => {
         if (!keys.length) return;

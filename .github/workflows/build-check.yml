@@ -10,15 +10,23 @@ name: Build check (JS/CSS)
 #
 # Deliberately narrow triggers: data regeneration has its own workflow
 # (regenerate-data.yml); Python/PHP-only pushes don't need a node build.
+#
+# `language/**` is in scope because the same `npm run build` runs the .po/.mo
+# guard, and a fr.po edit that forgets to recompile fr.mo touches nothing else
+# — that drift shipped once already (v1.48.1) with no CI path that could see
+# it.
 
 on:
   push:
     branches: [main]
     paths:
       - "asset/**"
+      - "language/**"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
+      - "scripts/build-mo.js"
       - "scripts/check-*.js"
+      - "scripts/gettext.js"
       - "tests/js/**"
       - "tests/browser/**"
       - "playwright.config.js"
@@ -29,9 +37,12 @@ on:
   pull_request:
     paths:
       - "asset/**"
+      - "language/**"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
+      - "scripts/build-mo.js"
       - "scripts/check-*.js"
+      - "scripts/gettext.js"
       - "tests/js/**"
       - "tests/browser/**"
       - "playwright.config.js"

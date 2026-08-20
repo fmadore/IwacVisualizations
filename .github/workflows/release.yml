@@ -105,9 +105,12 @@ jobs:
           ZIP="${{ steps.v.outputs.zip }}"
           unzip -Z1 "$ZIP" > /tmp/list
 
-          # Everything Omeka needs to load the module.
+          # Everything Omeka needs to load the module. language/fr.mo is in
+          # the list because it is the only translation artifact the runtime
+          # reads — fr.po is inert at runtime, so a missing .mo ships a module
+          # that silently renders English on the French site.
           for f in Module.php config/module.ini config/module.config.php \
-                   asset/css/iwac-core.min.css LICENSE README.md; do
+                   asset/css/iwac-core.min.css language/fr.mo LICENSE README.md; do
             grep -qx "IwacVisualizations/$f" /tmp/list || { echo "::error::missing $f"; exit 1; }
           done
 

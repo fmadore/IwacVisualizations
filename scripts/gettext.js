@@ -244,14 +244,13 @@ function parseMo(buffer, filename = 'fr.mo') {
 
     if (buffer.length < HEADER_BYTES) fail(`too short to be a .mo file (${buffer.length} bytes)`);
 
+    // The magic byte order declares the whole file's byte order. We only ever
+    // write little-endian, but msgfmt on a big-endian host writes the other.
     let read;
-    let byteOrder;
     if (buffer.readUInt32LE(0) === MAGIC) {
         read = (offset) => buffer.readUInt32LE(offset);
-        byteOrder = 'little-endian';
     } else if (buffer.readUInt32BE(0) === MAGIC) {
         read = (offset) => buffer.readUInt32BE(offset);
-        byteOrder = 'big-endian';
     } else {
         fail(`bad magic 0x${buffer.readUInt32BE(0).toString(16)} — expected 0x950412de`);
     }
@@ -290,7 +289,7 @@ function parseMo(buffer, filename = 'fr.mo') {
         });
     }
 
-    return { entries, byteOrder, hashTableSize: read(20) };
+    return { entries };
 }
 
 /**
