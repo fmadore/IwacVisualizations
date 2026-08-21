@@ -1,12 +1,28 @@
 #!/usr/bin/env node
 /**
- * Reject duplicate runtime keys in the JavaScript translation dictionaries.
+ * Guard the JavaScript translation dictionaries: no duplicate keys, and no
+ * locale that is short of the other where the fallback cannot cover it.
  *
- * Object-literal duplicates are legal JavaScript: the later value silently
- * shadows the earlier one. Three divergent translations shipped that way
- * before the v1.23 audit found them. Parse the source declarations (including
- * \u escapes) so equivalent spellings such as a literal character and its
- * escape form are compared as the same runtime key.
+ * Duplicates: object-literal duplicates are legal JavaScript, and the later
+ * value silently shadows the earlier one. Three divergent translations
+ * shipped that way before the v1.23 audit found them. Parse the source
+ * declarations (including \u escapes) so equivalent spellings such as a
+ * literal character and its escape form are compared as the same runtime key.
+ *
+ * Parity: t() resolves `DICTIONARY[locale][key]`, then `DICTIONARY.en[key]`,
+ * then the key itself. Two gaps in that chain are silent bugs:
+ *
+ *   - A French key with no English entry renders as the key. That is the
+ *     design when the key IS the English source string ('Dashboard',
+ *     'Loading dashboard') — but a snake_case key has no English in it, so
+ *     English visitors would read `desc_publication_run` off the page.
+ *   - An English key with no French entry falls through to the English value
+ *     on the French site. No error, no missing text — just the wrong
+ *     language, which is the hardest kind of gap to notice.
+ *
+ * Neither is a live defect today; both are one careless edit away, and the
+ * .po/.mo drift this repo actually had (see check-i18n-mo.js) is the same
+ * shape — paired catalogues with nothing asserting they stay paired.
  */
 'use strict';
 
@@ -67,6 +83,47 @@ if (duplicates.length) {
     process.exit(1);
 }
 
+// Only a snake_case key is unreadable when it falls through to itself; a key
+// that is already an English string ('Count', 'Loading dashboard') is exactly
+// what an English visitor should see, so those need no `en` entry.
+const IDENTIFIER = /^[a-z0-9]+(?:_[a-z0-9]+)+$/;
+
+const untranslatable = [...seen.fr]
+    .filter(([key]) => IDENTIFIER.test(key) && !seen.en.has(key))
+    .map(([key, line]) => ({ key, line }));
+
+const englishOnly = [...seen.en]
+    .filter(([key]) => !seen.fr.has(key))
+    .map(([key, line]) => ({ key, line }));
+
+if (untranslatable.length || englishOnly.length) {
+    console.error('\n✗ i18n guard: the en/fr dictionaries have drifted apart\n');
+
+    const report = (heading, rows, consequence) => {
+        if (!rows.length) return;
+        console.error(`  ${heading} (${rows.length}):`);
+        for (const { key, line } of rows.slice(0, 20)) {
+            console.error(`    ${JSON.stringify(key)}  (line ${line})`);
+        }
+        if (rows.length > 20) console.error(`    … and ${rows.length - 20} more`);
+        console.error(`    → ${consequence}\n`);
+    };
+
+    report(
+        'snake_case keys in fr with no en entry',
+        untranslatable,
+        'English visitors would see the raw key, because t() falls back to it.'
+    );
+    report(
+        'keys in en with no fr entry',
+        englishOnly,
+        'French visitors get the English value — t() tries en before the key.'
+    );
+
+    process.exit(1);
+}
+
 console.log(
-    `✓ i18n guard: ${seen.en.size} English + ${seen.fr.size} French keys, no duplicates`
+    `✓ i18n guard: ${seen.en.size} English + ${seen.fr.size} French keys, ` +
+    'no duplicates, no unreachable fallbacks'
 );
