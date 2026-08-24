@@ -66,7 +66,14 @@
                 }, {
                     categoryName: P.t('Year'),
                     valueName: P.t('Count'),
-                    labelFor: function (k) { return P.t('item_type_' + k); }
+                    labelFor: function (k) { return P.t('item_type_' + k); },
+                    // Item type is a category with a published colour — the
+                    // theme's --type-* map, the one the badge dots and
+                    // IwacSearch's result chips already read. Left to ECharts'
+                    // default cycling this stack started at palette slot 0, so
+                    // the six colours the panel above spends on COUNTRIES were
+                    // re-spent here on CONTENT TYPES, one panel apart.
+                    colors: C.typeColors()
                 });
             }
         });

@@ -285,20 +285,68 @@
     };
 
     /* ----------------------------------------------------------------- */
-    /*  Country color map                                                 */
+    /*  THE COLOUR GRAMMAR \u2014 country \u2192 series slot, item type \u2192 --type-*   */
     /*                                                                    */
-    /*  All known IWAC countries are pre-mapped in COUNTRY_MAP. The       */
-    /*  _dynamicMap fallback handles any unexpected country name (e.g.    */
-    /*  data drift) by assigning the next free palette slot. Since the    */
-    /*  page reloads on dashboard navigation, persistence across reinits  */
-    /*  is not a concern in practice.                                     */
+    /*  One dashboard scroll used to carry four mutually contradictory    */
+    /*  grammars for the same six countries: the year timeline coloured   */
+    /*  by country from this map; "Items by type, over time" let the same */
+    /*  six colours fall through onto CONTENT TYPES (ECharts' default     */
+    /*  per-series cycling starts at the same slot 0); "Content by        */
+    /*  country" painted every country uniform --primary (one series, so  */
+    /*  slot 0 for every bar); and the treemap cycled the palette in tree  */
+    /*  order, giving each country a fourth colour. A reader who learned   */
+    /*  the legend on panel 1 was punished for it three times.            */
+    /*                                                                    */
+    /*  There are now exactly two categorical maps on the dashboards, and */
+    /*  both live here:                                                   */
+    /*                                                                    */
+    /*    country \u2192 a FIXED slot of the theme's series scale (below)      */
+    /*    item type \u2192 the theme's published --type-* map (C.typeColors),  */
+    /*                the same one the badge dots and IwacSearch's result */
+    /*                chips read, so a type means one colour site-wide    */
+    /*                                                                    */
+    /*  Anything else on these pages is a different KIND of encoding and  */
+    /*  legitimately looks different: the sentiment/centrality/           */
+    /*  subjectivity ramps above are ordinal, and the world map's         */
+    /*  choropleth is a sequential count ramp, not a category scale.      */
+    /*                                                                    */
+    /*  Every chart that encodes country must call C._countryColor, and   */
+    /*  every chart that encodes item type must call C.typeColors \u2014 never */
+    /*  ECharts' default cycling, which assigns by series ORDER and so    */
+    /*  re-means a colour on every chart whose category list differs.     */
     /* ----------------------------------------------------------------- */
 
+    /**
+     * Country → palette slot. Slot N is `--series-(N+1)`; slots 0 and 1 are
+     * the theme's two admin-tunable leads (`--primary`, `--secondary`).
+     *
+     * | Country        | Slot | Token        |
+     * |----------------|------|--------------|
+     * | Bénin          | 0    | --series-1   |
+     * | Burkina Faso   | 1    | --series-2   |
+     * | Côte d'Ivoire  | 2    | --series-3   |
+     * | Niger          | 3    | --series-4   |
+     * | Nigeria        | 4    | --series-5   |
+     * | Togo           | 5    | --series-6   |
+     * | Sénégal        | 6    | --series-7   |
+     *
+     * Accented and unaccented spellings share a slot: the precomputed bundles
+     * carry the raw `country` field, which is not consistently accented, and a
+     * country that changed colour between two panels because one generator
+     * wrote "Benin" and another "Bénin" would be the same defect by another
+     * route.
+     *
+     * `_dynamicMap` assigns the next free slot to anything unexpected (data
+     * drift, a seventh country) so an unknown value still gets a stable colour
+     * within the page rather than falling back to slot 0 and colliding with
+     * Bénin.
+     */
     var COUNTRY_MAP = {
         'Benin':            0,
         'B\u00e9nin':       0,
         'Burkina Faso':     1,
         "C\u00f4te d'Ivoire": 2,
+        "Cote d'Ivoire":    2,
         'Niger':            3,
         'Nigeria':          4,
         'Togo':             5,
@@ -308,18 +356,47 @@
     var _dynamicIdx = 7;
     var _dynamicMap = {};
 
+    /** The slot a country occupies, assigning one if it is unknown. */
+    C._countrySlot = function (country) {
+        if (COUNTRY_MAP[country] != null) return COUNTRY_MAP[country];
+        if (_dynamicMap[country] != null) return _dynamicMap[country];
+        _dynamicMap[country] = _dynamicIdx++;
+        return _dynamicMap[country];
+    };
+
     C._countryColor = function (country) {
-        var palette = (ns.getPalette && ns.getPalette()) || [];
-        if (palette.length === 0) palette = ['#e64a19', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c', '#8b6f47'];
-        var idx;
-        if (COUNTRY_MAP[country] != null) {
-            idx = COUNTRY_MAP[country];
-        } else if (_dynamicMap[country] != null) {
-            idx = _dynamicMap[country];
-        } else {
-            idx = _dynamicIdx++;
-            _dynamicMap[country] = idx;
-        }
-        return palette[idx % palette.length];
+        return ns.getSeriesColor
+            ? ns.getSeriesColor(C._countrySlot(country))
+            : '';
+    };
+
+    /**
+     * Raw item-type key → the theme's `--type-*` colour.
+     *
+     * Keys are the type keys the precomputed bundles carry (the same ones
+     * `item_type_<key>` translates for display), so the lookup survives a
+     * locale switch. `image` maps to `--type-photograph`: the theme names the
+     * token after what the thing IS, the pipeline after its subset.
+     *
+     * Read at call time, like the ordinal ramps above, so the light/dark swap
+     * in dashboard-core repaints without remounting the panel.
+     */
+    var TYPE_TOKENS = {
+        article:     '--type-article',
+        publication: '--type-publication',
+        document:    '--type-document',
+        audiovisual: '--type-audiovisual',
+        reference:   '--type-reference',
+        image:       '--type-photograph'
+    };
+
+    C.typeColors = function () {
+        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        var out = {};
+        Object.keys(TYPE_TOKENS).forEach(function (key) {
+            var color = read(TYPE_TOKENS[key]);
+            if (color) out[key] = color;
+        });
+        return out;
     };
 })();

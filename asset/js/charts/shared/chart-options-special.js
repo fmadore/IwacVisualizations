@@ -160,6 +160,14 @@
      * @param {Object} tree { name, children: [...] }
      * @param {Object} [opts]
      * @param {string} [opts.rootName]
+     * @param {function(string): string} [opts.colorFor]
+     *   Fixes the colour of each FIRST-LEVEL node by name. Without it ECharts
+     *   cycles the palette in tree order, so a country's colour here depended
+     *   on where it happened to sort — a fourth grammar for the same six
+     *   countries on a page that already had three. Pass `C._countryColor`
+     *   whenever the top level is countries. Deeper levels stay
+     *   saturation-shaded tints of their ancestor, which is what makes the
+     *   nesting readable, so the fix stops at depth 1 by design.
      */
     C.treemap = function (tree, opts) {
         opts = opts || {};
@@ -263,34 +271,88 @@
         var children = (sanitized && sanitized.children) || [];
         var maxDepth = Math.max(1, depthRef.max);
 
+        /**
+         * Colour the whole tree explicitly: first level from the caller's map
+         * (or the series palette in order, which is what ECharts would have
+         * done), every level below it a tint of its ancestor MIXED TOWARD THE
+         * SURFACE.
+         *
+         * The direction is the point. ECharts' `colorSaturation` ramp — what
+         * this used to lean on — moves descendants toward MID luminance from
+         * whichever end their parent sits at: in light the slate ran
+         * #394f68 → #587aa1 (getting lighter), in dark it ran #708093 →
+         * #5f6e7e (getting darker), and both converge on L≈0.45. That is the
+         * crossover band where neither ink extreme clears 4.5:1, which is why
+         * the contrast-PICKED ink of 1.51.0 still left five dark tiles at
+         * 4.29-4.49:1 (measured on the rig, not the token hexes — ECharts
+         * shades what it draws). Mixing toward `--surface` instead moves every
+         * descendant away from the band in BOTH themes: paler on a light page,
+         * deeper on a dark one, and the ink that was already winning wins by
+         * more. Same visual grammar — descendants read as tints of their
+         * ancestor — opposite luminance direction.
+         *
+         * This is the treemap's form of the rule the token guard enforces in
+         * CSS: never build a ramp on a value that does not flip with the
+         * theme.
+         */
+        var seriesPalette = (ns.getPalette && ns.getPalette()) || [];
+        function mixToward(color, target, t) {
+            var a = _rgb(color);
+            var b = _rgb(target);
+            if (!a || !b) return color;
+            return 'rgb(' + [0, 1, 2].map(function (i) {
+                return Math.round(a[i] + (b[i] - a[i]) * t);
+            }).join(', ') + ')';
+        }
+        function paint(node, depth, base) {
+            // Every level is mixed from the FIRST-level colour, never from the
+            // level above it — compounding the mix would wash level 3 out to
+            // the surface itself.
+            // 0.20 per level: enough to separate three levels, mild enough
+            // that a leaf still reads as its country's colour.
+            var color = depth === 1
+                ? base
+                : mixToward(base, surfaceColor, Math.min(0.6, 0.2 * (depth - 1)));
+            var out = { name: node.name };
+            if (color) out.itemStyle = { color: color };
+            if (node.value != null) out.value = node.value;
+            if (node.children) {
+                out.children = node.children.map(function (kid) {
+                    return paint(kid, depth + 1, base);
+                });
+            }
+            return out;
+        }
+        children = children.map(function (node, i) {
+            var base = (typeof opts.colorFor === 'function' && opts.colorFor(node.name))
+                || seriesPalette[i % (seriesPalette.length || 1)];
+            return paint(node, 1, base);
+        });
+
         // Per-depth styling. ECharts indexes `levels` from the root (0)
         // down and THROWS when the array is shorter than the rendered
         // depth \u2014 so emit exactly `maxDepth + 1` entries.
         //
         //   depth 0          root container \u2014 no header, widest gaps
         //   1 .. maxDepth-1  parent groups \u2014 tinted header bar (upperLabel)
-        //   maxDepth         leaves \u2014 saturation-shaded colour tiles
+        //   maxDepth         leaves \u2014 colour tiles
         //
-        // The first visible level (countries / top categories) keeps its
-        // distinct palette hue; only depth >= 2 is saturation-shaded so
-        // descendants read as tints of their ancestor.
+        // Colour is NOT set here any more: `paint()` above writes an explicit
+        // itemStyle on every node, which is what lets the tint ramp run toward
+        // the surface instead of toward mid luminance. A `colorSaturation`
+        // range at this level would override those per-node colours.
         var levels = [];
         for (var d = 0; d <= maxDepth; d++) {
             var isRoot = d === 0;
             var isLeaf = d === maxDepth;
-            var level = {
+            levels.push({
                 upperLabel: { show: !isRoot && !isLeaf },
                 itemStyle: {
                     borderColor: surfaceColor,
                     borderWidth: isRoot ? 0 : 1,
                     gapWidth: isRoot ? 4 : 2
                 }
-            };
-            if (d >= 2) {
-                var hi = Math.max(0.34, 0.58 - (d - 2) * 0.1);
-                level.colorSaturation = [Math.max(0.2, hi - 0.16), hi];
-            }
-            levels.push(level);
+            });
         }
 
         // Flat depth-1 trees (e.g. the topic treemap) have no parent level
@@ -400,9 +462,20 @@
      * @param {Array<Object>} entries
      *   Each: { name, country, type, year_min, year_max, total }
      * @param {Object} [opts]
+     * @param {number} [opts.windowSize=20]
+     *   Rows the default view shows. Above this the y-axis gets a zoom
+     *   slider — which is a SILENT truncation on its own, so any caller
+     *   passing more rows than this should also render a
+     *   `P.buildWindowDisclosure` note saying how many of how many.
+     * @param {boolean} [opts.expanded=false]
+     *   Drop the window and draw every row. The caller must give the chart
+     *   host the height to hold them (`C.ganttHeight`) — an 82-row Gantt in a
+     *   320px box is unreadable in a different way.
      */
     C.gantt = function (entries, opts) {
         opts = opts || {};
+        var windowSize = opts.windowSize || 20;
+        var expanded = !!opts.expanded;
         var list = (entries || []).slice();
         var names = list.map(function (e) { return e.name; });
         var data = list.map(function (e, i) {
@@ -489,10 +562,21 @@
                 data: names,
                 inverse: true,
                 axisTick: { show: false },
-                axisLabel: { width: 160, overflow: 'truncate' }
+                // `interval: 0` — label EVERY row in the window. ECharts'
+                // default 'auto' drops labels until they stop colliding,
+                // which on the 20-row window meant every other newspaper
+                // went unnamed: half the visible bars were anonymous
+                // coloured strips in a chart whose whole subject is WHICH
+                // papers ran WHEN. The window is now sized so the rows fit,
+                // so there is nothing to thin out.
+                axisLabel: { width: 160, overflow: 'truncate', interval: 0 }
             },
-            dataZoom: list.length > 20 ? [
-                { type: 'slider', yAxisIndex: 0, start: 0, end: 100 / Math.max(1, list.length / 20), right: 8 },
+            // Windowed unless the caller expanded it. `end` is the share of
+            // the rows the first screenful covers — the same arithmetic as
+            // before, but now driven by the window size the caller also
+            // discloses, instead of a bare 20 that appeared nowhere in the UI.
+            dataZoom: (!expanded && list.length > windowSize) ? [
+                { type: 'slider', yAxisIndex: 0, start: 0, end: 100 * windowSize / list.length, right: 8 },
                 { type: 'inside', yAxisIndex: 0 }
             ] : [],
             series: [{
@@ -524,6 +608,25 @@
         return R && R.withMedia
             ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), ganttMedia)
             : base;
+    };
+
+    /**
+     * Host height a Gantt needs to draw `rows` rows at a legible pitch.
+     *
+     * An ECharts host has a fixed pixel height; the y-axis divides whatever it
+     * gets by the row count. So "show all 82" without growing the host would
+     * trade a silent truncation for 82 four-pixel slivers — honest and
+     * unreadable. 24px per row is the pitch the 20-row default already renders
+     * at in a 320px panel, so expanding keeps the bars exactly the size the
+     * reader was just looking at.
+     *
+     * @param {number} rows
+     * @param {number} [floor=320]  the panel's own min-height (iwac-core.css)
+     */
+    C.ganttHeight = function (rows, floor) {
+        var CHROME = 96;  // grid top + x-axis labels + axis name + gutter
+        var PITCH = 24;
+        return Math.max(floor || 320, Math.round((Number(rows) || 0) * PITCH + CHROME));
     };
 
     /* ----------------------------------------------------------------- */

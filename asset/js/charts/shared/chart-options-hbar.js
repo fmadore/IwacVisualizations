@@ -71,6 +71,13 @@
      * @param {boolean} [opts.log=false] Logarithmic value axis — use when a
      *   single category dwarfs the rest (e.g. French at 97% of languages) so
      *   the long tail stays legible instead of collapsing to invisible bars.
+     * @param {boolean} [opts.useCountryColors=false] Colour each bar by its
+     *   country's fixed palette slot (C._countryColor). Pass this on ANY chart
+     *   whose categories are countries: one series means ECharts paints every
+     *   bar in slot 0, so "Content by country" rendered six countries in one
+     *   undifferentiated --primary while the timeline directly above it gave
+     *   each of them a distinct colour. Off by default — a top-N of newspapers
+     *   or languages is not a country scale and must not borrow its colours.
      */
     C.horizontalBar = function (entries, opts) {
         opts = opts || {};
@@ -81,7 +88,11 @@
             list = list.filter(function (e) { return !P.isUnknown(e && e[nameKey]); });
         }
         var names = list.map(function (e) { return e[nameKey]; });
-        var values = list.map(function (e) { return e[valueKey]; });
+        var values = opts.useCountryColors
+            ? list.map(function (e) {
+                return { value: e[valueKey], itemStyle: { color: C._countryColor(e[nameKey]) } };
+            })
+            : list.map(function (e) { return e[valueKey]; });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
         var halo = C._labelHalo();

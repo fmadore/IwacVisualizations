@@ -116,20 +116,27 @@
             h.timeline.chart.appendChild(P.buildEmptyState());
         }
 
-        // Country bar
+        // Country bar — same country → slot grammar as the timeline above it
+        // and the Gantt below it (chart-options.js, COUNTRY_MAP).
         var countries = (data.countries || []).slice(0, 10);
         if (countries.length > 0) {
             ns.registerChart(h.country.chart, function (el, instance) {
-                instance.setOption(C.horizontalBar(countries, { nameKey: 'name', valueKey: 'total' }));
+                instance.setOption(C.horizontalBar(countries, {
+                    nameKey: 'name',
+                    valueKey: 'total',
+                    useCountryColors: true
+                }));
             });
         } else {
             h.country.chart.appendChild(P.buildEmptyState());
         }
 
-        // Treemap (sanitized inside C.treemap — Task 7 fix)
+        // Treemap (sanitized inside C.treemap — Task 7 fix). Its first level
+        // is countries, so it takes the same fixed slots rather than the
+        // palette in tree order.
         if (data.treemap && (data.treemap.children || []).length > 0) {
             ns.registerChart(h.treemap.chart, function (el, instance) {
-                instance.setOption(C.treemap(data.treemap));
+                instance.setOption(C.treemap(data.treemap, { colorFor: C._countryColor }));
             });
         } else {
             h.treemap.chart.appendChild(P.buildEmptyState());
