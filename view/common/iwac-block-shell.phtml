@@ -37,7 +37,13 @@
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var array|null  $assets        Config forwarded to common/iwac-assets.
  * @var string|null $blockClass    Modifier class added after `iwac-vis-block`.
- * @var string|null $heading       Optional <h3> text (already translated).
+ * @var string|null $heading       Optional block heading text (already translated).
+ * @var string|null $headingLevel  h2 | h3 | h4 — default h3. Pass h2 where the
+ *                                 surrounding page's next section heading is an
+ *                                 h2, so the outline does not run h1 → h3 → h2.
+ *                                 The LOOK does not follow the level: iwac-core
+ *                                 styles `.iwac-vis-block > h2` alongside
+ *                                 `.iwac-vis-block h3`.
  * @var string|null $loading       Loading message (already translated).
  * @var string|null $loadingClass  Extra class on the loading div.
  * @var string|null $prerendered   Server-rendered fallback HTML placed inside
@@ -80,6 +86,12 @@ $escapeAttr   = $this->plugin('escapeHtmlAttr');
 $escapeHtml   = $this->plugin('escapeHtml');
 $blockClass   = isset($blockClass)   ? (string) $blockClass : '';
 $heading      = isset($heading)      ? (string) $heading : '';
+// Heading LEVEL is a document-outline decision, not a type-scale one — the
+// same split `P.buildPanel` already makes for panel titles. Whitelisted rather
+// than interpolated, so a caller cannot inject markup through it.
+$headingLevel = isset($headingLevel) && in_array($headingLevel, ['h2', 'h3', 'h4'], true)
+    ? $headingLevel
+    : 'h3';
 $loading      = isset($loading)      ? (string) $loading : '';
 $loadingClass = isset($loadingClass) ? (string) $loadingClass : '';
 $extraData    = isset($data)         ? (array) $data : [];
@@ -140,7 +152,7 @@ if ($noscript !== '' && $prerendered === '') {
      data-<?= $escapeAttr($name) ?>="<?= $escapeAttr($value) ?>"<?php endforeach; ?>>
 <?php if ($heading !== ''): ?>
 
-    <h3><?= $escapeHtml($heading) ?></h3>
+    <<?= $headingLevel ?>><?= $escapeHtml($heading) ?></<?= $headingLevel ?>>
 <?php endif; ?>
 <?php if ($prerendered !== ''): ?>
 

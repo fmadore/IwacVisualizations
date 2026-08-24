@@ -178,8 +178,15 @@
 /*  Panel titles stay sans-serif — they're UI labels above charts, not
  *  editorial headings. Bigger block / section titles (see the serif
  *  `.iwac-vis-section-heading` rule below) are serif so the block
- *  unifies visually with the theme's h1 / h2 treatment. */
-.iwac-vis-block h3 {
+ *  unifies visually with the theme's h1 / h2 treatment.
+ *
+ *  The block heading is <h3> by default and <h2> where the surrounding page's
+ *  next section heading is one (item-set pages, via the shell's
+ *  `headingLevel`) — the same level-is-an-outline-decision split the panel
+ *  titles below already make. Without the second selector a promoted heading
+ *  would inherit the theme's h2: serif, --text-2xl, its own margins. */
+.iwac-vis-block h3,
+.iwac-vis-block > h2 {
     font-size: var(--text-lg, 1.1875rem);
     font-weight: 600;
     color: var(--ink, #13161c);
