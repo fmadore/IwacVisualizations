@@ -67,22 +67,196 @@
      */
     ns._charts = [];
 
+    /* ----------------------------------------------------------------- */
+    /*  Text alternatives                                                 */
+    /* ----------------------------------------------------------------- */
+
+    function t(key, params) {
+        return ns.t ? ns.t(key, params) : key;
+    }
+
+    /** The panel heading above a chart host, or '' when it stands alone. */
+    function panelTitleFor(el) {
+        var panel = el && el.closest ? el.closest('.iwac-vis-panel') : null;
+        if (!panel) return '';
+        // Direct children only: a heading rendered INSIDE the chart host
+        // (the index overview's section labels) names a part, not the panel.
+        for (var i = 0; i < panel.children.length; i++) {
+            var node = panel.children[i];
+            if (/^H[1-6]$/.test(node.tagName)) {
+                return (node.textContent || '').trim();
+            }
+        }
+        return '';
+    }
+
     /**
-     * Merge a baseline aria config into a chart AFTER its render callback
-     * ran. Render callbacks rebuild the whole option with
-     * `setOption(option, true)` (notMerge), which would discard anything
-     * injected earlier — applying aria as a follow-up merge survives that
-     * pattern, and the theme-swap path re-applies it after each re-render.
-     * `aria.enabled` makes ECharts generate a screen-reader description
-     * of the chart (series, types, data extent) on the canvas element.
-     * Zero visual change — decal patterns stay off (see ROADMAP 4.5/7.2).
+     * A short, correct, localized description of what a chart shows.
+     *
+     * ECharts writes its own if you let it, and on this codebase that came out
+     * at up to 2,506 characters — an auto-recitation of series names and data
+     * points, cut off mid-list at "the first 10 items", carrying a literal
+     * `NaN` on the two custom-series panels, and in ENGLISH on the French
+     * site, where it was the only text alternative a screen-reader user got.
+     * Setting `aria.label.description` replaces the whole generated string, so
+     * what a reader hears is now the panel's own heading — already translated,
+     * already the thing a sighted reader reads first — plus the shape of the
+     * data and, where the chart is windowed, how to move the window.
+     *
+     * The counts are computed defensively and dropped entirely if anything is
+     * not a plain array: announcing a wrong number is worse than announcing
+     * none, and "NaN" is how the last version of this failed.
      */
-    ns._applyAria = function (instance) {
+    function describeChart(el, instance) {
+        var title = panelTitleFor(el);
+        var option = null;
+        try { option = instance.getOption(); } catch (e) { option = null; }
+        if (!title && option && option.title && option.title[0]) {
+            title = String(option.title[0].text || '').trim();
+        }
+        if (!title) title = t('Chart');
+
+        var series = (option && option.series) || [];
+        var points = 0;
+        var countable = series.length > 0;
+        for (var i = 0; i < series.length; i++) {
+            var d = series[i] && series[i].data;
+            if (Array.isArray(d)) points += d.length;
+            else { countable = false; break; }
+        }
+
+        var text;
+        if (!countable || !isFinite(points) || points <= 0) {
+            text = t('chart_aria_plain', { title: title });
+        } else if (series.length === 1) {
+            text = t('chart_aria_single', { title: title, points: points });
+        } else {
+            text = t('chart_aria_summary', {
+                title: title, series: series.length, points: points
+            });
+        }
+
+        if (hasZoom(option)) text += ' ' + t('chart_aria_zoom');
+        return text;
+    }
+
+    /** Does this option carry a dataZoom the keyboard handler can drive? */
+    function hasZoom(option) {
+        var dz = option && option.dataZoom;
+        return !!(dz && dz.length && isFinite(Number(dz[0].start)) && isFinite(Number(dz[0].end)));
+    }
+
+    /**
+     * Apply the chart's text alternative AFTER its render callback ran.
+     * Render callbacks rebuild the whole option with `setOption(option, true)`
+     * (notMerge), which would discard anything injected earlier — applying
+     * aria as a follow-up merge survives that pattern. Zero visual change —
+     * decal patterns stay off (see ROADMAP 4.5/7.2).
+     */
+    ns._applyAria = function (instance, el) {
         if (!instance || instance.isDisposed()) return;
         try {
-            instance.setOption({ aria: { enabled: true } });
+            var host = el || instance.getDom();
+            var description = describeChart(host, instance);
+            instance.setOption({
+                aria: { enabled: true, label: { enabled: true, description: description } }
+            });
+            // ECharts hangs its own label on a div INSIDE the host, which
+            // `role="img"` prunes from the accessibility tree along with the
+            // rest of the subtree — so the host has to carry the name itself
+            // or it is a focusable, unlabelled div.
+            if (host && host.setAttribute) host.setAttribute('aria-label', description);
         } catch (e) { /* enhancement only — never let aria break a render */ }
     };
+
+    /* ----------------------------------------------------------------- */
+    /*  Keyboard reach                                                    */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Make a chart host reachable and, where it is windowed, operable.
+     *
+     * ECharts binds everything to the pointer: legend toggles, the dataZoom
+     * slider, treemap drill, the one click-to-navigate handler. It offers no
+     * keyboard layer at all, so every chart on the dashboards was
+     * mouse-and-sight-only. Two things are recoverable without inventing a
+     * widget: the host becomes focusable, which is what lets a screen reader
+     * land on it and read the description above; and where a chart has a
+     * dataZoom — the Gantt's 82 rows, the timelines' 60-odd years — the arrow
+     * keys move that window, through `dispatchAction`, which is ECharts' own
+     * supported entry point for exactly this.
+     *
+     * The listener is attached once per host, not per render: the render
+     * callback re-runs on every theme swap, and a listener added there stacks
+     * a duplicate each time.
+     */
+    /**
+     * Re-describe a chart after EVERY `setOption`, not just the first.
+     *
+     * Applying the description once after the render callback is not enough:
+     * a facet change, a tab, a pagination step all call `setOption(option,
+     * true)` straight on the instance, and ECharts — whose `aria.enabled` is
+     * on at theme level — regenerates its own label from the new option. So
+     * expanding the Gantt from 20 rows to 82 silently swapped a 108-character
+     * localized description for a 2,500-character English recitation of the
+     * first ten newspapers. Measured on the rig, not reasoned about.
+     *
+     * Patching the instance is what makes this hold for every caller without
+     * each one remembering. The re-entrancy flag is load-bearing: `_applyAria`
+     * itself sets an option.
+     */
+    function trackOptionChanges(instance, el) {
+        if (!instance || instance._iwacAriaPatched) return;
+        instance._iwacAriaPatched = true;
+        var native = instance.setOption;
+        instance.setOption = function () {
+            var result = native.apply(instance, arguments);
+            if (!instance._iwacApplyingAria) {
+                instance._iwacApplyingAria = true;
+                try { ns._applyAria(instance, el); }
+                finally { instance._iwacApplyingAria = false; }
+            }
+            return result;
+        };
+    }
+
+    function makeChartFocusable(el) {
+        if (!el || el._iwacKeyboard) return;
+        el._iwacKeyboard = true;
+        el.setAttribute('tabindex', '0');
+        // ECharts writes aria-label on this same element from the description
+        // above; role="img" is what makes an AT treat the pair as one labelled
+        // graphic rather than an unlabelled focusable div.
+        el.setAttribute('role', 'img');
+        el.addEventListener('keydown', function (event) {
+            if (event.altKey || event.ctrlKey || event.metaKey) return;
+            var instance = ns.getLiveChart(el);
+            if (!instance) return;
+            var option;
+            try { option = instance.getOption(); } catch (e) { return; }
+            if (!hasZoom(option)) return;
+
+            var start = Number(option.dataZoom[0].start);
+            var end = Number(option.dataZoom[0].end);
+            var span = Math.max(1, end - start);
+            var step = Math.max(1, span / 4);
+            var next;
+            switch (event.key) {
+                case 'ArrowRight': case 'ArrowDown': next = start + step; break;
+                case 'ArrowLeft':  case 'ArrowUp':   next = start - step; break;
+                case 'PageDown':                     next = start + span; break;
+                case 'PageUp':                       next = start - span; break;
+                case 'Home':                         next = 0; break;
+                case 'End':                          next = 100 - span; break;
+                default: return;
+            }
+            // preventDefault only once we know we are acting: an arrow key on
+            // a chart with no window must still scroll the page.
+            event.preventDefault();
+            next = Math.max(0, Math.min(100 - span, next));
+            instance.dispatchAction({ type: 'dataZoom', start: next, end: next + span });
+        });
+    }
 
     /**
      * Create an ECharts instance with the current IWAC theme applied.
@@ -126,8 +300,10 @@
         }
 
         ns._charts.push(entry);
+        makeChartFocusable(el);
+        trackOptionChanges(instance, el);
         try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
-        ns._applyAria(instance);
+        ns._applyAria(instance, el);
 
         // Auto-attach the shared panel toolbar (download button) if the
         // panel-toolbar module is loaded and the chart lives inside a
@@ -289,7 +465,7 @@
                     }
                     if (typeof entry.render === 'function' && entry.el) {
                         entry.render(entry.el, entry.instance);
-                        ns._applyAria(entry.instance);
+                        ns._applyAria(entry.instance, entry.el);
                     }
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);

@@ -43,12 +43,20 @@
 
         var state = { typeIdx: 0, page: 0 };
 
-        // Tabs row (inserted before the chart container)
+        // Tabs row (inserted before the chart container). `aria-pressed`, not
+        // a tablist: the chart host these switch is already `role="img"` with
+        // its own description (dashboard-core), and a tabpanel role would
+        // have to replace that — a toggle group is the honest shape here and
+        // it announces the selected state, which the bare `--active` class
+        // did not.
         var tabsBar = P.el('div', 'iwac-vis-tabs');
+        tabsBar.setAttribute('role', 'group');
+        tabsBar.setAttribute('aria-label', P.t('Entity type'));
         var tabButtons = availableTypes.map(function (type, idx) {
             var btn = P.el('button', 'iwac-vis-tab', P.t(ENTITY_TYPE_I18N[type] || type));
             btn.type = 'button';
             btn.dataset.entityIdx = String(idx);
+            btn.setAttribute('aria-pressed', idx === 0 ? 'true' : 'false');
             if (idx === 0) btn.classList.add('iwac-vis-tab--active');
             tabsBar.appendChild(btn);
             return btn;
@@ -112,6 +120,7 @@
             state.page = 0;
             tabButtons.forEach(function (b, i) {
                 b.classList.toggle('iwac-vis-tab--active', i === idx);
+                b.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
             });
             rerender();
         });

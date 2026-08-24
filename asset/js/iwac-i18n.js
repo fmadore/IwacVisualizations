@@ -67,6 +67,32 @@
             'period_covered': 'Period covered: {min} – {max}',
             'coverage_range': '{min} – {max}',
 
+            // Windowed charts — the "showing N of M" disclosure and its
+            // escape control (P.buildWindowDisclosure). The generic pair is
+            // the helper's default; the gantt_* pair names the rows for the
+            // newspaper coverage chart, where "rows" would be a needlessly
+            // technical word for "newspapers".
+            'window_note': 'Showing {shown} of {total} rows.',
+            'window_all': 'Showing all {total} rows.',
+            'window_show_all': 'Show all {total}',
+            'window_show_top': 'Show first {shown}',
+            'gantt_window_note': 'Showing the {shown} best-covered of {total} newspapers.',
+            'gantt_window_all': 'Showing all {total} newspapers.',
+            'gantt_show_all': 'Show all {total}',
+            'gantt_show_top': 'Show top {shown}',
+
+            // Chart text alternatives. ECharts generates its own summary
+            // otherwise — up to 2,500 characters, truncated mid-list at "the
+            // first 10 items", carrying literal NaN on the custom-series
+            // charts, and always in English because the library has no idea
+            // what locale the page is in. These replace it wholesale
+            // (aria.label.description), so they are the ONLY thing a screen
+            // reader gets: they have to name the chart and stop.
+            'chart_aria_plain': '{title}: chart.',
+            'chart_aria_single': '{title}: chart with {points} values.',
+            'chart_aria_summary': '{title}: chart with {series} series and {points} values.',
+            'chart_aria_zoom': 'Focus the chart and use the arrow keys to move the visible window.',
+
             // Entity type tabs (must match INDEX_TYPES in the generator)
 
             // References overview
@@ -490,6 +516,24 @@
             'period_covered': 'P\u00e9riode couverte : {min} \u2013 {max}',
             'coverage_range': '{min} \u2013 {max}',
 
+            // Windowed charts (see the English block)
+            'window_note': 'Affichage de {shown} lignes sur {total}.',
+            'window_all': 'Affichage des {total} lignes.',
+            'window_show_all': 'Afficher les {total}',
+            'window_show_top': 'Afficher les {shown} premi\u00e8res',
+            'gantt_window_note': 'Affichage des {shown} journaux les mieux couverts sur {total}.',
+            'gantt_window_all': 'Affichage des {total} journaux.',
+            'gantt_show_all': 'Afficher les {total}',
+            'gantt_show_top': 'Afficher les {shown} premiers',
+
+            // Chart text alternatives
+            'chart_aria_plain': '{title} : graphique.',
+            'chart_aria_single': '{title} : graphique de {points} valeurs.',
+            'chart_aria_summary': '{title} : graphique de {series} s\u00e9ries et {points} valeurs.',
+            'chart_aria_zoom': 'Placez le focus sur le graphique et utilisez les touches fl\u00e9ch\u00e9es pour d\u00e9placer la fen\u00eatre visible.',
+            'Chart': 'Graphique',
+            'Filters': 'Filtres',
+
             // Entity type tabs
             'Persons': 'Personnes',
             'Organizations': 'Organisations',
@@ -626,6 +670,7 @@
             'Loading': 'Chargement',
             'unique words': 'mots uniques',
             'Map library unavailable': 'Biblioth\u00e8que de cartographie indisponible',
+            'Loading map': 'Chargement de la carte',
 
             // Item type badges (user's preferred French labels)
             'item_type_article':     'Article de presse',

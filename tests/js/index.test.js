@@ -7,6 +7,7 @@ require('./gettext.test.js');
 require('./panels.test.js');
 require('./maplibre.test.js');
 require('./assets.test.js');
+require('./grammar.test.js');
 require('./sentiment.test.js');
 require('./diverging-bar.test.js');
 require('./associated-entities.test.js');

@@ -7,6 +7,14 @@
  *
  * Exposed as `P.buildFacetButtons(config)`.
  *
+ * Selected state is REAL state, not just a class. Until v1.52.0 the active
+ * facet was expressed only as `--active` in the class list, which paints a
+ * tint and announces nothing: thirteen controls on the collection overview
+ * told a screen-reader user nothing about which one was in force. Each button
+ * now carries `aria-pressed`, and each `<select>` an accessible name — the
+ * eyebrow label beside it is a `<span>`, so without an explicit association
+ * both country pickers on that page were simply unnamed.
+ *
  * Load order: after panels.js.
  */
 (function () {
@@ -18,6 +26,10 @@
         console.warn('IWACVis.facet-buttons: panels.js must load first');
         return;
     }
+
+    // Ids for the label ↔ select association. A page carries several facet
+    // bars, so the counter is module-level rather than per-bar.
+    var _uid = 0;
 
     /**
      * @param {Object} config
@@ -36,6 +48,8 @@
         var subPickerContainer = null;
 
         var root = P.el('div', 'iwac-vis-facets');
+        root.setAttribute('role', 'group');
+        root.setAttribute('aria-label', P.t('Filters'));
 
         var mainBar = P.el('div', 'iwac-vis-facets__main');
         root.appendChild(mainBar);
@@ -43,6 +57,10 @@
         var subBar = P.el('div', 'iwac-vis-facets__sub');
         subBar.style.display = 'none';
         root.appendChild(subBar);
+
+        // Set once per bar; reused as the <select>'s accessible name and, in
+        // the single-facet case, as the `for` target of the visible eyebrow.
+        var labelId = 'iwac-vis-facet-label-' + (++_uid);
 
         // A bar with a single facet has nothing to toggle — its lone "main
         // button" was rendering as a permanently-active, primary-tinted chip
@@ -52,14 +70,18 @@
         // carry all the interaction.
         var singleFacet = facets.length === 1;
         var mainButtons = {};
+        var eyebrowEl = null;
         facets.forEach(function (f) {
             if (singleFacet) {
-                mainBar.appendChild(P.el('span', 'iwac-vis-facets__label', f.label));
+                eyebrowEl = P.el('span', 'iwac-vis-facets__label', f.label);
+                eyebrowEl.id = labelId;
+                mainBar.appendChild(eyebrowEl);
                 return;
             }
             var btn = P.el('button', 'iwac-vis-facets__btn', f.label);
             btn.type = 'button';
             btn.dataset.facetKey = f.key;
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', function () {
                 setActive(f.key);
             });
@@ -96,16 +118,21 @@
 
             if (mode === 'buttons') {
                 var subButtons = {};
+                var markSub = function (active) {
+                    Object.keys(subButtons).forEach(function (sk) {
+                        var on = sk === active;
+                        subButtons[sk].classList.toggle('iwac-vis-facets__sub-btn--active', on);
+                        subButtons[sk].setAttribute('aria-pressed', on ? 'true' : 'false');
+                    });
+                };
                 keys.forEach(function (k) {
                     var btn = P.el('button', 'iwac-vis-facets__sub-btn', subFacets[k]);
                     btn.type = 'button';
                     btn.dataset.subKey = k;
+                    btn.setAttribute('aria-pressed', 'false');
                     btn.addEventListener('click', function () {
                         activeSubKey = k;
-                        Object.keys(subButtons).forEach(function (sk) {
-                            subButtons[sk].classList.toggle(
-                                'iwac-vis-facets__sub-btn--active', sk === k);
-                        });
+                        markSub(k);
                         fire();
                     });
                     subButtons[k] = btn;
@@ -113,12 +140,21 @@
                 });
                 // auto-pick first
                 activeSubKey = keys[0];
-                subButtons[activeSubKey].classList.add('iwac-vis-facets__sub-btn--active');
+                markSub(activeSubKey);
                 return;
             }
 
             // mode === 'select'
             var select = P.el('select', 'iwac-vis-control iwac-vis-facets__select');
+            // Name it. On a single-facet bar the visible eyebrow ("Country")
+            // IS the label, so point at it — an AT then reads the same word a
+            // sighted reader sees. With several facets there is no single
+            // visible label, so fall back to the facet's own name.
+            if (eyebrowEl) {
+                select.setAttribute('aria-labelledby', labelId);
+            } else {
+                select.setAttribute('aria-label', facet.label);
+            }
             keys.forEach(function (k) {
                 var opt = P.el('option', null, subFacets[k]);
                 opt.value = k;
@@ -136,8 +172,9 @@
 
         function highlightMain() {
             Object.keys(mainButtons).forEach(function (k) {
-                mainButtons[k].classList.toggle(
-                    'iwac-vis-facets__btn--active', k === activeKey);
+                var on = k === activeKey;
+                mainButtons[k].classList.toggle('iwac-vis-facets__btn--active', on);
+                mainButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
             });
         }
 
