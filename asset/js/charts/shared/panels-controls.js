@@ -278,4 +278,101 @@
         };
         return api;
     };
+
+    /* ----------------------------------------------------------------- */
+    /*  Window disclosure — "showing N of M", with a way out              */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * A stated row window plus the control that escapes it.
+     *
+     * Charts that hold more rows than a panel can show have to window them,
+     * and ECharts' `dataZoom` does that silently: the newspaper Gantt drew 20
+     * of 82 press runs behind a thin slider with no count anywhere, so the
+     * honest reading of its default state was "IWAC holds about a dozen
+     * newspapers". A window is fine. An UNSTATED window is a false claim about
+     * the size of the collection, which on an archive's own overview page is
+     * the one thing the page must not get wrong.
+     *
+     * So: say how many of how many, and offer the rest. The note is a
+     * `role="status"` live region because the count changes when a facet
+     * narrows the data, and the button carries `aria-expanded` because that is
+     * exactly what it does.
+     *
+     * @param {Object} cfg
+     * @param {number} cfg.windowSize      rows visible while collapsed
+     * @param {number} cfg.total           rows available
+     * @param {function(boolean):void} cfg.onToggle  receives the new expanded state
+     * @param {string} [cfg.noteKey]       collapsed note, gets {shown} + {total}
+     * @param {string} [cfg.allKey]        expanded note, gets {total}
+     * @param {string} [cfg.showAllKey]    expand button, gets {total}
+     * @param {string} [cfg.showTopKey]    collapse button, gets {shown}
+     * @returns {{root: HTMLElement, update: function(number): void,
+     *            isExpanded: function(): boolean}}
+     */
+    P.buildWindowDisclosure = function (cfg) {
+        var windowSize = cfg.windowSize || 20;
+        var total = cfg.total || 0;
+        var expanded = false;
+
+        var root = P.el('div', 'iwac-vis-window-note');
+        var text = P.el('p', 'iwac-vis-window-note__text');
+        text.setAttribute('role', 'status');
+        text.setAttribute('aria-live', 'polite');
+        var btn = P.el('button', 'iwac-vis-window-note__toggle');
+        btn.type = 'button';
+        root.appendChild(text);
+        root.appendChild(btn);
+
+        function shown() {
+            return Math.min(windowSize, total);
+        }
+
+        function paint() {
+            // Nothing is being hidden — say nothing. A disclosure that fires
+            // on a 6-row chart trains the reader to ignore it on an 82-row one.
+            var windowed = total > windowSize;
+            root.hidden = !windowed;
+            btn.hidden = !windowed;
+            if (!windowed) {
+                expanded = false;
+                text.textContent = '';
+                return;
+            }
+            text.textContent = expanded
+                ? P.t(cfg.allKey || 'window_all', { total: P.formatNumber(total) })
+                : P.t(cfg.noteKey || 'window_note', {
+                    shown: P.formatNumber(shown()),
+                    total: P.formatNumber(total)
+                });
+            btn.textContent = expanded
+                ? P.t(cfg.showTopKey || 'window_show_top', { shown: P.formatNumber(windowSize) })
+                : P.t(cfg.showAllKey || 'window_show_all', { total: P.formatNumber(total) });
+            btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        }
+
+        btn.addEventListener('click', function () {
+            expanded = !expanded;
+            paint();
+            if (typeof cfg.onToggle === 'function') cfg.onToggle(expanded);
+        });
+
+        paint();
+
+        return {
+            root: root,
+            /**
+             * New row count (a facet narrowed or widened the data). Collapses
+             * back when the remaining rows all fit — leaving the chart
+             * "expanded" over 4 rows would strand a tall empty panel.
+             */
+            update: function (newTotal) {
+                total = newTotal || 0;
+                if (total <= windowSize) expanded = false;
+                paint();
+                return expanded;
+            },
+            isExpanded: function () { return expanded; }
+        };
+    };
 })();
