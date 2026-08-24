@@ -9,7 +9,7 @@
  * a single precomputed JSON bundle from
  * `asset/data/lexical-metrics.json` (built by
  * `scripts/generate_lexical_metrics.py`) and renders all panels from
- * it — no runtime calls to the Hugging Face datasets-server.
+ * it.
  *
  * Panels (in render order):
  *   1. Summary cards — article count + corpus means

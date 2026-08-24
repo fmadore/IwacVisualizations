@@ -4,10 +4,7 @@
  * Loads a single precomputed JSON bundle from
  * `asset/data/references-overview.json` (built by
  * `scripts/generate_references_overview.py`) and renders all panels
- * from it. Replaces the old client-side path that paged through the
- * Hugging Face datasets-server `/rows` endpoint at runtime — every
- * visit triggered ~9 parallel HTTP fetches and a full client-side
- * aggregation pass over 864 rows.
+ * from it.
  *
  * Panels (in render order):
  *   1. Summary cards row

@@ -5,7 +5,7 @@
  * issues). Loads a single precomputed JSON bundle from
  * `asset/data/periodicals-overview.json` (built by
  * `scripts/generate_periodicals_overview.py`) and renders all panels
- * from it — no runtime calls to the Hugging Face datasets-server.
+ * from it.
  *
  * Panels (in render order):
  *   1. Summary cards row

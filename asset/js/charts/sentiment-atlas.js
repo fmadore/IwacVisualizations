@@ -5,7 +5,7 @@
  * subset. Loads a single precomputed JSON bundle from
  * `asset/data/sentiment-atlas.json` (built by
  * `scripts/generate_sentiment_atlas.py`) and renders all panels from
- * it — no runtime calls to the Hugging Face datasets-server.
+ * it.
  *
  * Every figure on this page is an AI-generated assessment (three rating
  * models: GPT-5.6 Luna, Mistral Small 4, DeepSeek V4 Flash), not
