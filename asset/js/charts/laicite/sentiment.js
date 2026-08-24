@@ -27,11 +27,15 @@
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels) {
-        console.warn('IWACVis.laicite sentiment: missing panels — check load order');
+    // chartOptions is a real dependency, not an optional one: the polarity
+    // ramp comes from it. The `ns.chartOptions && …` guards further down
+    // (on _grid / _valueAxisName) predate that and are now belt-and-braces.
+    if (!ns || !ns.panels || !ns.chartOptions || !ns.chartOptions.polarityPalette) {
+        console.warn('IWACVis.laicite sentiment: missing panels or chartOptions.polarityPalette — check load order');
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     /** Canonical scale order, most positive first — matches sentiment-atlas. */
@@ -49,16 +53,20 @@
         return value || fallback;
     }
 
-    /** Polarity label → colour, from the shared divergent tokens. */
+    /**
+     * Polarity label → colour, from the shared divergent ramp.
+     *
+     * This was a local copy of the same table chart-options.js and the
+     * person dashboard carry, complete with its own inline fallback hexes
+     * — and the fallbacks are exactly why it had to go. When the positive
+     * half of the ramp was rebuilt in v1.50.0 the CSS moved and this copy
+     * did not, so a theme-less render would have painted the previous,
+     * near-identical greens. The CSS tokens already declare their own
+     * fallbacks (`var(--success, #2e9052)`), which is the one place a
+     * fallback belongs; a second set in JS is a competing declaration.
+     */
     function polarityColors() {
-        return {
-            'Très positif':   readVar('--iwac-vis-sent-pos-strong', '#23703f'),
-            'Positif':        readVar('--iwac-vis-sent-pos', '#2e9052'),
-            'Neutre':         readVar('--iwac-vis-sent-neutral', '#66696e'),
-            'Négatif':        readVar('--iwac-vis-sent-neg', '#de7000'),
-            'Très négatif':   readVar('--iwac-vis-sent-neg-strong', '#c9222b'),
-            'Non applicable': readVar('--iwac-vis-sent-na', '#ced1d6')
-        };
+        return C.polarityPalette();
     }
 
     function pct(n, d) { return d ? (n / d) * 100 : 0; }

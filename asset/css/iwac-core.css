@@ -44,9 +44,33 @@
     /* Sentiment polarité — divergent (positive → neutral → negative).
      * Maps to the IWAC theme's success/warning/error tokens when
      * available, otherwise to the colorblind-safe fallbacks the IWAC
-     * palette uses elsewhere. */
-    --iwac-vis-sent-pos-strong: color-mix(in oklab, var(--success, #2e9052), black 18%); /* darkened --success; theme defines no --success-strong */
-    --iwac-vis-sent-pos:        var(--success,        #2e9052);
+     * palette uses elsewhere.
+     *
+     * The two halves are derived DIFFERENTLY, and deliberately. The
+     * negative half gets its two steps from two distinct theme tokens —
+     * --warning (orange) and --error (red) — so the step is a change of
+     * hue, worth ΔE 40 in both themes. The positive half has only
+     * --success to work with, so its step has to come from lightness,
+     * and it is taken TOWARD --surface: the weaker grade sits closer to
+     * the background, the stronger grade is the token itself. That is the
+     * same construction --iwac-vis-cent-* and --iwac-vis-subj-* below
+     * use, and the reason is the same — mixing toward the surface is
+     * theme-relative, so it stays correct when the surface goes dark.
+     *
+     * It previously went the other way: `-pos-strong` was --success mixed
+     * 18% toward literal BLACK. Black is not theme-relative. In the light
+     * theme that darkened the strong grade correctly, but only by ΔE 15.5
+     * (against 40 on the negative half), so the ramp read as four grades
+     * and a shading artefact. In the DARK theme it was worse than weak —
+     * it was backwards: mixing toward black moved "Très positif" TOWARD
+     * the near-black surface, leaving the strongest grade at contrast
+     * 4.96 while plain "Positif" sat at 8.28. The most emphatic rating on
+     * the scale was the dimmest thing on the chart. Now: ΔE 30.9 light /
+     * 38.2 dark, and the strong grade is the furthest from the surface in
+     * both themes. Anything derived here must mix toward --surface or
+     * --ink, never toward black or white. */
+    --iwac-vis-sent-pos-strong: var(--success,        #2e9052);
+    --iwac-vis-sent-pos:        color-mix(in oklab, var(--success, #2e9052) 55%, var(--surface, #fdfcfb));
     --iwac-vis-sent-neutral:    var(--muted,          #66696e);
     --iwac-vis-sent-neg:        var(--warning,        #de7000);
     --iwac-vis-sent-neg-strong: var(--error,          #c9222b);
@@ -390,6 +414,25 @@
  *  25 category rows). */
 .iwac-vis-panel > .iwac-vis-chart.iwac-vis-chart--tall {
     min-height: 400px;
+}
+
+/* -------------------------------------------------------------------
+ *  Likert host — a diverging bar spends one ROW per category, so its
+ *  height is a function of the data rather than of the panel. The
+ *  sentiment atlas draws 30 topics and 31 newspapers this way: at 720px
+ *  each row gets ~21px, which is a 15px bar with air around it. The
+ *  320px floor would give it 9px per row, i.e. sub-pixel bars under
+ *  their own axis labels — the exact failure the vertical version had.
+ *  Chained to `.iwac-vis-chart` to clear the generic floor without
+ *  depending on source order (see the graph-host note above).
+ * ----------------------------------------------------------------- */
+.iwac-vis-panel > .iwac-vis-chart.iwac-vis-chart--likert {
+    min-height: 720px;
+}
+@media (max-width: 599px) { /* sm */
+    .iwac-vis-panel > .iwac-vis-chart.iwac-vis-chart--likert {
+        min-height: 640px;
+    }
 }
 @media (max-width: 599px) { /* sm */
     .iwac-vis-panel > .iwac-vis-chart.iwac-vis-wordcloud-host {

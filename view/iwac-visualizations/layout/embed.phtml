@@ -117,9 +117,13 @@ $secondary = $hex($this->themeSetting('secondary_color', ''));
         /* Match the theme's dark-mode habit of lightening the accent
            (e.g. #e64a19 → #ec653f) rather than carrying the light value.
            The mode is always pinned via data-theme on this route (embeds
-           default to light), so this is the only dark branch we need. */
-        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $primary ?>, white 12%);<?php endif;
-            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $secondary ?>, white 14%);<?php endif; ?> }
+           default to light), so this is the only dark branch we need.
+           Mixing toward white is normally banned (guard rule 2b) because it
+           inverts when the surface flips; here the surface cannot flip —
+           the branch IS the dark one — so white is the correct direction
+           and both lines opt out. */
+        body[data-theme="dark"] {<?php if ($primary !== ''): ?> --primary: color-mix(in oklab, <?= $primary ?>, white 12%); /* allow-absolute-mix */<?php endif;
+            if ($secondary !== ''): ?> --secondary: color-mix(in oklab, <?= $secondary ?>, white 14%); /* allow-absolute-mix */<?php endif; ?> }
     </style>
     <?php endif; ?>
     <?= $this->headScript() ?>

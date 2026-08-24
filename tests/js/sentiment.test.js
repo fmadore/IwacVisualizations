@@ -5,6 +5,12 @@
 // strings, but ECharts' zrender hover-emphasis path cannot parse and lift them.
 // The panel must therefore use IWACVis.readColorVar(), which resolves every
 // token to a legacy rgb()/rgba() value before it reaches C.segmentedBar.
+//
+// The rating-scale → token maps live in chart-options.js (C.polarityPalette /
+// centralityPalette / subjectivityPalette), so this test loads that file FOR
+// REAL and only stubs C.segmentedBar. Faking the palettes too would leave the
+// assertions below checking the fake — and the mapping they exist to protect
+// is precisely what a consolidation could get wrong.
 
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
@@ -15,6 +21,10 @@ const vm = require('node:vm');
 const ROOT = join(__dirname, '..', '..');
 const SOURCE = readFileSync(
     join(ROOT, 'asset', 'js', 'charts', 'person-dashboard', 'sentiment.js'),
+    'utf8'
+);
+const CHART_OPTIONS = readFileSync(
+    join(ROOT, 'asset', 'js', 'charts', 'shared', 'chart-options.js'),
     'utf8'
 );
 
@@ -51,6 +61,9 @@ test('sentiment palettes resolve modern CSS colours before ECharts receives them
         sentimentModelLabel: (key) => key,
         t: (key) => key,
     };
+    // Pre-seeded with the spy; chart-options.js extends this same object
+    // (`ns.chartOptions = ns.chartOptions || {}`), so the real ramp lookups
+    // land alongside it rather than replacing it.
     const C = {
         segmentedBar(segments, opts) {
             segmentedCalls.push({
@@ -85,6 +98,17 @@ test('sentiment palettes resolve modern CSS colours before ECharts receives them
         window: { IWACVis: ns },
     };
     vm.createContext(context);
+    vm.runInContext(CHART_OPTIONS, context, { filename: 'shared/chart-options.js' });
+    assert.equal(
+        typeof context.window.IWACVis.chartOptions.polarityPalette,
+        'function',
+        'chart-options.js did not publish the ramp lookups'
+    );
+    assert.equal(
+        typeof context.window.IWACVis.chartOptions.segmentedBar,
+        'function',
+        'chart-options.js clobbered the segmentedBar spy'
+    );
     vm.runInContext(SOURCE, context, { filename: 'person-dashboard/sentiment.js' });
 
     const model = {

@@ -11,12 +11,17 @@
  *
  * This file is the CORE of the chart-options module: it owns the shared
  * private helpers (C._grid, C._dataZoom, C._truncate, C._stableLabelColor,
- * C._labelHalo, C._barDefaults, C._countryColor) and the country-color
- * map. The individual chart builders live in sibling files that extend
+ * C._labelHalo, C._barDefaults, C._countryColor), the country-color map,
+ * and the ORDINAL ramp lookups every rating chart paints from:
+ * C.polarityPalette() (diverging), C.centralityPalette() and
+ * C.subjectivityPalette() (sequential). Those three are the SINGLE copy of
+ * each rating-scale → token map — the person/entity dashboards and the
+ * laïcité framing view read them from here rather than repeating them. The individual chart builders live in sibling files that extend
  * the same IWACVis.chartOptions (C) namespace:
  *
  *   chart-options-bar.js      timeline, growthBar, stackedBar
- *   chart-options-hbar.js     horizontalBar, newspaper, entities, scaryTerms
+ *   chart-options-hbar.js     horizontalBar, newspaper, entities, scaryTerms,
+ *                             divergingBar (+ divergingExtent)
  *   chart-options-graph.js    chord, collaborationNetwork, sankey
  *   chart-options-special.js  pie, treemap, gantt, wordcloud, segmentedBar,
  *                             sunburst, beeswarm, heatmap
@@ -203,6 +208,79 @@
                 if (footer) lines.push(footer);
             }
             return lines.join('<br>');
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Ordinal rating ramps                                              */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Polarité (5-point Likert) → CSS colour, read from the
+     * `--iwac-vis-sent-*` tokens in iwac-core.css.
+     *
+     * Polarité is ORDINAL — very positive → very negative — so it must be
+     * painted with the diverging ramp, never with the categorical series
+     * palette ECharts assigns by default. The sentiment atlas did exactly
+     * that for five releases: every polarity panel there stacked the same
+     * five buckets in orange / blue / green / red / purple, so the colours
+     * carried no order at all AND disagreed with the person, entity and
+     * laïcité dashboards, which have always read these tokens. Same five
+     * labels, two colour systems, one site.
+     *
+     * Keys are the RAW French bucket names as they arrive in the
+     * precomputed bundles (the same strings `polarity_order` carries);
+     * callers translate for display but must look the palette up by the
+     * raw key. Read at call time, not at load, so the light/dark swap in
+     * dashboard-core repaints without remounting the panel.
+     */
+    C.polarityPalette = function () {
+        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        return {
+            'Très positif':   read('--iwac-vis-sent-pos-strong'),
+            'Positif':        read('--iwac-vis-sent-pos'),
+            'Neutre':         read('--iwac-vis-sent-neutral'),
+            'Négatif':        read('--iwac-vis-sent-neg'),
+            'Très négatif':   read('--iwac-vis-sent-neg-strong'),
+            'Non applicable': read('--iwac-vis-sent-na')
+        };
+    };
+
+    /**
+     * Centralité (how central Islam and Muslims are to an article) → CSS
+     * colour, from the `--iwac-vis-cent-*` tokens.
+     *
+     * Sequential, not diverging: one hue fading toward the background as
+     * the subject becomes more peripheral, ending on the flat border tint
+     * for "not addressed at all". Same argument as polarité — the grades
+     * are ORDERED, so the categorical series palette encodes nothing.
+     *
+     * Keys are the raw French bucket names carried by `centrality_order`.
+     */
+    C.centralityPalette = function () {
+        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        return {
+            'Très central': read('--iwac-vis-cent-1'),
+            'Central':      read('--iwac-vis-cent-2'),
+            'Secondaire':   read('--iwac-vis-cent-3'),
+            'Marginal':     read('--iwac-vis-cent-4'),
+            'Non abordé':   read('--iwac-vis-cent-na')
+        };
+    };
+
+    /**
+     * Subjectivité 1–5 → CSS colour, from the `--iwac-vis-subj-*` tokens.
+     * Sequential: 1 is factual and nearly the background, 5 is the accent
+     * itself. Keys are STRINGS, matching the level names the bundles carry.
+     */
+    C.subjectivityPalette = function () {
+        var read = ns.readColorVar || ns.resolveCssVar || function () { return ''; };
+        return {
+            '1': read('--iwac-vis-subj-1'),
+            '2': read('--iwac-vis-subj-2'),
+            '3': read('--iwac-vis-subj-3'),
+            '4': read('--iwac-vis-subj-4'),
+            '5': read('--iwac-vis-subj-5')
         };
     };
 

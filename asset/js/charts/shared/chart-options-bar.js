@@ -196,15 +196,26 @@
      * @param {function(string): string} [opts.labelFor]
      * @param {string} [opts.categoryName]
      * @param {string} [opts.valueName]
+     * @param {Object<string,string>} [opts.colors]
+     *   Raw stack key → CSS color. Supply this whenever the stack is an
+     *   ORDINAL scale (polarité, centralité, a 1–5 rating): left to its
+     *   own devices ECharts hands out the categorical series palette,
+     *   which encodes no order and collides with the semantic ramps the
+     *   rest of the site reads from `--iwac-vis-sent-*` / `-cent-*`.
+     *   Keyed on the RAW key, not the translated label, so the lookup
+     *   survives a locale switch.
      */
     C.stackedBar = function (d, opts) {
         opts = opts || {};
         var categories = d.categories || [];
         var stackKeys = d.stackKeys || [];
         var seriesMap = d.series || {};
+        var colors = opts.colors || null;
 
         var barDef = C._barDefaults('vertical');
         var series = stackKeys.map(function (k) {
+            var itemStyle = { borderRadius: barDef.borderRadius.slice() };
+            if (colors && colors[k]) itemStyle.color = colors[k];
             return {
                 name: opts.labelFor ? opts.labelFor(k) : k,
                 type: 'bar',
@@ -212,7 +223,7 @@
                 barMaxWidth: barDef.barMaxWidth,
                 emphasis: { focus: 'series' },
                 blur: { itemStyle: { opacity: 0.5 } },
-                itemStyle: { borderRadius: barDef.borderRadius.slice() },
+                itemStyle: itemStyle,
                 data: seriesMap[k] || []
             };
         });

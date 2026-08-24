@@ -20,8 +20,8 @@
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
     var C = ns.chartOptions;
-    if (!P || !C || !C.segmentedBar || !P.buildFacetButtons) {
-        console.warn('IWACVis.person-dashboard/sentiment: missing deps (need C.segmentedBar + P.buildFacetButtons)');
+    if (!P || !C || !C.segmentedBar || !C.polarityPalette || !P.buildFacetButtons) {
+        console.warn('IWACVis.person-dashboard/sentiment: missing deps (need C.segmentedBar + C.polarityPalette + P.buildFacetButtons)');
         return;
     }
 
@@ -60,35 +60,22 @@
     }
 
     /**
-     * Build the segment-name → CSS color maps by reading the semantic
-     * tokens in iwac-core.css. Recomputed every render so a
+     * The three segment-name → CSS colour maps, from the shared ramp
+     * lookups in chart-options.js. Recomputed every render so a
      * theme/palette swap propagates without remounting the panel.
+     *
+     * These tables used to be spelled out here, and again in
+     * laicite/sentiment.js, and a third time once the sentiment atlas
+     * needed them — three copies of the same rating-scale → token
+     * mapping. That is not a hypothetical cost: when the polarité ramp was
+     * rebuilt in v1.50.0, the laïcité copy still carried the previous
+     * greens as inline fallbacks and had to be found by hand. One table.
      */
     function readPalettes() {
         return {
-            polarite: {
-                'Très positif':   readColor('--iwac-vis-sent-pos-strong'),
-                'Positif':        readColor('--iwac-vis-sent-pos'),
-                'Neutre':         readColor('--iwac-vis-sent-neutral'),
-                'Négatif':        readColor('--iwac-vis-sent-neg'),
-                'Très négatif':   readColor('--iwac-vis-sent-neg-strong'),
-                'Non applicable': readColor('--iwac-vis-sent-na')
-            },
-            centralite: {
-                'Très central': readColor('--iwac-vis-cent-1'),
-                'Central':      readColor('--iwac-vis-cent-2'),
-                'Secondaire':   readColor('--iwac-vis-cent-3'),
-                'Marginal':     readColor('--iwac-vis-cent-4'),
-                'Non abordé':   readColor('--iwac-vis-cent-na')
-            },
-            // Subjectivité 1..5 — sequential, 1 = objective, 5 = very subjective.
-            subjectivite: {
-                '1': readColor('--iwac-vis-subj-1'),
-                '2': readColor('--iwac-vis-subj-2'),
-                '3': readColor('--iwac-vis-subj-3'),
-                '4': readColor('--iwac-vis-subj-4'),
-                '5': readColor('--iwac-vis-subj-5')
-            }
+            polarite: C.polarityPalette(),
+            centralite: C.centralityPalette(),
+            subjectivite: C.subjectivityPalette()
         };
     }
 

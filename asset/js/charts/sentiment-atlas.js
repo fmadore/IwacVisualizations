@@ -18,12 +18,22 @@
  *   Over time  — polarity over time, centrality over time (both faceted),
  *                subjectivity trend (every model at once — the only panel
  *                here that does, hence the per-model colour tokens)
- *   Breakdown  — polarity by country, polarity × subjectivity, and the
- *                centrality-by-country-and-year heatmap (all faceted)
+ *   Breakdown  — polarity by country, polarity × subjectivity, the
+ *                centrality-by-country-and-year heatmap, and polarity by
+ *                topic / by newspaper (all faceted). The last two are
+ *                diverging bars — thirty-odd rows sharing a baseline at
+ *                the neutral midpoint, each with its own order control
  *   Extremes   — top subject / place keywords in the most extreme-rated
  *                articles, with a sentiment-bucket + keyword-type facet
  *   Comparison — a model-pair facet driving cross-model agreement (cards +
  *                cross-tab heatmap)
+ *
+ * Polarité and centralité are both ORDINAL, so every panel that stacks
+ * either one paints from a semantic ramp and never from the categorical
+ * series palette ECharts assigns by default: `C.polarityPalette()` for the
+ * `--iwac-vis-sent-*` diverging scale the person, entity and laïcité
+ * dashboards already read, and `C.centralityPalette()` for the sequential
+ * `--iwac-vis-cent-*` one.
  *
  * Load order: after shared/panels.js + shared/chart-options*.js +
  * shared/facet-buttons.js + sentiment-atlas/i18n.js (the block's en/fr
@@ -41,6 +51,9 @@
     var C = ns.chartOptions;
 
     var NOT_APPLICABLE = 'Non applicable';
+    // Midpoint of the polarité scale — the grade that straddles zero on
+    // the diverging panels. Raw French key, as it arrives in the bundle.
+    var NEUTRAL = 'Neutre';
 
     // Filled from the payload's own `data.models` map by syncModels()
     // before anything reads it, NOT hardcoded.
@@ -133,6 +146,7 @@
             series: model.polarity_by_year || {}
         }, {
             labelFor: function (k) { return P.t(k); },
+            colors: C.polarityPalette(),
             categoryName: P.t('Year'),
             valueName: P.t('Articles')
         });
@@ -146,6 +160,7 @@
             series: model.centrality_by_year || {}
         }, {
             labelFor: function (k) { return P.t(k); },
+            colors: C.centralityPalette(),
             categoryName: P.t('Year'),
             valueName: P.t('Articles')
         });
@@ -159,52 +174,159 @@
             series: model.polarity_by_country || {}
         }, {
             labelFor: function (k) { return P.t(k); },
+            colors: C.polarityPalette(),
             valueName: P.t('Articles')
         });
     }
 
-    /** Delegate to the shared derivation (panels.js). */
+    /* ----------------------------------------------------------------- */
+    /*  Polarity by topic / by newspaper — the diverging panels           */
+    /*                                                                    */
+    /*  These two breakdowns are long (30 topics, 31 newspapers) and very */
+    /*  unevenly sized: the largest topic carries 1,317 rated articles,   */
+    /*  the smallest 17. As vertical stacked bars they answered the wrong */
+    /*  question — length read as volume, so composition was legible for  */
+    /*  the top two rows only — and 40°-rotated LDA term pairs ate so     */
+    /*  much of the 320px panel that the plot collapsed to a ~50px strip  */
+    /*  underneath its own legend. C.divergingBar carries the reasoning.  */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Topic display name: the shared derivation plus one local step. LDA
+     * terms arrive as underscore-joined n-grams
+     * (`conseil_supérieur_imam_cosim`), which is how they are keyed
+     * upstream and not how anyone reads them. The spaces are restored
+     * here, on the axis, rather than in `P.topicShortLabel` — its other
+     * consumers (semantic landscape, references overview, periodicals)
+     * draw the same strings into graph node labels and legends, where the
+     * unbreakable underscore form is doing real layout work.
+     */
     function topicShortLabel(label, id) {
-        return P.topicShortLabel(label, id);
+        return unscore(P.topicShortLabel(label, id));
     }
 
-    /** 30-topic / 31-newspaper category axes need slanted labels.
-     *  stackedBar may return a media-wrapped option ({baseOption, media}),
-     *  so mutate whichever object actually carries the xAxis. */
-    function rotateCategoryLabels(opt, deg) {
-        var root = opt.baseOption || opt;
-        root.xAxis = root.xAxis || {};
-        root.xAxis.axisLabel = Object.assign(
-            { rotate: deg, hideOverlap: true },
-            root.xAxis.axisLabel || {}
-        );
-        return opt;
+    function unscore(str) {
+        return String(str || '').replace(/_/g, ' ');
     }
 
-    function buildPolarityByTopic(data, modelKey) {
+    /** The topic's full term list, for the tooltip header. */
+    function topicFullLabel(label, id) {
+        var full = unscore(String(label || '').split(' - ').join(' · ')).trim();
+        return full || (P.t('Topic') + ' ' + id);
+    }
+
+    /**
+     * Polarité in SCALE order, most negative first — the left-to-right
+     * order the diverging bars and their legend are both drawn in.
+     * `polarity_order` runs the other way (it is the stacking order the
+     * vertical panels want), so the two are not interchangeable.
+     */
+    function polarityScale(data) {
+        return stackOrderWithoutNA(data.polarity_order).slice().reverse();
+    }
+
+    /**
+     * One row per category: display name, untruncated name, and the raw
+     * per-grade counts. `divergingBar` derives shares and totals itself,
+     * so rows stay comparable however they are later sorted.
+     */
+    function polarityRows(data, modelKey, kind) {
         var model = data.models[modelKey] || {};
-        return rotateCategoryLabels(C.stackedBar({
-            categories: (data.topics || []).map(function (t) {
-                return topicShortLabel(t.label, t.id);
-            }),
-            stackKeys: stackOrderWithoutNA(data.polarity_order),
-            series: model.polarity_by_topic || {}
-        }, {
-            labelFor: function (k) { return P.t(k); },
-            valueName: P.t('Articles')
-        }), 40);
+        var keys = polarityScale(data);
+        var series = (kind === 'topic' ? model.polarity_by_topic : model.polarity_by_newspaper) || {};
+        var names = kind === 'topic'
+            ? (data.topics || []).map(function (topic) {
+                return {
+                    name: topicShortLabel(topic.label, topic.id),
+                    full: topicFullLabel(topic.label, topic.id)
+                };
+            })
+            : (data.newspapers || []).map(function (paper) {
+                return { name: paper, full: paper };
+            });
+        return names.map(function (entry, i) {
+            var counts = {};
+            keys.forEach(function (k) { counts[k] = (series[k] || [])[i] || 0; });
+            return { name: entry.name, full: entry.full, counts: counts };
+        });
     }
 
-    function buildPolarityByNewspaper(data, modelKey) {
-        var model = data.models[modelKey] || {};
-        return rotateCategoryLabels(C.stackedBar({
-            categories: data.newspapers || [],
-            stackKeys: stackOrderWithoutNA(data.polarity_order),
-            series: model.polarity_by_newspaper || {}
-        }, {
+    /** Sum a row's counts over a subset of the scale. */
+    function sumGrades(counts, keys) {
+        var n = 0;
+        keys.forEach(function (k) { n += counts[k] || 0; });
+        return n;
+    }
+
+    /**
+     * Rows ordered either by net polarity or by volume.
+     *
+     * 'polarity' sorts on (positive share − negative share). Because a
+     * diverging bar's two extents always sum to 100, that single key makes
+     * BOTH outer edges monotonic: the chart resolves into two clean curves
+     * and the leaning-negative themes separate out at the bottom instead
+     * of hiding in the middle of a volume ranking. Ties fall back to
+     * volume, so the head of an equal-share cluster is its biggest member
+     * rather than an arbitrary one.
+     *
+     * @param {Array<string>} scale  Grades, most negative first.
+     */
+    function sortRows(rows, mode, scale) {
+        var neutralIdx = scale.indexOf(NEUTRAL);
+        var negKeys = scale.slice(0, neutralIdx);
+        var posKeys = scale.slice(neutralIdx + 1);
+        return rows.slice().map(function (r) {
+            var total = sumGrades(r.counts, scale);
+            return {
+                row: r,
+                total: total,
+                net: total ? (sumGrades(r.counts, posKeys) - sumGrades(r.counts, negKeys)) / total : 0
+            };
+        }).sort(function (a, b) {
+            if (mode === 'volume') return b.total - a.total || b.net - a.net;
+            return b.net - a.net || b.total - a.total;
+        }).map(function (entry) { return entry.row; });
+    }
+
+    /**
+     * ONE value-axis extent for both diverging panels, pooled over every
+     * model and both breakdowns.
+     *
+     * Two things depend on it. Across models: the ruler must not move when
+     * the model facet does, or the rater that judges sharply and the rater
+     * that judges mildly draw bars of the same width and the difference —
+     * the thing a three-rater corpus exists to show — reads as nothing.
+     * Across panels: "by topic" and "by newspaper" sit next to each other
+     * in the same grid, so sharing a ruler is what lets a reader carry a
+     * width from one to the other instead of re-reading the axis.
+     */
+    function polarityExtent(data) {
+        var scale = polarityScale(data);
+        var pooled = [];
+        Object.keys(data.models || {}).forEach(function (key) {
+            pooled = pooled
+                .concat(polarityRows(data, key, 'topic'))
+                .concat(polarityRows(data, key, 'newspaper'));
+        });
+        return C.divergingExtent(pooled, scale, NEUTRAL, 20);
+    }
+
+    function buildDivergingPolarity(data, modelKey, kind, sortMode, extent) {
+        var scale = polarityScale(data);
+        return C.divergingBar({
+            rows: sortRows(polarityRows(data, modelKey, kind), sortMode, scale),
+            order: scale,
+            neutralKey: NEUTRAL,
+            colors: C.polarityPalette(),
             labelFor: function (k) { return P.t(k); },
-            valueName: P.t('Articles')
-        }), 40);
+            extent: extent,
+            countName: P.t('Articles'),
+            countNote: function (n) {
+                return P.t('sentiment.rated_n', { count: P.formatNumber(n) });
+            },
+            // LDA term pairs run long; newspaper mastheads do not.
+            labelWidth: kind === 'topic' ? 264 : 170
+        });
     }
 
     /**
@@ -220,6 +342,7 @@
             series: model.correlation || {}
         }, {
             labelFor: function (k) { return P.t(k); },
+            colors: C.polarityPalette(),
             categoryName: P.t('Subjectivity'),
             valueName: P.t('Articles')
         });
@@ -597,18 +720,30 @@
         // Polarity by topic / by newspaper (ROADMAP 9.2 / 9.3). Both elide
         // when the deployed bundle predates their generator sections, so
         // code can ship ahead of the next data pull.
+        //
+        // Both are diverging bars over thirty-odd rows, so they need the
+        // room a row-per-category costs (--likert) and their own sort
+        // control between the description and the chart.
         var topicPanel = null;
+        var topicSortHost = null;
         if ((data.topics || []).length) {
             topicPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
                 P.t('sentiment.polarity_topic_title'), descWithAiNote('sentiment.polarity_topic_desc'));
+            topicPanel.chart.classList.add('iwac-vis-chart--likert');
+            topicSortHost = P.el('div', 'iwac-vis-facet-host');
+            topicPanel.panel.insertBefore(topicSortHost, topicPanel.chart);
             breakdownGrid.appendChild(topicPanel.panel);
         }
         var newspaperPanel = null;
+        var newspaperSortHost = null;
         if ((data.newspapers || []).length) {
             newspaperPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide',
                 P.t('sentiment.polarity_newspaper_title'),
                 P.t('sentiment.polarity_newspaper_desc', { min: data.newspaper_min || 50 })
                     + ' ' + P.t('sentiment.ai_note'));
+            newspaperPanel.chart.classList.add('iwac-vis-chart--likert');
+            newspaperSortHost = P.el('div', 'iwac-vis-facet-host');
+            newspaperPanel.panel.insertBefore(newspaperSortHost, newspaperPanel.chart);
             breakdownGrid.appendChild(newspaperPanel.panel);
         }
 
@@ -648,7 +783,9 @@
             correlationPanel:  correlationPanel,
             cenHeatPanel:      cenHeatPanel,
             topicPanel:        topicPanel,
+            topicSortHost:     topicSortHost,
             newspaperPanel:    newspaperPanel,
+            newspaperSortHost: newspaperSortHost,
             extremesPanel:     extremesPanel,
             extremesControls:  extremesControls,
             extremesNote:      extremesNote,
@@ -679,7 +816,33 @@
         }
 
         var firstCat = (data.extreme_categories || ['subjectivity_high'])[0];
-        var state = { model: MODELS[0].key, pair: 0, exCategory: firstCat, exType: 'subject' };
+        var state = {
+            model: MODELS[0].key,
+            pair: 0,
+            exCategory: firstCat,
+            exType: 'subject',
+            // Most positive → most negative by default: the order that makes
+            // the diverging bars readable as a gradient rather than a comb.
+            topicSort: 'polarity',
+            newspaperSort: 'polarity'
+        };
+        // Pinned once, over every model AND both breakdowns, so neither the
+        // model facet nor the move between the two panels rescales the
+        // ruler (see polarityExtent).
+        var sharedExtent = polarityExtent(data);
+
+        function topicOption() {
+            return buildDivergingPolarity(data, state.model, 'topic', state.topicSort, sharedExtent);
+        }
+        function newspaperOption() {
+            return buildDivergingPolarity(data, state.model, 'newspaper', state.newspaperSort, sharedExtent);
+        }
+        function repaint(host, option) {
+            var live = host && ns.getLiveChart ? ns.getLiveChart(host) : null;
+            // `true` — a diverging repaint reorders the category axis, and a
+            // merged setOption would leave the previous row labels in place.
+            if (live) live.setOption(option, true);
+        }
         var h = buildLayout(container, data);
 
         function updateNaNote() {
@@ -721,12 +884,12 @@
                         [h.correlationPanel.chart, buildCorrelation],
                         [h.cenHeatPanel.chart,     buildCentralityHeatmap]
                     ];
-                    if (h.topicPanel)     faceted.push([h.topicPanel.chart,     buildPolarityByTopic]);
-                    if (h.newspaperPanel) faceted.push([h.newspaperPanel.chart, buildPolarityByNewspaper]);
                     faceted.forEach(function (pair) {
                         var live = ns.getLiveChart ? ns.getLiveChart(pair[0]) : null;
                         if (live) live.setOption(pair[1](data, state.model), true);
                     });
+                    if (h.topicPanel) repaint(h.topicPanel.chart, topicOption());
+                    if (h.newspaperPanel) repaint(h.newspaperPanel.chart, newspaperOption());
                     renderExtremes();
                 }
             });
@@ -749,14 +912,41 @@
         ns.registerChart(h.cenHeatPanel.chart, function (el, chart) {
             chart.setOption(buildCentralityHeatmap(data, state.model), true);
         });
+        // -- Diverging polarity panels + their sort controls -------
+        function mountSortControl(host, current, apply) {
+            if (!host || !P.buildFacetButtons) return;
+            var bar = P.buildFacetButtons({
+                facets: [{
+                    key: 'sort',
+                    label: P.t('sentiment.sort_by'),
+                    subFacets: {
+                        polarity: P.t('sentiment.sort_polarity'),
+                        volume: P.t('sentiment.sort_volume')
+                    },
+                    renderAs: 'buttons'
+                }],
+                activeKey: 'sort',
+                onChange: function (evt) { apply(evt.subFacet || current); }
+            });
+            host.appendChild(bar.root);
+        }
+
         if (h.topicPanel) {
             ns.registerChart(h.topicPanel.chart, function (el, chart) {
-                chart.setOption(buildPolarityByTopic(data, state.model), true);
+                chart.setOption(topicOption(), true);
+            });
+            mountSortControl(h.topicSortHost, state.topicSort, function (mode) {
+                state.topicSort = mode;
+                repaint(h.topicPanel.chart, topicOption());
             });
         }
         if (h.newspaperPanel) {
             ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
-                chart.setOption(buildPolarityByNewspaper(data, state.model), true);
+                chart.setOption(newspaperOption(), true);
+            });
+            mountSortControl(h.newspaperSortHost, state.newspaperSort, function (mode) {
+                state.newspaperSort = mode;
+                repaint(h.newspaperPanel.chart, newspaperOption());
             });
         }
 

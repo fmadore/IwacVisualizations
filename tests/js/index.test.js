@@ -8,5 +8,6 @@ require('./panels.test.js');
 require('./maplibre.test.js');
 require('./assets.test.js');
 require('./sentiment.test.js');
+require('./diverging-bar.test.js');
 require('./associated-entities.test.js');
 require('./minimal-item.test.js');

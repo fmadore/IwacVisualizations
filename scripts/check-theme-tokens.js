@@ -14,6 +14,18 @@
  *      in theme v2.0.0 (derive variants via color-mix from `--primary`).
  *   2. No `color-mix(in srgb …)` — sRGB mixing muddies mid-tones; the
  *      contract is `in oklab`.
+ *   2b. No `color-mix(… black|white …)` — mix toward `--surface` or
+ *      `--ink` instead. Black and white are the two colours in the
+ *      palette that are NOT theme-relative, so a ramp built on them
+ *      inverts when the surface goes dark: mixing toward black moves a
+ *      swatch away from a white page but *toward* a near-black one.
+ *      `--iwac-vis-sent-pos-strong` was derived that way until v1.50.0,
+ *      which left the strongest grade on the polarité scale as the
+ *      dimmest thing on the chart in dark mode (contrast 4.96 against
+ *      8.28 for the grade below it). `--surface` and `--ink` both flip
+ *      with the theme, so a mix toward either keeps its direction. A
+ *      declaration inside an explicitly theme-pinned block already knows
+ *      which way is up and opts out with `/* allow-absolute-mix *​/`.
  *   3. (CSS only) Every hex colour must sit in a `var(--token, #fallback)`
  *      fallback slot. Bare hex chrome is forbidden. Genuine exceptions
  *      (sanctioned data-series colours) opt out with a trailing
@@ -93,10 +105,11 @@ function walk(dir, exts, out = []) {
  * removed token would fail rule 1 the same way. Comments are not CSS.
  */
 function blankComments(text) {
-    // `/* allow-hex */` is itself a comment and IS load-bearing — the opt-out
-    // marker rules 3 and 4 look for. Leave those intact and blank the rest.
+    // `/* allow-hex */` and `/* allow-absolute-mix */` are themselves
+    // comments and ARE load-bearing — they are the opt-out markers rules 3,
+    // 4 and 2b look for. Leave those intact and blank the rest.
     return text.replace(/\/\*[\s\S]*?\*\//g, (m) =>
-        /allow-hex/.test(m) ? m : m.replace(/[^\n]/g, ' '));
+        /allow-hex|allow-absolute-mix/.test(m) ? m : m.replace(/[^\n]/g, ' '));
 }
 
 /** Normalise #rgb / #rgba / #rrggbb / #rrggbbaa → lowercase #rrggbb. */
@@ -122,6 +135,11 @@ if (existsSync(TOKENS_PATH)) {
 
 const REMOVED_TOKEN = /--primary-(hue|sat)\b/;
 const SRGB_MIX = /color-mix\(\s*in\s+srgb\b/i;
+// A literal black/white operand anywhere inside a color-mix(). Matched on
+// the whole line rather than by parsing the call: these are single-line
+// declarations, and a word-boundary hit on `black`/`white` outside a
+// color-mix is not a thing this codebase writes.
+const ABSOLUTE_MIX = /color-mix\([^;]*\b(?:black|white)\b/i;
 const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
 const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
 const VAR_USE = /var\(\s*(--[\w-]+)/g;
@@ -411,6 +429,12 @@ function scanLines(file, numbered, { hexCheck }) {
         }
         if (SRGB_MIX.test(raw)) {
             flag(file, n, 'color-mix(in srgb …) — use `in oklab`', raw);
+        }
+        // A whole-line `//` comment is prose, not a declaration — the
+        // blanking pass above only strips /* … */, so JS line comments that
+        // quote a token definition would otherwise report themselves.
+        if (ABSOLUTE_MIX.test(raw) && !/^\s*\/\//.test(raw) && !/allow-absolute-mix/.test(raw)) {
+            flag(file, n, 'color-mix toward literal black/white — mix toward --surface or --ink so the ramp survives dark mode (or mark /* allow-absolute-mix */ inside a theme-pinned block)', raw);
         }
         checkVarFallbackValues(file, raw, n);
         checkVarNames(file, raw, n);
