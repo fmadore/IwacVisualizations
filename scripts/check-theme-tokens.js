@@ -69,6 +69,18 @@
  *  10. Media-query widths must be one of the theme's published breakpoints.
  *      `blocks/laicite.css` reflowed at 640px under a `/* sm *​/` comment
  *      while the theme's `$sm` — and every other block on the page — is 600.
+ *
+ * Rule added 2026-08 (Phase-2 colour grammar):
+ *  11. The categorical SERIES palette in iwac-theme.js must deep-equal
+ *      `tokens.json`'s `series`. The scale was module-owned for the module's
+ *      whole life — a 19-hex array literal published nowhere and asserted by
+ *      nothing, with slot 0 a hardcoded twin of `--secondary` that had to be
+ *      sliced back off at runtime. The theme now owns it (`--series-1 … -20`),
+ *      so the arrays here are a degraded-mode fallback and nothing else; this
+ *      rule pins them, the lead-slot count, and WHICH tokens hold the leads,
+ *      so a palette edit in the theme cannot land on one side of the contract.
+ *      Light and dark are checked separately: they are equal in contract v1
+ *      and the guard must not start passing by accident when they diverge.
  * Lines marked `/​* allow-hex *​/` are exempt from 3 and 4.
  *
  * Usage: node scripts/check-theme-tokens.js
@@ -483,6 +495,74 @@ function checkFallbackObjects(file) {
     }
 }
 
+/**
+ * Rule 11 — the series palette equals the published contract.
+ *
+ * Parsed out of the source rather than required in: iwac-theme.js is a browser
+ * IIFE that touches `window`/`document` at load, and the arrays are the only
+ * part of it this guard is about.
+ */
+function checkSeriesPalette(file) {
+    if (!TOKENS || !TOKENS.series) return;
+    const series = TOKENS.series;
+    const src = readFileSync(file, 'utf8');
+    if (!/SERIES_LIGHT\s*=/.test(src)) return; // not the palette owner
+
+    const leadMatch = /SERIES_LEAD_SLOTS\s*=\s*(\d+)/.exec(src);
+    const lead = leadMatch ? Number(leadMatch[1]) : undefined;
+    if (lead !== series.leadSlots) {
+        flag(file, lineOf(src, leadMatch ? leadMatch.index : 0),
+            `SERIES_LEAD_SLOTS ${lead} ≠ tokens.json series.leadSlots ${series.leadSlots}`,
+            'SERIES_LEAD_SLOTS');
+    }
+
+    // The lead slots are read live from --primary / --secondary, so the
+    // contract's claim about WHICH tokens they are has to hold or the module
+    // is reading the wrong two variables.
+    const expectedLeads = (series.leads || []).join(', ');
+    if (expectedLeads !== '--primary, --secondary') {
+        flag(file, 1, `series.leads is now [${expectedLeads}] — buildPalette() reads --primary/--secondary; update it`, 'buildPalette');
+    }
+    (series.leads || []).forEach((token, i) => {
+        for (const [arr, theme] of [['SERIES_LIGHT', 'light'], ['SERIES_DARK', 'dark']]) {
+            const canon = TOKENS[theme] && TOKENS[theme][token];
+            const got = readArray(src, arr)[i];
+            if (canon && got && normHex(got) !== canon.toLowerCase()) {
+                flag(file, lineOf(src, src.indexOf(arr)),
+                    `${arr}[${i}] ${got} ≠ canonical ${theme} ${canon} (${token}, series lead slot)`, arr);
+            }
+        }
+    });
+
+    for (const [arr, theme] of [['SERIES_LIGHT', 'light'], ['SERIES_DARK', 'dark']]) {
+        const got = readArray(src, arr);
+        const want = series[theme] || [];
+        const line = lineOf(src, src.indexOf(arr));
+        if (got.length !== want.length) {
+            flag(file, line, `${arr} has ${got.length} slots, tokens.json series.${theme} has ${want.length}`, arr);
+            continue;
+        }
+        want.forEach((hex, i) => {
+            if (normHex(got[i]) !== hex.toLowerCase()) {
+                flag(file, line,
+                    `${arr}[${i}] ${got[i]} ≠ tokens.json series.${theme}[${i}] ${hex} (--series-${i + 1})`, arr);
+            }
+        });
+    }
+}
+
+/** Hex literals of a `var NAME = [ … ];` array, in source order. */
+function readArray(src, name) {
+    const m = new RegExp(name + '\\s*=\\s*\\[([\\s\\S]*?)\\]').exec(src);
+    if (!m) return [];
+    return (m[1].match(/#[0-9a-fA-F]{3,8}/g) || []);
+}
+
+/** 1-based line number of a source offset. */
+function lineOf(src, index) {
+    return src.slice(0, Math.max(0, index)).split('\n').length;
+}
+
 const cssFiles = walk(CSS_DIR, ['.css']);
 const jsFiles = walk(JS_DIR, ['.js']);
 const viewFiles = walk(VIEW_DIR, ['.phtml']);
@@ -506,6 +586,7 @@ for (const lines of templateStyles.values()) {
 cssFiles.forEach((f) => scan(f, { hexCheck: true }));
 jsFiles.forEach((f) => scan(f, { hexCheck: false }));
 jsFiles.forEach(checkFallbackObjects);
+jsFiles.forEach(checkSeriesPalette);
 for (const [file, lines] of templateStyles) {
     scanLines(file, lines, { hexCheck: true });
 }

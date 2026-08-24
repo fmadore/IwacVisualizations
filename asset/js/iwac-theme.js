@@ -15,6 +15,8 @@
  *   IWACVis.getCurrentTheme()    'light' | 'dark'
  *   IWACVis.getChartTheme()      'iwac-light' | 'iwac-dark'
  *   IWACVis.getChartTokens()     the token object actually used by the current theme
+ *   IWACVis.getPalette()         the ordered categorical series scale
+ *   IWACVis.getSeriesColor(n)    one slot of that scale (wraps)
  *   IWACVis.getBasemapStyle()    MapLibre style URL matching current theme
  */
 (function () {
@@ -67,19 +69,39 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Categorical series colours used after the two theme-driven slots.
-     * buildPalette() prepends --primary (slot 0) and --secondary (slot 1),
-     * so PALETTE_REST[0] (#394f68) is the slate's hardcoded twin and is
-     * skipped via slice(1). The remaining hues are hand-picked to read well
-     * in both light and dark themes. These are SANCTIONED, module-owned data
-     * colours (data encoding needs more distinct hues than a UI theme should
-     * carry) — see IWAC-theme/docs/DESIGN-SYSTEM.md, "chart-palette exception".
+     * Categorical SERIES palette — theme-owned since IWAC-theme 2.13.
+     *
+     * The ordered qualitative scale is published by the theme as
+     * `--series-1 … --series-20` and mirrored into `tokens.json`'s `series`
+     * key ({ leadSlots, leads, tokens, light, dark }). Slots 1-2 alias
+     * `--primary` / `--secondary`, which are admin-tunable seeds, so they are
+     * always read LIVE from CSS; slots 3-20 are read live too, which is what
+     * makes a future divergent dark scale a theme-side value edit with no
+     * change here.
+     *
+     * These arrays are the degraded-mode fallback only — the embed routes
+     * ship without the compiled theme CSS, and a third-party Omeka theme
+     * defines none of these tokens. They are the `series.light` / `series.dark`
+     * arrays verbatim, and `npm run lint:theme` (rule 11) fails the build on
+     * any drift from tokens.json, including a change to `leadSlots` or to
+     * which tokens occupy the lead slots.
+     *
+     * Index N of these arrays is palette slot N, i.e. `--series-(N+1)`.
      */
-    var PALETTE_REST = [
-        '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574',
-        '#2c5f7c', '#8b6f47', '#5ba3a0', '#cc8963', '#4a8aab',
-        '#a68e6d', '#d49b6a', '#6fb08e', '#9e7bb8', '#e0a88a',
-        '#8e7cb8', '#d87e7a', '#6b5b95', '#4db6ac'
+    var SERIES_LEAD_SLOTS = 2;
+    var SERIES_LIGHT = [
+        '#ce4115', '#394f68',
+        '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c',
+        '#8b6f47', '#5ba3a0', '#cc8963', '#4a8aab', '#a68e6d',
+        '#d49b6a', '#6fb08e', '#9e7bb8', '#e0a88a', '#8e7cb8',
+        '#d87e7a', '#6b5b95', '#4db6ac'
+    ];
+    var SERIES_DARK = [
+        '#ec653f', '#708093',
+        '#4a8c6f', '#c5504d', '#7c5295', '#d4a574', '#2c5f7c',
+        '#8b6f47', '#5ba3a0', '#cc8963', '#4a8aab', '#a68e6d',
+        '#d49b6a', '#6fb08e', '#9e7bb8', '#e0a88a', '#8e7cb8',
+        '#d87e7a', '#6b5b95', '#4db6ac'
     ];
 
     /* ----------------------------------------------------------------- */
@@ -388,13 +410,31 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Build the categorical palette. Slot 0 = --primary (brand), slot 1 =
-     * --secondary (the shared slate); then the hand-picked categorical hues.
-     * PALETTE_REST[0] is the slate's hardcoded twin, so slice(1) avoids
-     * emitting it twice when --secondary resolves to that same value.
+     * Build the categorical palette from the theme's published series scale.
+     *
+     * Slot 0 = --primary, slot 1 = --secondary: `tokens` already carries them,
+     * read live so an admin-tuned brand seed reaches the charts. Slots 2+ are
+     * read live from `--series-3 … --series-20`, each degrading to its
+     * published literal when the theme CSS is absent (embed routes, foreign
+     * themes).
+     *
+     * Read from `document.body`, not `:root`: the theme applies its dark block
+     * at `body[data-theme="dark"]` as well as at `:root` under a system
+     * preference, and it re-declares every `--series-N` in BOTH blocks. Reading
+     * at the body is the only point where the two paths agree — and it is why
+     * the slots that alias `--primary` do not freeze at their light value.
      */
+    function seriesFallback() {
+        return ns.getCurrentTheme() === 'dark' ? SERIES_DARK : SERIES_LIGHT;
+    }
+
     function buildPalette(tokens) {
-        return [tokens.primary, tokens.secondary].concat(PALETTE_REST.slice(1));
+        var fallback = seriesFallback();
+        var palette = [tokens.primary, tokens.secondary];
+        for (var i = SERIES_LEAD_SLOTS; i < fallback.length; i++) {
+            palette.push(readColorVar('--series-' + (i + 1)) || fallback[i]);
+        }
+        return palette;
     }
 
     /**
@@ -410,8 +450,7 @@
     ns.prefersReducedMotion = prefersReducedMotion;
 
     /** Build an ECharts theme object from the IWAC tokens. */
-    function buildTheme(tokens) {
-        var palette = buildPalette(tokens);
+    function buildTheme(tokens, palette) {
         var tooltipBg = tokens.surface;
         return {
             color: palette,
@@ -559,15 +598,34 @@
     };
 
     /**
-     * Return the full qualitative series palette (with --primary in slot 0)
-     * for callers that need to assign stable per-item colors outside of
-     * ECharts' built-in per-series cycling. Used by charts that render a
-     * single series with individually-colored data points (e.g. the Scary
-     * Terms block's 12 term families).
+     * Return the full qualitative series palette (--primary in slot 0,
+     * --secondary in slot 1, then `--series-3 …`) for callers that need to
+     * assign stable per-item colors outside of ECharts' built-in per-series
+     * cycling — the country → slot grammar (chart-options.js), the Scary
+     * Terms block's 12 term families, and every single-series chart whose
+     * data points are individually coloured.
+     *
+     * Served from the cache `refreshThemes()` fills, because `C._countryColor`
+     * calls this once per rendered mark: recomputing 18 `getComputedStyle`
+     * probes per Gantt bar would be ~1,500 probes on one chart.
      */
     ns.getPalette = function () {
-        var tokens = ns._currentTokens || readTokens();
-        return buildPalette(tokens);
+        if (!ns._currentPalette) {
+            ns._currentPalette = buildPalette(ns._currentTokens || readTokens());
+        }
+        return ns._currentPalette;
+    };
+
+    /**
+     * One slot of the series palette, wrapping the index so a caller with more
+     * categories than the scale has slots still gets a colour rather than
+     * `undefined`. Slot 0 is `--primary`.
+     */
+    ns.getSeriesColor = function (slot) {
+        var palette = ns.getPalette();
+        if (!palette.length) return '';
+        var i = Number(slot) || 0;
+        return palette[((i % palette.length) + palette.length) % palette.length];
     };
 
     /** CartoCDN basemap URL matching the current theme. */
@@ -593,11 +651,14 @@
         if (typeof echarts === 'undefined') return null;
         var tokens = readTokens();
         ns._currentTokens = tokens;
+        // The palette is rebuilt here, once per theme state, and cached for
+        // ns.getPalette() — see the note there.
+        ns._currentPalette = buildPalette(tokens);
         // Same tokens power both registered names for the current mode —
         // the "other" mode will be refreshed when the user flips the toggle.
         // Registering both names keeps ECharts happy when initChart() asks
         // for whichever name corresponds to the current body[data-theme].
-        var theme = buildTheme(tokens);
+        var theme = buildTheme(tokens, ns._currentPalette);
         echarts.registerTheme(ns.getChartTheme(), theme);
         return theme;
     };
