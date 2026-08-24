@@ -24,6 +24,37 @@
     var R = ns.responsive;
 
     /* ----------------------------------------------------------------- */
+    /*  Label-ink contrast helpers (treemap)                              */
+    /* ----------------------------------------------------------------- */
+
+    /** Parse any ECharts-accepted colour string to [r,g,b], or null. */
+    function _rgb(color) {
+        if (typeof color !== 'string' || !color) return null;
+        if (typeof echarts !== 'undefined' && echarts.color && echarts.color.parse) {
+            var p = echarts.color.parse(color);
+            if (p) return [p[0], p[1], p[2]];
+        }
+        return null;
+    }
+
+    /** WCAG relative luminance of an [r,g,b] triple. */
+    function _relLum(rgb) {
+        var c = [];
+        for (var i = 0; i < 3; i++) {
+            var v = rgb[i] / 255;
+            c.push(v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+        }
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    }
+
+    /** WCAG contrast ratio between two [r,g,b] triples. */
+    function _contrast(a, b) {
+        var la = _relLum(a);
+        var lb = _relLum(b);
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    }
+
+    /* ----------------------------------------------------------------- */
     /*  Pie (donut)                                                       */
     /* ----------------------------------------------------------------- */
 
@@ -139,6 +170,65 @@
         var borderColor   = tokens.border         || '#d4d6da';
         var fontFamily    = tokens.fontFamily     || 'sans-serif';
 
+        // Label ink is chosen PER TILE, from the two token-resolved extremes
+        // the theme already gives us. Tiles are ECharts' own colours — the
+        // series palette at the first visible level, saturation-shaded tints
+        // below it — and they land mid-tone in BOTH themes (measured: #eb663d,
+        // #ce4115, #597ca3, #73b598), so no single label colour clears 4.5:1
+        // everywhere. A flat '#fff' (what this used to hardcode) measured
+        // 3.15:1 on #eb663d and 1.02:1 where the tile grid thins out to
+        // surface; a flat ink token would fail the deep slates just as badly.
+        //
+        // `surface` is the knockout colour (near-white in light, near-black in
+        // dark) and `inkStrong` is its opposite in both — so picking whichever
+        // wins on contrast needs no light/dark branch, and re-themes for free
+        // when the render callback re-runs on toggle.
+        var knockout = tokens.surface   || '#fdfcfb';
+        var deepInk  = tokens.inkStrong || '#05070c';
+        var koRgb    = _rgb(knockout);
+        var deepRgb  = _rgb(deepInk);
+
+        // Memoised: the formatters run once per node and tiles repeat hues.
+        var inkCache = {};
+        function inkFor(tileColor) {
+            if (!koRgb || !deepRgb) return '';
+            var hit = inkCache[tileColor];
+            if (hit !== undefined) return hit;
+            var tile = _rgb(tileColor);
+            var pick = (tile && _contrast(deepRgb, tile) > _contrast(koRgb, tile)) ? 'd' : '';
+            inkCache[tileColor] = pick;
+            return pick;
+        }
+
+        // A 2px stroke in the OPPOSITE extreme. It buys no WCAG credit (the
+        // ratios above are glyph-vs-tile) but it keeps 12px text crisp on the
+        // mid-tones where the two candidates run close.
+        function halo(deep) {
+            var base = deep ? knockout : deepInk;
+            var alpha = deep ? 0.45 : 0.34;
+            return (typeof echarts !== 'undefined' && echarts.color && echarts.color.modifyAlpha)
+                ? echarts.color.modifyAlpha(base, alpha)
+                : (deep ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.34)');
+        }
+        function leafInk(deep, size, pad) {
+            var style = {
+                fontFamily: fontFamily, fontSize: size,
+                color: deep ? deepInk : knockout,
+                textBorderColor: halo(deep), textBorderWidth: 2
+            };
+            if (pad) style.padding = pad;
+            return style;
+        }
+        function headerInk(deep) {
+            var style = leafInk(deep, 12);
+            style.fontWeight = 600;
+            style.overflow = 'truncate';
+            return style;
+        }
+        // Group headers all share one backdrop — the border strip — so their
+        // ink is decided once rather than per node.
+        var headerKey = inkFor(surfaceColor);
+
         // Abbreviate big counts for in-tile labels (4804 -> "4.8K"); the
         // tooltip still carries the exact figure via `fmt`.
         function shortNum(n) {
@@ -235,8 +325,15 @@
                     emphasis: { itemStyle: { color: borderColor } }
                 },
                 // Leaf labels: name over abbreviated count, anchored
-                // top-left. White text + a soft dark halo stays legible
-                // across every tile hue (light tan through saturated orange).
+                // top-left. The formatter picks the rich style — plain (`n`/
+                // `v`, knockout ink) or `d`-suffixed (deep ink) — from the
+                // tile colour ECharts hands it as `p.color`.
+                //
+                // The count line used to be dimmed to 0.82 alpha. Dropped:
+                // alpha-blending the ink INTO the tile costs about a full
+                // contrast point (5.5:1 -> 4.4:1 on #eb663d), which is the
+                // difference between passing and failing AA on a 11px label.
+                // Size and the name's own weight carry the hierarchy instead.
                 label: {
                     show: true,
                     position: 'insideTopLeft',
@@ -244,38 +341,44 @@
                     lineHeight: 15,
                     padding: [3, 4, 0, 4],
                     formatter: function (p) {
-                        return '{n|' + p.name + '}\n{v|' + shortNum(p.value) + '}';
+                        var k = inkFor(p.color);
+                        return '{n' + k + '|' + p.name + '}\n{v' + k + '|' + shortNum(p.value) + '}';
                     },
                     rich: {
-                        n: {
-                            fontFamily: fontFamily, fontSize: 12, color: '#fff',
-                            textBorderColor: 'rgba(0, 0, 0, 0.34)', textBorderWidth: 2
-                        },
-                        v: {
-                            fontFamily: fontFamily, fontSize: 11, color: 'rgba(255, 255, 255, 0.82)',
-                            textBorderColor: 'rgba(0, 0, 0, 0.30)', textBorderWidth: 2,
-                            padding: [1, 0, 0, 0]
-                        }
+                        n:  leafInk(false, 12),
+                        v:  leafInk(false, 11, [1, 0, 0, 0]),
+                        nd: leafInk(true, 12),
+                        vd: leafInk(true, 11, [1, 0, 0, 0])
                     }
                 },
-                // Parent headers: bold name + abbreviated count on the
-                // group's own tinted bar.
+                // Parent headers: bold name + abbreviated count.
+                //
+                // These do NOT sit on the group's own colour, which is why
+                // `p.color` is the wrong reference here and the leaf rule
+                // cannot just be reused. ECharts reserves `upperLabel.height`
+                // out of the node's BORDER area and paints that strip with
+                // `itemStyle.borderColor` — `surfaceColor` for us. So the
+                // header ink is chosen once, against the surface: knockout on
+                // surface is 1.0:1, so this always resolves to the deep ink,
+                // and the headers read as ordinary ink on the panel. That is
+                // the pair the Phase-1 probe caught at 1.02:1, visible only
+                // because the halo outlined otherwise-white-on-white text.
+                //
+                // `overflow` is repeated inside the rich styles because the
+                // parent-level setting does not reach rich segments.
                 upperLabel: {
                     show: hasHeaders,
                     height: 22,
                     overflow: 'truncate',
-                    fontFamily: fontFamily,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#fff',
-                    textBorderColor: 'rgba(0, 0, 0, 0.32)',
-                    textBorderWidth: 2,
                     formatter: function (p) {
-                        return p.name + '   ' + shortNum(p.value);
+                        return '{u' + headerKey + '|' + p.name + '   ' + shortNum(p.value) + '}';
+                    },
+                    rich: {
+                        u:  headerInk(false),
+                        ud: headerInk(true)
                     }
                 },
                 itemStyle: { borderColor: surfaceColor, borderWidth: 1, gapWidth: 2 },
-                emphasis: { upperLabel: { color: '#fff' } },
                 levels: levels,
                 data: children
             }],

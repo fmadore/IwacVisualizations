@@ -7,13 +7,18 @@
 // `dist/maplibre-gl.js` any more, so the old classic-<script> pin would 404 and
 // every map on the site would silently degrade to "map unavailable". The
 // replacement — import the `.mjs`, republish the namespace as
-// `window.maplibregl`, then run the classic chain — has three properties that
+// `window.maplibregl`, then run the classic chain — has four properties that
 // are easy to regress and invisible until a map block is rendered:
 //
-//   1. the global must exist BEFORE the first classic script executes
-//   2. a failed import must still run the chain (ECharts panels must survive a
+//   1. the global must exist before the GATED TAIL executes — the orchestrator,
+//      the only script that reaches a map panel's render()
+//   2. the rest of the chain must NOT wait for it. Awaiting the import in front
+//      of everything put ~1 MB of MapLibre ahead of echarts and ~30 module
+//      files on pages whose maps sit thousands of pixels below the fold; the
+//      split landed in 1.50.1
+//   3. a failed import must still run the tail (ECharts panels must survive a
 //      MapLibre CDN outage)
-//   3. blocks with no map must not pay for an import at all
+//   4. blocks with no map must not pay for an import at all
 //
 // Rather than restate the loader here (a copy would drift), these tests parse
 // the real PHP partial, rebuild the emitted JS, and execute it.
@@ -84,6 +89,7 @@ function runLoader(payload, options = {}) {
     );
 
     const injected = [];
+    const readyListeners = [];
     let importCalls = 0;
 
     const sandbox = {
@@ -95,7 +101,10 @@ function runLoader(payload, options = {}) {
         },
     };
     sandbox.document = {
-        readyState: 'complete',
+        // 'loading' holds load() back until fireReady(), which is the only way
+        // to merge a second block's payload the way a real page does: every
+        // block's inline script runs while the head is still parsing.
+        readyState: options.pending ? 'loading' : 'complete',
         head: {
             appendChild(node) {
                 // Snapshot the global at injection time: asserting only on the
@@ -112,26 +121,35 @@ function runLoader(payload, options = {}) {
         querySelectorAll() {
             return [];
         },
-        addEventListener() {},
+        addEventListener(name, fn) {
+            if (name === 'DOMContentLoaded') readyListeners.push(fn);
+        },
     };
 
     vm.createContext(sandbox);
     sandbox.window = sandbox;
-    vm.runInContext(source.replace('import(S.mjs)', '__dynamicImport(S.mjs)'), sandbox);
+    const exec = (src) =>
+        vm.runInContext(src.replace('import(S.mjs)', '__dynamicImport(S.mjs)'), sandbox);
+    exec(source);
+    // Additional blocks on the same page merge into the same window.IWACVisLazy.
+    for (const extra of options.alsoBlocks || []) exec(buildLoader(extra));
 
     return {
         sandbox,
         scripts: () => injected.filter((n) => n.tag === 'script'),
         links: () => injected.filter((n) => n.tag === 'link'),
         importCalls: () => importCalls,
+        fireReady: () => readyListeners.forEach((fn) => fn()),
     };
 }
 
 /** Resolve after the microtask queue has drained. */
 const flush = () => new Promise((resolve) => setImmediate(resolve));
 
+const ORCHESTRATOR = '/js/charts/collection-overview.min.js';
 const MAP_PAYLOAD = {
     scripts: ['/js/iwac-theme.min.js', '/js/charts/shared/maplibre.min.js'],
+    deferred: [ORCHESTRATOR],
     css: ['/css/iwac-maplibre.min.css'],
     mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs',
 };
@@ -167,24 +185,54 @@ test('MapLibre never enters the classic $scripts chain', () => {
     );
 });
 
-test('publishes window.maplibregl before running the classic chain', async () => {
+test('the classic chain starts without waiting for the MapLibre import', async () => {
     const namespace = { Map() {}, Popup() {} };
     const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
 
-    // Synchronously the stylesheets are in, but nothing has executed yet.
+    // Synchronously: stylesheets AND the whole ungated chain are already in,
+    // with the import still pending. This is the regression the split fixed —
+    // echarts used to queue behind ~1 MB of MapLibre.
     assert.equal(run.links().length, 1);
-    assert.equal(run.scripts().length, 0, 'classic chain must wait for the import');
+    assert.deepEqual(
+        run.scripts().map((s) => s.src),
+        MAP_PAYLOAD.scripts,
+        'the ungated chain must be injected before the import settles'
+    );
+    for (const script of run.scripts()) {
+        assert.equal(script.maplibreAtInject, undefined, 'the head chain did not need the global');
+    }
 
     await flush();
 
     const scripts = run.scripts();
     assert.equal(run.importCalls(), 1);
     assert.equal(run.sandbox.maplibregl, namespace);
-    assert.deepEqual(scripts.map((s) => s.src), MAP_PAYLOAD.scripts, 'order changed');
+    assert.deepEqual(
+        scripts.map((s) => s.src),
+        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
+        'the gated tail runs last, after every ungated script'
+    );
     for (const script of scripts) {
-        assert.equal(script.maplibreAtInject, namespace, 'a script ran before maplibregl existed');
         assert.equal(script.async, false, 'async=false is what keeps the chain in order');
     }
+});
+
+test('publishes window.maplibregl before the orchestrator executes', async () => {
+    const namespace = { Map() {}, Popup() {} };
+    const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
+
+    await flush();
+
+    // Map panels read the global in render(), which P.boot() — inside the
+    // orchestrator — calls eagerly. So this one script may not be injected
+    // until the namespace is published.
+    const tail = run.scripts().filter((s) => s.src === ORCHESTRATOR);
+    assert.equal(tail.length, 1, 'the orchestrator was never injected');
+    assert.equal(
+        tail[0].maplibreAtInject,
+        namespace,
+        'the orchestrator ran before maplibregl existed — every map would degrade to "unavailable"'
+    );
 });
 
 test('a failed MapLibre import still runs the rest of the chain', async () => {
@@ -197,18 +245,59 @@ test('a failed MapLibre import still runs the rest of the chain', async () => {
     assert.equal(run.sandbox.maplibregl, undefined);
     assert.deepEqual(
         run.scripts().map((s) => s.src),
-        MAP_PAYLOAD.scripts,
+        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
         'a MapLibre outage must cost the page its map, not its ECharts panels'
     );
 });
 
 test('blocks without a map import nothing and inject synchronously', () => {
     const run = runLoader({
-        scripts: ['/js/iwac-theme.min.js'],
+        scripts: ['/js/iwac-theme.min.js', '/js/charts/term-trends.min.js'],
+        deferred: [],
         css: [],
         mjs: null,
     });
 
     assert.equal(run.importCalls(), 0, 'map-less blocks must not pay for MapLibre');
-    assert.deepEqual(run.scripts().map((s) => s.src), ['/js/iwac-theme.min.js']);
+    assert.deepEqual(run.scripts().map((s) => s.src), [
+        '/js/iwac-theme.min.js',
+        '/js/charts/term-trends.min.js',
+    ], 'with no map, nothing is gated — the orchestrator rides the chain');
+});
+
+test('two blocks on one page merge, and gating wins on a clash', async () => {
+    const namespace = { Map() {}, Popup() {} };
+    // Same orchestrator reached by a map block (gated) and a map-less one
+    // (ungated). Gating it is what every block got before the split, so it is
+    // the safe merge: ungating it would strand the map block's panels.
+    const run = runLoader(MAP_PAYLOAD, {
+        pending: true,
+        importMjs: () => Promise.resolve(namespace),
+        alsoBlocks: [
+            { scripts: ['/js/iwac-theme.min.js', ORCHESTRATOR], deferred: [], css: [], mjs: null },
+        ],
+    });
+
+    assert.equal(run.scripts().length, 0, 'nothing loads until the block nears the viewport');
+    run.fireReady();
+    await flush();
+
+    assert.equal(run.importCalls(), 1, 'one import serves every block on the page');
+    assert.deepEqual(
+        run.scripts().map((s) => s.src),
+        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
+        'shared URLs are de-duped and the gated one stays gated'
+    );
+    assert.equal(
+        run.scripts().find((s) => s.src === ORCHESTRATOR).maplibreAtInject,
+        namespace
+    );
+});
+
+test('the orchestrator is gated only when the block needs MapLibre', () => {
+    assert.match(
+        PARTIAL,
+        /if \(\$needMaplibre\) \{\s*\$deferred\[\] = \$orchestratorUrl;\s*\} else \{\s*\$scripts\[\] = \$orchestratorUrl;/,
+        'the orchestrator must ride the ungated chain on map-less blocks'
+    );
 });
