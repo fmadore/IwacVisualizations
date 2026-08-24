@@ -7,17 +7,19 @@
 // `dist/maplibre-gl.js` any more, so the old classic-<script> pin would 404 and
 // every map on the site would silently degrade to "map unavailable". The
 // replacement — import the `.mjs`, republish the namespace as
-// `window.maplibregl`, then run the classic chain — has four properties that
-// are easy to regress and invisible until a map block is rendered:
+// `window.maplibregl`, and run the classic chain alongside it — has four
+// properties that are easy to regress and invisible until a map block renders:
 //
-//   1. the global must exist before the GATED TAIL executes — the orchestrator,
-//      the only script that reaches a map panel's render()
-//   2. the rest of the chain must NOT wait for it. Awaiting the import in front
-//      of everything put ~1 MB of MapLibre ahead of echarts and ~30 module
-//      files on pages whose maps sit thousands of pixels below the fold; the
-//      split landed in 1.50.1
-//   3. a failed import must still run the tail (ECharts panels must survive a
-//      MapLibre CDN outage)
+//   1. NOTHING in the chain waits for the import, orchestrator included. This
+//      took three goes: awaiting it in front of everything (~1 MB of MapLibre
+//      ahead of echarts and ~30 module files), then gating just the
+//      orchestrator in 1.51.0 — which is still the script that paints all
+//      twelve panels — and finally, in 1.52.0, moving the wait into the map
+//      panels themselves via `P.whenMaplibre()`
+//   2. the import promise must be PUBLISHED (`IWACVisLazy.mjsP`), because that
+//      is what those panels await
+//   3. a failed import must reject that promise and leave the chain alone
+//      (ECharts panels must survive a MapLibre CDN outage)
 //   4. blocks with no map must not pay for an import at all
 //
 // Rather than restate the loader here (a copy would drift), these tests parse
@@ -148,8 +150,11 @@ const flush = () => new Promise((resolve) => setImmediate(resolve));
 
 const ORCHESTRATOR = '/js/charts/collection-overview.min.js';
 const MAP_PAYLOAD = {
-    scripts: ['/js/iwac-theme.min.js', '/js/charts/shared/maplibre.min.js'],
-    deferred: [ORCHESTRATOR],
+    scripts: [
+        '/js/iwac-theme.min.js',
+        '/js/charts/shared/maplibre.min.js',
+        ORCHESTRATOR,
+    ],
     css: ['/css/iwac-maplibre.min.css'],
     mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs',
 };
@@ -185,57 +190,53 @@ test('MapLibre never enters the classic $scripts chain', () => {
     );
 });
 
-test('the classic chain starts without waiting for the MapLibre import', async () => {
+test('the whole chain, orchestrator included, starts before the import settles', async () => {
     const namespace = { Map() {}, Popup() {} };
     const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
 
-    // Synchronously: stylesheets AND the whole ungated chain are already in,
-    // with the import still pending. This is the regression the split fixed —
-    // echarts used to queue behind ~1 MB of MapLibre.
+    // Synchronously: stylesheets AND every script are already in, with the
+    // import still pending. This is the regression the 1.52.0 split fixed —
+    // the orchestrator paints all twelve panels, so gating it meant first
+    // paint still waited on a library two of them use.
     assert.equal(run.links().length, 1);
     assert.deepEqual(
         run.scripts().map((s) => s.src),
         MAP_PAYLOAD.scripts,
-        'the ungated chain must be injected before the import settles'
+        'the chain must be injected before the import settles'
     );
     for (const script of run.scripts()) {
-        assert.equal(script.maplibreAtInject, undefined, 'the head chain did not need the global');
+        assert.equal(
+            script.maplibreAtInject,
+            undefined,
+            'nothing in the chain may wait for the global — map panels await P.whenMaplibre()'
+        );
+        assert.equal(script.async, false, 'async=false is what keeps the chain in order');
     }
 
     await flush();
 
-    const scripts = run.scripts();
     assert.equal(run.importCalls(), 1);
     assert.equal(run.sandbox.maplibregl, namespace);
     assert.deepEqual(
-        scripts.map((s) => s.src),
-        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
-        'the gated tail runs last, after every ungated script'
+        run.scripts().map((s) => s.src),
+        MAP_PAYLOAD.scripts,
+        'the import settling must not inject anything further'
     );
-    for (const script of scripts) {
-        assert.equal(script.async, false, 'async=false is what keeps the chain in order');
-    }
 });
 
-test('publishes window.maplibregl before the orchestrator executes', async () => {
+test('publishes the import promise so map panels can await it', async () => {
     const namespace = { Map() {}, Popup() {} };
     const run = runLoader(MAP_PAYLOAD, { importMjs: () => Promise.resolve(namespace) });
 
-    await flush();
+    const promise = run.sandbox.IWACVisLazy.mjsP;
+    assert.ok(promise && typeof promise.then === 'function',
+        'IWACVisLazy.mjsP is what P.whenMaplibre() resolves off — without it, no map ever draws');
 
-    // Map panels read the global in render(), which P.boot() — inside the
-    // orchestrator — calls eagerly. So this one script may not be injected
-    // until the namespace is published.
-    const tail = run.scripts().filter((s) => s.src === ORCHESTRATOR);
-    assert.equal(tail.length, 1, 'the orchestrator was never injected');
-    assert.equal(
-        tail[0].maplibreAtInject,
-        namespace,
-        'the orchestrator ran before maplibregl existed — every map would degrade to "unavailable"'
-    );
+    assert.equal(await promise, namespace, 'the promise resolves with the namespace');
+    assert.equal(run.sandbox.maplibregl, namespace);
 });
 
-test('a failed MapLibre import still runs the rest of the chain', async () => {
+test('a failed MapLibre import rejects the promise and leaves the chain alone', async () => {
     const run = runLoader(MAP_PAYLOAD, {
         importMjs: () => Promise.reject(new Error('CDN unreachable')),
     });
@@ -245,36 +246,38 @@ test('a failed MapLibre import still runs the rest of the chain', async () => {
     assert.equal(run.sandbox.maplibregl, undefined);
     assert.deepEqual(
         run.scripts().map((s) => s.src),
-        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
+        MAP_PAYLOAD.scripts,
         'a MapLibre outage must cost the page its map, not its ECharts panels'
     );
+    // Rejected, so the panel can show a real error state rather than spin —
+    // and pre-handled by the loader, so a page whose map is never scrolled
+    // into view does not log an unhandled rejection.
+    await assert.rejects(() => run.sandbox.IWACVisLazy.mjsP, /CDN unreachable/);
 });
 
-test('blocks without a map import nothing and inject synchronously', () => {
+test('blocks without a map import nothing and expose no promise', () => {
     const run = runLoader({
         scripts: ['/js/iwac-theme.min.js', '/js/charts/term-trends.min.js'],
-        deferred: [],
         css: [],
         mjs: null,
     });
 
     assert.equal(run.importCalls(), 0, 'map-less blocks must not pay for MapLibre');
+    assert.equal(run.sandbox.IWACVisLazy.mjsP, null,
+        'no import was armed, so P.whenMaplibre() must reject rather than hang');
     assert.deepEqual(run.scripts().map((s) => s.src), [
         '/js/iwac-theme.min.js',
         '/js/charts/term-trends.min.js',
-    ], 'with no map, nothing is gated — the orchestrator rides the chain');
+    ]);
 });
 
-test('two blocks on one page merge, and gating wins on a clash', async () => {
+test('two blocks on one page merge into one queue and one import', async () => {
     const namespace = { Map() {}, Popup() {} };
-    // Same orchestrator reached by a map block (gated) and a map-less one
-    // (ungated). Gating it is what every block got before the split, so it is
-    // the safe merge: ungating it would strand the map block's panels.
     const run = runLoader(MAP_PAYLOAD, {
         pending: true,
         importMjs: () => Promise.resolve(namespace),
         alsoBlocks: [
-            { scripts: ['/js/iwac-theme.min.js', ORCHESTRATOR], deferred: [], css: [], mjs: null },
+            { scripts: ['/js/iwac-theme.min.js', '/js/charts/term-trends.min.js'], css: [], mjs: null },
         ],
     });
 
@@ -285,19 +288,20 @@ test('two blocks on one page merge, and gating wins on a clash', async () => {
     assert.equal(run.importCalls(), 1, 'one import serves every block on the page');
     assert.deepEqual(
         run.scripts().map((s) => s.src),
-        [...MAP_PAYLOAD.scripts, ORCHESTRATOR],
-        'shared URLs are de-duped and the gated one stays gated'
-    );
-    assert.equal(
-        run.scripts().find((s) => s.src === ORCHESTRATOR).maplibreAtInject,
-        namespace
+        [...MAP_PAYLOAD.scripts, '/js/charts/term-trends.min.js'],
+        'shared URLs are de-duped and later blocks join the end of the queue'
     );
 });
 
-test('the orchestrator is gated only when the block needs MapLibre', () => {
+test('the orchestrator always rides the ordinary chain', () => {
+    assert.doesNotMatch(
+        PARTIAL,
+        /\$deferred/,
+        'gating a script behind the MapLibre import is the pattern P.whenMaplibre() replaced'
+    );
     assert.match(
         PARTIAL,
-        /if \(\$needMaplibre\) \{\s*\$deferred\[\] = \$orchestratorUrl;\s*\} else \{\s*\$scripts\[\] = \$orchestratorUrl;/,
-        'the orchestrator must ride the ungated chain on map-less blocks'
+        /if \(\$orchestrator\) \{\s*\$scripts\[\] = \$this->assetUrl\('js\/charts\/' \. \$orchestrator/,
+        'the orchestrator must be appended to the ungated chain'
     );
 });

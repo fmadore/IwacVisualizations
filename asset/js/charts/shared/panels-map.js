@@ -8,13 +8,92 @@
  * first (it creates the namespace) and that all of them load before any block
  * controller.
  *
- * GeoJSON count-bubble features, and MapLibre feature-state hover wiring.
+ * The MapLibre readiness gate, GeoJSON count-bubble features, and MapLibre
+ * feature-state hover wiring.
  */
 (function () {
     'use strict';
 
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels = ns.panels || {};
+
+    /* ----------------------------------------------------------------- */
+    /*  MapLibre readiness                                                */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Resolve once `window.maplibregl` exists; reject if it never will.
+     *
+     * MapLibre has been ESM-only since v6, so it cannot ride the classic
+     * script chain — the on-view loader (view/common/iwac-assets.phtml)
+     * `import()`s it in parallel and publishes the promise as
+     * `window.IWACVisLazy.mjsP`. Everything that needs the global goes through
+     * here.
+     *
+     * This exists because the alternative is making the whole page wait. The
+     * loader used to hold the orchestrator back until the import settled,
+     * since map panels read `maplibregl` synchronously in render() and
+     * P.boot() calls render() eagerly — one true ordering constraint, paid for
+     * by every ECharts panel on the page. Scoping the wait to the panels that
+     * actually draw maps costs one promise and removes ~1 MB of MapLibre from
+     * the critical path of first paint.
+     *
+     * @returns {Promise<Object>} the maplibregl namespace
+     */
+    P.whenMaplibre = function () {
+        if (typeof maplibregl !== 'undefined' && maplibregl) {
+            return Promise.resolve(window.maplibregl);
+        }
+        var lazy = window.IWACVisLazy;
+        if (lazy && lazy.mjsP && typeof lazy.mjsP.then === 'function') {
+            return lazy.mjsP.then(function (m) {
+                if (typeof maplibregl === 'undefined') {
+                    throw new Error('MapLibre resolved without publishing a global');
+                }
+                return m || window.maplibregl;
+            });
+        }
+        // No import was ever armed: the block declared no `maplibre` need, or
+        // the page is an embed route that never emitted the loader. Either way
+        // the panel should say so rather than hang on a spinner.
+        return Promise.reject(new Error('MapLibre was not requested for this page'));
+    };
+
+    /**
+     * Run `build` once MapLibre is available, holding a spinner in `host`
+     * meanwhile and swapping it for the standard "map unavailable" banner if
+     * the import fails.
+     *
+     * Call this INSIDE a `P.lazyInit` where the panel already defers its data:
+     * an off-screen map should not paint a spinner it never resolves.
+     *
+     * @param {HTMLElement} host   element the spinner / error banner goes into
+     * @param {function(Object): *} build  receives the maplibregl namespace
+     * @param {Object} [opts]
+     * @param {boolean} [opts.loading=true]  set false when the caller already
+     *   rendered its own loading state into `host`
+     * @returns {Promise}
+     */
+    P.withMaplibre = function (host, build, opts) {
+        var showLoading = !opts || opts.loading !== false;
+        var loading = (host && showLoading) ? P.buildLoadingState('Loading map') : null;
+        if (loading) host.appendChild(loading);
+
+        function clear() {
+            if (loading && loading.parentNode) loading.parentNode.removeChild(loading);
+        }
+
+        return P.whenMaplibre().then(function (lib) {
+            clear();
+            return build(lib);
+        }, function (err) {
+            clear();
+            if (window.console && console.warn) {
+                console.warn('IWACVis: map panel skipped —', err && err.message);
+            }
+            if (host) host.appendChild(P.buildErrorState('Map library unavailable'));
+        });
+    };
 
     /* ----------------------------------------------------------------- */
     /*  GeoJSON feature builder for count-sized bubble maps               */

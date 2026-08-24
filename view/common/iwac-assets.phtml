@@ -171,7 +171,8 @@ foreach ((array) $blockCss as $sheet) {
 //
 // MapLibre is the one exception and is NOT in this list — see $lazyMjs. Being
 // ESM-only since v6 it cannot ride the classic queue, so it is imported
-// alongside it, in parallel. Only the orchestrator waits — see $deferred.
+// alongside it, in parallel, and nothing in the chain waits for it: the map
+// panels await it individually through P.whenMaplibre().
 $scripts = [];
 
 // CDN libraries (echarts must precede the IWAC theme + panels).
@@ -296,33 +297,28 @@ if ($needLayout) {
 foreach ($panels as $panel) {
     $scripts[] = $this->assetUrl('js/charts/' . $panel . '.min.js', $module);
 }
-
-// -- What actually has to wait for MapLibre -----------------------------
-//
-// Exactly one script: the orchestrator. Every map panel reads `maplibregl`
-// inside its render() and bails to a "Map library unavailable" notice if the
-// global is missing — and render() is called eagerly, by the orchestrator's
-// P.boot(), not from the per-panel on-view P.lazyInit() that defers the map's
-// DATA. So the global must exist before P.boot() runs, and nothing before it
-// touches MapLibre: the map modules (maplibre/map-popup/choropleth) only use
-// the global inside function bodies, and the panel modules merely export
-// `{ render }`. `P.boot` appears in orchestrators alone — verified across all
-// 24 of them.
-//
-// That is the whole reason the old loader `await`ed the import before starting
-// the chain: it was enforcing this one ordering constraint by serialising
-// ~1 MB of MapLibre in front of echarts and ~30 module files, on a page whose
-// first nine panels are ECharts and whose maps sit ~4,500 px down. Now the
-// chain and the import start together and only this last script is gated.
-$deferred = [];
 if ($orchestrator) {
-    $orchestratorUrl = $this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module);
-    if ($needMaplibre) {
-        $deferred[] = $orchestratorUrl;
-    } else {
-        $scripts[] = $orchestratorUrl;
-    }
+    $scripts[] = $this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module);
 }
+
+// -- Nothing waits for MapLibre ----------------------------------------
+//
+// The orchestrator rides the ordinary chain, map block or not.
+//
+// It did not always. Map panels read `maplibregl` synchronously inside their
+// render(), which P.boot() calls eagerly, so the global had to exist before
+// the orchestrator ran — first by `await`ing the import in front of the WHOLE
+// chain (~1 MB of MapLibre ahead of echarts and ~30 module files), then, in
+// 1.51.0, by gating just the orchestrator. The second is far better and still
+// wrong in the same direction: the orchestrator is what paints all twelve
+// panels, so on a page whose first nine are ECharts and whose maps sit
+// ~4,500 px down, first paint was still behind a library two panels need.
+//
+// The fix is to stop making the ordering a LOAD-ORDER problem. Map panels now
+// await MapLibre individually through `P.whenMaplibre()` (shared/panels-map.js),
+// which resolves off the promise the loader publishes below. Every other panel
+// paints the moment its own module lands, and a map panel shows its spinner
+// for exactly as long as the import takes.
 
 // -- On-view loader -----------------------------------------------------
 // Emitted per block; multiple blocks on one page merge their script lists
@@ -331,22 +327,15 @@ if ($orchestrator) {
 // payload can never break out of the <script> element.
 $payload = json_encode([
     'scripts'  => $scripts,
-    'deferred' => $deferred,
     'css'      => $lazyCss,
     'mjs'      => $lazyMjs,
 ]);
 $headScript->appendScript(
     '(function(){'
-    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],d:{},css:[],mjs:null,armed:false,done:false});'
+    . 'var S=window.IWACVisLazy=(window.IWACVisLazy||{q:[],css:[],mjs:null,mjsP:null,armed:false,done:false});'
     . 'var p=' . $payload . ';'
-    // `d` flags the URLs that must not run before window.maplibregl exists.
-    // Deferred wins on a clash: if one block wants a script gated and another
-    // does not, gating it is the conservative merge (it is what every block
-    // got before the split) and it cannot break a dependency, because only
-    // orchestrators are ever gated and nothing loads after them.
-    . 'function push(u,def){if(S.q.indexOf(u)<0)S.q.push(u);if(def)S.d[u]=1;}'
-    . 'p.scripts.forEach(function(u){push(u,false);});'
-    . '(p.deferred||[]).forEach(function(u){push(u,true);});'
+    . 'function push(u){if(S.q.indexOf(u)<0)S.q.push(u);}'
+    . 'p.scripts.forEach(push);'
     . '(p.css||[]).forEach(function(u){if(S.css.indexOf(u)<0)S.css.push(u);});'
     // One map-capable block on the page is enough to arm the import; blocks
     // that merge in later share the single resolved namespace.
@@ -355,21 +344,20 @@ $headScript->appendScript(
     . 'function inject(list){list.forEach(function(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);});}'
     . 'function load(){if(S.done)return;S.done=true;'
     . 'S.css.forEach(function(href){var l=document.createElement("link");l.rel="stylesheet";l.href=href;document.head.appendChild(l);});'
-    . 'var head=[],tail=[];S.q.forEach(function(u){(S.d[u]?tail:head).push(u);});'
-    // The chain starts NOW; the MapLibre module graph resolves alongside it
-    // instead of in front of it. `async=false` keeps one global in-order list,
-    // and a script appended later joins the end of that list — so the gated
-    // tail still executes after every head script, whenever it is injected.
-    . 'inject(head);'
-    . 'function rest(){inject(tail);}'
-    . 'if(!S.mjs){rest();return;}'
-    // A failed import still runs the tail. Every map module guards with
-    // `typeof maplibregl === "undefined"` and degrades to a "map unavailable"
-    // notice, so a CDN outage must cost the page its map — not its ECharts
-    // panels as well.
-    . 'import(S.mjs).then(function(m){window.maplibregl=m;},function(e){'
+    // The whole chain starts NOW — nothing is held back. `async=false` keeps
+    // it one global in-order list.
+    . 'inject(S.q);'
+    . 'if(!S.mjs)return;'
+    // The MapLibre module graph resolves alongside the chain, and the promise
+    // is PUBLISHED: P.whenMaplibre() in shared/panels-map.js awaits it, so the
+    // only thing that waits for MapLibre is a panel that draws a map. A
+    // rejection is re-thrown so those panels can show a real error state, and
+    // absorbed once here so a CDN outage on a page whose map is never scrolled
+    // into view doesn't log an unhandled rejection.
+    . 'S.mjsP=import(S.mjs).then(function(m){window.maplibregl=m;return m;},function(e){'
     . 'if(window.console&&console.error)console.error("IWAC: MapLibre failed to load",e);'
-    . '}).then(rest,rest);'
+    . 'throw e;});'
+    . 'S.mjsP.catch(function(){});'
     . '}'
     . 'function arm(){var b=document.querySelectorAll(".iwac-vis-block");'
     . 'if(!b.length||!("IntersectionObserver" in window)){load();return;}'

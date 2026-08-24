@@ -168,8 +168,12 @@
     }
 
     function render(panelEl, state) {
+        // MapLibre arrives as a parallel ES-module import (see
+        // P.whenMaplibre), so at first call the global may simply not be here
+        // yet. Wait for it, then re-enter — instead of the whole block waiting
+        // for a library only this panel uses.
         if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
+            P.withMaplibre(panelEl.chart, function () { render(panelEl, state); });
             return;
         }
 

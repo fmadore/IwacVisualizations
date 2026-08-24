@@ -32,11 +32,6 @@
     };
 
     function render(panelEl, data, ctx) {
-        if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
-            return;
-        }
-
         var places = (data && data.places) || [];
         var mentions = (data && data.place_mentions) || [];
         if (places.length === 0 && mentions.length === 0) {
@@ -47,9 +42,13 @@
         var loading = P.buildLoadingState();
         panelEl.chart.appendChild(loading);
 
+        // MapLibre lands as a parallel ES-module import, so it is awaited here
+        // — in the panel that draws the map — not by the whole block.
         P.lazyInit(panelEl.panel, function () {
-            panelEl.chart.removeChild(loading);
-            build(panelEl, places, mentions, ctx);
+            if (loading.parentNode) loading.parentNode.removeChild(loading);
+            P.withMaplibre(panelEl.chart, function () {
+                build(panelEl, places, mentions, ctx);
+            });
         });
     }
 

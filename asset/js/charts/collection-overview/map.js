@@ -11,7 +11,7 @@
  * The Type filter lives only under "By country" because that is the only
  * data with a per-type breakdown; the place bubbles carry a single total.
  *
- * Falls back to a "map unavailable" message if maplibregl is missing.
+ * Falls back to a "map unavailable" message if MapLibre never loads.
  */
 (function () {
     'use strict';
@@ -30,23 +30,28 @@
         var dataUrl = basePath + '/files/iwac-visualizations/collection-map.json';
         var geoUrl = basePath + '/modules/IwacVisualizations/asset/geo/world_countries_simple.geojson';
 
-        if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.buildErrorState('Map library unavailable'));
-            return;
-        }
-
         panelEl.chart.appendChild(P.buildLoadingState());
 
+        // The library and the data are fetched in parallel, and BOTH are
+        // waited for here rather than up front: MapLibre is an ES module the
+        // page loader imports alongside the classic chain, so at render() time
+        // the global may legitimately not exist yet. Testing `typeof
+        // maplibregl` here, as this did, is what forced the loader to hold the
+        // whole orchestrator back until the import settled.
         P.lazyInit(panelEl.panel, function () {
-            P.fetchJSON(dataUrl)
-                .then(function (mapData) {
+            Promise.all([P.whenMaplibre(), P.fetchJSON(dataUrl)])
+                .then(function (results) {
                     panelEl.chart.innerHTML = '';
-                    build(panelEl, mapData, geoUrl, basePath);
+                    build(panelEl, results[1], geoUrl, basePath);
                 })
                 .catch(function (err) {
                     console.error('IWACVis map:', err);
                     panelEl.chart.innerHTML = '';
-                    panelEl.chart.appendChild(P.buildFetchErrorState(err));
+                    panelEl.chart.appendChild(
+                        /MapLibre/.test(String(err && err.message))
+                            ? P.buildErrorState('Map library unavailable')
+                            : P.buildFetchErrorState(err)
+                    );
                 });
         });
     }

@@ -82,18 +82,18 @@
     }
 
     function renderMap(panelEl, mappedSources, ctx) {
-        if (typeof maplibregl === 'undefined') {
-            panelEl.chart.appendChild(P.buildErrorState(P.t('Map library unavailable')));
-            return;
-        }
-
         var mapContainer = P.el('div', 'iwac-vis-map iwac-vis-source-map__map');
         panelEl.chart.appendChild(mapContainer);
         mapContainer.appendChild(P.buildLoadingState());
 
+        // MapLibre is imported in parallel with the script chain, so its
+        // global may not exist yet at render() time — wait for it here, in the
+        // one panel that needs it, rather than holding the block back.
         P.lazyInit(panelEl.panel, function () {
             mapContainer.innerHTML = '';
-            buildMap(mapContainer, mappedSources, ctx);
+            P.withMaplibre(mapContainer, function () {
+                buildMap(mapContainer, mappedSources, ctx);
+            });
         });
     }
 
