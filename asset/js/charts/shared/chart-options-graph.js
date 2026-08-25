@@ -108,7 +108,7 @@
         var names = (data && data.names) || [];
         var matrix = (data && data.matrix) || [];
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#e64a19', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574'];
+            || ['#ce4115', '#394f68', '#4a8c6f', '#bb4c49', '#7c5295', '#d4a574'];
 
         // Row totals feed the node tooltip ("Total: N") — sector arcs
         // themselves are sized by ECharts from the surviving links.
@@ -215,7 +215,7 @@
         var edges = (graph && graph.edges) || [];
 
         var palette = (ns.getPalette && ns.getPalette())
-            || ['#e64a19', '#394f68', '#4a8c6f', '#c5504d', '#7c5295', '#d4a574'];
+            || ['#ce4115', '#394f68', '#4a8c6f', '#bb4c49', '#7c5295', '#d4a574'];
 
         // Edge color per collaboration type. Categories are also exposed
         // via a `categories` array on the graph series so ECharts can
