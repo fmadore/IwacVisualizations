@@ -84,28 +84,40 @@
         panelEl.chart.appendChild(mapEl);
 
         // --- Map + always-on choropleth ----------------------------------
+        // MapLibre is an ES module the page loader imports in PARALLEL with
+        // the classic script chain, so at render() time the global routinely
+        // does not exist yet — reading it synchronously here painted a
+        // permanent error over a panel that would have worked a second later.
+        // The year slider and the play button are pure DOM and stay live while
+        // the import settles; `setYear` already no-ops on a null choropleth.
         var choropleth = null;
-        var map = P.createIwacMap(mapEl, {
-            center: [2.5, 10.5],
-            zoom: 3.4,
-            onStyleReady: function () { /* choropleth re-adds itself */ }
-        });
-        if (!map) {
-            mapEl.appendChild(P.buildErrorState());
-            return;
-        }
-        if (typeof P.attachChoroplethToggle === 'function') {
-            choropleth = P.attachChoroplethToggle(map, {
-                countryCounts: countsAt(0),
-                bubbleLayers: [],
-                basePath: (ctx && ctx.basePath) || '',
-                labelKey: 'mentions',
-                hideDefaultControl: true,
-                hoverInfo: true,
-                paint: { fixedMax: fixedMax }
+        P.withMaplibre(mapEl, function () {
+            var map = P.createIwacMap(mapEl, {
+                center: [2.5, 10.5],
+                zoom: 3.4,
+                onStyleReady: function () { /* choropleth re-adds itself */ }
             });
-            choropleth.setMode('choropleth');
-        }
+            if (!map) return false;
+            if (typeof P.attachChoroplethToggle === 'function') {
+                // Open on whatever year the reader has already scrubbed to,
+                // not on year 0 — the controls were live during the import.
+                choropleth = P.attachChoroplethToggle(map, {
+                    countryCounts: countsAt(state.yearIdx),
+                    bubbleLayers: [],
+                    basePath: (ctx && ctx.basePath) || '',
+                    labelKey: 'mentions',
+                    hideDefaultControl: true,
+                    hoverInfo: true,
+                    paint: { fixedMax: fixedMax }
+                });
+                choropleth.setMode('choropleth');
+            }
+            return true;
+        }).then(function (ok) {
+            // Genuine failure: withMaplibre has put the banner up, so retire
+            // the transport that now drives nothing.
+            if (ok !== true) controls.style.display = 'none';
+        });
 
         function setYear(idx, fromTimer) {
             state.yearIdx = idx;

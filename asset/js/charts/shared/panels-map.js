@@ -95,6 +95,87 @@
         });
     };
 
+    /**
+     * `P.withMaplibre` for the case where the caller needs a CONTROLLER back
+     * synchronously.
+     *
+     * Some map panels are not "render once into a host" — they hand a live
+     * object to a toolbar, a facet bar or a details sidebar that goes on
+     * calling methods on it (`setData`, `update`, `resize`, `focusNode`…).
+     * Those callers cannot take a promise: the object is already wired into
+     * event handlers built in the same synchronous pass.
+     *
+     * So return a stand-in immediately. Every named method is a proxy that
+     * REPLAYS into the real controller once MapLibre lands, in call order, and
+     * passes straight through afterwards. The host shows the standard map
+     * spinner meanwhile, and the "Map library unavailable" banner only if the
+     * import genuinely fails.
+     *
+     * This is the shape entity-networks' graph, the laïcité place map and the
+     * scary-terms place map all had, and all three read `maplibregl`
+     * synchronously at boot because a `create()` that returns null had nowhere
+     * to put a "not yet" — so "not yet" was painted as "never". Since v1.52.0
+     * de-serialized the loader that is a live race, not a theoretical one.
+     *
+     * @param {HTMLElement} host   spinner / error banner container (the map host)
+     * @param {function(): (Object|null)} factory  builds the real controller;
+     *   runs only once MapLibre is present, so it may call P.createIwacMap
+     *   synchronously
+     * @param {Array<string>} methods  method names to proxy
+     * @param {Object} [opts]  forwarded to P.withMaplibre (e.g. {loading: false})
+     * @returns {Object} facade carrying `methods` plus `target()` (the real
+     *   controller or null) and `ready` (a promise resolving to it)
+     */
+    P.deferMaplibre = function (host, factory, methods, opts) {
+        var real = null;
+        var abandoned = false;
+        var queue = [];
+        var facade = {};
+
+        function proxy(name) {
+            return function () {
+                if (real) {
+                    return typeof real[name] === 'function'
+                        ? real[name].apply(real, arguments)
+                        : undefined;
+                }
+                // Before the library lands, remember the call; after a failure,
+                // drop it — there will never be anything to replay it into.
+                if (!abandoned) queue.push([name, arguments]);
+                return undefined;
+            };
+        }
+
+        (methods || []).forEach(function (name) { facade[name] = proxy(name); });
+
+        facade.target = function () { return real; };
+
+        facade.ready = P.withMaplibre(host, function () {
+            var built = factory();
+            if (!built) {
+                // MapLibre is present and the factory still declined (no WebGL
+                // context, say). Nothing queued can ever run.
+                abandoned = true;
+                queue.length = 0;
+                if (host) host.appendChild(P.buildErrorState('Map library unavailable'));
+                return null;
+            }
+            real = built;
+            queue.forEach(function (call) {
+                if (typeof real[call[0]] === 'function') {
+                    real[call[0]].apply(real, call[1]);
+                }
+            });
+            queue.length = 0;
+            return real;
+        }, opts).then(function (built) {
+            if (!built) abandoned = true;
+            return built || null;
+        });
+
+        return facade;
+    };
+
     /* ----------------------------------------------------------------- */
     /*  GeoJSON feature builder for count-sized bubble maps               */
     /* ----------------------------------------------------------------- */

@@ -85,12 +85,17 @@
         return {
             root: root,
             mount: function () {
-                controller = createMap(mapEl, bundle, cfg);
+                // MapLibre 6 is an ES module the loader imports in parallel
+                // with the script chain, so it may not be here even on a view
+                // the reader had to click into. `P.deferMaplibre` hands back a
+                // controller immediately, holds the map spinner in `mapEl`, and
+                // replays whatever was called meanwhile.
+                controller = P.deferMaplibre(mapEl, function () {
+                    return createMap(mapEl, bundle, cfg);
+                }, ['resize', 'update']);
                 // The host was display:none until this view activated, so
                 // MapLibre measured a zero-height container.
-                if (controller) {
-                    window.setTimeout(function () { controller.resize(); }, 0);
-                }
+                window.setTimeout(function () { controller.resize(); }, 0);
             },
             update: function () { if (controller) controller.update(); }
         };

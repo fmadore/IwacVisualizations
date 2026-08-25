@@ -6,6 +6,7 @@ require('./i18n.test.js');
 require('./gettext.test.js');
 require('./panels.test.js');
 require('./maplibre.test.js');
+require('./maplibre-gate.test.js');
 require('./assets.test.js');
 require('./grammar.test.js');
 require('./sentiment.test.js');

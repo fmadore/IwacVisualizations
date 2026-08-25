@@ -124,17 +124,17 @@
             if (!selection) overviewFor(data, mode === 'places');
         }
 
+        // `EN.graph.create` is MapLibre-gated and always returns a controller:
+        // it holds the map spinner in `abstractWrap` until the library's ESM
+        // import settles, replays these calls, and shows the error banner only
+        // if the import actually fails. The overview text and the toolbar below
+        // describe the DATA, which is already here, so they paint immediately.
         var abstractGraph = EN.graph.create(abstractWrap, {
             mode: 'abstract',
             onSelect: handleSelect
         });
         var geoGraph = null;
 
-        if (!abstractGraph) {
-            graphPanel.chart.innerHTML = '';
-            graphPanel.chart.appendChild(P.buildErrorState('Map library unavailable'));
-            return;
-        }
         abstractGraph.setData(globalData);
         overviewFor(globalData, false);
 
@@ -165,7 +165,7 @@
                         mode: 'geo',
                         onSelect: handleSelect
                     });
-                    if (geoGraph) geoGraph.setData(spatialData);
+                    geoGraph.setData(spatialData);
                 } else {
                     geoGraph.resize();
                 }

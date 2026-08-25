@@ -233,35 +233,43 @@
             }
         }
 
-        var map = P.createIwacMap(mapEl, {
-            center: [0, 10],
-            zoom: 2.2,
-            globe: false,
-            onStyleReady: addLayers
-        });
+        // MapLibre 6 is an ES module the page loader imports in PARALLEL with
+        // the classic script chain, and this panel renders on the block's
+        // first paint — so reading `maplibregl` synchronously here was a race
+        // that a cold cache loses. Gate it; the spinner belongs to the map
+        // host, and the rest of the references dashboard is unaffected.
+        return P.withMaplibre(mapEl, function () {
+            var map = P.createIwacMap(mapEl, {
+                center: [0, 10],
+                zoom: 2.2,
+                globe: false,
+                onStyleReady: addLayers
+            });
+            if (!map) return null;
 
-        if (map && provenanceMap.bounds) {
-            map.once('load', function () {
-                var bounds = provenanceMap.bounds;
-                if (locations.length === 1) {
-                    map.setCenter([locations[0].lng, locations[0].lat]);
-                    map.setZoom(5);
-                } else {
-                    map.fitBounds(
-                        [[bounds.west, bounds.south], [bounds.east, bounds.north]],
-                        { padding: 42, maxZoom: 7, duration: 0 }
-                    );
-                }
-            });
-        }
-        if (map && P.addFullscreenButton && panelEl) {
-            P.addFullscreenButton(panelEl, {
-                onResize: function () {
-                    setTimeout(function () { map.resize(); }, 50);
-                }
-            });
-        }
-        return map;
+            if (provenanceMap.bounds) {
+                map.once('load', function () {
+                    var bounds = provenanceMap.bounds;
+                    if (locations.length === 1) {
+                        map.setCenter([locations[0].lng, locations[0].lat]);
+                        map.setZoom(5);
+                    } else {
+                        map.fitBounds(
+                            [[bounds.west, bounds.south], [bounds.east, bounds.north]],
+                            { padding: 42, maxZoom: 7, duration: 0 }
+                        );
+                    }
+                });
+            }
+            if (P.addFullscreenButton && panelEl) {
+                P.addFullscreenButton(panelEl, {
+                    onResize: function () {
+                        setTimeout(function () { map.resize(); }, 50);
+                    }
+                });
+            }
+            return map;
+        });
     }
 
     /* ----------------------------------------------------------------- */

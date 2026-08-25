@@ -445,16 +445,14 @@
             }
             if (!mapController) {
                 mapEl.innerHTML = '';
+                // Never null: the controller is MapLibre-gated and owns its
+                // own spinner / "Map library unavailable" banner inside mapEl.
                 mapController = SH.createScaryMap(mapEl, placesData, {
                     getFilter: mapFilter,
                     termColors: termColors,
                     siteBase: container.dataset.siteBase
                         || container.dataset.embedBase || ''
                 });
-                if (!mapController) {
-                    mapEl.appendChild(P.buildErrorState());
-                    return;
-                }
             } else {
                 mapController.update();
             }

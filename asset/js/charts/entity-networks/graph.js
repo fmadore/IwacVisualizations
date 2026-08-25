@@ -15,6 +15,10 @@
  *     by entity type from the IWAC qualitative palette
  *   - 'geo'      — regular theme basemap, nodes at true coordinates
  *
+ * `create()` gates on `P.whenMaplibre()` and always returns a controller:
+ * calls made while the library is still importing are replayed once it lands,
+ * and the host shows the standard map spinner meanwhile.
+ *
  * Usage:
  *   var graph = ns.entityNetworks.graph.create(container, {
  *       mode: 'abstract',
@@ -30,8 +34,8 @@
 
     var ns = window.IWACVis = window.IWACVis || {};
     var P = ns.panels;
-    if (!P || !P.createIwacMap || !P.createIwacPopup) {
-        console.warn('IWACVis.entity-networks/graph: missing deps (need shared/maplibre.js)');
+    if (!P || !P.createIwacMap || !P.createIwacPopup || !P.deferMaplibre) {
+        console.warn('IWACVis.entity-networks/graph: missing deps (need shared/maplibre.js + panels-map.js)');
         return;
     }
 
@@ -49,7 +53,7 @@
         return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
     }
 
-    function create(container, opts) {
+    function createOnMaplibre(container, opts) {
         opts = opts || {};
         var mode = opts.mode === 'geo' ? 'geo' : 'abstract';
         var onSelect = opts.onSelect || function () {};
@@ -537,6 +541,34 @@
                 try { map.resize(); } catch (e) { /* ignore */ }
             }
         };
+    }
+
+    /** Methods the orchestrator drives — proxied while MapLibre is in flight. */
+    var GRAPH_METHODS = [
+        'setData', 'setTypeFilter', 'setWeightMin',
+        'select', 'focusNode', 'getSelection', 'resize'
+    ];
+
+    /**
+     * Public entry point. Always returns a controller — never null.
+     *
+     * The graph draws on a MapLibre canvas, which since v6 is an ES module the
+     * page loader imports in PARALLEL with the classic script chain. So at
+     * block boot `maplibregl` routinely does not exist yet, and this used to
+     * return null on exactly that: the orchestrator read the null as "no map
+     * library" and painted a permanent "Map library unavailable" banner over a
+     * panel that would have worked a second later. It was a race — a warm cache
+     * let MapLibre win and hid it — and de-serializing the loader in v1.52.0
+     * made production lose it.
+     *
+     * `P.deferMaplibre` keeps the synchronous contract the orchestrator needs
+     * while moving the wait where it belongs: the panel shows the map spinner,
+     * and the error banner is reserved for an import that actually failed.
+     */
+    function create(container, opts) {
+        return P.deferMaplibre(container, function () {
+            return createOnMaplibre(container, opts);
+        }, GRAPH_METHODS);
     }
 
     ns.entityNetworks = ns.entityNetworks || {};

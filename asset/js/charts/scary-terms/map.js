@@ -40,20 +40,7 @@
     }
     S.placeCount = placeCount;
 
-    /**
-     * Create the map view controller. Call once, the first time the map
-     * view activates; afterwards call `.update()` on filter changes and
-     * `.resize()` when the container becomes visible again.
-     *
-     * @param {HTMLElement} mapEl
-     * @param {Object} placesData   parsed scary-terms-places.json
-     * @param {Object} opts
-     * @param {function():{family:?string, country:?string}} opts.getFilter
-     * @param {Object<string,string>} opts.termColors
-     * @param {string} opts.siteBase
-     * @returns {{update: function(), resize: function(), map: Object}|null}
-     */
-    S.createScaryMap = function (mapEl, placesData, opts) {
+    function buildScaryMap(mapEl, placesData, opts) {
         var places = (placesData && placesData.places) || [];
         var getFilter = opts.getFilter;
         var termColors = opts.termColors || {};
@@ -185,6 +172,31 @@
                 });
             }
         };
+    }
+
+    /**
+     * Create the map view controller. Call once, the first time the map
+     * view activates; afterwards call `.update()` on filter changes and
+     * `.resize()` when the container becomes visible again.
+     *
+     * Always returns a controller. MapLibre 6 is an ES module the page loader
+     * imports in PARALLEL with the classic script chain, so the global can be
+     * missing even on a view the reader had to click into; `P.deferMaplibre`
+     * holds the map spinner in `mapEl`, replays anything called meanwhile, and
+     * shows "Map library unavailable" only when the import genuinely fails.
+     *
+     * @param {HTMLElement} mapEl
+     * @param {Object} placesData   parsed scary-terms-places.json
+     * @param {Object} opts
+     * @param {function():{family:?string, country:?string}} opts.getFilter
+     * @param {Object<string,string>} opts.termColors
+     * @param {string} opts.siteBase
+     * @returns {{update: function(), resize: function(), target: function()}}
+     */
+    S.createScaryMap = function (mapEl, placesData, opts) {
+        return P.deferMaplibre(mapEl, function () {
+            return buildScaryMap(mapEl, placesData, opts);
+        }, ['resize', 'update']);
     };
 
     /**
