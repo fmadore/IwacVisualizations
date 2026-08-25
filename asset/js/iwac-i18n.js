@@ -80,6 +80,11 @@
             'gantt_window_all': 'Showing all {total} newspapers.',
             'gantt_show_all': 'Show all {total}',
             'gantt_show_top': 'Show top {shown}',
+            // Index-overview activity Gantt: the rows are the top entities of
+            // one family, already capped at 30 by the generator, so the window
+            // is a second truncation on top of a cap.
+            'activity_window_note': 'Showing the {shown} most frequent of {total} entities.',
+            'activity_window_all': 'Showing all {total} entities.',
 
             // Chart text alternatives. ECharts generates its own summary
             // otherwise — up to 2,500 characters, truncated mid-list at "the
@@ -181,6 +186,24 @@
             'item_type_audiovisual': 'Audio-visual recording',
             'item_type_reference':   'Reference',
             'item_type_image':       'Photograph',
+
+            // Document types as the collection-overview bundle SPELLS them.
+            //
+            // `generate_collection_overview.py::SUBSET_TO_DOC_TYPE` writes the
+            // French label into the treemap's second level, and nothing
+            // localized it — so the English site's "Collection breakdown"
+            // printed "Article de presse" and "Périodique islamique" inside a
+            // chart whose every other label was English, and whose own
+            // dateline elsewhere on the page said "ARTICLE". The keys are the
+            // raw French strings because that is the `P.translateKeyed`
+            // convention already used for `ref_type_` and `lang_`: the
+            // precomputed JSON ships the French label and the JS localizes it.
+            // Keep them byte-identical to the generator's map.
+            'doc_type_Article de presse':               'News article',
+            'doc_type_Périodique islamique':       'Islamic periodical',
+            'doc_type_Document':                        'Document',
+            'doc_type_Enregistrement audio-visuel':     'Audio-visual recording',
+            'doc_type_Photographie':                    'Photograph',
 
             // Person dashboard — labels + panels
             'Period covered_short': 'Years',
@@ -525,6 +548,8 @@
             'gantt_window_all': 'Affichage des {total} journaux.',
             'gantt_show_all': 'Afficher les {total}',
             'gantt_show_top': 'Afficher les {shown} premiers',
+            'activity_window_note': 'Affichage des {shown} entités les plus fréquentes sur {total}.',
+            'activity_window_all': 'Affichage des {total} entités.',
 
             // Chart text alternatives
             'chart_aria_plain': '{title} : graphique.',
@@ -668,6 +693,9 @@
             'Cumulative total': 'Total cumul\u00e9',
             'No recent additions': 'Aucun ajout r\u00e9cent',
             'Loading': 'Chargement',
+            // Retry control on a fetch-failure banner. No `en` entry: the key
+            // IS the English string (see check-i18n.js on the parity rule).
+            'Try again': 'Réessayer',
             'unique words': 'mots uniques',
             'Map library unavailable': 'Biblioth\u00e8que de cartographie indisponible',
             'Loading map': 'Chargement de la carte',
@@ -679,6 +707,15 @@
             'item_type_audiovisual': 'Enregistrement audio-visuel',
             'item_type_reference':   'R\u00e9f\u00e9rence',
             'item_type_image':       'Photographie',
+
+            // Document types as the bundle spells them (see the English block).
+            // Identity mappings: the source labels are already French, and the
+            // parity guard requires the key to exist in both dictionaries.
+            'doc_type_Article de presse':               'Article de presse',
+            'doc_type_P\u00e9riodique islamique':       'P\u00e9riodique islamique',
+            'doc_type_Document':                        'Document',
+            'doc_type_Enregistrement audio-visuel':     'Enregistrement audio-visuel',
+            'doc_type_Photographie':                    'Photographie',
 
             // Person dashboard — labels + panels
             'Mentions': 'Mentions',

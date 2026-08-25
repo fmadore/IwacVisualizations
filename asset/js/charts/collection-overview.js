@@ -106,6 +106,37 @@
         };
     }
 
+    /**
+     * Localize the treemap's middle level.
+     *
+     * The hierarchy is country › document type › source. Countries and
+     * sources are proper nouns and stay as they are; the type level is not —
+     * `generate_collection_overview.py` writes French labels into it
+     * ("Article de presse", "Périodique islamique"), and nothing translated
+     * them, so the English site's "Collection breakdown" was the one chart on
+     * the page speaking French, three rows under a dateline that said
+     * "ARTICLE". Same `translateKeyed` pattern the references overview
+     * already applies to its own treemap.
+     */
+    function localizeTreemap(tree) {
+        return {
+            name: tree.name,
+            children: (tree.children || []).map(function (country) {
+                return {
+                    name: country.name,
+                    value: country.value,
+                    children: (country.children || []).map(function (type) {
+                        return {
+                            name: P.translateKeyed('doc_type_', type.name),
+                            value: type.value,
+                            children: type.children
+                        };
+                    })
+                };
+            })
+        };
+    }
+
     function wireInlinePanels(h, data) {
         // Timeline (existing C.timeline, year × country)
         if (data.timeline && (data.timeline.years || []).length > 0) {
@@ -135,8 +166,9 @@
         // is countries, so it takes the same fixed slots rather than the
         // palette in tree order.
         if (data.treemap && (data.treemap.children || []).length > 0) {
+            var tree = localizeTreemap(data.treemap);
             ns.registerChart(h.treemap.chart, function (el, instance) {
-                instance.setOption(C.treemap(data.treemap, { colorFor: C._countryColor }));
+                instance.setOption(C.treemap(tree, { colorFor: C._countryColor }));
             });
         } else {
             h.treemap.chart.appendChild(P.buildEmptyState());
