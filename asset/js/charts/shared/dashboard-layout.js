@@ -293,6 +293,11 @@
         var grid  = P.buildChartsGrid();
         rootEl.appendChild(grid);
 
+        // One step below the block's own heading, whatever level the surface
+        // gave it. Appended first so the wrapper is in the document and the
+        // lookup can reach the block heading.
+        var panelHeading = P.panelHeadingLevel(rootEl);
+
         var rendered = [];
         for (var i = 0; i < slots.length; i++) {
             var slot = slots[i];
@@ -321,7 +326,7 @@
             if (slot.tall)      classes += ' iwac-vis-panel--tall';
             if (slot.className) classes += ' ' + slot.className;
 
-            var panelEl = P.buildPanel(classes, title, desc || null);
+            var panelEl = P.buildPanel(classes, title, desc || null, { heading: panelHeading });
             grid.appendChild(panelEl.panel);
 
             try {

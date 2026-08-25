@@ -66,7 +66,7 @@
     P.bootBlock = function (opts) {
         var label = opts.warnLabel || 'IWACVis block';
 
-        function handleError(container, err, ctx) {
+        function handleError(container, err, ctx, retry) {
             if (typeof opts.onError === 'function') {
                 opts.onError(container, err, ctx);
                 return;
@@ -77,7 +77,7 @@
             }
             console.error(label + ':', err);
             if (opts.clearOnError !== false) container.innerHTML = '';
-            container.appendChild(P.buildFetchErrorState(err));
+            container.appendChild(P.buildFetchErrorState(err, null, retry));
         }
 
         function initOne(container) {
@@ -88,19 +88,33 @@
                 siteBase: container.dataset.siteBase || '',
                 dataBase: basePath + P.DATA_BASE
             };
-            var loading;
-            try {
-                if (opts.beforeLoad) opts.beforeLoad(container, ctx);
-                loading = opts.load
-                    ? opts.load(ctx)
-                    : P.fetchJSON(ctx.dataBase + opts.dataFile);
-            } catch (err) {
-                handleError(container, err, ctx);
-                return;
+            // One attempt, spinner included — also the retry button's whole
+            // job. A custom `load` owns its own fetch and may not be
+            // re-runnable, so only the built-in path offers the control.
+            function attempt(withSpinner) {
+                var loading;
+                try {
+                    if (withSpinner) {
+                        container.innerHTML = '';
+                        container.appendChild(P.buildLoadingState());
+                    }
+                    if (opts.beforeLoad) opts.beforeLoad(container, ctx);
+                    loading = opts.load
+                        ? opts.load(ctx)
+                        : P.fetchJSON(ctx.dataBase + opts.dataFile,
+                            { timeoutMs: P.FETCH_TIMEOUT_MS });
+                } catch (err) {
+                    handleError(container, err, ctx, opts.load ? null : retry);
+                    return;
+                }
+                Promise.resolve(loading)
+                    .then(function (data) { opts.render(container, data, ctx); })
+                    .catch(function (err) {
+                        handleError(container, err, ctx, opts.load ? null : retry);
+                    });
             }
-            Promise.resolve(loading)
-                .then(function (data) { opts.render(container, data, ctx); })
-                .catch(function (err) { handleError(container, err, ctx); });
+            function retry() { attempt(true); }
+            attempt(false);
         }
 
         function run() {
@@ -197,26 +211,48 @@
                 + opts.dataDir + '/' + itemId + '.json';
             var loadingSel = '.iwac-vis-' + opts.classToken + '__loading';
 
-            P.fetchJSON(url)
-                .then(function (data) {
-                    var loading = container.querySelector(loadingSel);
-                    if (loading) loading.remove();
+            // Bounded, and re-attemptable. The dashboards mount on view, so a
+            // stalled fetch used to leave the reader looking at a spinner that
+            // had already been scrolled to and would never resolve — the same
+            // failure On This Day fixed for itself in v1.49.0, still live on
+            // every person, entity and article page.
+            // `state` is whichever spinner-or-banner currently stands in for
+            // the dashboard, so a retry replaces exactly that node and nothing
+            // else in the container — the article block also carries a
+            // server-rendered sentiment panel here.
+            var state = container.querySelector(loadingSel);
+            function swapState(el) {
+                if (state && state.parentNode) state.parentNode.replaceChild(el, state);
+                else container.appendChild(el);
+                state = el;
+            }
+            function dropState() {
+                if (state && state.parentNode) state.parentNode.removeChild(state);
+                state = null;
+            }
+            function attempt() {
+                P.fetchJSON(url, { timeoutMs: P.FETCH_TIMEOUT_MS })
+                    .then(function (data) {
+                        dropState();
 
-                    var body = P.el('div', 'iwac-vis-' + opts.classToken + '__body');
-                    container.appendChild(body);
+                        var body = P.el('div', 'iwac-vis-' + opts.classToken + '__body');
+                        container.appendChild(body);
 
-                    ctx.data  = data;
-                    ctx.facet = (opts.makeFacet && opts.makeFacet()) || noopFacet();
-                    if (opts.mountHeader) opts.mountHeader(body, data, ctx);
+                        ctx.data  = data;
+                        ctx.facet = (opts.makeFacet && opts.makeFacet()) || noopFacet();
+                        if (opts.mountHeader) opts.mountHeader(body, data, ctx);
 
-                    DL.render(body, opts.layout, data, ctx);
-                })
-                .catch(function (err) {
-                    console.error(label + ':', err);
-                    var loading = container.querySelector(loadingSel);
-                    if (loading) loading.remove();
-                    container.appendChild(P.buildFetchErrorState(err));
-                });
+                        DL.render(body, opts.layout, data, ctx);
+                    })
+                    .catch(function (err) {
+                        console.error(label + ':', err);
+                        swapState(P.buildFetchErrorState(err, null, function () {
+                            swapState(P.buildLoadingState());
+                            attempt();
+                        }));
+                    });
+            }
+            attempt();
         }
 
         function run() {

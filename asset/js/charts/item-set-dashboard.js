@@ -110,6 +110,14 @@
         var grid = P.buildChartsGrid();
         root.appendChild(grid);
 
+        // One step below the block's own heading. On an item-set page that
+        // heading is an <h2> (iwac-block-shell `headingLevel`, v1.52.0), so
+        // the default <h4> panel title made the outline SKIP h3 — the fix for
+        // an out-of-order level had produced a missing one. Derived rather
+        // than hardcoded: the block heading is what has to be matched, and
+        // `panelHeadingLevel` reads it off the rendered wrapper.
+        var headingOpts = { heading: P.panelHeadingLevel(root) };
+
         // Items per year — single-series stacked timeline (the builder
         // is year × category; one category = a plain bar series).
         var tl = corpus.timeline || {};
@@ -117,7 +125,8 @@
             var seriesName = P.t('Items');
             var series = {};
             series[seriesName] = tl.counts || [];
-            var tlPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year'));
+            var tlPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Items per year'),
+                null, headingOpts);
             grid.appendChild(tlPanel.panel);
             ns.registerChart(tlPanel.chart, function (el, instance) {
                 instance.setOption(C.timeline(
@@ -134,7 +143,7 @@
         ].forEach(function (def) {
             var entries = (corpus[def.key] || []).slice(0, 15);
             if (!entries.length) return;
-            var panel = P.buildPanel('iwac-vis-panel', P.t(def.title));
+            var panel = P.buildPanel('iwac-vis-panel', P.t(def.title), null, headingOpts);
             grid.appendChild(panel.panel);
             ns.registerChart(panel.chart, function (el, instance) {
                 instance.setOption(C.horizontalBar(entries), true);
@@ -146,7 +155,8 @@
         // unknown series type; the fallback re-renders as a bar).
         var pairs = corpus.wordcloud || [];
         if (pairs.length) {
-            var wcPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most frequent words'));
+            var wcPanel = P.buildPanel('iwac-vis-panel iwac-vis-panel--wide', P.t('Most frequent words'),
+                null, headingOpts);
             grid.appendChild(wcPanel.panel);
             ns.registerChart(wcPanel.chart, function (el, instance) {
                 try {
