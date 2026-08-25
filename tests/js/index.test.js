@@ -12,3 +12,4 @@ require('./sentiment.test.js');
 require('./diverging-bar.test.js');
 require('./associated-entities.test.js');
 require('./minimal-item.test.js');
+require('./wordcloud-ink.test.js');
