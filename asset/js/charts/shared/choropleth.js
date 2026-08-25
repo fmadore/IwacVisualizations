@@ -321,6 +321,22 @@
             return clone;
         }
 
+        /**
+         * Resolve once the map's style is in place.
+         *
+         * `addSource` throws "Style is not done loading" on a map whose first
+         * style has not landed yet, and `setMode('choropleth')` is routinely
+         * called in the same tick as `createIwacMap` — so whether this threw
+         * came down to whether the country GeoJSON was in HTTP cache: a warm
+         * cache beat the style and logged an error, a cold one did not. Waiting
+         * for the style alongside the fetch removes the race in both
+         * directions.
+         */
+        function whenStyleReady() {
+            if (map.isStyleLoaded && map.isStyleLoaded()) return Promise.resolve();
+            return new Promise(function (resolve) { map.once('style.load', resolve); });
+        }
+
         function ensureLayers() {
             // If the source already exists on the current style, just
             // re-set the data (handles updateCounts() and post-style.load
@@ -331,7 +347,11 @@
                 map.getSource(SOURCE).setData(annotate(_geojsonCache));
                 return Promise.resolve();
             }
-            pendingFetch = loadGeojson(basePath).then(function (geo) {
+            pendingFetch = Promise.all([
+                loadGeojson(basePath),
+                whenStyleReady()
+            ]).then(function (settled) {
+                var geo = settled[0];
                 if (map.getSource(SOURCE)) { pendingFetch = null; return; }
                 map.addSource(SOURCE, {
                     type: 'geojson',
