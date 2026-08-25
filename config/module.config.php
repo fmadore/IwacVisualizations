@@ -148,4 +148,35 @@ return [
             dirname(__DIR__) . '/view',
         ],
     ],
+    /*
+     * Register the module's gettext catalogue.
+     *
+     * Omeka S does NOT discover `language/*.mo` on its own — a module declares
+     * the pattern here or its catalogue is never loaded, and every
+     * `$this->translate()` in its templates silently renders the English
+     * msgid. This block was simply absent, which is why the French site
+     * rendered the AI-sentiment panel on every article page entirely in
+     * English ("AI sentiment", "Polarity", "Very negative") while the charts
+     * beside it were correctly French: the charts translate client-side
+     * through `asset/js/iwac-i18n.js`, which needs no Omeka wiring, so the one
+     * failure the module had was invisible everywhere the JS dictionary
+     * covered — which is almost everywhere.
+     *
+     * `fr.po` has carried those strings since v0.11.0 and `fr.mo` matches it
+     * (npm run lint:i18n-mo). Nothing was missing but the registration.
+     *
+     * `text_domain => null` puts them in the default domain, which is where
+     * `$this->translate()` looks; `dirname(__DIR__)` resolves from this file
+     * rather than OMEKA_PATH, so a non-standard install directory still works.
+     */
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type' => 'gettext',
+                'base_dir' => dirname(__DIR__) . '/language',
+                'pattern' => '%s.mo',
+                'text_domain' => null,
+            ],
+        ],
+    ],
 ];
