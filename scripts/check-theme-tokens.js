@@ -30,6 +30,14 @@
  *      fallback slot. Bare hex chrome is forbidden. Genuine exceptions
  *      (sanctioned data-series colours) opt out with a trailing
  *      `/​* allow-hex *​/` marker on the same line.
+ *   3b. (CSS only, added 2026-08) The same rule for `rgb()` / `rgba()` /
+ *      `hsl()` / `hsla()`. Rule 3 matched `#` and nothing else, so two of the
+ *      three ways CSS spells a literal colour were simply outside the guard:
+ *      `background: rgba(0, 0, 0, 0.78)` on the map popup scrim was bare
+ *      chrome that does not flip with the theme, and it had passed every
+ *      build. Shares rule 3's `var()`-fallback exemption — that is where the
+ *      `--shadow-*` rgba() values legitimately live — and its `allow-hex`
+ *      opt-out.
  *
  * Rules (value) — only when `tokens.json` is present (synced from the theme
  * by IWAC-theme/scripts/build-tokens.js; the SINGLE SOURCE OF TRUTH):
@@ -66,6 +74,13 @@
  *   9. `font-size` must come from a `--text-*` token, not a literal. ~91
  *      literals ran a second, undeclared scale here on the 12/14/18px steps
  *      of a generic utility framework rather than the theme's 11/13/15/17/19.
+ *      Extended 2026-08 to the math-function form: the rule was anchored to
+ *      the colon, so it saw `font-size: 1.5rem` and not `font-size:
+ *      clamp(1.5rem, 1.05rem + 0.7vw, 2rem)` — four inline fluid ramps that
+ *      are exactly the second type scale rule 9 exists to forbid, and the
+ *      more expensive kind, since a clamp encodes three numbers instead of
+ *      one. Absolute lengths inside `var(--token, …)` are exempt: `--text-3xl`
+ *      IS a clamp, and its fallback has to spell it out.
  *  10. Media-query widths must be one of the theme's published breakpoints.
  *      `blocks/laicite.css` reflowed at 640px under a `/* sm *​/` comment
  *      while the theme's `$sm` — and every other block on the page — is 600.
@@ -153,13 +168,32 @@ const SRGB_MIX = /color-mix\(\s*in\s+srgb\b/i;
 // color-mix is not a thing this codebase writes.
 const ABSOLUTE_MIX = /color-mix\([^;]*\b(?:black|white)\b/i;
 const HEX = /#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3}(?:[0-9a-fA-F]{2})?)?\b/g;
+// Rule 3b — the other two ways to write a literal colour. Rule 3 has only
+// ever matched `#`, so `rgba(0, 0, 0, 0.78)` (iwac-core's map-popup scrim)
+// sat in the tree as bare chrome the guard could not see, and the whole
+// hsl() family was open. Same shape as the hex rule: legal inside a `var()`
+// fallback (that is where `--shadow-*`'s own rgba() lives), forbidden as
+// standalone chrome, opt out with `/* allow-hex */` where a value is
+// genuinely absolute.
+const FUNC_COLOR = /\b(?:rgba?|hsla?)\(/g;
 const VAR_FALLBACK = /var\(\s*(--[\w-]+)\s*,\s*(#[0-9a-fA-F]{3,8})\b/g;
 const VAR_USE = /var\(\s*(--[\w-]+)/g;
 const DECL = /(--[\w-]+)\s*:/g;
 const MEDIA_WIDTH = /\((min|max)-width\s*:\s*([\d.]+)px\)/g;
 // Absolute font-size literals only: em / % / unitless scale WITH whatever
 // token the cascade already set, so they don't fork the scale.
-const ABS_FONT_SIZE = /font-size:\s*(-?[\d.]+(?:px|rem|pt))\b/i;
+//
+// Two forms, because a `font-size` does not have to be a bare literal to fork
+// the scale. `font-size: clamp(1.5rem, 1.05rem + 0.7vw, 2rem)` is a whole
+// second type ramp written inline, and the original rule — anchored to the
+// colon — saw none of them: four fluid steps ran beside the theme's own
+// `--text-3xl`/`--text-4xl` clamps, on the block heading, the section heading,
+// a compare-newspapers title and an OTD masthead. `--text-3xl` IS a clamp, so
+// the fix is not "no clamp" but "the clamp comes from a token": absolute
+// lengths inside a math function on a font-size are the violation.
+const ABS_FONT_SIZE = /font-size:\s*(-?[\d.]+(?:px|rem|pt))\s*(?:;|!|$)/i;
+const FONT_SIZE_DECL = /font-size:\s*([^;]+)/i;
+const ABS_LENGTH = /(?:^|[\s,(+\-*/])(-?[\d.]+(?:px|rem|pt))\b/;
 // Module-owned namespace: data-series colours and properties set at runtime.
 // Exactly the prefix DESIGN-SYSTEM.md §4 documents — see rule 6.
 const MODULE_PREFIX = /^--iwac-vis-/;
@@ -312,10 +346,51 @@ function checkNonColourFallbacks(file, raw, n) {
     }
 }
 
-/** Rule 9 — font-size comes from the published type scale. */
+/**
+ * Rule 9 — font-size comes from the published type scale.
+ *
+ * The bare-literal form and the math-function form are the same violation:
+ * a size the theme did not publish. A declaration whose absolute lengths all
+ * sit inside `var(--token, …)` fallbacks is fine — that IS the token, spelled
+ * with its degraded-mode value, and `--text-3xl` is itself a clamp().
+ */
 function checkTypeScale(file, raw, n) {
-    const m = ABS_FONT_SIZE.exec(raw);
-    if (m) flag(file, n, `font-size: ${m[1]} — use a --text-* token (--text-2xs is the floor)`, raw);
+    const bare = ABS_FONT_SIZE.exec(raw);
+    if (bare) {
+        flag(file, n, `font-size: ${bare[1]} — use a --text-* token (--text-2xs is the floor)`, raw);
+        return;
+    }
+    const decl = FONT_SIZE_DECL.exec(raw);
+    if (!decl) return;
+    const value = decl[1];
+    if (!/\b(?:clamp|calc|min|max)\(/.test(value)) return;
+    // Strip every var() fallback: what remains is what the author wrote
+    // outside the token vocabulary.
+    const outside = stripVarFallbacks(value);
+    const hit = ABS_LENGTH.exec(outside);
+    if (hit) {
+        flag(file, n,
+            `font-size math with the literal ${hit[1]} — a clamp()/calc() of absolute lengths is a second type scale; use a --text-* token`,
+            raw);
+    }
+}
+
+/** Blank out the contents of every `var(…)` call, parens balanced. */
+function stripVarFallbacks(expr) {
+    let out = '', i = 0;
+    while (i < expr.length) {
+        const at = expr.indexOf('var(', i);
+        if (at === -1) { out += expr.slice(i); break; }
+        out += expr.slice(i, at);
+        let depth = 0, j = at + 3;
+        for (; j < expr.length; j++) {
+            if (expr[j] === '(') depth++;
+            else if (expr[j] === ')') { depth--; if (depth === 0) break; }
+        }
+        if (j >= expr.length) break; // unbalanced — nothing more to judge
+        i = j + 1;
+    }
+    return out;
 }
 
 /**
@@ -457,11 +532,32 @@ function scanLines(file, numbered, { hexCheck }) {
 
         let m;
         HEX.lastIndex = 0;
+        let reported = false;
         while ((m = HEX.exec(raw)) !== null) {
             const before = raw.slice(0, m.index);
             if (!isInVarFallback(before)) {
                 flag(file, n, 'bare hex outside a var() fallback (use a theme token, or mark /* allow-hex */)', raw);
+                reported = true;
                 break; // one report per line is enough
+            }
+        }
+        if (reported) return;
+
+        // Rule 3b — rgb() / rgba() / hsl() / hsla(). Colour has three
+        // spellings in CSS and the guard only ever knew one, so the rule that
+        // "bare chrome is forbidden" was enforced on `#000` and not on
+        // `rgba(0, 0, 0, 0.78)` — which is what the map popup's scrim was,
+        // sitting in iwac-core.css as a literal that does not flip with the
+        // theme and that no guard could see. The `color-mix` rules (2 / 2b)
+        // have the same reasoning applied to a different operator.
+        FUNC_COLOR.lastIndex = 0;
+        while ((m = FUNC_COLOR.exec(raw)) !== null) {
+            const before = raw.slice(0, m.index);
+            if (!isInVarFallback(before)) {
+                flag(file, n,
+                    `bare ${m[0].slice(0, -1)}() colour outside a var() fallback (use a theme token, color-mix from one, or mark /* allow-hex */)`,
+                    raw);
+                break;
             }
         }
     });
