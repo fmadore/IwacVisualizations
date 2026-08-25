@@ -197,21 +197,41 @@
 }
 
 /*  A panel title, at whichever heading level the outline needs. `buildPanel`
- *  emits <h4> by default and <h2> for a page block that sits directly under
- *  the page's <h1> (On This Day) — the level is a document-structure decision,
- *  so the two are styled together and render identically. Without the second
- *  selector a promoted heading would inherit the theme's h2: serif, --text-2xl,
- *  its own margins.
+ *  emits <h4> by default, <h3> under a block heading promoted to <h2>
+ *  (item-set pages — `P.panelHeadingLevel`), and <h2> for a page block that
+ *  sits directly under the page's <h1> (On This Day). The level is a
+ *  document-structure decision, so all three are styled together and render
+ *  identically. Without the extra selectors a promoted heading would inherit
+ *  the theme's h2/h3: serif, --text-2xl, its own margins.
+ *
+ *  `.iwac-vis-panel > h3` and `.iwac-vis-block h3` (the BLOCK heading rule
+ *  above) are both (0,1,1), so a panel title at h3 matches both and this rule
+ *  wins on source order — deliberately, and the reason this one stays below
+ *  that one. Re-scoping the block rule to `> h3` instead would be the tidier
+ *  selector and a visible regression: `.iwac-vis-section-heading` and
+ *  `.iwac-vis-block-header__title` are h3s DEEPER in the block, so they match
+ *  it too, and it is what actually paints their size, weight, colour,
+ *  tracking and margin today on six blocks (measured, not assumed — 19px/600
+ *  ink, not the 24px/700 and 30px/600 ink-strong their own class rules
+ *  declare). Narrowing the block rule hands those eleven headings a treatment
+ *  no one has reviewed. That is its own change, not a side effect of this one.
  *
  *  Kept at one class of specificity (0,1,1) so a block sheet's own
  *  `.iwac-vis-<block>-panel > h2` rule, which loads after this file, still
  *  wins — the OTD masthead treatment depends on that. */
 .iwac-vis-block h4,
-.iwac-vis-panel > h2 {
+.iwac-vis-panel > h2,
+.iwac-vis-panel > h3 {
     font-size: var(--text-base, 1.0625rem);
     font-weight: 600;
     color: var(--ink, #13161c);
     margin: 0 0 var(--space-2, 0.5rem);
+    /*  Explicit, because the block-heading rule above declares
+     *  `--tracking-tight` and this one ties it on specificity: a panel title
+     *  at h3 matched both and came out 0.34px-per-character tighter than the
+     *  same title at h4 — measured, not theorised. Panel titles are UI
+     *  labels; the display tracking belongs to the headings above them. */
+    letter-spacing: normal;
 }
 
 
@@ -243,6 +263,19 @@
 
 .iwac-vis-error {
     color: var(--error, #c9222b);
+}
+
+/*  Try-again control on a fetch-failure banner (P.buildFetchErrorState).
+ *  The banner is already a centred flex column with a gap, so this only has
+ *  to stop the button stretching and give it the quiet uppercase label the
+ *  On This Day fallback established for the same job. Inherits colour,
+ *  border, focus-visible and transition from `.iwac-vis-btn`. */
+.iwac-vis-error__retry {
+    flex: none;
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide, 0.04em);
+    text-transform: uppercase;
 }
 
 /*  No-JS note — iwac-block-shell's `noscript` slot, which also hides the
@@ -375,20 +408,44 @@
 }
 
 /* -------------------------------------------------------------------
- * Graph-host override — specificity bump.
+ * Force-graph panel host + its own toolbar.
  *
- * Panels that embed a force-directed graph mark the chart host with
- * `.iwac-vis-graph-host`. The rule in `blocks/person-dashboard.css`
- * sets `min-height: 640px`, but since that selector has the same
- * specificity as `.iwac-vis-panel > .iwac-vis-chart` AND loses to it
- * on ordering-independent child-combinator matching, the graph was
- * getting squashed to 320px — forcing the force layout's computed
- * node positions outside the drawn canvas and producing the "edges
- * floating into nowhere" artefact the user flagged.
+ * Moved here from `blocks/person-dashboard.css` in v1.53.0. These rules
+ * belong to the SHARED graph panel (`shared/graph-panel.js` →
+ * `P.buildGraphPanelToolbar`), which the person, entity, article-context,
+ * entity-networks and press-reprints panels all mount — but they lived in a
+ * sheet named after one of those five. That cost the article page a whole
+ * render-blocking stylesheet for four rules: measured on an article item
+ * page, 4 of person-dashboard.css's 99 rules matched anything at all, and
+ * the article template loaded it purely for these. It also split one
+ * component across two files, which is what the specificity note below is
+ * a symptom of.
  *
- * We bump the selector's specificity by chaining it to `.iwac-vis-panel`
- * so it always wins against the generic 320px floor.
+ * `position: relative` is load-bearing: the toolbar is absolutely
+ * positioned against the host.
  * ----------------------------------------------------------------- */
+.iwac-vis-graph-host,
+.iwac-vis-chord-host {
+    position: relative;
+    min-height: 640px;
+}
+
+@media (max-width: 599px) { /* sm */
+    .iwac-vis-graph-host,
+    .iwac-vis-chord-host {
+        min-height: 520px;
+    }
+}
+
+/*  Specificity bump for the same floor.
+ *
+ *  The plain selectors above have the same specificity as
+ *  `.iwac-vis-panel > .iwac-vis-chart` AND lose to it on ordering-independent
+ *  child-combinator matching, so a graph inside a panel was getting squashed
+ *  to the generic 320px — which put the force layout's computed node
+ *  positions outside the drawn canvas and produced the "edges floating into
+ *  nowhere" artefact. Chaining to `.iwac-vis-panel` always wins. The plain
+ *  pair is still needed for hosts that are not a panel's direct child. */
 .iwac-vis-panel > .iwac-vis-graph-host,
 .iwac-vis-panel > .iwac-vis-chord-host {
     min-height: 640px;
@@ -398,6 +455,34 @@
     .iwac-vis-panel > .iwac-vis-chord-host {
         min-height: 520px;
     }
+}
+
+/*  Buttons inherit colour, border, focus-visible and transition from
+ *  `.iwac-vis-btn` (the toolbar composes both classes), so only the
+ *  icon-button geometry is set here. */
+.iwac-vis-graph-toolbar {
+    position: absolute;
+    top: var(--space-2, 0.5rem);
+    right: var(--space-2, 0.5rem);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+}
+
+.iwac-vis-graph-toolbar__btn {
+    width: var(--size-control-sm, 2.25rem);
+    height: var(--size-control-sm, 2.25rem);
+    padding: 0;
+    font-size: var(--text-lg, 1.1875rem);
+    line-height: 1;
+    box-shadow: var(--shadow-xs, 0 1px 2px 0 rgba(20, 22, 27, 0.06));
+}
+
+.iwac-vis-graph-toolbar__btn--pressed {
+    background: color-mix(in oklab, var(--primary, #ce4115) 18%, var(--surface, #fdfcfb));
+    border-color: color-mix(in oklab, var(--primary, #ce4115) 60%, var(--border, #ced1d6));
+    color: var(--primary, #ce4115);
 }
 
 /* -------------------------------------------------------------------
@@ -905,9 +990,17 @@
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
     /*  Sized to keep the widest real figure in the dataset (8-digit
      *  totals like 28,142,934) on a single line inside a narrow 6-col
-     *  grid cell. Do not raise the max without re-measuring against
-     *  the narrowest actual deployment. */
-    font-size: clamp(1.375rem, 0.95rem + 0.55vw, 1.75rem);
+     *  grid cell. Do not raise the step without re-measuring against
+     *  the narrowest actual deployment.
+     *
+     *  A published step, not an inline clamp. This was
+     *  `clamp(1.375rem, 0.95rem + 0.55vw, 1.75rem)` — a private fluid ramp
+     *  running 22→28px beside the theme's own scale, which the font-size
+     *  guard could not see until v1.53.0 extended it past bare literals. The
+     *  fluidity is kept as a two-step ramp off `--text-lg` / `--text-xl`
+     *  (19 → 24px), which brackets what the clamp actually resolved to at the
+     *  widths this ships at. */
+    font-size: var(--text-lg, 1.1875rem);
     font-weight: 600;
     color: var(--ink-strong, #05070c);
     line-height: 1.05;
@@ -940,8 +1033,20 @@
 }
 
 .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
-    font-size: clamp(1.5rem, 1.05rem + 0.7vw, 2rem);
+    font-size: var(--text-xl, 1.5rem);
     font-weight: 700;
+}
+
+/*  The step up, for both variants. `md` rather than a vw ramp: the cards go
+ *  from a stacked column to a real grid around here, which is the width at
+ *  which a bigger figure stops competing with its own label. */
+@media (min-width: 768px) { /* md */
+    .iwac-vis-summary-card__value {
+        font-size: var(--text-xl, 1.5rem);
+    }
+    .iwac-vis-summary-card--featured .iwac-vis-summary-card__value {
+        font-size: var(--text-2xl, 1.875rem);
+    }
 }
 
 
@@ -1551,9 +1656,9 @@ select.iwac-vis-control:hover {
     .iwac-vis-summary-card {
         padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     }
-    .iwac-vis-summary-card__value {
-        font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-    }
+    /*  The phone font-size override is gone: the card value's base step IS
+     *  the phone step now (`--text-lg`), and the md query above is what
+     *  raises it. This rule only ever existed to undo the desktop clamp. */
 }
 
 /* -------------------------------------------------------------------
@@ -1686,7 +1791,7 @@ select.iwac-vis-control:hover {
     bottom: var(--space-xs, 0.25rem);
     padding: 0.125rem 0.3125rem;
     border-radius: var(--radius-sm, 0.375rem);
-    background: rgba(0, 0, 0, 0.78);
+    background: rgba(0, 0, 0, 0.78); /* allow-hex */
     color: #ffffff; /* allow-hex */
     font-family: var(--font-mono, ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", monaco, consolas, "Andale Mono", "DejaVu Sans Mono", monospace);
     font-size: var(--text-2xs, 0.6875rem);

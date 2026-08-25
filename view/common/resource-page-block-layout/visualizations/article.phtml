@@ -251,10 +251,17 @@ if ($hasSentiment) {
 
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
-        // person-dashboard.css is the base dashboard sheet (network toolbar,
-        // chord, map styling shared with the person + entity views);
-        // article-dashboard.css layers the card grids + sentiment cards on top.
-        'blockCss' => ['person-dashboard', 'article-dashboard'],
+        // Just this block's own sheet since v1.53.0.
+        //
+        // It used to load person-dashboard.css underneath, described here as
+        // "the base dashboard sheet". It was not one: measured on a rendered
+        // article page, 4 of its 99 rules matched anything, and all four were
+        // the shared force-graph panel's host + toolbar — a component whose
+        // other half already lived in iwac-core.css. Those four moved there,
+        // so this page no longer render-blocks on ~700 lines of person- and
+        // entity-only selectors (sentiment lanes, the associated-entities
+        // controls, the arc list, the time matrix) that it never used.
+        'blockCss' => 'article-dashboard',
         'needs' => [
             'maplibre'     => true,
             // The context network is a canvas force graph (d3-force), not an

@@ -205,7 +205,11 @@
 
 .iwac-vis-compare-metric__value {
     font-family: var(--font-headings, "Besley", "Source Serif 4", Georgia, "Times New Roman", serif);
-    font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem);
+    /*  A published step, not a private clamp. The old
+     *  `clamp(1.125rem, 0.9rem + 0.4vw, 1.4rem)` resolved to ~20px at the
+     *  widths this block ships at; `--text-lg` is 19px and never wider, which
+     *  the two-up grid with its ellipsis needs it to be. */
+    font-size: var(--text-lg, 1.1875rem);
     font-weight: 600;
     line-height: 1.05;
     color: var(--ink, #13161c);

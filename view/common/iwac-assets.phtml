@@ -142,10 +142,13 @@ $headLink->appendStylesheet($this->assetUrl('css/iwac-core.min.css', $module));
 // lazy loader (alongside the CDN maplibre.css) instead of render-blocking first
 // paint. See $lazyCss below.
 // `blockCss` takes a single sheet name or a list, in load order. The list form
-// exists for blocks that layer a specialisation over a shared base sheet — the
-// article dashboard reuses person-dashboard.css and adds its own on top. Before
-// it existed that block reached for a raw headLink in its template, which is
-// how it ended up shipping the UNMINIFIED sheet for several releases.
+// exists for blocks that layer a specialisation over a shared base sheet.
+// Before it existed, the article dashboard reached for a raw headLink in its
+// template, which is how it ended up shipping the UNMINIFIED sheet for several
+// releases. That block was also the list form's only user, stacking itself on
+// person-dashboard.css for four rules that have since moved to iwac-core —
+// a reminder that "shared base sheet" is a claim to measure, not assume: a
+// sheet named after one block usually IS about that block.
 foreach ((array) $blockCss as $sheet) {
     if ($sheet) {
         $headLink->appendStylesheet($this->assetUrl('css/blocks/' . $sheet . '.min.css', $module));
