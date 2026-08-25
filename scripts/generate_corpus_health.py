@@ -138,7 +138,8 @@ def subset_health(name: str, repo_id: str) -> Optional[Dict[str, Any]]:
         for model, label in (("gpt_5_6_luna", "Sentiment — GPT-5.6 Luna"),
                              ("mistral_small_2603", "Sentiment — Mistral Small 4"),
                              ("deepseek_v4_flash_0731", "Sentiment — DeepSeek V4 Flash"),
-                             ("gemma_4_31b_it", "Sentiment — Gemma 4 31B")):
+                             ("gemma_4_31b_it", "Sentiment — Gemma 4 31B"),
+                             ("qwen3_8_27b", "Sentiment — Qwen3.8 27B")):
             c = sentiment_cols[model]["polarite"]
             if c is not None:
                 metrics.append(metric(label, _nonempty(df[c]), n))

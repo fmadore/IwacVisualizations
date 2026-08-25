@@ -108,7 +108,8 @@
         gpt_5_6_luna: 1,
         deepseek_v4_flash_0731: 2,
         mistral_small_2603: 3,
-        gemma_4_31b_it: 4
+        gemma_4_31b_it: 4,
+        qwen3_8_27b: 5
     };
 
     /**

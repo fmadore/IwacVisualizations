@@ -30,22 +30,32 @@ class SentimentExtractor
      *
      * The matching Hugging Face column prefixes — what the precomputed
      * blocks key on — are the snake_case forms: `gpt_5_6_luna`,
-     * `mistral_small_2603`, `deepseek_v4_flash_0731`, `gemma_4_31b_it`.
+     * `mistral_small_2603`, `deepseek_v4_flash_0731`, `gemma_4_31b_it`,
+     * `qwen3_8_27b`.
      *
      * A model appears here as soon as its corpus pass STARTS, not when it
      * finishes. This class reads Omeka per item, so a partially-annotated
      * model simply has no lane on the articles it has not reached yet —
      * `fromItem` marks it unrated and the partial drops it. The
-     * precomputed side behaves differently and lags: it reads Hugging
+     * precomputed side behaves differently and can lag: it reads Hugging
      * Face columns that only exist once the uploader's panel has been
-     * taught the model, so expect a window in which the item page shows
-     * four raters and the corpus-level blocks still show three.
+     * taught the model, so a new rater can show on the item page while
+     * the corpus-level blocks still show one fewer. Gemma spent a while
+     * in that window; Qwen never did, its columns having landed the same
+     * day it joined here.
+     *
+     * Qwen is also the one model expected to leave lanes empty on purpose.
+     * Its pass retired 153 articles after four attempts rather than
+     * failing on them, and they skew to material where Islam is
+     * peripheral — so an article showing four lanes instead of five is
+     * usually that, not an unfinished run.
      */
     const MODELS = [
         'gpt56Luna',
         'mistralSmall2603',
         'deepseekV4Flash0731',
         'gemma431bIt',
+        'qwen3827b',
     ];
 
     /**
@@ -103,6 +113,18 @@ class SentimentExtractor
             'org'   => 'Google DeepMind',
             'short' => 'Gemma 4 31B',
             'logo'  => 'Gemma_logo.png',
+        ],
+        // Self-hosted on the project's own vLLM cluster since 2026-08-25,
+        // which is why the org line names the lab that built the model
+        // rather than an API vendor — nobody served this one to us. Raster
+        // for the same reason as Gemma: the supplied mark is a bitmap, so
+        // there is no vector to recover and tracing it by hand would only
+        // approximate someone's logo.
+        'qwen3827b' => [
+            'name'  => 'Qwen3.8 27B',
+            'org'   => 'Alibaba Cloud',
+            'short' => 'Qwen3.8 27B',
+            'logo'  => 'Qwen_logo.png',
         ],
     ];
 

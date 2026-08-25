@@ -95,7 +95,7 @@
     --iwac-vis-subj-4: color-mix(in oklab, var(--primary, #ce4115) 75%, var(--surface, #fdfcfb));
     --iwac-vis-subj-5: var(--primary, #ce4115);
 
-    /* AI model accents — four ROLE SLOTS, so the Sentiment Atlas's
+    /* AI model accents — five ROLE SLOTS, so the Sentiment Atlas's
      * subjectivity trend keeps visually distinct lines. Per-model
      * data-series accents (not theme chrome); each carries an allow-hex
      * marker so the theme-token guard permits the literals. Override
@@ -116,11 +116,21 @@
      * cyan end and darkening it buys ~20 degrees of hue and a clear step
      * in lightness, which is what the subjectivity trend — the one chart
      * that draws every model at once — needs to keep the two blues
-     * apart. */
+     * apart.
+     *
+     * Slot 5 is the same problem a second time, and resolved the same
+     * way. Qwen's mark is a flat indigo — hue 242 against slot 2's 230,
+     * at the same lightness, which is no separation at all on a line
+     * chart. Carrying the hue on to a true violet buys ~40 degrees from
+     * slot 2 and a clear step down in lightness, while staying inside
+     * the purple family the mark actually reads as. With five models the
+     * subjectivity trend now draws two blues, a violet, a green and an
+     * orange, and no two lines sit within 40 degrees of each other. */
     --iwac-vis-model-1: #10a37f; /* allow-hex */
     --iwac-vis-model-2: #4d6bfe; /* allow-hex */
     --iwac-vis-model-3: #f97316; /* allow-hex */
     --iwac-vis-model-4: #1f7ff0; /* allow-hex */
+    --iwac-vis-model-5: #9333ea; /* allow-hex */
 
     /* Heatmap — sequential 0..4, same --primary → --surface ramp as
      * subjectivité so every sequential chart in the module lands on

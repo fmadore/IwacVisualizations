@@ -241,6 +241,7 @@ namespace {
         // rating rows, justification prose included, appear on every
         // article the run has reached.
         'iwac:gemma431bItCentraliteJustification' => ['hidden'],
+        'iwac:qwen3827bPolariteJustification' => ['hidden'],
     ]]);
     (new Module())->filterSentimentValues($event);
     $filtered = $event->getParam('values');

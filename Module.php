@@ -59,10 +59,11 @@ class Module extends AbstractModule
     const SENTIMENT_MODEL_STEMS = [
         // Generation 1 — vendor slots, read-only, being retired upstream.
         'gemini', 'chatgpt', 'mistral',
-        // Generation 2 — keyed by model. The four the panel renders,
+        // Generation 2 — keyed by model. The five the panel renders,
         // plus the families whose properties exist but hold no (or
         // superseded) values.
         'gpt56Luna', 'mistralSmall2603', 'deepseekV4Flash0731', 'gemma431bIt',
+        'qwen3827b',
         'deepseekV4Flash', 'gemini35FlashLite', 'gemini36Flash',
         'qwen35A3b', 'qwen35A10b',
     ];

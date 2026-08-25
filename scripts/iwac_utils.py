@@ -1119,6 +1119,7 @@ SENTIMENT_MODELS: Tuple[str, ...] = (
     "mistral_small_2603",
     "deepseek_v4_flash_0731",
     "gemma_4_31b_it",
+    "qwen3_8_27b",
 )
 """Canonical model ids the whole module keys on.
 
@@ -1127,16 +1128,24 @@ that produced the annotation. It is also the key in every generated JSON
 payload, in the block JS and i18n catalogs, and — camel-cased — in the
 Omeka properties ``SentimentExtractor.php`` reads (``iwac:gpt56Luna*``,
 ``iwac:mistralSmall2603*``, ``iwac:deepseekV4Flash0731*``,
-``iwac:gemma431bIt*``).
+``iwac:gemma431bIt*``, ``iwac:qwen3827b*``).
 
 This is a *wish list*, not a promise that the columns exist. A model
 joins the panel on Omeka first and reaches Hugging Face only once the
-upstream uploader has been taught it, so ``gemma_4_31b_it`` sits here
-resolving to nothing until that lands. Every generator therefore filters
-this tuple through :func:`resolve_sentiment_columns` and emits only the
-models it actually found — listing an id in a payload's ``models`` array
-with no data behind it hands the block a model picker whose entry draws
-an empty chart, which reads as breakage rather than as "not yet".
+upstream uploader has been taught it, so an id can sit here resolving to
+nothing for a while — ``gemma_4_31b_it`` did, and ``qwen3_8_27b`` was
+added the same day its columns landed, so neither is waiting now. Every
+generator therefore filters this tuple through
+:func:`resolve_sentiment_columns` and emits only the models it actually
+found — listing an id in a payload's ``models`` array with no data behind
+it hands the block a model picker whose entry draws an empty chart, which
+reads as breakage rather than as "not yet".
+
+``qwen3_8_27b`` is the one member whose coverage is *expected* to be
+short: its full-corpus pass plus three retry rounds reached 12,098 of the
+12,251 eligible articles and the remaining 153 were retired deliberately,
+so a gap here is a finding about the model rather than a failed run to
+repair. Compare models by proportion, never by raw count.
 
 This replaced the earlier *vendor slot* ids (``gemini`` / ``chatgpt`` /
 ``mistral``, resolving to the ``gemini_3_flash_preview`` /  ``gpt_5_mini``

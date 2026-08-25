@@ -51,6 +51,11 @@
         // uploader has been taught the model, so this entry sits unused
         // for a while and then starts resolving on its own.
         'gemma_4_31b_it':         'Gemma 4 31B',
+        // Self-hosted on the project's own cluster since 2026-08-25 —
+        // the only rater whose annotations were produced on hardware the
+        // project controls. Its columns landed on the Hub the same day,
+        // so unlike Gemma this entry started resolving immediately.
+        'qwen3_8_27b':            'Qwen3.8 27B',
         // Generation 1 — frozen (January–February 2026). Kept so an
         // older bundle still renders with the right names on screen.
         'gemini_3_flash_preview': 'Gemini 3 Flash',
