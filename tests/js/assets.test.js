@@ -156,7 +156,7 @@ const MAP_PAYLOAD = {
         ORCHESTRATOR,
     ],
     css: ['/css/iwac-maplibre.min.css'],
-    mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.3.0/dist/maplibre-gl.mjs',
+    mjs: 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.6.0/dist/maplibre-gl.mjs',
 };
 
 test('MapLibre pin is a v6 ES module, and JS and CSS agree on the version', () => {
