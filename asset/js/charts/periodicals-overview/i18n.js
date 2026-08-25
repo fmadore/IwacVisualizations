@@ -23,6 +23,13 @@
             'periodicals.periodicals':            'Periodicals',
             'periodicals.runs_title':             'Periodical runs',
             'periodicals.runs_desc':              'Publication span of each periodical, from its first to its last issue in the collection, coloured by country.',
+            // Window disclosure (P.buildWindowDisclosure). Rows run oldest
+            // first, so the collapsed view is "the earliest N" — a statement
+            // a reader can evaluate, unlike a bare row count.
+            'periodicals.runs_window_note':       'Showing the {shown} earliest of {total} periodicals.',
+            'periodicals.runs_window_all':        'Showing all {total} periodicals.',
+            'periodicals.runs_show_all':          'Show all {total}',
+            'periodicals.runs_show_top':          'Show earliest {shown}',
             'periodicals.holdings_title':         'Issue holdings by year',
             'periodicals.holdings_desc':          'One row per periodical, in the same order as the runs above, and one column per year. The darker the cell, the more issues are held. A blank cell inside a run is a year with no issue in the collection, which is a gap in the holdings and not necessarily a gap in publication.',
             'periodicals.holdings_tip':           '{name} · {year} — {count} issues',
@@ -56,6 +63,10 @@
             'periodicals.periodicals':            'Périodiques',
             'periodicals.runs_title':             'Parutions des périodiques',
             'periodicals.runs_desc':              'Période de parution de chaque périodique, du premier au dernier numéro conservé dans la collection, colorée par pays.',
+            'periodicals.runs_window_note':       'Affichage des {shown} périodiques les plus anciens sur {total}.',
+            'periodicals.runs_window_all':        'Affichage des {total} périodiques.',
+            'periodicals.runs_show_all':          'Afficher les {total}',
+            'periodicals.runs_show_top':          'Afficher les {shown} plus anciens',
             'periodicals.holdings_title':         'Numéros conservés par année',
             'periodicals.holdings_desc':          'Une ligne par périodique, dans le même ordre que les parutions ci-dessus, et une colonne par année. Plus la case est sombre, plus le nombre de numéros conservés est élevé. Une case vide au sein d’une parution est une année sans numéro conservé : une lacune de la collection, pas nécessairement une interruption de parution.',
             'periodicals.holdings_tip':           '{name} · {year} — {count} numéros',

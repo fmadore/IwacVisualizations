@@ -395,6 +395,13 @@
             muted:         readColorVar('--muted')          || fallback.muted,
             surface:       readColorVar('--surface')        || fallback.surface,
             surfaceRaised: readColorVar('--surface-raised') || fallback.surfaceRaised,
+            // What a PANEL is actually painted with — the JS twin of
+            // iwac-core.css's `background: var(--panel-bg, var(--surface, …))`,
+            // fallback chain included. It is not `surface`: the theme aliases
+            // --panel-bg to --surface in light but to --surface-raised in
+            // dark, so anything measuring contrast against the panel (the word
+            // cloud's knocked-out text) has to read this and not guess.
+            panelBg:       readColorVar('--panel-bg')       || fallback.surface,
             background:    readColorVar('--background')     || fallback.background,
             border:        readColorVar('--border')         || fallback.border,
             borderLight:   readColorVar('--border-light')   || fallback.borderLight,

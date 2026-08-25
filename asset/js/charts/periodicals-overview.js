@@ -103,6 +103,7 @@
         return {
             grid:           grid,
             runs:           runsPanel.chart,
+            runsPanel:      runsPanel.panel,
             holdings:       holdingsPanel.chart,
             holdingsPanel:  holdingsPanel.panel,
             perYear:        perYearPanel.chart,
@@ -111,6 +112,68 @@
             subjects:       subjectsPanel.chart,
             wordcloud:      wordcloudPanel.chart
         };
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Periodical runs — windowed Gantt with its window stated           */
+    /* ----------------------------------------------------------------- */
+
+    /** Rows the collapsed runs Gantt shows. Matches the newspaper Gantt. */
+    var GANTT_WINDOW = 20;
+
+    /**
+     * Draw the runs Gantt, disclose its row window, and let the reader out of
+     * it.
+     *
+     * `C.gantt` windows anything past `GANTT_WINDOW` behind a thin ECharts
+     * slider and announces the truncation nowhere — the exact failure the
+     * newspaper Gantt carried until v1.52.0, where an unstated window on a
+     * collection's own overview page reads as a claim about how much the
+     * collection holds. Same treatment here, minus the reordering: state the
+     * count in a live region above the chart, name the ordering the window
+     * follows, and grow the host to every row when the reader asks for it.
+     */
+    function renderRuns(h, runs) {
+        var disclosure = P.buildWindowDisclosure({
+            windowSize: GANTT_WINDOW,
+            total:      runs.length,
+            noteKey:    'periodicals.runs_window_note',
+            allKey:     'periodicals.runs_window_all',
+            showAllKey: 'periodicals.runs_show_all',
+            showTopKey: 'periodicals.runs_show_top',
+            onToggle:   redraw
+        });
+        if (h.runsPanel) h.runsPanel.insertBefore(disclosure.root, h.runs);
+
+        function option() {
+            return C.gantt(runs, {
+                windowSize: GANTT_WINDOW,
+                expanded:   disclosure.isExpanded()
+            });
+        }
+
+        // The host owns the height: expanded, it grows to hold every row at
+        // the pitch the windowed view already used. `resize()` before
+        // `setOption` so ECharts lays the canvas into the new box at once
+        // rather than squashing and settling after the observer's debounce.
+        function applyHeight() {
+            h.runs.style.height = disclosure.isExpanded()
+                ? C.ganttHeight(runs.length) + 'px'
+                : '';
+        }
+
+        var chart = ns.registerChart(h.runs, function (el, instance) {
+            applyHeight();
+            instance.resize();
+            instance.setOption(option(), true);
+        });
+
+        function redraw() {
+            if (!chart || chart.isDisposed()) return;
+            applyHeight();
+            chart.resize();
+            chart.setOption(option(), true);
+        }
     }
 
     /* ----------------------------------------------------------------- */
@@ -127,11 +190,21 @@
         var h = buildLayout(container, data.summary);
 
         // 1. Periodical runs (Gantt — bars colored by country)
+        //
+        // The same silent window the newspaper Gantt carried until v1.52.0:
+        // C.gantt draws 20 rows behind a slider and says so nowhere, so a
+        // reader counting titles on this page reads the window as the
+        // holdings.
+        //
+        // The newspaper fix also REORDERED its rows, because its order was
+        // the bundle's own accident. This one's is not: the generator sorts
+        // by (year_min, name), which is what a Gantt is read by, and the
+        // holdings matrix below reuses that order and says so in its own
+        // description. So here the window is disclosed and the ordering left
+        // exactly as it is — the note names it instead ("the earliest N").
         var runs = data.runs || [];
         if (runs.length > 0) {
-            ns.registerChart(h.runs, function (el, chart) {
-                chart.setOption(C.gantt(runs));
-            });
+            renderRuns(h, runs);
         }
 
         // 1b. Holdings matrix — periodical × year issue counts

@@ -54,6 +54,41 @@
         return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
     }
 
+    /** AA for body-size text. The floor for anything drawn as glyphs. */
+    var TEXT_CONTRAST_MIN = 4.5;
+
+    /**
+     * The series-palette slots that may be used as TEXT on `backdrop`, in
+     * palette order.
+     *
+     * The categorical scale is built for filled marks — a bar carries its
+     * meaning at any luminance, and only its label has to be readable. Glyphs
+     * are the mark, so a slot that is fine as a 40px bar can be illegible as
+     * 12px type: measured against the light panel, 13 of the 20 slots sit
+     * under 4.5:1, and against the dark panel a different 5 do. There is no
+     * single subset that works in both.
+     *
+     * So it is computed, per theme, per call — never listed. A hardcoded list
+     * would be correct exactly until the next palette edit, and would then be
+     * wrong silently, which is the failure mode this whole module's token
+     * guards exist to prevent. Falls back to the ink token when nothing
+     * qualifies (degraded mode with no resolvable tokens), because
+     * monochrome-and-readable beats varied-and-not.
+     *
+     * @param {string} backdrop  resolved background colour of the host
+     * @param {string} [ink]     fallback when no slot qualifies
+     * @returns {Array<string>} at least one colour
+     */
+    C.readableInks = function (backdrop, ink) {
+        var bg = _rgb(backdrop);
+        var palette = (ns.getPalette && ns.getPalette()) || [];
+        var out = bg ? palette.filter(function (c) {
+            var rgb = _rgb(c);
+            return rgb && _contrast(rgb, bg) >= TEXT_CONTRAST_MIN;
+        }) : [];
+        return out.length ? out : [ink || (palette.length ? palette[0] : '#13161c')];
+    };
+
     /* ----------------------------------------------------------------- */
     /*  Pie (donut)                                                       */
     /* ----------------------------------------------------------------- */
@@ -472,6 +507,30 @@
      *   host the height to hold them (`C.ganttHeight`) — an 82-row Gantt in a
      *   320px box is unreadable in a different way.
      */
+    /**
+     * Y-label gutter, reserved EXPLICITLY rather than by `containLabel`.
+     *
+     * `grid.containLabel` is supposed to grow the gutter to hold the axis
+     * labels. Measured on the rig it does not, reliably: with the same 82
+     * names and the same `axisLabel.width: 160`, the collapsed 20-row window
+     * got a 160px gutter and the expanded 82-row view got 121px. ECharts
+     * truncated the labels to the declared 160 and then drew them
+     * right-aligned into 121, so five of the longest press runs lost their
+     * FIRST characters off the left edge of the canvas — "Agence Togolaise de
+     * Presse" rendered as "e Togolaise de Presse", and "Bulletin d'information
+     * du CNI" managed to be clipped at the left AND ellipsised at the right in
+     * the same label.
+     *
+     * A truncation the reader can see is fine; one that eats the beginning of
+     * a title is not — the beginning is what makes it identifiable. So the
+     * gutter is reserved by us and the label width is what fits it, in every
+     * state and at every width, which is exactly what `containLabel` was
+     * being trusted to work out.
+     */
+    var GANTT_LABEL_W = 160;
+    var GANTT_LABEL_W_SM = 100;
+    var GANTT_LABEL_GAP = 16; // axis gap + outer margin
+
     C.gantt = function (entries, opts) {
         opts = opts || {};
         var windowSize = opts.windowSize || 20;
@@ -493,6 +552,12 @@
         });
         if (!isFinite(yearMin)) yearMin = 1900;
         if (!isFinite(yearMax)) yearMax = new Date().getFullYear();
+
+        // Is a vertical slider being drawn? Both the base grid's right gutter
+        // and the phone media block have to know: the slider is an overlay
+        // ECharts positions against the CONTAINER, not the grid, so a gutter
+        // narrower than the slider puts it on top of the bars.
+        var windowed = !expanded && list.length > windowSize;
 
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         // modifyAlpha rather than string-concat an '36' hex-alpha suffix —
@@ -526,7 +591,12 @@
         }
 
         var base = {
-            grid: C._grid({ left: 8, right: 48, bottom: 48 }),
+            grid: C._grid({
+                left: GANTT_LABEL_W + GANTT_LABEL_GAP,
+                right: 48,
+                bottom: 56,
+                containLabel: false
+            }),
             tooltip: {
                 formatter: function (p) {
                     var entry = (data[p.dataIndex] || {}).entry || {};
@@ -569,13 +639,13 @@
                 // coloured strips in a chart whose whole subject is WHICH
                 // papers ran WHEN. The window is now sized so the rows fit,
                 // so there is nothing to thin out.
-                axisLabel: { width: 160, overflow: 'truncate', interval: 0 }
+                axisLabel: { width: GANTT_LABEL_W, overflow: 'truncate', interval: 0 }
             },
             // Windowed unless the caller expanded it. `end` is the share of
             // the rows the first screenful covers — the same arithmetic as
             // before, but now driven by the window size the caller also
             // discloses, instead of a bare 20 that appeared nowhere in the UI.
-            dataZoom: (!expanded && list.length > windowSize) ? [
+            dataZoom: windowed ? [
                 { type: 'slider', yAxisIndex: 0, start: 0, end: 100 * windowSize / list.length, right: 8 },
                 { type: 'inside', yAxisIndex: 0 }
             ] : [],
@@ -593,10 +663,26 @@
         // R.gridMedia's bottom:24 dropped the "Year" name into the bars.
         // Custom media: ~5 year ticks (interval /5 instead of /10), smaller
         // font, and a bottom gutter that keeps the axis name clear.
+        //
+        // The right gutter is the fix for the vertical slider. The base grid
+        // reserves 48px for it (8px offset + ECharts' 30px default width);
+        // this block was overriding that with 14px, so on every phone-width
+        // Gantt the slider sat ON the plotted bars — the rows nearest the
+        // right edge ran under a translucent grey panel and the handle covered
+        // whichever bar reached the present. Reserve a gutter here too, and
+        // slim the slider itself to 12px so the reservation costs ~7% of a
+        // 375px viewport instead of ~13%. When nothing is windowed there is no
+        // slider and the tight gutter is right, so it stays conditional.
         var ganttMedia = [{
             query: { maxWidth: R ? R.BP.sm : 640 },
             option: {
-                grid: { left: 8, right: 14, top: 8, bottom: 44, containLabel: true },
+                grid: {
+                    left: GANTT_LABEL_W_SM + GANTT_LABEL_GAP,
+                    right: windowed ? 26 : 14,
+                    top: 8, bottom: 48,
+                    containLabel: false
+                },
+                yAxis: { axisLabel: { width: GANTT_LABEL_W_SM, fontSize: 11 } },
                 xAxis: {
                     interval: Math.max(1, Math.ceil((yearMax - yearMin) / 5)),
                     nameGap: 24,
@@ -604,10 +690,16 @@
                 }
             }
         }];
+        // Merged element-wise by index: [0] is the slider, [1] the inside
+        // zoom, which has no geometry to narrow.
+        if (windowed) {
+            ganttMedia[0].option.dataZoom = [{ width: 12, right: 4 }];
+        }
 
-        return R && R.withMedia
-            ? R.withMedia(base, R.labelMedia({ smWidth: 100 }), ganttMedia)
-            : base;
+        // `R.labelMedia` is no longer in the chain: it set the phone label
+        // width, and the width and the gutter that has to hold it are one
+        // decision now, so both live in `ganttMedia` above.
+        return R && R.withMedia ? R.withMedia(base, ganttMedia) : base;
     };
 
     /**
@@ -634,6 +726,14 @@
     /* ----------------------------------------------------------------- */
 
     var _wordcloudAvailable = null;
+
+    /** Hover halo: the theme's strongest ink at 40%, or a neutral if absent. */
+    function wcHalo(inkStrong) {
+        return (inkStrong && typeof echarts !== 'undefined'
+                && echarts.color && echarts.color.modifyAlpha)
+            ? echarts.color.modifyAlpha(inkStrong, 0.4)
+            : 'rgba(0, 0, 0, 0.4)';
+    }
 
     function isWordCloudAvailable() {
         if (_wordcloudAvailable !== null) return _wordcloudAvailable;
@@ -665,9 +765,24 @@
      * dashboard-charts-wordcloud.js. Uses a shape function that behaves
      * like a rectangle but fills the panel much better than the stock
      * `shape: 'rectangle'` (which collapses everything to a diagonal arc
-     * in echarts-wordcloud 2). Size range + grid adapt to the word count;
-     * color is randomized from a small palette pulled from the live IWAC
-     * theme.
+     * in echarts-wordcloud 2). Size range + grid adapt to the word count.
+     *
+     * COLOUR (v1.53.0). Until now each word drew a random pick from a
+     * seven-hex literal that had drifted off the palette entirely — it still
+     * led with `#e64a19`, the pre-v2.0.0 brand seed, and it was the same
+     * array in both themes. Two consequences: the cloud was the one chart on
+     * the page not speaking the module's colour grammar, and roughly half its
+     * words failed AA against the panel in one theme or the other.
+     *
+     * A word cloud is knocked-out TEXT, not a filled mark, so the bar the
+     * palette has to clear is text contrast: 4.5:1 against `--panel-bg` (the
+     * panel's real backdrop — `--surface` in light, `--surface-raised` in
+     * dark). The qualifying slots are COMPUTED from the live palette in the
+     * active theme rather than listed, so a future palette edit either keeps
+     * a slot qualified or silently drops it out of the cloud — it can never
+     * leave an unreadable one in. And the assignment is by rank, not random:
+     * the render callback re-runs on every theme toggle and resize, and a
+     * cloud that re-shuffles its colours each time reads as a bug.
      *
      * @param {Array<[string, number]>} pairs
      * @param {Object} [opts]
@@ -690,8 +805,14 @@
         var grid = count > 100 ? 4 : count > 50 ? 6 : 8;
         var smMaxFont = Math.round(maxFont * 0.8);
 
-        var palette = (ns.getPalette && ns.getPalette())
-            || ['#e64a19', '#c9442a', '#2d6a4f', '#394f68', '#7a3b89', '#8a5a2b', '#4d3a1f'];
+        var wcTokens = (ns.getChartTokens && ns.getChartTokens()) || {};
+        var inks = C.readableInks(wcTokens.panelBg, wcTokens.ink);
+        // Per-datum rather than a `textStyle.color` callback: echarts-wordcloud
+        // resolves the datum's own textStyle, so this needs no assumption
+        // about what the library passes a colour function.
+        data.forEach(function (d, i) {
+            d.textStyle = { color: inks[i % inks.length] };
+        });
 
         var base = {
             tooltip: {
@@ -723,16 +844,19 @@
                 layoutAnimation: count <= 100,
                 textStyle: {
                     fontFamily: 'sans-serif',
-                    fontWeight: 'bold',
-                    color: function () {
-                        return palette[Math.floor(Math.random() * palette.length)];
-                    }
+                    fontWeight: 'bold'
                 },
                 emphasis: {
                     textStyle: {
                         fontWeight: 'bold',
                         shadowBlur: 14,
-                        shadowColor: 'rgba(0,0,0,0.4)'
+                        // The hover halo was a literal black at 0.4 — which in
+                        // dark mode is a black glow behind bright type on a
+                        // near-black panel, i.e. no hover state at all. The
+                        // theme's strongest ink flips with the theme (near-black
+                        // in light, near-white in dark), so it is the one value
+                        // that reads as a halo in both.
+                        shadowColor: wcHalo(wcTokens.inkStrong)
                     }
                 },
                 data: data
