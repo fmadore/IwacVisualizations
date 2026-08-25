@@ -42,6 +42,7 @@
             'ngram.no_matches':      'No matching term',
             'ngram.selected':        'Terms (up to {max})',
             'ngram.clear':           'Clear',
+            'ngram.mode_label':      'Measure',
             'ngram.mode_share':      'Share of articles',
             'ngram.mode_count':      'Article count',
             'ngram.axis_share':      '% of articles',
@@ -59,6 +60,7 @@
             'ngram.no_matches':      'Aucun terme correspondant',
             'ngram.selected':        'Termes (jusqu’à {max})',
             'ngram.clear':           'Effacer',
+            'ngram.mode_label':      'Mesure',
             'ngram.mode_share':      'Part des articles',
             'ngram.mode_count':      'Nombre d’articles',
             'ngram.axis_share':      '% des articles',
@@ -151,6 +153,10 @@
         controls.appendChild(search.root);
 
         var modeTabs = P.el('div', 'iwac-vis-tabs iwac-vis-ngram-mode');
+        // A toggle group, announced as one: the pair chooses how the same
+        // series is expressed, and `--active` alone said so only in colour.
+        modeTabs.setAttribute('role', 'group');
+        modeTabs.setAttribute('aria-label', P.t('ngram.mode_label'));
         var modeButtons = {};
         [
             { key: 'share', labelKey: 'ngram.mode_share' },
@@ -158,6 +164,7 @@
         ].forEach(function (m) {
             var btn = P.el('button', 'iwac-vis-tab', P.t(m.labelKey));
             btn.type = 'button';
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', function () {
                 if (state.mode === m.key) return;
                 state.mode = m.key;
@@ -186,7 +193,9 @@
 
         function syncModeTabs() {
             Object.keys(modeButtons).forEach(function (k) {
-                modeButtons[k].classList.toggle('iwac-vis-tab--active', k === state.mode);
+                var on = k === state.mode;
+                modeButtons[k].classList.toggle('iwac-vis-tab--active', on);
+                modeButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
             });
         }
 

@@ -25,6 +25,10 @@
 
     var TOP_N_OPTIONS = [3, 5, 10];
 
+    // One counter per page load: the sidebar renders several labelled groups
+    // and every one of them needs an id its control can point at.
+    var _uid = 0;
+
     function render(host, state, datasets) {
         host.innerHTML = '';
         var root = P.el('div', 'iwac-vis-keywords-filters');
@@ -40,6 +44,7 @@
             var btn = P.el('button', 'iwac-vis-tab', P.t(t.labelKey));
             btn.type = 'button';
             btn.dataset.type = t.key;
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', function () { state.set('type', t.key); });
             typeButtons[t.key] = btn;
             typeTabs.appendChild(btn);
@@ -105,6 +110,7 @@
             var btn = P.el('button', 'iwac-vis-tab', P.t(v.labelKey));
             btn.type = 'button';
             btn.dataset.view = v.key;
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', function () { state.set('view', v.key); });
             viewButtons[v.key] = btn;
             viewTabs.appendChild(btn);
@@ -211,10 +217,14 @@
             var snap = state.get();
 
             Object.keys(typeButtons).forEach(function (k) {
-                typeButtons[k].classList.toggle('iwac-vis-tab--active', k === snap.type);
+                var on = k === snap.type;
+                typeButtons[k].classList.toggle('iwac-vis-tab--active', on);
+                typeButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
             });
             Object.keys(viewButtons).forEach(function (k) {
-                viewButtons[k].classList.toggle('iwac-vis-tab--active', k === snap.view);
+                var on = k === snap.view;
+                viewButtons[k].classList.toggle('iwac-vis-tab--active', on);
+                viewButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
             });
             facetSelect.value = snap.facet;
             countrySelect.value = snap.country || '';
@@ -234,9 +244,25 @@
         applyStateToUI();
     }
 
+    /**
+     * A control under its eyebrow label — and NAMED by it.
+     *
+     * The label is a `<div>`, not a `<label for>`, so before v1.53.0 nothing
+     * connected the two: all four `<select>`s in this sidebar were reported
+     * as unnamed, and the two tab groups were unlabelled runs of buttons. The
+     * id association fixes both at the one place that builds them, so an AT
+     * reads the same word a sighted reader sees.
+     */
     function labeledGroup(labelText, controlEl) {
         var wrap = P.el('div', 'iwac-vis-keywords-filters__group');
-        wrap.appendChild(P.el('div', 'iwac-vis-keywords-filters__label', labelText));
+        var labelId = 'iwac-vis-kwf-label-' + (++_uid);
+        var label = P.el('div', 'iwac-vis-keywords-filters__label', labelText);
+        label.id = labelId;
+        wrap.appendChild(label);
+        if (controlEl.classList.contains('iwac-vis-tabs')) {
+            controlEl.setAttribute('role', 'group');
+        }
+        controlEl.setAttribute('aria-labelledby', labelId);
         wrap.appendChild(controlEl);
         return wrap;
     }

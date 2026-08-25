@@ -23,6 +23,10 @@
     var LIST_CAP = 60;
     var TOP_PLACES = 10;
 
+    // Module-level: a page can carry more than one picker, and the label ids
+    // it mints have to stay unique across all of them.
+    var _uid = 0;
+
     /** Accent-insensitive, case-insensitive search folding (shared). */
     var fold = P.foldAccents;
 
@@ -32,10 +36,14 @@
 
         // --- Entity type tabs ------------------------------------------
         var tabs = P.el('div', 'iwac-vis-tabs');
+        // Selected state is real state, not just a tint — `aria-pressed` on
+        // each button, and the group named by the eyebrow it sits under
+        // (`group()` wires the id association).
         var tabButtons = {};
         (state.data.types || []).forEach(function (type) {
             var btn = P.el('button', 'iwac-vis-tab', P.t('entity_type_' + type));
             btn.type = 'button';
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', function () { state.setType(type); });
             tabButtons[type] = btn;
             tabs.appendChild(btn);
@@ -67,9 +75,18 @@
         placesBox.appendChild(placesList);
         root.appendChild(placesBox);
 
+        // The eyebrow is a `<div>`, so the association has to be explicit or
+        // the group it labels is anonymous to assistive tech.
         function group(labelText, controlEl) {
             var wrap = P.el('div', 'iwac-vis-spatial-picker__group');
-            wrap.appendChild(P.el('div', 'iwac-vis-spatial-picker__label', labelText));
+            var labelId = 'iwac-vis-spatial-label-' + (++_uid);
+            var label = P.el('div', 'iwac-vis-spatial-picker__label', labelText);
+            label.id = labelId;
+            wrap.appendChild(label);
+            if (controlEl.classList.contains('iwac-vis-tabs')) {
+                controlEl.setAttribute('role', 'group');
+                controlEl.setAttribute('aria-labelledby', labelId);
+            }
             wrap.appendChild(controlEl);
             return wrap;
         }
@@ -193,8 +210,9 @@
 
         function highlightTab() {
             Object.keys(tabButtons).forEach(function (type) {
-                tabButtons[type].classList.toggle(
-                    'iwac-vis-tab--active', type === state.entityType);
+                var on = type === state.entityType;
+                tabButtons[type].classList.toggle('iwac-vis-tab--active', on);
+                tabButtons[type].setAttribute('aria-pressed', on ? 'true' : 'false');
             });
         }
 
