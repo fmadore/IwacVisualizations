@@ -72,7 +72,7 @@
     --iwac-vis-sent-pos-strong: var(--success,        #2e9052);
     --iwac-vis-sent-pos:        color-mix(in oklab, var(--success, #2e9052) 55%, var(--surface, #fdfcfb));
     --iwac-vis-sent-neutral:    var(--muted,          #66696e);
-    --iwac-vis-sent-neg:        var(--warning,        #de7000);
+    --iwac-vis-sent-neg:        var(--warning,        #d66800);
     --iwac-vis-sent-neg-strong: var(--error,          #c9222b);
     --iwac-vis-sent-na:         var(--border-light, #e2e5e8);
 
@@ -1593,7 +1593,7 @@ select.iwac-vis-control:hover {
    previously had. */
 .iwac-vis-badge--article     { --iwac-vis-badge-dot: var(--type-article, #ce4115); }
 .iwac-vis-badge--publication { --iwac-vis-badge-dot: var(--type-publication, #394f68); }
-.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--type-document, #de7000); }
+.iwac-vis-badge--document    { --iwac-vis-badge-dot: var(--type-document, #d66800); }
 .iwac-vis-badge--audiovisual { --iwac-vis-badge-dot: var(--type-audiovisual, #037ac0); }
 .iwac-vis-badge--reference   { --iwac-vis-badge-dot: var(--type-reference, #66696e); }
 
