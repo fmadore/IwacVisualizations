@@ -6,6 +6,7 @@ colors:
   model-2: "#4d6bfe"
   model-3: "#f97316"
   model-4: "#1f7ff0"
+  model-5: "#9333ea"
 components:
   panel:
     backgroundColor: "var(--panel-bg, var(--surface, #fdfcfb))"
@@ -138,12 +139,17 @@ categorical series scale: see IWAC-theme/DESIGN.md. Nothing about them is restat
 
 ### Owned literals — AI model accents
 
-- **Model slots 1–4** (`--iwac-vis-model-1..4`): four per-model data-series accents used
+- **Model slots 1–5** (`--iwac-vis-model-1..5`): five per-model data-series accents used
   where the Sentiment Atlas draws every annotator model at once. They are **role slots
   numbered by position, not by model id**; the id → slot map lives in `MODEL_SLOT`
   (charts/sentiment-atlas.js) and nowhere else. Slot 4 is deliberately a darkened,
   cyan-leaning blue rather than the model's own indigo, which was all but slot 2 — the
   subjectivity trend needs ~20° of hue and a clear lightness step to keep two blues apart.
+  Slot 5 (v1.55.0) is the same fix against the same neighbour: the model's own mark is a
+  flat `#615ced`, hue 242 against slot 2's 230 at the same lightness, which is no
+  separation at all on that chart. The slot carries the hue on to a true violet at 271° —
+  41° from slot 2, a clear step down in lightness, still reading as the purple the mark
+  actually is. With five lines drawn, no two sit within 40° of each other.
 
 ### Derived scales — sentiment
 
