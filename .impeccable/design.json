@@ -22,21 +22,48 @@
         "canonical": "#10a37f",
         "token": "--iwac-vis-model-1",
         "note": "Role slot, not a model id. The id -> slot map lives only in MODEL_SLOT (charts/sentiment-atlas.js).",
-        "tonalRamp": ["#031f18", "#063a2d", "#0a5745", "#0d745c", "#10a37f", "#3fbb9c", "#7ed3bd", "#c4ebe0"]
+        "tonalRamp": [
+          "#031f18",
+          "#063a2d",
+          "#0a5745",
+          "#0d745c",
+          "#10a37f",
+          "#3fbb9c",
+          "#7ed3bd",
+          "#c4ebe0"
+        ]
       },
       "model-2": {
         "role": "data-encoding",
         "displayName": "Model Slot 2 — Indigo",
         "canonical": "#4d6bfe",
         "token": "--iwac-vis-model-2",
-        "tonalRamp": ["#080f3f", "#12206e", "#1d329e", "#2f49cd", "#4d6bfe", "#7d92fe", "#a9b6ff", "#dce1ff"]
+        "tonalRamp": [
+          "#080f3f",
+          "#12206e",
+          "#1d329e",
+          "#2f49cd",
+          "#4d6bfe",
+          "#7d92fe",
+          "#a9b6ff",
+          "#dce1ff"
+        ]
       },
       "model-3": {
         "role": "data-encoding",
         "displayName": "Model Slot 3 — Amber",
         "canonical": "#f97316",
         "token": "--iwac-vis-model-3",
-        "tonalRamp": ["#3b1a02", "#5c2904", "#7e3a06", "#b25309", "#f97316", "#fb9a52", "#fdc08f", "#fee5cf"]
+        "tonalRamp": [
+          "#3b1a02",
+          "#5c2904",
+          "#7e3a06",
+          "#b25309",
+          "#f97316",
+          "#fb9a52",
+          "#fdc08f",
+          "#fee5cf"
+        ]
       },
       "model-4": {
         "role": "data-encoding",
@@ -44,7 +71,584 @@
         "canonical": "#1f7ff0",
         "token": "--iwac-vis-model-4",
         "note": "Deliberately the cyan end of the model's own gradient, darkened: its indigo end was all but slot 2, and the subjectivity trend draws every model at once.",
-        "tonalRamp": ["#04182f", "#062c56", "#0a417f", "#0f5fb4", "#1f7ff0", "#5ba3f5", "#96c4f9", "#d3e5fd"]
+        "tonalRamp": [
+          "#04182f",
+          "#062c56",
+          "#0a417f",
+          "#0f5fb4",
+          "#1f7ff0",
+          "#5ba3f5",
+          "#96c4f9",
+          "#d3e5fd"
+        ]
+      },
+      "theme/primary": {
+        "role": "theme-token",
+        "token": "--primary",
+        "canonical": "#ce4115",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ec653f"
+        ]
+      },
+      "theme/primary-hover": {
+        "role": "theme-token",
+        "token": "--primary-hover",
+        "canonical": "#b03710",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f17857"
+        ]
+      },
+      "theme/primary-active": {
+        "role": "theme-token",
+        "token": "--primary-active",
+        "canonical": "#942c0c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#da4617"
+        ]
+      },
+      "theme/secondary": {
+        "role": "theme-token",
+        "token": "--secondary",
+        "canonical": "#394f68",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#708093"
+        ]
+      },
+      "theme/ink-strong": {
+        "role": "theme-token",
+        "token": "--ink-strong",
+        "canonical": "#05070c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f7f5f1"
+        ]
+      },
+      "theme/ink": {
+        "role": "theme-token",
+        "token": "--ink",
+        "canonical": "#13161c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#e7e4df"
+        ]
+      },
+      "theme/ink-light": {
+        "role": "theme-token",
+        "token": "--ink-light",
+        "canonical": "#3f4349",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#b5b0aa"
+        ]
+      },
+      "theme/ink-subtle": {
+        "role": "theme-token",
+        "token": "--ink-subtle",
+        "canonical": "#5a5e63",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#99948f"
+        ]
+      },
+      "theme/muted": {
+        "role": "theme-token",
+        "token": "--muted",
+        "canonical": "#66696e",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#8a8580"
+        ]
+      },
+      "theme/ink-on-pastel": {
+        "role": "theme-token",
+        "token": "--ink-on-pastel",
+        "canonical": "#0d121b",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#0f0a05"
+        ]
+      },
+      "theme/white": {
+        "role": "theme-token",
+        "token": "--white",
+        "canonical": "#ffffff",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/black": {
+        "role": "theme-token",
+        "token": "--black",
+        "canonical": "#000000",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/surface": {
+        "role": "theme-token",
+        "token": "--surface",
+        "canonical": "#fdfcfb",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#110c08"
+        ]
+      },
+      "theme/surface-raised": {
+        "role": "theme-token",
+        "token": "--surface-raised",
+        "canonical": "#faf8f6",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#1a1510"
+        ]
+      },
+      "theme/surface-sunken": {
+        "role": "theme-token",
+        "token": "--surface-sunken",
+        "canonical": "#f4f1ef",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#0b0704"
+        ]
+      },
+      "theme/background": {
+        "role": "theme-token",
+        "token": "--background",
+        "canonical": "#f7f5f3",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#080503"
+        ]
+      },
+      "theme/border-light": {
+        "role": "theme-token",
+        "token": "--border-light",
+        "canonical": "#e2e5e8",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#26211a"
+        ]
+      },
+      "theme/border": {
+        "role": "theme-token",
+        "token": "--border",
+        "canonical": "#ced1d6",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#352f28"
+        ]
+      },
+      "theme/border-strong": {
+        "role": "theme-token",
+        "token": "--border-strong",
+        "canonical": "#aeb1b7",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#534c44"
+        ]
+      },
+      "theme/focus-color": {
+        "role": "theme-token",
+        "token": "--focus-color",
+        "canonical": "#ce4115",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ec653f"
+        ]
+      },
+      "theme/success": {
+        "role": "theme-token",
+        "token": "--success",
+        "canonical": "#2e9052",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#56bd78"
+        ]
+      },
+      "theme/success-bg": {
+        "role": "theme-token",
+        "token": "--success-bg",
+        "canonical": "#dffae5",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/warning": {
+        "role": "theme-token",
+        "token": "--warning",
+        "canonical": "#d66800",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f99532"
+        ]
+      },
+      "theme/warning-bg": {
+        "role": "theme-token",
+        "token": "--warning-bg",
+        "canonical": "#ffebd1",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/error": {
+        "role": "theme-token",
+        "token": "--error",
+        "canonical": "#c9222b",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ff645f"
+        ]
+      },
+      "theme/error-bg": {
+        "role": "theme-token",
+        "token": "--error-bg",
+        "canonical": "#ffe8e4",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/info": {
+        "role": "theme-token",
+        "token": "--info",
+        "canonical": "#037ac0",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4dacf6"
+        ]
+      },
+      "theme/info-bg": {
+        "role": "theme-token",
+        "token": "--info-bg",
+        "canonical": "#e2f5ff",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/type-article": {
+        "role": "theme-token",
+        "token": "--type-article",
+        "canonical": "#ce4115",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ec653f"
+        ]
+      },
+      "theme/type-publication": {
+        "role": "theme-token",
+        "token": "--type-publication",
+        "canonical": "#394f68",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#708093"
+        ]
+      },
+      "theme/type-audiovisual": {
+        "role": "theme-token",
+        "token": "--type-audiovisual",
+        "canonical": "#037ac0",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4dacf6"
+        ]
+      },
+      "theme/type-document": {
+        "role": "theme-token",
+        "token": "--type-document",
+        "canonical": "#d66800",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f99532"
+        ]
+      },
+      "theme/type-reference": {
+        "role": "theme-token",
+        "token": "--type-reference",
+        "canonical": "#66696e",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#8a8580"
+        ]
+      },
+      "theme/type-photograph": {
+        "role": "theme-token",
+        "token": "--type-photograph",
+        "canonical": "#2e9052",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#56bd78"
+        ]
+      },
+      "theme/type-entity-personnes": {
+        "role": "theme-token",
+        "token": "--type-entity-personnes",
+        "canonical": "#037ac0",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4dacf6"
+        ]
+      },
+      "theme/type-entity-lieux": {
+        "role": "theme-token",
+        "token": "--type-entity-lieux",
+        "canonical": "#2e9052",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#56bd78"
+        ]
+      },
+      "theme/type-entity-organisations": {
+        "role": "theme-token",
+        "token": "--type-entity-organisations",
+        "canonical": "#d66800",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f99532"
+        ]
+      },
+      "theme/series-1": {
+        "role": "theme-token",
+        "token": "--series-1",
+        "canonical": "#ce4115",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ec653f"
+        ]
+      },
+      "theme/series-2": {
+        "role": "theme-token",
+        "token": "--series-2",
+        "canonical": "#394f68",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#708093"
+        ]
+      },
+      "theme/series-3": {
+        "role": "theme-token",
+        "token": "--series-3",
+        "canonical": "#4a8c6f",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-4": {
+        "role": "theme-token",
+        "token": "--series-4",
+        "canonical": "#bb4c49",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-5": {
+        "role": "theme-token",
+        "token": "--series-5",
+        "canonical": "#7c5295",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-6": {
+        "role": "theme-token",
+        "token": "--series-6",
+        "canonical": "#d4a574",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-7": {
+        "role": "theme-token",
+        "token": "--series-7",
+        "canonical": "#2c5f7c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-8": {
+        "role": "theme-token",
+        "token": "--series-8",
+        "canonical": "#876c45",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-9": {
+        "role": "theme-token",
+        "token": "--series-9",
+        "canonical": "#5ba3a0",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-10": {
+        "role": "theme-token",
+        "token": "--series-10",
+        "canonical": "#cc8963",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-11": {
+        "role": "theme-token",
+        "token": "--series-11",
+        "canonical": "#4a8aab",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-12": {
+        "role": "theme-token",
+        "token": "--series-12",
+        "canonical": "#a68e6d",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-13": {
+        "role": "theme-token",
+        "token": "--series-13",
+        "canonical": "#d49b6a",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-14": {
+        "role": "theme-token",
+        "token": "--series-14",
+        "canonical": "#6fb08e",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-15": {
+        "role": "theme-token",
+        "token": "--series-15",
+        "canonical": "#9e7bb8",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-16": {
+        "role": "theme-token",
+        "token": "--series-16",
+        "canonical": "#e0a88a",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-17": {
+        "role": "theme-token",
+        "token": "--series-17",
+        "canonical": "#8e7cb8",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-18": {
+        "role": "theme-token",
+        "token": "--series-18",
+        "canonical": "#d87e7a",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-19": {
+        "role": "theme-token",
+        "token": "--series-19",
+        "canonical": "#6b5b95",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/series-20": {
+        "role": "theme-token",
+        "token": "--series-20",
+        "canonical": "#4db6ac",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js"
+      },
+      "theme/blockquote-bg": {
+        "role": "theme-token",
+        "token": "--blockquote-bg",
+        "canonical": "#f8e3dc",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#47281c"
+        ]
+      },
+      "theme/blockquote-border": {
+        "role": "theme-token",
+        "token": "--blockquote-border",
+        "canonical": "#d5816c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#ef9175"
+        ]
+      },
+      "theme/blockquote-quote": {
+        "role": "theme-token",
+        "token": "--blockquote-quote",
+        "canonical": "#a53b20",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#f58f72"
+        ]
+      },
+      "theme/footer-surface": {
+        "role": "theme-token",
+        "token": "--footer-surface",
+        "canonical": "#fdfcfb",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#090604"
+        ]
+      },
+      "theme/footer-divider": {
+        "role": "theme-token",
+        "token": "--footer-divider",
+        "canonical": "#ced1d6",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#4d4740"
+        ]
+      },
+      "theme/footer-text": {
+        "role": "theme-token",
+        "token": "--footer-text",
+        "canonical": "#13161c",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#e7e4df"
+        ]
+      },
+      "theme/footer-text-muted": {
+        "role": "theme-token",
+        "token": "--footer-text-muted",
+        "canonical": "#66696e",
+        "generated": true,
+        "source": "IWAC-theme/scripts/build-tokens.js",
+        "tonalRamp": [
+          "#b5b0aa"
+        ]
       }
     },
     "derivedScales": [
@@ -54,12 +658,30 @@
         "kind": "divergent",
         "purpose": "AI sentiment polarity, five grades plus N/A.",
         "steps": [
-          { "name": "pos-strong", "formula": "var(--success)" },
-          { "name": "pos", "formula": "color-mix(in oklab, var(--success) 55%, var(--surface))" },
-          { "name": "neutral", "formula": "var(--muted)" },
-          { "name": "neg", "formula": "var(--warning)" },
-          { "name": "neg-strong", "formula": "var(--error)" },
-          { "name": "na", "formula": "var(--border-light)" }
+          {
+            "name": "pos-strong",
+            "formula": "var(--success)"
+          },
+          {
+            "name": "pos",
+            "formula": "color-mix(in oklab, var(--success) 55%, var(--surface))"
+          },
+          {
+            "name": "neutral",
+            "formula": "var(--muted)"
+          },
+          {
+            "name": "neg",
+            "formula": "var(--warning)"
+          },
+          {
+            "name": "neg-strong",
+            "formula": "var(--error)"
+          },
+          {
+            "name": "na",
+            "formula": "var(--border-light)"
+          }
         ],
         "note": "The halves are derived differently on purpose: the negative half steps by HUE across two theme tokens (dE ~40 in both themes); the positive half has only --success, so it steps by lightness TOWARD --surface. Mixing toward black inverted this scale in dark mode until v1.50.0."
       },
@@ -98,32 +720,92 @@
       }
     ],
     "moduleLayoutTokens": [
-      { "name": "--iwac-vis-thumb-lg / -md / -sm", "value": "56px / 48px / 40px", "purpose": "Recent-additions thumbnail ramp." },
-      { "name": "--iwac-vis-thumb-col-lg / -md / -sm", "value": "72px / 60px / 52px", "purpose": "Total table-cell width for the thumbnail column (thumb + padding)." },
-      { "name": "--iwac-vis-panel-toolbar-reserve", "value": "96px", "purpose": "Header space reserved so a trailing badge cannot collide with the injected download / fullscreen buttons." }
+      {
+        "name": "--iwac-vis-thumb-lg / -md / -sm",
+        "value": "56px / 48px / 40px",
+        "purpose": "Recent-additions thumbnail ramp."
+      },
+      {
+        "name": "--iwac-vis-thumb-col-lg / -md / -sm",
+        "value": "72px / 60px / 52px",
+        "purpose": "Total table-cell width for the thumbnail column (thumb + padding)."
+      },
+      {
+        "name": "--iwac-vis-panel-toolbar-reserve",
+        "value": "96px",
+        "purpose": "Header space reserved so a trailing badge cannot collide with the injected download / fullscreen buttons."
+      }
     ],
     "shadows": [
-      { "name": "panel", "value": "var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06))", "purpose": "The module's entire elevation budget: the panel boundary. Nothing inside a panel casts a shadow." },
-      { "name": "chart-tooltip", "value": "0 4px 12px rgba(0,0,0,0.12)", "purpose": "The one floating element — the tooltip is appended to body to escape ancestor overflow clipping, so it carries its own depth." }
+      {
+        "name": "panel",
+        "value": "var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06))",
+        "purpose": "The module's entire elevation budget: the panel boundary. Nothing inside a panel casts a shadow."
+      },
+      {
+        "name": "chart-tooltip",
+        "value": "0 4px 12px rgba(0,0,0,0.12)",
+        "purpose": "The one floating element — the tooltip is appended to body to escape ancestor overflow clipping, so it carries its own depth."
+      }
     ],
     "motion": [
-      { "name": "transition-fast", "value": "var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1))", "purpose": "Every control state change: background, border, colour, shadow." },
-      { "name": "reduced-motion", "value": "animation: false at ECharts theme level", "purpose": "Under prefers-reduced-motion the chart theme disables animation globally; option builders only ever set durations, so one switch silences initial and update animation everywhere." }
+      {
+        "name": "transition-fast",
+        "value": "var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1))",
+        "purpose": "Every control state change: background, border, colour, shadow."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: false at ECharts theme level",
+        "purpose": "Under prefers-reduced-motion the chart theme disables animation globally; option builders only ever set durations, so one switch silences initial and update animation everywhere."
+      }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "600px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" },
-      { "name": "note", "value": "Owned by IWAC-theme and published in tokens.json. @media cannot read a custom property, so these three are literals in the stylesheet header AND asserted by lint:theme rule 10: min-width on a breakpoint, max-width at breakpoint - 1." }
+      {
+        "name": "sm",
+        "value": "600px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "note",
+        "value": "Owned by IWAC-theme and published in tokens.json. @media cannot read a custom property, so these three are literals in the stylesheet header AND asserted by lint:theme rule 10: min-width on a breakpoint, max-width at breakpoint - 1."
+      }
     ],
     "i18n": [
-      { "surface": "client-rendered chart strings", "mechanism": "IWACVis.t() / asset/js/iwac-i18n.js", "locale": "resolved once from <html lang>; language switching in IWAC is a page navigation, so there is no runtime switch", "guard": "npm run lint:i18n — key parity both directions; an English-identity key is deliberately absent because t() falls back to the key" },
-      { "surface": "PHP-rendered strings", "mechanism": "Omeka's translator ($this->translate / @translate), catalogue in language/fr.po + committed fr.mo", "guard": "npm run lint:i18n-mo — Omeka loads only the .mo and the release zip is a git archive, so a reworded msgid with a stale .mo falls silently through to English" }
+      {
+        "surface": "client-rendered chart strings",
+        "mechanism": "IWACVis.t() / asset/js/iwac-i18n.js",
+        "locale": "resolved once from <html lang>; language switching in IWAC is a page navigation, so there is no runtime switch",
+        "guard": "npm run lint:i18n — key parity both directions; an English-identity key is deliberately absent because t() falls back to the key"
+      },
+      {
+        "surface": "PHP-rendered strings",
+        "mechanism": "Omeka's translator ($this->translate / @translate), catalogue in language/fr.po + committed fr.mo",
+        "guard": "npm run lint:i18n-mo — Omeka loads only the .mo and the release zip is a git archive, so a reworded msgid with a stale .mo falls silently through to English"
+      }
     ],
     "guards": [
-      { "name": "lint:theme", "script": "scripts/check-theme-tokens.js", "asserts": "no removed tokens; oklab mixing only; no mixes toward black/white; no bare hex/rgb/hsl outside a var() fallback; every fallback equals tokens.json's canonical light value; no var() inside a fallback; every var(--…) names a published or module-owned token; font-size from --text-*; media widths on published breakpoints; the series arrays deep-equal tokens.json's series contract" },
-      { "name": "lint:blocks", "script": "scripts/check-blocks.js", "asserts": "the block registry, config invokables, BlockLayout classes and templates agree — a block whose embed slug did not match its template filename 500'd every embed of it" },
-      { "name": "lint:i18n / lint:i18n-mo", "asserts": "dictionary parity, and that fr.mo was recompiled from fr.po" }
+      {
+        "name": "lint:theme",
+        "script": "scripts/check-theme-tokens.js",
+        "asserts": "no removed tokens; oklab mixing only; no mixes toward black/white; no bare hex/rgb/hsl outside a var() fallback; every fallback equals tokens.json's canonical light value; no var() inside a fallback; every var(--…) names a published or module-owned token; font-size from --text-*; media widths on published breakpoints; the series arrays deep-equal tokens.json's series contract"
+      },
+      {
+        "name": "lint:blocks",
+        "script": "scripts/check-blocks.js",
+        "asserts": "the block registry, config invokables, BlockLayout classes and templates agree — a block whose embed slug did not match its template filename 500'd every embed of it"
+      },
+      {
+        "name": "lint:i18n / lint:i18n-mo",
+        "asserts": "dictionary parity, and that fr.mo was recompiled from fr.po"
+      }
     ]
   },
   "components": [
@@ -204,19 +886,71 @@
       "Every consumed token carries a fallback the build asserts against tokens.json"
     ],
     "rules": [
-      { "name": "The No Second Palette Rule", "body": "--iwac-vis- is for values the theme should not carry: data-encoding colour and module-local layout constants with no theme equivalent. It is not a place to re-declare a theme token. --iwac-vis-icon-btn-sm: 28px was --size-control-xs to the pixel and the shadow tints re-derived what --shadow-color* already publishes; both are gone. The guard exempts the full prefix only, so a shortened one (--iwac-otd-…) fails.", "section": "colors" },
-      { "name": "The Mix-Toward-Surface Rule", "body": "A derived swatch mixes toward --surface or --ink, never toward black or white. Black and white are the two colours in the palette that are not theme-relative, so a ramp built on them inverts when the surface goes dark: -sent-pos-strong was --success mixed 18% toward literal black until v1.50.0, which left the most emphatic grade on the scale as the dimmest thing on the chart in dark mode (4.96 against 8.28 for the grade below it). A theme-pinned block that already knows which way is up opts out with /* allow-absolute-mix */.", "section": "colors" },
-      { "name": "The Role-Slot Rule", "body": "A model accent is a position, never an identity. These tokens were once named from the Hugging Face column prefix, so every model upgrade renamed a design token and orphaned the rules referencing it. A version identifier is not a design decision.", "section": "colors" },
-      { "name": "The Computed-Not-Listed Rule", "body": "Which palette slots may carry text is computed from the live palette against the live --panel-bg, per theme, per call — never enumerated. Measured against the light panel 13 of 20 slots sit under 4.5:1; against the dark panel a different 5 do; there is no subset that works in both. A hardcoded list would be correct until the next palette edit and wrong silently thereafter. When nothing qualifies the code falls back to the ink token: monochrome-and-readable beats varied-and-not.", "section": "colors" },
-      { "name": "The Live-Read Rule", "body": "Chart colour is read through getComputedStyle and resolved to a legacy rgb() before it reaches the engine — never hardcoded, never handed over as color-mix(). The parser cannot deconstruct modern colour syntax, so a color-mix() series colour paints correctly at rest and vanishes on hover. Opacity variants go through ns.withAlpha, which emits a flat rgba() that survives the engine's own lift/darken.", "section": "colors" },
-      { "name": "The Panel-Not-Surface Rule", "body": "Anything measuring contrast against the box it sits in reads --panel-bg, not --surface: the theme aliases --panel-bg to --surface in light and to --surface-raised in dark. Guessing is wrong in exactly one theme, which is the hardest kind of wrong to see.", "section": "colors" },
-      { "name": "The Charts-Inherit-The-Body-Face Rule", "body": "The chart theme reads getComputedStyle(document.body).fontFamily and hands it to every axis, legend and tooltip, so canvas type never visibly clashes with the page around it. Naming a family in chart code is how every chart on the site once rendered in Inter on a Public Sans page.", "section": "typography" },
-      { "name": "The Panel-Titles-Are-UI Rule", "body": "Panel titles are sans-serif at --text-base/600 — they are labels above charts, not editorial headings. The serif treatment is reserved for the block-level section heading, which is what ties a block into the page's h1/h2 rhythm. Heading level is an outline decision, not a style one: buildPanel emits h4 by default, h3 under a block heading promoted to h2, h2 for a block sitting directly under the page h1 — and the level never changes the size.", "section": "typography" },
-      { "name": "The Token-Or-Nothing Rule", "body": "font-size comes from a --text-* token, inside clamp() included. Roughly 91 literals here once ran a second, undeclared 12/14/18px scale against the theme's 11/13/15/17/19; four inline fluid ramps hid from the guard inside clamp() until it learned to read the whole value.", "section": "typography" },
-      { "name": "The Reserved-Height Rule", "body": "A chart host declares its height before its data arrives. Panels that render a placeholder into the chart itself use the shared empty-chart option rather than emptying the host, so the reserved space survives an empty slice.", "section": "layout" },
-      { "name": "The Documented-Media-Width Rule", "body": "@media cannot read a custom property, so the three widths this module reflows at are written as literals and named in the stylesheet header — and the guard checks them against the published breakpoints, because a comment saying /* sm */ beside the wrong number is what \"documented\" looked like right up until it was wrong.", "section": "layout" },
-      { "name": "The Flat-Inside-The-Panel Rule", "body": "The panel's own shadow is the module's entire elevation budget. If a control inside a panel needs to read as raised, it is the wrong control.", "section": "elevation" },
-      { "name": "The Structural-Stripe Exception", "body": "A border-left / border-right of 2px or more is allowed only as a structural data marker — the multi-colour sentiment-card model indicator, the compare-corpus A/B edge. As decoration on a card or callout it is banned, per the theme.", "section": "elevation" }
+      {
+        "name": "The No Second Palette Rule",
+        "body": "--iwac-vis- is for values the theme should not carry: data-encoding colour and module-local layout constants with no theme equivalent. It is not a place to re-declare a theme token. --iwac-vis-icon-btn-sm: 28px was --size-control-xs to the pixel and the shadow tints re-derived what --shadow-color* already publishes; both are gone. The guard exempts the full prefix only, so a shortened one (--iwac-otd-…) fails.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mix-Toward-Surface Rule",
+        "body": "A derived swatch mixes toward --surface or --ink, never toward black or white. Black and white are the two colours in the palette that are not theme-relative, so a ramp built on them inverts when the surface goes dark: -sent-pos-strong was --success mixed 18% toward literal black until v1.50.0, which left the most emphatic grade on the scale as the dimmest thing on the chart in dark mode (4.96 against 8.28 for the grade below it). A theme-pinned block that already knows which way is up opts out with /* allow-absolute-mix */.",
+        "section": "colors"
+      },
+      {
+        "name": "The Role-Slot Rule",
+        "body": "A model accent is a position, never an identity. These tokens were once named from the Hugging Face column prefix, so every model upgrade renamed a design token and orphaned the rules referencing it. A version identifier is not a design decision.",
+        "section": "colors"
+      },
+      {
+        "name": "The Computed-Not-Listed Rule",
+        "body": "Which palette slots may carry text is computed from the live palette against the live --panel-bg, per theme, per call — never enumerated. Measured against the light panel 13 of 20 slots sit under 4.5:1; against the dark panel a different 5 do; there is no subset that works in both. A hardcoded list would be correct until the next palette edit and wrong silently thereafter. When nothing qualifies the code falls back to the ink token: monochrome-and-readable beats varied-and-not.",
+        "section": "colors"
+      },
+      {
+        "name": "The Live-Read Rule",
+        "body": "Chart colour is read through getComputedStyle and resolved to a legacy rgb() before it reaches the engine — never hardcoded, never handed over as color-mix(). The parser cannot deconstruct modern colour syntax, so a color-mix() series colour paints correctly at rest and vanishes on hover. Opacity variants go through ns.withAlpha, which emits a flat rgba() that survives the engine's own lift/darken.",
+        "section": "colors"
+      },
+      {
+        "name": "The Panel-Not-Surface Rule",
+        "body": "Anything measuring contrast against the box it sits in reads --panel-bg, not --surface: the theme aliases --panel-bg to --surface in light and to --surface-raised in dark. Guessing is wrong in exactly one theme, which is the hardest kind of wrong to see.",
+        "section": "colors"
+      },
+      {
+        "name": "The Charts-Inherit-The-Body-Face Rule",
+        "body": "The chart theme reads getComputedStyle(document.body).fontFamily and hands it to every axis, legend and tooltip, so canvas type never visibly clashes with the page around it. Naming a family in chart code is how every chart on the site once rendered in Inter on a Public Sans page.",
+        "section": "typography"
+      },
+      {
+        "name": "The Panel-Titles-Are-UI Rule",
+        "body": "Panel titles are sans-serif at --text-base/600 — they are labels above charts, not editorial headings. The serif treatment is reserved for the block-level section heading, which is what ties a block into the page's h1/h2 rhythm. Heading level is an outline decision, not a style one: buildPanel emits h4 by default, h3 under a block heading promoted to h2, h2 for a block sitting directly under the page h1 — and the level never changes the size.",
+        "section": "typography"
+      },
+      {
+        "name": "The Token-Or-Nothing Rule",
+        "body": "font-size comes from a --text-* token, inside clamp() included. Roughly 91 literals here once ran a second, undeclared 12/14/18px scale against the theme's 11/13/15/17/19; four inline fluid ramps hid from the guard inside clamp() until it learned to read the whole value.",
+        "section": "typography"
+      },
+      {
+        "name": "The Reserved-Height Rule",
+        "body": "A chart host declares its height before its data arrives. Panels that render a placeholder into the chart itself use the shared empty-chart option rather than emptying the host, so the reserved space survives an empty slice.",
+        "section": "layout"
+      },
+      {
+        "name": "The Documented-Media-Width Rule",
+        "body": "@media cannot read a custom property, so the three widths this module reflows at are written as literals and named in the stylesheet header — and the guard checks them against the published breakpoints, because a comment saying /* sm */ beside the wrong number is what \"documented\" looked like right up until it was wrong.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-Inside-The-Panel Rule",
+        "body": "The panel's own shadow is the module's entire elevation budget. If a control inside a panel needs to read as raised, it is the wrong control.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Structural-Stripe Exception",
+        "body": "A border-left / border-right of 2px or more is allowed only as a structural data marker — the multi-colour sentiment-card model indicator, the compare-corpus A/B edge. As decoration on a card or callout it is banned, per the theme.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do resolve every colour, font and size from a theme token with a fallback equal to the theme's canonical light value, and let npm run lint:theme compare it.",

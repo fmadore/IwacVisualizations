@@ -70,6 +70,22 @@ components:
       (scripts/check-theme-tokens.js, rules 4/7/8) fails the build on drift, and
       rule 6 fails on a token name the theme does not publish.
 
+  The SIDECAR is a different case from this frontmatter, and since theme
+  v2.14.0 it carries more than this file does. `.impeccable/design.json` holds
+  the module-owned `model-*` entries AND the theme's full resolved palette
+  under `extensions.colorMeta`, keyed `theme/<token>` — written into this repo
+  by `IWAC-theme/scripts/build-tokens.js` on `npm run sync:tokens`, in the
+  same run and from the same SCSS as `tokens.json`.
+
+  That is not a second authority, because nothing here maintains it: the
+  `theme/` keys are deleted and rewritten on every sync, so an upstream
+  removal propagates. It exists because the Impeccable design detector reads
+  the palette from DESIGN.md + sidecar, and with only four colours declared it
+  flagged all 152 correct `var(--token, #hex)` fallbacks in iwac-core.css as
+  unknown colours. It now reports zero there and still catches a genuinely
+  non-theme hex. `npm run lint:theme` remains the stronger, authoritative
+  check; the sync only makes the detector agree with it.
+
   Upstream artifact layer (register, North Star, palette, type ramp, named
   rules): IWAC-theme/DESIGN.md + IWAC-theme/.impeccable/design.json.
   Cross-repo token contract: IWAC-theme/docs/DESIGN-SYSTEM.md.
