@@ -44,11 +44,12 @@ is never the afterthought locale.
 
 ## What it ships
 
-Nineteen page blocks (Collection Overview, Index Overview, References Overview, Scary
-Terms, Laïcité, Topic Explorer, Periodicals Overview, two Semantic Landscapes,
-Sentiment Atlas, Press Language, Spatial Exploration, Entity Networks, Compare
-Newspapers, On This Day, Press Bylines, Islamic Organisations Co-occurrence, Term
-Trends, Distinctive Vocabulary, Press Reprints) plus template-dispatched resource-page
+Twenty page blocks (Collection Overview, Audiovisual Overview, Index Overview,
+References Overview, Scary Terms, Laïcité, Topic Explorer, Periodicals Overview, two
+Semantic Landscapes, Sentiment Atlas, Press Language, Spatial Exploration, Entity
+Networks, Compare Newspapers, On This Day, Press Bylines, Islamic Organisations
+Co-occurrence, Term Trends, Distinctive Vocabulary, Press Reprints) plus
+template-dispatched resource-page
 dashboards for items, persons, entities, articles, publications, references and item
 sets. Blocks are declared once in `src/Site/BlockRegistry.php` and embeddable via a
 dedicated route.

@@ -35,14 +35,22 @@
     /*  objects, so they must never be shared across series.              */
     /* ----------------------------------------------------------------- */
 
-    function haloLabel(labelInk, halo) {
+    /**
+     * @param {function(number):string} [valueFormatter]
+     *   Renders the value label. Defaults to the plain thousands-separated
+     *   count. A panel whose bars carry a *measure* rather than a tally —
+     *   runtime, bytes, a rate — passes its own so the number on the bar
+     *   arrives with its unit instead of reading as a count of something.
+     */
+    function haloLabel(labelInk, halo, valueFormatter) {
+        var format = valueFormatter || fmt;
         return {
             show: true,
             position: 'right',
             color: labelInk,
             textBorderColor: halo.textBorderColor,
             textBorderWidth: halo.textBorderWidth,
-            formatter: function (p) { return fmt(p.value); }
+            formatter: function (p) { return format(p.value); }
         };
     }
 
@@ -71,6 +79,18 @@
      * @param {boolean} [opts.log=false] Logarithmic value axis — use when a
      *   single category dwarfs the rest (e.g. French at 97% of languages) so
      *   the long tail stays legible instead of collapsing to invisible bars.
+     * @param {function(number):string} [opts.valueFormatter] Renders the value
+     *   label and the tooltip figure. Default: thousands-separated count. Pass
+     *   one when the bars carry a measure with a unit (runtime, bytes) — the
+     *   same ranking read as a bare number reads as a tally.
+     * @param {function(Object):string} [opts.tooltipFormatter] Replaces the
+     *   whole tooltip body. Receives the resolved ECharts param object.
+     *
+     *   Take this rather than mutating `option.tooltip` on the returned value:
+     *   when responsive rules apply, the return is `{baseOption, media}`, so
+     *   an assignment to `option.tooltip` lands on the wrapper where ECharts
+     *   never reads it — the chart keeps the default tooltip and nothing
+     *   errors. That silent failure is the reason this option exists.
      * @param {boolean} [opts.useCountryColors=false] Colour each bar by its
      *   country's fixed palette slot (C._countryColor). Pass this on ANY chart
      *   whose categories are countries: one series means ECharts paints every
@@ -97,9 +117,20 @@
         var labelInk = C._stableLabelColor();
         var halo = C._labelHalo();
 
+        var valueFormat = opts.valueFormatter || fmt;
         var base = {
             grid: C._grid({ left: 8, top: 8, bottom: 8 }),
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                formatter: function (params) {
+                    var p = Array.isArray(params) ? params[0] : params;
+                    if (!p) return '';
+                    if (opts.tooltipFormatter) return opts.tooltipFormatter(p);
+                    var v = p.value && p.value.value != null ? p.value.value : p.value;
+                    return esc(String(p.name)) + '<br/>' + esc(valueFormat(v));
+                }
+            },
             // Log axis can't anchor at 0 — start the scale at 1 (every real
             // count is ≥1). Bars still carry their true count in the value
             // label + tooltip; only the bar LENGTH is log-scaled.
@@ -122,7 +153,7 @@
                 data: values,
                 barMaxWidth: barDef.barMaxWidth - 2,
                 itemStyle: { borderRadius: barDef.borderRadius.slice() },
-                label: haloLabel(labelInk, halo),
+                label: haloLabel(labelInk, halo, opts.valueFormatter),
                 emphasis: haloEmphasis(labelInk, halo)
             }],
             animationDuration: 600,

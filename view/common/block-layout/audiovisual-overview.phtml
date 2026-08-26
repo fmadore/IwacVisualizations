@@ -1,0 +1,42 @@
+<?php
+/**
+ * Audiovisual Overview page block.
+ *
+ * Corpus-level view of the IWAC `audiovisual` subset — one resource class
+ * holding two populations (deposited recordings and embedded web video),
+ * which the block compares rather than averages. Loads a single precomputed
+ * bundle from `files/iwac-visualizations/audiovisual-overview.json`
+ * (built by `scripts/generate_audiovisual_overview.py`).
+ *
+ * Declares no `maplibre` need on purpose: `country` is a four-value facet
+ * and `spatial` carries seven values, almost all of them repeating the
+ * country, so there is nothing here a basemap would add. Nothing in this
+ * block's JS touches `maplibregl`.
+ *
+ * No `blockCss` either — every selector it renders is already in
+ * `iwac-core.css` (panel, summary cards, chart grid, facet buttons, table).
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SitePageBlockRepresentation $block
+ */
+
+echo $this->partial('common/iwac-block-shell', [
+    'assets' => [
+        'needs' => [
+            'chartOptions' => true,
+            // Also pulls faceted-chart.js, which the dual-measure panel uses.
+            'facetButtons' => true,
+            // Implies pagination — table.js's own dependency.
+            'table'        => true,
+        ],
+        'panels' => [
+            'audiovisual-overview/i18n',
+            'audiovisual-overview/dual-measure',
+            'audiovisual-overview/recent',
+        ],
+        'orchestrator' => 'audiovisual-overview',
+    ],
+    'blockClass' => 'iwac-vis-audiovisual-overview',
+    'embedSlug'  => 'audiovisual-overview',
+    'loading'    => $this->translate('Loading audiovisual overview'),
+]);

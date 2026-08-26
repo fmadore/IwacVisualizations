@@ -67,6 +67,12 @@
             'period_covered': 'Period covered: {min} – {max}',
             'coverage_range': '{min} – {max}',
 
+            // Aggregate runtime (P.formatTotalDuration). A SUM of runtimes,
+            // not one item's — the h:mm:ss clock format belongs to a single
+            // recording, and a total in it reads as a timestamp.
+            'duration_hours': '{count} h',
+            'duration_minutes': '{count} min',
+
             // Windowed charts — the "showing N of M" disclosure and its
             // escape control (P.buildWindowDisclosure). The generic pair is
             // the helper's default; the gantt_* pair names the rows for the
@@ -539,6 +545,10 @@
             'period_covered': 'P\u00e9riode couverte : {min} \u2013 {max}',
             'coverage_range': '{min} \u2013 {max}',
 
+            // Cumulative runtime (see the English block)
+            'duration_hours': '{count} h',
+            'duration_minutes': '{count} min',
+
             // Windowed charts (see the English block)
             'window_note': 'Affichage de {shown} lignes sur {total}.',
             'window_all': 'Affichage des {total} lignes.',
@@ -683,6 +693,9 @@
             'Page': 'Page',
             'Title': 'Titre',
             'Source': 'Source',
+            // One item's running time, as a table column. Distinct from
+            // 'av.runtime' ("Total runtime"), which labels a SUM.
+            'Duration': 'Durée',
             'Type': 'Type',
             'Coordinates': 'Coordonnées',
             'Added': 'Ajout\u00e9',

@@ -43,6 +43,13 @@ final class BlockRegistry
      * block that needs `$block` data cannot silently 500 the embed route.
      */
     const BLOCKS = [
+        'audiovisual-overview' => [
+            'invokable'   => 'audiovisualOverview',
+            'class'       => BlockLayout\AudiovisualOverview::class,
+            'label'       => 'Audiovisual Overview', // @translate
+            'description' => 'Corpus view of the audiovisual material: sources and countries ranked by recordings or by runtime, how long the recordings run, publication over time, and what the records carry. No configuration needed.', // @translate
+            'embeddable'  => true,
+        ],
         'collection-overview' => [
             'invokable'   => 'collectionOverview',
             'class'       => BlockLayout\CollectionOverview::class,

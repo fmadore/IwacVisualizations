@@ -261,6 +261,34 @@
     };
 
     /**
+     * Aggregate runtime, in the largest unit that keeps the figure legible.
+     *
+     * `formatDuration` above renders ONE item's runtime as the h:mm:ss every
+     * video player uses. A *sum* of runtimes is a different quantity and reads
+     * wrong in that clock format: "281:24:00" is a timestamp, not a size, and
+     * a reader compares it against the next bar by counting digits. So a total
+     * arrives as "281 h", minutes below the hour, and one decimal only while
+     * the leading digit alone would round two distinct channels together.
+     *
+     * Returns '' for anything non-positive, matching `formatDuration`, so a
+     * caller can treat "no runtime recorded" as "render nothing".
+     */
+    P.formatTotalDuration = function (seconds) {
+        var total = Math.round(Number(seconds));
+        if (!isFinite(total) || total <= 0) return '';
+        if (total < 3600) {
+            return P.t('duration_minutes', { count: Math.max(1, Math.round(total / 60)) });
+        }
+        var hours = total / 3600;
+        // One decimal under 10 h, where the integer part is too coarse to
+        // separate neighbouring bars; whole hours above it, where it isn't.
+        var shown = hours < 10
+            ? Math.round(hours * 10) / 10
+            : Math.round(hours);
+        return P.t('duration_hours', { count: P.formatNumber(shown) });
+    };
+
+    /**
      * Translate a raw (French-source) label via a prefixed i18n key,
      * falling back to the raw value when no translation exists. Centralizes
      * the pattern used for reference types (`ref_type_<name>`), language

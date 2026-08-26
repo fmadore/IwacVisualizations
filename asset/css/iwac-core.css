@@ -610,6 +610,20 @@
      * wraps on the chart-grid 1fr / 1fr 1fr columns. */
 }
 
+/*
+ *  Footnote variant — the same muted voice, printed BELOW the chart.
+ *
+ *  For a standing caveat that only makes sense once the reader has seen the
+ *  shape: a partial final year, rows excluded for want of a date. It is the
+ *  window disclosure's register (a dateline, not a banner) applied to a
+ *  statement about the data rather than about the view, so it reuses the
+ *  description's type and colour and only flips the margin to the top.
+ */
+.iwac-vis-panel-desc--footnote {
+    margin: var(--space-3, 0.75rem) 0 0;
+    font-size: var(--text-xs, 0.8125rem);
+}
+
 /* -------------------------------------------------------------------
  *  Panel toolbar — top-right floating icon bar
  *

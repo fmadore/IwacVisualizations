@@ -4,6 +4,7 @@ namespace IwacVisualizations;
 return [
     'block_layouts' => [
         'invokables' => [
+            'audiovisualOverview' => Site\BlockLayout\AudiovisualOverview::class,
             'compareNewspapers' => Site\BlockLayout\CompareNewspapers::class,
             'collectionOverview' => Site\BlockLayout\CollectionOverview::class,
             'distinctiveVocabulary' => Site\BlockLayout\DistinctiveVocabulary::class,

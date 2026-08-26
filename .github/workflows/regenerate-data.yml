@@ -81,6 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           gens=(
+            audiovisual_overview
             collection_overview wordcloud world_map index_overview keyword_explorer
             entity_networks lexical_metrics on_this_day periodicals_overview periodicals_landscape
             press_bylines references_overview scary_terms semantic_landscape sentiment_atlas
