@@ -281,7 +281,7 @@ namespace {
     }
 
     // Registry/dispatch contracts used by both normal blocks and embeds.
-    check(count(BlockRegistry::slugs()) === 20, 'page-block registry count drifted');
+    check(count(BlockRegistry::slugs()) === 21, 'page-block registry count drifted');
     check(BlockRegistry::get('laicite')['invokable'] === 'laicite', 'laicite registry entry drifted');
     check(isset(BlockRegistry::embeddable()['press-reprints']), 'press-reprints embed disappeared');
     check(BlockRegistry::get('collection-overview')['invokable'] === 'collectionOverview', 'registry invokable drifted');
