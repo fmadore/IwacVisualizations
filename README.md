@@ -11,6 +11,7 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Block | Type | Status | Data path |
 |---|---|---|---|
 | Collection Overview | page block | **Live** — 14 panels, including source locations | Precompute (`generate_collection_overview.py` + two sidecar generators) |
+| Audiovisual Overview | page block | **Live** — 6 panels; sources and countries rank by recordings *or* runtime | Precompute (`generate_audiovisual_overview.py`) |
 | Index Overview | page block | **Live** — 7 Section A panels + Keyword Explorer | Precompute (`generate_index_overview.py` + `generate_keyword_explorer.py`) |
 | References Overview | page block | **Live** — 16 panels, incl. full-text coverage, per-model LDA topics + semantic landscape | Precompute (`generate_references_overview.py`) |
 | Scary Terms | page block | **Live** — seven views: race, trends, country/global counts, co-occurrence, context word cloud, and mentioned-place map | Precompute (`generate_scary_terms.py`) |
@@ -43,6 +44,18 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.56.0 — the audiovisual material gets a block, and it ships two measures because one would be wrong
+
+**New block: Audiovisual Overview.** The `audiovisual` subset went from 47 items to roughly 1,800 in two weeks when the YouTube ingest began, and it had no block of its own while standing at ~8% of the collection. It has one now: sources and countries ranked by either recordings or runtime, a runtime histogram, publication over time, field completeness, and the newest items.
+
+**The block's headline is that items and hours do not rank the same.** RTB publishes the most recordings (639) and holds the fourth-most runtime (44 h); the Togolese student association AEEMT publishes fewer (532) and holds the most (281 h); the deposited Nigerian archive is sixth by count and second by runtime. The countries invert the same way — Burkina Faso carries twenty times Nigeria's recordings and less of its runtime. So both ranking panels ship both measures behind a toggle, defaulting to recordings because that is the measure every other block counts in; the switch is where the finding is. The tooltip carries both figures plus the typical length that explains the gap, so the reader who switches and finds the order changed gets the reason in the same place as the surprise.
+
+**Three fields were measured and deliberately left unplotted.** `subject` is populated on 1.5% of rows, `creator` on 2.5%, `is_part_of` on 0.3% — none can carry a panel. `language` reads 99.9% populated and would chart as a single 99% bar, but its non-French tags concentrate almost entirely in one hand-catalogued channel out of ten: 532 Togolese videos carry no Ewé or Kabiyè tag at all while the newspaper corpus does. That field measures cataloguing effort, not speech, so it appears only as a completeness bar beside `subject`, where the honest reading is visible. `spatial` is 99.9% populated across seven values that mostly repeat the country, so it is redundant rather than thin.
+
+**Two shared primitives grew rather than being forked.** `C.horizontalBar` gained `valueFormatter` (so a bar carrying a measure arrives with its unit instead of reading as a tally) and `tooltipFormatter` — the latter because assigning to `option.tooltip` on the returned value is silently dropped whenever responsive rules apply and the return is `{baseOption, media}`. That failure mode cost two working tooltips during this build before it was caught, so the option now exists to make the mistake unavailable. `P.formatTotalDuration` joins `P.formatDuration` in panels.js: a *sum* of runtimes in h:mm:ss reads as a timestamp, so totals render as "281 h" with a decimal only under ten hours, where the integer alone would round two channels together. The block itself ships **no stylesheet** — every selector it renders already existed in `iwac-core.css`, which gained one shared footnote modifier for standing caveats printed below a chart.
+
+**The timeline states its own limits.** Ingestion is continuous, so the newest year is always partial: the panel prints the date the data actually runs to rather than drawing a cliff, and names the 30 undated recordings instead of dropping them silently. The block declares no MapLibre need and passes through no map gate — with four countries there is nothing a basemap would add.
 
 ### v1.55.0 — a fifth rater joins, and this one arrived with its data already on the Hub
 
