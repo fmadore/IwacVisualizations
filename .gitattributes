@@ -21,3 +21,18 @@ tokens.json         export-ignore
 CLAUDE.md           export-ignore
 REFACTORING.md      export-ignore
 ROADMAP.md          export-ignore
+
+# The Impeccable artifact layer: the design-system record, the product
+# context it is written against, and the machine-readable sidecar the design
+# detector reads. All three describe how to CHANGE this module in step with
+# the IWAC theme — the same audience as CLAUDE.md above, and no part of what
+# Omeka loads. They shipped inside every release archive up to and including
+# v1.57.0 (81 KB of it) because the rule was never written down.
+#
+# They travel together on purpose. DESIGN.md's provenance comment and
+# .impeccable/design.json are two halves of one record — the sidecar exists
+# so the detector can read the palette the prose describes — so shipping
+# either without the other would be worse than shipping both.
+DESIGN.md           export-ignore
+PRODUCT.md          export-ignore
+.impeccable/        export-ignore

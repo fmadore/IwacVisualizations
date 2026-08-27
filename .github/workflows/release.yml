@@ -116,7 +116,7 @@ jobs:
 
           # Nothing that only exists to develop it. Mirrors .gitattributes —
           # this fails loudly if an export-ignore rule is ever dropped.
-          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|CLAUDE\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
+          if grep -nE '^IwacVisualizations/(\.github/|scripts/|tests/|\.impeccable/|package(-lock)?\.json$|tokens\.json$|playwright\.config\.js$|CLAUDE\.md$|DESIGN\.md$|PRODUCT\.md$|REFACTORING\.md$|ROADMAP\.md$|\.gitattributes$|\.gitignore$)' /tmp/list; then
             echo "::error::development files leaked into the release archive — check .gitattributes export-ignore"
             exit 1
           fi
