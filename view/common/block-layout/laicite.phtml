@@ -35,6 +35,11 @@ echo $this->partial('common/iwac-block-shell', [
             'timeline'     => true,
             'concordance'  => true,
             'maplibre'     => true,
+            // The per-corpus table is built by hand (row-header + meter),
+            // but it borrows shared/table.js's card-role tagging so it
+            // collapses into labelled records on a phone like every other
+            // table in the module.
+            'table'        => true,
         ],
         // Companion modules: i18n strings + stateless builders + the fourteen
         // view modules + the controls row. All must load before the

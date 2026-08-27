@@ -85,41 +85,74 @@
         panel.appendChild(P.el('h4', null, P.t('laicite.subset_table_title')));
         panel.appendChild(P.el('p', 'iwac-vis-panel-desc', P.t('laicite.no_sum_note')));
 
-        var table = P.el('table', 'iwac-vis-table iwac-vis-laicite-table');
-        var thead = P.el('thead');
-        var hrow = P.el('tr');
-        ['laicite.col_corpus', 'laicite.col_members', 'laicite.col_tagged',
+        // Seven columns of counts, built by hand rather than through
+        // P.buildTable because of the corpus row-header and the readable
+        // meter. It still wears the shared table's element classes, its
+        // ARIA roles and its card roles, so below `sm` it collapses into
+        // the same labelled records every other table in the module does.
+        var COLS = ['laicite.col_corpus', 'laicite.col_members', 'laicite.col_tagged',
             'laicite.col_said', 'laicite.col_occurrences', 'laicite.col_readable',
-            'laicite.col_span'
-        ].forEach(function (key) {
-            hrow.appendChild(P.el('th', null, P.t(key)));
+            'laicite.col_span'];
+
+        var table = P.el('table', 'iwac-vis-table iwac-vis-laicite-table');
+        table.setAttribute('role', 'table');
+        var thead = P.el('thead');
+        thead.setAttribute('role', 'rowgroup');
+        var hrow = P.el('tr');
+        hrow.setAttribute('role', 'row');
+        COLS.forEach(function (key) {
+            var th = P.el('th', 'iwac-vis-table__header', P.t(key));
+            th.setAttribute('role', 'columnheader');
+            th.setAttribute('scope', 'col');
+            hrow.appendChild(th);
         });
         thead.appendChild(hrow);
         table.appendChild(thead);
 
+        /** One body cell, wearing the shared classes and its card role. */
+        function cell(className, role, colKey) {
+            var td = P.el('td', 'iwac-vis-table__cell' +
+                (className ? ' ' + className : ''));
+            td.setAttribute('role', 'cell');
+            P.tableCardCell(td, role, colKey ? P.t(colKey) : '');
+            return td;
+        }
+
         var tbody = P.el('tbody');
+        tbody.setAttribute('role', 'rowgroup');
         L.SUBSETS.forEach(function (subset) {
             var v = subsets[subset];
             if (!v) return;
-            var tr = P.el('tr');
+            var tr = P.el('tr', 'iwac-vis-table__row');
+            tr.setAttribute('role', 'row');
             // Name plus a one-line gloss. Four bare corpus labels invite the
             // reading that only one of them holds primary sources; the gloss
             // says what each actually contains, and the note under the table
             // says which one is not a source at all.
-            var corpus = P.el('th', 'iwac-vis-laicite-corpus');
+            var corpus = P.el('th', 'iwac-vis-table__cell iwac-vis-laicite-corpus');
+            corpus.setAttribute('role', 'rowheader');
+            corpus.setAttribute('scope', 'row');
             corpus.appendChild(P.el('span', 'iwac-vis-laicite-corpus-name',
                 L.subsetLabel(subset)));
             corpus.appendChild(P.el('span', 'iwac-vis-laicite-corpus-gloss',
                 P.t('laicite.subset_gloss_' + subset)));
+            P.tableCardCell(corpus, 'title');
             tr.appendChild(corpus);
-            tr.appendChild(P.el('td', null, P.formatNumber(v.members || 0)));
-            tr.appendChild(P.el('td', null, P.formatNumber(v.tagged || 0)));
-            tr.appendChild(P.el('td', null, P.formatNumber(v.said || 0)));
-            tr.appendChild(P.el('td', null, P.formatNumber(v.occurrences || 0)));
+
+            [['laicite.col_members', v.members],
+                ['laicite.col_tagged', v.tagged],
+                ['laicite.col_said', v.said],
+                ['laicite.col_occurrences', v.occurrences]
+            ].forEach(function (pair) {
+                var td = cell(null, 'meta', pair[0]);
+                td.appendChild(document.createTextNode(P.formatNumber(pair[1] || 0)));
+                tr.appendChild(td);
+            });
 
             // The readable share, per corpus. A bare percentage would hide
             // that references sit at 169/9167 while documents sit at 502/502.
-            var readable = P.el('td', 'iwac-vis-laicite-readable');
+            // Its own line in the record layout — the meter needs the width.
+            var readable = cell('iwac-vis-laicite-readable', 'row', 'laicite.col_readable');
             var q = v.quotable_occurrences || 0;
             var o = v.occurrences || 0;
             readable.appendChild(P.el('span', 'iwac-vis-laicite-readable-n',
@@ -132,13 +165,15 @@
             tr.appendChild(readable);
 
             var span = v.year_range || [];
-            tr.appendChild(P.el('td', null,
+            var spanCell = cell(null, 'meta', 'laicite.col_span');
+            spanCell.appendChild(document.createTextNode(
                 span.length === 2 ? span[0] + '–' + span[1] : '—'));
+            tr.appendChild(spanCell);
             tbody.appendChild(tr);
         });
         table.appendChild(tbody);
 
-        var wrap = P.el('div', 'iwac-vis-table-wrapper');
+        var wrap = P.el('div', 'iwac-vis-table-wrapper iwac-vis-table-wrapper--cards');
         wrap.appendChild(table);
         panel.appendChild(wrap);
         panel.appendChild(P.el('p', 'iwac-vis-laicite-table-note',

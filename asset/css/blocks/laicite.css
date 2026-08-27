@@ -299,6 +299,28 @@
     background: var(--primary, #ce4115);
 }
 
+/*  In the record layout (iwac-core.css) the readable share keeps its own
+ *  line, but the count sits beside its label rather than under it — a
+ *  block there would put "READABLE" alone on a line of its own. The meter
+ *  still spans the record, which is the point of drawing one. */
+@container iwac-vis-table (max-width: 599px) {
+    .iwac-vis-laicite-corpus {
+        vertical-align: baseline;
+    }
+    .iwac-vis-laicite-corpus-name {
+        white-space: normal;
+    }
+    .iwac-vis-laicite-readable {
+        min-width: 0;
+    }
+    .iwac-vis-laicite-readable-n {
+        display: inline;
+    }
+    .iwac-vis-laicite-meter {
+        margin-top: var(--space-2, 0.5rem);
+    }
+}
+
 
 /* =================================================================== */
 /*  Rights note                                                          */
