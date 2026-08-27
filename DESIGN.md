@@ -276,6 +276,28 @@ header — and the guard checks them against the published breakpoints, because 
 saying `/* sm */` beside the wrong number is what "documented" looked like right up until
 it was wrong.
 
+**The Records-Not-Columns Rule.** Below `sm` a data table is re-laid as a list of records:
+thumbnail floated, headline on top, every remaining cell a labelled datum. It reflows on a
+**container** query, not a media query, because what fails is the table's own width — a
+half-width panel on a laptop is the same failure as a phone — and `check-theme-tokens.js`
+exempts `@container` from the breakpoint rule for exactly that reason. Three things are
+load-bearing. The record is separated by the row's existing hairline and nothing else, per
+Rules-Not-Boxes and Flat-Inside-The-Panel; a bordered card inside a panel would be a
+nested box. Every field is carried, never hidden — the column-hiding this replaced left a
+phone reader a list of titles with no provenance and no date. And each datum is an
+`inline-block` bounded by `max-width`: a label and its value are adjacent inline boxes with
+no whitespace between them, so a handle or a slug is one unbreakable word running from the
+start of the label, and as plain inline text it leaves the panel.
+
+**The Roles-Survive-The-Display-Flip Rule.** Changing `display` on a table strips its
+implicit table semantics in every engine, so `buildTable` declares `table` / `rowgroup` /
+`row` / `columnheader` / `cell` explicitly and the header row is *clipped*, never
+`display: none`. The visible card labels are `aria-hidden` for the same reason from the
+other side: the header they echo is still being announced, and printing both would name
+every field twice. A column's `width` rides `--iwac-vis-col-w` rather than
+`style.width`, because an inline width outranks every stylesheet rule — including the ones
+that stop the cell being a column at all.
+
 ## Elevation & Depth
 
 Flat inside, one shadow at the boundary. The theme's Rules-Not-Boxes doctrine holds
