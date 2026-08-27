@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC horizontal-bar renderer fixture</title>
+    <style>
+        :root {
+            --primary: #a33312;
+            --secondary: #2f6f8f;
+            --ink: #171717;
+            --ink-light: #45484d;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --surface-sunken: #f4f0ed;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --panel-bg: var(--surface);
+        }
+        body { margin: 0; padding: 1rem; font-family: system-ui, sans-serif; }
+        #host { width: 560px; height: 300px; }
+    </style>
+</head>
+<body>
+    <div id="host"></div>
+    <script>
+        // No ECharts here on purpose. The defect this fixture guards lives
+        // entirely in the option object the renderer hands to the chart —
+        // a series whose every datum resolved to `undefined` — so the
+        // assertions never need a paint, and the suite never needs a CDN.
+        window.IWACVis = { locale: 'en', t: function (k) { return k; },
+                           formatNumber: function (n) { return String(n); } };
+    </script>
+    <script src="/asset/js/iwac-theme.min.js"></script>
+    <script src="/asset/js/dashboard-core.min.js"></script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script src="/asset/js/charts/shared/responsive.min.js"></script>
+    <script src="/asset/js/charts/shared/chart-options.min.js"></script>
+    <script src="/asset/js/charts/shared/chart-options-bar.min.js"></script>
+    <script src="/asset/js/charts/shared/chart-options-hbar.min.js"></script>
+    <script src="/asset/js/charts/shared/dashboard-layout.min.js"></script>
+    <script>
+        // dashboard-layout keeps its renderers private; grab this one on the
+        // way past rather than reaching into its internals.
+        window.__renderers = {};
+        var _register = IWACVis.dashboardLayout.registerRenderer;
+        IWACVis.dashboardLayout.registerRenderer = function (key, fn) {
+            window.__renderers[key] = fn;
+            return _register.apply(this, arguments);
+        };
+    </script>
+    <script src="/asset/js/charts/shared/renderers/horizontal-bar.min.js"></script>
+    <script>
+        window.__warnings = [];
+        var _warn = console.warn;
+        console.warn = function () {
+            window.__warnings.push(Array.prototype.join.call(arguments, ' '));
+            return _warn.apply(console, arguments);
+        };
+
+        // Exactly what scripts/generate_topic_explorer.py writes for
+        // country_distribution / newspaper_distribution.
+        window.TOPIC_COUNTRIES = [
+            { name: 'Togo', value: 412 },
+            { name: "Cote d'Ivoire", value: 388 },
+            { name: 'Burkina Faso', value: 201 },
+            { name: 'Benin', value: 96 },
+            { name: 'Niger', value: 41 }
+        ];
+
+        /**
+         * Run the registered renderer and return the option it would have
+         * handed the chart, by standing in for the chart.
+         */
+        window.optionFromRenderer = function (data, slotOptions) {
+            var host = document.getElementById('host');
+            host.innerHTML = '';
+            window.__warnings.length = 0;
+            var captured = null;
+            var realRegister = IWACVis.registerChart;
+            IWACVis.registerChart = function (el, callback) {
+                callback(el, { setOption: function (option) { captured = option; } });
+            };
+            try {
+                window.__renderers.horizontalBar(host, data, { options: slotOptions || {} });
+            } finally {
+                IWACVis.registerChart = realRegister;
+            }
+            var base = captured && (captured.baseOption || captured);
+            return {
+                categories: base && base.yAxis && base.yAxis.data,
+                values: base && base.series && base.series[0] &&
+                    base.series[0].data.map(function (d) {
+                        return (d && typeof d === 'object') ? d.value : d;
+                    }),
+                colors: base && base.series && base.series[0] &&
+                    base.series[0].data.map(function (d) {
+                        return (d && d.itemStyle && d.itemStyle.color) || null;
+                    }),
+                emptyState: !captured && !!host.querySelector('.iwac-vis-empty, .iwac-vis-no-data'),
+                warnings: window.__warnings.slice()
+            };
+        };
+    </script>
+</body>
+</html>

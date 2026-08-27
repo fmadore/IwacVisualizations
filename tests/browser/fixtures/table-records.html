@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IWAC table records fixture</title>
+    <script>
+        const fixtureParams = new URLSearchParams(location.search);
+        document.documentElement.lang = fixtureParams.get('lang') || 'en';
+    </script>
+    <style>
+        :root {
+            --primary: #a33312;
+            --ink: #171717;
+            --ink-strong: #090909;
+            --ink-light: #45484d;
+            --muted: #606368;
+            --surface: #fffdfb;
+            --surface-raised: #f8f4f1;
+            --surface-sunken: #f4f0ed;
+            --border: #c9c4bf;
+            --border-light: #e6e1dc;
+            --panel-bg: var(--surface);
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+        }
+        body {
+            margin: 0;
+            padding: 1rem;
+            background: #f1eeea;
+            color: var(--ink);
+            font-family: "Public Sans", system-ui, sans-serif;
+        }
+        body[data-theme="dark"] {
+            --primary: #ec653f;
+            --ink: #e7e4df;
+            --ink-strong: #f7f5f1;
+            --ink-light: #b5b0aa;
+            --muted: #aaa49f;
+            --surface: #110c08;
+            --surface-raised: #1a1510;
+            --surface-sunken: #0c0805;
+            --border: #554b41;
+            --border-light: #352f28;
+            --panel-bg: var(--surface-raised);
+            background: #080503;
+        }
+        .iwac-vis-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: .5rem;
+            padding: var(--space-4);
+        }
+        main { max-width: 1180px; margin: 0 auto; }
+    </style>
+    <link rel="stylesheet" href="/asset/css/iwac-core.min.css">
+</head>
+<body>
+    <main>
+        <div class="iwac-vis-panel" id="host"></div>
+    </main>
+    <script>
+        if (fixtureParams.get('theme') === 'dark') document.body.dataset.theme = 'dark';
+
+        // The six-column "Most recent" shape from the Audiovisual Overview:
+        // the widest table the module ships and the one that shredded into
+        // one-letter columns on a phone.
+        window.IWACVis = {
+            locale: document.documentElement.lang === 'fr' ? 'fr' : 'en',
+            t(key) {
+                const fr = {
+                    Title: 'Titre', Source: 'Source', Duration: 'Durée', Date: 'Date',
+                    'av.source_youtube': 'Vidéo web',
+                };
+                return this.locale === 'fr' && fr[key] ? fr[key] : key;
+            },
+            formatNumber(value) { return String(value); },
+        };
+    </script>
+    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <script src="/asset/js/charts/shared/pagination.min.js"></script>
+    <script src="/asset/js/charts/shared/table.min.js"></script>
+    <script>
+        const P = window.IWACVis.panels;
+
+        const ROWS = [
+            {
+                thumbnail: '',
+                title: 'Cérémonie de clôture de la formation des élèves et étudiants musulmans',
+                url: '/s/iwac/item/101',
+                channel: 'Association des Élèves et Étudiants Musulmans au Burkina',
+                source_type: 'youtube',
+                duration: '31:07',
+                date: '2024-08-12',
+            },
+            {
+                thumbnail: '',
+                title: 'Conférence publique sur la laïcité',
+                url: '/s/iwac/item/102',
+                channel: 'Radio Al Houda',
+                source_type: 'youtube',
+                duration: '1:12:40',
+                date: '2023-02-03',
+            },
+        ];
+
+        const table = P.buildTable({
+            columns: [
+                { key: 'thumbnail', label: '', render: 'thumbnail', width: '72px' },
+                { key: 'title', label: P.t('Title'), render: 'link', linkKey: 'url' },
+                { key: 'channel', label: P.t('Source') },
+                { key: 'source_type', label: '', render: 'badge', i18nPrefix: 'av.source_' },
+                { key: 'duration', label: P.t('Duration'), width: '90px' },
+                { key: 'date', label: P.t('Date'), render: 'date', width: '130px' },
+            ],
+            rows: ROWS,
+            pageSize: 12,
+            className: 'iwac-vis-table--recent',
+        });
+        document.getElementById('host').appendChild(table.root);
+
+        // A datum with nothing to break on. A label and its value are
+        // adjacent inline boxes with no whitespace between them — the gap is
+        // a margin — so "Channel@LeFasoNetActualiteDuBurkinaFasoOfficielle"
+        // is a single word to the line breaker. Corpus data supplies these
+        // routinely: channel handles, slugs, hyphenless compounds.
+        const unbreakable = P.buildTable({
+            columns: [
+                { key: 'corpus', label: 'Corpus' },
+                { key: 'channel', label: 'Channel' },
+                { key: 'occurrences', label: 'Occurrences', render: 'number' },
+                { key: 'readable', label: 'Readable', card: 'row' },
+            ],
+            rows: [
+                {
+                    corpus: 'Articles',
+                    channel: '@LeFasoNetActualiteDuBurkinaFasoOfficielle',
+                    occurrences: 9167,
+                    readable: 'AucuneDonnéeLisibleDansCeSousEnsembleDuCorpus',
+                },
+            ],
+            className: 'iwac-vis-table--unbreakable',
+        });
+        document.getElementById('host').appendChild(unbreakable.root);
+
+        /** Narrow the PANEL without touching the viewport. */
+        window.setPanelWidth = function (px) {
+            const host = document.getElementById('host');
+            host.style.width = px == null ? '' : px + 'px';
+            host.offsetHeight;
+        };
+
+        /** WCAG relative-luminance contrast between two computed colours. */
+        window.contrastOf = function (selector, backdropSelector) {
+            const parse = (value) => value.match(/[\d.]+/g).slice(0, 3).map(Number);
+            const lum = (rgb) => {
+                const [r, g, b] = rgb.map((c) => {
+                    const s = c / 255;
+                    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+                });
+                return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            };
+            const fg = lum(parse(getComputedStyle(document.querySelector(selector)).color));
+            const bg = lum(parse(getComputedStyle(document.querySelector(backdropSelector)).backgroundColor));
+            const [hi, lo] = fg > bg ? [fg, bg] : [bg, fg];
+            return (hi + 0.05) / (lo + 0.05);
+        };
+    </script>
+</body>
+</html>

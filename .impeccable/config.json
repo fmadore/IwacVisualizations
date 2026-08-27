@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "tests/browser/fixtures/table-records.html"
+        ],
+        "createdAt": "2026-08-27T08:05:31.029Z",
+        "reason": "Playwright fixture: the literals are a stand-in for the IWAC theme's tokens so the fixture runs without the theme, matching tests/browser/fixtures/minimal-item.html and map-popup.html. Not module design surface."
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "tests/browser/fixtures/table-records.html"
+        ],
+        "createdAt": "2026-08-27T08:14:42.634Z",
+        "reason": "Playwright fixture: #f1eeea is a stand-in for the IWAC theme's own warm archival page ground (--surface #fdfcfb), copied verbatim from tests/browser/fixtures/minimal-item.html and map-popup.html so the fixture renders like the site without loading the theme. Faithfulness to the real palette, not an AI default."
+      }
+    ]
+  }
+}
