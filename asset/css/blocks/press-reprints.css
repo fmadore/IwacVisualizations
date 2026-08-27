@@ -39,5 +39,15 @@
 
 @media (max-width: 599px) { /* sm */
     .iwac-vis-reprints-network .iwac-vis-chart { min-height: 360px; }
-    .iwac-vis-reprints-tablehost .iwac-vis-table__cell--link { max-width: 12rem; }
+}
+
+/*  In the record layout the pair is the whole point, so both titles run
+ *  in full: the ellipsis above exists to keep six columns scannable, and
+ *  below `sm` there are no columns left to keep. */
+@container iwac-vis-table (max-width: 599px) {
+    .iwac-vis-reprints-tablehost .iwac-vis-table__cell--link {
+        max-width: none;
+        overflow: visible;
+        white-space: normal;
+    }
 }

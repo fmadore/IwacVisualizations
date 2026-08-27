@@ -226,9 +226,12 @@
             columns: [
                 { key: 'sim',    label: P.t('reprints.col_sim'),       width: '6rem' },
                 { key: 'gap',    label: P.t('reprints.col_gap'),       width: '6rem' },
-                { key: 'titleA', label: P.t('reprints.col_article_a'), render: 'link', linkKey: 'hrefA' },
+                // Both articles are labelled lines of their own: the pair is
+                // the finding, so promoting one of them to the record's
+                // headline would state a precedence the data does not have.
+                { key: 'titleA', label: P.t('reprints.col_article_a'), render: 'link', linkKey: 'hrefA', card: 'row' },
                 { key: 'paperA', label: P.t('reprints.col_paper_a') },
-                { key: 'titleB', label: P.t('reprints.col_article_b'), render: 'link', linkKey: 'hrefB' },
+                { key: 'titleB', label: P.t('reprints.col_article_b'), render: 'link', linkKey: 'hrefB', card: 'row' },
                 { key: 'paperB', label: P.t('reprints.col_paper_b') }
             ],
             rows: rows,

@@ -208,7 +208,7 @@
     padding: 0.75rem 1rem 0.25rem;
 }
 
-/* Tablet: reduce padding, shrink thumbnail, hide source column */
+/* Tablet: reduce padding, shrink thumbnail */
 @media (max-width: 767px) { /* md */
     .iwac-vis-recent-additions .iwac-vis-table {
         font-size: var(--text-xs, 0.8125rem);
@@ -226,33 +226,35 @@
         width: var(--iwac-vis-thumb-md, 48px);
         height: var(--iwac-vis-thumb-md, 48px);
     }
-    /* Hide the Source column (3rd visible column after thumb + title). */
-    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(3),
-    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(3) {
-        display: none;
-    }
 }
 
-/* Mobile: also hide the Added date column so only thumb + title remain */
-@media (max-width: 599px) { /* sm */
+/* Narrow container: the shared record layout takes over (iwac-core.css).
+ *
+ * Until v1.57.0 this block answered the same problem by hiding columns —
+ * Source at `md`, Added at `sm` — which left a phone reader a list of
+ * titles with no date, no provenance, and no way to ask for either. The
+ * record layout carries all four fields, so the hiding is gone; what
+ * remains here is the panel's own cell padding and thumbnail scale,
+ * which would otherwise outrank the core rules by specificity and
+ * re-impose column geometry on a cell that is no longer a column. */
+@container iwac-vis-table (max-width: 599px) {
     .iwac-vis-recent-additions .iwac-vis-table__header,
     .iwac-vis-recent-additions .iwac-vis-table__cell {
-        padding: 0.5rem 0.6rem;
+        padding: 0;
     }
     .iwac-vis-recent-additions .iwac-vis-table__cell--thumbnail {
-        width: var(--iwac-vis-thumb-col-sm, 52px);
-        padding: var(--space-2, 0.5rem) var(--space-1, 0.25rem) var(--space-2, 0.5rem) var(--space-2, 0.5rem);
+        width: auto;
+        padding: 0;
     }
     .iwac-vis-recent-additions .iwac-vis-table__thumb,
     .iwac-vis-recent-additions .iwac-vis-thumb-placeholder {
-        width: var(--iwac-vis-thumb-sm, 40px);
-        height: var(--iwac-vis-thumb-sm, 40px);
+        width: var(--iwac-vis-thumb-md, 48px);
+        height: var(--iwac-vis-thumb-md, 48px);
     }
-    .iwac-vis-recent-additions .iwac-vis-table th:nth-child(4),
-    .iwac-vis-recent-additions .iwac-vis-table td:nth-child(4) {
-        display: none;
-    }
+    /* A headline is the reason the record exists — no clamp on it here. */
     .iwac-vis-recent-additions .iwac-vis-table__link {
-        -webkit-line-clamp: 3;
+        display: inline;
+        -webkit-line-clamp: none;
+        overflow: visible;
     }
 }

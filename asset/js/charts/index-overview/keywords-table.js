@@ -83,7 +83,8 @@
                         key: '__action',
                         label: '',
                         width: '110px',
-                        render: 'action'   // custom — handled below via a DOM walk
+                        render: 'action',  // custom — handled below via a DOM walk
+                        card: 'action'
                     }
                 ],
                 rows: rows,

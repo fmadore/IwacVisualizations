@@ -106,7 +106,9 @@
                 { key: 'type',      label: P.t('Type') },
                 { key: 'frequency', label: P.t('Mentions'),  render: 'number' },
                 { key: 'span',      label: P.t('Period covered_short') },
-                { key: 'countries', label: P.t('Countries') }
+                // Its own line in the record layout: an entity cited in
+                // five countries prints a string no metadata line can hold.
+                { key: 'countries', label: P.t('Countries'), card: 'row' }
             ],
             rows: rowsForState(),
             pageSize: PAGE_SIZE,

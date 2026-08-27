@@ -1523,6 +1523,7 @@ select.iwac-vis-control:hover {
     letter-spacing: var(--tracking-wide, 0.04em);
     position: sticky;
     top: 0;
+    width: var(--iwac-vis-col-w, auto);
 }
 
 .iwac-vis-table__row {
@@ -1538,11 +1539,21 @@ select.iwac-vis-control:hover {
     padding: 0.5rem 0.75rem;
     vertical-align: middle;
     color: var(--ink, #13161c);
+    /*  A caller's `col.width` arrives as this custom property rather than
+     *  an inline `style.width`, which would outrank every stylesheet rule
+     *  including the ones that stop the cell being a column at all. */
+    width: var(--iwac-vis-col-w, auto);
 }
 
 .iwac-vis-table__cell--thumbnail {
-    width: 56px;
+    width: var(--iwac-vis-col-w, 56px);
     padding: 0.25rem 0.5rem;
+}
+
+/*  The card label is invisible while the column headers are: the header
+ *  band already names every field, and printing both would say it twice. */
+.iwac-vis-table__cell-label {
+    display: none;
 }
 
 .iwac-vis-table__thumb {
@@ -1573,6 +1584,154 @@ select.iwac-vis-control:hover {
 
 .iwac-vis-table__link:hover {
     text-decoration: underline;
+}
+
+
+/* ------------------------------------------------------------------- */
+/*  Narrow container — the table becomes a list of records              */
+/* ------------------------------------------------------------------- */
+
+/*  A column grid needs width a phone does not have. At 375px the
+ *  audiovisual panel's six headers printed one letter per line and a
+ *  40px header band became 340px tall; nothing below it was legible
+ *  either. Under `sm` the same rows are re-laid as stacked records:
+ *  thumbnail floated, headline on top, every remaining cell a labelled
+ *  datum flowing beside its neighbours.
+ *
+ *  A CONTAINER query, not a media query, because what fails is the
+ *  table's own width and not the viewport's — this is also the case
+ *  scripts/check-theme-tokens.js exempts from the breakpoint rule. Every
+ *  table this applies to sits in a `--wide` panel, so the container only
+ *  narrows past 599px when the viewport does.
+ *
+ *  Not cards: the theme's Rules-Not-Boxes doctrine and this module's
+ *  Flat-Inside-The-Panel rule both refuse a bordered, shadowed box
+ *  inside a panel, so a record is divided from the next by the hairline
+ *  the row already carried and by nothing else.
+ *
+ *  The layout is float-plus-normal-flow rather than grid or flex on
+ *  purpose. Text has to WRAP UNDER the thumbnail once it passes its
+ *  height, and the labelled data have to share a line when they are
+ *  short — both are what inline flow does and neither is what a
+ *  blockified grid or flex item does. */
+.iwac-vis-table-wrapper--cards {
+    container-type: inline-size;
+    container-name: iwac-vis-table;
+}
+
+@container iwac-vis-table (max-width: 599px) {
+    .iwac-vis-table {
+        display: block;
+        position: relative;
+    }
+
+    /*  Clipped, not `display: none`. The explicit ARIA roles buildTable
+     *  emits keep this a real table for assistive technology, and these
+     *  are still the column headers each visible label is echoing. */
+    .iwac-vis-table thead {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .iwac-vis-table tbody {
+        display: block;
+    }
+
+    /*  flow-root, not overflow, so the row contains its floated
+     *  thumbnail without clipping a focus outline off the link inside. */
+    .iwac-vis-table__row {
+        display: flow-root;
+        padding: var(--space-3, 0.75rem) var(--space-1, 0.25rem);
+    }
+
+    .iwac-vis-table__row:last-child {
+        border-bottom: 0;
+    }
+
+    .iwac-vis-table__cell {
+        width: auto;
+        padding: 0;
+        vertical-align: baseline;
+    }
+
+    .iwac-vis-table__cell--card-media {
+        float: left;
+        margin: 0.1rem var(--space-3, 0.75rem) var(--space-1, 0.25rem) 0;
+    }
+
+    .iwac-vis-table__cell--card-title {
+        display: block;
+        margin-bottom: var(--space-1, 0.25rem);
+        font-size: var(--text-base, 1.0625rem);
+        line-height: 1.45;
+    }
+
+    /*  The padding is a target-size decision, not a spacing one. An
+     *  inline link's tap area is its inline box, which follows the font
+     *  and ignores line-height entirely: measured 22px at --text-base,
+     *  under the 24px floor of WCAG 2.2 Target Size (Minimum). Padding on
+     *  an inline box grows the hit area without moving the line. */
+    .iwac-vis-table__cell--card-title .iwac-vis-table__link {
+        padding-block: 2px;
+        font-weight: 600;
+    }
+
+    /*  The metadata line: labelled data flowing left to right and wrapping,
+     *  each datum a unit that breaks internally rather than splitting from
+     *  its own label.
+     *
+     *  `inline-block` + `max-width` + `overflow-wrap` are three parts of one
+     *  guarantee, and the reason is that a label and its value are adjacent
+     *  inline boxes with NO whitespace between them — the gap is a margin.
+     *  To the line breaker "Channel@LeFasoNetActualiteDuBurkinaFaso" is one
+     *  word, so a run of inline text has nowhere to break and simply leaves
+     *  the record. Corpus data supplies exactly that: channel handles,
+     *  slugs, hyphenless compounds. Boxing each datum bounds it to the
+     *  record's width and breaks the word inside it if it has to. */
+    .iwac-vis-table__cell--card-meta,
+    .iwac-vis-table__cell--card-badge {
+        display: inline-block;
+        max-width: 100%;
+        margin-right: var(--space-3, 0.75rem);
+        vertical-align: top;
+        overflow-wrap: break-word;
+        font-size: var(--text-xs, 0.8125rem);
+        color: var(--ink-light, #3f4349);
+    }
+
+    /*  A datum too long to share a line — a list of countries, the second
+     *  article of a reprint pair. */
+    .iwac-vis-table__cell--card-row {
+        display: block;
+        margin-top: var(--space-1, 0.25rem);
+        overflow-wrap: break-word;
+        font-size: var(--text-xs, 0.8125rem);
+        color: var(--ink-light, #3f4349);
+        line-height: 1.4;
+    }
+
+    .iwac-vis-table__cell--card-action {
+        display: block;
+        margin-top: var(--space-2, 0.5rem);
+    }
+
+    .iwac-vis-table__cell-label {
+        display: inline;
+        /*  Tighter than the gap BETWEEN data (--space-3), so a label
+         *  groups with its own value rather than with its neighbour. */
+        margin-right: 0.4em;
+        font-size: var(--text-2xs, 0.6875rem);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: var(--tracking-wide, 0.04em);
+        color: var(--muted, #66696e);
+    }
 }
 
 
