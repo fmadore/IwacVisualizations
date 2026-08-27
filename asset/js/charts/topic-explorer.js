@@ -55,29 +55,30 @@
             // Day and Hijri stay one click away in the renderer's facet bar.
             options: { granularity: 'month', unitKey: 'articles_count' }
         },
+        // The generator emits [{name, value}, ...] capped at 15; `maxBars`
+        // takes the last three off. `categoryName`, `valueName` and
+        // `maxLabelLength` used to sit here too and were inert the whole
+        // time — C.horizontalBar reads none of the three. It draws no axis
+        // names by design, and it truncates category labels by PIXEL width
+        // (180px, narrowed on phones by R.labelMedia) rather than by
+        // character count, which is the right unit for a proportional face.
         {
             chart: 'horizontalBar',
             dataKey: 'country_distribution',
             title: 'Top countries',
             description: 'desc_topic_countries',
-            options: {
-                categoryName: '',
-                valueName: 'Articles',
-                maxBars: 12,
-                maxLabelLength: 28
-            }
+            // Countries get their fixed palette slots, as everywhere else a
+            // chart in this module ranks them.
+            options: { maxBars: 12, useCountryColors: true }
         },
         {
             chart: 'horizontalBar',
             dataKey: 'newspaper_distribution',
             title: 'Top newspapers',
             description: 'desc_topic_newspapers',
-            options: {
-                categoryName: '',
-                valueName: 'Articles',
-                maxBars: 12,
-                maxLabelLength: 28
-            }
+            // Not useCountryColors: a top-N of newspapers is not a country
+            // scale and must not borrow its colours.
+            options: { maxBars: 12 }
         },
         {
             chart: 'similarItems',
