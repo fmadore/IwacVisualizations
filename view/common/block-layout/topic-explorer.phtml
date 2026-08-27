@@ -24,11 +24,17 @@ echo $this->partial('common/iwac-block-shell', [
             // Weighting switch on the topics-over-time panel (dominant
             // topic vs probability-weighted prevalence).
             'facetButtons' => true,
+            // The topic map is drawn by calling the BUILDER directly
+            // (`ns.chartOptions.treemap`, which `chartOptions` above already
+            // supplies), not by dispatching a layout slot — so 'treemap' does
+            // NOT belong in this list. It sat here anyway and fetched
+            // renderers/treemap.min.js on every Topic Explorer page to
+            // register a renderer no slot has ever named. A renderer is
+            // needed here only when some slot carries `chart: '<key>'`.
             'renderers'    => [
                 'calendar-heatmap',
                 'horizontal-bar',
                 'similar-items',
-                'treemap',
             ],
         ],
         'orchestrator' => 'topic-explorer',
