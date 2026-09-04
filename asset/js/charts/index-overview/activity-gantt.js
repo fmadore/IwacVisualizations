@@ -94,11 +94,15 @@
             });
         }
 
-        /** The host owns the height — see collection-overview/gantt.js. */
+        /**
+         * The host owns the height in BOTH states, always from the row count
+         * actually on screen — see collection-overview/gantt.js.
+         */
         function applyHeight(rowCount) {
-            panelEl.chart.style.height = disclosure.isExpanded()
-                ? C.ganttHeight(rowCount) + 'px'
-                : '';
+            var visible = disclosure.isExpanded()
+                ? rowCount
+                : Math.min(rowCount, WINDOW_SIZE);
+            panelEl.chart.style.height = C.ganttHeight(visible) + 'px';
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {

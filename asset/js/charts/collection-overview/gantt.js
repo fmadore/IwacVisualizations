@@ -154,17 +154,31 @@
         }
 
         /**
-         * The host owns the height. Expanded, it grows to hold every row at
-         * the pitch the windowed view already used; collapsed, it returns to
-         * the panel's own floor. `resize()` is what makes ECharts re-lay the
-         * canvas into the new box — the ResizeObserver in registerChart also
-         * catches this, but only after its 150ms debounce, which shows as a
-         * visible squash-then-settle on an 80-row expansion.
+         * The host owns the height, in BOTH states, and always from the row
+         * count actually on screen.
+         *
+         * It used to fall back to the panel's CSS floor whenever it was not
+         * expanded, which decoupled the two: the collapsed view drew its 20
+         * rows into whatever 320px min-height left over — about 11px each,
+         * with an 11px font, so the titles touched. Deriving the collapsed
+         * height too costs ~130px of page and buys a row band the name
+         * comfortably fits, which is also what lets the axis turn on
+         * `hideOverlap` as a safety net without it culling rows that were
+         * never in trouble.
+         *
+         * `ganttHeight` still clamps to the floor, so a facet that narrows
+         * this to four newspapers gets the panel's min-height, not a stub.
+         *
+         * `resize()` is what makes ECharts re-lay the canvas into the new box
+         * — the ResizeObserver in registerChart also catches this, but only
+         * after its 150ms debounce, which shows as a visible squash-then-
+         * settle on an 84-row expansion.
          */
         function applyHeight(rowCount) {
-            panelEl.chart.style.height = disclosure.isExpanded()
-                ? C.ganttHeight(rowCount) + 'px'
-                : '';
+            var visible = disclosure.isExpanded()
+                ? rowCount
+                : Math.min(rowCount, WINDOW_SIZE);
+            panelEl.chart.style.height = C.ganttHeight(visible) + 'px';
         }
 
         var chart = ns.registerChart(panelEl.chart, function (el, instance) {

@@ -498,13 +498,15 @@
      *   Each: { name, country, type, year_min, year_max, total }
      * @param {Object} [opts]
      * @param {number} [opts.windowSize=20]
-     *   Rows the default view shows. Above this the y-axis gets a zoom
-     *   slider — which is a SILENT truncation on its own, so any caller
-     *   passing more rows than this should also render a
-     *   `P.buildWindowDisclosure` note saying how many of how many.
+     *   Rows the default view shows, and the hard cap on the zoom window.
+     *   Above this the y-axis gets a slider — which is a SILENT truncation on
+     *   its own, so any caller passing more rows than this should also render
+     *   a `P.buildWindowDisclosure` note saying how many of how many. The
+     *   slider only ever SCROLLS that window (see `maxValueSpan` below); the
+     *   disclosure's button is the one thing that widens it.
      * @param {boolean} [opts.expanded=false]
      *   Drop the window and draw every row. The caller must give the chart
-     *   host the height to hold them (`C.ganttHeight`) — an 82-row Gantt in a
+     *   host the height to hold them (`C.ganttHeight`) — an 84-row Gantt in a
      *   320px box is unreadable in a different way.
      */
     /**
@@ -639,15 +641,58 @@
                 // coloured strips in a chart whose whole subject is WHICH
                 // papers ran WHEN. The window is now sized so the rows fit,
                 // so there is nothing to thin out.
-                axisLabel: { width: GANTT_LABEL_W, overflow: 'truncate', interval: 0 }
+                //
+                // `hideOverlap` is the floor under that promise. `interval: 0`
+                // asks for all of them unconditionally, so if a row ever gets
+                // less pitch than a label needs, the labels do not thin — they
+                // pile, and 84 names stack into one unreadable smear down the
+                // axis. Not hypothetical: that is what the reader saw whenever
+                // the zoom below was widened past the height the host had been
+                // given. The zoom can no longer do that, and if some future
+                // caller finds another way, this drops the labels that collide
+                // instead of drawing the smear.
+                axisLabel: {
+                    width: GANTT_LABEL_W,
+                    overflow: 'truncate',
+                    interval: 0,
+                    hideOverlap: true
+                }
             },
             // Windowed unless the caller expanded it. `end` is the share of
             // the rows the first screenful covers — the same arithmetic as
             // before, but now driven by the window size the caller also
             // discloses, instead of a bare 20 that appeared nowhere in the UI.
+            //
+            // `maxValueSpan` is what keeps the two escape routes from
+            // contradicting each other. The host's height is fixed by the
+            // CALLER, from the row count it believes is on screen; this zoom
+            // could change that row count without telling anyone. Widen the
+            // slider to its full travel and 84 rows land in a box built for
+            // 20 — ~3px each, every label drawn, and the panel reads as a
+            // scribble. Capping the span at `windowSize` makes the slider a
+            // scroller: it moves the window through the rows, it never resizes
+            // it past what the box can render. Growing the view is the
+            // disclosure button's job, and that one grows the host to match
+            // (`C.ganttHeight`).
+            //
+            // The wheel bindings go with it. `inside` defaults to
+            // `zoomOnMouseWheel: true`, so a reader scrolling PAST the panel
+            // with the pointer over it zoomed the row axis instead — landing
+            // in the squashed state having asked for nothing at all. The wheel
+            // now scrolls the page; dragging still pans the rows.
             dataZoom: windowed ? [
-                { type: 'slider', yAxisIndex: 0, start: 0, end: 100 * windowSize / list.length, right: 8 },
-                { type: 'inside', yAxisIndex: 0 }
+                {
+                    type: 'slider', yAxisIndex: 0,
+                    start: 0, end: 100 * windowSize / list.length,
+                    right: 8,
+                    maxValueSpan: windowSize
+                },
+                {
+                    type: 'inside', yAxisIndex: 0,
+                    maxValueSpan: windowSize,
+                    zoomOnMouseWheel: false,
+                    moveOnMouseWheel: false
+                }
             ] : [],
             series: [{
                 type: 'custom',
@@ -706,18 +751,30 @@
      * Host height a Gantt needs to draw `rows` rows at a legible pitch.
      *
      * An ECharts host has a fixed pixel height; the y-axis divides whatever it
-     * gets by the row count. So "show all 82" without growing the host would
-     * trade a silent truncation for 82 four-pixel slivers — honest and
-     * unreadable. 24px per row is the pitch the 20-row default already renders
-     * at in a 320px panel, so expanding keeps the bars exactly the size the
-     * reader was just looking at.
+     * gets by the row count. So "show all 84" without growing the host would
+     * trade a silent truncation for 84 three-pixel slivers — honest and
+     * unreadable.
+     *
+     * The pitch used to be 24px, justified in this comment as "the pitch the
+     * 20-row default already renders at in a 320px panel". Measured on the
+     * live panel it is not: the 320px panel gives the chart a 288px host, the
+     * grid keeps ~96px of that for the x-axis and its name, and the 20 rows
+     * divide the remaining ~220px into bands of **11px**. So the claim was
+     * out by more than a factor of two, and expanding did not keep the bars
+     * the size the reader was just looking at — it doubled them, and spent
+     * 2112px of page on 84 newspapers to do it.
+     *
+     * 18px is the honest number: comfortably looser than the 11px the
+     * collapsed view renders at, tight enough that all 84 rows come in at
+     * ~1600px instead of ~2100px. Below ~14px the truncated titles start
+     * touching, which is the failure this function exists to prevent.
      *
      * @param {number} rows
      * @param {number} [floor=320]  the panel's own min-height (iwac-core.css)
      */
     C.ganttHeight = function (rows, floor) {
         var CHROME = 96;  // grid top + x-axis labels + axis name + gutter
-        var PITCH = 24;
+        var PITCH = 18;
         return Math.max(floor || 320, Math.round((Number(rows) || 0) * PITCH + CHROME));
     };
 
