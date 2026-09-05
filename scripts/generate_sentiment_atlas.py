@@ -81,7 +81,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from iwac_utils import (
+    CENTRALITE_ORDER,
     DATASET_ID,
+    POLARITE_ORDER,
     SENTIMENT_MODELS,
     canonicalize_country_field,
     clean_float,
@@ -107,22 +109,10 @@ SUBSET = "articles"
 MODELS: Tuple[str, ...] = SENTIMENT_MODELS
 
 # Canonical scale orders — the JS renders stacks / matrix axes in this
-# exact order (most positive / most central first).
-POLARITY_ORDER: Tuple[str, ...] = (
-    "Très positif",
-    "Positif",
-    "Neutre",
-    "Négatif",
-    "Très négatif",
-    "Non applicable",
-)
-CENTRALITY_ORDER: Tuple[str, ...] = (
-    "Très central",
-    "Central",
-    "Secondaire",
-    "Marginal",
-    "Non abordé",
-)
+# exact order (most positive / most central first). One definition in
+# iwac_utils; these are this generator's English-spelled aliases.
+POLARITY_ORDER: Tuple[str, ...] = POLARITE_ORDER
+CENTRALITY_ORDER: Tuple[str, ...] = CENTRALITE_ORDER
 
 NOT_APPLICABLE = "Non applicable"
 

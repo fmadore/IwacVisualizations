@@ -253,42 +253,59 @@
                 center: [0, 10],
                 zoom: 3.5,
                 onStyleReady: function (m) {
-                    var layerA = addSideLayers(m, 'a', geoA, rgbA, colorA);
-                    var layerB = addSideLayers(m, 'b', geoB, rgbB, colorB);
+                    // Rebuilt on every style load (setStyle wipes them); the
+                    // click / cursor handlers below read this list live, so
+                    // they follow the rebuild without being re-registered.
+                    circleLayers = [
+                        addSideLayers(m, 'a', geoA, rgbA, colorA),
+                        addSideLayers(m, 'b', geoB, rgbB, colorB)
+                    ];
 
                     // Belt-and-suspenders: the container may have grown to
                     // its real size between createIwacMap() and now.
                     m.resize();
-
-                    [layerA, layerB].forEach(function (layerId) {
-                        m.on('click', layerId, function (e) {
-                            var f = e.features && e.features[0];
-                            if (!f) return;
-                            var name = f.properties.name || '';
-                            var count = f.properties.count || 0;
-                            var oid = f.properties.o_id;
-                            var html = '<strong>' + P.escapeHtml(name) + '</strong><br>'
-                                + P.formatNumber(count) + ' ' + P.t('mentions');
-                            if (oid && ctx && ctx.siteBase) {
-                                html += '<br><a href="' + ctx.siteBase + '/item/' + oid + '">'
-                                    + P.t('Open entity') + '</a>';
-                            }
-                            P.createIwacPopup()
-                                .setLngLat(e.lngLat)
-                                .setHTML(html)
-                                .addTo(m);
-                        });
-                        m.on('mouseenter', layerId, function () {
-                            m.getCanvas().style.cursor = 'pointer';
-                        });
-                        m.on('mouseleave', layerId, function () {
-                            m.getCanvas().style.cursor = '';
-                        });
-                    });
                 }
             });
 
             _mapRef = map;
+
+            // Click + cursor wiring — ONCE per map instance, OUTSIDE
+            // onStyleReady. Delegated listeners live on the Map, not on the
+            // style, so registering them inside the style-load callback
+            // stacked six more on every theme toggle: after N toggles one
+            // click opened N popups. Map-level events filtered through the
+            // live layer list (the pattern places-map.js documents) survive
+            // the swap and cost nothing while the layers are being rebuilt.
+            var circleLayers = [];
+            function liveCircleLayers() {
+                return circleLayers.filter(function (id) { return id && map.getLayer(id); });
+            }
+            map.on('click', function (e) {
+                var layers = liveCircleLayers();
+                if (!layers.length) return;
+                var hits = map.queryRenderedFeatures(e.point, { layers: layers });
+                var f = hits && hits[0];
+                if (!f) return;
+                var name = f.properties.name || '';
+                var count = f.properties.count || 0;
+                var oid = f.properties.o_id;
+                var html = '<strong>' + P.escapeHtml(name) + '</strong><br>'
+                    + P.formatNumber(count) + ' ' + P.t('mentions');
+                if (oid && ctx && ctx.siteBase) {
+                    html += '<br><a href="' + ctx.siteBase + '/item/' + oid + '">'
+                        + P.t('Open entity') + '</a>';
+                }
+                P.createIwacPopup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(html)
+                    .addTo(map);
+            });
+            map.on('mousemove', function (e) {
+                var layers = liveCircleLayers();
+                var over = layers.length
+                    && map.queryRenderedFeatures(e.point, { layers: layers }).length > 0;
+                map.getCanvas().style.cursor = over ? 'pointer' : '';
+            });
 
             // Choropleth selector — 4-way segmented control replaces the
             // helper's default toggle button on this map. The user picks

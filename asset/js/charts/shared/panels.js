@@ -83,11 +83,13 @@
      *   updates OR a fresh data pull lands (issue #7).
      * - Sends same-origin credentials and a JSON Accept header.
      * - Rejects on non-2xx with the URL in the error message.
-     * - Bounds the wait when `timeoutMs` is passed (see below).
+     * - Bounds the wait: `P.FETCH_TIMEOUT_MS` by default, `timeoutMs` to
+     *   override, `timeoutMs: 0` to opt out (see below).
      *
      * @param {string} url
      * @param {Object} [opts]  Extra fetch options merged over the defaults.
-     * @param {number} [opts.timeoutMs]  Abort and reject after this long.
+     * @param {number} [opts.timeoutMs]  Abort and reject after this long
+     *   (default `P.FETCH_TIMEOUT_MS`; 0 disables the bound).
      * @returns {Promise<any>} parsed JSON body
      */
     P.fetchJSON = function (url, opts) {
@@ -100,7 +102,12 @@
             credentials: 'same-origin',
             headers: { Accept: 'application/json' }
         };
-        var timeoutMs = 0;
+        // Bounded BY DEFAULT since v1.59.0. The two boot helpers passed the
+        // timeout explicitly; the other 34 call sites — every lazy sidecar,
+        // every secondary bundle, three per-item dashboards — did not, so a
+        // stalled connection still left an eternal spinner everywhere the
+        // boot helpers were not in the path. Opt out with `timeoutMs: 0`.
+        var timeoutMs = Number(P.FETCH_TIMEOUT_MS) || 0;
         if (opts) {
             for (var k in opts) {
                 if (!Object.prototype.hasOwnProperty.call(opts, k)) continue;
@@ -108,7 +115,7 @@
                 init[k] = opts[k];
             }
         }
-        if (!timeoutMs) return doFetch(u, init);
+        if (!timeoutMs || typeof setTimeout !== 'function') return doFetch(u, init);
 
         // Bounded. `fetch` carries no timeout, so a request that never answers
         // — a captive portal, a proxy that swallows the connection, a phone

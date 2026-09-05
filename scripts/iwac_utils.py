@@ -1015,6 +1015,7 @@ def load_dataset_safe(
     repo_id: str = DATASET_ID,
     token: Optional[str] = None,
     columns: Optional[List[str]] = None,
+    required: bool = False,
 ) -> Optional[pd.DataFrame]:
     """
     Load a HuggingFace dataset subset with error handling.
@@ -1031,9 +1032,15 @@ def load_dataset_safe(
             Requested columns missing from the subset are skipped with a
             warning rather than failing, so callers can share one list across
             subsets whose schemas differ slightly.
+        required: Raise ``RuntimeError`` instead of returning ``None`` (or an
+            empty frame) when the subset cannot be loaded. A generator whose
+            whole output rests on one subset has nothing sensible to write
+            without it — ``generate_wordcloud`` used to write an EMPTY payload
+            and exit 0 in that case, which CI would then have published.
 
     Returns:
-        Pandas DataFrame of the dataset, or None if loading fails
+        Pandas DataFrame of the dataset, or None if loading fails and the
+        subset is not ``required``
 
     Examples:
         >>> df = load_dataset_safe("articles")
@@ -1060,7 +1067,6 @@ def load_dataset_safe(
             data = data.select_columns(keep)
         df = data.to_pandas()
         logger.info(f"Loaded {len(df)} records from '{config_name}'")
-        return df
 
     except Exception as e:
         logger.error(f"Error loading subset '{config_name}': {e}")
@@ -1072,7 +1078,15 @@ def load_dataset_safe(
                 "environment variable (or run `hf auth login`) with a token "
                 "that can read the private mirror."
             )
+        if required:
+            raise RuntimeError(
+                f"Required subset '{config_name}' could not be loaded from {repo_id}: {e}"
+            ) from e
         return None
+
+    if required and df.empty:
+        raise RuntimeError(f"Required subset '{config_name}' from {repo_id} is empty.")
+    return df
 
 
 def find_column(
@@ -1113,6 +1127,27 @@ def find_column(
 # =============================================================================
 # AI sentiment columns
 # =============================================================================
+
+# Canonical scale orders. The JS renders stacks and matrix axes in this
+# exact order (most positive / most central first), and every generator that
+# buckets a sentiment column emits its counts in it. ONE definition: the
+# copies that lived in dashboard_aggregator, generate_compare_newspapers and
+# generate_sentiment_atlas were identical and had no reason to stay so.
+POLARITE_ORDER: Tuple[str, ...] = (
+    "Très positif",
+    "Positif",
+    "Neutre",
+    "Négatif",
+    "Très négatif",
+    "Non applicable",
+)
+CENTRALITE_ORDER: Tuple[str, ...] = (
+    "Très central",
+    "Central",
+    "Secondaire",
+    "Marginal",
+    "Non abordé",
+)
 
 SENTIMENT_MODELS: Tuple[str, ...] = (
     "gpt_5_6_luna",

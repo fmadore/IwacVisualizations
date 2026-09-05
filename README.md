@@ -6,7 +6,7 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — nineteen page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — twenty-one page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|
@@ -44,6 +44,28 @@ Every registered block is wired end-to-end with live data — nineteen page bloc
 | Item Set Dashboard | resource-page block | **Live** — opportunistic: renders the matching compare-newspapers corpus aggregate (newspapers / periodicals / countries); silently removes itself elsewhere | Reuses `generate_compare_newspapers.py` output |
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
+
+### v1.59.0 — the sixth audit's first wave: one render pass, bounded fetches, maps that fail out loud
+
+The 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8) asked where the module still behaves like a set of static pictures rather than a reactive instrument. This release lands its "quick, safe, build-verifiable" wave — twenty-three items, every one behind a lint gate or a test.
+
+**Every chart render is one ECharts update pass again.** The text alternative a screen reader hears was produced *after* each render: a deep `getOption()` clone of the live option, series data included, followed by a second synchronous `setOption` — and `registerChart` then did the same again, so one render was four full update passes, and the five callers that ask for `lazyUpdate` never got their deferred frame. The description is now folded into the outgoing option before the native call: one pass, the caller's `{ notMerge, lazyUpdate }` form untouched, `getOption()` never consulted. `tests/js/lifecycle.test.js` counts the passes.
+
+**Tooltips without a formatter print localised numbers.** The stacked timelines, the growth chart and the compare panels showed `6000` on a site whose axes and tables say `6 000` / `6,000`; one theme-level `tooltip.valueFormatter` fixes all of them.
+
+**Maps fail out loud.** MapLibre 6 needs WebGL2 and throws from its constructor without it, and the gate's two-argument `.then` never caught that throw — a device without WebGL2 got an empty map box, or on two panels a whole-block error. The gate now chains a `catch`, the factory logs the throw and listens for runtime `error` events, and the banner appears where the map would have been. Theme toggles no longer stack a click listener per toggle on the Compare Newspapers map and the choropleth (N toggles used to mean N popups per click); the collection map stops adding a 205 KB country file that no layer ever drew; a hover state remembered across a style swap no longer fires MapLibre errors; and the laïcité and scary-terms maps guard their `addSource` like the other ten.
+
+**Views release their charts.** Only Compare Newspapers disposed the instances it threw away; the laïcité dossier's fourteen views and every Topic Explorer detail cleared their hosts with `innerHTML = ''` and left three or four live ECharts instances — and, for the laïcité map, a WebGL context — behind detached nodes on every visit. `IWACVis.disposeWithin(root)` is the shared teardown, called before each of those clears. Detachment alone is deliberately *not* a signal: laïcité parks its trends chart panel outside the document between views and re-attaches it.
+
+**Every fetch is bounded.** `P.fetchJSON` now applies the 30-second bound by default (`timeoutMs: 0` opts out) — only two of thirty-six call sites passed it, so every lazy sidecar and three per-item dashboards could still spin forever on a stalled connection. Those three dashboards (publication, reference, minimal item) now boot through the shared `bootPerItemDashboard`, which grew the `dataFile`, `skip`, `slices` and `onError: 'remove'` options they needed, and get its retry control. Compare Newspapers keeps the corpus you picked: a slow response for the previous choice used to overwrite the faster one for the current choice. Fullscreen listeners remove themselves once their panel leaves the document.
+
+**The precompute pipeline stops trusting the archive on transport alone.** The data workflow publishes `iwac-data.zip.sha256` beside the archive and the Sync Data job verifies it before installing anything — a release built before the sidecar existed installs with a warning, a mismatch is fatal. The workflow also caches the Hugging Face download by dataset revision (every run used to fetch all seven subsets) and the numba JIT cache, and refuses to publish unless all fifty-four expected bundles and eight fan-out directories exist and are non-empty; the wordcloud generator, which could write an empty payload and exit 0, now fails instead. The polarité / centralité scale orders live once in `iwac_utils` (three identical copies retired), Compare Newspapers uses the shared tokenizer it was already importing beside a byte-identical private copy, and laïcité's post-fold tokenizer is named for what it is.
+
+**The French catalogue gains a guard for the half nobody checked.** `lint:i18n-mo` proved `fr.mo` matched `fr.po`; nothing proved `fr.po` matched the code, and the On This Day block form's six admin strings were in neither — French admins read them in English. `scripts/extract-pot.js` regenerates `template.pot` from the sources (the sixteen sentiment vocabulary labels are now marked for extraction) and `lint:i18n-pot` fails the build when a source string is missing from the template or untranslated; thirteen stale template entries went, five translations arrived.
+
+**CI closes two holes.** `build-check` now triggers on `view/**`, `src/**`, `Module.php` and the module config, so a view-only pull request runs `lint:theme` and `lint:blocks`; and `lint:versions` covers `CITATION.cff` and the README citation, which sat at 1.54.0 and 1.37.0.
+
+**Also removed:** `C.beeswarm` (a builder with no caller) and `focusNodeAdjacency` (an ECharts 4 option beside the ECharts 6 setting that replaced it).
 
 ### v1.57.0 — on a phone a table stops being a table, so it stops pretending to be one
 
@@ -1360,7 +1382,7 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.37.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.59.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

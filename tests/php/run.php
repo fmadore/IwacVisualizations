@@ -358,6 +358,26 @@ namespace {
         'release tag was not confined to one encoded path segment'
     );
 
+    // The checksum sidecar: only a well-formed digest that names THIS archive
+    // counts, in either sha256sum column format; anything else is "no digest".
+    $hex = str_repeat('a', 64);
+    check(
+        SyncData::expectedDigestFromSidecar($hex . "  iwac-data.zip\n") === $hex,
+        'sha256sum sidecar not parsed'
+    );
+    check(
+        SyncData::expectedDigestFromSidecar(strtoupper($hex) . " *iwac-data.zip") === $hex,
+        'binary-mode sidecar not parsed (or digest not normalised to lower case)'
+    );
+    check(
+        SyncData::expectedDigestFromSidecar("garbage\n" . $hex . "  ./iwac-data.zip") === $hex,
+        'sidecar with a leading path or a preceding junk line rejected'
+    );
+    check(SyncData::expectedDigestFromSidecar($hex . "  other.zip") === null, 'digest for another asset accepted');
+    check(SyncData::expectedDigestFromSidecar('<html><body>Not Found</body></html>') === null, 'HTML error page accepted as a digest');
+    check(SyncData::expectedDigestFromSidecar(str_repeat('b', 63) . "  iwac-data.zip") === null, 'short digest accepted');
+    check(SyncData::expectedDigestFromSidecar('') === null, 'empty sidecar accepted');
+
     check(
         in_array('stopping', \IwacVisualizations\Controller\Admin\DataController::ACTIVE_STATUSES, true),
         'a stopping sync is not treated as active'

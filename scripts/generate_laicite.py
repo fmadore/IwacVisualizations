@@ -324,7 +324,10 @@ CIRCULATION_MAX_LISTED = 300
 BYLINE_TOP_N = 40
 
 SNIPPET_CONTEXT = 120   # characters either side of the match
-TOKEN_RE = re.compile(r"[a-z]+")
+# Post-fold tokenizer: runs on `fold_plain()` output (ASCII, lowercased),
+# so a bare a-z class is exact here. Deliberately NOT iwac_utils.TOKEN_RE,
+# which is the Unicode word-cloud tokenizer for raw text.
+ASCII_TOKEN_RE = re.compile(r"[a-z]+")
 
 # Half-width of the collocation window, in tokens. ±5 is the corpus-
 # linguistics default and the span the issue specifies.
@@ -414,8 +417,8 @@ class Lexicon:
         self.all_form_tokens: Set[str] = set()
         for spec in self.frames.values():
             for form in spec["forms"]:
-                self.all_form_tokens.update(TOKEN_RE.findall(fold_plain(form)))
-        self.all_form_tokens.update(TOKEN_RE.findall(fold_plain(" ".join(self.frames))))
+                self.all_form_tokens.update(ASCII_TOKEN_RE.findall(fold_plain(form)))
+        self.all_form_tokens.update(ASCII_TOKEN_RE.findall(fold_plain(" ".join(self.frames))))
 
         # Bilingual corpus: iwac_utils.STOPWORDS is French-only, and the
         # scholarly subset is largely English. Plus digitisation artefacts,
@@ -902,7 +905,7 @@ class LaiciteGenerator:
             if not isinstance(title, str) or not title.strip():
                 continue
             tokens = {
-                t for t in TOKEN_RE.findall(fold_plain(title))
+                t for t in ASCII_TOKEN_RE.findall(fold_plain(title))
                 if len(t) >= MIN_TOKEN_LEN
             }
             kind = str(row.get("Type") or "")
@@ -960,7 +963,7 @@ class LaiciteGenerator:
         """Token list plus a ``char offset → token index`` map."""
         tokens: List[str] = []
         token_at: Dict[int, int] = {}
-        for i, m in enumerate(TOKEN_RE.finditer(folded)):
+        for i, m in enumerate(ASCII_TOKEN_RE.finditer(folded)):
             tokens.append(m.group(0))
             token_at[m.start()] = i
         return tokens, token_at

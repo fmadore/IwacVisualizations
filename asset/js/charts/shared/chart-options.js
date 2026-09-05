@@ -24,7 +24,7 @@
  *                             divergingBar (+ divergingExtent)
  *   chart-options-graph.js    chord, collaborationNetwork, sankey
  *   chart-options-special.js  pie, treemap, gantt, wordcloud, segmentedBar,
- *                             sunburst, beeswarm, heatmap
+ *                             sunburst, heatmap
  *
  * Load order: after panels.js, this core file first, then the four
  * builder files (any order), before any block controller. The shared

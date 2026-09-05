@@ -65,6 +65,47 @@ jobs:
           node scripts/python-lock.js --check
           pip install --require-hashes -r scripts/requirements.lock
 
+      # The dataset revision keys the Hugging Face cache: a run against an
+      # unchanged dataset restores every parquet file instead of downloading
+      # all seven subsets again — until v1.59.0 every push to scripts/*.py and
+      # every monthly run paid the full download. HF_TOKEN is needed here too:
+      # the mirror is private and dataset_info() 401s without it. The revision
+      # is read through iwac_utils so this step follows DATASET_ID wherever it
+      # points.
+      - name: Resolve the dataset revision
+        id: hf
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          sha=$(python - <<'PY'
+          import sys
+          sys.path.insert(0, "scripts")
+          from huggingface_hub import HfApi
+          from iwac_utils import DATASET_ID
+          print(HfApi().dataset_info(DATASET_ID).sha)
+          PY
+          )
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Dataset revision: $sha"
+
+      # Exact key, no restore-keys: the datasets cache is laid out per
+      # revision, so an older revision's files are dead weight to a newer one.
+      - name: Cache the Hugging Face download
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-${{ steps.hf.outputs.sha }}
+
+      # numba JIT-compiles umap-learn on every cold run; the four UMAP
+      # generators each paid it. This one CAN restore an older key.
+      - name: Cache the numba JIT cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/numba
+          key: numba-${{ runner.os }}-${{ hashFiles('scripts/requirements.lock') }}
+          restore-keys: |
+            numba-${{ runner.os }}-
+
       - name: Run generators
         # The 30 HF-driven generators, with default flags (defaults already match
         # the committed output shapes/minify). Static geojson is read from
@@ -80,6 +121,7 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           set -euo pipefail
+          export NUMBA_CACHE_DIR="$HOME/.cache/numba"
           gens=(
             audiovisual_overview
             collection_overview wordcloud world_map index_overview keyword_explorer
@@ -121,9 +163,47 @@ jobs:
         # straight into files/iwac-visualizations/ and looks for that root marker.
         run: |
           set -euo pipefail
-          test -f asset/data/collection-overview.json   # sanity: generators ran
-          test -f asset/data/laicite-events.json         # committed, rode in from checkout
+          # Every bundle the blocks fetch must exist and be non-empty before
+          # anything is published. Until v1.59.0 only collection-overview.json
+          # was checked, and one generator (wordcloud) could write an EMPTY
+          # payload and exit 0 — a partial build must never reach the release.
+          # Names are the generators' save_json targets; the two *-events
+          # files are committed and ride in from the checkout.
+          fail=0
+          for f in \
+            audiovisual-overview.json collection-map.json collection-overview.json \
+            collection-wordcloud.json compare-newspapers/index.json corpus-health.json \
+            entity-networks-global.json entity-networks-spatial.json index-overview.json \
+            keyness.json keyword-explorer-metadata.json keyword-explorer-spatial.json \
+            keyword-explorer-subjects.json \
+            laicite-actors.json laicite-arenas.json laicite-bylines.json laicite-circulation.json \
+            laicite-collocates.json laicite-concordance.json laicite-corpora.json \
+            laicite-countries.json laicite-documents.json laicite-events.json laicite-implicit.json \
+            laicite-metadata.json laicite-places.json laicite-references.json \
+            laicite-seasonality.json laicite-semantic.json laicite-sentiment.json laicite-trends.json \
+            lexical-metrics.json org-cooccurrence.json periodicals-landscape.json \
+            periodicals-overview.json press-bylines.json press-reprints.json references-overview.json \
+            scary-terms-cooccurrence.json scary-terms-countries.json scary-terms-events.json \
+            scary-terms-global.json scary-terms-metadata.json scary-terms-places.json \
+            scary-terms-temporal.json scary-terms-trends.json scary-terms-wordcloud.json \
+            semantic-landscape.json sentiment-atlas.json spatial-exploration.json \
+            template-summary.json term-trends-index.json topic-explorer.json
+          do
+            test -s "asset/data/$f" || { echo "::error::missing or empty output: asset/data/$f"; fail=1; }
+          done
+          for d in article-dashboards compare-newspapers entity-dashboards on-this-day \
+                   person-dashboards publication-dashboards reference-dashboards term-trends
+          do
+            [ -n "$(ls -A "asset/data/$d" 2>/dev/null)" ] || { echo "::error::empty fan-out: asset/data/$d"; fail=1; }
+          done
+          [ "$fail" -eq 0 ] || exit 1
           ( cd asset/data && zip -r -q -X "$GITHUB_WORKSPACE/iwac-data.zip" . )
+          # The digest the Sync Data job verifies before it installs anything
+          # (SyncData::verifyDigest). Published beside the archive under the
+          # same name + .sha256; `sha256sum -c` format, so it is checkable by
+          # hand too.
+          sha256sum iwac-data.zip > iwac-data.zip.sha256
+          cat iwac-data.zip.sha256
           echo "Archive size:"; ls -lh iwac-data.zip
           echo "Entry count:"; unzip -l iwac-data.zip | tail -1
 
@@ -139,7 +219,7 @@ jobs:
               --title "Precomputed visualization data ($TAG)" \
               --notes "Automated data build from ${GITHUB_SHA:0:12} (run ${GITHUB_RUN_ID})." \
               --latest=false
-            gh release upload "$TAG" iwac-data.zip --clobber
+            gh release upload "$TAG" iwac-data.zip iwac-data.zip.sha256 --clobber
           else
             # Moving `data` release — the stable URL the Sync Data job downloads by default:
             #   https://github.com/${{ github.repository }}/releases/download/data/iwac-data.zip
@@ -147,6 +227,6 @@ jobs:
               --title "Precomputed visualization data (latest)" \
               --notes "Moving release: the latest automated data build, refreshed by the regenerate-data workflow." \
               --latest=false
-            gh release upload data iwac-data.zip --clobber
+            gh release upload data iwac-data.zip iwac-data.zip.sha256 --clobber
           fi
-          echo "Published iwac-data.zip to release '${TAG:-data}'."
+          echo "Published iwac-data.zip + iwac-data.zip.sha256 to release '${TAG:-data}'."

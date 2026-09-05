@@ -502,7 +502,20 @@
                 // the page on mobile. Both are theme-level defaults so
                 // every builder inherits without per-call configuration.
                 confine: true,
-                appendTo: 'body'
+                appendTo: 'body',
+                // Every tooltip that has no `formatter` of its own — the
+                // stacked timelines, the growth chart, the compare panels —
+                // used to print raw numbers: "6000" on a site whose axes,
+                // cards and tables all say "6 000" / "6,000". One theme-level
+                // formatter localises the value column for all of them.
+                // Resolved lazily because panels.js loads after this file;
+                // non-numbers (null gaps, labels) pass through untouched.
+                valueFormatter: function (value) {
+                    var format = ns.panels && ns.panels.formatNumber;
+                    return (format && typeof value === 'number' && isFinite(value))
+                        ? format(value)
+                        : value;
+                }
             },
             axisPointer: {
                 lineStyle: { color: tokens.muted },

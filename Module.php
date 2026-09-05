@@ -88,29 +88,32 @@ class Module extends AbstractModule
      * Ported verbatim from `IwacSentiment\Module` so existing
      * translation catalogues (language/fr.po) keep working after the
      * merge. When new enum values are added to the authority list,
-     * update these three maps together.
+     * update these three maps together. The `@translate` markers are what
+     * `scripts/extract-pot.js` reads: these labels reach `translate()`
+     * only through a variable, so without the marker the template would
+     * never carry them.
      */
     const CENTRALITE_ITEMS = [
-        78048 => 'Very central',
-        78049 => 'Central',
-        78050 => 'Secondary',
-        78051 => 'Marginal',
-        78052 => 'Not addressed',
+        78048 => 'Very central', // @translate
+        78049 => 'Central', // @translate
+        78050 => 'Secondary', // @translate
+        78051 => 'Marginal', // @translate
+        78052 => 'Not addressed', // @translate
     ];
     const POLARITE_ITEMS = [
-        78031 => 'Very positive',
-        78038 => 'Positive',
-        78039 => 'Neutral',
-        78040 => 'Negative',
-        78041 => 'Very negative',
-        78042 => 'Not applicable',
+        78031 => 'Very positive', // @translate
+        78038 => 'Positive', // @translate
+        78039 => 'Neutral', // @translate
+        78040 => 'Negative', // @translate
+        78041 => 'Very negative', // @translate
+        78042 => 'Not applicable', // @translate
     ];
     const SUBJECTIVITE_ITEMS = [
-        78043 => ['score' => 1, 'label' => 'Very objective'],
-        78044 => ['score' => 2, 'label' => 'Rather objective'],
-        78045 => ['score' => 3, 'label' => 'Mixed'],
-        78046 => ['score' => 4, 'label' => 'Rather subjective'],
-        78047 => ['score' => 5, 'label' => 'Very subjective'],
+        78043 => ['score' => 1, 'label' => 'Very objective'], // @translate
+        78044 => ['score' => 2, 'label' => 'Rather objective'], // @translate
+        78045 => ['score' => 3, 'label' => 'Mixed'], // @translate
+        78046 => ['score' => 4, 'label' => 'Rather subjective'], // @translate
+        78047 => ['score' => 5, 'label' => 'Very subjective'], // @translate
     ];
 
     /**

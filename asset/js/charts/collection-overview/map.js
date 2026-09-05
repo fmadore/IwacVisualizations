@@ -28,7 +28,6 @@
     function render(panelEl, data, ctx) {
         var basePath = ctx && ctx.basePath ? ctx.basePath : '';
         var dataUrl = basePath + '/files/iwac-visualizations/collection-map.json';
-        var geoUrl = basePath + '/modules/IwacVisualizations/asset/geo/world_countries_simple.geojson';
 
         panelEl.chart.appendChild(P.buildLoadingState());
 
@@ -42,7 +41,7 @@
             Promise.all([P.whenMaplibre(), P.fetchJSON(dataUrl)])
                 .then(function (results) {
                     panelEl.chart.innerHTML = '';
-                    build(panelEl, results[1], geoUrl, basePath);
+                    build(panelEl, results[1], basePath);
                 })
                 .catch(function (err) {
                     console.error('IWACVis map:', err);
@@ -74,7 +73,7 @@
         return counts;
     }
 
-    function build(panelEl, mapData, geoUrl, basePath) {
+    function build(panelEl, mapData, basePath) {
         var locations = mapData.locations || [];
         var countryData = mapData.country_counts || {};
         var TYPE_KEYS = ['article', 'publication', 'document', 'audiovisual', 'reference', 'image'];
@@ -175,9 +174,9 @@
                     generateId: true
                 });
             }
-            if (!map.getSource('countries')) {
-                map.addSource('countries', { type: 'geojson', data: geoUrl });
-            }
+            // (A 205 KB `countries` GeoJSON source used to be added here and
+            // parsed by the worker on every style load. No layer ever drew
+            // it — the choropleth helper loads its own 6-country file.)
             if (!map.getLayer('location-circles')) {
                 map.addLayer({
                     id: 'location-circles',

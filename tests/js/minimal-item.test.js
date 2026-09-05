@@ -26,7 +26,9 @@ function loadModule() {
         document: { readyState: 'complete', querySelectorAll: () => [] },
         window: {
             IWACVis: {
-                panels: {},
+                // The orchestrator boots through the shared per-item helper at
+                // load; a no-op keeps the module load side-effect free here.
+                panels: { bootPerItemDashboard() {} },
                 dashboardLayout: { register() {} },
             },
         },

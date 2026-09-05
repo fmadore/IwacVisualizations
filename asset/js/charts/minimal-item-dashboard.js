@@ -186,127 +186,120 @@
     /*  Bootstrap                                                         */
     /* ----------------------------------------------------------------- */
 
-    function initDashboard(container) {
-        var subset   = container.dataset.subset || '';
-        var basePath = container.dataset.basePath || '';
-        var channel  = container.dataset.channel || '';
-        var watchUrl = container.dataset.watchUrl || '';
-        var itemId   = Number(container.dataset.itemId);
-        var pubYear  = parseInt(container.dataset.pubYear, 10);
-        if (isNaN(pubYear)) pubYear = null;
-
-        // No template-id → subset map = nothing to render. Drop the
-        // loading spinner so the block doesn't sit there forever.
-        if (!subset) {
-            var loading = container.querySelector('.iwac-vis-minimal-item__loading');
-            if (loading) loading.remove();
-            return;
+    /**
+     * Which slice of the template summary this item reads — the whole
+     * subset, or one channel of it — resolved once per container and
+     * memoised on ctx because both the header and the grid need it.
+     */
+    function resolveScope(bundle, ctx) {
+        if (ctx._scope !== undefined) return ctx._scope;
+        var ds = ctx.container.dataset;
+        var subsetSlice = (bundle.subsets || {})[ds.subset || ''];
+        if (!subsetSlice) {
+            ctx._scope = null;
+            return null;
         }
-
-        var url = basePath + P.DATA_BASE + 'template-summary.json';
-
-        P.fetchJSON(url)
-            .then(function (bundle) {
-                var loading = container.querySelector('.iwac-vis-minimal-item__loading');
-                if (loading) loading.remove();
-
-                var subsetSlice = (bundle.subsets || {})[subset];
-                if (!subsetSlice) {
-                    container.appendChild(P.buildEmptyState());
-                    return;
-                }
-
-                var scope = scopeToPublisher(subsetSlice, channel);
-                var slice = scope || subsetSlice;
-
-                // Figures + watch link ride above the panel grid. Only
-                // audiovisual slices carry a runtime, so this row simply
-                // doesn't appear for documents or photographs.
-                if (slice.duration) {
-                    container.appendChild(buildFigures(slice));
-                }
-                if (watchUrl) {
-                    var actions = P.el('p', 'iwac-vis-minimal-item__actions');
-                    actions.appendChild(buildWatchLink(watchUrl));
-                    container.appendChild(actions);
-                }
-
-                // Sparkline — siblingSparkline expects parallel
-                // `years` + `values` arrays plus an optional
-                // `highlight` year to stamp a dot at. Caption text
-                // displays beneath the curve.
-                var years  = (slice.years || []).map(function (e) { return e.year; });
-                var values = (slice.years || []).map(function (e) { return e.count; });
-                var sparkline = {
-                    years:     years,
-                    values:    values,
-                    highlight: pubYear,
-                    caption:   scope
-                        ? P.t('items_from_source', {
-                            count: P.formatNumber(slice.total || 0),
-                            source: slice.label || channel
-                        })
-                        : P.t('items_count', { count: P.formatNumber(slice.total || 0) })
-                };
-
-                // Similar items — prefer the precomputed neighbours for
-                // this exact item when the subset has an embedding
-                // (images: multimodal cosine over embedding_image).
-                // Neighbours are computed over the whole subset, so they
-                // are read from there rather than from the scoped slice.
-                // Otherwise fall back to the recency list, dropping the
-                // current item so users don't see "this same item
-                // you're viewing" among the cards. The similar-items
-                // renderer normalises the shape: title / o_id / date /
-                // country / publisher / duration / thumbnail / score are
-                // all consumed natively.
-                var neighbours = (subsetSlice.similar_by_id || {})[String(itemId)];
-                var semantic   = !!(neighbours && neighbours.length);
-                var similar    = semantic
-                    ? neighbours
-                    : (slice.top_items || []).filter(function (it) {
-                        return it && it.o_id !== itemId;
-                    });
-
-                var body = P.el('div', 'iwac-vis-minimal-item__body');
-                container.appendChild(body);
-
-                var ctx = {
-                    siteBase: container.dataset.siteBase || '',
-                    basePath: basePath,
-                    data:     bundle
-                };
-
-                DL.render(body, 'minimalItem', {
-                    sparkline: sparkline,
-                    similar:   similar,
-                    semantic:  semantic,
-                    scope:     !!scope
-                }, ctx);
-            })
-            .catch(function (err) {
-                console.error('IWACVis minimal-item dashboard:', err);
-                var loading = container.querySelector('.iwac-vis-minimal-item__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.buildFetchErrorState(err));
-            });
+        var channel = ds.channel || '';
+        var scope = scopeToPublisher(subsetSlice, channel);
+        ctx._scope = {
+            subsetSlice: subsetSlice,
+            scope:       scope,
+            slice:       scope || subsetSlice,
+            channel:     channel
+        };
+        return ctx._scope;
     }
 
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-minimal-item');
-        for (var i = 0; i < containers.length; i++) {
-            initDashboard(containers[i]);
+    // The shared per-item boot (fetch with a bounded wait, spinner → body,
+    // retry banner) replaced the hand-rolled scaffold this file carried until
+    // v1.59.0. This block reads one shared bundle rather than a per-item
+    // file, and scopes it here.
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-minimal-item',
+        classToken: 'minimal-item',
+        dataFile:   'template-summary.json',
+        layout:     'minimalItem',
+        warnLabel:  'IWACVis minimal-item dashboard',
+        // Sparkline (inline SVG) + cards: no ECharts renderer in this layout.
+        requireECharts: false,
+        // No template-id → subset map = nothing to render. Drop the loading
+        // spinner rather than fetch a bundle nothing will read.
+        skip: function (container) { return !container.dataset.subset; },
+        slices: function (bundle, ctx) {
+            var scoped = resolveScope(bundle, ctx);
+            if (!scoped) return null;
+            var slice = scoped.slice;
+            var ds = ctx.container.dataset;
+            var itemId = Number(ds.itemId);
+            var pubYear = parseInt(ds.pubYear, 10);
+            if (isNaN(pubYear)) pubYear = null;
+
+            // Sparkline — siblingSparkline expects parallel `years` +
+            // `values` arrays plus an optional `highlight` year to stamp a
+            // dot at. Caption text displays beneath the curve.
+            var years  = (slice.years || []).map(function (e) { return e.year; });
+            var values = (slice.years || []).map(function (e) { return e.count; });
+            var sparkline = {
+                years:     years,
+                values:    values,
+                highlight: pubYear,
+                caption:   scoped.scope
+                    ? P.t('items_from_source', {
+                        count: P.formatNumber(slice.total || 0),
+                        source: slice.label || scoped.channel
+                    })
+                    : P.t('items_count', { count: P.formatNumber(slice.total || 0) })
+            };
+
+            // Similar items — prefer the precomputed neighbours for this
+            // exact item when the subset has an embedding (images:
+            // multimodal cosine over embedding_image). Neighbours are
+            // computed over the whole subset, so they are read from there
+            // rather than from the scoped slice. Otherwise fall back to the
+            // recency list, dropping the current item so users don't see
+            // "this same item you're viewing" among the cards. The
+            // similar-items renderer normalises the shape: title / o_id /
+            // date / country / publisher / duration / thumbnail / score are
+            // all consumed natively.
+            var neighbours = (scoped.subsetSlice.similar_by_id || {})[String(itemId)];
+            var semantic   = !!(neighbours && neighbours.length);
+            var similar    = semantic
+                ? neighbours
+                : (slice.top_items || []).filter(function (it) {
+                    return it && it.o_id !== itemId;
+                });
+
+            return {
+                sparkline: sparkline,
+                similar:   similar,
+                semantic:  semantic,
+                scope:     !!scoped.scope
+            };
+        },
+        mountHeader: function (body, bundle, ctx) {
+            var scoped = resolveScope(bundle, ctx);
+            if (!scoped) return;
+            // Figures + watch link ride above the panel grid, as direct
+            // children of the block (minimal-item.css addresses the figure
+            // row as `.iwac-vis-minimal-item > .iwac-vis-overview-summary`),
+            // so they go BEFORE the body rather than into it. Only
+            // audiovisual slices carry a runtime, so the row simply doesn't
+            // appear for documents or photographs.
+            var container = ctx.container;
+            if (scoped.slice.duration) {
+                container.insertBefore(buildFigures(scoped.slice), body);
+            }
+            var watchUrl = container.dataset.watchUrl || '';
+            if (watchUrl) {
+                var actions = P.el('p', 'iwac-vis-minimal-item__actions');
+                actions.appendChild(buildWatchLink(watchUrl));
+                container.insertBefore(actions, body);
+            }
         }
-    }
+    });
 
     // Exported for tests — the scoping rules are where this block either
     // shows a channel or silently falls back, and that is worth pinning
     // down without a browser. Same shape as person-dashboard/network.js.
     ns.minimalItem = { sliceKey: sliceKey, scopeToPublisher: scopeToPublisher };
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
 })();

@@ -153,11 +153,11 @@
         }
 
         // The registerChart render callback doubles as the
-        // post-theme-swap re-render path: dashboard-core disposes the
-        // ECharts instance on theme change, re-inits it with the new
-        // theme, then calls this callback with the fresh instance.
-        // Applying from current state (instead of setting empty
-        // series) keeps the chart visible across theme toggles.
+        // post-theme-swap re-render path: dashboard-core keeps the SAME
+        // instance across a theme change (`setTheme()` on it, not a
+        // dispose + re-init) and re-runs this callback on it. Applying
+        // from current state (instead of setting empty series) keeps the
+        // chart visible across theme toggles.
         ns.registerChart(panelEl.chart, function (el, instance) {
             applyFromState(instance);
         });

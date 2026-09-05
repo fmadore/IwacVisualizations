@@ -433,7 +433,15 @@
         btn.classList.add('iwac-vis-panel-toolbar__btn--fullscreen');
         bar.appendChild(btn);
 
+        // Self-cleaning: a panel that leaves the document (a view switch, a
+        // rebuilt results area) takes its listener with it on the next
+        // fullscreen change, instead of stacking one detached closure per
+        // panel ever built on the page.
         var onChange = function () {
+            if (!document.body.contains(panelEl)) {
+                document.removeEventListener('fullscreenchange', onChange);
+                return;
+            }
             var isFull = (document.fullscreenElement === panelEl);
             panelEl.classList.toggle('iwac-vis-panel--fullscreen', isFull);
             btn.classList.toggle('iwac-vis-panel-toolbar__btn--pressed', isFull);

@@ -90,6 +90,12 @@
         return '';
     }
 
+    /** Normalise an option component ECharts accepts as either object or array. */
+    function toArray(value) {
+        if (value == null) return [];
+        return Array.isArray(value) ? value : [value];
+    }
+
     /**
      * A short, correct, localized description of what a chart shows.
      *
@@ -103,20 +109,28 @@
      * already the thing a sighted reader reads first — plus the shape of the
      * data and, where the chart is windowed, how to move the window.
      *
+     * It reads the option the caller is ABOUT to set, not `getOption()`. The
+     * previous version described the chart after the fact, which meant a deep
+     * clone of the live option (series data included) plus a second, non-lazy
+     * `setOption` for every render — four full update passes per registered
+     * chart once the explicit re-apply was counted, and the five `lazyUpdate`
+     * callers never got their deferred frame. The outgoing option carries the
+     * same title, series and dataZoom; describing it before the native call
+     * costs nothing.
+     *
      * The counts are computed defensively and dropped entirely if anything is
      * not a plain array: announcing a wrong number is worse than announcing
      * none, and "NaN" is how the last version of this failed.
      */
-    function describeChart(el, instance) {
+    function describeOption(el, option) {
         var title = panelTitleFor(el);
-        var option = null;
-        try { option = instance.getOption(); } catch (e) { option = null; }
-        if (!title && option && option.title && option.title[0]) {
-            title = String(option.title[0].text || '').trim();
+        var titles = toArray(option && option.title);
+        if (!title && titles[0]) {
+            title = String(titles[0].text || '').trim();
         }
         if (!title) title = t('Chart');
 
-        var series = (option && option.series) || [];
+        var series = toArray(option && option.series);
         var points = 0;
         var countable = series.length > 0;
         for (var i = 0; i < series.length; i++) {
@@ -142,32 +156,28 @@
 
     /** Does this option carry a dataZoom the keyboard handler can drive? */
     function hasZoom(option) {
-        var dz = option && option.dataZoom;
-        return !!(dz && dz.length && isFinite(Number(dz[0].start)) && isFinite(Number(dz[0].end)));
+        var dz = toArray(option && option.dataZoom);
+        return !!(dz.length && isFinite(Number(dz[0].start)) && isFinite(Number(dz[0].end)));
     }
 
-    /**
-     * Apply the chart's text alternative AFTER its render callback ran.
-     * Render callbacks rebuild the whole option with `setOption(option, true)`
-     * (notMerge), which would discard anything injected earlier — applying
-     * aria as a follow-up merge survives that pattern. Zero visual change —
-     * decal patterns stay off (see ROADMAP 4.5/7.2).
-     */
-    ns._applyAria = function (instance, el) {
-        if (!instance || instance.isDisposed()) return;
-        try {
-            var host = el || instance.getDom();
-            var description = describeChart(host, instance);
-            instance.setOption({
-                aria: { enabled: true, label: { enabled: true, description: description } }
-            });
-            // ECharts hangs its own label on a div INSIDE the host, which
-            // `role="img"` prunes from the accessibility tree along with the
-            // rest of the subtree — so the host has to carry the name itself
-            // or it is a focusable, unlabelled div.
-            if (host && host.setAttribute) host.setAttribute('aria-label', description);
-        } catch (e) { /* enhancement only — never let aria break a render */ }
-    };
+    /** True when at least one series in an option carries a data array. */
+    function seriesCarryData(series) {
+        for (var i = 0; i < series.length; i++) {
+            if (series[i] && Array.isArray(series[i].data)) return true;
+        }
+        return false;
+    }
+
+    /** Fold the description into an option's `aria` block, keeping any caller keys. */
+    function ariaWith(existing, description) {
+        var aria = existing && typeof existing === 'object' ? existing : {};
+        aria.enabled = true;
+        var label = aria.label && typeof aria.label === 'object' ? aria.label : {};
+        label.enabled = true;
+        label.description = description;
+        aria.label = label;
+        return aria;
+    }
 
     /* ----------------------------------------------------------------- */
     /*  Keyboard reach                                                    */
@@ -191,31 +201,53 @@
      * a duplicate each time.
      */
     /**
-     * Re-describe a chart after EVERY `setOption`, not just the first.
+     * Describe a chart on EVERY `setOption`, not just the first — and do it
+     * on the way IN, as part of the same update.
      *
-     * Applying the description once after the render callback is not enough:
-     * a facet change, a tab, a pagination step all call `setOption(option,
-     * true)` straight on the instance, and ECharts — whose `aria.enabled` is
-     * on at theme level — regenerates its own label from the new option. So
+     * Describing once after the render callback is not enough: a facet
+     * change, a tab, a pagination step all call `setOption(option, true)`
+     * straight on the instance, and ECharts — whose `aria.enabled` is on at
+     * theme level — regenerates its own label from the new option. So
      * expanding the Gantt from 20 rows to 82 silently swapped a 108-character
      * localized description for a 2,500-character English recitation of the
      * first ten newspapers. Measured on the rig, not reasoned about.
      *
-     * Patching the instance is what makes this hold for every caller without
-     * each one remembering. The re-entrancy flag is load-bearing: `_applyAria`
-     * itself sets an option.
+     * The description is folded into the outgoing option's `aria` block
+     * before the native call, so one `setOption` stays one update pass and
+     * the caller's `{ notMerge, lazyUpdate }` form passes through untouched.
+     * A full rebuild (notMerge, or series carrying data) is re-described; a
+     * partial merge that touches neither — a legend toggle, a layout nudge —
+     * keeps the last description, which ECharts also keeps because a merge
+     * leaves `aria` alone. Patching the instance is what makes this hold for
+     * every caller without each one remembering.
+     *
+     * ECharts hangs its own label on a div INSIDE the host, which `role="img"`
+     * prunes from the accessibility tree along with the rest of the subtree —
+     * so the host carries the name itself or it is a focusable, unlabelled div.
      */
     function trackOptionChanges(instance, el) {
         if (!instance || instance._iwacAriaPatched) return;
         instance._iwacAriaPatched = true;
         var native = instance.setOption;
-        instance.setOption = function () {
-            var result = native.apply(instance, arguments);
-            if (!instance._iwacApplyingAria) {
-                instance._iwacApplyingAria = true;
-                try { ns._applyAria(instance, el); }
-                finally { instance._iwacApplyingAria = false; }
+        instance.setOption = function (option, arg) {
+            var description = null;
+            if (option && typeof option === 'object') {
+                try {
+                    var base = option.baseOption || option;
+                    var notMerge = arg === true
+                        || !!(arg && typeof arg === 'object' && arg.notMerge);
+                    var series = toArray(base.series);
+                    if (notMerge || !instance._iwacAriaDescription || seriesCarryData(series)) {
+                        description = describeOption(el, base);
+                        instance._iwacAriaDescription = description;
+                    } else {
+                        description = instance._iwacAriaDescription;
+                    }
+                    base.aria = ariaWith(base.aria, description);
+                } catch (e) { description = null; /* enhancement only — never let aria break a render */ }
             }
+            var result = native.apply(instance, arguments);
+            if (description && el && el.setAttribute) el.setAttribute('aria-label', description);
             return result;
         };
     }
@@ -301,9 +333,10 @@
 
         ns._charts.push(entry);
         makeChartFocusable(el);
+        // The patch below describes the chart inside the render's own
+        // setOption — no follow-up pass.
         trackOptionChanges(instance, el);
         try { render(el, instance); } catch (e) { console.error('IWACVis: render failed', e); }
-        ns._applyAria(instance, el);
 
         // Auto-attach the shared panel toolbar (download button) if the
         // panel-toolbar module is loaded and the chart lives inside a
@@ -408,21 +441,82 @@
         return null;
     };
 
-    /** Remove disposed/detached charts from the tracking array. */
+    /**
+     * Free whatever an entry holds: the ECharts instance (its canvas and
+     * zrender state), the MapLibre map (its WebGL context — browsers cap
+     * those at about sixteen and silently lose the oldest), and the
+     * ResizeObserver `registerChart` attached. Idempotent; never throws.
+     */
+    function releaseEntry(entry) {
+        try {
+            if (entry.kind === 'echarts' && entry.instance && !entry.instance.isDisposed()) {
+                entry.instance.dispose();
+            } else if (entry.kind === 'maplibre' && entry.instance && !entry.instance._removed
+                && typeof entry.instance.remove === 'function') {
+                entry.instance.remove();
+            }
+        } catch (e) { /* already gone */ }
+        if (entry._resizeObserver) {
+            try { entry._resizeObserver.disconnect(); } catch (e) { /* ignore */ }
+            entry._resizeObserver = null;
+        }
+    }
+
+    /**
+     * Remove dead charts from the tracking array.
+     *
+     * "Dead" means disposed or removed — NOT detached. A host that has left
+     * the document is not necessarily gone for good: the laïcité dossier
+     * parks its trends chart panel outside the document between views and
+     * re-attaches it, and disposing it on a theme toggle in the meantime
+     * would blank the chart on the way back. So detachment is no signal
+     * here; a block that throws a subtree away says so with
+     * `ns.disposeWithin` below. (Canvas renderers are the exception and
+     * always were: they hold no instance, so their container's presence is
+     * the only liveness they have.)
+     */
     ns.pruneCharts = function () {
         ns._charts = ns._charts.filter(function (c) {
             var alive = false;
-            if (c.kind === 'echarts') alive = c.instance && !c.instance.isDisposed();
-            else if (c.kind === 'maplibre') alive = c.instance && !c.instance._removed;
+            if (c.kind === 'echarts') alive = !!(c.instance && !c.instance.isDisposed());
+            else if (c.kind === 'maplibre') alive = !!(c.instance && !c.instance._removed);
             // A canvas renderer has no instance to interrogate — it lives
             // exactly as long as its container is still in the document.
             else if (c.kind === 'renderer') alive = !!(c.el && c.el.isConnected);
-            if (!alive && c._resizeObserver) {
-                c._resizeObserver.disconnect();
-                c._resizeObserver = null;
-            }
+            if (!alive) releaseEntry(c);
             return alive;
         });
+    };
+
+    /**
+     * Dispose every tracked chart and map inside `root`, and forget them.
+     *
+     * The call to make BEFORE clearing a subtree that holds charts — a view
+     * host, a detail pane, a results area — so the instances go with the
+     * DOM instead of outliving it. Until v1.59.0 only compare-newspapers did
+     * this (its private `disposeCharts`, promoted here); every other view
+     * switch — the laïcité dossier's views, a Topic Explorer detail — left
+     * the ECharts instance, its canvas and its ResizeObserver alive behind a
+     * detached node, so the array grew by three or four entries per
+     * interaction and the next dark-mode toggle re-rendered all of them. A
+     * MapLibre map inside `root` is `remove()`d, which is also what gives
+     * its WebGL context back. Returns how many entries were released.
+     *
+     * @param {Element} root
+     * @returns {number}
+     */
+    ns.disposeWithin = function (root) {
+        if (!root || !root.contains || !ns._charts.length) return 0;
+        var kept = [];
+        var released = 0;
+        ns._charts.forEach(function (entry) {
+            var inside = entry.el && (entry.el === root || root.contains(entry.el));
+            if (!inside) { kept.push(entry); return; }
+            releaseEntry(entry);
+            released++;
+        });
+        ns._charts = kept;
+        return released;
     };
 
     /* ----------------------------------------------------------------- */
@@ -465,7 +559,6 @@
                     }
                     if (typeof entry.render === 'function' && entry.el) {
                         entry.render(entry.el, entry.instance);
-                        ns._applyAria(entry.instance, entry.el);
                     }
                 } catch (e) {
                     console.error('IWACVis: theme swap failed', e);

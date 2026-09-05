@@ -83,16 +83,31 @@
             if (loading && loading.parentNode) loading.parentNode.removeChild(loading);
         }
 
-        return P.whenMaplibre().then(function (lib) {
-            clear();
-            return build(lib);
-        }, function (err) {
-            clear();
-            if (window.console && console.warn) {
-                console.warn('IWACVis: map panel skipped —', err && err.message);
-            }
-            if (host) host.appendChild(P.buildErrorState('Map library unavailable'));
-        });
+        // Chained, not paired: `.then(build, onReject)` only caught a failed
+        // IMPORT. A throw inside `build` — MapLibre 6 needs WebGL2 and its
+        // constructor throws without it (a `GPUInitializationError` in 6.7, a
+        // plain Error before) — rejected the returned promise with no banner,
+        // leaving an empty map box, or on the panels that re-enter render()
+        // synchronously, an error on the whole block. The catch below covers
+        // both failures with the same banner; a map box the factory already
+        // appended is hidden so the banner is what the reader sees.
+        return P.whenMaplibre()
+            .then(function (lib) {
+                clear();
+                return build(lib);
+            })
+            .catch(function (err) {
+                clear();
+                if (window.console && console.warn) {
+                    console.warn('IWACVis: map panel skipped —', err && err.message);
+                }
+                if (host) {
+                    var box = host.querySelector && host.querySelector('.iwac-vis-map');
+                    if (box) box.hidden = true;
+                    host.appendChild(P.buildErrorState('Map library unavailable'));
+                }
+                return null;
+            });
     };
 
     /**
@@ -233,13 +248,23 @@
 
         function clearHover() {
             if (hovered) {
-                map.setFeatureState(
-                    { source: hovered.source, id: hovered.id },
-                    { hover: false }
-                );
+                // The source may be mid-swap (setStyle wiped it and the
+                // panel's onStyleReady has not re-added it yet): a
+                // setFeatureState against a missing source fires a MapLibre
+                // `error` event, and the state it names no longer exists.
+                if (map.getSource(hovered.source)) {
+                    map.setFeatureState(
+                        { source: hovered.source, id: hovered.id },
+                        { hover: false }
+                    );
+                }
                 hovered = null;
             }
         }
+
+        // A new style means new sources and fresh generated ids; a hover
+        // remembered from the old ones would point at nothing.
+        function onStyleLoad() { hovered = null; }
 
         function onMove(e) {
             // Filter to layers that are actually on the map right now
@@ -288,11 +313,13 @@
 
         map.on('mousemove', onMove);
         map.on('mouseleave', onLeave);
+        map.on('style.load', onStyleLoad);
 
         return function detach() {
             clearHover();
             map.off('mousemove', onMove);
             map.off('mouseleave', onLeave);
+            map.off('style.load', onStyleLoad);
         };
     };
 

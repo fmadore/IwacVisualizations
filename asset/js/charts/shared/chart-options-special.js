@@ -1080,65 +1080,6 @@
     };
 
     /* ------------------------------------------------------------------ */
-    /*  Beeswarm — jittered scatter on a single axis                       */
-    /* ------------------------------------------------------------------ */
-
-    /**
-     * Beeswarm/strip plot. Each point is positioned on the value axis
-     * with a small deterministic Y jitter so overlapping points spread
-     * out vertically. Useful for showing distributions without the
-     * smoothing of a histogram.
-     *
-     * @param {{value:number, label?:string, group?:string}[]} points
-     * @param {Object} [opts]
-     * @param {string} [opts.xAxisName] Axis label
-     */
-    C.beeswarm = function (points, opts) {
-        opts = opts || {};
-        // Deterministic jitter so pan/zoom doesn't reshuffle the swarm.
-        function jitter(i) {
-            var x = Math.sin(i * 12.9898) * 43758.5453;
-            return (x - Math.floor(x) - 0.5) * 0.8;
-        }
-        var data = (points || []).map(function (p, i) {
-            return {
-                value: [p.value, jitter(i)],
-                name: p.label || '',
-                group: p.group || ''
-            };
-        });
-        return {
-            grid: C._grid({ top: 16, bottom: 32, left: 32, right: 16 }),
-            tooltip: {
-                trigger: 'item',
-                formatter: function (p) {
-                    var d = p.data || {};
-                    return (d.name ? '<strong>' + esc(d.name) + '</strong><br>' : '') +
-                        fmt(d.value[0]);
-                }
-            },
-            xAxis: {
-                type: 'value',
-                name: opts.xAxisName || '',
-                nameLocation: 'middle',
-                nameGap: 24
-            },
-            yAxis: {
-                type: 'value',
-                show: false,
-                min: -1,
-                max: 1
-            },
-            series: [{
-                type: 'scatter',
-                data: data,
-                symbolSize: 9,
-                itemStyle: { opacity: 0.7 }
-            }]
-        };
-    };
-
-    /* ------------------------------------------------------------------ */
     /*  Heatmap — year × month calendar grid                               */
     /* ------------------------------------------------------------------ */
 

@@ -75,25 +75,11 @@
     /* ----------------------------------------------------------------- */
 
     function disposeCharts(root) {
-        if (!ns._charts || !ns._charts.length) return;
-        var next = [];
-        for (var i = 0; i < ns._charts.length; i++) {
-            var entry = ns._charts[i];
-            if (entry.el && root.contains(entry.el)) {
-                if (entry.instance && typeof entry.instance.dispose === 'function') {
-                    try { entry.instance.dispose(); } catch (e) {}
-                }
-                if (entry.kind === 'maplibre' && entry.instance && typeof entry.instance.remove === 'function') {
-                    try { entry.instance.remove(); } catch (e) {}
-                }
-                if (entry._resizeObserver && typeof entry._resizeObserver.disconnect === 'function') {
-                    try { entry._resizeObserver.disconnect(); } catch (e) {}
-                }
-            } else {
-                next.push(entry);
-            }
-        }
-        ns._charts = next;
+        // The instance + map + observer teardown is dashboard-core's now
+        // (`ns.disposeWithin`, promoted from here in v1.59.0 so the other
+        // view-switching blocks could share it). What stays block-specific
+        // is the observer this block attaches to its own map hosts.
+        if (ns.disposeWithin) ns.disposeWithin(root);
 
         // Tear down any ResizeObservers we attached directly to map hosts
         // so they don't fire against disposed maps when the user picks a
@@ -170,11 +156,32 @@
         var state = { A: null, B: null };
         var pickers = {};
 
+        // Latest-wins per side. Every picker change fetched its corpus and
+        // whichever response landed LAST won, so switching side A from a
+        // country (a large file) to one newspaper (a small one) rendered the
+        // newspaper and then, when the slower country file arrived, silently
+        // repainted A as the country while the picker still said the
+        // newspaper. A sequence number drops the superseded response; the
+        // AbortController stops it holding a connection slot as well.
+        var seq = { A: 0, B: 0 };
+        var inflight = { A: null, B: null };
+
         function onPickerChange(side) {
             return function (pickerState) {
                 var url = corpusUrl(ctx.basePath,
                     pickerState.type, pickerState.scope, pickerState.slug);
-                P.fetchJSON(url).then(function (data) {
+                if (inflight[side]) {
+                    try { inflight[side].abort(); } catch (e) { /* already settled */ }
+                }
+                var controller = typeof AbortController !== 'undefined'
+                    ? new AbortController() : null;
+                inflight[side] = controller;
+                var mine = ++seq[side];
+                var opts = controller ? { signal: controller.signal } : undefined;
+
+                P.fetchJSON(url, opts).then(function (data) {
+                    if (mine !== seq[side]) return;   // superseded by a newer pick
+                    inflight[side] = null;
                     state[side] = data;
                     if (state.A && state.B) {
                         renderResults(resultsRoot, state.A, state.B, ctx);
@@ -184,7 +191,10 @@
                             P.t('Choose two corpora to compare')));
                     }
                 }).catch(function (err) {
+                    if (mine !== seq[side]) return;   // our own abort, or superseded
+                    inflight[side] = null;
                     console.error('IWACVis compare-newspapers:', err);
+                    disposeCharts(resultsRoot);
                     resultsRoot.innerHTML = '';
                     resultsRoot.appendChild(P.buildFetchErrorState(err));
                 });

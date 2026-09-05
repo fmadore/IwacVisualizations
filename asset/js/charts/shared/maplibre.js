@@ -250,7 +250,31 @@
             }
         }
 
-        var map = new maplibregl.Map(baseOptions);
+        // MapLibre 6 requires WebGL2 and the constructor throws without it —
+        // a `GPUInitializationError` in 6.7, a plain Error before. That is a
+        // "never", not a "not yet", so it is NOT turned into the null that
+        // means "the library has not landed" (see panels-map.js): it is
+        // logged and rethrown for P.withMaplibre's catch to turn into the
+        // "Map library unavailable" banner.
+        var map;
+        try {
+            map = new maplibregl.Map(baseOptions);
+        } catch (e) {
+            console.warn('IWACVis.maplibre: map construction failed —', e && e.message);
+            throw e;
+        }
+
+        // Runtime errors — a lost WebGL context, a basemap the CDN would not
+        // serve — arrive as `error` events that nobody used to listen for, so
+        // they surfaced as MapLibre's own console line or not at all. One
+        // warning per map keeps a tile 404 storm from flooding the console
+        // while still leaving a trace when a map goes blank.
+        map.on('error', function (e) {
+            if (map._iwacErrorLogged) return;
+            map._iwacErrorLogged = true;
+            var err = e && e.error;
+            console.warn('IWACVis.maplibre: map error —', err && err.message ? err.message : err);
+        });
 
         // Stamp the initial theme so future P.setMapTheme calls can no-op
         // when the requested mode already matches, and the style mode so

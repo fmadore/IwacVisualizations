@@ -159,16 +159,18 @@
     /* ----------------------------------------------------------------- */
 
     /**
-     * Boot a per-item resource-page dashboard (person / entity / article).
+     * Boot a per-item resource-page dashboard (person / entity / article /
+     * publication / reference / minimal item).
      *
-     * Collapses the identical scaffold the three per-item orchestrators
-     * used to hand-roll: wait for ECharts + the DOM, find every matching
-     * container, read its data-* attributes, fetch the per-item JSON, swap
-     * the loading spinner for an `<classToken>__body` wrapper, optionally
-     * mount a header (stats / facet) above the grid, then dispatch the
-     * panel grid through `IWACVis.dashboardLayout.render(body, layout, data,
-     * ctx)`. On fetch failure it removes the spinner and shows the shared
-     * error banner.
+     * Collapses the identical scaffold the per-item orchestrators used to
+     * hand-roll: wait for ECharts + the DOM, find every matching container,
+     * read its data-* attributes, fetch the item's JSON, swap the loading
+     * spinner for an `<classToken>__body` wrapper, optionally mount a header
+     * (stats / facet / metric cards) above the grid, then dispatch the panel
+     * grid through `IWACVis.dashboardLayout.render(body, layout, slices,
+     * ctx)`. On fetch failure it shows the shared error banner with a retry
+     * control — or, for blocks whose bundle legitimately may not exist,
+     * removes the block outright.
      *
      * Call once at module load (it wires its own DOMContentLoaded).
      *
@@ -177,14 +179,37 @@
      * @param {string} opts.classToken  BEM token for the loading + body classes,
      *                                   e.g. 'person' → '.iwac-vis-person__loading'
      *                                   / 'iwac-vis-person__body'.
-     * @param {string} opts.dataDir     asset/data subdirectory, e.g. 'person-dashboards'.
+     * @param {string} [opts.dataDir]   Fan-out directory under files/iwac-visualizations/:
+     *                                   the bundle is `<dataDir>/<itemId>.json`.
+     * @param {string} [opts.dataFile]  One shared bundle instead of a fan-out (the
+     *                                   minimal-item block reads the whole template
+     *                                   summary and scopes it in `slices`). Containers
+     *                                   need no data-item-id then.
      * @param {string} opts.layout      Registered dashboardLayout key.
      * @param {string} [opts.warnLabel] console prefix for warnings / errors.
+     * @param {boolean} [opts.requireECharts=true]  Skip (with a warning) when
+     *                                   ECharts is absent. A dashboard whose
+     *                                   layout holds no ECharts renderer — the
+     *                                   sparkline-and-cards ones — passes false
+     *                                   and renders regardless, as it always did.
+     * @param {'banner'|'remove'} [opts.onError='banner']  'remove' deletes the
+     *                                   block, heading included, on failure — the
+     *                                   contract for dashboards whose bundle is
+     *                                   normally absent (a reference the generator
+     *                                   has not covered).
+     * @param {function(HTMLElement, Object):boolean} [opts.skip]  True → drop the
+     *                                   spinner and render nothing: the markup
+     *                                   already says there is nothing to show.
      * @param {function():Object} [opts.makeFacet]  Build the facet object placed on
      *                                   ctx.facet (defaults to a no-op facet).
+     * @param {function(Object, Object):(Object|null)} [opts.slices]  Shape the
+     *                                   fetched bundle into the object the layout's
+     *                                   slots read (defaults to the bundle itself).
+     *                                   Return null for "this bundle carries nothing
+     *                                   for this item" → the shared empty state.
      * @param {function(body, data, ctx):void} [opts.mountHeader]  Optional hook to
      *                                   mount stats / facet markup above the grid;
-     *                                   runs after ctx.facet is set.
+     *                                   runs after ctx.facet and ctx.slices are set.
      */
     P.bootPerItemDashboard = function (opts) {
         var DL = ns.dashboardLayout;
@@ -200,22 +225,24 @@
 
         function initOne(container) {
             var itemId = container.dataset.itemId;
-            if (!itemId) return;
+            if (!itemId && !opts.dataFile) return;
 
             var ctx = {
-                basePath: container.dataset.basePath || '',
-                siteBase: container.dataset.siteBase || '',
-                itemId:   itemId
+                container: container,
+                basePath:  container.dataset.basePath || '',
+                siteBase:  container.dataset.siteBase || '',
+                itemId:    itemId
             };
-            var url = ctx.basePath + '/files/iwac-visualizations/'
-                + opts.dataDir + '/' + itemId + '.json';
+            var url = ctx.basePath + P.DATA_BASE
+                + (opts.dataFile ? opts.dataFile : opts.dataDir + '/' + itemId + '.json');
             var loadingSel = '.iwac-vis-' + opts.classToken + '__loading';
 
-            // Bounded, and re-attemptable. The dashboards mount on view, so a
-            // stalled fetch used to leave the reader looking at a spinner that
-            // had already been scrolled to and would never resolve — the same
-            // failure On This Day fixed for itself in v1.49.0, still live on
-            // every person, entity and article page.
+            // Bounded (fetchJSON's default timeout), and re-attemptable. The
+            // dashboards mount on view, so a stalled fetch used to leave the
+            // reader looking at a spinner that had already been scrolled to
+            // and would never resolve — the same failure On This Day fixed
+            // for itself in v1.49.0, still live on every person, entity and
+            // article page.
             // `state` is whichever spinner-or-banner currently stands in for
             // the dashboard, so a retry replaces exactly that node and nothing
             // else in the container — the article block also carries a
@@ -230,33 +257,54 @@
                 if (state && state.parentNode) state.parentNode.removeChild(state);
                 state = null;
             }
+
+            if (typeof opts.skip === 'function' && opts.skip(container, ctx)) {
+                dropState();
+                return;
+            }
+
+            function fail(err) {
+                if (opts.onError === 'remove') {
+                    console.warn(label + ':', err);
+                    P.removeBlock(container);
+                    return;
+                }
+                console.error(label + ':', err);
+                swapState(P.buildFetchErrorState(err, null, function () {
+                    swapState(P.buildLoadingState());
+                    attempt();
+                }));
+            }
+
             function attempt() {
-                P.fetchJSON(url, { timeoutMs: P.FETCH_TIMEOUT_MS })
+                P.fetchJSON(url)
                     .then(function (data) {
                         dropState();
 
-                        var body = P.el('div', 'iwac-vis-' + opts.classToken + '__body');
-                        container.appendChild(body);
-
                         ctx.data  = data;
                         ctx.facet = (opts.makeFacet && opts.makeFacet()) || noopFacet();
+                        var slices = typeof opts.slices === 'function'
+                            ? opts.slices(data, ctx)
+                            : data;
+                        if (slices == null) {
+                            container.appendChild(P.buildEmptyState());
+                            return;
+                        }
+                        ctx.slices = slices;
+
+                        var body = P.el('div', 'iwac-vis-' + opts.classToken + '__body');
+                        container.appendChild(body);
                         if (opts.mountHeader) opts.mountHeader(body, data, ctx);
 
-                        DL.render(body, opts.layout, data, ctx);
+                        DL.render(body, opts.layout, slices, ctx);
                     })
-                    .catch(function (err) {
-                        console.error(label + ':', err);
-                        swapState(P.buildFetchErrorState(err, null, function () {
-                            swapState(P.buildLoadingState());
-                            attempt();
-                        }));
-                    });
+                    .catch(fail);
             }
             attempt();
         }
 
         function run() {
-            if (typeof echarts === 'undefined') {
+            if (opts.requireECharts !== false && typeof echarts === 'undefined') {
                 console.warn(label + ': ECharts not loaded');
                 return;
             }
@@ -376,15 +424,22 @@
         });
         bar.appendChild(fullBtn);
 
-        document.addEventListener('fullscreenchange', function () {
+        // Self-cleaning (same rule as panel-toolbar.js): once the panel has
+        // left the document the listener removes itself rather than holding
+        // a detached panel and a disposed chart for the life of the page.
+        var onFullscreenChange = function () {
             var host = panelEl.panel;
-            if (!host) return;
+            if (!host || !document.body.contains(host)) {
+                document.removeEventListener('fullscreenchange', onFullscreenChange);
+                return;
+            }
             isFullscreen = (document.fullscreenElement === host);
             host.classList.toggle('iwac-vis-panel--fullscreen', isFullscreen);
             fullBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', isFullscreen);
             // Give the browser a frame to apply the new size.
             setTimeout(function () { if (!chart.isDisposed()) chart.resize(); }, 50);
-        });
+        };
+        document.addEventListener('fullscreenchange', onFullscreenChange);
 
         panelEl.chart.appendChild(bar);
 

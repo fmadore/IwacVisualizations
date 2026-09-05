@@ -111,9 +111,14 @@
             }
         });
 
-        document.addEventListener('fullscreenchange', function () {
+        // Self-cleaning (same rule as panel-toolbar.js): a panel that has
+        // left the document drops its listener on the next change.
+        var onFullscreenChange = function () {
             var host = panelEl.panel;
-            if (!host) return;
+            if (!host || !document.body.contains(host)) {
+                document.removeEventListener('fullscreenchange', onFullscreenChange);
+                return;
+            }
             var isFull = (document.fullscreenElement === host);
             host.classList.toggle('iwac-vis-panel--fullscreen', isFull);
             fullBtn.classList.toggle('iwac-vis-graph-toolbar__btn--pressed', isFull);
@@ -123,7 +128,8 @@
             // A deliberate re-fit is NOT forced here: if the reader had zoomed
             // in, that zoom is theirs to keep (Reset view is one click away).
             setTimeout(function () { graph.resize(); }, 50);
-        });
+        };
+        document.addEventListener('fullscreenchange', onFullscreenChange);
 
         return bar;
     }

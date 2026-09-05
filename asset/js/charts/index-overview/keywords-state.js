@@ -170,10 +170,8 @@
                     state.country = null;
                     state.newspaper = null;
                 }
-                if (key === 'view' && state.view !== value && value === 'top') {
-                    // leaving compare mode: keep selection so the user
-                    // can swap back without losing picks
-                }
+                // Leaving compare mode ('view' → 'top') deliberately keeps
+                // `selected`, so the user can swap back without losing picks.
                 state[key] = value;
                 notify();
             },
