@@ -6,7 +6,7 @@ The module targets the [IWAC theme](https://github.com/fmadore/IWAC-theme). It r
 
 ## Status
 
-Every registered block is wired end-to-end with live data — nineteen page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
+Every registered block is wired end-to-end with live data — twenty-one page blocks and the template-dispatched resource-page blocks (plus the Item Set Dashboard, which lights up opportunistically where a corpus aggregate exists). The deprecated `iwac-dashboard` migration is complete: all retained visualizations are represented in Omeka blocks; `KnowledgeGraph` and `TopicNetwork` remain intentional exclusions.
 
 | Block | Type | Status | Data path |
 |---|---|---|---|

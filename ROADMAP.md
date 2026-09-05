@@ -584,7 +584,16 @@ merge). The issues predated the data decoupling (issue #7), so their
    every article a topic). The outlier-handling code stays as a guard
    for future dataset versions.
 3. **Phase 5.4** self-host vs CDN — owner decision (GDPR vs edge
-   latency).
+   latency). **Input from the 2026-09-05 audit (REFACTORING.md Tier 8,
+   8.C / B1 / M14):** an order-preserving esbuild bundle is a
+   zero-semantics first step independent of this decision; a
+   tree-shaken `echarts/core` build of the 13 series types and ~14
+   components in use is estimated at 30–40 % below the full CDN
+   bundle; and the Carto basemap tiles raise the same visitor-IP
+   question as jsDelivr, one request per tile per pan, so the
+   decision should cover both (self-hosted style JSON + glyphs is
+   the cheap half; PMTiles via `addProtocol` the fully first-party
+   one).
 
 ## Done — pre-evaluation history (condensed)
 

@@ -44,7 +44,7 @@ is never the afterthought locale.
 
 ## What it ships
 
-Twenty page blocks (Collection Overview, Audiovisual Overview, Index Overview,
+Twenty-one page blocks (Collection Overview, Audiovisual Overview, Index Overview,
 References Overview, Scary Terms, Laïcité, Topic Explorer, Periodicals Overview, two
 Semantic Landscapes, Sentiment Atlas, Press Language, Spatial Exploration, Entity
 Networks, Compare Newspapers, On This Day, Press Bylines, Islamic Organisations
