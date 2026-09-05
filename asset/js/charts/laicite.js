@@ -225,11 +225,11 @@
             return false;
         }
 
-        // The timeline chart is the only ECharts instance in this block.
-        // dashboard-core disposes and re-inits it on every theme swap, so we
-        // capture the new instance here rather than closing over the first —
-        // otherwise draw() would setOption on a disposed chart after the
-        // first light/dark toggle and the chart would go blank.
+        // The timeline chart is the only ECharts instance this block owns
+        // directly (the lazy views register their own). dashboard-core keeps
+        // the SAME instance across a theme swap — `setTheme()` on it, then
+        // this callback again — so capturing it here is belt-and-braces: it
+        // keeps draw() correct if that contract ever changes, at no cost.
         var currentInstance = null;
         ns.registerChart(chartEl, function (el, instance) {
             currentInstance = instance;
@@ -332,6 +332,20 @@
         }
 
         function draw() {
+            // Release the outgoing view's charts and map before their nodes
+            // are thrown away — every lazy view builds fresh ones, and until
+            // v1.59.0 each visit to the sentiment view left four ECharts
+            // instances alive behind detached nodes and each visit to the
+            // map view leaked a WebGL context. Two children are parked, not
+            // rebuilt, and must survive: the trends chart panel and the
+            // concordance host.
+            if (ns.disposeWithin) {
+                for (var i = viewHost.children.length - 1; i >= 0; i--) {
+                    var outgoing = viewHost.children[i];
+                    if (outgoing === chartPanel || outgoing === concordance.host) continue;
+                    ns.disposeWithin(outgoing);
+                }
+            }
             viewHost.innerHTML = '';
             if (state.view === 'overview') {
                 viewHost.appendChild(L.buildVenn(metadata, function (cell) {

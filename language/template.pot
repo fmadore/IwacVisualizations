@@ -1,9 +1,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: IwacVisualizations 1.41.0\n"
+"Project-Id-Version: IwacVisualizations 1.59.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 00:00+0000\n"
+"POT-Creation-Date: 2026-09-05 00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,518 +11,531 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Visualisations"
-msgstr ""
-
-msgid "Item Set Dashboard"
-msgstr ""
-
-msgid "Collection Overview"
-msgstr ""
-
-msgid "Compare Newspapers"
-msgstr ""
-
-msgid "Index Overview"
-msgstr ""
-
-msgid "Press Language"
-msgstr ""
-
-msgid "Periodicals Overview"
-msgstr ""
-
-msgid "References Overview"
-msgstr ""
-
-msgid "Semantic Landscape"
-msgstr ""
-
-msgid "Sentiment Atlas"
-msgstr ""
-
-msgid "Scary Terms"
-msgstr ""
-
-msgid "Laïcité"
-msgstr ""
-
-msgid "Topic Explorer"
-msgstr ""
-
-msgid "Entity Networks"
-msgstr ""
-
-msgid "Spatial Exploration"
-msgstr ""
-
-msgid ""
-"Aggregate visualisations across the entire collection. No configuration "
-"needed."
-msgstr ""
-
-msgid ""
-"Side-by-side comparison of two newspaper corpora (articles or Islamic "
-"publications), scoped either to a whole country or a single newspaper. No "
-"configuration needed."
-msgstr ""
-
-msgid ""
-"Explore authority entities (persons, places, organisations, events, topics) "
-"and Dublin Core Subject + Spatial Coverage prevalence over time. No "
-"configuration needed."
-msgstr ""
-
-msgid ""
-"Press language metrics of the newspaper articles: readability (Flesch), "
-"lexical richness (MATTR) and article length over time, with newspapers "
-"ranked by readability and richness. Data is precomputed from the OCR text of"
-" the IWAC articles subset. No configuration needed."
-msgstr ""
-
-msgid ""
-"Islamic periodicals overview: publication runs, issues per year by country, "
-"languages, countries, and top subjects. Data is precomputed from the IWAC "
-"publications subset. No configuration needed."
-msgstr ""
-
-msgid ""
-"Bibliographic references overview: timeline, types, languages, countries, "
-"top authors and subjects, country-by-type treemap, and co-authorship "
-"network. Data is precomputed from the IWAC references subset. No "
-"configuration needed."
-msgstr ""
-
-msgid ""
-"Zoomable map of the whole press corpus: every article placed by the "
-"semantic similarity of its full text (UMAP over AI embeddings), "
-"colour-faceted by country, decade or topic. Data is precomputed. No "
-"configuration needed."
-msgstr ""
-
-msgid ""
-"AI sentiment atlas of the newspaper articles: polarity, centrality of Islam "
-"and subjectivity over time and by country as rated by several language "
-"models, plus cross-model agreement. All figures are AI-generated "
-"assessments precomputed from the IWAC articles subset. No configuration "
-"needed."
-msgstr ""
-
-msgid ""
-"Bar chart of radical / extremism-related terms across the IWAC collection, "
-"with bar chart race, by-country, and global views. No configuration needed."
-msgstr ""
-
-msgid ""
-"LDA-30 topic overview of the IWAC articles subset, with a treemap of all "
-"topics and a per-topic drill-down (calendar heatmap, country / newspaper "
-"distributions, most-representative articles). No configuration needed."
-msgstr ""
-
-msgid ""
-"Co-occurrence networks across the collection: an entity graph linking "
-"persons, organisations, events, subjects and places that appear in the "
-"same items (layout precomputed), and a geographic network of co-mentioned "
-"places drawn over the basemap. No configuration needed."
-msgstr ""
-
-msgid ""
-"Interactive world map of every place mentioned in the collection, with "
-"country focus and an entity picker (persons, organisations, events, "
-"subjects, places) that maps the locations related to the selected entity. "
-"Data is precomputed. No configuration needed."
-msgstr ""
-
-msgid "Loading dashboard"
-msgstr ""
-
-msgid "Loading visualisations"
-msgstr ""
-
-msgid "Loading collection overview"
-msgstr ""
-
-msgid "Loading newspaper comparison"
-msgstr ""
-
-msgid "Loading index overview"
-msgstr ""
-
-msgid "Loading press language metrics"
-msgstr ""
-
-msgid "Loading periodicals overview"
-msgstr ""
-
-msgid "Loading references overview"
-msgstr ""
-
-msgid "Loading scary terms"
-msgstr ""
-
-msgid "Loading semantic landscape"
-msgstr ""
-
-msgid "Loading sentiment atlas"
-msgstr ""
-
-msgid "Loading Topic Explorer"
-msgstr ""
-
-msgid "Loading entity networks"
-msgstr ""
-
-msgid "Loading spatial exploration"
-msgstr ""
-
-msgid "AI sentiment"
-msgstr ""
-
-msgid "Polarity"
-msgstr ""
-
-msgid "Centrality"
-msgstr ""
-
-msgid "Subjectivity"
-msgstr ""
-
-msgid "Show reasoning"
-msgstr ""
-
-#. Whether the models landed on the same point of a 1–5 scale
-#. (spread 0), one step apart (spread 1), or further (spread 2+).
-msgid "Models agree"
-msgstr ""
-
-msgid "Models nearly agree"
-msgstr ""
-
-msgid "Models disagree"
-msgstr ""
-
-#. %s is a comma-separated list of the model names that rated THIS
-#. article, composed at render time. The roster changes between
-#. annotation campaigns, and a corpus pass in progress means one
-#. article may carry three ratings and the next four.
-msgid ""
-"Polarity, centrality to Islam and Muslim communities, and subjectivity "
-"ratings for this article, produced independently by %s. Read directly "
-"from this item’s record."
-msgstr ""
-
+#: Module.php:97 view/common/resource-page-block-layout/visualizations/article.phtml:68
 msgid "Very central"
 msgstr ""
 
+#: Module.php:98
 msgid "Central"
 msgstr ""
 
+#: Module.php:99
 msgid "Secondary"
 msgstr ""
 
+#: Module.php:100
 msgid "Marginal"
 msgstr ""
 
+#: Module.php:101 view/common/resource-page-block-layout/visualizations/article.phtml:67
 msgid "Not addressed"
 msgstr ""
 
+#: Module.php:104 view/common/resource-page-block-layout/visualizations/article.phtml:59
 msgid "Very positive"
 msgstr ""
 
+#: Module.php:105
 msgid "Positive"
 msgstr ""
 
+#: Module.php:106
 msgid "Neutral"
 msgstr ""
 
+#: Module.php:107
 msgid "Negative"
 msgstr ""
 
+#: Module.php:108 view/common/resource-page-block-layout/visualizations/article.phtml:58
 msgid "Very negative"
 msgstr ""
 
+#: Module.php:109
 msgid "Not applicable"
 msgstr ""
 
+#: Module.php:112 view/common/resource-page-block-layout/visualizations/article.phtml:76
 msgid "Very objective"
 msgstr ""
 
+#: Module.php:113
 msgid "Rather objective"
 msgstr ""
 
+#: Module.php:114
 msgid "Mixed"
 msgstr ""
 
+#: Module.php:115
 msgid "Rather subjective"
 msgstr ""
 
+#: Module.php:116 view/common/resource-page-block-layout/visualizations/article.phtml:77
 msgid "Very subjective"
 msgstr ""
 
-#. Embed snippet gallery
-msgid "Embed IWAC visualisations"
-msgstr ""
-
-#. Embed snippet gallery
-msgid ""
-"Copy a snippet below to embed any visualisation on another website. Each "
-"iframe loads live from this site and resizes itself to fit."
-msgstr ""
-
-#. Embed snippet gallery
-msgid "Copy"
-msgstr ""
-
-#. Embed snippet gallery
-msgid "Copied!"
-msgstr ""
-
-#. Embed snippet gallery
-msgid "Embed a single panel"
-msgstr ""
-
-#. Embed snippet gallery
-msgid ""
-"Tip: embeds render in light mode by default; append <code>?theme=dark</code>"
-" for dark mode, or <code>?primary=2b6cb0</code> to override the accent "
-"colour."
-msgstr ""
-
-#. Embed snippet gallery
-msgid "Visualisation not found"
-msgstr ""
-
-#. Embed snippet gallery
-msgid "No embeddable visualisation matches this address."
-msgstr ""
-
+#: config/module.config.php:54 view/iwac-visualizations/admin/data/index.phtml:20
 msgid "IWAC Visualizations"
 msgstr ""
 
-msgid ""
-"Download the latest precomputed visualisation data and unpack it into the "
-"site files. The heavy generation runs in GitHub Actions, off this server; "
-"this only pulls the published archive. Progress and any errors are logged "
-"under Admin → Jobs."
-msgstr ""
-
-msgid "A data sync is currently running."
-msgstr ""
-
-msgid "View its progress"
-msgstr ""
-
-msgid "Current data"
-msgstr ""
-
-msgid "Last synced"
-msgstr ""
-
-msgid "Files"
-msgstr ""
-
-msgid "Archive size"
-msgstr ""
-
-msgid "Source"
-msgstr ""
-
-msgid "No data has been pulled yet. Use the button below to fetch it."
-msgstr ""
-
-msgid "Pull data"
-msgstr ""
-
-msgid "Pull latest data"
-msgstr ""
-
-msgid "Iframe embeds"
-msgstr ""
-
-msgid ""
-"Open a site-specific embed gallery to preview each page-block "
-"visualisation and copy its iframe snippet."
-msgstr ""
-
-msgid "Open embed gallery"
-msgstr ""
-
-msgid "No sites are available yet. Create a site before using iframe embeds."
-msgstr ""
-
-msgid "Release tag (optional)"
-msgstr ""
-
-msgid "Leave blank to pull the latest build from the moving “data” release."
-msgstr ""
-
+#: src/Controller/Admin/DataController.php:76
 msgid "Invalid or expired form submission. Please try again."
 msgstr ""
 
+#: src/Controller/Admin/DataController.php:83
 msgid "A data sync is already running."
 msgstr ""
 
+#: src/Controller/Admin/DataController.php:96
 msgid "Data sync started. Watch its progress below."
 msgstr ""
 
-# v1.19.0 — On This Day + Press Bylines blocks
-msgid "On This Day"
+#: src/Controller/Admin/DataController.php:137
+msgid "Release tag (optional)"
 msgstr ""
 
-msgid ""
-"Items published on today's date across the collection's decades: newspaper "
-"articles and periodical issues with full publication dates, with page scans "
-"and a line of the text where they exist. Readers can read the day in the "
-"Gregorian or the Hijri calendar (each picks its own documents), switch "
-"between three layouts, and unfold the full list for the day. The block "
-"removes itself silently when no data is available, so it is safe on a "
-"homepage. Data is precomputed from the IWAC dataset."
+#: src/Controller/Admin/DataController.php:138
+msgid "Leave blank to pull the latest build from the moving “data” release."
 msgstr ""
 
-msgid "Loading on this day"
+#: src/Site/BlockLayout/OnThisDay.php:26
+msgid "Register — ruled rows, six documents"
 msgstr ""
 
-#. On This Day <noscript> fallback: the block is entirely client-rendered, so
-#. with scripting off its spinner would never stop.
-msgid "This block assembles today’s items in your browser, so it needs JavaScript."
+#: src/Site/BlockLayout/OnThisDay.php:27
+msgid "Decades — five documents along a time axis"
 msgstr ""
 
-msgid "Browse the collection"
+#: src/Site/BlockLayout/OnThisDay.php:28
+msgid "Clippings — eight documents in a mosaic"
 msgstr ""
 
-msgid "Press Bylines"
+#: src/Site/BlockLayout/OnThisDay.php:44
+msgid "Default layout"
 msgstr ""
 
-msgid ""
-"Who signed the press: byline coverage over time and the most prolific "
-"journalists and press agencies, with active spans and frequent subjects, "
-"linked to their authority records where they exist. Data is precomputed from"
-" the IWAC articles subset. No configuration needed."
+#: src/Site/BlockLayout/OnThisDay.php:46
+msgid "Which layout the block opens on. Visitors can switch between all three; their choice is remembered."
 msgstr ""
 
-msgid "Loading press bylines"
+#: src/Site/BlockRegistry.php:49
+msgid "Audiovisual Overview"
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Term Trends"
+#: src/Site/BlockRegistry.php:50
+msgid "Corpus view of the audiovisual material: sources and countries ranked by recordings or by runtime, how long the recordings run, publication over time, and what the records carry. No configuration needed."
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"The IWAC \"Ngram viewer\": chart the per-year share of articles whose "
-"full text contains any frequent term. Search the vocabulary, overlay up "
-"to eight terms, and switch between shares and absolute counts. Data is "
-"precomputed from the articles subset. No configuration needed."
+#: src/Site/BlockRegistry.php:56
+msgid "Collection Overview"
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Loading term trends"
+#: src/Site/BlockRegistry.php:57
+msgid "Aggregate visualisations across the entire collection. No configuration needed."
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Islamic Organisations Co-occurrence"
+#: src/Site/BlockRegistry.php:63
+msgid "Compare Newspapers"
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"A heatmap of the ideas that cluster around each major West African Islamic "
-"organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen "
-"organisation, which pairs of words keep turning up together near its name. "
-"Data is precomputed from the IWAC articles. No configuration needed."
+#: src/Site/BlockRegistry.php:64
+msgid "Side-by-side comparison of two newspaper corpora (articles or Islamic publications), scoped either to a whole country or a single newspaper. No configuration needed."
 msgstr ""
 
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Loading organisation co-occurrences"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Press Reprints"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"Pairs of near-identical articles printed by different newspapers: "
-"syndicated wire copy (PANA, AFP), shared communiqués and reprints, found "
-"by comparing how closely articles are worded. Shows which outlets "
-"circulated the same copy, with the full pair list. Data is precomputed "
-"from the IWAC articles. No configuration needed."
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Loading press reprints"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Periodicals Semantic Landscape"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"Zoomable map of the Islamic-periodical corpus: every issue placed by the "
-"semantic similarity of its table of contents (UMAP over AI embeddings), "
-"colour-faceted by country or decade. Data is precomputed. No "
-"configuration needed."
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"Terms related to radicalism and extremism across the IWAC collection in "
-"seven views: an animated bar-chart race, time trends with "
-"historical-event markers, by country, global, a co-occurrence matrix, a "
-"word cloud of the surrounding vocabulary, and a map of the places "
-"mentioned. No configuration needed."
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Corpus health"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid ""
-"How far the enrichment pipelines have got, measured against the Hugging "
-"Face dataset when the data was built. Use these meters to set "
-"digitisation and annotation priorities; they refresh with every data pull."
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Computed"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Collection growth over time"
-msgstr ""
-
-#. v1.22.0 — third-audit catalogue refresh
-msgid "Period covered: %1$s – %2$s"
-msgstr ""
-
+#: src/Site/BlockRegistry.php:70
 msgid "Distinctive Vocabulary"
 msgstr ""
 
-msgid ""
-"What sets each part of the press apart, in two views: the vocabulary a "
-"country or a decade uses more than the rest of the collection does (log-"
-"likelihood keyness with a false-discovery correction, ranked by effect "
-"size), and the years in which coverage of a subject suddenly spiked above "
-"its own base rate (Kleinberg burst detection). Complements Term Trends, "
-"which shows how often a word is used rather than where it stands out. Data "
-"is precomputed from the IWAC articles. No configuration needed."
+#: src/Site/BlockRegistry.php:71
+msgid "What sets each part of the press apart, in two views: the vocabulary a country or a decade uses more than the rest of the collection does (log-likelihood keyness with a false-discovery correction, ranked by effect size), and the years in which coverage of a subject suddenly spiked above its own base rate (Kleinberg burst detection). Complements Term Trends, which shows how often a word is used rather than where it stands out. Data is precomputed from the IWAC articles. No configuration needed."
 msgstr ""
 
+#: src/Site/BlockRegistry.php:77
+msgid "Entity Networks"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:78
+msgid "Co-occurrence networks across the collection: an entity graph linking persons, organisations, events, subjects and places that appear in the same items (layout precomputed), and a geographic network of co-mentioned places drawn over the basemap. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:84
+msgid "Index Overview"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:85
+msgid "Explore authority entities (persons, places, organisations, events, topics) and Dublin Core Subject + Spatial Coverage prevalence over time. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:91
+msgid "Laïcité"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:92
+msgid "A dossier on laïcité (secularism) across the whole IWAC corpus: press coverage, Islamic periodicals, archival documents and scholarship. Eleven views: where the curated subject tag and the word itself diverge, an annotated timeline linking spikes to the documents that prompted them, the archival dossier, a searchable concordance of the actual sentences, collocates, the press-versus-periodicals comparison, the actors and institutions, the arenas being contested, the per-model AI framing, a map of the places named, and the bibliography. Readable snippets are limited to items whose full text is public. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:98
+msgid "Press Language"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:99
+msgid "Press language metrics of the newspaper articles: readability (Flesch), lexical richness (MATTR) and article length over time, with newspapers ranked by readability and richness. Data is precomputed from the OCR text of the IWAC articles subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:105
+msgid "On This Day"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:106
+msgid "Items published on today's date across the collection's decades: newspaper articles and periodical issues with full publication dates, with page scans and a line of the text where they exist. Readers can read the day in the Gregorian or the Hijri calendar (each picks its own documents), switch between three layouts, and unfold the full list for the day. The block removes itself silently when no data is available, so it is safe on a homepage. Data is precomputed from the IWAC dataset."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:112
+msgid "Islamic Organisations Co-occurrence"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:113
+msgid "A heatmap of the ideas that cluster around each major West African Islamic organisation (UIB, CNI, COSIM, CSI, FAIB, UMT) in the press: for a chosen organisation, which pairs of words keep turning up together near its name. Data is precomputed from the IWAC articles. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:119
+msgid "Periodicals Semantic Landscape"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:120
+msgid "Zoomable map of the Islamic-periodical corpus: every issue placed by the semantic similarity of its table of contents (UMAP over AI embeddings), colour-faceted by country or decade. Data is precomputed. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:126
+msgid "Periodicals Overview"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:127
+msgid "Islamic periodicals overview: publication runs, issues per year by country, languages, countries, and top subjects. Data is precomputed from the IWAC publications subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:133
+msgid "Press Bylines"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:134
+msgid "Who signed the press: byline coverage over time and the most prolific journalists and press agencies, with active spans and frequent subjects, linked to their authority records where they exist. Data is precomputed from the IWAC articles subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:140
+msgid "Press Reprints"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:141
+msgid "Pairs of near-identical articles printed by different newspapers: syndicated wire copy (PANA, AFP), shared communiqués and reprints, found by comparing how closely articles are worded. Shows which outlets circulated the same copy, with the full pair list. Data is precomputed from the IWAC articles. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:147
+msgid "References Overview"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:148
+msgid "Bibliographic references overview: timeline, types, languages, countries, top authors and subjects, country-by-type treemap, and co-authorship network. Data is precomputed from the IWAC references subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:154
+msgid "Scary Terms"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:155
+msgid "Terms related to radicalism and extremism across the IWAC collection in seven views: an animated bar-chart race, time trends with historical-event markers, by country, global, a co-occurrence matrix, a word cloud of the surrounding vocabulary, and a map of the places mentioned. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:161
+msgid "Semantic Landscape"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:162
+msgid "Zoomable map of the whole press corpus: every article placed by the semantic similarity of its full text (UMAP over AI embeddings), colour-faceted by country, decade or topic. Data is precomputed. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:168
+msgid "Sentiment Atlas"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:169
+msgid "AI sentiment atlas of the newspaper articles: polarity, centrality of Islam and subjectivity over time and by country as rated by several language models, plus cross-model agreement. All figures are AI-generated assessments precomputed from the IWAC articles subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:175
+msgid "Spatial Exploration"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:176
+msgid "Interactive world map of every place mentioned in the collection, with country focus and an entity picker (persons, organisations, events, subjects, places) that maps the locations related to the selected entity. Data is precomputed. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:182
+msgid "Term Trends"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:183
+msgid "The IWAC \"Ngram viewer\": chart the per-year share of articles whose full text contains any frequent term. Search the vocabulary, overlay up to eight terms, and switch between shares and absolute counts. Data is precomputed from the articles subset. No configuration needed."
+msgstr ""
+
+#: src/Site/BlockRegistry.php:189
+msgid "Topic Explorer"
+msgstr ""
+
+#: src/Site/BlockRegistry.php:190
+msgid "LDA-30 topic overview of the IWAC articles subset, with a treemap of all topics and a per-topic drill-down (calendar heatmap, country / newspaper distributions, most-representative articles). No configuration needed."
+msgstr ""
+
+#: src/Site/ResourcePageBlockLayout/ItemSetDashboard.php:12
+msgid "Item Set Dashboard"
+msgstr ""
+
+#: src/Site/ResourcePageBlockLayout/Visualizations.php:98 view/common/resource-page-block-layout/item-set-dashboard.phtml:32 view/common/resource-page-block-layout/visualizations/article.phtml:293 view/common/resource-page-block-layout/visualizations/entity.phtml:53 view/common/resource-page-block-layout/visualizations/minimal-item.phtml:131 view/common/resource-page-block-layout/visualizations/person.phtml:52 view/common/resource-page-block-layout/visualizations/publication.phtml:35 view/common/resource-page-block-layout/visualizations/reference.phtml:46
+msgid "Visualisations"
+msgstr ""
+
+#: view/common/block-layout/audiovisual-overview.phtml:41
+msgid "Loading audiovisual overview"
+msgstr ""
+
+#: view/common/block-layout/collection-overview-fallback.phtml:57
+msgid "Period covered: %1$s – %2$s"
+msgstr ""
+
+#: view/common/block-layout/collection-overview-fallback.phtml:62 view/common/block-layout/collection-overview-fallback.phtml:65
+msgid "Collection growth over time"
+msgstr ""
+
+#: view/common/block-layout/collection-overview.phtml:69
+msgid "Loading collection overview"
+msgstr ""
+
+#: view/common/block-layout/compare-newspapers.phtml:44
+msgid "Loading newspaper comparison"
+msgstr ""
+
+#: view/common/block-layout/distinctive-vocabulary.phtml:36
 msgid "Loading distinctive vocabulary"
 msgstr ""
 
-msgid ""
-"A dossier on laïcité (secularism) across the whole IWAC corpus: press "
-"coverage, Islamic periodicals, archival documents and scholarship. Eleven "
-"views: where the curated subject tag and the word itself diverge, an "
-"annotated timeline linking spikes to the documents that prompted them, "
-"the archival dossier, a searchable concordance of the actual sentences, "
-"collocates, the press-versus-periodicals comparison, the actors and "
-"institutions, the arenas being contested, the per-model AI framing, a "
-"map of the places named, and the bibliography. Readable snippets are "
-"limited to items whose full text is public. No configuration needed."
+#: view/common/block-layout/entity-networks.phtml:29
+msgid "Loading entity networks"
 msgstr ""
 
+#: view/common/block-layout/index-overview.phtml:56
+msgid "Loading index overview"
+msgstr ""
+
+#: view/common/block-layout/laicite.phtml:71
 msgid "Loading laïcité dossier"
 msgstr ""
+
+#: view/common/block-layout/lexical-metrics.phtml:32
+msgid "Loading press language metrics"
+msgstr ""
+
+#: view/common/block-layout/on-this-day.phtml:53
+msgid "This block assembles today’s items in your browser, so it needs JavaScript."
+msgstr ""
+
+#: view/common/block-layout/on-this-day.phtml:58
+msgid "Browse the collection"
+msgstr ""
+
+#: view/common/block-layout/on-this-day.phtml:77
+msgid "Loading on this day"
+msgstr ""
+
+#: view/common/block-layout/org-cooccurrence.phtml:27
+msgid "Loading organisation co-occurrences"
+msgstr ""
+
+#: view/common/block-layout/periodicals-landscape.phtml:31 view/common/block-layout/semantic-landscape.phtml:27
+msgid "Loading semantic landscape"
+msgstr ""
+
+#: view/common/block-layout/periodicals-overview.phtml:36
+msgid "Loading periodicals overview"
+msgstr ""
+
+#: view/common/block-layout/press-bylines.phtml:27
+msgid "Loading press bylines"
+msgstr ""
+
+#: view/common/block-layout/press-reprints.phtml:26
+msgid "Loading press reprints"
+msgstr ""
+
+#: view/common/block-layout/references-overview.phtml:32
+msgid "Loading references overview"
+msgstr ""
+
+#: view/common/block-layout/scary-terms.phtml:50
+msgid "Loading scary terms"
+msgstr ""
+
+#: view/common/block-layout/sentiment-atlas.phtml:36
+msgid "Loading sentiment atlas"
+msgstr ""
+
+#: view/common/block-layout/spatial-exploration.phtml:29
+msgid "Loading spatial exploration"
+msgstr ""
+
+#: view/common/block-layout/term-trends.phtml:26
+msgid "Loading term trends"
+msgstr ""
+
+#: view/common/block-layout/topic-explorer.phtml:44
+msgid "Loading Topic Explorer"
+msgstr ""
+
+#: view/common/resource-page-block-layout/item-set-dashboard.phtml:37 view/common/resource-page-block-layout/visualizations/article.phtml:294 view/common/resource-page-block-layout/visualizations/entity.phtml:54 view/common/resource-page-block-layout/visualizations/person.phtml:53
+msgid "Loading dashboard"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:57
+msgid "Polarity"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:66
+msgid "Centrality"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:75
+msgid "Subjectivity"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:117
+msgid "Models agree"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:118
+msgid "Models nearly agree"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:119
+msgid "Models disagree"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:150
+msgid "AI sentiment"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:153
+msgid "Polarity, centrality to Islam and Muslim communities, and subjectivity ratings for this article, produced independently by %s. Read directly from this item’s record."
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/article.phtml:233
+msgid "Show reasoning"
+msgstr ""
+
+#: view/common/resource-page-block-layout/visualizations/minimal-item.phtml:132 view/common/resource-page-block-layout/visualizations/publication.phtml:36 view/common/resource-page-block-layout/visualizations/reference.phtml:47
+msgid "Loading visualisations"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:25
+msgid "Download the latest precomputed visualisation data and unpack it into the site files. The heavy generation runs in GitHub Actions, off this server; this only pulls the published archive. Progress and any errors are logged under Admin → Jobs."
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:36
+msgid "A data sync is currently running."
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:39
+msgid "View its progress"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:44
+msgid "Current data"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:47
+msgid "Last synced"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:49
+msgid "Files"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:51
+msgid "Archive size"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:53 view/iwac-visualizations/layout/embed.phtml:47
+msgid "Source"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:58
+msgid "No data has been pulled yet. Use the button below to fetch it."
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:63
+msgid "Corpus health"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:65
+msgid "How far the enrichment pipelines have got, measured against the Hugging Face dataset when the data was built. Use these meters to set digitisation and annotation priorities; they refresh with every data pull."
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:71
+msgid "Computed"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:119
+msgid "Pull data"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:125
+msgid "Pull latest data"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:130
+msgid "Iframe embeds"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:132
+msgid "Open a site-specific embed gallery to preview each page-block visualisation and copy its iframe snippet."
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:144
+msgid "Open embed gallery"
+msgstr ""
+
+#: view/iwac-visualizations/admin/data/index.phtml:151
+msgid "No sites are available yet. Create a site before using iframe embeds."
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:42
+msgid "Embed IWAC visualisations"
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:43
+msgid "Copy a snippet below to embed any visualisation on another website. Each iframe loads live from this site and resizes itself to fit."
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:67 view/iwac-visualizations/embed/index.phtml:86
+msgid "Copy"
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:72
+msgid "Embed a single panel"
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:78
+msgid "Tip: embeds render in light mode by default; append <code>?theme=dark</code> for dark mode, or <code>?primary=2b6cb0</code> to override the accent colour."
+msgstr ""
+
+#: view/iwac-visualizations/embed/index.phtml:87
+msgid "Copied!"
+msgstr ""
+
+#: view/iwac-visualizations/embed/not-found.phtml:14 view/iwac-visualizations/embed/not-found.phtml:36
+msgid "Visualisation not found"
+msgstr ""
+
+#: view/iwac-visualizations/embed/not-found.phtml:37
+msgid "No embeddable visualisation matches this address."
+msgstr ""
+

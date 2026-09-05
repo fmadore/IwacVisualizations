@@ -51,10 +51,10 @@ def build_wordcloud(
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     logger.info("Loading articles subset from %s", repo_id)
-    df = load_dataset_safe("articles", repo_id=repo_id)
-    if df is None or df.empty:
-        logger.warning("No articles loaded; returning empty wordcloud")
-        return _empty_result(year_min, year_max)
+    # `required`: a wordcloud with no articles behind it is not a result, it
+    # is a missing input — this used to return the empty shape and exit 0,
+    # which CI would have published as collection-wordcloud.json.
+    df = load_dataset_safe("articles", repo_id=repo_id, required=True)
 
     text_col: Optional[str] = None
     for candidate in ("OCR", "ocr_text", "OCR_text", "text", "content"):
@@ -62,8 +62,9 @@ def build_wordcloud(
             text_col = candidate
             break
     if text_col is None:
-        logger.warning("No OCR text column found; returning empty wordcloud")
-        return _empty_result(year_min, year_max)
+        raise RuntimeError(
+            "No OCR text column found in the articles subset; refusing to write an empty wordcloud"
+        )
 
     # Optional filter to French only if the language column exists
     if "language" in df.columns:
@@ -137,21 +138,6 @@ def build_wordcloud(
             "countries": sorted(by_country.keys()),
             "years": sorted(by_year.keys()),
             "total_articles": total_articles,
-        },
-    }
-
-
-def _empty_result(year_min: int, year_max: int) -> Dict[str, Any]:
-    return {
-        "global": {"data": [], "total_articles": 0, "unique_words": 0},
-        "by_country": {},
-        "by_year": {},
-        "metadata": {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "language_filter": "French",
-            "countries": [],
-            "years": [],
-            "total_articles": 0,
         },
     }
 

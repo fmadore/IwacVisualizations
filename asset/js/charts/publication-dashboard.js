@@ -103,61 +103,36 @@
     /*  Bootstrap                                                         */
     /* ----------------------------------------------------------------- */
 
-    function initDashboard(container) {
-        var itemId = container.dataset.itemId;
-        if (!itemId) return;
-        var basePath = container.dataset.basePath || '';
-        var url = basePath + P.DATA_BASE + 'publication-dashboards/'
-            + itemId + '.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var loading = container.querySelector('.iwac-vis-publication__loading');
-                if (loading) loading.remove();
-
-                var body = P.el('div', 'iwac-vis-publication__body');
-                container.appendChild(body);
-
-                var cards = buildMetricCards(data.metrics);
-                if (cards) body.appendChild(cards);
-
-                var run = data.run || null;
-                var sparkline = run ? {
-                    years:     run.years,
-                    values:    run.values,
-                    highlight: run.highlight,
-                    caption:   (run.newspaper ? run.newspaper + ' — ' : '')
-                        + P.t('publications_count', { count: P.formatNumber(run.total || 0) })
-                } : null;
-
-                DL.render(body, 'publication', {
-                    wordcloud:          data.wordcloud || [],
-                    sparkline:          sparkline,
-                    semantic_neighbors: data.semantic_neighbors || []
-                }, {
-                    siteBase: container.dataset.siteBase || '',
-                    basePath: basePath,
-                    data:     data
-                });
-            })
-            .catch(function (err) {
-                console.error('IWACVis publication dashboard:', err);
-                var loading = container.querySelector('.iwac-vis-publication__loading');
-                if (loading) loading.remove();
-                container.appendChild(P.buildFetchErrorState(err));
-            });
-    }
-
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-publication');
-        for (var i = 0; i < containers.length; i++) {
-            initDashboard(containers[i]);
+    // The shared per-item boot (fetch with a bounded wait, spinner → body,
+    // retry banner) replaced the hand-rolled scaffold this file carried until
+    // v1.59.0 — the one that fetched with no timeout and no retry.
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-publication',
+        classToken: 'publication',
+        dataDir:    'publication-dashboards',
+        layout:     'publication',
+        warnLabel:  'IWACVis publication dashboard',
+        // The hand-rolled boot this replaced never gated on ECharts; the
+        // sparkline and the neighbour cards render without it.
+        requireECharts: false,
+        mountHeader: function (body, data) {
+            var cards = buildMetricCards(data.metrics);
+            if (cards) body.appendChild(cards);
+        },
+        slices: function (data) {
+            var run = data.run || null;
+            var sparkline = run ? {
+                years:     run.years,
+                values:    run.values,
+                highlight: run.highlight,
+                caption:   (run.newspaper ? run.newspaper + ' — ' : '')
+                    + P.t('publications_count', { count: P.formatNumber(run.total || 0) })
+            } : null;
+            return {
+                wordcloud:          data.wordcloud || [],
+                sparkline:          sparkline,
+                semantic_neighbors: data.semantic_neighbors || []
+            };
         }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

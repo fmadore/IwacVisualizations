@@ -160,17 +160,27 @@
             zoom: 4,
             onStyleReady: function (m) {
                 var built = buildFeatures();
-                m.addSource(SOURCE_ID, {
-                    type: 'geojson',
-                    generateId: true,
-                    data: built.collection
-                });
-                m.addLayer({
-                    id: LAYER_ID,
-                    type: 'circle',
-                    source: SOURCE_ID,
-                    paint: paintFor(built.max)
-                });
+                // Guarded like every other map panel: a style that already
+                // carries the source (a future transformStyle swap, a
+                // double-fired load) gets its data refreshed, not a second
+                // addSource that throws inside the style-ready wrapper.
+                if (m.getSource(SOURCE_ID)) {
+                    m.getSource(SOURCE_ID).setData(built.collection);
+                } else {
+                    m.addSource(SOURCE_ID, {
+                        type: 'geojson',
+                        generateId: true,
+                        data: built.collection
+                    });
+                }
+                if (!m.getLayer(LAYER_ID)) {
+                    m.addLayer({
+                        id: LAYER_ID,
+                        type: 'circle',
+                        source: SOURCE_ID,
+                        paint: paintFor(built.max)
+                    });
+                }
             }
         });
         if (!map) return null;

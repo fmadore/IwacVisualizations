@@ -57,8 +57,11 @@ from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 
 from iwac_utils import (
+    CENTRALITE_ORDER,
     DATASET_ID,
+    POLARITE_ORDER,
     SENTIMENT_MODELS,
+    STOPWORDS,
     canonical_country,
     canonicalize_country_field,
     configure_logging,
@@ -70,48 +73,14 @@ from iwac_utils import (
     resolve_sentiment_columns,
     save_json,
     subjectivite_ordinal,
+    tokenize,
 )
 
 SUBSETS = ("articles", "publications")
 
-# French stopwords + IWAC-specific noise terms. Kept in sync with
-# generate_wordcloud.py — duplicated here to avoid cross-script imports.
-FR_STOPWORDS = set("""
-a à ai ainsi ais ait alors après as au aucun aucune aussi autant autre autres
-aux avait avant avec avoir ayant c ça car ce ceci cela celle celles celui
-cent cependant certain certaine certaines certains ces cet cette ceux chacun
-chaque chez ci comme comment d dans de depuis des du deux dès donc dont doux
-du durant e elle elles en encore entre es est et étant été être eu eux
-fait faire fois font h hors i il ils j je l la là laquelle le lequel les
-lesquelles lesquels leur leurs lui m ma mais me même mes mien mienne miennes
-miens moi moins mon n ne ni nos notre nous nouveau nouveaux nouvelle nouvelles
-o on ont ou où oui par parce pas peu peut peuvent plus plusieurs plutôt pour
-pourquoi puis qu quand que quel quelle quelles quels qui quoi s sa sans
-se sera serait seront ses si sien sienne siennes siens soi soient sois soit
-sommes son sont sous suis sur t ta tandis tant te tel telle telles tels tes
-toi ton tous tout toute toutes très trois tu un une vais vas vers voici voilà
-vos votre vous y
-comme cette dans plus mais tout pour être avoir faire dire voir savoir pouvoir vouloir devoir
-""".split())
-
-CUSTOM_STOPWORDS = set("""
-article journal page pages numero numéro nombre date lieu monsieur madame
-selon ainsi cependant effet toutefois outre certes ailleurs notamment
-""".split())
-
-STOPWORDS = FR_STOPWORDS | CUSTOM_STOPWORDS
-
-TOKEN_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
-
-
-def tokenize(text: Any) -> List[str]:
-    if not isinstance(text, str) or not text:
-        return []
-    return [
-        tok for tok in TOKEN_RE.findall(text.lower())
-        if len(tok) >= 4 and tok not in STOPWORDS
-    ]
-
+# Tokenisation + stopwords come from iwac_utils (one vocabulary for every
+# word cloud); this file used to carry a byte-identical copy "to avoid
+# cross-script imports" it was already making.
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 
@@ -570,21 +539,7 @@ def compute_corpus(
 # Ordered so the JSON renders each model's buckets in the canonical
 # "very positive → very negative" / "very central → not addressed"
 # progression rather than dataset-insertion order.
-POLARITE_ORDER = (
-    "Tr\u00e8s positif",
-    "Positif",
-    "Neutre",
-    "N\u00e9gatif",
-    "Tr\u00e8s n\u00e9gatif",
-    "Non applicable",
-)
-CENTRALITE_ORDER = (
-    "Tr\u00e8s central",
-    "Central",
-    "Secondaire",
-    "Marginal",
-    "Non abord\u00e9",
-)
+# (POLARITE_ORDER / CENTRALITE_ORDER are imported from iwac_utils.)
 
 
 def _compute_sentiment(sub: pd.DataFrame) -> Dict[str, Any]:

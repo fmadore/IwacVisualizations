@@ -78,8 +78,11 @@
             flags.appendChild(L.chip(P.t('laicite.doc_full_text'), 'is-public'));
         }
         // The year chip is the cross-link into the timeline: clicking it
-        // moves the timeline to the year this document was produced, which
-        // is how a reader gets from the source to the coverage it generated.
+        // switches to the trends view scoped to the document's first
+        // country, which is how a reader gets from the source to the
+        // coverage it generated. The year rides along for a future
+        // year-focus — the trends view carries no year-window state yet,
+        // so the orchestrator currently discards it.
         if (doc.year && opts.onFocusYear) {
             var yearChip = P.el('button', 'iwac-vis-laicite-chip is-year',
                 String(doc.year));

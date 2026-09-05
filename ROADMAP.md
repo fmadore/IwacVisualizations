@@ -196,8 +196,9 @@ The `publications` subset (1,501 Islamic-periodical issues; OCR,
 - [x] **4.4 Scatter jitter — evaluated, not applicable.** ECharts 6
       jitter lives on category/single axes only; lifespan × frequency
       is value × value and already blends overplot via 0.75 opacity.
-      (A `C.beeswarm` builder with deterministic jitter already exists
-      for single-axis cases.)
+      (A `C.beeswarm` builder with deterministic jitter existed for
+      single-axis cases; it never gained a caller and was removed in
+      v1.59.0.)
 - [x] **4.5 `aria.enabled: true`** applied to every registered chart
       via `ns._applyAria` (merge-mode setOption after each render, so
       the notMerge render pattern and theme swaps can't drop it).

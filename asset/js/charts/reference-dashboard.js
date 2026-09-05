@@ -127,66 +127,41 @@
     /*  Bootstrap                                                         */
     /* ----------------------------------------------------------------- */
 
-    function initDashboard(container) {
-        var itemId = container.dataset.itemId;
-        if (!itemId) return;
-        var basePath = container.dataset.basePath || '';
-        var siteBase = container.dataset.siteBase || '';
-        var url = basePath + P.DATA_BASE + 'reference-dashboards/' + itemId + '.json';
-
-        P.fetchJSON(url)
-            .then(function (data) {
-                var loading = container.querySelector('.iwac-vis-reference__loading');
-                if (loading) loading.remove();
-
-                var body = P.el('div', 'iwac-vis-reference__body');
-                container.appendChild(body);
-
-                var topic = buildTopicLine(data.metrics);
-                if (topic) body.appendChild(topic);
-                var reviews = buildReviewLine(data.reviews, siteBase);
-                if (reviews) body.appendChild(reviews);
-
-                var activity = data.activity || null;
-                var sparkline = activity ? {
-                    years:     activity.years,
-                    values:    activity.values,
-                    highlight: activity.highlight,
-                    caption:   P.t('references_count', {
-                        count: P.formatNumber(activity.total || 0)
-                    })
-                } : null;
-
-                DL.render(body, 'reference', {
-                    sparkline:          sparkline,
-                    semantic_neighbors: data.semantic_neighbors || [],
-                    press_neighbors:    data.press_neighbors || []
-                }, {
-                    siteBase: siteBase,
-                    basePath: basePath,
-                    data:     data
-                });
-            })
-            .catch(function (err) {
-                // A missing file is the normal state for a reference the
-                // generator has not covered, so this must not look like a
-                // site error: drop the spinner and leave the item page as
-                // Omeka rendered it.
-                console.warn('IWACVis reference dashboard:', err);
-                P.removeBlock(container);
-            });
-    }
-
-    function init() {
-        var containers = document.querySelectorAll('.iwac-vis-reference');
-        for (var i = 0; i < containers.length; i++) {
-            initDashboard(containers[i]);
+    // The shared per-item boot (fetch with a bounded wait, spinner → body)
+    // replaced the hand-rolled scaffold this file carried until v1.59.0.
+    P.bootPerItemDashboard({
+        selector:   '.iwac-vis-reference',
+        classToken: 'reference',
+        dataDir:    'reference-dashboards',
+        layout:     'reference',
+        warnLabel:  'IWACVis reference dashboard',
+        // Sparkline (inline SVG) + cards: no ECharts renderer in this layout.
+        requireECharts: false,
+        // A missing file is the normal state for a reference the generator
+        // has not covered, so a failure must not look like a site error:
+        // drop the block and leave the item page as Omeka rendered it.
+        onError:    'remove',
+        mountHeader: function (body, data, ctx) {
+            var topic = buildTopicLine(data.metrics);
+            if (topic) body.appendChild(topic);
+            var reviews = buildReviewLine(data.reviews, ctx.siteBase);
+            if (reviews) body.appendChild(reviews);
+        },
+        slices: function (data) {
+            var activity = data.activity || null;
+            var sparkline = activity ? {
+                years:     activity.years,
+                values:    activity.values,
+                highlight: activity.highlight,
+                caption:   P.t('references_count', {
+                    count: P.formatNumber(activity.total || 0)
+                })
+            } : null;
+            return {
+                sparkline:          sparkline,
+                semantic_neighbors: data.semantic_neighbors || [],
+                press_neighbors:    data.press_neighbors || []
+            };
         }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    });
 })();

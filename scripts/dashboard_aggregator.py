@@ -63,8 +63,10 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 import pandas as pd
 
 from iwac_utils import (
+    CENTRALITE_ORDER,
     DATASET_ID,
     HIJRI_COLUMNS,
+    POLARITE_ORDER,
     SENTIMENT_MODELS,
     clean_str,
     extract_month_num,
@@ -126,23 +128,9 @@ SPATIAL_FIELDS = {
 # so publishing it verbatim gives the panel a picker entry that draws an
 # empty chart.
 
-# Polarité ordering — kept as the canonical IWAC scale so the chart
-# segments always render in this order regardless of dataset row order.
-POLARITE_ORDER = [
-    "Très positif",
-    "Positif",
-    "Neutre",
-    "Négatif",
-    "Très négatif",
-    "Non applicable",
-]
-CENTRALITE_ORDER = [
-    "Très central",
-    "Central",
-    "Secondaire",
-    "Marginal",
-    "Non abordé",
-]
+# Polarité / centralité ordering — the canonical IWAC scales, imported from
+# iwac_utils (one definition) so the chart segments always render in this
+# order regardless of dataset row order.
 
 # Subjectivité arrives as a French label and is normalised to its 1..5
 # ordinal by iwac_utils.subjectivite_ordinal. The segmentedBar panel

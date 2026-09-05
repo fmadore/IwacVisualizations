@@ -67,6 +67,8 @@ throw; ~92 dataset loads per CI run with no cache; and the CI path filters
 let a view-only PR skip `lint:theme` / `lint:blocks`. Two mechanical doc
 fixes (the page-block count in README.md and PRODUCT.md) were applied in the
 same commit that added the tier.
+ **Wave 1 shipped as v1.59.0** (2026-09-05) —
+see "Implemented in v1.59.0" under Tier 8.
 
 **Scope audited:** ~19,000 lines JS (186 source files), ~4,500 CSS, ~2,000 PHP,
 ~10,900 Python (23 generators + 2 shared modules). Five parallel deep dives
@@ -1130,6 +1132,48 @@ MapLibre is one minor behind (**6.6.0 pinned, 6.7.0 current**). Nothing below
 is firefighting; the security posture (escaping, CSRF, ACL, embed whitelists,
 zip hardening) re-checked clean.
 
+### Implemented in v1.59.0 (wave 1)
+
+All twenty-three items of wave 1 below are done and marked `[x]`. Three
+landed differently from how they were written up, and say so here:
+
+- **S5** — the latest-wins guard is inline in `compare-newspapers.js` (a
+  per-side sequence number plus an `AbortController`), not a shared
+  `P.latest`: the three other sites the finding named (`entity-networks.js`,
+  `laicite.js`, `scary-terms.js`) are one-shot bundle loads behind their own
+  `requested` flags and have no stale-response race. One consumer does not
+  earn a primitive.
+- **S6** — `ns.disposeWithin(root)` exists and is called before the laïcité
+  view clear and the Topic Explorer detail clear; laïcité disposes its
+  outgoing view's children *except* the trends chart panel and the
+  concordance host, which it parks and re-attaches. The second half of the
+  recommendation — `pruneCharts` treating a detached host as dead — was
+  **not** applied, because that premise is false for exactly that panel: a
+  theme toggle while another view was open would have disposed the trends
+  chart. Recorded under false positives. `disposeWithin` also `remove()`s
+  the laïcité map on a view switch, which closes the per-activation WebGL
+  leak M3 describes; M3's own recommendation (cache the built view) stays
+  open.
+- **B6** — CITATION.cff and the README citation joined the version lockstep
+  and were set to 1.59.0 with the bump; `date-released` is the bump date and
+  should be corrected at tagging if the release slips.
+
+Also in the wave: **P12**'s "test -s for every expected output" landed as a
+54-file + 8-directory completeness check in the packaging step; **H3**'s
+extractor marks the sixteen sentiment-vocabulary labels in `Module.php`
+with `@translate` (they reach `translate()` through a variable and were in
+the template only by hand); **S9** migrated all three hand-rolled per-item
+dashboards, which needed five new `bootPerItemDashboard` options
+(`dataFile`, `skip`, `slices`, `onError: 'remove'`, and `requireECharts:
+false` — their layouts hold no ECharts renderer and the hand-rolled boots
+never gated on it; the minimal-item browser fixture now loads
+`panels-boot.min.js` like the production chain does); **E15** is the beeswarm
+deletion only — the other sub-items stay open. Verified: 95 JS tests
+(`lifecycle.test.js` and two fetch-timeout tests are new), 31 Playwright
+browser contracts, 128 PHP checks (seven new, on the sidecar parser), the
+53 Python contract tests, pyflakes, and every `npm run lint:*` gate
+including the new `lint:i18n-pot`.
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1219,7 +1263,7 @@ non-text content, and the thing a historian citing a figure actually needs
 
 ### E — ECharts
 
-- [ ] **E1 (High, M) — The aria re-description patch makes one render four
+- [x] **E1 (High, M) — The aria re-description patch makes one render four
       update passes.** ✓ `dashboard-core.js:211-221` wraps `setOption`;
       `_applyAria` (`:157-170`) calls `getOption()` (a documented deep clone
       including series data) and then a synchronous, non-lazy
@@ -1257,7 +1301,7 @@ non-text content, and the thing a historian citing a figure actually needs
       / `C.entities` pagination (`top-entities.js:90`). notMerge is not the
       blocker; `universalTransition` would not help (it morphs *between*
       series/chart types keyed by `groupId`).
-- [ ] **E4 (Med, S) — Ten axis-trigger tooltips show unformatted, unlocalised
+- [x] **E4 (Med, S) — Ten axis-trigger tooltips show unformatted, unlocalised
       numbers.** `chart-options-bar.js:73,113,236` (`C.timeline`,
       `C.growthBar`, `C.stackedBar` — every stacked timeline on the site),
       `laicite/references.js:88`, `laicite/corpora.js:161,258`,
@@ -1342,12 +1386,13 @@ non-text content, and the thing a historian citing a figure actually needs
       are the small static renderers (pie/sunburst/radar/treemap) for
       crispness and a vector export (E17); the sparkline is hand-rolled SVG
       already (right call). Extend `registerChart(el, render, initOpts)`.
-- [ ] **E14 (Low, S) — `focusNodeAdjacency: true` is a removed ECharts 4
+- [x] **E14 (Low, S) — `focusNodeAdjacency: true` is a removed ECharts 4
       option.** ✓ `chart-options-graph.js:328`, two lines above the correct
       `emphasis.focus: 'adjacency'`. No other 5-era leftovers found (no
       `normal:` nesting, no `axisLabel.textStyle`, no `hoverAnimation`; all
       six `visualMap` literals set `inRange`).
-- [ ] **E15 (Low, S each) — ECharts 6 features: adopt / skip.** `matrix`
+- [ ] **E15 (Low, S each) — ECharts 6 features: adopt / skip.** *(beeswarm
+      deleted in v1.59.0; the rest open.)* `matrix`
       coordinate system: no benefit for the 12×12 co-occurrence or the 5×5
       agreement matrix beyond model-name super-headers — close ROADMAP 4.6 as
       "no benefit unless that header is wanted". `axis.jitter`: `C.beeswarm`
@@ -1372,7 +1417,7 @@ non-text content, and the thing a historian citing a figure actually needs
 
 ### M — MapLibre
 
-- [ ] **M1 (High, S) — The WebGL2-unavailable path is unreachable code.** ✓
+- [x] **M1 (High, S) — The WebGL2-unavailable path is unreachable code.** ✓
       `shared/maplibre.js:253` `new maplibregl.Map(baseOptions)` has no
       try/catch; MapLibre 6 requires WebGL2 (6.7 throws
       `GPUInitializationError`). `panels-map.js:86-95` passes the rejection
@@ -1386,7 +1431,7 @@ non-text content, and the thing a historian citing a figure actually needs
       returning `null`; chain `.then(build).catch(banner)`; one `error`
       listener in the factory that swaps the host for the banner on
       `GPUInitializationError`.
-- [ ] **M2 (High, S) — Listener stacking on every theme swap.**
+- [x] **M2 (High, S) — Listener stacking on every theme swap.**
       `compare-newspapers/map.js:255-288` registers
       `m.on('click'|'mouseenter'|'mouseleave', layerId)` for two layers
       *inside* `onStyleReady`, no guard; `shared/choropleth.js:340-398`
@@ -1401,7 +1446,8 @@ non-text content, and the thing a historian citing a figure actually needs
       `places-map.js:214-224`). Move compare's block after `createIwacMap`;
       call `attachInteractions()` once in the helper body.
 - [ ] **M3 (High, S–M) — The laïcité places view leaks one MapLibre instance
-      per view switch.** `laicite.js:334-335` clears `viewHost`; `:424-433`
+      per view switch.** *(The leak is closed in v1.59.0 — `disposeWithin`
+      removes the outgoing view's map; caching the built view stays open.)* `laicite.js:334-335` clears `viewHost`; `:424-433`
       mounts the map via `mountLazy('places', …)`; `laicite/map.js:93-95`
       creates a fresh map every activation. `map.remove()` is called only in
       `compare-newspapers.js:81-83` ✓; `pruneCharts` drops only `_removed`
@@ -1411,7 +1457,7 @@ non-text content, and the thing a historian citing a figure actually needs
       symptom. Cache the built view like `scary-terms.js:446-455`, or give
       views a teardown hook; also let `pruneCharts` treat a maplibre entry
       whose `el` is no longer connected as dead and `remove()` it.
-- [ ] **M4 (Med, S) — A 205 KB GeoJSON source is added to the collection map
+- [x] **M4 (Med, S) — A 205 KB GeoJSON source is added to the collection map
       and never drawn.** ✓ `collection-overview/map.js:178-180` adds
       `countries` from `world_countries_simple.geojson` (205,295 B); no layer
       references it; the worker parses and tiles it on load and after every
@@ -1517,10 +1563,10 @@ non-text content, and the thing a historian citing a figure actually needs
 - [ ] **M15 (Low, S)** — spatial admin mode re-fits the camera on every
       `style.load` (`spatial-exploration/map.js:617-619 → 568`, 600 ms): a
       theme toggle moves the map.
-- [ ] **M16 (Low, S)** — `attachFeatureStateHover`'s `clearHover`
+- [x] **M16 (Low, S)** — `attachFeatureStateHover`'s `clearHover`
       (`panels-map.js:234-242`) calls `setFeatureState` without a `getSource`
       guard, firing MapLibre `error` events mid-swap that nobody listens for.
-- [ ] **M17 (Low, S)** — `addSource` without a `getSource` guard in
+- [x] **M17 (Low, S)** — `addSource` without a `getSource` guard in
       `laicite/map.js:163` and `scary-terms/map.js:109` (the other ten guard);
       harmless today, the first landmine for M13.
 - [ ] **M18 (Low, M)** — no keyboard / non-pointer route to place data on the
@@ -1627,7 +1673,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       in a block-level store; each panel declares whether it consumes it or
       shows a muted "all countries" note; country bars dispatch
       `store.set('country', name)` on click with a visible clear chip.
-- [ ] **S5 (Med, S) — Compare Newspapers: a stale corpus response overwrites a
+- [x] **S5 (Med, S) — Compare Newspapers: a stale corpus response overwrites a
       newer selection.** ✓ `compare-newspapers.js:173-192` has no request
       token and no `AbortController`; both sides fire on boot (`:200-202`) and
       on every picker change, so a large response landing after a small one
@@ -1637,7 +1683,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       already forwards `init.signal`, `panels.js:127`); lift into
       `P.latest(fn)` and use it in `entity-networks.js:179`,
       `laicite.js:207`, `scary-terms.js:356, 413`.
-- [ ] **S6 (Med, S) — Orphaned ECharts instances accumulate on every view
+- [x] **S6 (Med, S) — Orphaned ECharts instances accumulate on every view
       switch.** ✓ `laicite.js:335` clears `viewHost` on every `draw()` and the
       sentiment view registers four charts (`laicite/sentiment.js:121, 136,
       147, 171`); `topic-explorer.js:602` clears `detail` and `DL.render`
@@ -1673,7 +1719,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `aria-pressed` (the module's established, correct pattern — rationale
       at `collection-overview/entities.js:46-51`); `buildFacetButtons` uses
       it internally.
-- [ ] **S9 (Med, S) — Three per-item dashboards bypass
+- [x] **S9 (Med, S) — Three per-item dashboards bypass
       `bootPerItemDashboard`; ~20 secondary fetches have no timeout.** ✓ only
       the two calls in `panels-boot.js` pass `timeoutMs` (2 of 36).
       `publication-dashboard.js:106-163`, `minimal-item-dashboard.js:189-312`,
@@ -1772,7 +1818,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       (`getLiveChart(host).setOption(…)`, `:841-846`) is the model;
       compare-newspapers may keep its rebuild (new corpus is new data) with a
       reserved `min-height`.
-- [ ] **S18 (Low/Med, S)** — `fullscreenchange` listeners stack on `document`
+- [x] **S18 (Low/Med, S)** — `fullscreenchange` listeners stack on `document`
       and are never removed ✓ (`panel-toolbar.js:444`, `panels-boot.js:379`,
       `graph-panel.js:114`); copy the self-removing pattern
       `panels-controls.js:218-225` already uses.
@@ -1795,7 +1841,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `embed.js:245-249` firing seven synthetic `resize` events, the 50 ms
       fullscreen timers. Keep `index-overview.js:170-175` — a deliberate
       main-thread yield.
-- [ ] **S22 (Low, S)** — stale comments that will mislead the next refactor:
+- [x] **S22 (Low, S)** — stale comments that will mislead the next refactor:
       `laicite.js:228-232` and `keywords-chart.js:155-160` say dashboard-core
       "disposes and re-inits" on theme swap (it calls `setTheme` on the same
       instance, `dashboard-core.js:463-467`); `laicite/documents.js:80-88`
@@ -1837,7 +1883,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       spatial_exploration, index_overview, collection_overview,
       compare_newspapers, keyword_explorer, sentiment_atlas, lexical_metrics,
       topic_explorer, org_cooccurrence).
-- [ ] **P2 (High, S) — No Hugging Face cache across CI runs.**
+- [x] **P2 (High, S) — No Hugging Face cache across CI runs.**
       `regenerate-data.yml:55-58` caches pip only; every push to
       `scripts/*.py` and every monthly run re-downloads all seven subsets.
       `actions/cache` on `~/.cache/huggingface` keyed on
@@ -1936,20 +1982,20 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `numpy==2.5.1` while `requirements.txt` says `numpy<2.5` and the lock
       has `numpy==2.4.6` (`:692`) — the unit tests run on a numpy the
       generators cannot.
-- [ ] **P12 (Med, S) — Empty-data exit codes are inconsistent; one generator
+- [x] **P12 (Med, S) — Empty-data exit codes are inconsistent; one generator
       publishes an empty payload with exit 0.** ✓ `generate_wordcloud.py:
       54-66` returns `_empty_result` when `articles` fails to load and
       `main:180-191` writes it and exits 0 — CI would publish an empty
       `collection-wordcloud.json`. Others raise (`index_overview:494`,
       `keyword_explorer:397`, `laicite:646`, `on_this_day:363`) or
       `return 2`. `required=True` on `load_dataset_safe` + P10's `test -s`.
-- [ ] **P13 (Med, S) — Sentiment scale constants triplicated.** ✓
+- [x] **P13 (Med, S) — Sentiment scale constants triplicated.** ✓
       `POLARITE_ORDER` / `CENTRALITE_ORDER` at `dashboard_aggregator.py:
       131-145`, `generate_compare_newspapers.py:573-586`,
       `generate_sentiment_atlas.py:110-122` (as `POLARITY_ORDER`);
       `laicite:2007-2024` tallies with no order at all. Home: next to
       `SENTIMENT_MODELS` (`iwac_utils.py:1117`).
-- [ ] **P14 (Med, S) — Stopword / tokenizer copy in `compare_newspapers`.**
+- [x] **P14 (Med, S) — Stopword / tokenizer copy in `compare_newspapers`.**
       `generate_compare_newspapers.py:79-115` duplicates
       `iwac_utils.py:785-832` byte-for-byte; the comment at `:77-78`
       ("duplicated here to avoid cross-script imports") is stale — the file
@@ -1992,7 +2038,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### H — PHP / templates
 
-- [ ] **H1 (Med, S) — `iwac-data.zip` has no integrity check.** ✓
+- [x] **H1 (Med, S) — `iwac-data.zip` has no integrity check.** ✓
       `regenerate-data.yml:125-147` uploads with `--clobber` and no digest;
       `SyncData.php:104-109` checks `bytes > 0`; `:117` `CHECKCONS` catches
       structural corruption only. Publish `iwac-data.zip.sha256` alongside;
@@ -2007,7 +2053,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `stage-*` / `old-*` / `download-*` at job start; require
       `disk_free_space > 2 × bytes` before `extractTo`; retry once on curl 7 /
       28 / 56.
-- [ ] **H3 (Med, S) — No pot extraction; the catalogue drifts with no
+- [x] **H3 (Med, S) — No pot extraction; the catalogue drifts with no
       lint.** ✓ `OnThisDay.php:24-26` (the three layout labels), `:38`
       `Default layout` and `:39-40` are `// @translate` strings rendered
       through `$view->translate()` in the admin form and appear in neither
@@ -2164,7 +2210,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       an existing `.min.js` (H5); (3) `hijri.js` round-trips; (4)
       `EmbedController::blockAction` param matrix in `omeka_boot.php`; (5)
       the i18n source ⊂ pot ⊂ po chain (H3).
-- [ ] **B4 (Med, S) — Path filters skip `lint:theme` / `lint:blocks` on view-
+- [x] **B4 (Med, S) — Path filters skip `lint:theme` / `lint:blocks` on view-
       and src-only PRs.** ✓ `build-check.yml:20-52` lists `asset/**`,
       `language/**`, scripts, tests, `config/module.ini`, `tokens.json`,
       package files — not `view/**`, `src/**`, `Module.php`,
@@ -2177,11 +2223,11 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 - [ ] **B5 (Low/Med, S)** — `regenerate-data.yml`: sequential, uncached (P2),
       unchecksummed (H1), no `if: failure()` notice (P11); matrix parallelism
       only after the cache lands (each matrix job would re-download).
-- [ ] **B6 (Low, S)** — `CITATION.cff` (1.54.0) and the README citation
+- [x] **B6 (Low, S)** — `CITATION.cff` (1.54.0) and the README citation
       (1.37.0) sit outside `lint:versions` (`check-versions.js:16-22`) ✓; add
       both to the lockstep. (Not touched in this commit: whether v1.58.0 is
       released is not visible from a shallow clone.)
-- [ ] **B7 (Low, S)** — `dependabot.yml` says pip is "intentionally
+- [x] **B7 (Low, S)** — `dependabot.yml` says pip is "intentionally
       unpinned" while `requirements.lock` + `--require-hashes` exist; update
       the comment or target the lock.
 - [ ] **B8 (Low, S)** — no sourcemaps (`build-js.js:30-37`) — folds into B1;
@@ -2212,10 +2258,10 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### Suggested waves
 
-1. **Quick, safe, build-verifiable (one release):** E1, E4, E14, E15
-   (beeswarm delete), M1, M2, M4, M16, M17, S5, S6, S9, S18, S22, P2, P12,
-   P13, P14, H1, H3, B4, B6, B7 — roughly two days, every item has a lint or
-   a test that proves it.
+1. **Quick, safe, build-verifiable (one release) — shipped as v1.59.0:** E1,
+   E4, E14, E15 (beeswarm delete), M1, M2, M4, M16, M17, S5, S6, S9, S18,
+   S22, P2, P12, P13, P14, H1, H3, B4, B6, B7 — every item has a lint or a
+   test that proves it.
 2. **The reactive core (S11 → S1 → S2 → S4, with E3/E5, S7/S8):** store, URL
    state, focus-safe controls, linked country facet; land block by block
    (person facet → keywords → spatial → laïcité/scary), each behind the
@@ -2266,6 +2312,10 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### False positives — do NOT "fix" these (Tier 8 additions)
 
+- **A detached chart host is not a dead chart.** The laïcité dossier parks
+  its trends chart panel outside the document between views and re-attaches
+  it; `pruneCharts` must not dispose on `!isConnected`. Release subtrees
+  explicitly with `ns.disposeWithin` (S6, as landed).
 - **`setOption(opt, true)` is not the transition killer.** Series views are
   reused across notMerge when names are stable; fix item names (E3), not the
   merge mode. `universalTransition` and `dataset`/`transform` do not apply.

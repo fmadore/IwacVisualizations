@@ -11,9 +11,13 @@ version: 2
 #      committed .min output, so the PR will fail `Build check (JS/CSS)` on
 #      "minified assets are stale" until you run `npm run build` and commit the
 #      .min siblings — those PRs are never auto-mergeable.
-#   3. pip — `scripts/requirements.txt` is intentionally unpinned, and
-#      Dependabot updates version constraints, so there is nothing for it to
-#      bump. Enabling it would be a no-op until the requirements are pinned.
+#   3. pip — `scripts/requirements.txt` carries loose constraints and the
+#      exact, hash-verified pins live in `scripts/requirements.lock`, which
+#      `scripts/python-lock.js` regenerates (`npm run lock:python`) and CI
+#      installs with `--require-hashes`. NOT covered: Dependabot would bump
+#      the constraints file and leave the lock (the thing CI installs)
+#      untouched, so `lint:python-lock` would fail every such PR. Refresh
+#      the lock deliberately instead.
 #   4. The CDN libraries that actually reach visitors' browsers (ECharts,
 #      MapLibre GL, d3) are PHP string constants in
 #      view/common/iwac-assets.phtml and are invisible to Dependabot entirely.

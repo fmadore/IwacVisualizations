@@ -325,7 +325,6 @@
                 }),
                 {
                     nodeScaleRatio: 0.6,
-                    focusNodeAdjacency: true,
                     emphasis: {
                         focus: 'adjacency',
                         lineStyle: { width: 4, opacity: 0.9 },

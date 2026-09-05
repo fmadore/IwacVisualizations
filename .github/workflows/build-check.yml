@@ -22,6 +22,14 @@ on:
     paths:
       - "asset/**"
       - "language/**"
+      # view/ + src/ + the two config files: `npm run build` runs lint:theme
+      # (which scans <style> blocks in view/) and lint:blocks (registry ↔
+      # config ↔ classes ↔ templates). Without these paths a view-only or
+      # src-only PR skipped both and lint.yml never ran the npm gates.
+      - "view/**"
+      - "src/**"
+      - "Module.php"
+      - "config/module.config.php"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
       - "scripts/build-mo.js"
@@ -38,6 +46,14 @@ on:
     paths:
       - "asset/**"
       - "language/**"
+      # view/ + src/ + the two config files: `npm run build` runs lint:theme
+      # (which scans <style> blocks in view/) and lint:blocks (registry ↔
+      # config ↔ classes ↔ templates). Without these paths a view-only or
+      # src-only PR skipped both and lint.yml never ran the npm gates.
+      - "view/**"
+      - "src/**"
+      - "Module.php"
+      - "config/module.config.php"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
       - "scripts/build-mo.js"

@@ -29,6 +29,9 @@ class SyncData extends AbstractJob
     /** Release asset filename produced by .github/workflows/regenerate-data.yml. */
     const ASSET_NAME = 'iwac-data.zip';
 
+    /** The `sha256sum` sidecar the same workflow publishes beside the archive. */
+    const CHECKSUM_SUFFIX = '.sha256';
+
     /** Base for the repository's release downloads. */
     const RELEASE_BASE = 'https://github.com/fmadore/IwacVisualizations/releases/download/';
 
@@ -107,6 +110,16 @@ class SyncData extends AbstractJob
                 throw new \RuntimeException('Downloaded archive is empty.');
             }
             $logger->info(sprintf('IWAC data sync: downloaded %.1f MB.', $bytes / 1048576));
+
+            // 2b. Check the archive against the digest the workflow published
+            // beside it. Until v1.59.0 the archive was trusted on transport
+            // alone: a `--clobber` landing mid-download, a CDN serving a
+            // truncated body, or anyone able to replace the release asset
+            // produced a stream that CHECKCONS would usually — not provably —
+            // reject. A release that predates the sidecar degrades to that
+            // older behaviour with a warning; a sidecar that is present and
+            // does not match is fatal, which is the case it exists for.
+            $this->verifyDigest($url . self::CHECKSUM_SUFFIX, $zipPath, $logger);
 
             // 3. Verify + extract into a fresh staging dir (never the live dir).
             if ($this->shouldStop()) {
@@ -222,6 +235,9 @@ class SyncData extends AbstractJob
             if (is_file($zipPath)) {
                 @unlink($zipPath);
             }
+            if (is_file($zipPath . self::CHECKSUM_SUFFIX)) {
+                @unlink($zipPath . self::CHECKSUM_SUFFIX);
+            }
             flock($lock, LOCK_UN);
             fclose($lock);
             @unlink($lockPath);
@@ -243,6 +259,27 @@ class SyncData extends AbstractJob
             && !preg_match('#^[A-Za-z]:#', $name);
     }
 
+    /**
+     * The SHA-256 a `sha256sum` sidecar declares for the archive, or null.
+     *
+     * Accepts only a well-formed 64-hex digest whose filename column names
+     * this archive (`<hex>  iwac-data.zip`, or `*iwac-data.zip` in binary
+     * mode), so an HTML error page, a truncated file or a digest for some
+     * other asset can never pass as a verification. Public and pure so the
+     * dependency-free PHP test runner covers the boundary.
+     */
+    public static function expectedDigestFromSidecar(string $contents, string $assetName = self::ASSET_NAME): ?string
+    {
+        foreach (preg_split('/\R/', trim($contents)) ?: [] as $line) {
+            if (preg_match('/^([0-9a-f]{64})\s+\*?(\S+)\s*$/i', trim($line), $m)
+                && basename($m[2]) === $assetName
+            ) {
+                return strtolower($m[1]);
+            }
+        }
+        return null;
+    }
+
     /** Build the only permitted download origin for a release tag. */
     public static function releaseUrlForTag(string $tag): string
     {
@@ -261,6 +298,44 @@ class SyncData extends AbstractJob
     {
         $type = ($attributes >> 16) & 0170000;
         return $type === 0 || $type === 0100000 || $type === 0040000;
+    }
+
+    /**
+     * Fetch the checksum sidecar and compare it with the downloaded archive.
+     *
+     * A missing sidecar (a release built before the workflow published one, a
+     * transient fetch failure) is a warning, not a failure — the archive is
+     * then installed as it always was. A sidecar that is present but
+     * malformed, or that does not match, throws: an unverifiable archive is
+     * not installed.
+     */
+    private function verifyDigest(string $sidecarUrl, string $zipPath, $logger): void
+    {
+        $sidecarPath = $zipPath . self::CHECKSUM_SUFFIX;
+        try {
+            $this->download($sidecarUrl, $sidecarPath, $logger);
+        } catch (\RuntimeException $e) {
+            @unlink($sidecarPath);
+            $logger->warn(
+                'IWAC data sync: no checksum sidecar for this release — installing without an integrity check ('
+                . $e->getMessage() . ').'
+            );
+            return;
+        }
+        $expected = self::expectedDigestFromSidecar((string) @file_get_contents($sidecarPath));
+        @unlink($sidecarPath);
+        if ($expected === null) {
+            throw new \RuntimeException(
+                'The checksum sidecar is malformed; refusing to install an unverified archive.'
+            );
+        }
+        $actual = hash_file('sha256', $zipPath);
+        if (!is_string($actual) || !hash_equals($expected, strtolower($actual))) {
+            throw new \RuntimeException(
+                'The archive\'s SHA-256 does not match the published checksum; nothing was installed.'
+            );
+        }
+        $logger->info('IWAC data sync: archive SHA-256 verified.');
     }
 
     /**

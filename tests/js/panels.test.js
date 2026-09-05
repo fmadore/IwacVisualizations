@@ -167,3 +167,25 @@ test('a total and a single runtime format differently on purpose', () => {
     assert.equal(P.formatDuration(1012955), '281:22:35');
     assert.equal(P.formatTotalDuration(1012955), '281 h');
 });
+
+test('fetchJSON is bounded by default and rejects a request that never answers', async () => {
+    const { P } = loadPanels({
+        fetch: () => new Promise(() => {}),   // a captive portal, a swallowed connection
+    });
+    P.FETCH_TIMEOUT_MS = 20;
+    await assert.rejects(P.fetchJSON('/files/never.json'), /timed out after 20 ms/);
+});
+
+test('fetchJSON timeoutMs: 0 opts out of the bound', async () => {
+    let init;
+    const { P } = loadPanels({
+        fetch: async (url, options) => {
+            init = options;
+            return { ok: true, json: async () => ({ ok: true }) };
+        },
+    });
+    P.FETCH_TIMEOUT_MS = 20;
+    const body = await P.fetchJSON('/files/data.json', { timeoutMs: 0 });
+    assert.deepEqual(JSON.parse(JSON.stringify(body)), { ok: true });
+    assert.equal(init.signal, undefined, 'no abort controller is armed when the bound is off');
+});

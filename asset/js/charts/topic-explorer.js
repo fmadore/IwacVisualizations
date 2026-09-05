@@ -599,6 +599,10 @@
 
         overview.classList.remove('is-active');
         detail.classList.add('is-active');
+        // Release the previous topic's three charts before their hosts are
+        // thrown away; otherwise each detail opened added three live
+        // instances that every theme toggle then re-rendered.
+        if (ns.disposeWithin) ns.disposeWithin(detail);
         detail.innerHTML = '';
 
         detail.appendChild(buildDetailHeader(topic, function back() {

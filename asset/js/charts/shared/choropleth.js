@@ -397,7 +397,16 @@
             return pendingFetch;
         }
 
+        // Once per map instance. `ensureLayers()` re-adds the source after
+        // every theme swap and used to call this each time, so the
+        // click / hover listeners — which live on the Map, not the style —
+        // stacked one deeper per toggle: N toggles, N popups per click.
+        var interactionsAttached = false;
+
         function attachInteractions() {
+            if (interactionsAttached) return;
+            interactionsAttached = true;
+
             // Hover highlight via feature-state — same idiom as the
             // bubble layers, no JS work per frame.
             P.attachFeatureStateHover(map, { layer: FILL, source: SOURCE });
