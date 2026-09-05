@@ -12,7 +12,8 @@
  * `scripts/generate_term_trends.py`.
  *
  * UI: search box with a suggestion dropdown, removable term chips (max 8),
- * absolute-count vs share-of-articles toggle, multi-line chart.
+ * absolute-count vs share-of-articles toggle, multi-line chart. The picks
+ * and the measure are URL-addressable (`?ngram.terms=islam,religion`).
  *
  * Load order: after shared/panels.js + shared/chart-options*.js.
  */
@@ -103,6 +104,29 @@
             selected: [],          // ordered term strings
             mode: 'share'          // 'share' | 'count'
         };
+        var store = P.createStore(state);
+        // The Ngram viewer's whole value is the shareable address:
+        // `?ngram.terms=islam,laïcité&ngram.mode=count`. Unknown terms are
+        // dropped on the way in; the cap applies as it does to the picker.
+        var url = P.bindUrlState ? P.bindUrlState(store, {
+            prefix: 'ngram',
+            keys: [
+                { key: 'selected', param: 'terms',
+                  parse: function (raw) {
+                      var out = [];
+                      String(raw).split(',').forEach(function (term) {
+                          term = term.trim();
+                          if (term && out.indexOf(term) === -1
+                                  && Object.prototype.hasOwnProperty.call(termTotals, term)
+                                  && out.length < MAX_SELECTED) {
+                              out.push(term);
+                          }
+                      });
+                      return out;
+                  } },
+                { key: 'mode', values: ['share', 'count'] }
+            ]
+        }) : null;
         var seriesCache = {};      // term -> counts array
         var shardPromises = {};    // shard key -> Promise<shard object>
 
@@ -152,29 +176,23 @@
         });
         controls.appendChild(search.root);
 
-        var modeTabs = P.el('div', 'iwac-vis-tabs iwac-vis-ngram-mode');
         // A toggle group, announced as one: the pair chooses how the same
         // series is expressed, and `--active` alone said so only in colour.
-        modeTabs.setAttribute('role', 'group');
-        modeTabs.setAttribute('aria-label', P.t('ngram.mode_label'));
-        var modeButtons = {};
-        [
-            { key: 'share', labelKey: 'ngram.mode_share' },
-            { key: 'count', labelKey: 'ngram.mode_count' }
-        ].forEach(function (m) {
-            var btn = P.el('button', 'iwac-vis-tab', P.t(m.labelKey));
-            btn.type = 'button';
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () {
-                if (state.mode === m.key) return;
-                state.mode = m.key;
-                syncModeTabs();
-                draw();
-            });
-            modeButtons[m.key] = btn;
-            modeTabs.appendChild(btn);
+        var modeTabs = P.buildSegmented({
+            name: 'ngram-mode',
+            ariaLabel: P.t('ngram.mode_label'),
+            options: [
+                { key: 'share', label: P.t('ngram.mode_share') },
+                { key: 'count', label: P.t('ngram.mode_count') }
+            ],
+            active: state.mode,
+            classes: { root: 'iwac-vis-tabs iwac-vis-ngram-mode' },
+            onChange: function (key) { store.patch({ mode: key }); }
         });
-        controls.appendChild(modeTabs);
+        controls.appendChild(modeTabs.root);
+        if (url && P.buildCopyLinkButton) {
+            controls.appendChild(P.buildCopyLinkButton({ href: url.href }));
+        }
 
         var chipsRow = P.el('div', 'iwac-vis-ngram-chips');
         root.appendChild(chipsRow);
@@ -191,14 +209,6 @@
             draw();
         });
 
-        function syncModeTabs() {
-            Object.keys(modeButtons).forEach(function (k) {
-                var on = k === state.mode;
-                modeButtons[k].classList.toggle('iwac-vis-tab--active', on);
-                modeButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
-        }
-
         // --- Shard loading ------------------------------------------------
         function loadTerm(term) {
             if (seriesCache[term]) return Promise.resolve(seriesCache[term]);
@@ -214,23 +224,26 @@
             });
         }
 
-        function addTerm(term) {
-            if (state.selected.indexOf(term) !== -1) return;
-            if (state.selected.length >= MAX_SELECTED) return;
-            state.selected.push(term);
-            renderChips();
-            loadTerm(term).then(function () { draw(); }).catch(function (err) {
+        /** Fetch a term's series, then redraw if it is still selected. */
+        function ensureLoaded(term) {
+            loadTerm(term).then(function () {
+                if (state.selected.indexOf(term) !== -1) draw();
+            }).catch(function (err) {
                 console.warn('IWACVis term-trends: shard load failed', err);
                 removeTerm(term);
             });
         }
 
+        function addTerm(term) {
+            if (state.selected.indexOf(term) !== -1) return;
+            if (state.selected.length >= MAX_SELECTED) return;
+            store.patch({ selected: state.selected.concat([term]) });
+            ensureLoaded(term);
+        }
+
         function removeTerm(term) {
-            var idx = state.selected.indexOf(term);
-            if (idx < 0) return;
-            state.selected.splice(idx, 1);
-            renderChips();
-            draw();
+            if (state.selected.indexOf(term) === -1) return;
+            store.patch({ selected: state.selected.filter(function (t) { return t !== term; }) });
         }
 
         // --- Chips -----------------------------------------------------------
@@ -250,9 +263,7 @@
                     P.t('ngram.clear'));
                 clear.type = 'button';
                 clear.addEventListener('click', function () {
-                    state.selected = [];
-                    renderChips();
-                    draw();
+                    store.patch({ selected: [] });
                 });
                 chipsRow.appendChild(clear);
             }
@@ -329,19 +340,39 @@
                 option = R.withMedia(option,
                     R.valueChartMedia({ hasZoom: dataZoom.length > 0 }));
             }
-            currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
+            // A merge where the chart's shape is unchanged: adding a term
+            // used to reset the 65-year window to 0–100 and drop every
+            // legend toggle. The empty-state title above is a different
+            // shape, so the first real paint after it is still a rebuild.
+            if (ns.repaint) ns.repaint(currentInstance, option, { lazyUpdate: true });
+            else currentInstance.setOption(option, { notMerge: true, lazyUpdate: true });
         }
 
+        // --- Wiring ----------------------------------------------------------
+        store.subscribe(function () {
+            renderChips();
+            draw();
+        }, { keys: ['selected'] });
+        store.subscribe(function () {
+            modeTabs.set(state.mode);
+            draw();
+        }, { keys: ['mode'] });
+
         // --- Boot ------------------------------------------------------------
-        syncModeTabs();
         renderChips();
-        var defaults = DEFAULT_TERMS.filter(function (t) {
-            return Object.prototype.hasOwnProperty.call(termTotals, t);
-        });
-        if (!defaults.length) {
-            defaults = terms.slice(0, 3).map(function (pair) { return pair[0]; });
+        if (state.selected.length) {
+            // Restored from the URL: the picks are already in the state,
+            // they only need their series.
+            state.selected.forEach(ensureLoaded);
+        } else {
+            var defaults = DEFAULT_TERMS.filter(function (t) {
+                return Object.prototype.hasOwnProperty.call(termTotals, t);
+            });
+            if (!defaults.length) {
+                defaults = terms.slice(0, 3).map(function (pair) { return pair[0]; });
+            }
+            defaults.forEach(addTerm);
         }
-        defaults.forEach(addTerm);
     }
 
     P.bootBlock({

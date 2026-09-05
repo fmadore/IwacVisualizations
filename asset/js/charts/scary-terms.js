@@ -28,6 +28,11 @@
  *   iwac-theme.js → dashboard-core.js → panels.js → responsive.js →
  *   chart-options.js → facet-buttons.js → maplibre.js → map-popup.js →
  *   scary-terms/{i18n,helpers,trends,wordcloud,map,controls}.js
+ *
+ * State lives in one P.createStore; the controls row patches it and the
+ * subscriptions at the foot of render() turn a change into a remount, a
+ * sync or a redraw. View, country and race year are URL-addressable
+ * (`?scary.view=…`) through P.bindUrlState.
  */
 (function () {
     'use strict';
@@ -207,6 +212,41 @@
             isPlaying: false
         };
 
+        // One store over that object. Controls patch it; the subscriptions
+        // at the foot of this function decide what a change means: a new
+        // view remounts the controls row, anything else syncs the widgets
+        // in place and redraws. The cross-field rule the map selects used
+        // to apply inside their own handlers lives here instead.
+        var store = P.createStore(state, {
+            reduce: function (st, changed) {
+                var extra = {};
+                if (changed.indexOf('mapFamily') !== -1 && st.mapFamily) extra.mapCountry = '';
+                if (changed.indexOf('mapCountry') !== -1 && st.mapCountry) extra.mapFamily = '';
+                return extra;
+            }
+        });
+
+        // The view, the country and the race year are addressable:
+        // `?scary.view=trends&scary.country=Togo`. Defaults are omitted, the
+        // address bar is replaced (no history entry per click), and inside
+        // an embed frame the same code runs against the frame's own URL.
+        var viewKeys = SH.viewOptions({ hasCooccurrence: !!cooccurrence })
+            .map(function (v) { return v.key; });
+        var url = P.bindUrlState ? P.bindUrlState(store, {
+            prefix: 'scary',
+            keys: [
+                { key: 'view', values: viewKeys },
+                { key: 'country', values: availableCountries },
+                { key: 'trendsCountry', param: 'trends', values: trendsCountries },
+                { key: 'yearIdx', param: 'year',
+                  serialize: function (idx) { return years[idx]; },
+                  parse: function (raw) {
+                      var idx = years.indexOf(parseInt(raw, 10));
+                      return idx === -1 ? undefined : idx;
+                  } }
+            ]
+        }) : null;
+
         // Lazy bundles: undefined = not requested, null = failed / absent,
         // object = loaded. Fetch flags stop duplicate requests.
         var wordcloudData;
@@ -360,8 +400,10 @@
                     wordcloudData = null;
                 })
                 .then(function () {
+                    // A bundle arriving is structural (the facet bar can
+                    // only be built from it), so this is a remount.
                     if (state.view === 'wordcloud') {
-                        controls.render();
+                        controls.mount();
                         draw();
                     }
                 });
@@ -427,7 +469,7 @@
                         mapCountries = Object.keys(seen).sort();
                     }
                     if (state.view === 'map') {
-                        controls.render();
+                        controls.mount();
                         draw();
                     }
                 });
@@ -544,35 +586,23 @@
         //
         //  The controls row (view toggle, per-view selects, playback bar,
         //  slider) lives in scary-terms/controls.js; the race timer's
-        //  state machine is the shared P.createPlaybackTimer. `controls`
-        //  is referenced from the timer callbacks — safe, the timer only
-        //  fires after a user clicks play, long after both exist.
+        //  state machine is the shared P.createPlaybackTimer. Neither
+        //  touches the DOM of the other: the timer patches the store and
+        //  the row's sync() moves the slider and the play glyph.
         // -----------------------------------------------------------------
 
-        var controls;
         var playback = P.createPlaybackTimer({
             tickMs: RACE_TICK_MS,
             isAtEnd: function () { return state.yearIdx >= years.length - 1; },
-            rewind: function () { state.yearIdx = 0; },
-            advance: function () {
-                state.yearIdx++;
-                controls.syncSliderPosition();
-                draw();
-            },
-            onPlay: function () {
-                state.isPlaying = true;
-                controls.render();
-                draw();
-            },
-            onStop: function () {
-                state.isPlaying = false;
-                controls.render();
-            }
+            rewind: function () { store.patch({ yearIdx: 0 }); },
+            advance: function () { store.patch({ yearIdx: state.yearIdx + 1 }); },
+            onPlay: function () { store.patch({ isPlaying: true }); },
+            onStop: function () { store.patch({ isPlaying: false }); }
         });
 
-        controls = SH.createScaryControls({
+        var controls = SH.createScaryControls({
             controlsEl: controlsEl,
-            state: state,
+            store: store,
             years: years,
             availableCountries: availableCountries,
             matrixCountries: matrixCountries,
@@ -583,12 +613,23 @@
             getWordcloudData: function () { return wordcloudData; },
             getPlacesData: function () { return placesData; },
             getMapCountries: function () { return mapCountries; },
-            draw: draw,
-            playback: playback
+            playback: playback,
+            trailing: url && P.buildCopyLinkButton
+                ? P.buildCopyLinkButton({ href: url.href })
+                : null
+        });
+
+        // What a change means. Order matters within one flush: the row is
+        // remounted (view) or synced (anything) before the chart redraws.
+        store.subscribe(function () { controls.mount(); }, { keys: ['view'] });
+        store.subscribe(function () { controls.sync(); });
+        store.subscribe(function () { draw(); }, {
+            keys: ['view', 'country', 'matrixCountry', 'trendsCountry', 'showEvents',
+                   'wcFacet', 'wcSub', 'mapFamily', 'mapCountry', 'yearIdx']
         });
 
         // Initial paint
-        controls.render();
+        controls.mount();
         draw();
     }
 

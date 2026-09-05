@@ -1093,6 +1093,72 @@
     border-bottom: 1px solid var(--border-light, #e2e5e8);
 }
 
+/*  Optional eyebrow inside a `P.buildSegmented` group ("View:"). */
+.iwac-vis-tabs__label {
+    align-self: center;
+    margin-right: var(--space-1, 0.25rem);
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 700;
+    color: var(--ink-light, #3f4349);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+}
+
+/* -------------------------------------------------------------------
+ *  Controls rows that remount by view
+ *
+ *  A block's controls row keeps a persistent skeleton — the view toggle
+ *  and the copy-link button — and rebuilds only a slot between them when
+ *  the view changes. `display: contents` makes that slot invisible to the
+ *  row's flex layout, so the selects it holds lay out as its direct
+ *  children and the row's own stylesheet needs no change.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-controls-slot {
+    display: contents;
+}
+
+/*  "Copy link to this view": at the far end of the row it lives in. */
+.iwac-vis-copy-link {
+    margin-inline-start: auto;
+}
+
+.iwac-vis-copy-link--copied {
+    color: var(--success, #2e9052);
+}
+
+/* -------------------------------------------------------------------
+ *  Year slider — default skin for `P.buildYearSlider`
+ *
+ *  The two current consumers (scary-terms, keywords attention) pass their
+ *  own classes; this is what a new caller gets without any.
+ * ------------------------------------------------------------------- */
+
+.iwac-vis-year-slider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+}
+
+.iwac-vis-year-slider__edge {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--muted, #66696e);
+    font-variant-numeric: tabular-nums;
+}
+
+.iwac-vis-year-slider__input {
+    flex: 1;
+    min-width: 0;
+    accent-color: var(--primary, #ce4115);
+    cursor: pointer;
+}
+
+.iwac-vis-year-slider__input:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 2px;
+}
+
 .iwac-vis-tab,
 .iwac-vis-pagination__btn,
 .iwac-vis-facets__btn,
@@ -1170,6 +1236,13 @@
     flex-wrap: wrap;
     gap: var(--space-1, 0.25rem);
     align-items: center;
+}
+
+/*  The sub-facet buttons are a `P.buildSegmented` group inside the sub
+ *  bar; `display: contents` lets the bar lay the buttons out exactly as it
+ *  did when they were its direct children. */
+.iwac-vis-facets__sub-group {
+    display: contents;
 }
 
 /* -------------------------------------------------------------------

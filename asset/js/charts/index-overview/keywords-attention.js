@@ -64,17 +64,21 @@
         playBtn.type = 'button';
         playBtn.setAttribute('aria-label', P.t('Play'));
         controls.appendChild(playBtn);
-        controls.appendChild(P.el('span', 'iwac-vis-keywords-attention-edge', String(years[0])));
-        var slider = P.el('input', 'iwac-vis-keywords-attention-slider');
-        slider.type = 'range';
-        slider.min = '0';
-        slider.max = String(years.length - 1);
-        slider.step = '1';
-        slider.value = '0';
-        slider.setAttribute('aria-label', P.t('Year'));
-        controls.appendChild(slider);
-        controls.appendChild(P.el('span', 'iwac-vis-keywords-attention-edge',
-            String(years[years.length - 1])));
+        // The shared slider announces the YEAR, not "12 of 64".
+        var slider = P.buildYearSlider({
+            name: 'keywords-attention-year',
+            years: years,
+            index: 0,
+            into: controls,
+            classes: {
+                edge: 'iwac-vis-keywords-attention-edge',
+                input: 'iwac-vis-keywords-attention-slider'
+            },
+            onInput: function (idx) {
+                playback.stop();
+                setYear(idx);
+            }
+        });
         var yearLabel = P.el('span', 'iwac-vis-keywords-attention-year', String(years[0]));
         controls.appendChild(yearLabel);
         panelEl.chart.appendChild(controls);
@@ -119,10 +123,10 @@
             if (ok !== true) controls.style.display = 'none';
         });
 
-        function setYear(idx, fromTimer) {
+        function setYear(idx) {
             state.yearIdx = idx;
             yearLabel.textContent = String(years[idx]);
-            if (!fromTimer) slider.value = String(idx);
+            slider.set(idx);
             if (choropleth) {
                 choropleth.updateCounts(countsAt(idx), {
                     paint: { fixedMax: fixedMax }
@@ -137,10 +141,7 @@
             tickMs: TICK_MS,
             isAtEnd: function () { return state.yearIdx >= years.length - 1; },
             rewind: function () { setYear(0); },
-            advance: function () {
-                slider.value = String(state.yearIdx + 1);
-                setYear(state.yearIdx + 1, true);
-            },
+            advance: function () { setYear(state.yearIdx + 1); },
             onPlay: function () {
                 playBtn.textContent = '⏸';
                 playBtn.setAttribute('aria-label', P.t('Pause'));
@@ -152,10 +153,6 @@
         });
 
         playBtn.addEventListener('click', function () { playback.toggle(); });
-        slider.addEventListener('input', function () {
-            playback.stop();
-            setYear(parseInt(slider.value, 10) || 0);
-        });
     }
 
     ns.indexOverview = ns.indexOverview || {};

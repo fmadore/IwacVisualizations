@@ -122,6 +122,34 @@
         if (papers) grid.appendChild(papers);
     }
 
+    /**
+     * Is `{type, scope, slug}` a corpus the index actually carries? The URL
+     * can name anything; only a real one is worth a fetch.
+     */
+    function knownCorpus(index, pick) {
+        if (!pick || !pick.type || !pick.scope || !pick.slug) return false;
+        var subset = index.subsets && index.subsets[pick.type];
+        if (!subset) return false;
+        var list = pick.scope === 'country' ? subset.countries
+            : pick.scope === 'newspaper' ? subset.newspapers : null;
+        if (!list) return false;
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].slug === pick.slug) return true;
+        }
+        return false;
+    }
+
+    /** `articles/country/benin` ↔ {type, scope, slug}. */
+    function serializeCorpus(pick) {
+        return pick && pick.slug ? [pick.type, pick.scope, pick.slug].join('/') : null;
+    }
+
+    function parseCorpus(raw) {
+        var parts = String(raw).split('/');
+        if (parts.length !== 3) return undefined;
+        return { type: parts[0], scope: parts[1], slug: parts[2] };
+    }
+
     function pickDefaults(index) {
         var subset = index.subsets && index.subsets.articles;
         var countries = (subset && subset.countries) || [];
@@ -153,6 +181,21 @@
         root.appendChild(resultsRoot);
 
         var defaults = pickDefaults(index);
+        // The two picks are the block's state, and the address:
+        // `?cmp.a=articles/country/benin&cmp.b=publications/newspaper/…`.
+        var picks = P.createStore({ A: defaults.A, B: defaults.B });
+        var url = P.bindUrlState ? P.bindUrlState(picks, {
+            prefix: 'cmp',
+            keys: SIDES.map(function (side) {
+                return {
+                    key: side,
+                    param: side.toLowerCase(),
+                    serialize: serializeCorpus,
+                    parse: parseCorpus,
+                    validate: function (pick) { return knownCorpus(index, pick); }
+                };
+            })
+        }) : null;
         var state = { A: null, B: null };
         var pickers = {};
 
@@ -202,13 +245,30 @@
         }
 
         SIDES.forEach(function (side) {
-            var picker = buildPicker(side, index, defaults[side], onPickerChange(side));
+            var picker = buildPicker(side, index, picks.state[side], function (pickerState) {
+                picks.set(side, pickerState);
+            });
             pickers[side] = picker;
             pickersEl.appendChild(picker.root);
         });
 
+        if (url && P.buildCopyLinkButton) {
+            pickersEl.appendChild(P.buildCopyLinkButton({ href: url.href }));
+        }
+
+        // A pick — from its picker, or restored from the URL — fetches its
+        // corpus; the picker is told either way so the two never disagree.
+        var load = { A: onPickerChange('A'), B: onPickerChange('B') };
+        picks.subscribe(function (keys) {
+            keys.forEach(function (side) {
+                if (!pickers[side]) return;
+                pickers[side].set(picks.state[side]);
+                load[side](pickers[side].getState());
+            });
+        });
+
         SIDES.forEach(function (side) {
-            onPickerChange(side)(pickers[side].getState());
+            load[side](pickers[side].getState());
         });
     }
 

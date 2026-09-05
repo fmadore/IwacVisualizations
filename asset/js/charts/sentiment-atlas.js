@@ -827,6 +827,25 @@
             topicSort: 'polarity',
             newspaperSort: 'polarity'
         };
+        // The facets patch this store; the subscriptions below repaint what
+        // each key drives. All of it is URL-addressable:
+        // `?sentiment.model=gpt_5_6_luna&sentiment.sort_topic=volume`.
+        var store = P.createStore(state);
+        var agreementCount = (data.agreement || []).length;
+        var url = P.bindUrlState ? P.bindUrlState(store, {
+            prefix: 'sentiment',
+            keys: [
+                { key: 'model', values: MODELS.map(function (m) { return m.key; }) },
+                { key: 'pair', validate: function (v) {
+                    return v >= 0 && v < agreementCount && v === Math.floor(v);
+                } },
+                { key: 'exCategory', param: 'category',
+                  values: data.extreme_categories || [firstCat] },
+                { key: 'exType', param: 'type', values: ['subject', 'spatial'] },
+                { key: 'topicSort', param: 'sort_topic', values: ['polarity', 'volume'] },
+                { key: 'newspaperSort', param: 'sort_newspaper', values: ['polarity', 'volume'] }
+            ]
+        }) : null;
         // Pinned once, over every model AND both breakdowns, so neither the
         // model facet nor the move between the two panels rescales the
         // ruler (see polarityExtent).
@@ -840,9 +859,12 @@
         }
         function repaint(host, option) {
             var live = host && ns.getLiveChart ? ns.getLiveChart(host) : null;
-            // `true` — a diverging repaint reorders the category axis, and a
-            // merged setOption would leave the previous row labels in place.
-            if (live) live.setOption(option, true);
+            if (!live) return;
+            // A shape-aware merge: the series are replaced (so a re-sort
+            // moves every row, by name, to its new slot) while the legend
+            // toggles the reader set survive the model switch.
+            if (ns.repaint) ns.repaint(live, option);
+            else live.setOption(option, true);
         }
         var h = buildLayout(container, data);
 
@@ -855,8 +877,8 @@
         updateNaNote();
 
         function renderExtremes() {
-            var live = ns.getLiveChart ? ns.getLiveChart(h.extremesPanel.chart) : null;
-            if (live) live.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
+            repaint(h.extremesPanel.chart,
+                buildExtremes(data, state.model, state.exCategory, state.exType));
             var bucket = ((data.models[state.model] || {}).extremes || {})[state.exCategory] || {};
             h.extremesNote.textContent = P.t('sentiment.extremes_n', {
                 count: P.formatNumber(bucket.n || 0)
@@ -875,27 +897,32 @@
                     renderAs: 'buttons'
                 }],
                 activeKey: 'model',
+                activeSubKey: state.model,
                 onChange: function (evt) {
-                    state.model = evt.subFacet || MODELS[0].key;
-                    updateNaNote();
-                    var faceted = [
-                        [h.polarityPanel.chart,    buildPolarityByYear],
-                        [h.centralityPanel.chart,  buildCentralityByYear],
-                        [h.countryPanel.chart,     buildPolarityByCountry],
-                        [h.correlationPanel.chart, buildCorrelation],
-                        [h.cenHeatPanel.chart,     buildCentralityHeatmap]
-                    ];
-                    faceted.forEach(function (pair) {
-                        var live = ns.getLiveChart ? ns.getLiveChart(pair[0]) : null;
-                        if (live) live.setOption(pair[1](data, state.model), true);
-                    });
-                    if (h.topicPanel) repaint(h.topicPanel.chart, topicOption());
-                    if (h.newspaperPanel) repaint(h.newspaperPanel.chart, newspaperOption());
-                    renderExtremes();
+                    store.patch({ model: evt.subFacet || MODELS[0].key });
                 }
             });
             h.modelFacetHost.appendChild(facetBar.root);
+            if (url && P.buildCopyLinkButton) {
+                h.modelFacetHost.appendChild(P.buildCopyLinkButton({ href: url.href }));
+            }
         }
+        store.subscribe(function () {
+            updateNaNote();
+            var faceted = [
+                [h.polarityPanel.chart,    buildPolarityByYear],
+                [h.centralityPanel.chart,  buildCentralityByYear],
+                [h.countryPanel.chart,     buildPolarityByCountry],
+                [h.correlationPanel.chart, buildCorrelation],
+                [h.cenHeatPanel.chart,     buildCentralityHeatmap]
+            ];
+            faceted.forEach(function (pair) {
+                repaint(pair[0], pair[1](data, state.model));
+            });
+            if (h.topicPanel) repaint(h.topicPanel.chart, topicOption());
+            if (h.newspaperPanel) repaint(h.newspaperPanel.chart, newspaperOption());
+            renderExtremes();
+        }, { keys: ['model'] });
 
         // -- Faceted single-model panels ---------------------------
         ns.registerChart(h.polarityPanel.chart, function (el, chart) {
@@ -927,6 +954,7 @@
                     renderAs: 'buttons'
                 }],
                 activeKey: 'sort',
+                activeSubKey: current,
                 onChange: function (evt) { apply(evt.subFacet || current); }
             });
             host.appendChild(bar.root);
@@ -937,18 +965,22 @@
                 chart.setOption(topicOption(), true);
             });
             mountSortControl(h.topicSortHost, state.topicSort, function (mode) {
-                state.topicSort = mode;
-                repaint(h.topicPanel.chart, topicOption());
+                store.patch({ topicSort: mode });
             });
+            store.subscribe(function () {
+                repaint(h.topicPanel.chart, topicOption());
+            }, { keys: ['topicSort'] });
         }
         if (h.newspaperPanel) {
             ns.registerChart(h.newspaperPanel.chart, function (el, chart) {
                 chart.setOption(newspaperOption(), true);
             });
             mountSortControl(h.newspaperSortHost, state.newspaperSort, function (mode) {
-                state.newspaperSort = mode;
-                repaint(h.newspaperPanel.chart, newspaperOption());
+                store.patch({ newspaperSort: mode });
             });
+            store.subscribe(function () {
+                repaint(h.newspaperPanel.chart, newspaperOption());
+            }, { keys: ['newspaperSort'] });
         }
 
         // -- Subjectivity trend (all models at once) ---------------
@@ -965,9 +997,9 @@
             var catBar = P.buildFacetButtons({
                 facets: [{ key: 'category', label: P.t('sentiment.extremes_category'), subFacets: catFacets }],
                 activeKey: 'category',
+                activeSubKey: state.exCategory,
                 onChange: function (evt) {
-                    state.exCategory = evt.subFacet || firstCat;
-                    renderExtremes();
+                    store.patch({ exCategory: evt.subFacet || firstCat });
                 }
             });
             var typeBar = P.buildFacetButtons({
@@ -978,9 +1010,9 @@
                     renderAs: 'buttons'
                 }],
                 activeKey: 'type',
+                activeSubKey: state.exType,
                 onChange: function (evt) {
-                    state.exType = evt.subFacet || 'subject';
-                    renderExtremes();
+                    store.patch({ exType: evt.subFacet || 'subject' });
                 }
             });
             h.extremesControls.appendChild(catBar.root);
@@ -989,6 +1021,7 @@
         ns.registerChart(h.extremesPanel.chart, function (el, chart) {
             chart.setOption(buildExtremes(data, state.model, state.exCategory, state.exType), true);
         });
+        store.subscribe(renderExtremes, { keys: ['exCategory', 'exType'] });
         renderExtremes();
 
         // -- Comparison section ------------------------------------
@@ -1030,13 +1063,14 @@
                     renderAs: 'buttons'
                 }],
                 activeKey: 'pair',
+                activeSubKey: String(state.pair),
                 onChange: function (evt) {
-                    state.pair = parseInt(evt.subFacet, 10) || 0;
-                    renderComparison();
+                    store.patch({ pair: parseInt(evt.subFacet, 10) || 0 });
                 }
             });
             h.pairFacetHost.appendChild(pairBar.root);
         }
+        store.subscribe(renderComparison, { keys: ['pair'] });
 
         ns.registerChart(h.agreementPanel.chart, function (el, chart) {
             chart.setOption(buildAgreementMatrix(data, agreement[state.pair]), true);

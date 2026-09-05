@@ -15,7 +15,14 @@
  * eyebrow label beside it is a `<span>`, so without an explicit association
  * both country pickers on that page were simply unnamed.
  *
- * Load order: after panels.js.
+ * Both button rows are `P.buildSegmented` groups since v1.60.0 (the shared
+ * "pick one of N" widget: aria-pressed, arrow keys), and a bar can open on a
+ * given sub-facet — `activeSubKey` — so a value restored from the URL is the
+ * one that shows pressed. Before that, `setActive(key, subKey)` in button
+ * mode set the state but could not reach the highlighter, so the pressed
+ * button and the value diverged.
+ *
+ * Load order: after panels-controls.js (for P.buildSegmented).
  */
 (function () {
     'use strict';
@@ -38,14 +45,19 @@
      *   - subFacets is an object { subKey: subLabel }
      *   - renderAs is 'buttons' | 'select'; default auto by count
      * @param {string} config.activeKey
+     * @param {string} [config.activeSubKey]  sub-facet to open on (must exist
+     *   under the active facet; otherwise the first one is picked as before)
      * @param {function({facet:string,subFacet:?string})} config.onChange
-     * @returns {{ root: HTMLElement, setActive: function(string, string=) }}
+     * @returns {{ root: HTMLElement, setActive: function(string, string=),
+     *             getActive: function(): {facet:string, subFacet:?string} }}
      */
     P.buildFacetButtons = function (config) {
         var facets = config.facets || [];
         var activeKey = config.activeKey || (facets[0] && facets[0].key);
         var activeSubKey = null;
-        var subPickerContainer = null;
+        var subPickerContainer = null;   // the <select>, in select mode
+        var subSegmented = null;         // the P.buildSegmented group, in button mode
+        var openSubKey = config.activeSubKey || null;
 
         var root = P.el('div', 'iwac-vis-facets');
         root.setAttribute('role', 'group');
@@ -69,25 +81,31 @@
         // eyebrow label instead and let the sub-control (select / sub-buttons)
         // carry all the interaction.
         var singleFacet = facets.length === 1;
-        var mainButtons = {};
+        var mainSegmented = null;
         var eyebrowEl = null;
-        facets.forEach(function (f) {
-            if (singleFacet) {
-                eyebrowEl = P.el('span', 'iwac-vis-facets__label', f.label);
-                eyebrowEl.id = labelId;
-                mainBar.appendChild(eyebrowEl);
-                return;
-            }
-            var btn = P.el('button', 'iwac-vis-facets__btn', f.label);
-            btn.type = 'button';
-            btn.dataset.facetKey = f.key;
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () {
-                setActive(f.key);
+        if (singleFacet) {
+            eyebrowEl = P.el('span', 'iwac-vis-facets__label', facets[0].label);
+            eyebrowEl.id = labelId;
+            mainBar.appendChild(eyebrowEl);
+        } else if (facets.length) {
+            mainSegmented = P.buildSegmented({
+                options: facets.map(function (f) { return { key: f.key, label: f.label }; }),
+                active: activeKey,
+                name: 'facet-' + _uid,
+                classes: { root: 'iwac-vis-facets__main', btn: 'iwac-vis-facets__btn',
+                           active: 'iwac-vis-facets__btn--active' },
+                onChange: function (key) { setActive(key); }
             });
-            mainButtons[f.key] = btn;
-            mainBar.appendChild(btn);
-        });
+            // The segmented root IS the main bar: same class, same children.
+            root.replaceChild(mainSegmented.root, mainBar);
+            mainBar = mainSegmented.root;
+            // The outer root already names the whole bar; the inner group
+            // would otherwise be an unnamed group inside a named one.
+            mainBar.removeAttribute('role');
+            Object.keys(mainSegmented.buttons).forEach(function (key) {
+                mainSegmented.buttons[key].dataset.facetKey = key;
+            });
+        }
 
         function findFacet(key) {
             for (var i = 0; i < facets.length; i++) {
@@ -100,6 +118,7 @@
             subBar.innerHTML = '';
             subBar.style.display = 'none';
             subPickerContainer = null;
+            subSegmented = null;
         }
 
         function renderSubFacets(facet) {
@@ -116,31 +135,29 @@
 
             subBar.style.display = '';
 
+            // Open on the requested sub-facet when it exists, else the first.
+            activeSubKey = (openSubKey && subFacets[openSubKey] !== undefined)
+                ? openSubKey : keys[0];
+            openSubKey = null;
+
             if (mode === 'buttons') {
-                var subButtons = {};
-                var markSub = function (active) {
-                    Object.keys(subButtons).forEach(function (sk) {
-                        var on = sk === active;
-                        subButtons[sk].classList.toggle('iwac-vis-facets__sub-btn--active', on);
-                        subButtons[sk].setAttribute('aria-pressed', on ? 'true' : 'false');
-                    });
-                };
-                keys.forEach(function (k) {
-                    var btn = P.el('button', 'iwac-vis-facets__sub-btn', subFacets[k]);
-                    btn.type = 'button';
-                    btn.dataset.subKey = k;
-                    btn.setAttribute('aria-pressed', 'false');
-                    btn.addEventListener('click', function () {
+                subSegmented = P.buildSegmented({
+                    options: keys.map(function (k) { return { key: k, label: subFacets[k] }; }),
+                    active: activeSubKey,
+                    name: 'facet-' + _uid + '-' + facet.key,
+                    classes: { root: 'iwac-vis-facets__sub-group', btn: 'iwac-vis-facets__sub-btn',
+                               active: 'iwac-vis-facets__sub-btn--active' },
+                    onChange: function (k) {
                         activeSubKey = k;
-                        markSub(k);
                         fire();
-                    });
-                    subButtons[k] = btn;
-                    subBar.appendChild(btn);
+                    }
                 });
-                // auto-pick first
-                activeSubKey = keys[0];
-                markSub(activeSubKey);
+                if (eyebrowEl) subSegmented.root.setAttribute('aria-labelledby', labelId);
+                else subSegmented.root.setAttribute('aria-label', facet.label);
+                Object.keys(subSegmented.buttons).forEach(function (k) {
+                    subSegmented.buttons[k].dataset.subKey = k;
+                });
+                subBar.appendChild(subSegmented.root);
                 return;
             }
 
@@ -164,18 +181,20 @@
                 activeSubKey = select.value;
                 fire();
             });
-            activeSubKey = keys[0];
+            select.setAttribute('data-iwac-control', 'facet-' + _uid + '-' + facet.key);
             select.value = activeSubKey;
             subPickerContainer = select;
             subBar.appendChild(select);
         }
 
         function highlightMain() {
-            Object.keys(mainButtons).forEach(function (k) {
-                var on = k === activeKey;
-                mainButtons[k].classList.toggle('iwac-vis-facets__btn--active', on);
-                mainButtons[k].setAttribute('aria-pressed', on ? 'true' : 'false');
-            });
+            if (mainSegmented) mainSegmented.set(activeKey);
+        }
+
+        /** Reflect the active sub-facet in whichever picker is mounted. */
+        function markSub() {
+            if (subSegmented) subSegmented.set(activeSubKey);
+            if (subPickerContainer) subPickerContainer.value = activeSubKey;
         }
 
         function fire() {
@@ -187,13 +206,17 @@
         function setActive(key, subKey) {
             var facet = findFacet(key);
             if (!facet) return;
+            var sameFacet = key === activeKey;
             activeKey = key;
-            activeSubKey = null;
             highlightMain();
-            renderSubFacets(facet);
-            if (subKey && facet.subFacets && facet.subFacets[subKey]) {
+            if (sameFacet && subKey != null && facet.subFacets && facet.subFacets[subKey] !== undefined) {
+                // Same facet, new sub-facet: keep the picker, move the mark.
                 activeSubKey = subKey;
-                if (subPickerContainer) subPickerContainer.value = subKey;
+                markSub();
+            } else {
+                activeSubKey = null;
+                openSubKey = subKey || null;
+                renderSubFacets(facet);
             }
             fire();
         }
@@ -211,7 +234,8 @@
 
         return {
             root: root,
-            setActive: setActive
+            setActive: setActive,
+            getActive: function () { return { facet: activeKey, subFacet: activeSubKey }; }
         };
     };
 })();

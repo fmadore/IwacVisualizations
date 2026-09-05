@@ -45,6 +45,22 @@ Every registered block is wired end-to-end with live data — twenty-one page bl
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.60.0 — the reactive core: controls that keep your focus, views with an address
+
+The second wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S11, S1, S2, S7, S8, E3, E5, S25, and the `setActive` half of S19). Where v1.59.0 made the charts render honestly, this release makes the controls around them behave like an instrument rather than a form that reloads.
+
+**One state store per block.** `P.createStore(state, { reduce })` keeps the block's own state object (nothing was rewritten to copies), batches a tick's patches into one notification, and wakes subscribers by key. That last part is the whole point: a block now says *a change of view remounts the controls row, anything else syncs values into the widgets that exist* as two subscriptions. The cross-field rules that six laïcité change handlers and two scary-terms selects applied by hand — a corpus clears the country and vice versa, a scope resets its slice, a map frame clears the map country — live in one reducer per block. Adopted by the Laïcité dossier, Scary Terms, Term Trends, Compare Newspapers and the Sentiment Atlas.
+
+**Controls stop destroying themselves.** Every one of those blocks rebuilt its controls row from inside its own change handlers, which removed the control under the reader's hand: pressing Play removed the Play button, and a `<select>` stepped with the arrow keys — which fire `change` on the first keystroke in Chrome and Firefox — was gone before the second, so the lists could not be traversed by keyboard at all. The rows now have `mount()` and `sync()`: dependent selects are repopulated in place (`group.setOptions`), hidden groups toggle rather than rebuild, the concordance search box is never overwritten while it has focus, the spatial picker marks the selected row instead of rebuilding the list, and the one remount that remains (a change of view) runs inside `P.withFocusRestored`, which hands focus back to the control carrying the same handle.
+
+**The citable views have an address.** `P.bindUrlState(store, { prefix, keys })` writes block-prefixed query params (`?laicite.view=trends&laicite.country=Togo`, `?ngram.terms=islam,laïcité&ngram.mode=count`, `?cmp.a=articles/country/benin`, `?scary.view=race&scary.year=1975`, `?sentiment.model=…`) with `replaceState`, omits defaults, validates every value against what the block actually offers, and degrades silently inside a sandboxed embed frame. A "Copy link to this view" button sits at the end of each of those blocks' controls. The Topic Explorer keeps its own `?topic=` (it pushes history; the binder supports that too, with `popstate` returning absent params to their defaults).
+
+**Two accessible primitives replace three vocabularies.** `P.buildSegmented` is the module's one "pick one of N": `role="group"`, `aria-pressed`, arrow keys within the group, `set()` silent. It replaces the laïcité tablist (tabs with no tabpanels), the Compare Newspapers radiogroup whose buttons carried `aria-checked` *and* `aria-pressed`, the scary-terms buttons whose state was a class, and the Term Trends mode pair; `P.buildFacetButtons` is built on it. `P.buildYearSlider` is the one year scrubber: it announces the *year* through `aria-valuetext` where both sliders said "12 of 64", paints the filled track, and takes the playback tick through `set()`. `buildFacetButtons` also gained `activeSubKey` and a `setActive(key, subKey)` that moves the pressed button along with the value — it could not, in button mode, before.
+
+**Repaints keep what the reader set.** Adding a term to the Ngram viewer reset its 65-year window to 0–100; switching the sentiment model dropped every legend toggle. `IWACVis.repaint(instance, option)` merges when the new option has the shape of the last one (same components, same counts — series are `replaceMerge`d) and rebuilds when it does not (an empty-state title, an axis appearing), and on a merge drops the builders' `start: 0, end: 100` so the window the reader dragged survives. Wired into Term Trends, the Sentiment Atlas, the Topic Explorer's over-time switch and every `buildFacetedChart` panel. Bar items in `C.horizontalBar`, `C.newspaper`, `C.entities`, `C.scaryTerms` and `C.divergingBar` now carry their category name, so a sort toggle or a race frame animates each bar to its new row instead of every bar changing length in place.
+
+**Tests.** `tests/js/store.test.js` (the store, the reducer, the URL round-trip, push/popstate, the sandboxed frame) and `tests/js/controls.test.js` (segmented, slider, in-place selects, focus restoration, the facet-bar trap) against a small DOM stand-in; `lifecycle.test.js` covers `repaint`; 123 JS tests, 31 Playwright contracts, 128 PHP checks.
+
 ### v1.59.0 — the sixth audit's first wave: one render pass, bounded fetches, maps that fail out loud
 
 The 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8) asked where the module still behaves like a set of static pictures rather than a reactive instrument. This release lands its "quick, safe, build-verifiable" wave — twenty-three items, every one behind a lint gate or a test.
@@ -1382,7 +1398,7 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.59.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.60.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

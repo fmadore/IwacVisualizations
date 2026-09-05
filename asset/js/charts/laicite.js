@@ -33,6 +33,12 @@
  * Missing files resolve to null so the block degrades gracefully on deploys
  * whose data predates them.
  *
+ * State lives in one P.createStore; the controls row patches it and the
+ * subscriptions at the foot of render() turn a change into a remount, a
+ * sync or a redraw. The view, the trends scope, the concordance corpus /
+ * frame / query are URL-addressable (`?laicite.view=…`) through
+ * P.bindUrlState.
+ *
  * Dependencies (in load order before this file):
  *   echarts → iwac-i18n.js → iwac-theme.js → dashboard-core.js → panels.js →
  *   pagination.js → facet-buttons.js → maplibre stack → annotated-timeline.js →
@@ -185,6 +191,43 @@
             state.kwicSubset = available[0];
         }
 
+        // One store over that object. The controls patch it; the
+        // subscriptions at the foot of this function turn a change into a
+        // remount (view), a sync (anything) and a redraw. The cross-field
+        // rules that six change handlers used to apply by hand — a corpus
+        // clears the country and vice versa, a scope resets its slice, a
+        // frame clears the map country — live in the reducer, once.
+        var trendsCountries = trends && trends.by_country
+            ? Object.keys(trends.by_country).sort() : [];
+        var store = P.createStore(state, {
+            reduce: function (st, changed) {
+                var extra = {};
+                var has = function (k) { return changed.indexOf(k) !== -1; };
+                if (has('trendsCountry') && st.trendsCountry) extra.trendsSubset = null;
+                if (has('trendsSubset') && st.trendsSubset) extra.trendsCountry = null;
+                if (has('colScope')) extra.colSlice = null;
+                if (has('kwicSubset')) extra.kwicCountry = '';
+                if (has('mapFrame') && st.mapFrame) extra.mapCountry = '';
+                if (has('mapCountry') && st.mapCountry) extra.mapFrame = '';
+                return extra;
+            }
+        });
+
+        // The citable state is addressable: `?laicite.view=trends&
+        // laicite.country=Togo`, `?laicite.view=concordance&laicite.q=école`.
+        var url = P.bindUrlState ? P.bindUrlState(store, {
+            prefix: 'laicite',
+            keys: [
+                { key: 'view', values: L.VIEW_KEYS },
+                { key: 'trendsCountry', param: 'country', values: trendsCountries },
+                { key: 'trendsSubset', param: 'subset', values: L.SUBSETS },
+                { key: 'trendsAxis', param: 'axis', values: ['years', 'seasons'] },
+                { key: 'kwicSubset', param: 'corpus', values: available },
+                { key: 'kwicFrame', param: 'frame', values: frames },
+                { key: 'kwicQuery', param: 'q' }
+            ]
+        }) : null;
+
         // Phase 2 bundles load on first activation of their view — the
         // block opens on the overview, and none of these are needed there.
         // undefined = not requested, null = failed/absent, object = loaded.
@@ -217,7 +260,9 @@
                             return lazy[n] !== undefined;
                         });
                         if (ready) {
-                            controls.render();
+                            // A bundle arriving is structural — the selects
+                            // it feeds can only be built now — so remount.
+                            controls.mount();
                             draw();
                         }
                     });
@@ -238,12 +283,13 @@
 
         var controls = L.createControls({
             controlsEl: controlsEl,
-            state: state,
+            store: store,
             metadata: metadata,
             countries: metadata.countries || [],
-            trendsCountries: trends && trends.by_country
-                ? Object.keys(trends.by_country).sort() : [],
-            draw: draw,
+            trendsCountries: trendsCountries,
+            trailing: url && P.buildCopyLinkButton
+                ? P.buildCopyLinkButton({ href: url.href })
+                : null,
             getConcordanceSubsets: function () {
                 return concordance.availableSubsets();
             },
@@ -291,7 +337,8 @@
                 }
                 var subsets = Object.keys((season.by_subset || {}));
                 if (subsets.indexOf(state.seasonSubset) === -1 && subsets.length) {
-                    state.seasonSubset = subsets[0];
+                    // Silent: the select was just mounted on this same value.
+                    store.patch({ seasonSubset: subsets[0] }, { silent: true });
                 }
                 currentInstance.setOption(
                     L.seasonalityOption(season, state.seasonSubset, metadata),
@@ -353,9 +400,7 @@
                     // definition — those items carry no text match — so the
                     // Venn only routes the two cells that do.
                     if (cell === 'tagged_only') return;
-                    state.view = 'concordance';
-                    controls.render();
-                    draw();
+                    store.patch({ view: 'concordance' });
                 }));
                 viewHost.appendChild(L.buildSubsetTable(metadata));
                 viewHost.appendChild(L.buildRightsNote(metadata));
@@ -377,13 +422,9 @@
                         siteBase: siteBase,
                         frameColors: frameColors,
                         onFocusYear: function (year, country) {
-                            state.view = 'trends';
-                            if (country) {
-                                state.trendsCountry = country;
-                                state.trendsSubset = null;
-                            }
-                            controls.render();
-                            draw();
+                            var changes = { view: 'trends' };
+                            if (country) changes.trendsCountry = country;
+                            store.patch(changes);
                             void year;
                         }
                     }));
@@ -493,7 +534,13 @@
             built.mount();
         }
 
-        controls.render();
+        // What a change means. Within one flush the row is remounted (view)
+        // or synced (anything) before the view redraws.
+        store.subscribe(function () { controls.mount(); }, { keys: ['view'] });
+        store.subscribe(function () { controls.sync(); });
+        store.subscribe(function () { draw(); });
+
+        controls.mount();
         draw();
     }
 })();

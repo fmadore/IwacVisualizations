@@ -72,6 +72,12 @@ function fixtureRows() {
     ];
 }
 
+/** A series' plotted value at a row: items are `{ name, value }` (or null). */
+function at(series, row) {
+    const item = series.data[row];
+    return item == null ? null : item.value;
+}
+
 function build(C, overrides) {
     const wrapped = C.divergingBar(Object.assign({
         rows: fixtureRows(),
@@ -92,11 +98,23 @@ test('diverging bar splits the midpoint grade across zero, half to each side', (
 
     assert.equal(neutrals.length, 2, 'midpoint grade must be drawn as two half-series');
     // Row 0: neutral is 20 of 100 → 20%, so ±10 on each side.
-    assert.equal(neutrals[0].data[0], -10);
-    assert.equal(neutrals[1].data[0], 10);
+    assert.equal(at(neutrals[0], 0), -10);
+    assert.equal(at(neutrals[1], 0), 10);
     // Row 1: neutral is 40 of 100 → ±20.
-    assert.equal(neutrals[0].data[1], -20);
-    assert.equal(neutrals[1].data[1], 20);
+    assert.equal(at(neutrals[0], 1), -20);
+    assert.equal(at(neutrals[1], 1), 20);
+});
+
+test('every plotted item is named after its row, so a re-sort moves it rather than morphing by slot', () => {
+    const C = loadChartOptions();
+    const opt = build(C);
+    for (const s of opt.series) {
+        s.data.forEach((item, row) => {
+            if (item == null) return;
+            assert.equal(item.name, opt.yAxis[0].data[row], `${s.name} row ${row} is keyed to its category`);
+        });
+    }
+    assert.equal(opt.yAxis[0].animationDurationUpdate, 400, 'the axis labels animate with the bars');
 });
 
 test('every row spans exactly 100 points of its own total', () => {
@@ -106,7 +124,7 @@ test('every row spans exactly 100 points of its own total', () => {
     assert.equal(opt.yAxis[0].data.length, 2, 'a row with no ratings must not be plotted');
 
     for (let row = 0; row < 2; row++) {
-        const span = opt.series.reduce((sum, s) => sum + Math.abs(s.data[row] || 0), 0);
+        const span = opt.series.reduce((sum, s) => sum + Math.abs(at(s, row) || 0), 0);
         assert.ok(Math.abs(span - 100) < 1e-9, `row ${row} spans ${span}, not 100`);
     }
 });
@@ -122,10 +140,11 @@ test('each side stacks outward from zero, extremes furthest out', () => {
     ]);
 
     const sign = (n) => opt.series.filter((s) => s.name === n);
-    assert.ok(sign('Négatif').every((s) => s.data.every((v) => v === null || v < 0)));
-    assert.ok(sign('Très négatif').every((s) => s.data.every((v) => v === null || v < 0)));
-    assert.ok(sign('Positif').every((s) => s.data.every((v) => v === null || v > 0)));
-    assert.ok(sign('Très positif').every((s) => s.data.every((v) => v === null || v > 0)));
+    const values = (s) => s.data.map((item, row) => at(s, row));
+    assert.ok(sign('Négatif').every((s) => values(s).every((v) => v === null || v < 0)));
+    assert.ok(sign('Très négatif').every((s) => values(s).every((v) => v === null || v < 0)));
+    assert.ok(sign('Positif').every((s) => values(s).every((v) => v === null || v > 0)));
+    assert.ok(sign('Très positif').every((s) => values(s).every((v) => v === null || v > 0)));
 });
 
 test('the legend names each grade once, in scale order', () => {
@@ -140,7 +159,7 @@ test('a grade with no articles is omitted rather than drawn as a hairline', () =
     const opt = build(C);
     // Row 0 has no negative ratings at all.
     for (const s of opt.series.filter((x) => /négatif/i.test(x.name))) {
-        assert.equal(s.data[0], null, `${s.name} should be null, not 0, where the count is 0`);
+        assert.equal(s.data[0], null, `${s.name} should be null, not a named 0, where the count is 0`);
     }
 });
 

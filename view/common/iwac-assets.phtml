@@ -220,6 +220,10 @@ $scripts[] = $this->assetUrl('js/dashboard-core.min.js', $module);
 // would buy less than the extra branch costs in reasoning.
 $scripts[] = $this->assetUrl('js/charts/shared/panels.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panels-controls.min.js', $module);
+// store.js: the block state store, the URL binding and the copy-link button
+// (v1.60.0). Every interactive block's controls patch a store, so it rides
+// with the other panels parts; it extends the same IWACVis.panels object.
+$scripts[] = $this->assetUrl('js/charts/shared/store.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panels-map.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panels-boot.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);

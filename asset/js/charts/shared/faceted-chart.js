@@ -3,7 +3,8 @@
  *
  * Collapses the ~30 lines of boilerplate every faceted panel used to
  * ship: (1) register an ECharts instance with a render function that
- * checks for data and calls `setOption(..., true)` or `instance.clear()`,
+ * checks for data and repaints (`ns.repaint`, which keeps the legend
+ * toggles and the zoom window across a facet change) or `instance.clear()`,
  * (2) if no data AND registration failed, drop an empty-state banner
  * into the panel, and (3) optionally subscribe to a shared facet
  * observer so the chart re-renders on facet change.
@@ -79,9 +80,11 @@
         function setOrClear(instance) {
             var d = getData();
             if (hasData(d)) {
-                instance.setOption(buildOption(d), true);
+                if (ns.repaint) ns.repaint(instance, buildOption(d));
+                else instance.setOption(buildOption(d), true);
             } else {
                 instance.clear();
+                if (ns.forgetShape) ns.forgetShape(instance);
             }
         }
 

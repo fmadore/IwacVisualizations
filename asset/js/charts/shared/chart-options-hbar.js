@@ -108,11 +108,16 @@
             list = list.filter(function (e) { return !P.isUnknown(e && e[nameKey]); });
         }
         var names = list.map(function (e) { return e[nameKey]; });
-        var values = opts.useCountryColors
-            ? list.map(function (e) {
-                return { value: e[valueKey], itemStyle: { color: C._countryColor(e[nameKey]) } };
-            })
-            : list.map(function (e) { return e[valueKey]; });
+        // Items carry their NAME. ECharts diffs bar items by name when one is
+        // present and by index otherwise, so a sort toggle or a pagination
+        // step on nameless items animated every bar's length in place while
+        // the axis labels swapped underneath — the ranking looked like it
+        // reshuffled by slot. Named items animate each bar to its new row.
+        var values = list.map(function (e) {
+            var item = { name: e[nameKey], value: e[valueKey] };
+            if (opts.useCountryColors) item.itemStyle = { color: C._countryColor(e[nameKey]) };
+            return item;
+        });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
         var halo = C._labelHalo();
@@ -143,6 +148,7 @@
                 data: names,
                 inverse: true,
                 axisTick: { show: false },
+                animationDurationUpdate: 400,
                 // Cap long category labels with an ellipsis; the full name
                 // stays available in the axis tooltip. R.labelMedia narrows
                 // the cap on phones.
@@ -179,7 +185,7 @@
     C.newspaper = function (entries) {
         var list = entries || [];
         var names = list.map(function (e) { return e.name; });
-        var values = list.map(function (e) { return e.total; });
+        var values = list.map(function (e) { return { name: e.name, value: e.total }; });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
         var halo = C._labelHalo();
@@ -208,7 +214,8 @@
                 type: 'category',
                 data: names,
                 inverse: true,
-                axisTick: { show: false }
+                axisTick: { show: false },
+                animationDurationUpdate: 400
             },
             series: [{
                 type: 'bar',
@@ -246,7 +253,7 @@
         var list = entries || [];
         var names = list.map(function (e) { return e.title; });
         var values = list.map(function (e) {
-            return { value: e.frequency, o_id: e.o_id };
+            return { name: e.title, value: e.frequency, o_id: e.o_id };
         });
         var barDef = C._barDefaults('horizontal');
         var labelInk = C._stableLabelColor();
@@ -279,6 +286,7 @@
                 data: names,
                 inverse: true,
                 axisTick: { show: false },
+                animationDurationUpdate: 400,
                 axisLabel: {
                     width: 220,
                     overflow: 'truncate',
@@ -328,8 +336,12 @@
         var maxLen = cfg.maxLabelLength || 28;
 
         var terms = entries.map(function (e) { return e[0]; });
+        // Named items: a term that climbs from rank 4 to rank 2 between two
+        // frames animates its bar UP the axis, which is what a bar chart
+        // race is. Keyed by index, the same frame animated four bar lengths.
         var values = entries.map(function (e) {
             return {
+                name: e[0],
                 value: e[1],
                 itemStyle: { color: termColors[e[0]] || undefined }
             };
@@ -357,6 +369,7 @@
                 data: terms,
                 inverse: true,
                 axisTick: { show: false },
+                animationDurationUpdate: 800,
                 axisLabel: {
                     width: 160,
                     overflow: 'truncate',
@@ -476,12 +489,14 @@
                 itemStyle: { color: colors[key] },
                 emphasis: { focus: 'series' },
                 blur: { itemStyle: { opacity: 0.35 } },
-                data: shares.map(function (s) {
+                data: shares.map(function (s, i) {
                     var v = half ? s[key] / 2 : s[key];
                     // Zero-share grades stay out of the stack entirely: a 0
                     // still paints a hairline at the segment boundary, which
-                    // on a 15px bar reads as a real category.
-                    return v ? sign * v : null;
+                    // on a 15px bar reads as a real category. Present ones
+                    // carry the row NAME so a re-sort moves each segment to
+                    // its row's new position instead of morphing by slot.
+                    return v ? { name: names[i], value: sign * v } : null;
                 })
             };
         }
@@ -572,6 +587,7 @@
                     inverse: true,
                     axisTick: { show: false },
                     axisLine: { show: false },
+                    animationDurationUpdate: 400,
                     axisLabel: { width: labelWidth, overflow: 'truncate', fontSize: 12 }
                 },
                 // The count gutter: a second category axis over the same

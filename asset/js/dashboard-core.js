@@ -154,10 +154,15 @@
         return text;
     }
 
-    /** Does this option carry a dataZoom the keyboard handler can drive? */
+    /**
+     * Does this option carry a dataZoom the keyboard handler can drive?
+     * Presence is enough: a merged repaint through `ns.repaint` strips the
+     * builder's `start`/`end` so the reader's window survives, and the live
+     * model always reports finite bounds when the keys are pressed.
+     */
     function hasZoom(option) {
         var dz = toArray(option && option.dataZoom);
-        return !!(dz.length && isFinite(Number(dz[0].start)) && isFinite(Number(dz[0].end)));
+        return dz.length > 0 && !!dz[0];
     }
 
     /** True when at least one series in an option carries a data array. */
@@ -270,6 +275,8 @@
 
             var start = Number(option.dataZoom[0].start);
             var end = Number(option.dataZoom[0].end);
+            if (!isFinite(start)) start = 0;
+            if (!isFinite(end)) end = 100;
             var span = Math.max(1, end - start);
             var step = Math.max(1, span / 4);
             var next;
@@ -375,6 +382,110 @@
             return null;
         }
         return null;
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Repaint — keep what the reader set                                */
+    /* ----------------------------------------------------------------- */
+
+    // The option components whose presence and count define a chart's
+    // "shape". Two options with the same shape can be merged: the axes,
+    // legend and zoom keep their interaction state and only the series are
+    // replaced. A different shape — an empty-state title where a chart was,
+    // a second axis appearing — is a full rebuild.
+    var SHAPE_KEYS = ['title', 'legend', 'grid', 'xAxis', 'yAxis', 'polar',
+        'radiusAxis', 'angleAxis', 'radar', 'dataZoom', 'visualMap', 'tooltip',
+        'axisPointer', 'toolbox', 'brush', 'geo', 'parallel', 'parallelAxis',
+        'singleAxis', 'timeline', 'graphic', 'calendar', 'dataset'];
+
+    function optionShape(base) {
+        var parts = [];
+        for (var i = 0; i < SHAPE_KEYS.length; i++) {
+            var value = base[SHAPE_KEYS[i]];
+            if (value == null) continue;
+            parts.push(SHAPE_KEYS[i] + ':' + toArray(value).length);
+        }
+        return parts.join('|');
+    }
+
+    /** A copy of a dataZoom list with the window bounds left out. */
+    function withoutWindow(dataZoom) {
+        return toArray(dataZoom).map(function (z) {
+            if (!z || typeof z !== 'object') return z;
+            var copy = {};
+            for (var k in z) {
+                if (!Object.prototype.hasOwnProperty.call(z, k)) continue;
+                if (k === 'start' || k === 'end' || k === 'startValue' || k === 'endValue') continue;
+                copy[k] = z[k];
+            }
+            return copy;
+        });
+    }
+
+    /**
+     * Repaint a chart without discarding what the reader has set on it.
+     *
+     * `setOption(option, true)` — notMerge — is the safe default and every
+     * facet, sort and term change used it, which is why adding a term to the
+     * Ngram viewer reset its 65-year window to 0–100 and why switching the
+     * sentiment model dropped every legend toggle. ECharts keeps legend
+     * selection and the dataZoom window across a MERGE, and `replaceMerge`
+     * lets the series list be replaced wholesale inside one — so when the
+     * new option has the same shape as the last one painted here, that is
+     * what this does. When it does not (the first paint, an empty-state
+     * title replacing a chart, a component appearing or vanishing), it falls
+     * back to a full rebuild, because a merge would leave the vanished
+     * component on screen.
+     *
+     * The builders write `start: 0, end: 100` into every dataZoom; on a
+     * merge those are dropped from the outgoing copy so the window the
+     * reader dragged is the one that survives.
+     *
+     * @param {echarts.ECharts} instance
+     * @param {Object} option  a fresh option (possibly `{baseOption, media}`)
+     * @param {{lazyUpdate?: boolean, replaceMerge?: Array<string>,
+     *          notMerge?: boolean}} [opts]
+     * @returns {boolean} true when the paint was a merge
+     */
+    ns.repaint = function (instance, option, opts) {
+        if (!instance || (instance.isDisposed && instance.isDisposed())) return false;
+        opts = opts || {};
+        var wrapped = !!(option && option.baseOption);
+        var base = wrapped ? option.baseOption : option;
+        var shape = base && typeof base === 'object' ? optionShape(base) : '';
+        var stable = !!(shape && instance._iwacShape === shape);
+        instance._iwacShape = shape;
+        if (!stable || opts.notMerge) {
+            instance.setOption(option, { notMerge: true, lazyUpdate: !!opts.lazyUpdate });
+            return false;
+        }
+        var out = option;
+        if (base.dataZoom) {
+            var trimmed = {};
+            for (var k in base) {
+                if (Object.prototype.hasOwnProperty.call(base, k)) trimmed[k] = base[k];
+            }
+            trimmed.dataZoom = withoutWindow(base.dataZoom);
+            if (wrapped) {
+                out = {};
+                for (var w in option) {
+                    if (Object.prototype.hasOwnProperty.call(option, w)) out[w] = option[w];
+                }
+                out.baseOption = trimmed;
+            } else {
+                out = trimmed;
+            }
+        }
+        instance.setOption(out, {
+            replaceMerge: opts.replaceMerge || ['series'],
+            lazyUpdate: !!opts.lazyUpdate
+        });
+        return true;
+    };
+
+    /** Forget a chart's shape — after `clear()`, the next repaint must rebuild. */
+    ns.forgetShape = function (instance) {
+        if (instance) instance._iwacShape = null;
     };
 
     /**
@@ -557,6 +668,11 @@
                     if (themeName && typeof entry.instance.setTheme === 'function') {
                         entry.instance.setTheme(themeName);
                     }
+                    // A theme swap is a full rebuild for a render that goes
+                    // through `ns.repaint`: the merged path keeps components
+                    // as they are, and here they must be re-created under
+                    // the new theme.
+                    ns.forgetShape(entry.instance);
                     if (typeof entry.render === 'function' && entry.el) {
                         entry.render(entry.el, entry.instance);
                     }

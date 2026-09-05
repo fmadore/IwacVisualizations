@@ -496,6 +496,8 @@
             'Download chart': 'T\u00e9l\u00e9charger le graphique',
             'Copy embed code': 'Copier le code d\u2019int\u00e9gration',
             'Copied!': 'Copi\u00e9 !',
+            'Copy link to this view': 'Copier le lien vers cette vue',
+            'Link copied': 'Lien copi\u00e9',
             'Show patterns': 'Afficher les motifs',
             'Hide patterns': 'Masquer les motifs',
             'No data available': 'Aucune donn\u00e9e disponible',

@@ -38,21 +38,21 @@
         var typeLabel = P.el('span', 'iwac-vis-compare-picker__label', P.t('Type'));
         typeLabel.id = 'iwac-cmp-type-label-' + suffix;
         typeRow.appendChild(typeLabel);
-        var typeBar = P.el('div', 'iwac-vis-compare-picker__type');
-        typeBar.setAttribute('role', 'radiogroup');
-        typeBar.setAttribute('aria-labelledby', typeLabel.id);
-        var typeButtons = {};
-        ['articles', 'publications'].forEach(function (key) {
-            var btn = P.el('button', null,
-                P.t(key === 'articles' ? 'Newspaper articles' : 'Islamic publications'));
-            btn.type = 'button';
-            btn.name = 'iwac-cmp-type-' + suffix;
-            btn.id = 'iwac-cmp-type-' + key + '-' + suffix;
-            btn.setAttribute('role', 'radio');
-            btn.setAttribute('aria-checked', 'false');
-            btn.setAttribute('aria-pressed', 'false');
-            btn.addEventListener('click', function () {
-                if (state.type === key) return;
+        // One toggle group with aria-pressed — the shared vocabulary. This
+        // used to be a radiogroup whose buttons carried aria-checked AND
+        // aria-pressed, two answers to the same question.
+        var typeBar = P.buildSegmented({
+            name: 'cmp-type-' + suffix,
+            labelledBy: typeLabel.id,
+            options: ['articles', 'publications'].map(function (key) {
+                return {
+                    key: key,
+                    label: P.t(key === 'articles' ? 'Newspaper articles' : 'Islamic publications')
+                };
+            }),
+            active: state.type,
+            classes: { root: 'iwac-vis-compare-picker__type', btn: null, active: null },
+            onChange: function (key) {
                 state.type = key;
                 var subset = index.subsets && index.subsets[state.type];
                 if (subset) {
@@ -66,12 +66,9 @@
                 rebuildScope();
                 rebuildName();
                 fire();
-                refreshButtons();
-            });
-            typeButtons[key] = btn;
-            typeBar.appendChild(btn);
+            }
         });
-        typeRow.appendChild(typeBar);
+        typeRow.appendChild(typeBar.root);
         card.appendChild(typeRow);
 
         // --- Scope switch (country / newspaper) ----------------------
@@ -79,9 +76,10 @@
         var scopeLabel = P.el('label', 'iwac-vis-compare-picker__label', P.t('Scope'));
         scopeLabel.htmlFor = 'iwac-cmp-scope-' + suffix;
         scopeRow.appendChild(scopeLabel);
-        var scopeSelect = P.el('select', 'iwac-vis-compare-picker__select');
+        var scopeSelect = P.el('select', 'iwac-vis-control iwac-vis-compare-picker__select');
         scopeSelect.id = 'iwac-cmp-scope-' + suffix;
         scopeSelect.name = 'iwac-cmp-scope-' + suffix;
+        scopeSelect.setAttribute('data-iwac-control', 'cmp-scope-' + side);
         scopeSelect.addEventListener('change', function () {
             state.scope = scopeSelect.value;
             rebuildName();
@@ -95,23 +93,16 @@
         var nameLabel = P.el('label', 'iwac-vis-compare-picker__label', P.t('Selection'));
         nameLabel.htmlFor = 'iwac-cmp-selection-' + suffix;
         nameRow.appendChild(nameLabel);
-        var nameSelect = P.el('select', 'iwac-vis-compare-picker__select');
+        var nameSelect = P.el('select', 'iwac-vis-control iwac-vis-compare-picker__select');
         nameSelect.id = 'iwac-cmp-selection-' + suffix;
         nameSelect.name = 'iwac-cmp-selection-' + suffix;
+        nameSelect.setAttribute('data-iwac-control', 'cmp-selection-' + side);
         nameSelect.addEventListener('change', function () {
             state.slug = nameSelect.value;
             fire();
         });
         nameRow.appendChild(nameSelect);
         card.appendChild(nameRow);
-
-        function refreshButtons() {
-            Object.keys(typeButtons).forEach(function (k) {
-                var isActive = k === state.type;
-                typeButtons[k].setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                typeButtons[k].setAttribute('aria-checked', isActive ? 'true' : 'false');
-            });
-        }
 
         function rebuildScope() {
             scopeSelect.innerHTML = '';
@@ -173,10 +164,28 @@
 
         rebuildScope();
         rebuildName();
-        refreshButtons();
+
+        /**
+         * Reflect a state set elsewhere (the URL, Back); no onChange. A
+         * no-op when nothing differs — which is every echo of the picker's
+         * own change, so the select the reader is stepping through with the
+         * arrow keys is never rebuilt under them.
+         */
+        function set(next) {
+            if (!next) return;
+            if (next.type === state.type && next.scope === state.scope
+                    && next.slug === state.slug) return;
+            state.type = next.type || state.type;
+            state.scope = next.scope || state.scope;
+            state.slug = next.slug || state.slug;
+            typeBar.set(state.type);
+            rebuildScope();
+            rebuildName();
+        }
 
         return {
             root: card,
+            set: set,
             getState: function () { return { type: state.type, scope: state.scope, slug: state.slug }; }
         };
     }

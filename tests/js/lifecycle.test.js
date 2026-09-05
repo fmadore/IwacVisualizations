@@ -181,3 +181,82 @@ test('pruneCharts keeps a live chart whose host is merely parked outside the doc
     ns.pruneCharts();
     assert.equal(ns._charts.length, 0, 'a disposed chart is forgotten');
 });
+
+/* ------------------------------------------------------------------ */
+/*  ns.repaint — keep what the reader set                              */
+/* ------------------------------------------------------------------ */
+
+function paintedWith(instance, i) {
+    const [option, arg] = instance.calls[i];
+    return { option, arg: JSON.parse(JSON.stringify(arg)) };
+}
+
+test('repaint merges when the shape is unchanged and rebuilds when it is not', () => {
+    const { ns } = loadCore();
+    const el = element();
+    const instance = ns.registerChart(el, () => {});
+    const chart = (n) => ({
+        grid: {}, legend: {}, xAxis: { type: 'category', data: ['a', 'b'] }, yAxis: { type: 'value' },
+        series: Array.from({ length: n }, (_, i) => ({ name: 's' + i, type: 'line', data: [1, 2] })),
+    });
+
+    assert.equal(ns.repaint(instance, chart(1)), false, 'first paint: nothing to merge into');
+    assert.deepEqual(paintedWith(instance, 0).arg, { notMerge: true, lazyUpdate: false });
+
+    assert.equal(ns.repaint(instance, chart(3), { lazyUpdate: true }), true, 'same shape, more series: merged');
+    assert.deepEqual(paintedWith(instance, 1).arg, { replaceMerge: ['series'], lazyUpdate: true });
+
+    // An empty-state title is a different shape: rebuild, and again after it.
+    assert.equal(ns.repaint(instance, { title: { text: 'No data' } }), false);
+    assert.deepEqual(paintedWith(instance, 2).arg, { notMerge: true, lazyUpdate: false });
+    assert.equal(ns.repaint(instance, chart(2)), false, 'the paint after an empty state is a rebuild');
+    assert.equal(ns.repaint(instance, chart(2)), true);
+
+    // A component appearing (a second y axis) is a different shape too.
+    const twoAxes = Object.assign(chart(2), { yAxis: [{ type: 'value' }, { type: 'value' }] });
+    assert.equal(ns.repaint(instance, twoAxes), false);
+
+    // Forced, and after clear().
+    assert.equal(ns.repaint(instance, twoAxes, { notMerge: true }), false);
+    ns.forgetShape(instance);
+    assert.equal(ns.repaint(instance, twoAxes), false);
+    assert.equal(ns.repaint(instance, twoAxes), true);
+});
+
+test('a merged repaint drops the builder\'s dataZoom bounds so the reader\'s window survives', () => {
+    const { ns } = loadCore();
+    const el = element();
+    const instance = ns.registerChart(el, () => {});
+    const withZoom = () => ({
+        xAxis: { data: ['a'] }, yAxis: {},
+        dataZoom: [{ type: 'slider', start: 0, end: 100, bottom: 8 }, { type: 'inside' }],
+        series: [{ data: [1] }],
+    });
+    ns.repaint(instance, withZoom());
+    const first = paintedWith(instance, 0).option;
+    assert.equal(first.dataZoom[0].start, 0, 'the first paint keeps the builder\'s window');
+
+    const fresh = withZoom();
+    ns.repaint(instance, fresh);
+    const merged = paintedWith(instance, 1).option;
+    assert.deepEqual(JSON.parse(JSON.stringify(merged.dataZoom)),
+        [{ type: 'slider', bottom: 8 }, { type: 'inside' }]);
+    assert.equal(fresh.dataZoom[0].start, 0, 'the caller\'s option is not mutated');
+    assert.match(merged.aria.label.description, /chart_aria_zoom/, 'the keyboard hint is still announced');
+
+    // The withMedia form: the base option is trimmed, the wrapper kept.
+    const wrapped = { baseOption: withZoom(), media: [{ query: {}, option: {} }] };
+    ns.repaint(instance, wrapped);
+    const third = paintedWith(instance, 2).option;
+    assert.equal(third.baseOption.dataZoom[0].start, undefined);
+    assert.equal(third.media.length, 1);
+    assert.equal(wrapped.baseOption.dataZoom[0].start, 0);
+});
+
+test('repaint on a disposed chart is a no-op', () => {
+    const { ns } = loadCore();
+    const instance = ns.registerChart(element(), () => {});
+    instance.dispose();
+    assert.equal(ns.repaint(instance, { series: [] }), false);
+    assert.equal(instance.calls.length, 0);
+});

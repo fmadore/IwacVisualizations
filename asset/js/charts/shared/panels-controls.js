@@ -8,9 +8,11 @@
  * first (it creates the namespace) and that all of them load before any block
  * controller.
  *
- * The three reusable control widgets: a labelled `<select>`, a search box with
- * a suggestion dropdown, and the interval state machine behind the animated
- * year scrubbers.
+ * The reusable control widgets: a labelled `<select>` (with in-place option
+ * updates), a search box with a suggestion dropdown, the interval state
+ * machine behind the animated year scrubbers, and — since v1.60.0 — the
+ * segmented "pick one of N" group, the year slider that announces the year,
+ * and the focus-restoring remount helper the blocks' controls rows use.
  */
 (function () {
     'use strict';
@@ -113,18 +115,293 @@
             + Math.random().toString(36).slice(2, 8);
         select.id = selectId;
         label.htmlFor = selectId;
-        (cfg.options || []).forEach(function (o) {
-            var opt = P.el('option', null, o.label);
-            opt.value = o.value;
-            if (o.value === cfg.current) opt.selected = true;
-            select.appendChild(opt);
-        });
+        // A stable handle, for `P.withFocusRestored` to find the same control
+        // again after a remount — the random id above is new every time.
+        var name = cfg.name || cfg.idPrefix;
+        if (name) select.setAttribute('data-iwac-control', name);
+        P.setSelectOptions(select, cfg.options, cfg.current);
         select.addEventListener('change', function () {
             cfg.onChange(select.value);
         });
         group.appendChild(label);
         group.appendChild(select);
+        // The select itself, for in-place updates: a block's `sync()` writes
+        // `group.control.value` or repopulates through `group.setOptions`
+        // instead of rebuilding the row — which is what keeps a focused
+        // select focused (the arrow keys fire `change` on every step).
+        group.control = select;
+        group.setOptions = function (options, current) {
+            return P.setSelectOptions(select, options, current);
+        };
         return group;
+    };
+
+    /**
+     * Replace a `<select>`'s options in place, keeping the current value
+     * where it survives and falling back to the first option otherwise.
+     * Returns the value that ended up selected.
+     *
+     * @param {HTMLSelectElement} select
+     * @param {Array<{value:string, label:string}>} options
+     * @param {string} [current]  value to select (default: keep)
+     * @returns {string}
+     */
+    P.setSelectOptions = function (select, options, current) {
+        var want = current != null ? String(current) : String(select.value || '');
+        select.innerHTML = '';
+        var values = [];
+        (options || []).forEach(function (o) {
+            var opt = P.el('option', null, o.label);
+            opt.value = o.value;
+            values.push(String(o.value));
+            select.appendChild(opt);
+        });
+        if (values.indexOf(want) === -1) want = values.length ? values[0] : '';
+        select.value = want;
+        return want;
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Focus-safe remounts                                               */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * Run a DOM rebuild and put keyboard focus back where it was.
+     *
+     * A controls row that rebuilds itself from inside its own change handler
+     * destroys the element the reader is interacting with — and for a
+     * `<select>`, whose `change` fires on the first arrow key in Chrome and
+     * Firefox, that meant the list could not be traversed by keyboard at all.
+     * Blocks now remount only on a change of view, through this: the focused
+     * control is remembered by its `data-iwac-control` handle (every shared
+     * control writes one), the rebuild runs, and the control carrying the
+     * same handle in the new tree takes focus — with the caret where it was,
+     * for a text input.
+     *
+     * @param {HTMLElement} container  the subtree being rebuilt
+     * @param {function(): void} rebuild
+     */
+    P.withFocusRestored = function (container, rebuild) {
+        var doc = container && container.ownerDocument || document;
+        var active = doc.activeElement;
+        var handle = null;
+        var selection = null;
+        if (active && container && container.contains(active)) {
+            handle = active.getAttribute ? active.getAttribute('data-iwac-control') : null;
+            if (handle && typeof active.selectionStart === 'number') {
+                try { selection = [active.selectionStart, active.selectionEnd]; }
+                catch (e) { selection = null; }
+            }
+        }
+        rebuild();
+        if (!handle || !/^[\w.:-]+$/.test(handle)) return;
+        var next = container.querySelector('[data-iwac-control="' + handle + '"]');
+        if (!next || next === active || !doc.contains(next)) return;
+        try {
+            next.focus({ preventScroll: true });
+            if (selection && typeof next.setSelectionRange === 'function') {
+                next.setSelectionRange(selection[0], selection[1]);
+            }
+        } catch (e) { /* not focusable after all */ }
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Segmented control — "pick one of N"                               */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * One accessible vocabulary for a group of exclusive toggle buttons:
+     * `role="group"` with a name, one button per option carrying
+     * `aria-pressed`, all of them in the tab order, arrow keys moving focus
+     * within the group. This is the module's established pattern for chart
+     * switchers (the rationale is at collection-overview/entities.js — a
+     * chart facet is not a tab: nothing it controls is a tabpanel), and it
+     * replaces the three vocabularies that had grown beside it: a tablist
+     * with no tabpanels, a radiogroup whose buttons carried aria-checked AND
+     * aria-pressed, and a bare `--active` class announcing nothing.
+     *
+     * Class names default to the shared `.iwac-vis-tabs` family and may be
+     * overridden per block so existing stylesheets keep matching.
+     *
+     * @param {Object} cfg
+     * @param {Array<{key:string, label:string}>} cfg.options
+     * @param {string} [cfg.active]      initially pressed key
+     * @param {function(string):void} cfg.onChange  fires with the new key
+     *   (not on `set()`, and not when the pressed button is pressed again)
+     * @param {string} [cfg.label]       visible label rendered before the buttons
+     * @param {string} [cfg.ariaLabel]   accessible name when there is no visible label
+     * @param {string} [cfg.labelledBy]  id of an existing label element
+     * @param {boolean} [cfg.arrowKeys=true]
+     * @param {string} [cfg.name]        `data-iwac-control` handle prefix
+     * @param {{root?:string, btn?:string, active?:string, label?:string}} [cfg.classes]
+     * @returns {{root: HTMLElement, set: function(string):void,
+     *            get: function():string, buttons: Object<string, HTMLButtonElement>}}
+     */
+    P.buildSegmented = function (cfg) {
+        cfg = cfg || {};
+        var classes = cfg.classes || {};
+        // `null` for btn / active means "no class at all" — a stylesheet
+        // that targets `button[aria-pressed="true"]` needs neither.
+        var activeClass = classes.active === undefined ? 'iwac-vis-tab--active' : classes.active;
+        var root = P.el('div', classes.root || 'iwac-vis-tabs');
+        root.setAttribute('role', 'group');
+        var name = cfg.name || 'segmented';
+        if (cfg.label) {
+            var labelEl = P.el('span', classes.label || 'iwac-vis-tabs__label', cfg.label);
+            labelEl.id = 'iwac-vis-seg-' + name.replace(/[^\w-]/g, '-') + '-'
+                + Math.random().toString(36).slice(2, 7);
+            root.appendChild(labelEl);
+            root.setAttribute('aria-labelledby', labelEl.id);
+        } else if (cfg.labelledBy) {
+            root.setAttribute('aria-labelledby', cfg.labelledBy);
+        } else if (cfg.ariaLabel) {
+            root.setAttribute('aria-label', cfg.ariaLabel);
+        }
+
+        var active = cfg.active;
+        var buttons = {};
+        var order = [];
+
+        function paint() {
+            order.forEach(function (key) {
+                var on = key === active;
+                buttons[key].setAttribute('aria-pressed', on ? 'true' : 'false');
+                if (activeClass) buttons[key].classList.toggle(activeClass, on);
+            });
+        }
+
+        (cfg.options || []).forEach(function (o) {
+            var btn = P.el('button', classes.btn === undefined ? 'iwac-vis-tab' : classes.btn, o.label);
+            btn.type = 'button';
+            btn.setAttribute('data-iwac-control', name + ':' + o.key);
+            btn.addEventListener('click', function () {
+                if (o.key === active) return;
+                active = o.key;
+                paint();
+                if (typeof cfg.onChange === 'function') cfg.onChange(o.key);
+            });
+            buttons[o.key] = btn;
+            order.push(o.key);
+            root.appendChild(btn);
+        });
+
+        if (cfg.arrowKeys !== false) {
+            root.addEventListener('keydown', function (e) {
+                var idx = -1;
+                for (var i = 0; i < order.length; i++) {
+                    if (buttons[order[i]] === e.target) { idx = i; break; }
+                }
+                if (idx === -1 || !order.length) return;
+                var next;
+                switch (e.key) {
+                    case 'ArrowRight': case 'ArrowDown': next = (idx + 1) % order.length; break;
+                    case 'ArrowLeft':  case 'ArrowUp':   next = (idx - 1 + order.length) % order.length; break;
+                    case 'Home': next = 0; break;
+                    case 'End':  next = order.length - 1; break;
+                    default: return;
+                }
+                e.preventDefault();
+                buttons[order[next]].focus();
+            });
+        }
+
+        paint();
+        return {
+            root: root,
+            buttons: buttons,
+            /** Reflect a key set elsewhere (URL, another control); silent. */
+            set: function (key) {
+                if (key === active) return;
+                active = key;
+                paint();
+            },
+            get: function () { return active; }
+        };
+    };
+
+    /* ----------------------------------------------------------------- */
+    /*  Year slider                                                       */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * A range input over an array of years that ANNOUNCES the year.
+     *
+     * Both year scrubbers (scary-terms race, keywords attention map) were
+     * `min=0 max=years.length-1` inputs labelled "Year": the visible label
+     * beside them said 1973 while a screen reader said "Year, 12 of 64",
+     * because a range input announces its numeric value and nothing told it
+     * otherwise. `aria-valuetext` is exactly the attribute for this, and it
+     * is rewritten on every move — the reader's own, and the playback tick
+     * through `set()`.
+     *
+     * @param {Object} cfg
+     * @param {Array<number>} cfg.years
+     * @param {number} [cfg.index=0]
+     * @param {function(number):void} cfg.onInput  new index, on the reader's
+     *   own moves only (never from `set()`)
+     * @param {string} [cfg.label]   accessible name (default t('Year'))
+     * @param {string} [cfg.name]    `data-iwac-control` handle
+     * @param {HTMLElement} [cfg.into]  append the edges + input into this
+     *   element instead of a new row (for a row that also holds a play
+     *   button and a label)
+     * @param {string} [cfg.fillVar]  CSS custom property to write the
+     *   0–100% progress into, for a filled-track style
+     * @param {{row?:string, edge?:string, input?:string}} [cfg.classes]
+     * @returns {{root: HTMLElement, input: HTMLInputElement,
+     *            set: function(number):void, get: function():number}}
+     */
+    P.buildYearSlider = function (cfg) {
+        cfg = cfg || {};
+        var classes = cfg.classes || {};
+        var years = cfg.years || [];
+        var last = Math.max(0, years.length - 1);
+        var root = cfg.into || P.el('div', classes.row || 'iwac-vis-year-slider');
+        var input = P.el('input', classes.input || 'iwac-vis-year-slider__input');
+        input.type = 'range';
+        input.min = '0';
+        input.max = String(last);
+        input.step = '1';
+        input.setAttribute('aria-label', cfg.label || P.t('Year'));
+        input.setAttribute('data-iwac-control', cfg.name || 'year-slider');
+
+        function clamp(idx) {
+            idx = parseInt(idx, 10);
+            if (isNaN(idx)) idx = 0;
+            return Math.max(0, Math.min(last, idx));
+        }
+
+        function paint(idx) {
+            input.value = String(idx);
+            input.setAttribute('aria-valuetext', String(years[idx] != null ? years[idx] : ''));
+            if (cfg.fillVar) {
+                var pct = last > 0 ? (idx / last) * 100 : 0;
+                input.style.setProperty(cfg.fillVar, pct + '%');
+            }
+        }
+
+        var current = clamp(cfg.index || 0);
+        paint(current);
+        input.addEventListener('input', function () {
+            current = clamp(input.value);
+            paint(current);
+            if (typeof cfg.onInput === 'function') cfg.onInput(current);
+        });
+
+        root.appendChild(P.el('span', classes.edge || 'iwac-vis-year-slider__edge',
+            String(years[0] != null ? years[0] : '')));
+        root.appendChild(input);
+        root.appendChild(P.el('span', classes.edge || 'iwac-vis-year-slider__edge',
+            String(years[last] != null ? years[last] : '')));
+
+        return {
+            root: root,
+            input: input,
+            set: function (idx) {
+                current = clamp(idx);
+                paint(current);
+            },
+            get: function () { return current; }
+        };
     };
 
     /**

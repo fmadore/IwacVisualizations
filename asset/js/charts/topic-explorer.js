@@ -456,7 +456,10 @@
             if (!instance) return;
             var live = ns.getLiveChart && ns.getLiveChart(panel.chart);
             if (!live) return;
-            live.setOption(optionFor(view), true);
+            // Same axes, different series: a merge keeps the legend toggles
+            // across the dominant / weighted switch.
+            if (ns.repaint) ns.repaint(live, optionFor(view));
+            else live.setOption(optionFor(view), true);
         }
 
         function optionFor(view) {

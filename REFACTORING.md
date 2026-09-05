@@ -1174,6 +1174,72 @@ browser contracts, 128 PHP checks (seven new, on the sidecar parser), the
 53 Python contract tests, pyflakes, and every `npm run lint:*` gate
 including the new `lint:i18n-pot`.
 
+### Implemented in v1.60.0 (wave 2)
+
+**S11, S1, S2, S7, S8, E3, E5, S25** are done and marked `[x]`; S19's
+`setActive` trap is closed as a side effect. What landed differently:
+
+- **S11** — `P.createStore` keeps the block's own state object rather than
+  copying (`store.state === state`); the blocks' existing references and
+  the concordance module's `state` argument stay valid unchanged. No
+  `derive`: nothing needed it. Adopted by laïcité, scary-terms, term-trends,
+  compare-newspapers (the two picks) and sentiment-atlas — the audit's
+  "person facet → keywords → spatial" order was not followed, because the
+  blocks with the S1 defect were the ones whose controls had to be
+  restructured anyway; keywords-state, the spatial state and the person
+  facet keep their own observers for now (their controls are not rebuilt
+  from their handlers, so nothing was broken there).
+- **S1** — `render()` became `mount()` + `sync()` in both controls modules;
+  only a change of `view` (or a lazy bundle arriving, which is structural)
+  remounts, and that remount runs inside `P.withFocusRestored`, which finds
+  the control carrying the same `data-iwac-control` handle in the new tree.
+  Every shared control writes that handle. The laïcité trends row builds
+  BOTH axis sets and toggles `hidden` (the axis select used to destroy
+  itself); dependent selects (collocate slice, concordance country) are
+  repopulated through `group.setOptions`; the concordance input is never
+  written while focused. The spatial picker marks the selected row in place.
+- **S2** — `P.bindUrlState` as specified (block-prefixed, `replaceState`,
+  defaults omitted, values validated against what the block offers, a
+  `push` predicate + `popstate` for navigation-like changes, silent inside a
+  frame that cannot write). Bound: laïcité `view / country / subset / axis /
+  corpus / frame / q`; scary `view / country / trends / year`; term-trends
+  `terms / mode`; compare `a / b` as `type/scope/slug`; sentiment `model /
+  pair / category / type / sort_topic / sort_newspaper`. The Topic Explorer
+  keeps its hand-rolled `?topic=` (it works and pushes history correctly);
+  index-overview keywords, spatial, entity-networks and the overview facets
+  are NOT bound yet — they wait on their stores. "Copy link to this view"
+  is `P.buildCopyLinkButton`, at the end of each bound block's controls.
+- **S8** — `P.buildSegmented` with per-block class overrides so no
+  stylesheet changed; `buildFacetButtons` uses it for both rows (the
+  sub-row's group is `display: contents` so the sub bar lays the buttons
+  out as before). The seven private `highlight(btn)` copies the finding
+  listed are still there — only the four sites named as *wrong* were
+  migrated (laïcité tablist, compare radiogroup, scary class-only toggle,
+  term-trends). Migrating the correct-but-duplicated ones is wave 5 work.
+- **E5** — as `IWACVis.repaint`, a shape-aware helper rather than
+  per-call-site `replaceMerge` flags: the option's component signature
+  decides merge vs rebuild, so the empty→full transition (which a plain
+  `replaceMerge` would have painted a "No data" title over live series)
+  needs no per-block flag. The builders' `start: 0, end: 100` are dropped
+  from a merged dataZoom; `hasZoom` in the aria description now tests for
+  presence rather than finite bounds, and the keyboard handler defaults
+  missing bounds. Scary-terms' view switch keeps notMerge (different
+  component sets per view), as the finding said.
+- **E3** — named items in all five bar builders plus
+  `yAxis.animationDurationUpdate`; `tests/js/diverging-bar.test.js` reads
+  `.value` now and asserts the naming.
+- **S25** — `store.test.js` (14 tests) and `controls.test.js` (11) against a
+  ~100-line DOM stand-in; `createPlaybackTimer`, keywords-state and the
+  spatial race guard remain untested.
+
+**S4 (the linked country facet) did not ship** in this wave: it is a
+product change (which panels consume the shared country, what the "all
+countries" note says) rather than a mechanism, and it deserves its own
+release on top of the store. Verified: 123 JS tests, 31 Playwright
+contracts, 128 PHP checks, every `npm run lint:*` gate, and a real-DOM
+smoke run of both controls rows (36 assertions on focus survival, in-place
+repopulation, hidden toggles and the URL round-trip).
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1291,7 +1357,7 @@ non-text content, and the thing a historian citing a figure actually needs
       merge-mode tick `setOption({ series: [{ data }] })` with
       `animationDurationUpdate ≈ tick − 100` linear. The reduced-motion switch
       at theme level (`iwac-theme.js:478`) still snaps frames.
-- [ ] **E3 (Med, S) — Sort toggles and model switches animate by slot, not by
+- [x] **E3 (Med, S) — Sort toggles and model switches animate by slot, not by
       row.** `C.divergingBar` builds `data` as bare numbers
       (`chart-options-hbar.js:477-484`) and discards `names` into
       `yAxis.data` (`:460`); the toggles at `sentiment-atlas.js:936-950`
@@ -1309,7 +1375,7 @@ non-text content, and the thing a historian citing a figure actually needs
       subjects:45}.js` render `6000`, not `6 000` / `6,000`. One theme-level
       line in `buildTheme` (`iwac-theme.js:487`): `tooltip.valueFormatter`
       resolving `ns.panels.formatNumber` lazily (panels.js loads later).
-- [ ] **E5 (Med, S) — notMerge discards legend selection and the dataZoom
+- [x] **E5 (Med, S) — notMerge discards legend selection and the dataZoom
       window on every facet/term change.** `term-trends.js:332` (65-year
       slider resets to 0–100 when a term is added), `sentiment-atlas.js:890`
       (model switch drops legend toggles), `topic-explorer.js:463`,
@@ -1608,7 +1674,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 | 14–15 | `buildFacetButtons`, table/pagination/window-disclosure internals | `facet-buttons.js:46-48`, `table.js:249`, `pagination.js:384-387` | `setActive` without `get` |
 | 16 | DOM-as-state | `entity-networks.js:282,324`, `compare-newspapers/sentiment.js:112-113`, `on-this-day/shared.js:394`, `scary-terms/controls.js:299` | widget is the source of truth |
 
-- [ ] **S1 (High, M) — Controls are rebuilt from inside their own change
+- [x] **S1 (High, M) — Controls are rebuilt from inside their own change
       handlers; keyboard focus is destroyed on every interaction.** ✓
       `scary-terms/controls.js:71-72` `render()` starts with
       `controlsEl.innerHTML = ''` and is invoked from the map selects' own
@@ -1629,7 +1695,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       per view) and `sync()`; only a change of `state.view` may remount;
       repopulate dependent selects in place (`compare-newspapers/picker.js:
       135-166` `rebuildName()` already does this).
-- [ ] **S2 (High, M) — Only Topic Explorer is deep-linkable; the citable views
+- [x] **S2 (High, M) — Only Topic Explorer is deep-linkable; the citable views
       are the ones that reset.** ✓ `keywords-state.js:8-13` argues the URL must
       not be used because a block "can be embedded on any page alongside other
       content"; `?topic=` already collides with nothing, and block-prefixed
@@ -1695,7 +1761,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `P.disposeWithin(root)` in dashboard-core; call it before both clears;
       let `pruneCharts` treat `!el.isConnected` as dead for `'echarts'` (it
       already does for `'renderer'`, `:419`). Pairs with M3.
-- [ ] **S7 (Med, S) — Both year sliders announce an array index, not a
+- [x] **S7 (Med, S) — Both year sliders announce an array index, not a
       year.** ✓ `aria-valuetext` 0 uses. `scary-terms/controls.js:286-292` and
       `index-overview/keywords-attention.js:68-74` are near-identical (60
       lines): `min=0`, `max=years.length-1`, `aria-label="Year"` — a screen
@@ -1703,7 +1769,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `P.buildYearSlider({ years, index, onInput, onCommit })` owning
       `aria-valuetext`/`aria-valuenow`, the fill paint (`:317-322`) and a
       `set()` for the playback tick (replacing `:335-343` and `:122-131`).
-- [ ] **S8 (Med, M) — Three ARIA vocabularies for "pick one of N", one of
+- [x] **S8 (Med, M) — Three ARIA vocabularies for "pick one of N", one of
       them wrong.** ✓ `laicite/controls.js:64-80` `role=tablist` + `role=tab`
       + `aria-selected` with no `aria-controls`, no `tabpanel`, no arrow keys
       and every tab in the tab order — that *is* the tabs pattern's contract,
@@ -1744,7 +1810,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       Walk every `ns.addTranslations('en'|'fr', {…})` literal in
       `asset/js/**`; pair per file; flag a per-block key that shadows a shared
       one.
-- [ ] **S11 (Med, M) — A shared store primitive: worth it only together with
+- [x] **S11 (Med, M) — A shared store primitive: worth it only together with
       S1, S2 and S4.** Line savings alone do not justify it (keywords-state
       228 → ~130, spatial −40, person facet −12, the duplicated no-op −6;
       scary/laïcité/sentiment-atlas would not shrink — their repaint lists
@@ -1827,9 +1893,13 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       spatial `map.js:215, 229, 245, 250`, `entity-networks.js:262`, person
       `network.js:238, 335`, compare `picker.js:82, 98`,
       `sentiment.js:61, 75` — the last two carry no class at all and miss the
-      `.iwac-vis-control` skin). Latent trap: `facet-buttons.js:187-198`
+      `.iwac-vis-control` skin). ~~Latent trap: `facet-buttons.js:187-198`
       `setActive(key, subKey)` in button mode cannot reach `markSub`, so
-      highlight and state diverge — no caller passes a `subKey` today.
+      highlight and state diverge — no caller passes a `subKey` today.~~ The
+      trap is closed in v1.60.0 (`activeSubKey` + a `setActive` that moves
+      the mark; the sentiment atlas passes sub-keys from the URL now); the
+      compare picker's two selects got the `.iwac-vis-control` skin. The
+      other ad-hoc builders stay open.
 - [ ] **S20 (Low, S)** — empty/error states bypassing the shared banners:
       `compare-newspapers.js:183-184` (no `role=status`),
       `keywords-chart.js:113-116, 138-145`, `scary-terms.js:488-508` (an
@@ -1859,7 +1929,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       (references overview, collection overview, spatial, entity networks,
       keyword explorer) can move to the per-block mechanism that already
       exists. Do after S10.
-- [ ] **S25 (Low, S)** — nothing in `tests/js` exercises `buildFacetButtons`,
+- [x] **S25 (Low, S)** — nothing in `tests/js` exercises `buildFacetButtons`,
       `createPlaybackTimer`, keywords-state transitions, the spatial race
       guard or the compare picker; S5, S7, S8, S11 and S12 are each a 20-line
       `node:test` away from being locked in.
@@ -2262,10 +2332,10 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    E4, E14, E15 (beeswarm delete), M1, M2, M4, M16, M17, S5, S6, S9, S18,
    S22, P2, P12, P13, P14, H1, H3, B4, B6, B7 — every item has a lint or a
    test that proves it.
-2. **The reactive core (S11 → S1 → S2 → S4, with E3/E5, S7/S8):** store, URL
-   state, focus-safe controls, linked country facet; land block by block
-   (person facet → keywords → spatial → laïcité/scary), each behind the
-   existing Playwright fixtures plus S25's unit tests.
+2. **The reactive core (S11 → S1 → S2 → S4, with E3/E5, S7/S8) — shipped as
+   v1.60.0 minus S4:** store, URL state, focus-safe controls, the two
+   accessible primitives, shape-aware repaints, S25's unit tests. S4 (the
+   linked country facet) is next, on top of the store.
 3. **Data back to the reader (S3, E17, M11, M18):** table/CSV toolbar,
    choropleth legend, keyboard routes.
 4. **Build (B1 step 1 → B2 eslint → B1 step 2 + ECharts self-host):** the

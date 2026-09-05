@@ -107,11 +107,29 @@
             }
         }
 
+        /**
+         * Mark the selected row in place. Rebuilding the list on every
+         * selection threw away the button the reader had just pressed —
+         * and with it their keyboard focus, mid-list.
+         */
+        function syncListSelection() {
+            var selectedId = state.selection ? String(state.selection.id) : null;
+            var rows = list.children;
+            for (var i = 0; i < rows.length; i++) {
+                var btn = rows[i];
+                if (!btn.dataset || btn.dataset.entityId === undefined) continue;
+                var on = selectedId !== null && btn.dataset.entityId === selectedId;
+                btn.classList.toggle('iwac-vis-spatial-picker__item--active', on);
+                btn.setAttribute('aria-selected', on ? 'true' : 'false');
+            }
+        }
+
         function buildRow(row) {
             var id = row[0], label = row[1], count = row[2];
             var btn = P.el('button', 'iwac-vis-spatial-picker__item');
             btn.type = 'button';
             btn.setAttribute('role', 'option');
+            btn.dataset.entityId = String(id);
             var selected = state.selection && state.selection.id === id;
             if (selected) btn.classList.add('iwac-vis-spatial-picker__item--active');
             btn.setAttribute('aria-selected', selected ? 'true' : 'false');
@@ -228,7 +246,7 @@
                 highlightTab();
                 renderList();
             } else if (key === 'selection') {
-                renderList();
+                syncListSelection();
                 renderSelection();
                 renderPlaces();
             } else if (key === 'focus') {
