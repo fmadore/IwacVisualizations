@@ -38,13 +38,16 @@ import logging
 import os
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 
+from iwac_stats import build_timeline_series
 from iwac_utils import (
     DATASET_ID,
     canonicalize_country_field,
+    clean_int,
+    clean_str,
     configure_logging,
     create_metadata_block,
     extract_year,
@@ -190,23 +193,6 @@ def _first_present_column(
     return None
 
 
-def _int_or_none(value: Any) -> Optional[int]:
-    """Return an int or None if the value isn't usable."""
-    try:
-        if value is None or (isinstance(value, float) and pd.isna(value)):
-            return None
-        return int(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _clean_text(value: Any) -> str:
-    """Stringify a DataFrame cell, returning ``""`` for null-ish values."""
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return ""
-    return str(value).strip()
-
-
 def compute_subset_summary(df: Optional[pd.DataFrame]) -> Dict[str, int]:
     """Row count + word count for a subset DataFrame."""
     if df is None or df.empty:
@@ -234,10 +220,7 @@ def compute_timeline(
           "totals": [count_per_year, ...],
         }
     """
-    per_year_country: Dict[int, Counter] = defaultdict(Counter)
-    seen_years: set = set()
-    seen_countries: set = set()
-
+    pairs: List[Tuple[int, str]] = []
     for subset in CONTENT_SUBSETS:
         df = dataframes.get(subset)
         if df is None or df.empty:
@@ -251,38 +234,10 @@ def compute_timeline(
             country_value = str(country).strip() if country is not None else ""
             if not country_value or country_value.lower() == "unknown":
                 continue  # skip items without a resolvable country
-            per_year_country[year][country_value] += 1
-            seen_years.add(year)
-            seen_countries.add(country_value)
+            pairs.append((year, country_value))
 
-    if not seen_years:
-        return {"years": [], "countries": [], "series": {}, "totals": []}
-
-    years = sorted(seen_years)
-    # Order countries by total count desc, stable alphabetical tie-break
-    country_totals = Counter()
-    for counts in per_year_country.values():
-        country_totals.update(counts)
-    countries = sorted(
-        seen_countries,
-        key=lambda c: (-country_totals[c], c),
-    )
-
-    series: Dict[str, List[int]] = {c: [0] * len(years) for c in countries}
-    totals: List[int] = [0] * len(years)
-    for i, year in enumerate(years):
-        year_counts = per_year_country[year]
-        for country in countries:
-            count = int(year_counts.get(country, 0))
-            series[country][i] = count
-            totals[i] += count
-
-    return {
-        "years": years,
-        "countries": countries,
-        "series": series,
-        "totals": totals,
-    }
+    # Countries by total count desc, alphabetical tie-break.
+    return build_timeline_series(pairs, order="count", totals=True)
 
 
 def compute_country_distribution(
@@ -676,7 +631,7 @@ def compute_recent_additions(
                     if t:
                         thumbnail = t
             rows.append({
-                "o_id": _int_or_none(df["o:id"].iat[idx]),
+                "o_id": clean_int(df["o:id"].iat[idx]),
                 "title": title,
                 "source": source,
                 "type": type_key,
@@ -807,12 +762,12 @@ def _build_source_coordinate_lookups(
         return coord_lookup, id_lookup
 
     for _, row in index_df.iterrows():
-        title = _clean_text(row.get(title_col))
+        title = clean_str(row.get(title_col))
         if not title:
             continue
         normalized = normalize_location_name(title)
 
-        oid = _int_or_none(row.get(id_col)) if id_col else None
+        oid = clean_int(row.get(id_col)) if id_col else None
         if oid is not None:
             id_lookup[normalized] = oid
 
@@ -1063,7 +1018,7 @@ def compute_top_entities(
         entries: List[Dict[str, Any]] = []
         for _, row in subset.iterrows():
             entry = {
-                "o_id": _int_or_none(row.get("o:id")),
+                "o_id": clean_int(row.get("o:id")),
                 "title": str(row.get("Titre") or "").strip(),
                 "frequency": int(row.get("_freq") or 0),
             }

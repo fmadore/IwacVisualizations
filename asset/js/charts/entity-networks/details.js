@@ -36,7 +36,7 @@
 
         function renderOverview() {
             root.innerHTML = '';
-            root.appendChild(P.el('div', 'iwac-vis-networks-details__label',
+            root.appendChild(P.el('div', 'iwac-vis-aside__label iwac-vis-networks-details__label',
                 P.t('About this network')));
             if (overview.stats) {
                 root.appendChild(P.el('p', 'iwac-vis-networks-details__stats', overview.stats));
@@ -71,7 +71,7 @@
             header.appendChild(P.el('div', 'iwac-vis-networks-details__meta', bits.join(' · ')));
             root.appendChild(header);
 
-            root.appendChild(P.el('div', 'iwac-vis-networks-details__label',
+            root.appendChild(P.el('div', 'iwac-vis-aside__label iwac-vis-networks-details__label',
                 P.t('Strongest co-occurrences')));
 
             var list = P.el('ul', 'iwac-vis-networks-details__list');
@@ -82,7 +82,7 @@
                 btn.title = P.t('cooccurrence_title', {
                     count: P.formatNumber(nb.weight)
                 });
-                btn.appendChild(P.el('span', 'iwac-vis-networks-details__item-name', nb.node.label));
+                btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-networks-details__item-name', nb.node.label));
                 btn.appendChild(P.el('span', 'iwac-vis-networks-details__item-count',
                     P.formatNumber(nb.weight)));
                 btn.addEventListener('click', function () { onJump(nb.index); });

@@ -485,7 +485,7 @@
         var valueAxis = {
             type: 'value',
             max: 100,
-            axisLabel: { formatter: '{value}%' }
+            axisLabel: C._percentAxisLabel()
         };
         var catAxis = { type: 'category', data: categories };
         var R = ns.responsive;

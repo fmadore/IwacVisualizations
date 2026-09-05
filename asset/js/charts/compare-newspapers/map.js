@@ -286,18 +286,16 @@
                 var hits = map.queryRenderedFeatures(e.point, { layers: layers });
                 var f = hits && hits[0];
                 if (!f) return;
-                var name = f.properties.name || '';
-                var count = f.properties.count || 0;
                 var oid = f.properties.o_id;
-                var html = '<strong>' + P.escapeHtml(name) + '</strong><br>'
-                    + P.formatNumber(count) + ' ' + P.t('mentions');
-                if (oid && ctx && ctx.siteBase) {
-                    html += '<br><a href="' + ctx.siteBase + '/item/' + oid + '">'
-                        + P.t('Open entity') + '</a>';
-                }
                 P.createIwacPopup()
                     .setLngLat(e.lngLat)
-                    .setHTML(html)
+                    .setDOMContent(P.buildMapPopup({
+                        title: f.properties.name || '',
+                        // The title is the link to the entity, as on every
+                        // other bubble map.
+                        titleHref: oid && ctx && ctx.siteBase ? P.itemUrl(ctx.siteBase, oid) : null,
+                        subtitleLines: [P.formatNumber(f.properties.count || 0) + ' ' + P.t('mentions')]
+                    }))
                     .addTo(map);
             });
             map.on('mousemove', function (e) {

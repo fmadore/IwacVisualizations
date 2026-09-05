@@ -111,39 +111,15 @@
         });
 
         var maxCount = featureResult.max;
-        var mapInstance = null;
         var fitDone = false;
 
-        function ml(color) {
-            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(color) : color;
-        }
-        function resolvePrimary() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return ml(resolved || '#e64a19');
-        }
-        function resolveInk() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return ml(resolved || '#2c2f37');
-        }
-
         function fitToSources(map) {
-            if (fitDone || mappedSources.length < 2 || typeof maplibregl.LngLatBounds !== 'function') {
-                return;
-            }
-            var bounds = new maplibregl.LngLatBounds();
-            mappedSources.forEach(function (source) {
-                bounds.extend([source.lng, source.lat]);
-            });
-            map.fitBounds(bounds, {
-                padding: 48,
-                maxZoom: 5,
-                duration: 0
-            });
+            if (fitDone || mappedSources.length < 2) return;
+            P.fitToPoints(map, mappedSources, { padding: 48, maxZoom: 5, duration: 0 });
             fitDone = true;
         }
 
         function onStyleReady(map) {
-            mapInstance = map;
             if (!map.getSource('source-locations')) {
                 map.addSource('source-locations', {
                     type: 'geojson',
@@ -152,38 +128,18 @@
                 });
             }
             if (!map.getLayer('source-circles')) {
-                map.addLayer({
+                map.addLayer(P.bubbleLayer({
                     id: 'source-circles',
-                    type: 'circle',
                     source: 'source-locations',
-                    paint: {
-                        'circle-radius': [
-                            'interpolate', ['linear'], ['get', 'count'],
-                            1, 6,
-                            maxCount, 30
-                        ],
-                        'circle-color': resolvePrimary(),
-                        'circle-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            1.0,
-                            0.76
-                        ],
-                        'circle-stroke-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            3,
-                            1.5
-                        ],
-                        'circle-stroke-color': resolveInk()
-                    }
-                });
+                    radius: P.countRadius('count', maxCount, 6, 30),
+                    sortKey: 'count'
+                }));
             }
             fitToSources(map);
         }
 
         function sourceUrl(source) {
-            return source.o_id && ctx.siteBase ? ctx.siteBase + '/item/' + source.o_id : '';
+            return ctx.siteBase ? P.itemUrl(ctx.siteBase, source.o_id) : '';
         }
 
         function typeBreakdown(source) {
@@ -193,15 +149,9 @@
             }).join(' · ');
         }
 
-        function handleClick(e) {
-            if (!mapInstance || !mapInstance.getLayer('source-circles')) return;
-            var features = mapInstance.queryRenderedFeatures(e.point, {
-                layers: ['source-circles']
-            });
-            if (!features.length) return;
-            var feature = features[0];
+        function popupFor(feature) {
             var source = mappedSources[Number(feature.properties.idx)];
-            if (!source) return;
+            if (!source) return null;
 
             var subtitle = [];
             subtitle.push(P.t('items_count', { count: P.formatNumber(source.count || 0) }));
@@ -212,14 +162,7 @@
             var breakdown = typeBreakdown(source);
             if (breakdown) subtitle.push(breakdown);
 
-            P.createIwacPopup({ closeButton: true, closeOnClick: true })
-                .setLngLat(feature.geometry.coordinates.slice())
-                .setDOMContent(P.buildMapPopup({
-                    title: source.name,
-                    titleHref: sourceUrl(source),
-                    subtitleLines: subtitle
-                }))
-                .addTo(mapInstance);
+            return { title: source.name, titleHref: sourceUrl(source), subtitleLines: subtitle };
         }
 
         var map = P.createIwacMap(mapContainer, {
@@ -231,8 +174,7 @@
         });
 
         if (map) {
-            mapInstance = map;
-            map.on('click', handleClick);
+            P.attachMapClickPopup(map, { layers: 'source-circles', content: popupFor });
             P.attachFeatureStateHover(map, {
                 layer: 'source-circles',
                 source: 'source-locations'

@@ -97,8 +97,7 @@
                 min: 0
             },
             series: ecSeries,
-            animationDuration: 400,
-            animationEasing: 'cubicOut'
+            animationDuration: 400
         };
     }
 

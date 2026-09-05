@@ -14,6 +14,7 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var CN = ns.compareNewspapers = ns.compareNewspapers || {};
 
     function buildTimeline(dataA, dataB) {
@@ -52,10 +53,7 @@
                     nameGap: 28
                 },
                 yAxis: { type: 'value', name: P.t('Count') },
-                dataZoom: years.length > 30
-                    ? [{ type: 'slider', start: 0, end: 100, bottom: 8, height: 18 },
-                       { type: 'inside' }]
-                    : [],
+                dataZoom: C._dataZoom(years.length, { threshold: 30 }),
                 series: [
                     {
                         name: dataA.name,
@@ -77,9 +75,7 @@
                         areaStyle: { color: colorB, opacity: 0.18 },
                         data: toSeries(dataB)
                     }
-                ],
-                animationDuration: 600,
-                animationEasing: 'cubicOut'
+                ]
             });
         });
 

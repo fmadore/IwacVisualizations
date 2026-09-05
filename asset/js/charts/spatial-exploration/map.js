@@ -41,26 +41,9 @@
     var ADMIN_STROKE = 'spatial-admin-boundaries-stroke';
     var HOVER_ITEMS = 4;
 
-    function ml(c) {
-        return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
-    }
-    function resolvePrimary() {
-        var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-        return ml(resolved || '#e64a19');
-    }
-    function resolveInk() {
-        var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-        return ml(resolved || '#2c2f37');
-    }
-
-    function resolveBorder() {
-        var resolved = ns.resolveCssVar && ns.resolveCssVar('--border');
-        return ml(resolved || '#d4d6da');
-    }
-
     function resolveSurface() {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        return ml(tokens.surface || '#fdfdfd');
+        return P.normalizeColorForMapLibre(tokens.surface || '#fdfdfd');
     }
 
     function resolveAdminRamp() {
@@ -71,9 +54,9 @@
             resolve('--iwac-vis-heatmap-2'),
             resolve('--iwac-vis-heatmap-3'),
             resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean).map(ml);
+        ].filter(Boolean).map(P.normalizeColorForMapLibre);
         if (stops.length < 2) {
-            stops = [resolveSurface(), resolvePrimary()];
+            stops = [resolveSurface(), P.mapColor('--primary')];
         }
         return stops;
     }
@@ -205,7 +188,7 @@
         }
 
         // --- Toolbar: map mode + country focus + status line -------------
-        var toolbar = P.el('div', 'iwac-vis-spatial-toolbar');
+        var toolbar = P.el('div', 'iwac-vis-toolbar iwac-vis-spatial-toolbar');
 
         var mode = 'bubbles';
         var adminLevel = 'regions';
@@ -309,11 +292,7 @@
         rebuildFeatures();
 
         function radiusExpression() {
-            return [
-                'interpolate', ['linear'], ['get', 'count'],
-                1, 3,
-                Math.max(featureResult.max, 2), 26
-            ];
+            return P.countRadius('count', Math.max(featureResult.max, 2), 3, 26);
         }
 
         function countryFilter() {
@@ -443,8 +422,10 @@
                 var count = Number(p._iwac_count || 0);
                 hoverPopup
                     .setLngLat(e.lngLat)
-                    .setHTML('<strong>' + P.escapeHtml(p.name || '') + '</strong><br>' +
-                        P.formatNumber(count) + ' ' + P.t('items'))
+                    .setDOMContent(P.buildMapPopup({
+                        title: p.name || '',
+                        subtitleLines: [P.formatNumber(count) + ' ' + P.t('items')]
+                    }))
                     .addTo(mapInstance);
             });
             mapInstance.on('mouseleave', ADMIN_FILL, function () {
@@ -458,9 +439,13 @@
                 var country = currentAdminCountry() || '';
                 P.createIwacPopup({ closeButton: true, closeOnClick: true })
                     .setLngLat(e.lngLat)
-                    .setHTML('<strong>' + P.escapeHtml(p.name || '') + '</strong><br>' +
-                        P.escapeHtml(levelLabel + ' · ' + country) + '<br>' +
-                        P.formatNumber(count) + ' ' + P.t('items'))
+                    .setDOMContent(P.buildMapPopup({
+                        title: p.name || '',
+                        subtitleLines: [
+                            levelLabel + ' · ' + country,
+                            P.formatNumber(count) + ' ' + P.t('items')
+                        ]
+                    }))
                     .addTo(mapInstance);
             });
         }
@@ -540,7 +525,7 @@
                         type: 'line',
                         source: ADMIN_SOURCE,
                         paint: {
-                            'line-color': resolveBorder(),
+                            'line-color': P.mapColor('--border'),
                             'line-width': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
@@ -555,7 +540,7 @@
                     'fill-color',
                     buildAdminFillExpression(currentAdminCounts(), adminScale)
                 );
-                mapInstance.setPaintProperty(ADMIN_STROKE, 'line-color', resolveBorder());
+                mapInstance.setPaintProperty(ADMIN_STROKE, 'line-color', P.mapColor('--border'));
                 attachAdminInteractions();
                 setLayerVisibility(ADMIN_FILL, true);
                 setLayerVisibility(ADMIN_STROKE, true);
@@ -584,28 +569,12 @@
                 });
             }
             if (!m.getLayer(LAYER)) {
-                m.addLayer({
+                m.addLayer(P.bubbleLayer({
                     id: LAYER,
-                    type: 'circle',
                     source: SOURCE,
-                    paint: {
-                        'circle-radius': radiusExpression(),
-                        'circle-color': resolvePrimary(),
-                        'circle-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            1.0,
-                            0.75
-                        ],
-                        'circle-stroke-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            3,
-                            1.5
-                        ],
-                        'circle-stroke-color': resolveInk()
-                    }
-                });
+                    radius: radiusExpression(),
+                    sortKey: 'count'
+                }));
             }
             // Re-assert the country-focus filter after every style
             // (re)load — setStyle wipes layer filters with the layer.
@@ -684,7 +653,7 @@
         function pinnedNode(place, articles) {
             return P.buildMapPopup({
                 title: place.name,
-                titleHref: ctx.siteBase ? ctx.siteBase + '/item/' + place.id : null,
+                titleHref: ctx.siteBase ? P.itemUrl(ctx.siteBase, place.id) : null,
                 subtitleLines: [
                     (place.country ? place.country + ' · ' : '') +
                         P.t('mentions_count', { count: P.formatNumber(place.count) })
@@ -871,17 +840,9 @@
             var pts = list.filter(function (p) {
                 return !state.focusCountry || p.country === state.focusCountry;
             });
-            if (!pts.length) return;
-            var w = 180, s = 90, e = -180, n = -90;
-            pts.forEach(function (p) {
-                if (p.lng < w) w = p.lng;
-                if (p.lng > e) e = p.lng;
-                if (p.lat < s) s = p.lat;
-                if (p.lat > n) n = p.lat;
-            });
-            try {
-                map.fitBounds([[w, s], [e, n]], { padding: 60, maxZoom: 8, duration: 600 });
-            } catch (err) { /* degenerate bounds */ }
+            // One place is fitted too: fitBounds on a point picks the max
+            // zoom, so P.fitToPoints centres it at 8 instead.
+            P.fitToPoints(map, pts, { padding: 60, maxZoom: 8, duration: 600, singleZoom: 8 });
         }
 
         function applyView() {

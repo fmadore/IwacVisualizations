@@ -445,37 +445,4 @@
 
         return { el: bar, isLegendVisible: function () { return legendVisible; } };
     };
-
-    /**
-     * Wire click-to-navigate on a force-graph, suppressing the synthetic
-     * `click` ECharts fires at mouseup after a node drag. Watches zrender
-     * mousedown/mouseup: a pointer travel > 4px marks the gesture a drag,
-     * so positioning a node never navigates away. Pure clicks on a node
-     * invoke `onNode(nodeData, params)`; the caller decides routing (and
-     * any centre-node guard).
-     *
-     * @param {ECharts} chart
-     * @param {function(Object, Object):void} onNode
-     */
-    P.attachGraphClickThrough = function (chart, onNode) {
-        var pressX = 0, pressY = 0, suppressClick = false;
-        var zr = chart.getZr && chart.getZr();
-        if (zr) {
-            zr.on('mousedown', function (e) {
-                pressX = e.offsetX;
-                pressY = e.offsetY;
-                suppressClick = false;
-            });
-            zr.on('mouseup', function (e) {
-                if (Math.abs(e.offsetX - pressX) > 4 || Math.abs(e.offsetY - pressY) > 4) {
-                    suppressClick = true;
-                }
-            });
-        }
-        chart.on('click', function (params) {
-            if (suppressClick) return;
-            if (params.dataType !== 'node') return;
-            onNode(params.data || {}, params);
-        });
-    };
 })();

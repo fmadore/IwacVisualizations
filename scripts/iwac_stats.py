@@ -28,11 +28,12 @@ Functions
 - keyness_for_slices: significant overrepresented tokens per slice
 - kleinberg_bursts: burst intervals from a 2-state automaton
 - contiguous_years: zero-filled calendar range over observed years
+- build_timeline_series: year × category counts shaped for C.timeline
 """
 from __future__ import annotations
 
 import math
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
@@ -249,6 +250,61 @@ def contiguous_years(observed: Sequence[int]) -> List[int]:
     if not years:
         return []
     return list(range(min(years), max(years) + 1))
+
+
+def build_timeline_series(
+    pairs: Any,
+    *,
+    order: Any = "count",
+    totals: bool = False,
+) -> Dict[str, Any]:
+    """Year × category counts in the shape ``C.timeline`` draws.
+
+    ``pairs`` is an iterable of ``(year, category)``; each pair counts one
+    item. The result is ``{"years": [...], "countries": [...], "series":
+    {category: [count per year]}}`` — the stack key is called
+    ``countries`` whatever the categories are, because that is the field
+    the chart reads — plus ``"totals"`` (items per year) when asked.
+
+    ``order`` decides the stack order: ``"count"`` (most items first,
+    alphabetical tie-break — the collection overview), ``"alpha"`` (the
+    per-item dashboards), ``"most_common"`` (most items first, first-seen
+    tie-break — the references overview), or an explicit sequence of
+    categories, kept in that order and dropping any that never occur.
+
+    Three generators carried this loop; the shape and the empty result
+    are pinned here so the chart never sees a series without its years.
+    """
+    per_year: Dict[int, Counter] = defaultdict(Counter)
+    category_totals: Counter = Counter()
+    for year, category in pairs:
+        per_year[year][category] += 1
+        category_totals[category] += 1
+
+    if not per_year:
+        empty: Dict[str, Any] = {"years": [], "countries": [], "series": {}}
+        if totals:
+            empty["totals"] = []
+        return empty
+
+    years = sorted(per_year)
+    if order == "alpha":
+        categories = sorted(category_totals)
+    elif order == "count":
+        categories = sorted(category_totals, key=lambda c: (-category_totals[c], c))
+    elif order == "most_common":
+        categories = [c for c, _ in category_totals.most_common()]
+    else:
+        categories = [c for c in order if c in category_totals]
+
+    series = {
+        c: [int(per_year[y].get(c, 0)) for y in years]
+        for c in categories
+    }
+    out: Dict[str, Any] = {"years": years, "countries": categories, "series": series}
+    if totals:
+        out["totals"] = [int(sum(per_year[y].values())) for y in years]
+    return out
 
 
 def kleinberg_bursts(

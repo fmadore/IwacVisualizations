@@ -174,8 +174,7 @@
                 },
                 data: nodes,
                 links: links
-            }],
-            animationDuration: 600
+            }]
         };
     };
 
@@ -334,9 +333,7 @@
                     links: graphEdges,
                     cursor: 'pointer'
                 }
-            )],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            )]
         };
     };
 

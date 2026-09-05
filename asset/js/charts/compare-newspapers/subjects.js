@@ -64,9 +64,7 @@
                         itemStyle: { color: colorB, borderRadius: [0, 4, 4, 0] },
                         data: top.map(function (n) { return mapB[n] || 0; })
                     }
-                ],
-                animationDuration: 600,
-                animationEasing: 'cubicOut'
+                ]
             });
         });
 

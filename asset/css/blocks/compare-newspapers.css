@@ -73,14 +73,6 @@
     background: var(--iwac-vis-compare-color-b, var(--secondary, #394f68));
 }
 
-.iwac-vis-compare-picker__eyebrow {
-    font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    font-weight: 700;
-    color: var(--muted, #66696e);
-}
-
 .iwac-vis-compare-picker[data-side="A"] .iwac-vis-compare-picker__eyebrow {
     color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
@@ -186,14 +178,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-}
-
-.iwac-vis-compare-metric__label {
-    font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    color: var(--muted, #66696e);
-    font-weight: 700;
 }
 
 .iwac-vis-compare-metric__pair {
@@ -330,14 +314,6 @@
     min-height: 220px;
 }
 
-.iwac-vis-compare-overlap__title {
-    font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    font-weight: 700;
-    color: var(--muted, #66696e);
-}
-
 .iwac-vis-compare-overlap__col[data-kind="only-a"] .iwac-vis-compare-overlap__title {
     color: var(--iwac-vis-compare-color-a, var(--primary, #ce4115));
 }
@@ -419,14 +395,6 @@
     flex-direction: column;
     gap: 0.35rem;
     min-height: 320px;
-}
-
-.iwac-vis-compare-wordcloud__label {
-    font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    font-weight: 700;
-    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-wordcloud[data-side="A"] .iwac-vis-compare-wordcloud__label {
@@ -576,14 +544,6 @@ a.iwac-vis-compare-overlap__tag:focus-visible {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm, 0.5rem);
-}
-
-.iwac-vis-compare-sentiment__heading {
-    font-size: var(--text-xs, 0.8125rem);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider, 0.08em);
-    font-weight: 700;
-    color: var(--muted, #66696e);
 }
 
 .iwac-vis-compare-sentiment__col[data-side="A"] .iwac-vis-compare-sentiment__heading {

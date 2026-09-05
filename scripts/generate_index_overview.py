@@ -58,6 +58,7 @@ import pandas as pd
 from iwac_utils import (
     DATASET_ID,
     canonicalize_country_field,
+    clean_int,
     configure_logging,
     create_metadata_block,
     extract_year,
@@ -83,15 +84,6 @@ INDEX_TYPES = [
 # authority pins from the index. ``images`` (photographs) carry spatial
 # place tags too, so a photographed place counts as a real mention.
 CONTENT_SUBSETS = ["articles", "publications", "documents", "audiovisual", "images", "references"]
-
-
-def _int_or_none(value: Any) -> Optional[int]:
-    try:
-        if value is None or (isinstance(value, float) and pd.isna(value)):
-            return None
-        return int(value)
-    except (TypeError, ValueError):
-        return None
 
 
 def _str_or_none(value: Any) -> Optional[str]:
@@ -191,7 +183,7 @@ def compute_top_entities(
             if not title:
                 continue
             entry: Dict[str, Any] = {
-                "o_id": _int_or_none(row.get("o:id")),
+                "o_id": clean_int(row.get("o:id")),
                 "title": title,
                 "frequency": int(row.get("_freq") or 0),
             }
@@ -244,7 +236,7 @@ def compute_lifespan(
             if not title:
                 continue
             rows.append({
-                "o_id": _int_or_none(row.get("o:id")),
+                "o_id": clean_int(row.get("o:id")),
                 "title": title,
                 "frequency": int(freq),
                 "first_year": int(first_y),
@@ -307,7 +299,7 @@ def compute_places(
             continue
         freq_val = pd.to_numeric(row.get("frequency"), errors="coerce")
         entry: Dict[str, Any] = {
-            "o_id": _int_or_none(row.get("o:id")),
+            "o_id": clean_int(row.get("o:id")),
             "title": title,
             "lat": lat,
             "lng": lng,
@@ -400,7 +392,7 @@ def compute_activity(
                 continue
             countries = parse_pipe_separated(row.get("countries"))
             rows.append({
-                "o_id": _int_or_none(row.get("o:id")),
+                "o_id": clean_int(row.get("o:id")),
                 "name": title,
                 "country": countries[0] if countries else None,
                 "type": entity_type,
@@ -433,7 +425,7 @@ def compute_recent_additions(
         if not title:
             continue
         rows.append({
-            "o_id": _int_or_none(row.get("o:id")),
+            "o_id": clean_int(row.get("o:id")),
             "title": title,
             "type": etype,
             "added_date": added[:10],
@@ -466,7 +458,7 @@ def compute_index_table(index_df: pd.DataFrame) -> List[Dict[str, Any]]:
         first_y = extract_year(_str_or_none(row.get("first_occurrence")))
         last_y = extract_year(_str_or_none(row.get("last_occurrence")))
         rows.append({
-            "o_id": _int_or_none(row.get("o:id")),
+            "o_id": clean_int(row.get("o:id")),
             "title": title,
             "type": etype,
             "frequency": int(freq) if pd.notna(freq) else 0,

@@ -100,15 +100,6 @@ def slugify(value: str) -> str:
     return slug or "unknown"
 
 
-def _int_or_none(value: Any) -> Optional[int]:
-    try:
-        if value is None or (isinstance(value, float) and pd.isna(value)):
-            return None
-        return int(value)
-    except (TypeError, ValueError):
-        return None
-
-
 # ---------------------------------------------------------------------------
 # Corpus enumeration
 # ---------------------------------------------------------------------------

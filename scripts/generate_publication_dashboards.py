@@ -62,6 +62,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from iwac_embeddings import coerce_embedding
 from iwac_utils import (
     DATASET_ID,
     clean_float,
@@ -250,7 +251,7 @@ class PublicationDashboardGenerator:
         valid = np.zeros(N, dtype=bool)
 
         for i, value in enumerate(df[embed_col].values):
-            vec = self._coerce_embedding(value)
+            vec = coerce_embedding(value)
             if vec is None:
                 vectors.append(None)
                 continue
@@ -283,26 +284,6 @@ class PublicationDashboardGenerator:
             f"Embedding matrix: {N} rows × {dim} dims, "
             f"{int(valid.sum())} valid, {N - int(valid.sum())} missing/invalid"
         )
-
-    @staticmethod
-    def _coerce_embedding(value: Any) -> Optional[np.ndarray]:
-        if value is None:
-            return None
-        if isinstance(value, np.ndarray):
-            if value.size == 0 or not np.isfinite(value).all():
-                return None
-            return value.astype(np.float32, copy=False)
-        if isinstance(value, (list, tuple)):
-            if not value:
-                return None
-            try:
-                arr = np.asarray(value, dtype=np.float32)
-            except (TypeError, ValueError):
-                return None
-            if arr.size == 0 or not np.isfinite(arr).all():
-                return None
-            return arr
-        return None
 
     def compute_semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K neighbour cards per issue. N=1,501 → the full (N, N)

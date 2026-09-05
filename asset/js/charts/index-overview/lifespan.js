@@ -76,12 +76,7 @@
 
         return {
             grid: C._grid({ left: 48, right: 24, top: 36, bottom: 48 }),
-            legend: {
-                type: 'scroll',
-                top: 4,
-                itemWidth: 12,
-                itemHeight: 10
-            },
+            legend: C._legend(),
             tooltip: {
                 trigger: 'item',
                 formatter: function (p) {
@@ -107,9 +102,7 @@
                 name: P.t('Frequency'),
                 min: 0
             },
-            series: series,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: series
         };
     }
 
@@ -150,15 +143,10 @@
             instance.setOption(buildOption(lifespan, state.activeType), true);
         });
 
-        if (chart) {
-            chart.on('click', function (params) {
-                var d = params.data;
-                var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
-                if (d && d.o_id && siteBase) {
-                    window.location.href = siteBase + '/item/' + d.o_id;
-                }
-            });
-        }
+        P.navigateOnClick(chart, ctx && ctx.siteBase, function (params) {
+            var d = params.data;
+            return d && d.o_id ? d.o_id : null;
+        });
     }
 
     ns.indexOverview = ns.indexOverview || {};

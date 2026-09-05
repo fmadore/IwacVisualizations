@@ -31,11 +31,12 @@
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels) {
-        console.warn('IWACVis.laicite semantic: missing panels — check load order');
+    if (!ns || !ns.panels || !ns.chartOptions) {
+        console.warn('IWACVis.laicite semantic: missing panels or chartOptions — check load order');
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     var FACETS = ['frame', 'country', 'decade'];
@@ -100,66 +101,28 @@
 
     function option(bundle, facet, frameLabel, frameColors) {
         var pts = bundle.points;
-        var grouped = groupsFor(bundle, facet, frameLabel);
         var frames = bundle.frames || [];
 
-        return {
-            legend: {
-                type: 'scroll',
-                bottom: 0,
-                itemWidth: 12,
-                itemHeight: 10,
-                data: grouped.order.slice()
+        return C.landscape(pts, groupsFor(bundle, facet, frameLabel), {
+            symbolSize: 6,
+            opacity: 0.7,
+            tooltipBits: function (i) {
+                var bits = [];
+                var f = pts.frame ? pts.frame[i] : -1;
+                if (f >= 0 && frames[f]) bits.push(frameLabel(frames[f]));
+                if (pts.year && pts.year[i]) bits.push(String(pts.year[i]));
+                return bits;
             },
-            tooltip: {
-                trigger: 'item',
-                confine: true,
-                formatter: function (p) {
-                    var i = p.data[2];
-                    var bits = [];
-                    var f = pts.frame ? pts.frame[i] : -1;
-                    if (f >= 0 && frames[f]) bits.push(frameLabel(frames[f]));
-                    if (pts.year && pts.year[i]) bits.push(String(pts.year[i]));
-                    return '<strong>' + P.escapeHtml(pts.title[i] || '') + '</strong>'
-                        + (bits.length ? '<br>' + P.escapeHtml(bits.join(' · ')) : '');
-                }
-            },
-            grid: { left: 8, right: 8, top: 8, bottom: 36 },
-            // UMAP coordinates carry no unit — only relative position
-            // means anything — so the axes are hidden rather than
-            // labelled with numbers a reader could take for a measure.
-            xAxis: { type: 'value', scale: true, show: false },
-            yAxis: { type: 'value', scale: true, show: false },
-            dataZoom: [
-                { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
-                { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
-            ],
-            series: grouped.order.map(function (name) {
-                var series = {
-                    name: name,
-                    type: 'scatter',
-                    symbolSize: 6,
-                    itemStyle: { opacity: 0.7 },
-                    emphasis: { itemStyle: { opacity: 1 } },
-                    // [x, y, point-index] — the index drives tooltip + click.
-                    data: grouped.groups[name].map(function (i) {
-                        return [pts.x[i], pts.y[i], i];
-                    })
-                };
-                // On the frame facet, reuse the block's own frame palette
-                // so a cluster here and a band in the arenas view are the
-                // same colour rather than two unrelated encodings of the
-                // same category.
-                if (facet === 'frame' && frameColors) {
+            // On the frame facet, reuse the block's own frame palette so a
+            // cluster here and a band in the arenas view are the same
+            // colour rather than two unrelated encodings of one category.
+            seriesColor: facet === 'frame' && frameColors
+                ? function (name) {
                     var key = frameKeyFor(frames, frameLabel, name);
-                    if (key && frameColors[key]) {
-                        series.itemStyle.color = frameColors[key];
-                    }
+                    return key && frameColors[key] ? frameColors[key] : null;
                 }
-                return series;
-            }),
-            animation: false
-        };
+                : null
+        });
     }
 
     /** Reverse the display label back to its frame key, for the palette. */
@@ -251,16 +214,10 @@
                     instance.setOption(
                         option(bundle, active, frameLabel, cfg.frameColors), true);
                 });
-                if (chart && cfg.siteBase) {
-                    chart.on('click', function (params) {
-                        var i = params.data && params.data[2];
-                        if (i == null) return;
-                        var oId = bundle.points.o_id[i];
-                        if (oId != null) {
-                            window.location.href = cfg.siteBase + '/item/' + oId;
-                        }
-                    });
-                }
+                P.navigateOnClick(chart, cfg.siteBase, function (params) {
+                    var i = params.data && params.data[2];
+                    return i == null ? null : bundle.points.o_id[i];
+                });
             }
         };
     };

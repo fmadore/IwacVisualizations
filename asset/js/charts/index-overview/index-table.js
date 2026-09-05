@@ -51,7 +51,7 @@
         var state = { query: '', type: ALL_KEY };
 
         // Controls row — search input + type facet
-        var controls = P.el('div', 'iwac-vis-index-table-controls');
+        var controls = P.el('div', 'iwac-vis-toolbar iwac-vis-index-table-controls');
 
         var searchInput = P.el('input', 'iwac-vis-control iwac-vis-index-table-search');
         searchInput.type = 'search';

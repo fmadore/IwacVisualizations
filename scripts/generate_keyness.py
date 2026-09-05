@@ -187,7 +187,13 @@ DEFAULT_MAX_SUBJECTS = 40
 
 
 def _first_country(value: Any) -> str:
-    """Canonical first country of a possibly pipe-separated cell, or ''."""
+    """Canonical first KNOWN country of a possibly pipe-separated cell, or ''.
+
+    Not the same rule as the dashboard generators' ``_first_country``,
+    which returns '' when the first segment is a placeholder: here an item
+    joins the corpus of the first real country named, there it is filed
+    under none. Both are deliberate; do not merge them.
+    """
     for raw in parse_pipe_separated(value):
         raw = raw.strip()
         if raw and not is_unknown(raw):

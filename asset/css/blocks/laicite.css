@@ -92,13 +92,6 @@
     color: var(--ink-subtle, #5a5e63);
 }
 
-/*  View toggle — the shared tab aesthetic.  */
-.iwac-vis-laicite-views {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1, 0.25rem);
-}
-
 .iwac-vis-laicite-view-btn {
     padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
     min-height: var(--size-control-md, 2.5rem);
@@ -1260,12 +1253,6 @@ a.iwac-vis-laicite-actor-name:focus-visible {
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider, 0.08em);
     color: var(--muted, #66696e);
-}
-
-.iwac-vis-laicite-breakdown-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1, 0.25rem);
 }
 
 .iwac-vis-laicite-works-count {

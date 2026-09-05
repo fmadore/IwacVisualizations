@@ -98,9 +98,7 @@
                             : String(p.value);
                     }
                 }
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     }
 

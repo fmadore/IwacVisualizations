@@ -19,3 +19,5 @@ require('./lifecycle.test.js');
 require('./store.test.js');
 require('./controls.test.js');
 require('./chart-rows.test.js');
+require('./landscape.test.js');
+require('./theme-animation.test.js');

@@ -120,15 +120,10 @@
             chart.setOption(optionFor(list), true);
         }
 
-        if (chart) {
-            chart.on('click', function (params) {
-                var entry = params.data && params.data.entry;
-                var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
-                if (entry && entry.o_id && siteBase) {
-                    window.location.href = siteBase + '/item/' + entry.o_id;
-                }
-            });
-        }
+        P.navigateOnClick(chart, ctx && ctx.siteBase, function (params) {
+            var entry = params.data && params.data.entry;
+            return entry && entry.o_id ? entry.o_id : null;
+        });
     }
 
     ns.indexOverview = ns.indexOverview || {};

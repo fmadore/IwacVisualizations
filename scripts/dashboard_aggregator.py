@@ -62,12 +62,14 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 
 import pandas as pd
 
+from iwac_stats import build_timeline_series
 from iwac_utils import (
     CENTRALITE_ORDER,
     DATASET_ID,
     HIJRI_COLUMNS,
     POLARITE_ORDER,
     SENTIMENT_MODELS,
+    build_entity_index,
     clean_str,
     extract_month_num,
     extract_year,
@@ -75,7 +77,6 @@ from iwac_utils import (
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
-    parse_coordinates,
     parse_pipe_separated,
     present_sentiment_models,
     read_hijri_month,
@@ -346,68 +347,21 @@ class DashboardAggregator:
         """Normalized-name → index row, o_id → index row, Lieux coords.
 
         Built once so per-target compute loops can do O(1) lookups
-        instead of walking ``self.index_df`` again on every call. Also
-        populates ``self.targets`` via the ``_is_target`` hook.
+        instead of walking ``self.index_df`` again on every call
+        (``iwac_utils.build_entity_index``, the row kept on each entry for
+        the subclass header builders). Also populates ``self.targets``
+        via the ``_is_target`` hook, in the same pass.
         """
         df = self.index_df
-
-        id_col = find_column(df, ["o:id", "id"])
-        title_col = find_column(df, ["Titre", "dcterms:title"])
-        type_col = find_column(df, ["Type"])
-        if not (id_col and title_col and type_col):
-            raise RuntimeError(
-                f"index subset missing required columns: id={id_col}, title={title_col}, type={type_col}"
-            )
-        alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
-        coord_col = find_column(df, ["Coordonnées", "coordinates"])
-
         self._cache_header_columns(df)
 
-        for _, row in df.iterrows():
-            o_id = row.get(id_col)
-            try:
-                o_id = int(o_id)
-            except (TypeError, ValueError):
-                continue
+        def register(info: Dict[str, Any]) -> None:
+            if self._is_target(info["type"]):
+                self.targets[info["o_id"]] = info
 
-            entity_type = str(row.get(type_col) or "").strip()
-            if not entity_type or entity_type == "Notices d'autorité":
-                continue
-
-            title = str(row.get(title_col) or "").strip()
-            if not title:
-                continue
-
-            info = {
-                "o_id": o_id,
-                "title": title,
-                "type": entity_type,
-                "row": row,
-            }
-            key = normalize_location_name(title)
-            if key:
-                self.entity_lookup.setdefault(key, info)
-
-            if alt_col:
-                for alt in parse_pipe_separated(row.get(alt_col)):
-                    alt_key = normalize_location_name(alt)
-                    if alt_key and alt_key not in self.entity_lookup:
-                        self.entity_lookup[alt_key] = info
-
-            self.id_to_entity[o_id] = info
-
-            if entity_type == "Lieux" and coord_col:
-                coords = parse_coordinates(row.get(coord_col))
-                if coords is not None:
-                    # Note: index.countries is "countries this entity has
-                    # been MENTIONED in", not "country this place is
-                    # located in", so we deliberately do not record a
-                    # country for the place. The frontend popup just
-                    # shows the place name + count.
-                    self.lieux_rows[o_id] = (coords[0], coords[1])
-
-            if self._is_target(entity_type):
-                self.targets[o_id] = info
+        self.entity_lookup, self.id_to_entity, self.lieux_rows = build_entity_index(
+            df, keep_row=True, on_entity=register
+        )
 
         self.n_targets = len(self.targets)
         logger.info(
@@ -536,6 +490,14 @@ class DashboardAggregator:
 
     @staticmethod
     def _first_country(value: Any) -> str:
+        """The FIRST country of a cell, or '' when that first one is unknown.
+
+        Deliberately not "the first known country": an item whose first
+        segment is a placeholder has no country here, whereas
+        generate_keyness.py's ``_first_country`` skips to the first known
+        segment. The two answer different questions (where is the item
+        filed / which corpus does it join), so keep them apart.
+        """
         countries = normalize_country(value, return_list=True)
         if isinstance(countries, list) and countries:
             first = countries[0].strip()
@@ -601,32 +563,15 @@ class DashboardAggregator:
         """Year × country stacked series, mirrors C.timeline shape."""
         by_role: Dict[str, Any] = {}
         for role, item_keys in self._role_slices(target_id):
-            year_country: Counter = Counter()
-            countries: Set[str] = set()
-            years_seen: Set[int] = set()
+            pairs: List[Tuple[int, str]] = []
             for key in item_keys:
                 meta = self.items_meta.get(key, {})
                 y = extract_year(meta.get("pub_date"))
                 c = meta.get("country") or ""
                 if y is None or not c:
                     continue
-                year_country[(y, c)] += 1
-                countries.add(c)
-                years_seen.add(y)
-            if not years_seen:
-                by_role[role] = {"years": [], "countries": [], "series": {}}
-                continue
-            years = sorted(years_seen)
-            countries_sorted = sorted(countries)
-            series = {
-                c: [year_country.get((y, c), 0) for y in years]
-                for c in countries_sorted
-            }
-            by_role[role] = {
-                "years": years,
-                "countries": countries_sorted,
-                "series": series,
-            }
+                pairs.append((y, c))
+            by_role[role] = build_timeline_series(pairs, order="alpha")
         return {"by_role": by_role}
 
     def compute_newspapers(self, target_id: int, top_n: int = 15) -> Dict[str, Any]:

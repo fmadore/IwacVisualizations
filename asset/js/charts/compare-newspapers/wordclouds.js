@@ -28,7 +28,7 @@
             var data = pair[1];
             var col = P.el('div', 'iwac-vis-compare-wordcloud');
             col.dataset.side = side;
-            col.appendChild(P.el('div', 'iwac-vis-compare-wordcloud__label', data.name));
+            col.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-wordcloud__label', data.name));
             var host = P.el('div', 'iwac-vis-compare-wordcloud__chart');
             col.appendChild(host);
             wrap.appendChild(col);

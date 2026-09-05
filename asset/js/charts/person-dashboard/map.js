@@ -68,61 +68,18 @@
 
         var mapInstance = null;
 
-        function handleClick(e) {
-            if (!mapInstance) return;
-            if (!mapInstance.getLayer('person-location-circles')) return;
-            var features = mapInstance.queryRenderedFeatures(e.point, {
-                layers: ['person-location-circles']
-            });
-            if (!features.length) return;
-            var f = features[0];
-            var idx = Number(f.properties.idx);
-            var loc = currentLocations[idx];
-            if (!loc) return;
-
-            var popupNode = P.buildMapPopup({
+        function popupFor(f) {
+            var loc = currentLocations[Number(f.properties.idx)];
+            if (!loc) return null;
+            return {
                 title: loc.name,
-                titleHref: loc.o_id && siteBase ? siteBase + '/item/' + loc.o_id : null,
+                titleHref: siteBase ? P.itemUrl(siteBase, loc.o_id) : null,
                 subtitleLines: [
                     P.formatNumber(Number(loc.count || 0)) + ' ' + P.t('Mentions').toLowerCase()
                 ],
                 articles: loc.articles || [],
                 siteBase: siteBase
-            });
-
-            // Pan so the clicked point sits in the upper half of the
-            // viewport, giving the popup body room to expand downward
-            // without getting clipped by the map container. Mirrors
-            // the common MapLibre pattern — the default auto-anchor
-            // already flips top/bottom, but without panning, dense
-            // popups at the top edge still get their bottom cut off.
-            var coords = f.geometry.coordinates.slice();
-            try {
-                mapInstance.easeTo({
-                    center: coords,
-                    offset: [0, 80],
-                    duration: 300
-                });
-            } catch (e) { /* map may not be ready yet */ }
-
-            P.createIwacPopup({ closeButton: true, closeOnClick: true, maxWidth: '340px' })
-                .setLngLat(coords)
-                .setDOMContent(popupNode)
-                .addTo(mapInstance);
-        }
-
-        // Normalize for MapLibre — theme v2.0.0 OKLCH tokens otherwise
-        // serialize as oklab()/oklch() and the style validator rejects.
-        function ml(c) {
-            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
-        }
-        function resolvePrimary() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return ml(resolved || '#e64a19');
-        }
-        function resolveInk() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return ml(resolved || '#2c2f37');
+            };
         }
 
         var createdMap = P.createIwacMap(mapContainer, {
@@ -140,35 +97,12 @@
                     });
                 }
                 if (!m.getLayer('person-location-circles')) {
-                    m.addLayer({
+                    m.addLayer(P.bubbleLayer({
                         id: 'person-location-circles',
-                        type: 'circle',
                         source: 'person-locations',
-                        paint: {
-                            'circle-radius': [
-                                'interpolate', ['linear'], ['get', 'count'],
-                                1, 3,
-                                maxCount, 24
-                            ],
-                            'circle-color': resolvePrimary(),
-                            // Hover lift — see collection-overview/map.js
-                            // for the rationale behind driving this via
-                            // feature-state instead of a JS cursor swap.
-                            'circle-opacity': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                1.0,
-                                0.75
-                            ],
-                            'circle-stroke-width': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                3,
-                                1.5
-                            ],
-                            'circle-stroke-color': resolveInk()
-                        }
-                    });
+                        radius: P.countRadius('count', maxCount, 3, 24),
+                        sortKey: 'count'
+                    }));
                 }
             }
         });
@@ -179,7 +113,15 @@
         // re-attachment and don't stack up on every style.load.
         if (createdMap) {
             mapInstance = createdMap;
-            createdMap.on('click', handleClick);
+            // `ease`: pan so the clicked point sits in the upper half of the
+            // viewport, giving a popup with an article list room to grow
+            // downward without being clipped by the map container.
+            P.attachMapClickPopup(createdMap, {
+                layers: 'person-location-circles',
+                content: popupFor,
+                popup: { closeButton: true, closeOnClick: true, maxWidth: '340px' },
+                ease: { offset: [0, 80], duration: 300 }
+            });
             P.attachFeatureStateHover(createdMap, {
                 layer: 'person-location-circles',
                 source: 'person-locations'

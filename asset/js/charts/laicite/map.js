@@ -5,12 +5,9 @@
  * Bubble size = items under the active filter; colour = the active frame's
  * palette colour, or --primary when no frame is selected.
  *
- * Reuses the shared map stack end to end — P.createIwacMap (theme-aware
- * basemap that swaps on toggle), P.buildCountFeatures, feature-state hover,
- * P.createIwacPopup + P.buildMapPopup — exactly as scary-terms/map.js does.
- * Every colour handed to a MapLibre paint property goes through
- * P.normalizeColorForMapLibre: the theme's OKLCH tokens otherwise serialize
- * as oklab(...) and the whole layer silently fails to load.
+ * The map itself is the shared filtered places map (shared/places-map.js)
+ * — the same one scary-terms/map.js draws; this file supplies the count
+ * under the active filter, the frame palette and the popup lines.
  *
  * What the map does NOT claim: a place appears only when the IWAC index
  * holds coordinates for it, so this is a map of what is catalogued, not of
@@ -85,14 +82,10 @@
         return {
             root: root,
             mount: function () {
-                // MapLibre 6 is an ES module the loader imports in parallel
-                // with the script chain, so it may not be here even on a view
-                // the reader had to click into. `P.deferMaplibre` hands back a
-                // controller immediately, holds the map spinner in `mapEl`, and
-                // replays whatever was called meanwhile.
-                controller = P.deferMaplibre(mapEl, function () {
-                    return createMap(mapEl, bundle, cfg);
-                }, ['resize', 'update']);
+                // The shared map is gated (P.deferMaplibre inside): the
+                // controller is live at once and replays what is called
+                // before MapLibre arrives.
+                controller = createMap(mapEl, bundle, cfg);
                 // The host was display:none until this view activated, so
                 // MapLibre measured a zero-height container.
                 window.setTimeout(function () { controller.resize(); }, 0);
@@ -102,170 +95,45 @@
     };
 
     function createMap(mapEl, bundle, cfg) {
-        var places = bundle.places || [];
         var state = cfg.state;
         var frameColors = cfg.frameColors || {};
-        var siteBase = cfg.siteBase || '';
-
-        function activeColor() {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var raw = (state.mapFrame && frameColors[state.mapFrame])
-                || tokens.primary || '#ce4115';
-            return P.normalizeColorForMapLibre(raw);
-        }
-
-        function buildFeatures() {
-            var items = [];
-            places.forEach(function (place, idx) {
-                var count = placeCount(place, state);
-                if (count <= 0) return;
-                items.push({ lng: place.lng, lat: place.lat, count: count, idx: idx });
-            });
-            return P.buildCountFeatures(items, {
-                countKey: 'count',
-                toProps: function (item) {
-                    return { count: item.count, idx: item.idx };
-                }
-            });
-        }
-
-        function paintFor(max) {
-            var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-            var stroke = P.normalizeColorForMapLibre(tokens.surface || '#ffffff');
-            return {
-                'circle-color': activeColor(),
-                'circle-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.95, 0.7
-                ],
-                'circle-stroke-color': stroke,
-                'circle-stroke-width': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    2, 1
-                ],
-                // sqrt scaling so Abidjan and Ouagadougou do not swallow
-                // the Sahel — the same treatment as every IWAC bubble map.
-                'circle-radius': [
-                    'interpolate', ['linear'], ['sqrt', ['get', 'count']],
-                    0, 3,
-                    Math.sqrt(Math.max(1, max)), 24
-                ]
-            };
-        }
-
-        var map = P.createIwacMap(mapEl, {
-            center: [2.5, 12],
-            zoom: 4,
-            onStyleReady: function (m) {
-                var built = buildFeatures();
-                // Guarded like every other map panel: a style that already
-                // carries the source (a future transformStyle swap, a
-                // double-fired load) gets its data refreshed, not a second
-                // addSource that throws inside the style-ready wrapper.
-                if (m.getSource(SOURCE_ID)) {
-                    m.getSource(SOURCE_ID).setData(built.collection);
-                } else {
-                    m.addSource(SOURCE_ID, {
-                        type: 'geojson',
-                        generateId: true,
-                        data: built.collection
+        return P.createFilteredPlacesMap(mapEl, {
+            places: bundle.places || [],
+            sourceId: SOURCE_ID,
+            layerId: LAYER_ID,
+            count: function (place) { return placeCount(place, state); },
+            // The active frame's palette colour, or --primary for no frame.
+            color: function () { return state.mapFrame && frameColors[state.mapFrame]; },
+            siteBase: cfg.siteBase || '',
+            popupLines: function (place, count) {
+                var lines = [P.t('laicite.map_items', { count: P.formatNumber(count) })];
+                var topFrames = Object.keys(place.by_frame || {})
+                    .sort(function (a, b) {
+                        return (place.by_frame[b] || 0) - (place.by_frame[a] || 0);
+                    })
+                    .slice(0, 3)
+                    .map(function (frame) {
+                        return L.frameLabel(cfg.metadata || {}, frame);
                     });
+                if (topFrames.length) {
+                    lines.push(P.t('laicite.map_top_frames') + ': ' + topFrames.join(', '));
                 }
-                if (!m.getLayer(LAYER_ID)) {
-                    m.addLayer({
-                        id: LAYER_ID,
-                        type: 'circle',
-                        source: SOURCE_ID,
-                        paint: paintFor(built.max)
-                    });
+                if (place.first_year && place.last_year) {
+                    lines.push(place.first_year + ' – ' + place.last_year);
                 }
+                return lines;
             }
         });
-        if (!map) return null;
-
-        // Wired ONCE per instance, outside onStyleReady, so handlers do not
-        // stack up every time the theme toggle reloads the style.
-        P.attachFeatureStateHover(map, { layer: LAYER_ID, source: SOURCE_ID });
-
-        map.on('click', LAYER_ID, function (e) {
-            var f = e.features && e.features[0];
-            if (!f) return;
-            var place = places[f.properties.idx];
-            if (!place) return;
-
-            var lines = [P.t('laicite.map_items', {
-                count: P.formatNumber(placeCount(place, state))
-            })];
-            var topFrames = Object.keys(place.by_frame || {})
-                .sort(function (a, b) {
-                    return (place.by_frame[b] || 0) - (place.by_frame[a] || 0);
-                })
-                .slice(0, 3)
-                .map(function (frame) {
-                    return L.frameLabel(cfg.metadata || {}, frame);
-                });
-            if (topFrames.length) {
-                lines.push(P.t('laicite.map_top_frames') + ': ' + topFrames.join(', '));
-            }
-            if (place.first_year && place.last_year) {
-                lines.push(place.first_year + ' – ' + place.last_year);
-            }
-            P.createIwacPopup()
-                .setLngLat([place.lng, place.lat])
-                .setDOMContent(P.buildMapPopup({
-                    title: place.name,
-                    titleHref: siteBase ? siteBase + '/item/' + place.o_id : null,
-                    subtitleLines: lines
-                }))
-                .addTo(map);
-        });
-
-        return {
-            map: map,
-            resize: function () {
-                try { map.resize(); } catch (e) { /* container mid-toggle */ }
-            },
-            update: function () {
-                var src = map.getSource(SOURCE_ID);
-                if (!src) return;   // style reload in flight — onStyleReady rebuilds
-                var built = buildFeatures();
-                src.setData(built.collection);
-                var paint = paintFor(built.max);
-                Object.keys(paint).forEach(function (prop) {
-                    try { map.setPaintProperty(LAYER_ID, prop, paint[prop]); } catch (e) {}
-                });
-            }
-        };
     }
 
     /** `<details>` fallback — the data path for screen readers and no-WebGL. */
     function buildPlacesDetails(bundle, state) {
-        var ranked = (bundle.places || []).map(function (p) {
-            return { place: p, count: placeCount(p, state) };
-        }).filter(function (r) { return r.count > 0; });
-        if (!ranked.length) return null;
-        ranked.sort(function (a, b) { return b.count - a.count; });
-
-        var details = P.el('details', 'iwac-vis-timeline-details');
-        details.appendChild(P.el('summary', null, P.t('laicite.map_places_list')));
-        var table = P.el('table', 'iwac-vis-table');
-        var thead = P.el('thead');
-        var headRow = P.el('tr');
-        headRow.appendChild(P.el('th', null, P.t('laicite.map_place')));
-        headRow.appendChild(P.el('th', null, P.t('laicite.items')));
-        thead.appendChild(headRow);
-        table.appendChild(thead);
-        var tbody = P.el('tbody');
-        ranked.slice(0, 50).forEach(function (r) {
-            var tr = P.el('tr');
-            tr.appendChild(P.el('td', null, r.place.name));
-            tr.appendChild(P.el('td', null, P.formatNumber(r.count)));
-            tbody.appendChild(tr);
+        return P.buildRankedPlacesDetails({
+            places: bundle.places || [],
+            count: function (p) { return placeCount(p, state); },
+            summary: P.t('laicite.map_places_list'),
+            placeLabel: P.t('laicite.map_place'),
+            countLabel: P.t('laicite.items')
         });
-        table.appendChild(tbody);
-        details.appendChild(table);
-        return details;
     }
 })();

@@ -45,6 +45,22 @@ Every registered block is wired end-to-end with live data — twenty-one page bl
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.63.0 — the duplication clusters: one landscape, one heatmap, one bubble map
+
+The fifth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: E6–E10, M10, M12, C1, P3, P5–P7). Nothing here is a feature; every change replaces a copy with the thing it copied, and every one was proved against the committed version — an old-versus-new harness loads each module from `HEAD` and from the working tree under identical stubs and compares every option a chart is painted with, every click target, every MapLibre source, layer, paint update, fit and popup, and every promoted stylesheet selector's resolved declarations. What differs is listed in REFACTORING.md, because it is intended.
+
+**One landscape, one heatmap, one entities panel.** `C.landscape` is the UMAP scatter the semantic landscape, the laïcité semantic map and the bibliography's landscape each carried (point size, opacity, tooltip lines, a per-bucket colour and an overlay were the only differences, and are the options). The sentiment atlas's two heatmaps are `C.heatmapMatrix` calls, and the cell labels every matrix shows are locale-formatted now. The top-entities panel two overviews drew is `P.buildEntitiesPanel`; its tabs are the shared segmented control and its page changes animate. `P.itemUrl` and `P.navigateOnClick` replace eight click-to-navigate handlers; a chart with no site to address no longer navigates anywhere.
+
+**The bubble maps share a vocabulary.** `maplibre.js` gained `P.mapColor`, `P.bubbleLayer`, `P.countRadius`, `P.attachMapClickPopup`, `P.fitToPoints` and their companions; six panels that each carried a colour-resolver trio, a hover-lift paint block, a click handler and a bounding-box reduce use them instead. Their radii are on a square root now — area, not diameter, grows with the count, so a 10:1 ratio reads as 10:1 on every map rather than as 3× on one and 100× on the next — and big bubbles are drawn first so a small one beside Abidjan's stays on top and can be clicked. The laïcité and scary-terms maps, two ~230-line near-clones, are one `P.createFilteredPlacesMap` with a ranked `<details>` list beside it; each block keeps only its count rule, its palette and its popup lines. Every string-built popup is a `P.buildMapPopup` node.
+
+**Six option literals become one theme line.** The 600 ms ease-out entrance every builder spelled out is the theme's; `C._legend`, `C._percentAxisLabel` (the three laïcité axes now carry the space French typography puts before the sign) and `C._dataZoom` replace the rest. A test fails on any builder that restates the theme default.
+
+**Seven stylesheet primitives.** `.iwac-vis-layout--sidebar`, `.iwac-vis-toolbar`, `.iwac-vis-chip-row`, `.iwac-vis-aside__label`, `.iwac-vis-eyebrow`, `.iwac-vis-list__name` and `.iwac-vis-places-details` were each written, byte for byte, in three to six block sheets; they live in `iwac-core.css` and the block classes stay on the elements as hooks for what is genuinely theirs. The scary-terms view toggle is the core tab family, and a pressed tab keeps its tint under the pointer everywhere. 250 lines of block CSS gone.
+
+**The Python generators share their scalars.** `iwac_utils.build_entity_index`, `iwac_stats.build_timeline_series`, `clean_known_str`, `clean_values`, `top_n_pipe` and the one `coerce_embedding` replace fourteen private copies across seven generators; the old and new functions agree on synthetic frames, and the one deliberate divergence — two `_first_country` rules that answer different questions — is documented on both rather than merged.
+
+**Tests.** `landscape.test.js`, `theme-animation.test.js`, the item-URL and click-through contracts in `panels.test.js`, seven Python contracts for the hoisted helpers. 143 JS tests, 60 Python tests, 31 Playwright contracts, 128 PHP checks.
+
 ### v1.62.0 — the load order becomes data: bundles, sourcemaps and an ESLint gate
 
 The fourth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: B1 step 1, B2's ESLint, B8). The two steps that do not wait on the owner's self-hosting decision (ROADMAP 5.4).
@@ -1005,9 +1021,12 @@ IwacVisualizations/
 │   │       │                               #   dashboard-layout (slot/renderer registry,
 │   │       │                               #     shouldRender + isEmpty predicates),
 │   │       │                               #   pagination, table, facet-buttons,
-│   │       │                               #   chart-options, maplibre, map-popup,
+│   │       │                               #   entities-panel (top entities per type),
+│   │       │                               #   chart-options, maplibre (map + bubble
+│   │       │                               #     vocabulary), map-popup,
 │   │       │                               #   choropleth (toggle button + 6-country
 │   │       │                               #     fill, v0.18.0),
+│   │       │                               #   places-map (filtered bubble map + list),
 │   │       │                               #   panel-toolbar (composited PNG export),
 │   │       │                               #   responsive
 │   │       ├── shared/renderers/           # Opt-in chart renderers, self-registering into
@@ -1146,7 +1165,7 @@ The shared partial hands the on-view loader a fixed sequence of bundles (built b
 
 1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js` and the four d3-force modules
 2. **`shared-core`** — every block: `iwac-i18n` → `iwac-theme` → `dashboard-core` → the `panels` family (core, controls, store, map, boot) → `chart-rows` → `panel-toolbar` → `embed` → `responsive` → `hijri`
-3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (pagination, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the IWAC map helpers), `shared-d3` (the canvas force graph)
+3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (pagination, the entities panel, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the IWAC map helpers, the popup, the choropleth, the filtered places map), `shared-d3` (the canvas force graph)
 4. **Panel sets the block shares** — `panels/<name>` (the person and entity dashboards draw the same eleven panels)
 5. **The block bundle** — `blocks/<name>`: its panel modules (self-registering IIFEs under `charts/<block>/`) in order, then the orchestrator `charts/<block>.js`, which fetches JSON, builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
 
@@ -1425,7 +1444,7 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.62.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.63.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

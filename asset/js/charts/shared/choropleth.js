@@ -531,11 +531,12 @@
                 if (!e.features || !e.features[0]) return;
                 var p = e.features[0].properties || {};
                 var count = Number(p._iwac_count || 0);
-                var html = '<strong>' + P.escapeHtml(p.name || '') + '</strong><br>' +
-                    P.formatNumber(count) + ' ' + P.t(labelKey);
                 P.createIwacPopup({ closeButton: true, closeOnClick: true })
                     .setLngLat(e.lngLat)
-                    .setHTML(html)
+                    .setDOMContent(P.buildMapPopup({
+                        title: p.name || '',
+                        subtitleLines: [P.formatNumber(count) + ' ' + P.t(labelKey)]
+                    }))
                     .addTo(map);
             });
 
@@ -554,8 +555,10 @@
                     var hc = Number(hp._iwac_count || 0);
                     hoverPopup
                         .setLngLat(e.lngLat)
-                        .setHTML('<strong>' + P.escapeHtml(hp.name || '') + '</strong><br>' +
-                            P.formatNumber(hc) + ' ' + P.t(labelKey))
+                        .setDOMContent(P.buildMapPopup({
+                            title: hp.name || '',
+                            subtitleLines: [P.formatNumber(hc) + ' ' + P.t(labelKey)]
+                        }))
                         .addTo(map);
                 });
                 map.on('mouseleave', FILL, function () {

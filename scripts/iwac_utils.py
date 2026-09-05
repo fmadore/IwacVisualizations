@@ -76,6 +76,10 @@ automatically — set as a repo secret in CI, or locally via
 SUBSETS = ["articles", "audiovisual", "documents", "images", "publications", "references", "index"]
 """Available subsets in the IWAC dataset."""
 
+AUTHORITY_PLACEHOLDER_TYPE = "Notices d'autorité"
+"""The index subset flags bibliographic authority placeholders with this
+``Type``; entity lookups skip them so they never surface as entities."""
+
 
 # =============================================================================
 # Logging Configuration
@@ -736,6 +740,129 @@ def is_unknown(value: Any) -> bool:
     return normalized == "" or normalized in {
         "unknown", "inconnu", "n/a", "na", "none", "null", "—"
     }
+
+
+def clean_known_str(value: Any) -> str:
+    """``clean_str`` that also blanks the dataset's unknown placeholders.
+
+    ``clean_str`` keeps "Unknown" as a string, which is right for a title
+    and wrong for a label that will be counted; this is the counting
+    variant (the references generator carried it as ``_clean_text``).
+    """
+    text = clean_str(value)
+    return "" if is_unknown(text) else text
+
+
+def clean_values(values: Any) -> List[str]:
+    """Strip a list of labels and drop the empty and unknown ones.
+
+    The usual companion of ``parse_pipe_separated``: the pipe splitter
+    keeps every non-empty segment, this drops the ``Unknown`` / ``n/a``
+    placeholders a multi-value cell can carry among real values.
+    """
+    return [v for v in (str(s).strip() for s in (values or [])) if v and not is_unknown(v)]
+
+
+def top_n_pipe(rows: Any, field: str, n: Optional[int] = None) -> List[Dict[str, Any]]:
+    """Histogram of a pipe-separated column as ``[{name, count}, …]``.
+
+    Every value of every row counts once, unknowns dropped, most common
+    first; ``n=None`` keeps every value. Two overview generators carried
+    this as ``_top_n_pipe``.
+    """
+    counter: Counter = Counter()
+    for value in rows.get(field, []):
+        for v in clean_values(parse_pipe_separated(value)):
+            counter[v] += 1
+    return [
+        {"name": name, "count": int(count)}
+        for name, count in counter.most_common(n)
+    ]
+
+
+def build_entity_index(
+    df: Any,
+    *,
+    keep_row: bool = False,
+    on_entity: Optional[Any] = None,
+) -> Tuple[Dict[str, Dict[str, Any]], Dict[int, Dict[str, Any]], Dict[int, Tuple[float, float]]]:
+    """The index subset as three lookups: name → entity, id → entity, Lieux coordinates.
+
+    The shared first step of every per-item dashboard generator (the
+    person / entity aggregator and the article generator each carried a
+    copy). A name key is the NFC-folded title (``normalize_location_name``)
+    and every ``Titre alternatif`` alias, first writer wins; authority
+    placeholders (``AUTHORITY_PLACEHOLDER_TYPE``) and rows without an id
+    or a title are skipped; a ``Lieux`` row with parseable coordinates is
+    recorded for the maps.
+
+    The index's ``countries`` column is "countries this entity has been
+    MENTIONED in", not "country this place is located in", so no country
+    is recorded for a place.
+
+    ``keep_row`` keeps the DataFrame row on the info dict (the aggregator's
+    header builders read more columns later); ``on_entity(info)`` is called
+    for every entity kept, so a caller can pick its targets in the same
+    pass. Raises ``RuntimeError`` when the id / title / type columns are
+    missing.
+
+    Returns ``(entity_lookup, id_to_entity, lieux)`` — the last keyed by
+    o_id with ``(lat, lng)`` values.
+    """
+    id_col = find_column(df, ["o:id", "id"])
+    title_col = find_column(df, ["Titre", "dcterms:title"])
+    type_col = find_column(df, ["Type"])
+    if not (id_col and title_col and type_col):
+        raise RuntimeError(
+            f"index subset missing required columns: id={id_col}, title={title_col}, type={type_col}"
+        )
+    alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
+    coord_col = find_column(df, ["Coordonnées", "coordinates"])
+
+    entity_lookup: Dict[str, Dict[str, Any]] = {}
+    id_to_entity: Dict[int, Dict[str, Any]] = {}
+    lieux: Dict[int, Tuple[float, float]] = {}
+
+    for _, row in df.iterrows():
+        o_id = row.get(id_col)
+        try:
+            o_id = int(o_id)
+        except (TypeError, ValueError):
+            continue
+
+        entity_type = str(row.get(type_col) or "").strip()
+        if not entity_type or entity_type == AUTHORITY_PLACEHOLDER_TYPE:
+            continue
+
+        title = str(row.get(title_col) or "").strip()
+        if not title:
+            continue
+
+        info: Dict[str, Any] = {"o_id": o_id, "title": title, "type": entity_type}
+        if keep_row:
+            info["row"] = row
+
+        key = normalize_location_name(title)
+        if key:
+            entity_lookup.setdefault(key, info)
+
+        if alt_col:
+            for alt in parse_pipe_separated(row.get(alt_col)):
+                alt_key = normalize_location_name(alt)
+                if alt_key and alt_key not in entity_lookup:
+                    entity_lookup[alt_key] = info
+
+        id_to_entity[o_id] = info
+
+        if entity_type == "Lieux" and coord_col:
+            coords = parse_coordinates(row.get(coord_col))
+            if coords is not None:
+                lieux[o_id] = (coords[0], coords[1])
+
+        if on_entity is not None:
+            on_entity(info)
+
+    return entity_lookup, id_to_entity, lieux
 
 
 def parse_multi_value(value: Any, separators: str = "|;,/") -> List[str]:

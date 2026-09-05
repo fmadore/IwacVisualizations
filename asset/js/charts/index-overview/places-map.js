@@ -139,23 +139,6 @@
         function authorityFeatures() { return authResult.collection; }
         function mentionFeatures() { return mentionResult.collection; }
 
-        // Resolve theme tokens to legacy rgb() for MapLibre. After
-        // theme v2.0.0, getComputedStyle returns oklab()/oklch() for
-        // OKLCH-based tokens, which MapLibre's style validator rejects.
-        // P.normalizeColorForMapLibre canvas-rasterizes them. ECharts
-        // is intentionally NOT routed through this path.
-        function ml(c) {
-            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
-        }
-        function primaryColor() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return ml(resolved || '#e64a19');
-        }
-        function inkColor() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return ml(resolved || '#2c2f37');
-        }
-
         var mapInstance = null;
 
         function onStyleReady(map) {
@@ -178,105 +161,52 @@
                 });
             }
 
-            var primary = primaryColor();
-            var stroke = inkColor();
+            var primary = P.mapColor('--primary');
 
-            // Mentions layer drawn first so authority pins sit on top.
-            // Both layers ship feature-state-driven hover highlights —
-            // see collection-overview/map.js for the rationale.
+            // Mentions layer drawn first so authority pins sit on top; the
+            // mentions read as a translucent halo, primary-stroked, under
+            // the solid, ink-stroked authority pins (shared bubble
+            // vocabulary: maplibre.js).
             if (!map.getLayer('place-mentions-bubbles')) {
-                map.addLayer({
+                map.addLayer(P.bubbleLayer({
                     id: 'place-mentions-bubbles',
-                    type: 'circle',
                     source: 'places-mentions',
-                    paint: {
-                        'circle-radius': [
-                            'interpolate', ['linear'], ['get', 'count'],
-                            1, 3,
-                            maxMentions, 24
-                        ],
-                        'circle-color': primary,
-                        'circle-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            0.6,
-                            0.35
-                        ],
-                        'circle-stroke-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            2.5,
-                            1
-                        ],
-                        'circle-stroke-color': primary
-                    }
-                });
+                    radius: P.countRadius('count', maxMentions, 3, 24),
+                    sortKey: 'count',
+                    color: primary,
+                    stroke: primary,
+                    opacity: [0.35, 0.6],
+                    strokeWidth: [1, 2.5]
+                }));
             }
 
             if (!map.getLayer('place-authority-pins')) {
-                map.addLayer({
+                map.addLayer(P.bubbleLayer({
                     id: 'place-authority-pins',
-                    type: 'circle',
                     source: 'places-authority',
-                    paint: {
-                        'circle-radius': [
-                            'interpolate', ['linear'], ['get', 'frequency'],
-                            0, 3,
-                            maxFreq, 18
-                        ],
-                        'circle-color': primary,
-                        'circle-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            1.0,
-                            0.9
-                        ],
-                        'circle-stroke-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            3,
-                            1.5
-                        ],
-                        'circle-stroke-color': stroke
-                    }
-                });
+                    radius: P.countRadius('frequency', maxFreq, 3, 18),
+                    sortKey: 'frequency',
+                    color: primary,
+                    opacity: [0.9, 1]
+                }));
             }
 
             applyVisibility();
         }
 
-        // Click + hover handlers attached ONCE per map (outside
-        // onStyleReady). Two reasons:
-        //   1. Separate per-layer handlers fire twice when the two
-        //      layers overlap at the same coordinates (which they
-        //      usually do — mention bubbles sit on top of the
-        //      authority pin for the same place). A single handler
-        //      queryRenderedFeatures-ing both layers yields a single
-        //      popup regardless of how many layers reported a hit.
-        //   2. Attaching inside onStyleReady would stack additional
-        //      handlers on every theme swap since MapLibre's filtered
-        //      event handlers persist across setStyle calls.
-        function handleMapClick(e) {
-            if (!mapInstance) return;
-            var layerIds = [];
-            if (mapInstance.getLayer('place-authority-pins'))   layerIds.push('place-authority-pins');
-            if (mapInstance.getLayer('place-mentions-bubbles')) layerIds.push('place-mentions-bubbles');
-            if (layerIds.length === 0) return;
-
-            var features = mapInstance.queryRenderedFeatures(e.point, { layers: layerIds });
-            if (!features.length) return;
-
-            // Prefer the authority pin (has o_id → linkable) when both
-            // layers reported a hit at the click point.
-            var feat = null;
+        // Prefer the authority pin (has o_id → linkable) when both layers
+        // reported a hit at the click point — mention bubbles usually sit
+        // on top of the authority pin for the same place.
+        function pickAuthorityFirst(features) {
             for (var i = 0; i < features.length; i++) {
                 if (features[i].layer && features[i].layer.id === 'place-authority-pins') {
-                    feat = features[i];
-                    break;
+                    return features[i];
                 }
             }
-            if (!feat) feat = features[0];
+            return features[0];
+        }
 
+        function popupFor(feat) {
             var props = feat.properties || {};
             var isAuth = feat.layer && feat.layer.id === 'place-authority-pins';
             var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
@@ -293,17 +223,12 @@
                 subtitle.push(P.t('mentions_count', { count: P.formatNumber(Number(props.count)) }));
             }
 
-            var popupNode = P.buildMapPopup({
+            return {
                 title: props.name || '',
-                titleHref: isAuth && props.o_id && siteBase ? siteBase + '/item/' + props.o_id : null,
+                titleHref: isAuth && props.o_id && siteBase ? P.itemUrl(siteBase, props.o_id) : null,
                 subtitleLines: subtitle,
                 siteBase: siteBase
-            });
-
-            P.createIwacPopup({ closeButton: true, closeOnClick: true })
-                .setLngLat(feat.geometry.coordinates.slice())
-                .setDOMContent(popupNode)
-                .addTo(mapInstance);
+            };
         }
 
         function applyVisibility() {
@@ -328,14 +253,18 @@
             onStyleReady: onStyleReady
         });
 
-        // Click + hover handlers attached ONCE per map instance, not
-        // per style.load — see the comment above handleMapClick for
-        // why re-attaching inside onStyleReady would double-fire
-        // popups after a theme swap. Hover is driven by MapLibre
+        // Click + hover handlers attached ONCE per map instance, not per
+        // style.load (P.attachMapClickPopup says why). One handler over
+        // both layers yields one popup when they overlap at the click
+        // point, which they usually do. Hover is driven by MapLibre
         // feature-state so the visual lift (opacity + stroke) happens
         // on the GPU without per-frame JS work.
         if (createdMap) {
-            createdMap.on('click', handleMapClick);
+            P.attachMapClickPopup(createdMap, {
+                layers: ['place-authority-pins', 'place-mentions-bubbles'],
+                pick: pickAuthorityFirst,
+                content: popupFor
+            });
             P.attachFeatureStateHover(createdMap, [
                 { layer: 'place-authority-pins',   source: 'places-authority' },
                 { layer: 'place-mentions-bubbles', source: 'places-mentions'  }

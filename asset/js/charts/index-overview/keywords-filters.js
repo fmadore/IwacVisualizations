@@ -133,7 +133,7 @@
 
         // --- Compare-mode picker ---------------------------------------
         var compareWrap = P.el('div', 'iwac-vis-keywords-compare');
-        var compareLabel = P.el('div', 'iwac-vis-keywords-filters__label',
+        var compareLabel = P.el('div', 'iwac-vis-aside__label iwac-vis-keywords-filters__label',
             P.t('select_up_to_n', { count: state.MAX_SELECTED }));
         compareWrap.appendChild(compareLabel);
 
@@ -182,7 +182,7 @@
                     state.toggleKeyword(item.keyword, cb.checked);
                 });
                 row.appendChild(cb);
-                var label = P.el('span', 'iwac-vis-keywords-compare__name', item.keyword);
+                var label = P.el('span', 'iwac-vis-list__name iwac-vis-keywords-compare__name', item.keyword);
                 var count = P.el('span', 'iwac-vis-keywords-compare__count',
                     ' (' + P.formatNumber(item.total) + ')');
                 row.appendChild(label);
@@ -256,7 +256,7 @@
     function labeledGroup(labelText, controlEl) {
         var wrap = P.el('div', 'iwac-vis-keywords-filters__group');
         var labelId = 'iwac-vis-kwf-label-' + (++_uid);
-        var label = P.el('div', 'iwac-vis-keywords-filters__label', labelText);
+        var label = P.el('div', 'iwac-vis-aside__label iwac-vis-keywords-filters__label', labelText);
         label.id = labelId;
         wrap.appendChild(label);
         if (controlEl.classList.contains('iwac-vis-tabs')) {

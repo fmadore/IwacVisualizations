@@ -42,7 +42,7 @@
             if (m.skipIfZero && !vA && !vB) return;
 
             var card = P.el('div', 'iwac-vis-compare-metric');
-            card.appendChild(P.el('div', 'iwac-vis-compare-metric__label', P.t(m.labelKey)));
+            card.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-metric__label', P.t(m.labelKey)));
             var pair = P.el('div', 'iwac-vis-compare-metric__pair');
             var valueCls = 'iwac-vis-compare-metric__value' + (m.numeric ? '' : ' iwac-vis-compare-metric__value--text');
             var a = P.el('div', valueCls,

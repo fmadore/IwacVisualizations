@@ -161,9 +161,7 @@
                 itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: haloLabel(labelInk, halo, opts.valueFormatter),
                 emphasis: haloEmphasis(labelInk, halo)
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         return R && R.withMedia
@@ -224,9 +222,7 @@
                 itemStyle: { borderRadius: barDef.borderRadius.slice() },
                 label: haloLabel(labelInk, halo),
                 emphasis: haloEmphasis(labelInk, halo)
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         return R && R.withMedia
@@ -301,9 +297,7 @@
                 label: haloLabel(labelInk, halo),
                 emphasis: haloEmphasis(labelInk, halo),
                 cursor: 'pointer'
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         return R && R.withMedia
@@ -390,9 +384,7 @@
                 emphasis: { disabled: true },
                 animationDurationUpdate: 800,
                 animationEasingUpdate: 'cubicOut'
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         return R && R.withMedia
@@ -622,9 +614,7 @@
                     axisLabel: { align: 'right', fontSize: 11, margin: countMargin(11) }
                 }
             ],
-            series: series,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: series
         };
 
         return R && R.withMedia

@@ -78,6 +78,39 @@
         ];
     };
 
+    /**
+     * The scrolling legend every categorical chart shows — under the
+     * panel heading, compact swatches. Line charts pass `{ itemWidth: 14,
+     * itemHeight: 3 }` for a stroke-shaped swatch; anything passed is
+     * merged over the defaults.
+     */
+    C._legend = function (overrides) {
+        var legend = { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 };
+        if (overrides) {
+            for (var k in overrides) {
+                if (Object.prototype.hasOwnProperty.call(overrides, k)) legend[k] = overrides[k];
+            }
+        }
+        return legend;
+    };
+
+    /**
+     * A value-axis label in percent: "42 %", with the space French
+     * typography puts before the sign. The module keeps it in English
+     * too, so an axis reads the same on both sites — and so the three
+     * laïcité panels that wrote `'{value}%'` stop dropping it. Extra
+     * axisLabel properties (fontSize, …) are merged in.
+     */
+    C._percentAxisLabel = function (extra) {
+        var label = { formatter: function (v) { return v + ' %'; } };
+        if (extra) {
+            for (var k in extra) {
+                if (Object.prototype.hasOwnProperty.call(extra, k)) label[k] = extra[k];
+            }
+        }
+        return label;
+    };
+
     C._truncate = function (str, maxLen) {
         if (!str || str.length <= maxLen) return str || '';
         var head = Math.floor((maxLen - 1) / 2);

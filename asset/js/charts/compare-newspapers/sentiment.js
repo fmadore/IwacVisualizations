@@ -96,7 +96,7 @@
         function makeSide(side, data, color) {
             var col = P.el('div', 'iwac-vis-compare-sentiment__col');
             col.dataset.side = side;
-            col.appendChild(P.el('div', 'iwac-vis-compare-sentiment__heading', data.name));
+            col.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-sentiment__heading', data.name));
             var host = P.el('div', 'iwac-vis-compare-sentiment__chart');
             col.appendChild(host);
             wrap.appendChild(col);
@@ -135,8 +135,7 @@
                              formatter: function (p) { return P.formatNumber(p.value); } },
                     data: entries.map(function (e) { return e.count; })
                 }],
-                animationDuration: 500,
-                animationEasing: 'cubicOut'
+                animationDuration: 500
             }, true);
         }
 
@@ -145,7 +144,7 @@
         else {
             var placeA = P.el('div', 'iwac-vis-compare-sentiment__col');
             placeA.dataset.side = 'A';
-            placeA.appendChild(P.el('div', 'iwac-vis-compare-sentiment__heading', dataA.name));
+            placeA.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-sentiment__heading', dataA.name));
             placeA.appendChild(P.buildEmptyState('Sentiment only on articles'));
             wrap.appendChild(placeA);
         }
@@ -153,7 +152,7 @@
         else {
             var placeB = P.el('div', 'iwac-vis-compare-sentiment__col');
             placeB.dataset.side = 'B';
-            placeB.appendChild(P.el('div', 'iwac-vis-compare-sentiment__heading', dataB.name));
+            placeB.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-sentiment__heading', dataB.name));
             placeB.appendChild(P.buildEmptyState('Sentiment only on articles'));
             wrap.appendChild(placeB);
         }

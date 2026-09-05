@@ -37,7 +37,7 @@
             var col = P.el('div', 'iwac-vis-compare-wordcloud');
             col.dataset.side = side;
 
-            var header = P.el('div', 'iwac-vis-compare-wordcloud__label',
+            var header = P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-wordcloud__label',
                 data.name + ' \u2014 ' + P.formatNumber((data.newspapers || []).length)
                     + ' ' + P.t('Newspapers'));
             col.appendChild(header);
@@ -93,8 +93,7 @@
                                  formatter: function (p) { return P.formatNumber(p.value); } },
                         data: slice.map(function (e) { return e.count; })
                     }],
-                    animationDuration: 400,
-                    animationEasing: 'cubicOut'
+                    animationDuration: 400
                 }, true);
             }
 
@@ -118,7 +117,7 @@
         function placeholderCol(side, name) {
             var col = P.el('div', 'iwac-vis-compare-wordcloud');
             col.dataset.side = side;
-            col.appendChild(P.el('div', 'iwac-vis-compare-wordcloud__label', name));
+            col.appendChild(P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-wordcloud__label', name));
             col.appendChild(P.buildEmptyState('Single-newspaper corpus \u2014 no breakdown'));
             wrap.appendChild(col);
         }

@@ -28,6 +28,7 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     function pct(n, d) { return d ? (n / d) * 100 : 0; }
@@ -75,7 +76,7 @@
                   nameLocation: 'end', nameGap: 12 },
                 { type: 'value', name: P.t('laicite.bylines_axis_share'),
                   nameLocation: 'end', nameGap: 12, max: 100,
-                  axisLabel: { formatter: '{value}%' },
+                  axisLabel: C._percentAxisLabel(),
                   splitLine: { show: false } }
             ],
             series: [

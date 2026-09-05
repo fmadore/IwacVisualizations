@@ -8,18 +8,6 @@
 /*  Breakpoints (match iwac-core.css): sm 640 / md 768 / lg 1024.        */
 /* =================================================================== */
 
-.iwac-vis-spatial-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
-}
-
-@media (min-width: 1024px) { /* lg */
-    .iwac-vis-spatial-layout {
-        grid-template-columns: minmax(260px, 320px) 1fr;
-    }
-}
-
 /*  Sidebar shell comes from the shared .iwac-vis-aside (iwac-core.css)
  *  since v1.22.0; the class stays in the markup as a hook. */
 
@@ -57,14 +45,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 0.25rem);
-}
-
-.iwac-vis-spatial-picker__label {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-spatial-picker__search {
@@ -127,14 +107,6 @@
     border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
 }
 
-.iwac-vis-spatial-picker__item-name {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .iwac-vis-spatial-picker__item-count {
     flex: 0 0 auto;
     color: var(--muted, #66696e);
@@ -148,12 +120,6 @@
     gap: var(--space-2, 0.5rem);
     padding-top: var(--space-3, 0.75rem);
     border-top: 1px solid var(--border-light, #e2e5e8);
-}
-
-.iwac-vis-spatial-picker__chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1, 0.25rem);
 }
 
 .iwac-vis-spatial-picker__summary {
@@ -182,14 +148,6 @@
 /* =================================================================== */
 /*  Map toolbar (country focus + status line)                            */
 /* =================================================================== */
-
-.iwac-vis-spatial-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3, 0.75rem);
-    margin-bottom: var(--space-3, 0.75rem);
-}
 
 .iwac-vis-spatial-toolbar__label {
     display: inline-flex;

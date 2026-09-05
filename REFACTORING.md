@@ -1291,6 +1291,101 @@ differently from the write-up:
 - **B2 (1)** — eleven findings, all real, none a behaviour change:
   six unused aliases, four regex escapes, one deliberate one annotated.
 
+### Implemented in v1.63.0 (wave 5, the duplication clusters)
+
+E6, E7, E8, E9, M10, M12 and P7 are done; E10, C1, P3, P5 and P6 are done
+for the copies the write-ups named and annotated where a sibling was left
+alone; S15 and P4 stay open (S15 is a layout migration with no output
+diff to prove it by, P4 is wave 6's), and H5's file-existence half was
+already B1's manifest check. Every change was verified against the
+committed version: an old-vs-new harness loads each module from `HEAD`
+and from the working tree under identical stubs and compares every
+option handed to `setOption` (functions evaluated on sample params),
+every click target, every MapLibre source / layer / paint update / fit /
+popup, and every promoted CSS selector's resolved declarations; the
+Python side runs the old and new generator functions on synthetic frames.
+What differs is listed here, because it is intended:
+
+- **E7 / E9** — `C.landscape(pts, grouped, opts)` is the one UMAP
+  scatter (the three copies differed in point size, opacity, tooltip
+  lines, a per-bucket colour and an overlay, which are the options);
+  `P.itemUrl(siteBase, oId)` and `P.navigateOnClick(chart, siteBase,
+  pick)` replace the eight `window.location.href` handlers, and the dead
+  `P.attachGraphClickThrough` is deleted (the Tier 2 / Tier 5 entries
+  above that describe it as wired were wrong about that since v1.22).
+  One behaviour change: `press-bylines` navigated to a bare `/item/<id>`
+  when the block had no site base, a page Omeka does not serve; no site,
+  no navigation now, like every other chart. The 35 other `'/item/'`
+  string builds (popup and card hrefs, each with its own null
+  convention) were left as they are.
+- **E6** — both sentiment heatmaps are `C.heatmapMatrix` calls, which
+  gained `ramp`, `grid` and `static` (`progressive: 0, animation: false`,
+  the false positive above) for them. Accepted unifications: the shared
+  axis typography (10 px labels, the 140 px y-label truncation), the
+  120 px visualMap bar and 11 px ink cell labels on the agreement matrix,
+  its emphasis border in ink rather than primary, and a `--surface`
+  rather than `--surface-raised` cell separator. The cell-label formatter
+  is locale-formatted for every caller now (a thousand reads `1 000` on
+  the French site) and guards a missing value instead of throwing.
+- **E8** — `P.buildEntitiesPanel` (`shared/entities-panel.js`, in
+  `shared-ui`) is the panel; the two block files are ten-line wrappers
+  that state their tab order. The tabs are `P.buildSegmented`, and page
+  or type changes go through `IWACVis.repaint` so the bars animate to
+  their new rows.
+- **E10** — `animationDuration: 600, animationEasing: 'cubicOut'` lives in
+  the theme (24 literals dropped, the four 400/500 ms overrides keep only
+  their duration); `C._legend(overrides)` at the three exact sites and
+  two of the line variants; `C._percentAxisLabel()` at all eight (the
+  three laïcité axes now carry the space); the compare timeline's
+  re-typed dataZoom is `C._dataZoom`. Not done: the `grid:` literals in
+  panel files (each is a deliberate per-panel margin) and `C.multiLine`.
+  `tests/js/theme-animation.test.js` pins the theme pair and fails on a
+  builder that restates it.
+- **M10 / M12** — `maplibre.js` gained the bubble vocabulary: `P.mapColor`
+  (one fallback per token; `#e64a19` and `#13161c` were stale), `P.hoverCase`,
+  `P.countRadius` (sqrt), `P.countSortKey` (big first), `P.bubblePaint` /
+  `P.bubbleLayer`, `P.boundsOf` / `P.fitToPoints`, and
+  `P.attachMapClickPopup` (registered once on the map, resolved through
+  `queryRenderedFeatures` against the layers that exist at click time).
+  The six linear panels are on the sqrt radius with a sort key (the
+  intended visual change: area now grows with the count on every map);
+  the references provenance map gains the hover lift it lacked; every
+  string-built popup (choropleth, spatial admin, compare) is
+  `P.buildMapPopup`, and the compare popup's "Open entity" line became
+  the title link. `shared/places-map.js` (`P.createFilteredPlacesMap`,
+  gated inside, and `P.buildRankedPlacesDetails`) is the map the laïcité
+  and scary-terms blocks both draw; each file keeps only its count rule,
+  palette and popup lines. Not done: the compare map's zoom-interpolated
+  circles and the entity-networks graph nodes, which are different
+  encodings.
+- **C1** — promoted into `iwac-core.css`: `.iwac-vis-layout--sidebar` /
+  `--sidebar-end`, `.iwac-vis-toolbar`, `.iwac-vis-chip-row`,
+  `.iwac-vis-aside__label`, `.iwac-vis-eyebrow`, `.iwac-vis-list__name`,
+  `.iwac-vis-places-details`; `.iwac-vis-section-desc` and
+  `.iwac-vis-block .dashboard-charts` are selectors on the rules they
+  duplicated; the scary-terms view toggle is the core tab family (its
+  four rules deleted). A block keeps its own class on the element as a
+  hook for what is its own (a side colour, a disabled state). 61
+  duplicate groups → 57, 112 instances → 93; the flex-column wrappers
+  and the `:focus-visible` restatements were left (three declarations
+  each, and the restatements are the theme's own rule). One deliberate
+  change beyond the promotion: a pressed tab / facet button keeps its
+  tint under the pointer (`--active:hover`), which the scary toggle had
+  and the core family did not.
+- **P3 / P5 / P6 / P7** — `iwac_embeddings.coerce_embedding` replaces the
+  four copies (it rejects a 2-D cell they accepted);
+  `iwac_utils.build_entity_index(df, keep_row=, on_entity=)` is the
+  entity lookup both dashboard generators build (the article generator is
+  not a subclass and `resolve_items` / `resolve_articles` /
+  `build_index_lookups` are still three); `iwac_stats.build_timeline_series
+  (pairs, order=…, totals=)` is the three `C.timeline` aggregations
+  (`audiovisual`'s is a different shape — partial year, undated — and
+  stays); `clean_int`, `clean_str`, `clean_known_str`, `clean_values` and
+  `top_n_pipe` replace `_int_or_none` ×3, `_clean_text` ×2, `_clean_list`
+  ×2 and `_top_n_pipe` ×2. The `_first_country` trap is documented on all
+  three functions rather than merged. The L2-normalise and `argpartition`
+  copies P3 also names are still there.
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1434,24 +1529,24 @@ non-text content, and the thing a historian citing a figure actually needs
       `setOption(opt, { replaceMerge: ['series', 'xAxis', 'yAxis'] })`; keep
       notMerge where the component set changes (scary-terms view switch,
       `P.emptyChartOption`).
-- [ ] **E6 (Med, S–M) — `sentiment-atlas.js` re-implements `C.heatmapMatrix`
+- [x] **E6 (Med, S–M) — `sentiment-atlas.js` re-implements `C.heatmapMatrix`
       twice (~185 lines).** `buildCentralityHeatmap` (`:423-510`) and
       `buildAgreementMatrix` (`:532-627`) vs `C.heatmapMatrix`
       (`chart-options-special.js:1298-1411`), which already takes
       `tooltipFormatter`, `visualMin/visualMax`, `cellLabels`, `cellBorder`,
       `xLabelRotate` and `{ value: [x, y, v], n }` cells. ~150 lines.
-- [ ] **E7 (Med, M) — Three copies of the UMAP landscape option and three
+- [x] **E7 (Med, M) — Three copies of the UMAP landscape option and three
       identical click-through handlers.** `semantic-landscape.js:181-247,
       305-312`, `laicite/semantic.js:101-160, 255-262`,
       `references-overview.js:436-489, 547-552`; only `symbolSize` (4/6/7),
       opacity, tooltip bits and an optional label overlay differ.
       `C.landscape(points, grouped, opts)` saves ~120 lines and gives one home
       for the perf flags in E12.
-- [ ] **E8 (Med, S) — `index-overview/top-entities.js` is a rename of
+- [x] **E8 (Med, S) — `index-overview/top-entities.js` is a rename of
       `collection-overview/entities.js`.** ✓ both 131 lines, 24 lines differ
       (header, i18n map name, position of `Lieux` in the type order).
       `P.buildEntitiesPanel(ctx, { typeOrder, i18n, ns })` saves ~115 lines.
-- [ ] **E9 (Low/Med, S) — Click→navigate is copy-pasted 8×; a shared helper
+- [x] **E9 (Low/Med, S) — Click→navigate is copy-pasted 8×; a shared helper
       is dead.** ✓ `window.location.href = siteBase + '/item/' + oId` at
       `semantic-landscape.js:309`, `laicite/semantic.js:259`,
       `references-overview.js:551`, `activity-gantt.js:128`,
@@ -1463,7 +1558,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `P.itemUrl(siteBase, oId)` + `P.navigateOnClick(chart, pick)`; delete or
       wire the dead helper to the one remaining ECharts force graph
       (`references-overview.js:913`).
-- [ ] **E10 (Low/Med, S) — Repeated option literals that `chart-options`
+- [x] **E10 (Low/Med, S) — Repeated option literals that `chart-options`
       should own.** `animationDuration: 600, animationEasing: 'cubicOut'` ×24
       → theme-level next to `animation` (`iwac-theme.js:478`);
       `legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 }` ×3
@@ -1618,7 +1713,7 @@ non-text content, and the thing a historian citing a figure actually needs
       `spatial-exploration/map.js:493-494, 704, 887, 916, 920, 937, 944`,
       `person-dashboard/map.js:101-105`, `entity-networks/graph.js:527-531`.
       `P.mapMotion(ms)` returning 0 under the preference.
-- [ ] **M10 (Med, S) — Radius encodings disagree and nothing sets
+- [x] **M10 (Med, S) — Radius encodings disagree and nothing sets
       `circle-sort-key`.** Linear-on-count in six panels
       (`collection-overview/map.js:187-191`, `sources-map.js:160-164`,
       `places-map.js:159-163, 188-192`, `person-dashboard/map.js:148-152`,
@@ -1634,7 +1729,7 @@ non-text content, and the thing a historian citing a figure actually needs
       to `[0, max]` / `±maxAbs` (`:136-172`) and never says so;
       `spatial-exploration/map.js:142-168, 468-487` has a private legend for
       its admin mode. `P.buildChoroplethLegend(stops, domain)` shared by both.
-- [ ] **M12 (Med, M) — Duplicated map code, five pairs (~350 lines).**
+- [x] **M12 (Med, M) — Duplicated map code, five pairs (~350 lines).**
       (a) the `ml / resolvePrimary / resolveInk` colour trio ×4–6
       (`collection-overview/map.js:150-160`, `sources-map.js:117-127`,
       `places-map.js:113-123`, `person-dashboard/map.js:116-126`) →
@@ -2011,7 +2106,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `HfApi().dataset_info(…).sha` (with `HF_TOKEN` in that step — the
       private mirror 401s otherwise, `iwac_utils.py:1067-1074`); add
       `NUMBA_CACHE_DIR` to the same cache for the four UMAP generators.
-- [ ] **P3 (High, M) — The kNN / embedding stack is still copied six times
+- [x] **P3 (High, M) — The kNN / embedding stack is still copied six times
       after `iwac_embeddings.py`.** ✓ `_coerce_embedding` at
       `generate_article_dashboards.py:498-522`,
       `generate_publication_dashboards.py:288-305`,
@@ -2024,6 +2119,8 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       its own 94-line version for articles (`:429-522`). Drift already exists:
       `iwac_embeddings.coerce_embedding:33-55` rejects `ndim != 1`; the local
       copies do not. ~250 lines; verify with the `--limit 5` output diff.
+      *v1.63.0: the four `coerce_embedding` copies are gone; the
+      L2-normalise and `argpartition` copies remain.*
 - [ ] **P4 (High, L) — `generate_laicite.py` → a `scripts/laicite/` package
       mirroring `asset/js/charts/laicite/`.** `LaiciteGenerator` (`:572-2993`,
       41 methods, 2,420 lines); `write_all` (`:2933-2989`) is already the
@@ -2037,7 +2134,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       silently skip a subpackage: `regenerate-data.yml:25` (`scripts/*.py`),
       `lint.yml:101` (`pyflakes scripts/*.py`), `check-python.js:41-45`
       (`readdirSync` of the top directory).
-- [ ] **P5 (Med, M) — Entity-index / resolve pipeline forked three ways.**
+- [x] **P5 (Med, M) — Entity-index / resolve pipeline forked three ways.**
       `dashboard_aggregator.build_entity_lookup:357-428` vs
       `generate_article_dashboards.build_entity_lookup:269-324` (identical
       except `"row"` and the `_is_target` hook); `resolve_items:434-547` vs
@@ -2045,15 +2142,19 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       build_index_lookups:266-342` a third `.iat`-based variant. Extract
       `build_entity_index(index_df, keep_row=False) -> EntityIndex`; make
       `ArticleDashboardGenerator` a `DashboardAggregator` subclass. ~120
-      lines.
-- [ ] **P6 (Med, S–M) — Timeline year × category aggregation ×4.**
+      lines. *v1.63.0: `iwac_utils.build_entity_index` (a tuple, with
+      `keep_row` and an `on_entity` hook) serves both; the resolve
+      pipelines and the subclassing are still open.*
+- [x] **P6 (Med, S–M) — Timeline year × category aggregation ×4.**
       `generate_collection_overview.compute_timeline:221-285` (count-desc,
       `totals`), `dashboard_aggregator.compute_timeline:612-642` (alpha),
       `generate_references_overview.compute_timeline:295-331`
       (`most_common`), `generate_audiovisual_overview.py:264` — all feed
       `C.timeline`. `iwac_stats.build_timeline_series(pairs, order=…,
       totals=False)`; ordering must be a parameter or outputs change.
-- [ ] **P7 (Med, S) — Scalar helpers still duplicated after the v1.9.0
+      *v1.63.0: done for the three `C.timeline` feeders; the audiovisual
+      one (partial year, undated, `C.stackedBar`) is a different shape.*
+- [x] **P7 (Med, S) — Scalar helpers still duplicated after the v1.9.0
       sweep.** Byte-identical to `iwac_utils.clean_int:625-636`:
       `_int_or_none` at `collection_overview:193-200`,
       `compare_newspapers:134-141`, `index_overview:88-95`; `_clean_text`
@@ -2201,7 +2302,8 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       `renderers` entry resolves to an existing `.min.js` — a typo is a
       silent 404 in the lazy chain. Do the file-existence lint first (parse
       the templates' arrays; it is the stronger half of `check-blocks` rules
-      3–4). The generic template (manifest in
+      3–4). *The first half is B1's (v1.62.0): templates name a bundle,
+      the manifest names files, and the build fails on a missing one.* The generic template (manifest in
       `BlockRegistry::BLOCKS[slug]['assets']`, `templateViewScript()` and
       `embed/block.phtml:2` dispatching to `_generic`, an optional
       `'template' =>` override for the two logic-bearing blocks) deletes ~19
@@ -2226,7 +2328,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 
 ### C — CSS
 
-- [ ] **C1 (Med, M) — 59 byte-identical declaration groups / 110 instances.**
+- [x] **C1 (Med, M) — 59 byte-identical declaration groups / 110 instances.**
       `.iwac-vis-scary-view-btn` = the core tab/pagination/facets button
       verbatim (10 declarations; the open "toggle family" item); ×3 toolbars
       (`-index-table-controls`, `-spatial-toolbar`, `-networks-toolbar`); ×3
@@ -2395,7 +2497,9 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    ROADMAP 5.4 decision is the owner's; steps 1 and eslint are independent
    of it — *shipped as v1.62.0; step 2 and the self-host wait on 5.4*.
 5. **Consolidation (E6–E10, M10, M12, C1, P3–P7, S15, H5):** the duplication
-   clusters, each verified with output diffs or the fixture suite.
+   clusters, each verified with output diffs or the fixture suite —
+   *shipped as v1.63.0 minus S15, P4 (wave 6's) and H5's generic template;
+   the partial items are annotated in the v1.63.0 section*.
 6. **Structural (P1 + P4, M13, M14, D1):** the generator runner and the
    laïcité package, `transformStyle`, the basemap decision, the README split.
 

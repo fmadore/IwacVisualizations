@@ -543,5 +543,49 @@
         return P.el('div', 'iwac-vis-overview-grid');
     };
 
+    /* ----------------------------------------------------------------- */
+    /*  Item links                                                        */
+    /* ----------------------------------------------------------------- */
 
+    /**
+     * The public page of an Omeka item, under the current site.
+     *
+     * One place for the `siteBase + '/item/' + o_id` build every card,
+     * popup and click handler needs. The id is URL-encoded — Omeka ids
+     * are integers, so this is a no-op today and a guard for the day a
+     * slug or a stray string reaches it. Returns '' when there is no id,
+     * so a caller can write `if (href)`; an empty site base yields a
+     * site-relative `/item/<id>`, which is what a link inside a page
+     * should carry when the block cannot tell which site it is on.
+     *
+     * @param {string} siteBase  e.g. "/s/westafrica"
+     * @param {number|string} oId
+     * @returns {string}
+     */
+    P.itemUrl = function (siteBase, oId) {
+        if (oId == null || oId === '') return '';
+        return (siteBase || '') + '/item/' + encodeURIComponent(String(oId));
+    };
+
+    /**
+     * Send the reader to an item when a chart datum is clicked.
+     *
+     * `pick(params)` reads the id off the ECharts click params (a named
+     * bar's `data.o_id`, a landscape point's index resolved through the
+     * bundle, …) and returns it, or null / undefined for "not this one".
+     * Without a site base — an embed rendered outside a site — nothing is
+     * wired, matching the module's rule that a chart never navigates to a
+     * page it cannot address.
+     *
+     * @param {ECharts|null} chart  as returned by ns.registerChart
+     * @param {string} siteBase
+     * @param {function(Object):(number|string|null|undefined)} pick
+     */
+    P.navigateOnClick = function (chart, siteBase, pick) {
+        if (!chart || !siteBase) return;
+        chart.on('click', function (params) {
+            var href = P.itemUrl(siteBase, pick(params));
+            if (href) window.location.href = href;
+        });
+    };
 })();

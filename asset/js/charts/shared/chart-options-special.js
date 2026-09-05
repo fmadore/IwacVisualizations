@@ -141,9 +141,7 @@
                 },
                 labelLine: { show: true },
                 data: data
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         var pieMedia = [
@@ -478,9 +476,7 @@
                 itemStyle: { borderColor: surfaceColor, borderWidth: 1, gapWidth: 2 },
                 levels: levels,
                 data: children
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     };
 
@@ -699,9 +695,7 @@
                 renderItem: renderItem,
                 encode: { x: [1, 2], y: 0 },
                 data: data
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
 
         // On phones the value x-axis crowds ~10 year ticks into ~330px and
@@ -1212,6 +1206,106 @@
         };
     };
 
+    /* ----------------------------------------------------------------- */
+    /*  UMAP landscape (scatter of a projection, one series per bucket)   */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * A 2-D embedding projection as a scatter: one series per category so
+     * the theme palette and legend toggling come free, inside pan/zoom on
+     * both axes, and the axes themselves hidden — UMAP coordinates carry
+     * no unit, only proximity means anything, and a numbered axis would
+     * invite a reading as a measure.
+     *
+     * Three blocks draw one — the article and periodical landscapes, the
+     * laïcité dossier's semantic map, the bibliography's landscape — and
+     * until v1.63.0 each carried its own copy of this option. They differ
+     * in the point size a given density can afford, the tooltip lines,
+     * whether a category has a colour of its own and whether a label
+     * overlay sits on top; everything else is here.
+     *
+     * Every datum is `[x, y, i]`, `i` the point's index into the bundle's
+     * columnar arrays, so a tooltip and a click handler resolve the title,
+     * the id or any other column through it (see P.navigateOnClick).
+     *
+     * @param {{x:number[], y:number[], title?:string[]}} pts  columnar points
+     * @param {{groups:Object<string,number[]>, order:string[]}} grouped
+     *   bucket name → point indices, and the buckets' display order
+     * @param {Object} [opts]
+     *   symbolSize — px (default 4: right for ten thousand points)
+     *   opacity — resting point opacity (default 0.6); emphasis is 1
+     *   progressive / progressiveThreshold — ECharts progressive rendering,
+     *     set only on the dense landscapes (off by default)
+     *   tooltipBits(i) — extra lines for point i (country, year, …); the
+     *     tooltip is the point's title in bold plus these joined by " · "
+     *   seriesColor(name) — a colour for the bucket, or nothing for the
+     *     palette (the laïcité frame facet reuses the arenas' palette)
+     *   extraSeries — series appended after the buckets (a silent label
+     *     overlay); the legend lists the buckets only
+     */
+    C.landscape = function (pts, grouped, opts) {
+        opts = opts || {};
+        pts = pts || {};
+        var order = (grouped && grouped.order) || [];
+        var groups = (grouped && grouped.groups) || {};
+        var symbolSize = opts.symbolSize != null ? opts.symbolSize : 4;
+        var opacity = opts.opacity != null ? opts.opacity : 0.6;
+        var titles = pts.title || [];
+
+        var series = order.map(function (name) {
+            var s = {
+                name: name,
+                type: 'scatter',
+                symbolSize: symbolSize
+            };
+            if (opts.progressive != null) {
+                s.progressive = opts.progressive;
+                s.progressiveThreshold = opts.progressiveThreshold != null
+                    ? opts.progressiveThreshold : opts.progressive;
+            }
+            s.itemStyle = { opacity: opacity };
+            var color = opts.seriesColor ? opts.seriesColor(name) : null;
+            if (color) s.itemStyle.color = color;
+            s.emphasis = { itemStyle: { opacity: 1 } };
+            // [x, y, point-index] — the index feeds tooltip + click.
+            s.data = (groups[name] || []).map(function (i) {
+                return [pts.x[i], pts.y[i], i];
+            });
+            return s;
+        });
+        (opts.extraSeries || []).forEach(function (s) { if (s) series.push(s); });
+
+        return {
+            legend: {
+                type: 'scroll',
+                bottom: 0,
+                itemWidth: 12,
+                itemHeight: 10,
+                // The point buckets only, so an overlay never grows a legend entry.
+                data: order.slice()
+            },
+            tooltip: {
+                trigger: 'item',
+                confine: true,
+                formatter: function (p) {
+                    var i = p.data[2];
+                    var bits = (opts.tooltipBits && opts.tooltipBits(i)) || [];
+                    return '<strong>' + esc(titles[i] || '') + '</strong>'
+                        + (bits.length ? '<br>' + esc(bits.join(' · ')) : '');
+                }
+            },
+            grid: { left: 8, right: 8, top: 8, bottom: 36 },
+            xAxis: { type: 'value', scale: true, show: false },
+            yAxis: { type: 'value', scale: true, show: false },
+            dataZoom: [
+                { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
+                { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
+            ],
+            series: series,
+            animation: false
+        };
+    };
+
     /**
      * Generic label × label count/intensity matrix on the shared
      * sequential ramp (--iwac-vis-heatmap-0..4). Unlike C.heatmap (the
@@ -1221,20 +1315,26 @@
      * 4.6 matrix-coordinate rewrite can absorb both variants later.
      *
      * First consumer: the Periodicals Overview holdings matrix
-     * (periodical × year issue counts). The sentiment atlas's two
-     * bespoke heatmap builders are migration candidates (REFACTORING
-     * Tier 3) once the live-verification session can check them.
+     * (periodical × year issue counts); since v1.63.0 also the sentiment
+     * atlas's centrality heatmap and model-agreement cross-tab, which
+     * carried their own copies of this option until then.
      *
      * @param {{xLabels:Array, yLabels:Array, cells:Array}} data
      * @param {Object} [opts]
      *   tooltipFormatter — ECharts formatter; default "y · x — value"
      *   visualMin/visualMax — visualMap range (default 0..max(cell))
+     *   ramp — visualMap colour stops, for a matrix that must not read on
+     *     the heat ramp (the agreement cross-tab: surface → primary)
+     *   grid — overrides merged over the default grid
      *   yLabelWidth — truncation width for long y labels (default 140)
      *   cellLabels — render each non-zero value inside its cell (small
      *     square matrices only; the default off suits dense year axes)
      *   cellBorder — 1px surface-colored separator between cells
      *   xLabelRotate — rotate the x labels (deg) and force interval 0,
      *     for term axes where every label must stay readable
+     *   static — `progressive: 0, animation: false` on the series: a
+     *     small matrix that is repainted on a facet change must not
+     *     restart progressive rendering and flash empty
      */
     C.heatmapMatrix = function (data, opts) {
         opts = opts || {};
@@ -1259,6 +1359,7 @@
                 resolve('--primary') || tokens.primary
             ].filter(Boolean);
         }
+        if (opts.ramp && opts.ramp.length >= 2) heatStops = opts.ramp.slice();
 
         var max = opts.visualMax;
         if (max == null) {
@@ -1272,6 +1373,45 @@
         var esc = (ns.panels && ns.panels.escapeHtml) || function (s) { return s; };
         var fmt = ns.formatNumber || String;
 
+        var grid = { left: 8, right: 24, top: 12, bottom: 64, containLabel: true };
+        if (opts.grid) {
+            for (var g in opts.grid) {
+                if (Object.prototype.hasOwnProperty.call(opts.grid, g)) grid[g] = opts.grid[g];
+            }
+        }
+
+        var series = {
+            type: 'heatmap',
+            data: cells,
+            label: opts.cellLabels
+                ? {
+                    show: true,
+                    formatter: function (p) {
+                        var v = p.value && p.value[2];
+                        return v > 0 ? fmt(v) : '';
+                    },
+                    color: tokens.ink || '#2c2f37',
+                    fontSize: 11
+                }
+                : { show: false },
+            itemStyle: opts.cellBorder
+                ? {
+                    borderColor: resolve('--surface') || tokens.surface || '#fdfdfd',
+                    borderWidth: 1
+                }
+                : undefined,
+            emphasis: {
+                itemStyle: {
+                    borderColor: tokens.ink || '#2c2f37',
+                    borderWidth: 2
+                }
+            }
+        };
+        if (opts.static) {
+            series.progressive = 0;
+            series.animation = false;
+        }
+
         return {
             tooltip: {
                 position: 'top',
@@ -1282,7 +1422,7 @@
                         + esc(String(xLabels[v[0]] || '')) + ' — ' + fmt(v[2]);
                 }
             },
-            grid: { left: 8, right: 24, top: 12, bottom: 64, containLabel: true },
+            grid: grid,
             xAxis: {
                 type: 'category',
                 data: xLabels.map(String),
@@ -1320,33 +1460,7 @@
                 textStyle: { color: muted },
                 inRange: { color: heatStops }
             },
-            series: [{
-                type: 'heatmap',
-                data: cells,
-                label: opts.cellLabels
-                    ? {
-                        show: true,
-                        formatter: function (p) {
-                            var v = p.value && p.value[2];
-                            return v > 0 ? v : '';
-                        },
-                        color: tokens.ink || '#2c2f37',
-                        fontSize: 11
-                    }
-                    : { show: false },
-                itemStyle: opts.cellBorder
-                    ? {
-                        borderColor: resolve('--surface') || tokens.surface || '#fdfdfd',
-                        borderWidth: 1
-                    }
-                    : undefined,
-                emphasis: {
-                    itemStyle: {
-                        borderColor: tokens.ink || '#2c2f37',
-                        borderWidth: 2
-                    }
-                }
-            }]
+            series: [series]
         };
     };
 })();

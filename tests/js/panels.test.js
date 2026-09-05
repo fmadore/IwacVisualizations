@@ -189,3 +189,35 @@ test('fetchJSON timeoutMs: 0 opts out of the bound', async () => {
     assert.deepEqual(JSON.parse(JSON.stringify(body)), { ok: true });
     assert.equal(init.signal, undefined, 'no abort controller is armed when the bound is off');
 });
+
+test('itemUrl is the one item-page build: encoded id, site-relative without a base, empty without an id', () => {
+    const { P } = loadPanels();
+    assert.equal(P.itemUrl('/s/westafrica', 1234), '/s/westafrica/item/1234');
+    assert.equal(P.itemUrl('/s/westafrica', 'a b/c'), '/s/westafrica/item/a%20b%2Fc');
+    assert.equal(P.itemUrl('', 12), '/item/12');
+    assert.equal(P.itemUrl(undefined, 12), '/item/12');
+    assert.equal(P.itemUrl('/s/westafrica', null), '');
+    assert.equal(P.itemUrl('/s/westafrica', ''), '');
+    assert.equal(P.itemUrl('/s/westafrica', 0), '/s/westafrica/item/0');
+});
+
+test('navigateOnClick sends the reader to the picked item, and wires nothing without a chart or a site', () => {
+    const { P, context } = loadPanels();
+    context.window.location = { href: '' };
+    const handlers = [];
+    const chart = { on(evt, fn) { handlers.push([evt, fn]); } };
+    P.navigateOnClick(chart, '/s/x', (params) => params.data && params.data.o_id);
+    assert.equal(handlers.length, 1);
+    assert.equal(handlers[0][0], 'click');
+    handlers[0][1]({ data: { o_id: 42 } });
+    assert.equal(context.window.location.href, '/s/x/item/42');
+    context.window.location.href = '';
+    handlers[0][1]({ data: {} });
+    assert.equal(context.window.location.href, '', 'a datum without an id is not a navigation');
+    handlers[0][1]({});
+    assert.equal(context.window.location.href, '');
+
+    P.navigateOnClick(chart, '', () => 1);
+    P.navigateOnClick(null, '/s/x', () => 1);
+    assert.equal(handlers.length, 1, 'no site base or no chart: no handler at all');
+});

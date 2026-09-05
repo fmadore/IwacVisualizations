@@ -67,7 +67,7 @@
             // numbers; bottom widened so, with a slider present, the x-axis
             // name sits above the slider track instead of colliding.
             grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
-            legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
+            legend: C._legend(),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
                 type: 'category',
@@ -78,9 +78,7 @@
             },
             yAxis: Object.assign({ type: 'value' }, C._valueAxisName(opts.valueName || t('Count'))),
             dataZoom: dataZoom,
-            series: series,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: series
         };
 
         return R && R.withMedia
@@ -145,9 +143,7 @@
                     symbol: 'none',
                     lineStyle: { width: 2 }
                 }
-            ],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            ]
         };
 
         // Dual-axis chart is the most cramped on phones: rotate the long
@@ -230,7 +226,7 @@
         var useZoom = dataZoom.length > 0;
         var base = {
             grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
-            legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
+            legend: C._legend(),
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: {
                 type: 'category',
@@ -241,9 +237,7 @@
             },
             yAxis: Object.assign({ type: 'value' }, C._valueAxisName(opts.valueName || t('Count'))),
             dataZoom: dataZoom,
-            series: series,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: series
         };
 
         return R && R.withMedia

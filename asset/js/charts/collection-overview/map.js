@@ -182,27 +182,7 @@
         });
         var maxCount = featureResult.max;
 
-        // Resolve theme tokens via ns.resolveCssVar, then normalize for
-        // MapLibre — IWAC theme v2.0.0 OKLCH tokens otherwise serialize
-        // as oklab()/oklch(), which MapLibre's style validator rejects.
-        // P.normalizeColorForMapLibre canvas-rasterizes them into legacy
-        // rgb() bytes. ECharts callers don't go through this path.
-        function ml(c) {
-            return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(c) : c;
-        }
-        function resolvePrimary() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--primary');
-            return ml(resolved || '#e64a19');
-        }
-        function resolveInk() {
-            var resolved = ns.resolveCssVar && ns.resolveCssVar('--ink');
-            return ml(resolved || '#2c2f37');
-        }
-
-        var mapInstance = null;
-
         function onStyleReady(map) {
-            mapInstance = map;
             // Custom sources + layers get wiped by every setStyle call,
             // so we re-add them on every style.load. Guard with getSource
             // in case the callback fires twice for the same load.
@@ -219,36 +199,14 @@
             // parsed by the worker on every style load. No layer ever drew
             // it — the choropleth helper loads its own 6-country file.)
             if (!map.getLayer('location-circles')) {
-                map.addLayer({
+                // Shared bubble vocabulary (maplibre.js): sqrt radius, the
+                // feature-state hover lift, big bubbles drawn first.
+                map.addLayer(P.bubbleLayer({
                     id: 'location-circles',
-                    type: 'circle',
                     source: 'locations',
-                    paint: {
-                        'circle-radius': [
-                            'interpolate', ['linear'], ['get', 'count'],
-                            1, 3,
-                            maxCount, 28
-                        ],
-                        'circle-color': resolvePrimary(),
-                        // Hover lift: brighter fill + thicker stroke when
-                        // the cursor is over the bubble. Driven entirely
-                        // by MapLibre feature-state so there's no JS work
-                        // per frame — the GPU paints the transition.
-                        'circle-opacity': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            1.0,
-                            0.75
-                        ],
-                        'circle-stroke-width': [
-                            'case',
-                            ['boolean', ['feature-state', 'hover'], false],
-                            3,
-                            1.5
-                        ],
-                        'circle-stroke-color': resolveInk()
-                    }
-                });
+                    radius: P.countRadius('count', maxCount, 3, 28),
+                    sortKey: 'count'
+                }));
             }
         }
 
@@ -256,27 +214,6 @@
         // onStyleReady). Layer-filtered handlers installed inside
         // onStyleReady would stack on every theme swap because MapLibre
         // persists filtered handlers across setStyle calls.
-        function handleClick(e) {
-            if (!mapInstance || !mapInstance.getLayer('location-circles')) return;
-            var features = mapInstance.queryRenderedFeatures(e.point, {
-                layers: ['location-circles']
-            });
-            if (!features.length) return;
-            var f = features[0];
-            var subtitle = [];
-            if (f.properties.country) subtitle.push(f.properties.country);
-            subtitle.push(P.t('mentions_count', {
-                count: P.formatNumber(Number(f.properties.count))
-            }));
-            P.createIwacPopup({ closeButton: true, closeOnClick: true })
-                .setLngLat(f.geometry.coordinates.slice())
-                .setDOMContent(P.buildMapPopup({
-                    title: f.properties.name,
-                    subtitleLines: subtitle
-                }))
-                .addTo(mapInstance);
-        }
-
         var map = P.createIwacMap(mapContainer, {
             center: [2, 10],
             zoom: 3.2,
@@ -286,8 +223,17 @@
         });
 
         if (map) {
-            mapInstance = map;
-            map.on('click', handleClick);
+            P.attachMapClickPopup(map, {
+                layers: 'location-circles',
+                content: function (f) {
+                    var subtitle = [];
+                    if (f.properties.country) subtitle.push(f.properties.country);
+                    subtitle.push(P.t('mentions_count', {
+                        count: P.formatNumber(Number(f.properties.count))
+                    }));
+                    return { title: f.properties.name, subtitleLines: subtitle };
+                }
+            });
             P.attachFeatureStateHover(map, {
                 layer: 'location-circles',
                 source: 'locations'

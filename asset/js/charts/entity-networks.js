@@ -69,7 +69,7 @@
         /*  Layout skeleton                                              */
         /* ----------------------------------------------------------- */
 
-        var layout = P.el('div', 'iwac-vis-networks-layout');
+        var layout = P.el('div', 'iwac-vis-layout--sidebar-end iwac-vis-networks-layout');
         var main = P.el('div', 'iwac-vis-networks-main');
         var aside = P.el('aside', 'iwac-vis-aside iwac-vis-networks-aside');
         layout.appendChild(main);
@@ -222,13 +222,13 @@
         });
         graphPanel.panel.insertBefore(facetBar.root, graphPanel.chart);
 
-        var toolbar = P.el('div', 'iwac-vis-networks-toolbar');
+        var toolbar = P.el('div', 'iwac-vis-toolbar iwac-vis-networks-toolbar');
         graphPanel.panel.insertBefore(toolbar, graphPanel.chart);
 
         // --- Type chips (abstract mode only) --------------------------
         var palette = (ns.getPalette && ns.getPalette()) || [];
         var enabledTypes = globalData.types.map(function (_t, i) { return i; });
-        var chipsWrap = P.el('div', 'iwac-vis-networks-typechips');
+        var chipsWrap = P.el('div', 'iwac-vis-chip-row iwac-vis-networks-typechips');
         var chipButtons = [];
         globalData.types.forEach(function (type, idx) {
             var chip = P.el('button', 'iwac-vis-networks-typechip');
@@ -291,7 +291,7 @@
                 input:    'iwac-vis-control iwac-vis-networks-search__input',
                 dropdown: 'iwac-vis-networks-search__results',
                 item:     'iwac-vis-networks-search__item',
-                name:     'iwac-vis-networks-search__item-name',
+                name:     'iwac-vis-list__name iwac-vis-networks-search__item-name',
                 count:    'iwac-vis-networks-search__item-count',
                 empty:    'iwac-vis-muted'
             },

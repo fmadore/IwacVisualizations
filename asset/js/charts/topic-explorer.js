@@ -490,7 +490,7 @@
                     type: 'value',
                     min: 0,
                     max: view.max,
-                    axisLabel: { formatter: function (v) { return v + ' %'; } }
+                    axisLabel: C._percentAxisLabel()
                 },
                 dataZoom: C._dataZoom(view.years.length),
                 series: view.defs.map(function (d) {

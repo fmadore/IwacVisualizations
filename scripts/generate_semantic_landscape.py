@@ -43,6 +43,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from iwac_embeddings import coerce_embedding
 from iwac_utils import (
     DATASET_ID,
     canonicalize_country_field,
@@ -62,28 +63,6 @@ logger = logging.getLogger("generate_semantic_landscape")
 # readable (30 topic colours is a legend nobody can use).
 DEFAULT_TOP_TOPICS = 12
 DEFAULT_TITLE_LEN = 60
-
-
-def coerce_embedding(value: Any) -> Optional[np.ndarray]:
-    """Raw embedding cell → float32 vector, or None when unusable.
-    Same rules as the article/publication dashboard generators."""
-    if value is None:
-        return None
-    if isinstance(value, np.ndarray):
-        if value.size == 0 or not np.isfinite(value).all():
-            return None
-        return value.astype(np.float32, copy=False)
-    if isinstance(value, (list, tuple)):
-        if not value:
-            return None
-        try:
-            arr = np.asarray(value, dtype=np.float32)
-        except (TypeError, ValueError):
-            return None
-        if arr.size == 0 or not np.isfinite(arr).all():
-            return None
-        return arr
-    return None
 
 
 def main() -> int:

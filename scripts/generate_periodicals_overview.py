@@ -66,6 +66,7 @@ from iwac_utils import (
     DATASET_ID,
     aggregate_prevalence,
     canonicalize_country_field,
+    clean_values,
     configure_logging,
     create_metadata_block,
     extract_year,
@@ -77,6 +78,7 @@ from iwac_utils import (
     parse_topk,
     save_json,
     tokenize,
+    top_n_pipe,
 )
 
 SUBSET = "publications"
@@ -120,11 +122,6 @@ def _str_or_none(value: Any) -> Optional[str]:
 
 
 # Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
-_is_unknown = is_unknown
-
-
-def _clean_list(values: List[str]) -> List[str]:
-    return [v for v in (s.strip() for s in values) if v and not _is_unknown(v)]
 
 
 def _column_sum(df: pd.DataFrame, column: str) -> int:
@@ -147,11 +144,11 @@ def compute_summary(rows: pd.DataFrame) -> Dict[str, Any]:
 
     for _, row in rows.iterrows():
         name = _str_or_none(row.get("newspaper"))
-        if name and not _is_unknown(name):
+        if name and not is_unknown(name):
             periodicals.add(name)
-        for c in _clean_list(parse_pipe_separated(row.get("country"))):
+        for c in clean_values(parse_pipe_separated(row.get("country"))):
             countries.add(c)
-        for l in _clean_list(parse_pipe_separated(row.get("language"))):
+        for l in clean_values(parse_pipe_separated(row.get("language"))):
             languages.add(l)
         year = extract_year(row.get("pub_date"))
         if year is not None:
@@ -184,7 +181,7 @@ def compute_runs(rows: pd.DataFrame) -> List[Dict[str, Any]]:
 
     for _, row in rows.iterrows():
         name = _str_or_none(row.get("newspaper"))
-        if name is None or _is_unknown(name):
+        if name is None or is_unknown(name):
             continue
         rec = per.setdefault(name, {
             "total": 0,
@@ -193,7 +190,7 @@ def compute_runs(rows: pd.DataFrame) -> List[Dict[str, Any]]:
             "year_max": None,
         })
         rec["total"] += 1
-        for c in _clean_list(parse_pipe_separated(row.get("country"))):
+        for c in clean_values(parse_pipe_separated(row.get("country"))):
             rec["countries"][c] += 1
         year = extract_year(row.get("pub_date"))
         if year is not None:
@@ -233,7 +230,7 @@ def compute_holdings(rows: pd.DataFrame, runs: List[Dict[str, Any]]) -> Dict[str
     counts: Counter = Counter()
     for _, row in rows.iterrows():
         name = _str_or_none(row.get("newspaper"))
-        if name is None or _is_unknown(name):
+        if name is None or is_unknown(name):
             continue
         year = extract_year(row.get("pub_date"))
         if year is None:
@@ -273,7 +270,7 @@ def compute_issues_per_year(rows: pd.DataFrame) -> Dict[str, Any]:
         year = extract_year(row.get("pub_date"))
         if year is None:
             continue
-        for country in _clean_list(parse_pipe_separated(row.get("country"))):
+        for country in clean_values(parse_pipe_separated(row.get("country"))):
             by_year_country[year][country] += 1
             country_totals[country] += 1
             seen_years.add(year)
@@ -292,18 +289,6 @@ def compute_issues_per_year(rows: pd.DataFrame) -> Dict[str, Any]:
         "countries": countries_sorted,
         "series":    series,
     }
-
-
-def _top_n_pipe(rows: pd.DataFrame, field: str, n: Optional[int]) -> List[Dict[str, Any]]:
-    """Histogram over a pipe-separated column; ``n=None`` keeps all values."""
-    counter: Counter = Counter()
-    for value in rows.get(field, []):
-        for v in _clean_list(parse_pipe_separated(value)):
-            counter[v] += 1
-    return [
-        {"name": name, "count": int(count)}
-        for name, count in counter.most_common(n)
-    ]
 
 
 def compute_wordcloud(
@@ -644,9 +629,9 @@ def build_periodicals_overview(
     summary = compute_summary(df)
     runs = compute_runs(df)
     issues_per_year = compute_issues_per_year(df)
-    languages = _top_n_pipe(df, "language", None)
-    top_subjects = _top_n_pipe(df, "subject", top_n_subjects)
-    countries = _top_n_pipe(df, "country", None)
+    languages = top_n_pipe(df, "language", None)
+    top_subjects = top_n_pipe(df, "subject", top_n_subjects)
+    countries = top_n_pipe(df, "country", None)
     wordcloud = compute_wordcloud(df, wordcloud_max_words, wordcloud_min_frequency)
     topics = compute_topics(
         df,

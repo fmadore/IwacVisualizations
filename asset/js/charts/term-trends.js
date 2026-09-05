@@ -302,7 +302,7 @@
             var dataZoom = C._dataZoom(years.length, { threshold: 30 });
             var option = {
                 grid: C._grid({ left: 64, top: 56, bottom: 56 }),
-                legend: { type: 'scroll', top: 4, itemWidth: 14, itemHeight: 3 },
+                legend: C._legend({ itemWidth: 14, itemHeight: 3 }),
                 tooltip: {
                     trigger: 'axis',
                     confine: true,
@@ -329,11 +329,10 @@
                 },
                 yAxis: Object.assign({ type: 'value' },
                     C._valueAxisName(share ? P.t('ngram.axis_share') : P.t('ngram.axis_count')),
-                    share ? { axisLabel: { formatter: function (v) { return v + ' %'; } } } : {}),
+                    share ? { axisLabel: C._percentAxisLabel() } : {}),
                 dataZoom: dataZoom,
                 series: series,
-                animationDuration: 400,
-                animationEasing: 'cubicOut'
+                animationDuration: 400
             };
             var R = ns.responsive;
             if (R && R.withMedia) {

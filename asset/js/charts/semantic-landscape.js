@@ -33,11 +33,12 @@
     'use strict';
 
     var ns = window.IWACVis;
-    if (!ns || !ns.panels) {
-        console.warn('IWACVis semantic landscape: missing panels — check script load order');
+    if (!ns || !ns.panels || !ns.chartOptions) {
+        console.warn('IWACVis semantic landscape: missing panels or chartOptions — check script load order');
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
 
     // Two page blocks share this orchestrator: the article "Semantic
     // landscape" (embedding_OCR, coloured by country / decade / LDA topic)
@@ -180,71 +181,27 @@
 
     function buildOption(data, facet) {
         var pts = data.points;
-        var grouped = buildGroups(data, facet);
         var topics = data.topics || [];
         var countries = data.countries || [];
 
-        var series = grouped.order.map(function (name) {
-            return {
-                name: name,
-                type: 'scatter',
-                symbolSize: 4,
-                progressive: 2500,
-                progressiveThreshold: 3000,
-                itemStyle: { opacity: 0.6 },
-                emphasis: { itemStyle: { opacity: 1 } },
-                // [x, y, point-index] — the index feeds tooltip + click.
-                data: grouped.groups[name].map(function (i) {
-                    return [pts.x[i], pts.y[i], i];
-                })
-            };
+        return C.landscape(pts, buildGroups(data, facet), {
+            // Ten thousand points: small, translucent, progressive.
+            symbolSize: 4,
+            opacity: 0.6,
+            progressive: 2500,
+            progressiveThreshold: 3000,
+            tooltipBits: function (i) {
+                var bits = [];
+                var c = pts.country[i];
+                if (c >= 0) bits.push(countries[c]);
+                if (pts.year[i]) bits.push(String(pts.year[i]));
+                // Publications bundles omit the topic array entirely.
+                var t = pts.topic ? pts.topic[i] : -1;
+                if (t >= 0 && topics[t]) bits.push(topics[t].label);
+                return bits;
+            },
+            extraSeries: [buildLabelSeries(data)]
         });
-
-        var labelSeries = buildLabelSeries(data);
-        if (labelSeries) series.push(labelSeries);
-
-        return {
-            legend: {
-                type: 'scroll',
-                bottom: 0,
-                itemWidth: 12,
-                itemHeight: 10,
-                // Restrict to the point buckets so the silent
-                // topic-label overlay never grows a legend entry.
-                data: grouped.order.slice()
-            },
-            tooltip: {
-                trigger: 'item',
-                confine: true,
-                formatter: function (p) {
-                    var i = p.data[2];
-                    var bits = [];
-                    var c = pts.country[i];
-                    if (c >= 0) bits.push(countries[c]);
-                    if (pts.year[i]) bits.push(String(pts.year[i]));
-                    // Publications bundles omit the topic array entirely.
-                    var t = pts.topic ? pts.topic[i] : -1;
-                    if (t >= 0 && topics[t]) bits.push(topics[t].label);
-                    return '<strong>' + P.escapeHtml(pts.title[i] || '') + '</strong>'
-                        + (bits.length ? '<br>' + P.escapeHtml(bits.join(' · ')) : '');
-                }
-            },
-            grid: { left: 8, right: 8, top: 8, bottom: 36 },
-            xAxis: {
-                type: 'value', scale: true,
-                show: false
-            },
-            yAxis: {
-                type: 'value', scale: true,
-                show: false
-            },
-            dataZoom: [
-                { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
-                { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
-            ],
-            series: series,
-            animation: false
-        };
     }
 
     // Both landscape blocks share this renderer; the per-block variant (bundle,
@@ -301,16 +258,10 @@
             instance.setOption(buildOption(data, state.facet), true);
         });
 
-        if (chart && siteBase) {
-            chart.on('click', function (params) {
-                var i = params.data && params.data[2];
-                if (i == null) return;
-                var oId = data.points.o_id[i];
-                if (oId != null) {
-                    window.location.href = siteBase + '/item/' + oId;
-                }
-            });
-        }
+        P.navigateOnClick(chart, siteBase, function (params) {
+            var i = params.data && params.data[2];
+            return i == null ? null : data.points.o_id[i];
+        });
     }
 
     P.bootBlock({

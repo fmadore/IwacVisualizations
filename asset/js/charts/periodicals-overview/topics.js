@@ -120,7 +120,7 @@
                 // stack and the axis is the truncated tail, and rescaling
                 // would hide a known partial measurement.
                 max: 100,
-                axisLabel: { formatter: function (v) { return v + ' %'; } }
+                axisLabel: C._percentAxisLabel()
             },
             dataZoom: C._dataZoom(years.length),
             series: defs.map(function (d) {
@@ -174,7 +174,7 @@
             },
             xAxis: {
                 type: 'value',
-                axisLabel: { formatter: function (v) { return v + ' %'; } }
+                axisLabel: C._percentAxisLabel()
             },
             yAxis: {
                 type: 'category',
@@ -193,9 +193,7 @@
                     position: 'right',
                     formatter: function (p) { return p.value + ' %'; }
                 }
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     }
 

@@ -69,7 +69,7 @@
 
         // --- Top places (collection or entity) --------------------------
         var placesBox = P.el('div', 'iwac-vis-spatial-picker__places');
-        var placesTitle = P.el('div', 'iwac-vis-spatial-picker__label', P.t('Top places'));
+        var placesTitle = P.el('div', 'iwac-vis-aside__label iwac-vis-spatial-picker__label', P.t('Top places'));
         var placesList = P.el('ul', 'iwac-vis-spatial-picker__places-list');
         placesBox.appendChild(placesTitle);
         placesBox.appendChild(placesList);
@@ -80,7 +80,7 @@
         function group(labelText, controlEl) {
             var wrap = P.el('div', 'iwac-vis-spatial-picker__group');
             var labelId = 'iwac-vis-spatial-label-' + (++_uid);
-            var label = P.el('div', 'iwac-vis-spatial-picker__label', labelText);
+            var label = P.el('div', 'iwac-vis-aside__label iwac-vis-spatial-picker__label', labelText);
             label.id = labelId;
             wrap.appendChild(label);
             if (controlEl.classList.contains('iwac-vis-tabs')) {
@@ -133,7 +133,7 @@
             var selected = state.selection && state.selection.id === id;
             if (selected) btn.classList.add('iwac-vis-spatial-picker__item--active');
             btn.setAttribute('aria-selected', selected ? 'true' : 'false');
-            btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-name', label));
+            btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-spatial-picker__item-name', label));
             btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-count', P.formatNumber(count)));
             btn.addEventListener('click', function () {
                 if (state.selection && state.selection.id === id) {
@@ -154,7 +154,7 @@
                 return;
             }
 
-            var chipRow = P.el('div', 'iwac-vis-spatial-picker__chip-row');
+            var chipRow = P.el('div', 'iwac-vis-chip-row iwac-vis-spatial-picker__chip-row');
             var chip = P.el('button', 'iwac-vis-chip', sel.label + ' ×');
             chip.type = 'button';
             chip.setAttribute('aria-label', P.t('Clear selection') + ': ' + sel.label);
@@ -217,7 +217,7 @@
                 var li = P.el('li');
                 var btn = P.el('button', 'iwac-vis-spatial-picker__item');
                 btn.type = 'button';
-                btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-name', p.name));
+                btn.appendChild(P.el('span', 'iwac-vis-list__name iwac-vis-spatial-picker__item-name', p.name));
                 btn.appendChild(P.el('span', 'iwac-vis-spatial-picker__item-count', P.formatNumber(p.count)));
                 btn.addEventListener('click', function () { state.requestFlyTo(p); });
                 li.appendChild(btn);

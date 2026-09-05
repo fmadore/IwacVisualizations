@@ -100,7 +100,7 @@
                     min: 0,
                     max: 100,
                     name: P.t('bylines.trend_axis'),
-                    axisLabel: { formatter: function (v) { return v + ' %'; } }
+                    axisLabel: C._percentAxisLabel()
                 },
                 dataZoom: dataZoom,
                 series: [{
@@ -145,14 +145,10 @@
             };
             chart.setOption(option, true);
         });
-        if (instance) {
-            instance.on('click', function (p) {
-                var row = rows[p.dataIndex];
-                if (row && row.o_id) {
-                    window.location.href = (ctx.siteBase || '') + '/item/' + row.o_id;
-                }
-            });
-        }
+        P.navigateOnClick(instance, ctx.siteBase, function (p) {
+            var row = rows[p.dataIndex];
+            return row && row.o_id ? row.o_id : null;
+        });
     }
 
     /* ----------------------------------------------------------------- */

@@ -97,7 +97,7 @@
         sectionB.appendChild(P.el('p', 'iwac-vis-section-desc',
             P.t('Explore the prevalence of Dublin Core Subject and Spatial Coverage fields over time.')));
 
-        var keywordsLayout = P.el('div', 'iwac-vis-keywords-layout');
+        var keywordsLayout = P.el('div', 'iwac-vis-layout--sidebar iwac-vis-keywords-layout');
         sectionB.appendChild(keywordsLayout);
 
         // Two-column: filters sidebar + chart + table

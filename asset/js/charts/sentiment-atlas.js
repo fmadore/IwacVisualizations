@@ -376,7 +376,7 @@
         var useZoom = dataZoom.length > 0;
         return {
             grid: C._grid({ left: 64, bottom: useZoom ? 64 : 40 }),
-            legend: { type: 'scroll', top: 4, itemWidth: 12, itemHeight: 10 },
+            legend: C._legend(),
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params) {
@@ -409,16 +409,15 @@
                 C._valueAxisName(P.t('Subjectivity'))
             ),
             dataZoom: dataZoom,
-            series: series,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: series
         };
     }
 
     /**
      * Centrality intensity by country (rows) × year (columns). Mean
-     * centralité on a 1–5 scale; every color resolved from theme tokens
-     * (the dedicated `--iwac-vis-heatmap-*` ramp, same as C.heatmap).
+     * centralité on a 1–5 scale on the shared heat ramp, static (the
+     * matrix is repainted on every model change and must not flash
+     * through progressive rendering).
      */
     function buildCentralityHeatmap(data, modelKey) {
         var model = data.models[modelKey] || {};
@@ -426,82 +425,27 @@
         var years = data.years || [];
         var countries = data.countries || [];
 
-        var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
-        var resolve = ns.resolveCssVar || function () { return ''; };
-        var muted = resolve('--muted') || tokens.muted;
-        var border = resolve('--border') || tokens.border;
-        var ink = resolve('--ink') || tokens.ink;
-        var heatStops = [
-            resolve('--iwac-vis-heatmap-0'),
-            resolve('--iwac-vis-heatmap-1'),
-            resolve('--iwac-vis-heatmap-2'),
-            resolve('--iwac-vis-heatmap-3'),
-            resolve('--iwac-vis-heatmap-4')
-        ].filter(Boolean);
-        if (heatStops.length < 2) {
-            heatStops = [resolve('--surface') || tokens.surface, resolve('--primary') || tokens.primary].filter(Boolean);
-        }
-
         // c = [countryIdx, yearIdx, mean, n]; ECharts heatmap wants
         // [xIdx, yIdx, value] with x = year, y = country.
         var cells = cellsIn.map(function (c) {
             return { value: [c[1], c[0], c[2]], n: c[3] };
         });
 
-        return {
-            tooltip: {
-                position: 'top',
-                confine: true,
-                formatter: function (p) {
-                    var v = p.value || [];
-                    return P.t('sentiment.cenheat_tip', {
-                        country: P.escapeHtml(countries[v[1]] || ''),
-                        year: years[v[0]],
-                        value: P.formatNumber(v[2]),
-                        count: P.formatNumber((p.data && p.data.n) || 0)
-                    });
-                }
-            },
-            grid: { left: 8, right: 24, top: 12, bottom: 64, containLabel: true },
-            xAxis: {
-                type: 'category',
-                data: years.map(String),
-                axisLabel: { interval: 'auto', fontSize: 10, color: muted },
-                axisLine: { lineStyle: { color: border } },
-                axisTick: { show: false },
-                splitArea: { show: false }
-            },
-            yAxis: {
-                type: 'category',
-                data: countries.slice(),
-                inverse: true,
-                axisLabel: { interval: 0, color: muted },
-                axisLine: { lineStyle: { color: border } },
-                axisTick: { show: false },
-                splitArea: { show: false }
-            },
-            visualMap: {
-                min: 1,
-                max: 5,
-                calculable: true,
-                orient: 'horizontal',
-                left: 'center',
-                bottom: 4,
-                itemWidth: 14,
-                itemHeight: 120,
-                textStyle: { color: muted },
-                inRange: { color: heatStops }
-            },
-            series: [{
-                type: 'heatmap',
-                data: cells,
-                label: { show: false },
-                itemStyle: { borderColor: resolve('--surface') || tokens.surface, borderWidth: 1 },
-                emphasis: { itemStyle: { borderColor: ink, borderWidth: 2 } },
-                progressive: 0,
-                animation: false
-            }]
-        };
+        return C.heatmapMatrix({ xLabels: years, yLabels: countries, cells: cells }, {
+            visualMin: 1,
+            visualMax: 5,
+            cellBorder: true,
+            static: true,
+            tooltipFormatter: function (p) {
+                var v = p.value || [];
+                return P.t('sentiment.cenheat_tip', {
+                    country: P.escapeHtml(countries[v[1]] || ''),
+                    year: years[v[0]],
+                    value: P.formatNumber(v[2]),
+                    count: P.formatNumber((p.data && p.data.n) || 0)
+                });
+            }
+        });
     }
 
     /**
@@ -525,18 +469,15 @@
     }
 
     /**
-     * 6×6 polarity cross-tab heatmap for one model pair: every color
-     * resolved from theme tokens, value labels on non-zero cells,
-     * surface→primary visualMap ramp.
+     * 6×6 polarity cross-tab heatmap for one model pair: value labels on
+     * non-zero cells, a surface→primary ramp rather than the heat ramp
+     * (this is agreement, not intensity), static like the centrality map.
      */
     function buildAgreementMatrix(data, pairEntry) {
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         var primary = (ns.resolveCssVar && ns.resolveCssVar('--primary')) || tokens.primary;
         var surface = (ns.resolveCssVar && ns.resolveCssVar('--surface-raised'))
             || tokens.surfaceRaised || tokens.surface;
-        var ink = (ns.resolveCssVar && ns.resolveCssVar('--ink')) || tokens.ink;
-        var muted = (ns.resolveCssVar && ns.resolveCssVar('--muted')) || tokens.muted;
-        var border = (ns.resolveCssVar && ns.resolveCssVar('--border')) || tokens.border;
 
         var order = data.polarity_order || [];
         var labels = order.map(function (l) { return P.t(l); });
@@ -545,80 +486,31 @@
         var labelB = modelLabel(pairEntry.models[1]);
 
         var cells = [];
-        var maxVal = 1;
         for (var i = 0; i < order.length; i++) {
             for (var j = 0; j < order.length; j++) {
-                var v = (matrix[i] && matrix[i][j]) || 0;
-                if (v > maxVal) maxVal = v;
                 // x = model B label index, y = model A label index.
-                cells.push([j, i, v]);
+                cells.push([j, i, (matrix[i] && matrix[i][j]) || 0]);
             }
         }
 
-        return {
-            tooltip: {
-                trigger: 'item',
-                confine: true,
-                formatter: function (p) {
-                    return P.t('sentiment.pair_cell', {
-                        a: P.escapeHtml(labelA),
-                        la: P.escapeHtml(labels[p.value[1]] || ''),
-                        b: P.escapeHtml(labelB),
-                        lb: P.escapeHtml(labels[p.value[0]] || ''),
-                        count: P.formatNumber(p.value[2] || 0)
-                    });
-                }
-            },
-            grid: { left: 110, right: 24, top: 16, bottom: 84, containLabel: true },
-            xAxis: {
-                type: 'category',
-                data: labels,
-                axisLabel: { rotate: 35, interval: 0, color: muted },
-                axisLine: { lineStyle: { color: border } },
-                splitArea: { show: false },
-                axisTick: { show: false }
-            },
-            yAxis: {
-                type: 'category',
-                data: labels.slice(),
-                inverse: true,
-                axisLabel: { interval: 0, color: muted },
-                axisLine: { lineStyle: { color: border } },
-                splitArea: { show: false },
-                axisTick: { show: false }
-            },
-            visualMap: {
-                min: 0,
-                max: maxVal,
-                calculable: true,
-                orient: 'horizontal',
-                left: 'center',
-                bottom: 4,
-                itemWidth: 14,
-                itemHeight: 140,
-                textStyle: { color: muted },
-                inRange: { color: [surface, primary] }
-            },
-            series: [{
-                type: 'heatmap',
-                data: cells,
-                label: {
-                    show: true,
-                    formatter: function (p) {
-                        var v = p.value[2];
-                        return v > 0 ? P.formatNumber(v) : '';
-                    },
-                    color: ink,
-                    fontSize: 10
-                },
-                itemStyle: { borderColor: surface, borderWidth: 1 },
-                emphasis: {
-                    itemStyle: { borderColor: primary, borderWidth: 2 }
-                },
-                progressive: 0,
-                animation: false
-            }]
-        };
+        return C.heatmapMatrix({ xLabels: labels, yLabels: labels, cells: cells }, {
+            visualMin: 0,
+            ramp: [surface, primary],
+            grid: { left: 110, top: 16, bottom: 84 },
+            xLabelRotate: 35,
+            cellLabels: true,
+            cellBorder: true,
+            static: true,
+            tooltipFormatter: function (p) {
+                return P.t('sentiment.pair_cell', {
+                    a: P.escapeHtml(labelA),
+                    la: P.escapeHtml(labels[p.value[1]] || ''),
+                    b: P.escapeHtml(labelB),
+                    lb: P.escapeHtml(labels[p.value[0]] || ''),
+                    count: P.formatNumber(p.value[2] || 0)
+                });
+            }
+        });
     }
 
     /* ----------------------------------------------------------------- */

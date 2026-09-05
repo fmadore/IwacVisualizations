@@ -126,7 +126,7 @@
             var row = P.el('div', 'iwac-vis-laicite-breakdown-row');
             row.appendChild(P.el('span', 'iwac-vis-laicite-breakdown-label',
                 P.t(group.key)));
-            var chips = P.el('span', 'iwac-vis-laicite-breakdown-chips');
+            var chips = P.el('span', 'iwac-vis-chip-row iwac-vis-laicite-breakdown-chips');
             keys.forEach(function (k) {
                 chips.appendChild(L.chip(k + ' ' + P.formatNumber(group.data[k]),
                     'is-count'));

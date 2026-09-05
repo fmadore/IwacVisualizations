@@ -38,14 +38,6 @@
  *  inside a flex-wrap row. Base text-input styling comes from the
  *  shared form-control rule in iwac-core.css; only layout lives here. */
 
-.iwac-vis-index-table-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3, 0.75rem);
-    align-items: center;
-    margin-bottom: var(--space-3, 0.75rem);
-}
-
 .iwac-vis-index-table-search {
     flex: 1 1 220px;
     min-width: 180px;
@@ -55,18 +47,6 @@
 /* =================================================================== */
 /*  Keyword Explorer — Section B layout                                  */
 /* =================================================================== */
-
-.iwac-vis-keywords-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
-}
-
-@media (min-width: 1024px) { /* lg */
-    .iwac-vis-keywords-layout {
-        grid-template-columns: minmax(260px, 320px) 1fr;
-    }
-}
 
 /*  Shell comes from the shared .iwac-vis-aside (iwac-core.css); only the
  *  stacked-filters layout stays block-local. */
@@ -98,14 +78,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1, 0.25rem);
-}
-
-.iwac-vis-keywords-filters__label {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 /* Base form-control styling lives in the shared rule in iwac-core.css;
@@ -163,14 +135,6 @@
 
 .iwac-vis-keywords-compare__item input[type="checkbox"]:disabled + .iwac-vis-keywords-compare__name {
     color: var(--muted, #66696e);
-}
-
-.iwac-vis-keywords-compare__name {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .iwac-vis-keywords-compare__count {

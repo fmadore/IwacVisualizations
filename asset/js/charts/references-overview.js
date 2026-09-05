@@ -163,13 +163,6 @@
 
         function addLayers(map) {
             var tokens = ns.getChartTokens ? ns.getChartTokens() : {};
-            var primary = P.normalizeColorForMapLibre
-                ? P.normalizeColorForMapLibre(tokens.primary || '#e64a19')
-                : (tokens.primary || '#e64a19');
-            var surface = P.normalizeColorForMapLibre
-                ? P.normalizeColorForMapLibre(tokens.surface || '#ffffff')
-                : (tokens.surface || '#ffffff');
-
             if (!map.getSource(sourceId)) {
                 map.addSource(sourceId, {
                     type: 'geojson',
@@ -177,60 +170,36 @@
                 });
             }
             if (!map.getLayer(layerId)) {
-                map.addLayer({
+                // The bibliography's bubbles sit on a surface stroke rather
+                // than ink: a lighter register for a lighter map.
+                map.addLayer(P.bubbleLayer({
                     id: layerId,
-                    type: 'circle',
                     source: sourceId,
-                    paint: {
-                        'circle-radius': [
-                            'interpolate', ['linear'], ['get', 'count'],
-                            1, 6,
-                            maxCount, 28
-                        ],
-                        'circle-color': primary,
-                        'circle-opacity': 0.7,
-                        'circle-stroke-color': surface,
-                        'circle-stroke-width': 1.5
-                    }
-                });
-            } else {
-                map.setPaintProperty(layerId, 'circle-color', primary);
-                map.setPaintProperty(layerId, 'circle-stroke-color', surface);
+                    radius: P.countRadius('count', maxCount, 6, 28),
+                    sortKey: 'count',
+                    stroke: P.normalizeColorForMapLibre(tokens.surface || '#ffffff'),
+                    opacity: [0.7, 1],
+                    strokeWidth: [1.5, 3]
+                }));
             }
+        }
 
-            if (!map._iwacReferencesProvenanceHandlers) {
-                map._iwacReferencesProvenanceHandlers = true;
-                map.on('mouseenter', layerId, function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseleave', layerId, function () {
-                    map.getCanvas().style.cursor = '';
-                });
-                map.on('click', layerId, function (event) {
-                    var feature = event.features && event.features[0];
-                    if (!feature) return;
-                    var props = feature.properties || {};
-                    var location = locations[Number(props.locationIndex)] || {};
-                    var subtitle = [];
-                    subtitle.push(P.t('references_count', { count: P.formatNumber(location.count || 0) }));
-                    if (location.earliestYear && location.latestYear) {
-                        subtitle.push(String(location.earliestYear) + '–' + String(location.latestYear));
-                    }
-                    var popup = P.createIwacPopup && P.createIwacPopup();
-                    if (!popup) return;
-                    popup
-                        .setLngLat(feature.geometry.coordinates)
-                        .setDOMContent(P.buildMapPopup({
-                            title: location.name || props.name,
-                            titleHref: location.o_id && siteBase ? siteBase + '/item/' + location.o_id : '',
-                            subtitleLines: subtitle,
-                            articles: location.publications || [],
-                            siteBase: siteBase || '',
-                            pageSize: 5
-                        }))
-                        .addTo(map);
-                });
+        function popupFor(feature) {
+            var props = feature.properties || {};
+            var location = locations[Number(props.locationIndex)] || {};
+            var subtitle = [];
+            subtitle.push(P.t('references_count', { count: P.formatNumber(location.count || 0) }));
+            if (location.earliestYear && location.latestYear) {
+                subtitle.push(String(location.earliestYear) + '–' + String(location.latestYear));
             }
+            return {
+                title: location.name || props.name,
+                titleHref: siteBase ? P.itemUrl(siteBase, location.o_id) : '',
+                subtitleLines: subtitle,
+                articles: location.publications || [],
+                siteBase: siteBase || '',
+                pageSize: 5
+            };
         }
 
         // MapLibre 6 is an ES module the page loader imports in PARALLEL with
@@ -247,18 +216,19 @@
             });
             if (!map) return null;
 
+            // Wired ONCE per instance, outside onStyleReady, so a theme
+            // swap does not stack a copy per toggle.
+            P.attachMapClickPopup(map, { layers: layerId, content: popupFor, popup: {} });
+            P.attachFeatureStateHover(map, { layer: layerId, source: sourceId });
+
             if (provenanceMap.bounds) {
                 map.once('load', function () {
-                    var bounds = provenanceMap.bounds;
-                    if (locations.length === 1) {
-                        map.setCenter([locations[0].lng, locations[0].lat]);
-                        map.setZoom(5);
-                    } else {
-                        map.fitBounds(
-                            [[bounds.west, bounds.south], [bounds.east, bounds.north]],
-                            { padding: 42, maxZoom: 7, duration: 0 }
-                        );
-                    }
+                    // The generator's bounds for several locations; a single
+                    // one is centred at a fixed zoom instead.
+                    var b = provenanceMap.bounds;
+                    P.fitToPoints(map, locations.length === 1 ? locations : [
+                        { lng: b.west, lat: b.south }, { lng: b.east, lat: b.north }
+                    ], { padding: 42, maxZoom: 7, duration: 0, singleZoom: 5 });
                 });
             }
             if (P.addFullscreenButton && panelEl) {
@@ -319,9 +289,7 @@
                     var entry = list[p.dataIndex] || {};
                     return P.formatNumber(entry.with_ocr || 0) + '/' + P.formatNumber(entry.total || 0);
                 } }
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     }
 
@@ -367,9 +335,7 @@
                 barMaxWidth: 22,
                 itemStyle: { borderRadius: [0, 4, 4, 0] },
                 label: { show: true, position: 'right' }
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     }
 
@@ -435,58 +401,22 @@
 
     function landscapeOption(landscape, facet) {
         var pts = landscape.points;
-        var grouped = landscapeGroups(landscape, facet);
         var types = landscape.types || [];
 
-        return {
-            legend: {
-                type: 'scroll',
-                bottom: 0,
-                itemWidth: 12,
-                itemHeight: 10,
-                data: grouped.order.slice()
-            },
-            tooltip: {
-                trigger: 'item',
-                confine: true,
-                formatter: function (p) {
-                    var i = p.data[2];
-                    var bits = [];
-                    if (pts.author && pts.author[i]) bits.push(pts.author[i]);
-                    var t = pts.type ? pts.type[i] : -1;
-                    if (t >= 0 && types[t]) bits.push(translateType(types[t]));
-                    if (pts.year && pts.year[i]) bits.push(String(pts.year[i]));
-                    return '<strong>' + P.escapeHtml(pts.title[i] || '') + '</strong>'
-                        + (bits.length ? '<br>' + P.escapeHtml(bits.join(' · ')) : '');
-                }
-            },
-            grid: { left: 8, right: 8, top: 8, bottom: 36 },
-            // UMAP coordinates carry no unit — only relative position is
-            // meaningful — so the axes are hidden rather than labelled
-            // with numbers a reader could mistake for a measurement.
-            xAxis: { type: 'value', scale: true, show: false },
-            yAxis: { type: 'value', scale: true, show: false },
-            dataZoom: [
-                { type: 'inside', xAxisIndex: 0, filterMode: 'none' },
-                { type: 'inside', yAxisIndex: 0, filterMode: 'none' }
-            ],
-            series: grouped.order.map(function (name) {
-                return {
-                    name: name,
-                    type: 'scatter',
-                    // Larger than the article landscape's 4px: a few
-                    // hundred points can afford to be legible.
-                    symbolSize: 7,
-                    itemStyle: { opacity: 0.75 },
-                    emphasis: { itemStyle: { opacity: 1 } },
-                    // [x, y, point-index] — the index feeds tooltip + click.
-                    data: grouped.groups[name].map(function (i) {
-                        return [pts.x[i], pts.y[i], i];
-                    })
-                };
-            }),
-            animation: false
-        };
+        return C.landscape(pts, landscapeGroups(landscape, facet), {
+            // Larger than the article landscape's 4px: a few hundred
+            // points can afford to be legible.
+            symbolSize: 7,
+            opacity: 0.75,
+            tooltipBits: function (i) {
+                var bits = [];
+                if (pts.author && pts.author[i]) bits.push(pts.author[i]);
+                var t = pts.type ? pts.type[i] : -1;
+                if (t >= 0 && types[t]) bits.push(translateType(types[t]));
+                if (pts.year && pts.year[i]) bits.push(String(pts.year[i]));
+                return bits;
+            }
+        });
     }
 
     /**
@@ -543,14 +473,10 @@
             instance.setOption(landscapeOption(landscape, state.facet), true);
         });
 
-        if (chart && siteBase) {
-            chart.on('click', function (params) {
-                var i = params.data && params.data[2];
-                if (i == null) return;
-                var oId = landscape.points.o_id[i];
-                if (oId != null) window.location.href = siteBase + '/item/' + oId;
-            });
-        }
+        P.navigateOnClick(chart, siteBase, function (params) {
+            var i = params.data && params.data[2];
+            return i == null ? null : landscape.points.o_id[i];
+        });
         if (chart && P.addFullscreenButton) {
             P.addFullscreenButton(panel.panel, {
                 onResize: function () {

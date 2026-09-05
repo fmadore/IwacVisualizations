@@ -95,9 +95,7 @@
                 symbolSize: 4,
                 lineStyle: { width: 2 },
                 data: values
-            }],
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            }]
         };
     }
 

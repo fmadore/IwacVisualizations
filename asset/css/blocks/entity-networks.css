@@ -8,18 +8,6 @@
 /*  Breakpoints (match iwac-core.css): sm 640 / md 768 / lg 1024.        */
 /* =================================================================== */
 
-.iwac-vis-networks-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
-}
-
-@media (min-width: 1024px) { /* lg */
-    .iwac-vis-networks-layout {
-        grid-template-columns: 1fr minmax(240px, 300px);
-    }
-}
-
 .iwac-vis-networks-main {
     min-width: 0;
 }
@@ -54,20 +42,6 @@
 /* =================================================================== */
 /*  Toolbar — type chips, weight select, search                          */
 /* =================================================================== */
-
-.iwac-vis-networks-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3, 0.75rem);
-    margin-bottom: var(--space-3, 0.75rem);
-}
-
-.iwac-vis-networks-typechips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1, 0.25rem);
-}
 
 .iwac-vis-networks-typechip {
     display: inline-flex;
@@ -175,14 +149,6 @@
     background: var(--surface-raised, #faf8f6);
 }
 
-.iwac-vis-networks-search__item-name {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .iwac-vis-networks-search__item-count {
     flex: 0 0 auto;
     color: var(--muted, #66696e);
@@ -198,14 +164,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2, 0.5rem);
-}
-
-.iwac-vis-networks-details__label {
-    font-size: var(--text-xs, 0.8125rem);
-    font-weight: 600;
-    color: var(--ink-light, #3f4349);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide, 0.04em);
 }
 
 .iwac-vis-networks-details__header {
@@ -271,14 +229,6 @@
 .iwac-vis-networks-details__item:focus-visible {
     outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
     outline-offset: 1px;
-}
-
-.iwac-vis-networks-details__item-name {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .iwac-vis-networks-details__item-count {

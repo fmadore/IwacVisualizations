@@ -29,7 +29,7 @@
         var card = P.el('div', 'iwac-vis-compare-picker');
         card.dataset.side = side;
 
-        var eyebrow = P.el('div', 'iwac-vis-compare-picker__eyebrow',
+        var eyebrow = P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-picker__eyebrow',
             P.t(side === 'A' ? 'Corpus A' : 'Corpus B'));
         card.appendChild(eyebrow);
 

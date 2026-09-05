@@ -562,18 +562,23 @@
  * flush against each other with no gap. Hoisted into core so every
  * block that calls `P.buildChartsGrid()` gets the same responsive
  * 1-column → 2-column layout with `--wide` panels spanning full width.
+ * `.dashboard-charts` is the per-item dashboards' grid (dashboard-layout.js):
+ * the same grid under an older name.
  * ----------------------------------------------------------------- */
-.iwac-vis-overview-grid {
+.iwac-vis-overview-grid,
+.iwac-vis-block .dashboard-charts {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-4, 1rem);
 }
 
 @media (min-width: 768px) { /* md */
-    .iwac-vis-overview-grid {
+    .iwac-vis-overview-grid,
+    .iwac-vis-block .dashboard-charts {
         grid-template-columns: 1fr 1fr;
     }
-    .iwac-vis-overview-grid .iwac-vis-panel--wide {
+    .iwac-vis-overview-grid .iwac-vis-panel--wide,
+    .iwac-vis-block .dashboard-charts .iwac-vis-panel--wide {
         grid-column: 1 / -1;
     }
 }
@@ -594,7 +599,8 @@
 }
 
 @media (max-width: 599px) { /* sm */
-    .iwac-vis-overview-grid {
+    .iwac-vis-overview-grid,
+    .iwac-vis-block .dashboard-charts {
         gap: var(--space-3, 0.75rem);
     }
 }
@@ -780,7 +786,10 @@
     letter-spacing: var(--tracking-display, -0.01em);
 }
 
-.iwac-vis-block-header__desc {
+/*  The block's own description and a section's (`.iwac-vis-section-desc`,
+ *  under a section heading) are one register. */
+.iwac-vis-block-header__desc,
+.iwac-vis-section-desc {
     margin: 0;
     color: var(--ink-subtle, #5a5e63);
     font-size: var(--text-sm, 0.9375rem);
@@ -838,26 +847,12 @@
 
 
 /* =================================================================== */
-/*  Dashboard layout — generic 2-column grid used by most blocks         */
+/*  Dashboard layout — the per-item dashboards' async shell              */
+/*  (their `.dashboard-charts` grid is `.iwac-vis-overview-grid`, above)  */
 /* =================================================================== */
 
 .iwac-vis-block .dashboard-async-container {
     min-height: 240px;
-}
-
-.iwac-vis-block .dashboard-charts {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4, 1rem);
-}
-
-@media (min-width: 768px) {
-    .iwac-vis-block .dashboard-charts {
-        grid-template-columns: 1fr 1fr;
-    }
-    .iwac-vis-block .dashboard-charts .iwac-vis-panel--wide {
-        grid-column: 1 / -1;
-    }
 }
 
 
@@ -1231,8 +1226,11 @@
 }
 
 .iwac-vis-tab--active,
+.iwac-vis-tab--active:hover,
 .iwac-vis-facets__btn--active,
-.iwac-vis-facets__sub-btn--active {
+.iwac-vis-facets__btn--active:hover,
+.iwac-vis-facets__sub-btn--active,
+.iwac-vis-facets__sub-btn--active:hover {
     background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
     color: var(--ink, #13161c);
     border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
@@ -1912,12 +1910,105 @@ select.iwac-vis-control:hover {
     border-top: 2px solid var(--ink-strong, #05070c);
 }
 
-.iwac-vis-section-desc {
-    margin: 0;
-    color: var(--ink-subtle, #5a5e63);
+/*  `.iwac-vis-section-desc` is styled with `.iwac-vis-block-header__desc`. */
+
+
+/* =================================================================== */
+/*  Shared layout primitives                                             */
+/*                                                                       */
+/*  Each of these was written, byte for byte, in three to six block       */
+/*  sheets (v1.63.0 promoted them). A block keeps its own class on the    */
+/*  element as a hook for what is genuinely its own — a side colour, a    */
+/*  disabled state — and takes the base from here.                        */
+/* =================================================================== */
+
+/*  A filter / picker column beside the main pane; one column on a phone.
+ *  `--sidebar-end` puts the aside on the right. */
+.iwac-vis-layout--sidebar,
+.iwac-vis-layout--sidebar-end {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+}
+
+@media (min-width: 1024px) { /* lg */
+    .iwac-vis-layout--sidebar {
+        grid-template-columns: minmax(260px, 320px) 1fr;
+    }
+    .iwac-vis-layout--sidebar-end {
+        grid-template-columns: 1fr minmax(240px, 300px);
+    }
+}
+
+/*  A row of controls above a table or a map. */
+.iwac-vis-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+/*  A wrapping row of chips or small toggles. */
+.iwac-vis-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1, 0.25rem);
+}
+
+/*  The small-caps label over a group in a sidebar. */
+.iwac-vis-aside__label {
+    font-size: var(--text-xs, 0.8125rem);
+    font-weight: 600;
+    color: var(--ink-light, #3f4349);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+}
+
+/*  An eyebrow over a card or a column. */
+.iwac-vis-eyebrow {
+    font-size: var(--text-xs, 0.8125rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider, 0.08em);
+    font-weight: 700;
+    color: var(--muted, #66696e);
+}
+
+/*  A name in a flex row that must not push its neighbours off the row. */
+.iwac-vis-list__name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*  The ranked places list under a filtered map (P.buildRankedPlacesDetails)
+ *  — the data path for screen readers and for a browser without WebGL. */
+.iwac-vis-places-details {
+    border-top: 1px solid var(--border-light, #e2e5e8);
+    padding-top: var(--space-2, 0.5rem);
     font-size: var(--text-sm, 0.9375rem);
-    line-height: 1.55;
-    max-width: var(--measure-narrow, 44rem);
+    color: var(--ink-light, #3f4349);
+}
+
+.iwac-vis-places-details > summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted, #66696e);
+    font-size: var(--text-xs, 0.8125rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, 0.04em);
+}
+
+.iwac-vis-places-details > summary:focus-visible {
+    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
+    outline-offset: 2px;
+}
+
+.iwac-vis-places-details > .iwac-vis-table {
+    margin-top: var(--space-2, 0.5rem);
+    font-variant-numeric: tabular-nums;
 }
 
 
@@ -1941,9 +2032,6 @@ select.iwac-vis-control:hover {
     }
     .iwac-vis-panel > .iwac-vis-chart {
         min-height: 280px;
-    }
-    .iwac-vis-block .dashboard-charts {
-        gap: var(--space-3, 0.75rem);
     }
     .iwac-vis-summary-card {
         padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);

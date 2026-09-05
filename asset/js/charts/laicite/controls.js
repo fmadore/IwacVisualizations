@@ -86,7 +86,7 @@
                 }),
                 active: state.view,
                 classes: {
-                    root: 'iwac-vis-laicite-views',
+                    root: 'iwac-vis-chip-row iwac-vis-laicite-views',
                     btn: 'iwac-vis-laicite-view-btn',
                     active: 'is-active'
                 },

@@ -154,9 +154,7 @@
                     axisLabel: { formatter: function (v) { return '#' + v; } },
                     splitLine: { show: false }
                 },
-                series: chartSeries,
-                animationDuration: 600,
-                animationEasing: 'cubicOut'
+                series: chartSeries
             }, true);
         });
     }

@@ -28,6 +28,7 @@
         return;
     }
     var P = ns.panels;
+    var C = ns.chartOptions;
     var L = ns.laicite = ns.laicite || {};
 
     /** Countries offered by the scope selector, plus the pooled view. */
@@ -172,7 +173,7 @@
                 gridIndex: i,
                 max: axisMax,
                 splitNumber: 2,
-                axisLabel: { fontSize: 10, formatter: '{value}%' }
+                axisLabel: C._percentAxisLabel({ fontSize: 10 })
             });
             titles.push({
                 text: L.frameLabel(metadata, frame),

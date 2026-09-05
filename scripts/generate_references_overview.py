@@ -81,17 +81,20 @@ import numpy as np
 import pandas as pd
 
 from iwac_embeddings import coerce_embedding
+from iwac_stats import build_timeline_series
 from iwac_utils import (
     DATASET_ID,
     canonicalize_country_field,
+    clean_known_str,
+    clean_values,
     configure_logging,
     create_metadata_block,
     extract_year,
-    is_unknown,
     load_dataset_safe,
     parse_coordinates,
     parse_pipe_separated,
     save_json,
+    top_n_pipe,
 )
 
 SUBSET = "references"
@@ -146,24 +149,12 @@ MODEL_LANGUAGES: Dict[str, str] = {
 
 
 # Local alias for the shared iwac_utils.is_unknown (call sites keep the short name).
-_is_unknown = is_unknown
-
-
-def _clean_list(values: List[str]) -> List[str]:
-    return [v for v in (s.strip() for s in values) if v and not _is_unknown(v)]
-
-
-def _clean_text(value: Any) -> str:
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return ""
-    text = str(value).strip()
-    return "" if _is_unknown(text) else text
 
 
 def _clean_unique_list(values: List[str]) -> List[str]:
     seen: set = set()
     result: List[str] = []
-    for value in _clean_list(values):
+    for value in clean_values(values):
         if value not in seen:
             seen.add(value)
             result.append(value)
@@ -203,7 +194,7 @@ def _ref_type(row: pd.Series) -> str:
 
 def _reference_id(row: pd.Series, fallback_index: Any) -> str:
     for field in ("o:id", "identifier", "id"):
-        value = _clean_text(row.get(field))
+        value = clean_known_str(row.get(field))
         if value:
             return value
     return f"ref:{fallback_index}"
@@ -211,7 +202,7 @@ def _reference_id(row: pd.Series, fallback_index: Any) -> str:
 
 def _reference_title(row: pd.Series) -> str:
     for field in ("title", "o:title"):
-        value = _clean_text(row.get(field))
+        value = clean_known_str(row.get(field))
         if value:
             return value
     return "Untitled"
@@ -237,10 +228,10 @@ def _publication_record(row: pd.Series, fallback_index: Any) -> Dict[str, Any]:
         "title": _reference_title(row),
         "type": _ref_type(row),
     }
-    o_id = _clean_text(row.get("o:id"))
+    o_id = clean_known_str(row.get("o:id"))
     if o_id:
         record["o_id"] = o_id
-    date = _clean_text(row.get("pub_date"))
+    date = clean_known_str(row.get("pub_date"))
     if date:
         record["date"] = date
     publisher = _first_pipe_value(row, "publisher")
@@ -266,13 +257,13 @@ def compute_summary(rows: pd.DataFrame) -> Dict[str, Any]:
     year_max: Optional[int] = None
 
     for _, row in rows.iterrows():
-        for a in _clean_list(parse_pipe_separated(row.get("author"))):
+        for a in clean_values(parse_pipe_separated(row.get("author"))):
             authors.add(a)
-        for p in _clean_list(parse_pipe_separated(row.get("publisher"))):
+        for p in clean_values(parse_pipe_separated(row.get("publisher"))):
             publishers.add(p)
-        for l in _clean_list(parse_pipe_separated(row.get("language"))):
+        for l in clean_values(parse_pipe_separated(row.get("language"))):
             languages.add(l)
-        for c in _clean_list(parse_pipe_separated(row.get("country"))):
+        for c in clean_values(parse_pipe_separated(row.get("country"))):
             countries.add(c)
         types.add(_ref_type(row))
         year = extract_year(row.get("pub_date"))
@@ -302,44 +293,15 @@ def compute_timeline(rows: pd.DataFrame) -> Dict[str, Any]:
     misleadingly named — C.timeline expects the field to hold the
     stack-series categories, which here are reference types.
     """
-    by_year_type: Dict[int, Counter] = defaultdict(Counter)
-    type_totals: Counter = Counter()
-    seen_years: set = set()
-
+    pairs: List[Tuple[int, str]] = []
     for _, row in rows.iterrows():
         year = extract_year(row.get("pub_date"))
         if year is None:
             continue
-        type_label = _ref_type(row)
-        by_year_type[year][type_label] += 1
-        type_totals[type_label] += 1
-        seen_years.add(year)
-
-    if not seen_years:
-        return {"years": [], "countries": [], "series": {}}
-
-    years = sorted(seen_years)
-    types_sorted = [t for t, _ in type_totals.most_common()]
-    series: Dict[str, List[int]] = {}
-    for t in types_sorted:
-        series[t] = [int(by_year_type[y].get(t, 0)) for y in years]
-
-    return {
-        "years":     years,
-        "countries": types_sorted,  # naming kept for C.timeline compat
-        "series":    series,
-    }
-
-
-def _top_n_pipe(rows: pd.DataFrame, field: str, n: int) -> List[Dict[str, Any]]:
-    counter: Counter = Counter()
-    for value in rows.get(field, []):
-        for v in _clean_list(parse_pipe_separated(value)):
-            counter[v] += 1
-    return [
-        {"name": name, "count": int(count)}
-        for name, count in counter.most_common(n)
-    ]
+        pairs.append((year, _ref_type(row)))
+    # Types by total count desc, first-seen tie-break; "countries" holds
+    # the types — the key C.timeline reads.
+    return build_timeline_series(pairs, order="most_common")
 
 
 def compute_type_distribution(rows: pd.DataFrame, n: int) -> List[Dict[str, Any]]:
@@ -377,7 +339,7 @@ def compute_fulltext_coverage(rows: pd.DataFrame) -> Dict[str, Any]:
     words = rows.get("nb_mots")
 
     def _has_text(value: Any) -> bool:
-        return bool(_clean_text(value))
+        return bool(clean_known_str(value))
 
     with_ocr = int(sum(1 for v in ocr if _has_text(v))) if ocr is not None else 0
 
@@ -467,7 +429,7 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
         topic_id = _topic_id(row.get("lda_topic_id"))
         if topic_id is None:
             continue
-        model_name = _clean_text(row.get("lda_model_name")) if has_model_column else ""
+        model_name = clean_known_str(row.get("lda_model_name")) if has_model_column else ""
         model_name = model_name or "unknown"
 
         bucket = models[model_name].setdefault(
@@ -477,7 +439,7 @@ def compute_topics(rows: pd.DataFrame, items_per_topic: int) -> Dict[str, Any]:
         bucket["count"] += 1
         model_totals[model_name] += 1
 
-        label = _clean_text(row.get("lda_topic_label"))
+        label = clean_known_str(row.get("lda_topic_label"))
         if label and not bucket["label"]:
             bucket["label"] = label
 
@@ -603,11 +565,11 @@ def compute_semantic_landscape(
         # click-through to /item/<id>, so a row without an Omeka id has
         # nowhere to link and is better left off the map.
         try:
-            o_id = int(_clean_text(row.get("o:id")))
+            o_id = int(clean_known_str(row.get("o:id")))
         except (TypeError, ValueError):
             continue
 
-        title = _clean_text(row.get("title"))
+        title = clean_known_str(row.get("title"))
         if len(title) > max_title_len:
             title = title[: max_title_len - 1].rstrip() + "…"
 
@@ -621,7 +583,7 @@ def compute_semantic_landscape(
             # One name is enough for a tooltip; "et al." signals the rest.
             "author":  (authors[0] + " et al." if len(authors) > 1 else authors[0]) if authors else "",
             "type":    _ref_type(row),
-            "country": _clean_text(canonicalize_country_field(row.get("country"))),
+            "country": clean_known_str(canonicalize_country_field(row.get("country"))),
             "year":    year,
             "decade":  f"{(year // 10) * 10}s" if year is not None else "",
         })
@@ -762,7 +724,7 @@ def compute_treemap(rows: pd.DataFrame) -> Dict[str, Any]:
     by_country: Dict[str, Counter] = defaultdict(Counter)
     for _, row in rows.iterrows():
         type_label = _ref_type(row)
-        for country in _clean_list(parse_pipe_separated(row.get("country"))):
+        for country in clean_values(parse_pipe_separated(row.get("country"))):
             by_country[country][type_label] += 1
 
     children = []
@@ -806,7 +768,7 @@ def build_coordinate_lookup(index_rows: Optional[pd.DataFrame]) -> Dict[str, Dic
     lookup: Dict[str, Dict[str, Any]] = {}
     for _, row in index_rows.iterrows():
         coordinates = parse_coordinates(row.get("Coordonnées"))
-        title = _clean_text(row.get("Titre") or row.get("title") or row.get("o:title"))
+        title = clean_known_str(row.get("Titre") or row.get("title") or row.get("o:title"))
         if not coordinates or not title:
             continue
 
@@ -816,10 +778,10 @@ def build_coordinate_lookup(index_rows: Optional[pd.DataFrame]) -> Dict[str, Dic
             "lat": float(lat),
             "lng": float(lng),
         }
-        o_id = _clean_text(row.get("o:id"))
+        o_id = clean_known_str(row.get("o:id"))
         if o_id:
             entry["o_id"] = o_id
-        entity_type = _clean_text(row.get("Type"))
+        entity_type = clean_known_str(row.get("Type"))
         if entity_type:
             entry["type"] = entity_type
 
@@ -1079,8 +1041,8 @@ def compute_author_collaborations(
     node_records: Counter = Counter()  # count of references each person appears on
 
     for _, row in rows.iterrows():
-        authors = _clean_list(parse_pipe_separated(row.get("author")))
-        editors = _clean_list(parse_pipe_separated(row.get("editor")))
+        authors = clean_values(parse_pipe_separated(row.get("author")))
+        editors = clean_values(parse_pipe_separated(row.get("editor")))
 
         for a in authors:
             node_records[a] += 1
@@ -1178,12 +1140,12 @@ def build_references_overview(
     summary = compute_summary(df)
     timeline = compute_timeline(df)
     types = compute_type_distribution(df, top_n_types)
-    languages = _top_n_pipe(df, "language", top_n_languages)
-    countries = _top_n_pipe(df, "country", top_n_countries)
-    authors = _top_n_pipe(df, "author", top_n_authors)
+    languages = top_n_pipe(df, "language", top_n_languages)
+    countries = top_n_pipe(df, "country", top_n_countries)
+    authors = top_n_pipe(df, "author", top_n_authors)
     publishers = compute_publisher_rankings(df, top_n_publishers)
     publisher_countries = compute_publisher_countries(df, top_n_publishers)
-    subjects = _top_n_pipe(df, "subject", top_n_subjects)
+    subjects = top_n_pipe(df, "subject", top_n_subjects)
     treemap = compute_treemap(df)
 
     fulltext = compute_fulltext_coverage(df)

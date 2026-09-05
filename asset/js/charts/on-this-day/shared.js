@@ -324,8 +324,7 @@
     }
 
     function itemUrl(ctx, oId) {
-        return (ctx && ctx.siteBase ? ctx.siteBase : '')
-            + '/item/' + encodeURIComponent(String(oId));
+        return P.itemUrl(ctx && ctx.siteBase, oId);
     }
 
     /**

@@ -770,3 +770,77 @@ class CollectionOverviewAudiovisualTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SharedHelperTests(unittest.TestCase):
+    """The helpers v1.63.0 hoisted out of the generators that each carried a copy."""
+
+    def test_clean_known_str_blanks_the_placeholders_clean_str_keeps(self) -> None:
+        self.assertEqual(iwac_utils.clean_str(" Unknown "), "Unknown")
+        self.assertEqual(iwac_utils.clean_known_str(" Unknown "), "")
+        self.assertEqual(iwac_utils.clean_known_str(np.nan), "")
+        self.assertEqual(iwac_utils.clean_known_str(" Bénin "), "Bénin")
+
+    def test_clean_values_drops_empty_and_unknown_segments(self) -> None:
+        self.assertEqual(iwac_utils.clean_values([" Bénin ", "", "n/a", "Togo", None]), ["Bénin", "Togo"])
+        self.assertEqual(iwac_utils.clean_values(None), [])
+
+    def test_top_n_pipe_counts_every_value_of_every_row(self) -> None:
+        rows = pd.DataFrame({"country": ["Bénin|Togo", "Togo", "Unknown|Togo", np.nan, "Bénin"]})
+        self.assertEqual(
+            iwac_utils.top_n_pipe(rows, "country"),
+            [{"name": "Togo", "count": 3}, {"name": "Bénin", "count": 2}],
+        )
+        self.assertEqual(iwac_utils.top_n_pipe(rows, "country", 1), [{"name": "Togo", "count": 3}])
+        self.assertEqual(iwac_utils.top_n_pipe(rows, "missing"), [])
+
+    def test_timeline_series_orders_the_stack_three_ways(self) -> None:
+        pairs = [(1961, "Togo"), (1960, "Bénin"), (1961, "Bénin"), (1960, "Niger"), (1962, "Togo")]
+        by_count = iwac_stats.build_timeline_series(pairs, order="count", totals=True)
+        self.assertEqual(by_count["years"], [1960, 1961, 1962])
+        # Bénin and Togo tie on two items: alphabetical breaks it.
+        self.assertEqual(by_count["countries"], ["Bénin", "Togo", "Niger"])
+        self.assertEqual(by_count["series"]["Togo"], [0, 1, 1])
+        self.assertEqual(by_count["totals"], [2, 2, 1])
+        self.assertEqual(
+            iwac_stats.build_timeline_series(pairs, order="alpha")["countries"],
+            ["Bénin", "Niger", "Togo"],
+        )
+        # most_common keeps the first-seen order among ties: Togo before Bénin.
+        self.assertEqual(
+            iwac_stats.build_timeline_series(pairs, order="most_common")["countries"],
+            ["Togo", "Bénin", "Niger"],
+        )
+        explicit = iwac_stats.build_timeline_series(pairs, order=["Niger", "Mali", "Togo"])
+        self.assertEqual(explicit["countries"], ["Niger", "Togo"])
+        self.assertNotIn("totals", explicit)
+
+    def test_timeline_series_empty_result_keeps_the_shape(self) -> None:
+        self.assertEqual(iwac_stats.build_timeline_series([]), {"years": [], "countries": [], "series": {}})
+        self.assertEqual(
+            iwac_stats.build_timeline_series([], totals=True),
+            {"years": [], "countries": [], "series": {}, "totals": []},
+        )
+
+    def test_entity_index_skips_placeholders_and_indexes_aliases_and_places(self) -> None:
+        df = pd.DataFrame({
+            "o:id": [1, 2, 3, "x", 5],
+            "Titre": ["Abdoulaye Wade", "Cotonou", "Placeholder", "No id", ""],
+            "Type": ["Personnes", "Lieux", iwac_utils.AUTHORITY_PLACEHOLDER_TYPE, "Personnes", "Sujets"],
+            "Titre alternatif": ["Wade, Abdoulaye|A. Wade", None, None, None, None],
+            "Coordonnées": [None, "6.37, 2.39", None, None, None],
+        })
+        seen = []
+        lookup, by_id, lieux = iwac_utils.build_entity_index(df, on_entity=lambda info: seen.append(info["o_id"]))
+        self.assertEqual(sorted(by_id), [1, 2])
+        self.assertEqual(seen, [1, 2])
+        self.assertIs(lookup[iwac_utils.normalize_location_name("A. Wade")], by_id[1])
+        self.assertIs(lookup[iwac_utils.normalize_location_name("Cotonou")], by_id[2])
+        self.assertEqual(lieux, {2: (6.37, 2.39)})
+        self.assertNotIn("row", by_id[1])
+        with_rows = iwac_utils.build_entity_index(df, keep_row=True)[1]
+        self.assertEqual(with_rows[1]["row"]["Titre"], "Abdoulaye Wade")
+
+    def test_entity_index_names_the_missing_columns(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "index subset missing required columns"):
+            iwac_utils.build_entity_index(pd.DataFrame({"o:id": [1]}))

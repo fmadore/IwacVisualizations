@@ -473,6 +473,12 @@
             // user-initiated, never autoplay — then snaps between frames
             // instead of easing.
             animation: !prefersReducedMotion(),
+            // The one entrance animation every builder used to spell out —
+            // 600 ms, easing out — stated once. A builder that wants a
+            // different tempo (the 400 ms facet swaps, the bar race's
+            // update timing) still sets its own; the rest inherit these.
+            animationDuration: 600,
+            animationEasing: 'cubicOut',
             textStyle: {
                 color: tokens.ink,
                 fontFamily: tokens.fontFamily

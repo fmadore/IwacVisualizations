@@ -107,7 +107,7 @@
         function makeCol(kind, titleText, total, items) {
             var col = P.el('div', 'iwac-vis-compare-overlap__col');
             col.dataset.kind = kind;
-            var title = P.el('div', 'iwac-vis-compare-overlap__title', titleText);
+            var title = P.el('div', 'iwac-vis-eyebrow iwac-vis-compare-overlap__title', titleText);
             title.appendChild(P.el('span', 'iwac-vis-compare-overlap__count',
                 ' \u00b7 ' + P.formatNumber(total)));
             col.appendChild(title);

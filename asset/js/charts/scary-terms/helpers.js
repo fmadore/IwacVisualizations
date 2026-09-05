@@ -61,7 +61,7 @@
         Object.keys(defs).forEach(function (family) {
             var cardEl = P.el('div', 'iwac-vis-scary-def-card');
             cardEl.appendChild(P.el('h5', 'iwac-vis-scary-def-title', family));
-            var tags = P.el('div', 'iwac-vis-scary-def-tags');
+            var tags = P.el('div', 'iwac-vis-chip-row iwac-vis-scary-def-tags');
             (defs[family] || []).forEach(function (variant) {
                 tags.appendChild(P.el('span', 'iwac-vis-scary-def-tag', variant));
             });

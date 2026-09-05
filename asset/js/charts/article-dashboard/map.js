@@ -37,16 +37,6 @@
     var SOURCE_ID = 'article-places';
     var LAYER_ID  = 'article-place-circles';
 
-    /** Normalize a resolved token for MapLibre paint (rejects oklab/oklch). */
-    function ml(colour) {
-        return P.normalizeColorForMapLibre ? P.normalizeColorForMapLibre(colour) : colour;
-    }
-
-    function resolve(varName, fallback) {
-        var resolved = ns.resolveCssVar && ns.resolveCssVar(varName);
-        return ml(resolved || fallback);
-    }
-
     function featuresFrom(places) {
         return {
             type: 'FeatureCollection',
@@ -83,33 +73,22 @@
         var host = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(host);
 
-        var mapInstance = null;
-
-        function handleClick(e) {
-            if (!mapInstance || !mapInstance.getLayer(LAYER_ID)) return;
-            var hits = mapInstance.queryRenderedFeatures(e.point, { layers: [LAYER_ID] });
-            if (!hits.length) return;
-            var place = places[Number(hits[0].properties.idx)];
-            if (!place) return;
-            P.createIwacPopup({ closeButton: true, closeOnClick: true, maxWidth: '300px' })
-                .setLngLat(hits[0].geometry.coordinates.slice())
-                .setDOMContent(P.buildMapPopup({
-                    title: place.name,
-                    titleHref: place.o_id && siteBase
-                        ? siteBase + '/item/' + place.o_id
-                        : null,
-                    subtitleLines: [P.t('article_place_subtitle')],
-                    articles: [],
-                    siteBase: siteBase
-                }))
-                .addTo(mapInstance);
+        function popupFor(hit) {
+            var place = places[Number(hit.properties.idx)];
+            if (!place) return null;
+            return {
+                title: place.name,
+                titleHref: siteBase ? P.itemUrl(siteBase, place.o_id) : null,
+                subtitleLines: [P.t('article_place_subtitle')],
+                articles: [],
+                siteBase: siteBase
+            };
         }
 
         var created = P.createIwacMap(host, {
             center: [2, 10],
             zoom: 3.2,
             onStyleReady: function (m) {
-                mapInstance = m;
                 if (!m.getSource(SOURCE_ID)) {
                     m.addSource(SOURCE_ID, {
                         type: 'geojson',
@@ -118,59 +97,31 @@
                     });
                 }
                 if (!m.getLayer(LAYER_ID)) {
-                    m.addLayer({
+                    // A fixed radius: an article's places are a handful of
+                    // equal pins, not a count encoding.
+                    m.addLayer(P.bubbleLayer({
                         id: LAYER_ID,
-                        type: 'circle',
                         source: SOURCE_ID,
-                        paint: {
-                            'circle-radius': 7,
-                            'circle-color': resolve('--primary', '#ce4115'),
-                            'circle-opacity': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                1.0,
-                                0.78
-                            ],
-                            'circle-stroke-width': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                3,
-                                1.5
-                            ],
-                            'circle-stroke-color': resolve('--ink', '#13161c')
-                        }
-                    });
+                        radius: 7,
+                        opacity: [0.78, 1]
+                    }));
                 }
             }
         });
 
         if (!created) return;
-        mapInstance = created;
-        created.on('click', handleClick);
-        if (P.attachFeatureStateHover) {
-            P.attachFeatureStateHover(created, { layer: LAYER_ID, source: SOURCE_ID });
-        }
+        P.attachMapClickPopup(created, {
+            layers: LAYER_ID,
+            content: popupFor,
+            popup: { closeButton: true, closeOnClick: true, maxWidth: '300px' }
+        });
+        P.attachFeatureStateHover(created, { layer: LAYER_ID, source: SOURCE_ID });
 
         // Fit to the article's own pins: a world view would leave two
         // neighbouring towns indistinguishable. A single pin gets a fixed
         // zoom instead, since fitBounds on a zero-area box picks the max.
         created.once('load', function () {
-            if (places.length === 1) {
-                created.setCenter([places[0].lng, places[0].lat]);
-                created.setZoom(6);
-                return;
-            }
-            var west = Infinity, east = -Infinity, south = Infinity, north = -Infinity;
-            places.forEach(function (p) {
-                if (p.lng < west) west = p.lng;
-                if (p.lng > east) east = p.lng;
-                if (p.lat < south) south = p.lat;
-                if (p.lat > north) north = p.lat;
-            });
-            try {
-                created.fitBounds([[west, south], [east, north]],
-                    { padding: 48, maxZoom: 7, duration: 0 });
-            } catch (err) { /* degenerate bounds — keep the default view */ }
+            P.fitToPoints(created, places, { padding: 48, maxZoom: 7, duration: 0, singleZoom: 6 });
         });
     }
 

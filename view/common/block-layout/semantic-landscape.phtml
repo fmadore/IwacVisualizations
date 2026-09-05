@@ -15,6 +15,9 @@
 echo $this->partial('common/iwac-block-shell', [
     'assets' => [
         'needs' => [
+            // C.landscape — the UMAP scatter option the three landscape
+            // views share.
+            'chartOptions' => true,
             'facetButtons' => true,
         ],
         'bundle' => 'semantic-landscape',

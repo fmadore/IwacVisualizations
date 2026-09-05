@@ -233,9 +233,7 @@
                     : { name: cfg.valueAxisLabel || '' }
             ),
             dataZoom: zoom,
-            series: chartSeries,
-            animationDuration: 600,
-            animationEasing: 'cubicOut'
+            series: chartSeries
         };
         return R && R.withMedia
             ? R.withMedia(base, R.valueChartMedia({ hasZoom: years.length > 30 }))

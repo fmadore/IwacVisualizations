@@ -106,39 +106,6 @@
     gap: var(--space-1, 0.25rem);
 }
 
-.iwac-vis-scary-view-btn {
-    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
-    background: transparent;
-    color: var(--muted, #66696e);
-    border: 1px solid transparent;
-    border-radius: var(--radius-md, 0.5rem);
-    font-size: var(--text-sm, 0.9375rem);
-    font-family: inherit;
-    font-weight: 500;
-    cursor: pointer;
-    transition:
-        background-color var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        color            var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1)),
-        border-color     var(--transition-fast, 150ms cubic-bezier(0.25, 1, 0.5, 1));
-}
-
-.iwac-vis-scary-view-btn:hover {
-    background: var(--surface-raised, #faf8f6);
-    color: var(--ink, #13161c);
-}
-
-.iwac-vis-scary-view-btn:focus-visible {
-    outline: var(--focus-outline, 2px solid var(--focus-color, #ce4115));
-    outline-offset: 2px;
-}
-
-.iwac-vis-scary-view-btn--active,
-.iwac-vis-scary-view-btn--active:hover {
-    background: color-mix(in oklab, var(--primary, #ce4115) 12%, var(--surface-raised, #faf8f6));
-    color: var(--ink, #13161c);
-    border-color: color-mix(in oklab, var(--primary, #ce4115) 40%, var(--border, #ced1d6));
-}
-
 
 /* =================================================================== */
 /*  Country selector                                                     */
@@ -560,12 +527,6 @@
     font-weight: 700;
     color: var(--primary, #ce4115);
     text-transform: capitalize;
-}
-
-.iwac-vis-scary-def-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1, 0.25rem);
 }
 
 .iwac-vis-scary-def-tag {

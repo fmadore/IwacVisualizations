@@ -56,9 +56,10 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import numpy as np
 import pandas as pd
 
-from iwac_embeddings import build_normalized_matrix
+from iwac_embeddings import build_normalized_matrix, coerce_embedding
 from iwac_utils import (
     DATASET_ID,
+    build_entity_index,
     clean_float,
     clean_str,
     configure_logging,
@@ -66,7 +67,6 @@ from iwac_utils import (
     load_dataset_safe,
     normalize_country,
     normalize_location_name,
-    parse_coordinates,
     parse_pipe_separated,
     save_json,
 )
@@ -130,11 +130,6 @@ SHARED_ENTITIES_SAMPLE_SIZE = 3
 # well inside cache on any reasonable dev machine but small enough to
 # stream through rather than allocating a 144 M × 4 B = 576 MB square.
 KNN_BATCH_SIZE = 500
-
-# The index subset flags rows with Type == "Notices d'autorité" as
-# bibliographic authority placeholders — we skip them when building the
-# name lookup so they never appear as "entities" of an article.
-AUTHORITY_PLACEHOLDER_TYPE = "Notices d'autorité"
 
 logger: Optional[logging.Logger] = None
 
@@ -268,56 +263,10 @@ class ArticleDashboardGenerator:
 
     def build_entity_lookup(self) -> None:
         """Populate ``entity_lookup`` (name -> entity info), ``id_to_entity``,
-        and ``lieux_coords``. Same rules as entity_dashboards: NFC-normalize
-        the title, also index every ``Titre alternatif`` alias, cache Lieu
-        coordinates for the spatial map.
+        and ``lieux_coords`` — ``iwac_utils.build_entity_index``, the same
+        pass the entity dashboards make.
         """
-        df = self.index_df
-        id_col = find_column(df, ["o:id", "id"])
-        title_col = find_column(df, ["Titre", "dcterms:title"])
-        type_col = find_column(df, ["Type"])
-        if not (id_col and title_col and type_col):
-            raise RuntimeError(
-                f"index subset missing required columns: id={id_col}, "
-                f"title={title_col}, type={type_col}"
-            )
-        alt_col = find_column(df, ["Titre alternatif", "dcterms:alternative"])
-        coord_col = find_column(df, ["Coordonnées", "coordinates"])
-
-        for _, row in df.iterrows():
-            o_id = row.get(id_col)
-            try:
-                o_id = int(o_id)
-            except (TypeError, ValueError):
-                continue
-
-            entity_type = str(row.get(type_col) or "").strip()
-            if not entity_type or entity_type == AUTHORITY_PLACEHOLDER_TYPE:
-                continue
-
-            title = str(row.get(title_col) or "").strip()
-            if not title:
-                continue
-
-            info = {"o_id": o_id, "title": title, "type": entity_type}
-
-            key = normalize_location_name(title)
-            if key:
-                self.entity_lookup.setdefault(key, info)
-
-            if alt_col:
-                for alt in parse_pipe_separated(row.get(alt_col)):
-                    alt_key = normalize_location_name(alt)
-                    if alt_key and alt_key not in self.entity_lookup:
-                        self.entity_lookup[alt_key] = info
-
-            self.id_to_entity[o_id] = info
-
-            if entity_type == "Lieux" and coord_col:
-                coords = parse_coordinates(row.get(coord_col))
-                if coords is not None:
-                    self.lieux_coords[o_id] = (coords[0], coords[1])
-
+        self.entity_lookup, self.id_to_entity, self.lieux_coords = build_entity_index(self.index_df)
         logger.info(
             f"Entity lookup: {len(self.entity_lookup)} name keys, "
             f"{len(self.id_to_entity)} entities, {len(self.lieux_coords)} geocoded places"
@@ -405,6 +354,9 @@ class ArticleDashboardGenerator:
 
     @staticmethod
     def _first_country(value: Any) -> str:
+        """The FIRST country of a cell, or '' when that first one is unknown
+        (see dashboard_aggregator._first_country; generate_keyness.py's
+        differs on purpose)."""
         countries = normalize_country(value, return_list=True)
         if isinstance(countries, list) and countries:
             first = countries[0].strip()
@@ -450,7 +402,7 @@ class ArticleDashboardGenerator:
         valid = np.zeros(N, dtype=bool)
 
         for i, value in enumerate(df[embed_col].values):
-            vec = self._coerce_embedding(value)
+            vec = coerce_embedding(value)
             if vec is None:
                 rows.append(np.zeros(1, dtype=np.float32))  # placeholder, replaced below
                 continue
@@ -493,33 +445,6 @@ class ArticleDashboardGenerator:
             f"{int(valid.sum())} valid, "
             f"{N - int(valid.sum())} missing/invalid"
         )
-
-    @staticmethod
-    def _coerce_embedding(value: Any) -> Optional[np.ndarray]:
-        """Coerce a raw embedding cell to a float32 numpy vector.
-
-        Datasets library returns list[float] for sequence columns, but
-        older parquet reads may yield numpy arrays directly. Handle
-        both without casting a known-good vector twice.
-        """
-        if value is None:
-            return None
-        if isinstance(value, np.ndarray):
-            if value.size == 0 or not np.isfinite(value).all():
-                return None
-            return value.astype(np.float32, copy=False)
-        if isinstance(value, (list, tuple)):
-            if not value:
-                return None
-            try:
-                arr = np.asarray(value, dtype=np.float32)
-            except (TypeError, ValueError):
-                return None
-            if arr.size == 0 or not np.isfinite(arr).all():
-                return None
-            return arr
-        # Unknown type (e.g. pandas NaN float) → treat as missing.
-        return None
 
     def compute_semantic_neighbors(self) -> Dict[int, List[Dict[str, Any]]]:
         """Top-K cosine neighbours per valid row, computed in batches.

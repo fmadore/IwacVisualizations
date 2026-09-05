@@ -32,7 +32,7 @@
         var root = P.el('div', 'iwac-vis-spatial-root');
         container.appendChild(root);
 
-        var layout = P.el('div', 'iwac-vis-spatial-layout');
+        var layout = P.el('div', 'iwac-vis-layout--sidebar iwac-vis-spatial-layout');
         root.appendChild(layout);
 
         var sidebar = P.el('aside', 'iwac-vis-aside iwac-vis-spatial-sidebar');

@@ -168,6 +168,214 @@
         }
     };
 
+    /* ----------------------------------------------------------------- */
+    /*  The bubble maps' shared vocabulary                                */
+    /* ----------------------------------------------------------------- */
+
+    // Where a token cannot be read (a render before the theme sheet is in,
+    // a test without a stylesheet) the theme's own light values stand in.
+    var TOKEN_FALLBACK = {
+        '--primary': '#ce4115',
+        '--ink':     '#2c2f37',
+        '--border':  '#d4d6da',
+        '--surface': '#fdfdfd',
+        '--muted':   '#66696e'
+    };
+
+    /**
+     * A theme token as a MapLibre colour: the live custom property, or the
+     * fallback, normalised — the theme's OKLCH tokens otherwise serialise
+     * as oklab()/oklch(), which MapLibre's style validator rejects and the
+     * whole layer silently fails to load. Until v1.63.0 six map panels
+     * each carried an `ml / resolvePrimary / resolveInk` trio for this.
+     *
+     * @param {string} varName   e.g. '--primary'
+     * @param {string} [fallback]  default: the token's light value
+     * @returns {string}
+     */
+    P.mapColor = function (varName, fallback) {
+        var resolved = ns.resolveCssVar && ns.resolveCssVar(varName);
+        return P.normalizeColorForMapLibre(resolved || fallback || TOKEN_FALLBACK[varName] || '');
+    };
+
+    /** `hovered` under feature-state hover (P.attachFeatureStateHover), else `resting`. */
+    P.hoverCase = function (hovered, resting) {
+        return ['case', ['boolean', ['feature-state', 'hover'], false], hovered, resting];
+    };
+
+    /**
+     * Bubble radius from a count property, on a square root: area, not
+     * diameter, grows with the count, so the same 10:1 ratio reads as
+     * 10:1 on every panel. Linear made area ∝ count², and the ratio read
+     * as ~3× on one map and ~100× on the next.
+     *
+     * @param {string} key    the feature property
+     * @param {number} max    the largest count in the source
+     * @param {number} minPx  radius at 0
+     * @param {number} maxPx  radius at `max`
+     */
+    P.countRadius = function (key, max, minPx, maxPx) {
+        return [
+            'interpolate', ['linear'], ['sqrt', ['get', key]],
+            0, minPx,
+            Math.sqrt(Math.max(1, max || 1)), maxPx
+        ];
+    };
+
+    /**
+     * Draw the big bubbles first: a small one beside Abidjan's then sits on
+     * top instead of under it, and can be hovered and clicked.
+     */
+    P.countSortKey = function (key) {
+        return ['*', -1, ['get', key]];
+    };
+
+    /**
+     * The paint every bubble layer shares — a fill, a stroke, and the hover
+     * lift (brighter, thicker) feature-state hover drives.
+     *
+     * @param {Object} cfg
+     *   radius — a number or expression (P.countRadius)
+     *   color — fill (default: --primary); stroke — stroke (default: --ink)
+     *   opacity — [resting, hovered] (default [0.75, 1])
+     *   strokeWidth — [resting, hovered] (default [1.5, 3])
+     */
+    P.bubblePaint = function (cfg) {
+        cfg = cfg || {};
+        var opacity = cfg.opacity || [0.75, 1];
+        var width = cfg.strokeWidth || [1.5, 3];
+        return {
+            'circle-radius': cfg.radius != null ? cfg.radius : 6,
+            'circle-color': cfg.color || P.mapColor('--primary'),
+            'circle-opacity': P.hoverCase(opacity[1], opacity[0]),
+            'circle-stroke-width': P.hoverCase(width[1], width[0]),
+            'circle-stroke-color': cfg.stroke || P.mapColor('--ink')
+        };
+    };
+
+    /**
+     * A circle layer on P.bubblePaint, big-first when `sortKey` names the
+     * count property.
+     *
+     * @param {Object} cfg  id, source, [filter], [sortKey], + P.bubblePaint's
+     */
+    P.bubbleLayer = function (cfg) {
+        var layer = { id: cfg.id, type: 'circle', source: cfg.source, paint: P.bubblePaint(cfg) };
+        if (cfg.sortKey) layer.layout = { 'circle-sort-key': P.countSortKey(cfg.sortKey) };
+        if (cfg.filter) layer.filter = cfg.filter;
+        return layer;
+    };
+
+    /**
+     * `[[west, south], [east, north]]` of `{lng, lat}` points, or null when
+     * there are none. Points without finite coordinates are skipped.
+     */
+    P.boundsOf = function (points) {
+        var w = Infinity, s = Infinity, e = -Infinity, n = -Infinity, any = false;
+        (points || []).forEach(function (p) {
+            if (!p || !isFinite(p.lng) || !isFinite(p.lat)) return;
+            any = true;
+            if (p.lng < w) w = p.lng;
+            if (p.lng > e) e = p.lng;
+            if (p.lat < s) s = p.lat;
+            if (p.lat > n) n = p.lat;
+        });
+        return any ? [[w, s], [e, n]] : null;
+    };
+
+    /**
+     * Fit the view to points. One point gets a centre and `singleZoom`
+     * (fitBounds on a zero-area box picks the maximum zoom); several get
+     * fitBounds with the padding / maxZoom / duration given. Never throws:
+     * a degenerate box keeps the current view.
+     *
+     * @param {maplibregl.Map} map
+     * @param {Array<{lng:number, lat:number}>} points
+     * @param {{padding?:number, maxZoom?:number, duration?:number, singleZoom?:number}} [opts]
+     * @returns {boolean} whether the view moved
+     */
+    P.fitToPoints = function (map, points, opts) {
+        opts = opts || {};
+        var pts = (points || []).filter(function (p) { return p && isFinite(p.lng) && isFinite(p.lat); });
+        if (!map || !pts.length) return false;
+        try {
+            if (pts.length === 1) {
+                if (opts.singleZoom == null) return false;
+                map.setCenter([pts[0].lng, pts[0].lat]);
+                map.setZoom(opts.singleZoom);
+                return true;
+            }
+            var fit = {};
+            ['padding', 'maxZoom', 'duration'].forEach(function (k) {
+                if (opts[k] != null) fit[k] = opts[k];
+            });
+            map.fitBounds(P.boundsOf(pts), fit);
+            return true;
+        } catch (err) {
+            return false;   // degenerate bounds — keep the current view
+        }
+    };
+
+    /**
+     * A popup on click on one or more layers.
+     *
+     * Registered ONCE on the map, never inside onStyleReady — a theme swap
+     * reloads the style, and a handler registered there stacks a copy per
+     * toggle until one click opens N popups. Hits are resolved through
+     * queryRenderedFeatures against the layers that exist at click time,
+     * so the handler survives the swap and costs nothing while the layers
+     * are being rebuilt.
+     *
+     * @param {maplibregl.Map} map
+     * @param {Object} cfg
+     *   layers — a layer id, an array of ids, or a function returning them
+     *   pick(features) — choose among several hits (default: the first)
+     *   content(feature, e) — a P.buildMapPopup config, a DOM node, an HTML
+     *     string, or null to open nothing
+     *   lngLat(feature, e) — the anchor (default: a point feature's own
+     *     coordinates, else the click point)
+     *   popup — options for P.createIwacPopup
+     *     (default { closeButton: true, closeOnClick: true })
+     *   ease — `{ offset, duration }` to easeTo the anchor first, so a
+     *     popup that grows downward has room
+     *   onOpen(popup, feature, e) — after the popup is on the map (a
+     *     caller that fills it in asynchronously)
+     */
+    P.attachMapClickPopup = function (map, cfg) {
+        if (!map || !cfg) return;
+        function layerIds() {
+            var ids = typeof cfg.layers === 'function' ? cfg.layers() : cfg.layers;
+            ids = Array.isArray(ids) ? ids : [ids];
+            return ids.filter(function (id) { return id && map.getLayer(id); });
+        }
+        map.on('click', function (e) {
+            var layers = layerIds();
+            if (!layers.length) return;
+            var hits = map.queryRenderedFeatures(e.point, { layers: layers });
+            if (!hits || !hits.length) return;
+            var feature = cfg.pick ? cfg.pick(hits) : hits[0];
+            if (!feature) return;
+            var content = cfg.content(feature, e);
+            if (!content) return;
+            var at = cfg.lngLat ? cfg.lngLat(feature, e)
+                : (feature.geometry && feature.geometry.type === 'Point'
+                    ? feature.geometry.coordinates.slice() : e.lngLat);
+            if (cfg.ease) {
+                try {
+                    map.easeTo({ center: at, offset: cfg.ease.offset || [0, 80], duration: cfg.ease.duration || 300 });
+                } catch (err) { /* map may not be ready yet */ }
+            }
+            var popup = P.createIwacPopup(cfg.popup || { closeButton: true, closeOnClick: true });
+            if (!popup) return;
+            popup.setLngLat(at);
+            if (typeof content === 'string') popup.setHTML(content);
+            else if (content.nodeType) popup.setDOMContent(content);
+            else popup.setDOMContent(P.buildMapPopup(content));
+            popup.addTo(map);
+            if (cfg.onOpen) cfg.onOpen(popup, feature, e);
+        });
+    };
+
     /**
      * @param {HTMLElement|string} container  Map container (element or id)
      * @param {Object} config

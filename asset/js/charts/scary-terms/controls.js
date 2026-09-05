@@ -268,10 +268,10 @@
                 options: S.viewOptions({ hasCooccurrence: ctx.hasCooccurrence })
                     .map(function (v) { return { key: v.key, label: P.t(v.labelKey) }; }),
                 active: state.view,
+                // The core tab family; only the row and its label are the
+                // block's own.
                 classes: {
                     root: 'iwac-vis-scary-view-toggle',
-                    btn: 'iwac-vis-scary-view-btn',
-                    active: 'iwac-vis-scary-view-btn--active',
                     label: 'iwac-vis-scary-label'
                 },
                 onChange: function (key) {
