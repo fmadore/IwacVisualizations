@@ -64,13 +64,7 @@ echo $this->partial('common/iwac-block-shell', [
         // shared/hijri is no longer listed here: it became an unconditional
         // shared primitive in iwac-assets.phtml when the dashboards' year ×
         // month panel became its third consumer.
-        'panels'   => [
-            'on-this-day/shared',
-            'on-this-day/register',
-            'on-this-day/decades',
-            'on-this-day/clippings',
-        ],
-        'orchestrator' => 'on-this-day',
+        'bundle' => 'on-this-day',
     ],
     'blockClass' => 'iwac-vis-on-this-day',
     'embedSlug'  => 'on-this-day',

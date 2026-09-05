@@ -219,9 +219,9 @@
     // Match  oklab( L A B [ / alpha ] )   space- or comma-separated
     var _oklabRe = /^oklab\(\s*([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)(?:\s*\/\s*([\d.eE+\-%]+))?\s*\)$/i;
     // Match  oklch( L C H [ / alpha ] )
-    var _oklchRe = /^oklch\(\s*([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)[\s,]+([\d.eE+\-%]+)(?:deg)?(?:\s*\/\s*([\d.eE+\-%]+))?\s*\)$/i;
+    var _oklchRe = /^oklch\(\s*([\d.eE%+-]+)[\s,]+([\d.eE%+-]+)[\s,]+([\d.eE%+-]+)(?:deg)?(?:\s*\/\s*([\d.eE%+-]+))?\s*\)$/i;
     // Match  color(srgb r g b [ / alpha ] )
-    var _csrgbRe = /^color\(\s*srgb\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)\s+([\d.eE+\-]+)(?:\s*\/\s*([\d.eE+\-]+))?\s*\)$/i;
+    var _csrgbRe = /^color\(\s*srgb\s+([\d.eE+-]+)\s+([\d.eE+-]+)\s+([\d.eE+-]+)(?:\s*\/\s*([\d.eE+-]+))?\s*\)$/i;
 
     function _convertModernColor(s) {
         var m = _oklabRe.exec(s);

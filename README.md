@@ -45,6 +45,18 @@ Every registered block is wired end-to-end with live data — twenty-one page bl
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.62.0 — the load order becomes data: bundles, sourcemaps and an ESLint gate
+
+The fourth wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: B1 step 1, B2's ESLint, B8). The two steps that do not wait on the owner's self-hosting decision (ROADMAP 5.4).
+
+**One manifest, thirty-four bundles.** Every source under `asset/js/` was minified to a `.min.js` sibling and `view/common/iwac-assets.phtml` listed them one by one — about thirty-three `<script>` tags per block, the order held in PHP where nothing could check it against the files. `asset/js/bundles.json` now holds that order: six shared bundles (`shared-core` for every block; `shared-charts`, `shared-ui`, `shared-layout`, `shared-map`, `shared-d3` each behind a `$needs` flag), one bundle per panel set two blocks share (`panels/person`, drawn by the person and entity dashboards), and one bundle per block with its orchestrator last. `scripts/build-js.js` (esbuild, replacing terser) writes `asset/js/dist/**` with a sourcemap beside each bundle that carries the original sources, and fails when a source is missing, listed twice, or in no bundle. A block is three to seven requests instead of thirty-three; 155 sources become 34 bundles, 1.93 MB → 722 KB. Shared code never enters a block bundle — the on-view loader de-duplicates by URL, so two blocks on one page share every bundle they have in common and each executes once.
+
+**Templates name a bundle, not files.** All twenty-eight templates declare `'bundle' => '<name>'` beside their needs; the partial reads the manifest once per request, follows a block's `uses`, and emits the bundles in a fixed order. `lint:blocks` now also checks that every template's bundle exists in the manifest, that every manifest bundle is named by a template, and that no template still lists `panels` or `orchestrator`. The 155 per-file `.min.js` siblings are gone from the tree; the Playwright fixtures load either a real bundle (the dashboard and minimal-item fixtures, which now exercise the esbuild output) or the sources they isolate.
+
+**An ESLint gate.** `npm run lint:js` (ESLint 9 `recommended`, browser scripts against the `IWACVis`, `echarts`, `maplibregl` and `d3` globals; Node for scripts and tests) is the first step of `npm run lint`, so a value assigned and never read or a name never defined fails the build — the class of bug the regex scripts in `scripts/` could only approximate. It found eleven: six unused aliases in the chart-options builders, four escapes in the theme's colour regexes, one deliberate escape in the embed snippet, now annotated.
+
+**Retries stop hiding flakes.** CI's Playwright run writes a JSON report and `scripts/check-flakes.js` turns any test that passed only on retry into a red run naming the test.
+
 ### v1.61.0 — the data back to the reader: every chart as a table, every choropleth with a scale
 
 The third wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S3, E17, M11, M18). A chart's numbers reached a reader in two forms until now: the pixels, and the one-sentence description a screen reader gets instead of ECharts' own recitation. Nothing on the site let anyone read the figures, sort them, or take them into a spreadsheet.
@@ -979,7 +991,8 @@ IwacVisualizations/
 │   │       ├── scary-terms.css             #   metrics, view toggle, slider, matrix
 │   │       ├── topic-explorer.css          #   topic-card grid, detail header (v0.17.0)
 │   │       └── person-dashboard.css        #   body/stats, sentiment, graph/chord host
-│   ├── js/                                 # Every .js has a .min.js sibling (terser, committed)
+│   ├── js/                                 # Sources; bundled into js/dist/ by scripts/build-js.js (esbuild, committed)
+│   │   ├── bundles.json                    # The load order: shared bundles, panel sets, one bundle per block
 │   │   ├── iwac-i18n.js                    # Locale detection + en/fr dictionary + t()
 │   │   ├── iwac-theme.js                   # ECharts theme built from live CSS vars
 │   │   ├── dashboard-core.js               # IWACVis namespace, chart tracking, theme observer
@@ -1058,14 +1071,14 @@ IwacVisualizations/
 │   ├── generate_article_dashboards.py      # per-article + semantic kNN
 │   ├── generate_spatial_exploration.py     # Spatial Exploration sidecar (v1.7.0)
 │   ├── generate_entity_networks.py         # Co-occurrence graphs + FA2 layout (v1.7.0)
-│   ├── build-js.js                         # terser-driven JS minification
+│   ├── build-js.js                         # esbuild bundler driven by asset/js/bundles.json
 │   ├── requirements.txt
 │   └── README.md
 ├── language/
 │   ├── template.pot                        # Gettext template for PHP-rendered strings
 │   ├── fr.po                               # French translations
 │   └── README.md
-├── package.json                            # Node build: `npm run build:js`
+├── package.json                            # Node build + lint: `npm run build`, `npm run lint:js`
 ├── DATA_NOTES.md                           # Full HF dataset schema (6 subsets, ~19,420 rows)
 ├── ROADMAP.md
 └── README.md
@@ -1122,21 +1135,20 @@ The partial:
 Consequences for contributors:
 
 - **When adding a new block**, write the template body (markup + data attributes) and call `$this->partial('common/iwac-assets', [...])` at the top. Don't write raw `$this->headScript()` calls — that's what the partial is for.
-- **Reference `.min.js`, not `.js`** — the partial already appends `.min.js`; pass panel paths without any extension.
+- **Name the bundle, not the files** — `'bundle' => '<name>'`; the block's panel modules and orchestrator are listed, in order, under `blocks.<name>` in `asset/js/bundles.json`, and `npm run lint:blocks` fails on a template that still lists `panels` or `orchestrator`.
 - Shared JS primitives live under `asset/js/charts/shared/`; panel modules under `asset/js/charts/<block>/`; orchestrators at `asset/js/charts/<block>.js`.
-- If you need a truly new shared primitive, add it to the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file, add it as an opt-in flag in the partial, and document it in this README.
+- If you need a truly new shared primitive, add it to the matching `panels*.js` part (small additions) or a new `shared/<name>.js` file, list it in the right shared bundle in `asset/js/bundles.json` (a new bundle also needs an opt-in flag in the partial), and document it in this README.
 - **Blocks are declared once**, in `IwacVisualizations\Site\BlockRegistry`: slug, label, description, embeddable. The `BlockLayout` subclass declares only `const SLUG`; the embed whitelist derives from the registry; `npm run lint:blocks` fails the build if the registry, the config invokables, the classes and the templates stop agreeing.
 
 ### Load order (runtime)
 
-The shared partial enqueues scripts in this fixed order. All are deferred, so they download in parallel during HTML parse and execute in document order after parsing completes — the orchestrator always runs last, with its dependencies populated.
+The shared partial hands the on-view loader a fixed sequence of bundles (built by `scripts/build-js.js` from `asset/js/bundles.json`); the loader injects them in order once a block nears the viewport, so the orchestrator always runs last, with its dependencies populated. MapLibre is the exception — an ES module imported in parallel, awaited only by the panels that draw a map.
 
-1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js`, `maplibre-gl.js` + CSS (not deferred for CSS)
-2. **IWAC infrastructure** — order matters: `iwac-i18n.min.js` → `iwac-theme.min.js` → `dashboard-core.min.js`
-3. **Shared primitives** — `panels` + `panel-toolbar` + `responsive` always load; `chart-options`, `pagination`, `table`, `facet-buttons` + `faceted-chart`, `maplibre` + `map-popup` load only when the block opts in via `needs`
-4. **Dashboard layout system + renderers (opt-in)** — `dashboard-layout.js` (the registry) followed by every entry in `needs.renderers` from `shared/renderers/<name>.js`; each renderer self-registers into `IWACVis.dashboardLayout` on load. Skipped entirely when the block declares neither `'layout' => true` nor a `'renderers' => [...]` list.
-5. **Panel modules** — self-registering IIFEs under `charts/<block>/` that attach to `IWACVis.<block>Dashboard.<panel>`
-6. **Orchestrator** — `charts/<block>.js` — waits for `DOMContentLoaded`, fetches JSON (or live HF data), builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
+1. **CDN libraries** — `echarts.min.js`, optionally `echarts-wordcloud.min.js` and the four d3-force modules
+2. **`shared-core`** — every block: `iwac-i18n` → `iwac-theme` → `dashboard-core` → the `panels` family (core, controls, store, map, boot) → `chart-rows` → `panel-toolbar` → `embed` → `responsive` → `hijri`
+3. **Shared bundles the block opts into via `needs`** — `shared-charts` (the chart-options builders), `shared-ui` (pagination, table, facet buttons, faceted chart, annotated timeline, concordance), `shared-layout` (the dashboard layout registry, the panels bridge and every renderer, each self-registering on load), `shared-map` (the IWAC map helpers), `shared-d3` (the canvas force graph)
+4. **Panel sets the block shares** — `panels/<name>` (the person and entity dashboards draw the same eleven panels)
+5. **The block bundle** — `blocks/<name>`: its panel modules (self-registering IIFEs under `charts/<block>/`) in order, then the orchestrator `charts/<block>.js`, which fetches JSON, builds the DOM scaffold, and dispatches `panel.render(host, data, facet, ctx)` for each registered panel — or, for layout-system blocks, calls `IWACVis.dashboardLayout.render(rootEl, layoutKey, data, ctx)` once and lets the registry walk the slot list
 
 ### Shared JS helpers (`asset/js/charts/shared/panels*.js`)
 
@@ -1200,13 +1212,13 @@ Not yet released. For local development:
 
 1. Place this directory (or a clone of the repo) under your Omeka S `modules/` folder.
 2. If you plan to regenerate the minified JS bundles or the precomputed data:
-   - **Node 20+** for the JS build/browser tests: `npm install && npm run build:js`
+   - **Node 22** for the JS build/lint/browser tests: `npm install && npm run build`
    - **Python 3.12** for the CI-equivalent precompute pipeline: `python3 -m venv .venv && source .venv/bin/activate && pip install --require-hashes -r scripts/requirements.lock`
 3. Regenerate data as needed (see [Precompute pipeline](#precompute-pipeline)).
 4. Activate the module in **Admin → Modules**.
 5. On any site page, add one of the page blocks (for example **Collection Overview**, **References Overview**, or **Compare Newspapers**). For resource-page blocks (**Visualizations**, **Item Set Dashboard**), attach them to the appropriate resource templates from the admin.
 
-Already-committed `.min.js` files mean a fresh clone works without running `npm install` — the Node build is only needed when you change a `.js` source.
+The committed `asset/js/dist/` bundles and `.min.css` sheets mean a fresh clone works without running `npm install` — the Node build is only needed when you change a source.
 
 ### Requirements
 
@@ -1337,16 +1349,17 @@ The HF dataset updates roughly monthly, so the workflow regenerates on a monthly
 
 ## Build & development
 
-JS sources under `asset/js/` are mirrored to `.min.js` siblings by `scripts/build-js.js` (terser). Templates load the `.min.js` variants; the unminified sources stay in-tree for development and debugging.
+JS sources under `asset/js/` are bundled by `scripts/build-js.js` (esbuild) into `asset/js/dist/`, in the order `asset/js/bundles.json` states — the one place the load order lives. Six shared bundles (`shared-core`, always; `shared-charts`, `shared-ui`, `shared-layout`, `shared-map`, `shared-d3`, each behind a `$needs` flag in the asset partial), one bundle per shared panel set (`panels/person`, drawn by the person and entity dashboards), and one bundle per block (`blocks/<name>`, panels in order, orchestrator last). Every bundle has a `.map` beside it pointing back at the original sources with their contents embedded, so the browser's devtools show the unminified files. Templates name their bundle (`'bundle' => 'laicite'`) and their needs; the partial emits the bundles in a fixed order and nothing else.
 
 ```bash
-npm install          # installs terser as a devDependency (one-time)
-npm run build:js     # walks asset/js/**/*.js and writes .min.js next to each source
+npm install          # esbuild, eslint, csso (one-time)
+npm run build:js     # reads asset/js/bundles.json and writes asset/js/dist/**
+npm run lint:js      # eslint over asset/js, scripts and tests
 ```
 
-`node_modules/` is gitignored; the generated `.min.js` files **are** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the minified output.
+`node_modules/` is gitignored; `asset/js/dist/` **is** committed, so a fresh clone works without running the build. Re-run `npm run build:js` after editing any `.js` source and commit both the source and the bundles. The build fails when a source is missing, listed in two bundles, or in none — a new file has to be added to the manifest, which is how the order stays data.
 
-Current minification results across **128 files: ≈ 1.33 MB → 488 KB (−63.4%)**. The chart-options builders (formerly a single ≈ 81 KB `charts/shared/chart-options.js`) were split in v0.23.0 into a small core plus four chart-family files (`chart-options-bar`, `-hbar`, `-graph`, `-special`) that together minify to ≈ 27 KB. The tiny `faceted-chart.js` helper still minifies to under 1 KB; `dashboard-layout.js` lands at ≈ 3.5 KB and the renderers stay independently loadable. `choropleth.js` lands at ≈ 5.7 KB; the 6-country polygon GeoJSON it loads is a separate 138 KB file fetched once per page on first toggle.
+A block is now three to seven script requests (the ECharts CDN, `shared-core`, the shared bundles it needs, its own) instead of about thirty-three; 155 sources → 34 bundles, ≈ 1.93 MB → 722 KB (−62.7%). Shared code never goes into a block bundle: the on-view loader de-duplicates by URL, so two blocks on one page share every bundle they have in common and each executes once, whereas a shared file inlined into two block bundles would execute twice.
 
 Every sheet under `asset/css/` is hand-authored; the styles are split per-block, mirroring the JS architecture:
 
@@ -1381,7 +1394,7 @@ The module has four dependency surfaces, and they are watched by two different m
 | Surface | Where | Watched by |
 | --- | --- | --- |
 | GitHub Actions | `.github/workflows/*.yml` | Dependabot (`.github/dependabot.yml`), monthly, grouped |
-| npm devDependencies | `package.json` — `csso`, `terser` | Nothing. Build-only; never served to visitors |
+| npm devDependencies | `package.json` — `esbuild`, `eslint`, `csso` | Nothing. Build-only; never served to visitors |
 | Python | `scripts/requirements.txt` + `scripts/requirements.lock` | Hash-verified Python 3.12/Linux lock; refresh with `npm run lock:python` after changing direct requirements |
 | **CDN libraries** | `view/common/iwac-assets.phtml` | **`CDN versions` workflow** |
 
@@ -1412,7 +1425,7 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.61.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.62.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

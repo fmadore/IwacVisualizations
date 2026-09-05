@@ -35,12 +35,8 @@ echo $this->partial('common/iwac-block-shell', [
         'needs' => [
             'chartOptions' => true,
             'layout'       => true,
-            'renderers'    => [
-                'sibling-sparkline',
-                'similar-items',
-            ],
         ],
-        'orchestrator' => 'reference-dashboard',
+        'bundle' => 'reference-dashboard',
     ],
     'blockClass'   => 'iwac-vis-reference',
     'heading'      => $this->translate('Visualisations'),

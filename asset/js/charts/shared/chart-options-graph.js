@@ -21,7 +21,6 @@
     var t = P.t;
     var fmt = P.formatNumber;
     var esc = P.escapeHtml;
-    var R = ns.responsive;
 
     /* ----------------------------------------------------------------- */
     /*  Shared frozen-force series skeleton                               */

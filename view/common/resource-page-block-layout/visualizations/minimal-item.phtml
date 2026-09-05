@@ -120,12 +120,8 @@ echo $this->partial('common/iwac-block-shell', [
         'needs' => [
             'chartOptions' => true,
             'layout'       => true,
-            'renderers'    => [
-                'sibling-sparkline',
-                'similar-items',
-            ],
         ],
-        'orchestrator' => 'minimal-item-dashboard',
+        'bundle' => 'minimal-item-dashboard',
     ],
     'blockClass'   => 'iwac-vis-minimal-item',
     'heading'      => $this->translate('Visualisations'),

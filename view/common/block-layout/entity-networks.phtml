@@ -18,11 +18,7 @@ echo $this->partial('common/iwac-block-shell', [
             'maplibre' => true,
             'facetButtons' => true,
         ],
-        'panels' => [
-            'entity-networks/graph',
-            'entity-networks/details',
-        ],
-        'orchestrator' => 'entity-networks',
+        'bundle' => 'entity-networks',
     ],
     'blockClass' => 'iwac-vis-networks',
     'embedSlug'  => 'entity-networks',

@@ -31,19 +31,11 @@ echo $this->partial('common/iwac-block-shell', [
             // in shared/, shared with the Laïcité block (issue #14).
             'timeline'     => true,
         ],
-        // Companion modules: i18n strings + stateless builders + the three
-        // view modules + the controls row. All must load before the
-        // orchestrator (which aliases the builders and reads the
-        // registered translations).
-        'panels' => [
-            'scary-terms/i18n',
-            'scary-terms/helpers',
-            'scary-terms/trends',
-            'scary-terms/wordcloud',
-            'scary-terms/map',
-            'scary-terms/controls',
-        ],
-        'orchestrator' => 'scary-terms',
+        // The bundle: i18n strings + stateless builders + the three view
+        // modules + the controls row, then the orchestrator (which aliases
+        // the builders and reads the registered translations). The file
+        // list and its order live in asset/js/bundles.json.
+        'bundle' => 'scary-terms',
     ],
     'blockClass' => 'iwac-vis-scary',
     'embedSlug'  => 'scary-terms',

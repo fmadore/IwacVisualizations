@@ -41,6 +41,10 @@
         '<script>(function(){if(window.__iwacEmbedResize)return;window.__iwacEmbedResize=1;'
         + "window.addEventListener('message',function(e){if(!e.data||e.data.type!=='iwac-embed-height')return;"
         + 'var f=document.getElementsByTagName(\'iframe\');for(var i=0;i<f.length;i++){'
+        // `<\/script>`: the escape does nothing in JS, and everything if this
+        // source is ever inlined into a page — an unescaped `</script>` would
+        // end the tag mid-string.
+        // eslint-disable-next-line no-useless-escape
         + "if(f[i].contentWindow===e.source){f[i].style.height=e.data.height+'px';}}});})();<\/script>";
 
     /** Build the copy-paste embed snippet (iframe + the resize listener). */

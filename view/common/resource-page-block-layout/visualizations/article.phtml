@@ -273,21 +273,13 @@ echo $this->partial('common/iwac-block-shell', [
             'pagination'   => true,
             'layout'       => true,
         ],
-        // Self-registering IIFEs for the client-side panels. The sentiment
-        // panel is entirely server-rendered (CSS dot plots, no chart library)
-        // and so has no entry here.
-        // `dashboard-panels-bridge` MUST load after the per-panel IIFEs — it
-        // registers thin wrappers into IWACVis.dashboardLayout so the
-        // orchestrator can dispatch via declarative slot arrays.
-        'panels' => [
-            'article-dashboard/network',
-            'article-dashboard/further-reading',
-            // Registers its own renderer + hasData predicate, so unlike the
-            // two above it needs no entry in dashboard-panels-bridge.
-            'article-dashboard/map',
-            'shared/dashboard-panels-bridge',
-        ],
-        'orchestrator' => 'article-dashboard',
+        // The bundle: the client-side panels (self-registering IIFEs), then
+        // the orchestrator; `dashboard-panels-bridge`, which registers thin
+        // wrappers around them into IWACVis.dashboardLayout, rides the
+        // shared-layout bundle above. The sentiment panel is entirely
+        // server-rendered (CSS dot plots, no chart library) and so is in no
+        // bundle. File list and order: asset/js/bundles.json.
+        'bundle' => 'article-dashboard',
     ],
     'blockClass'   => 'iwac-vis-article',
     'heading'      => $this->translate('Visualisations'),

@@ -15,46 +15,40 @@
  *     <?php echo $this->partial('common/iwac-assets', [
  *         'blockCss'     => 'collection-overview',
  *         'needs'        => [
- *             'maplibre'     => true,
- *             'wordcloud'    => true,
- *             'd3'           => true,           // canvas force-graph renderer
- *             'chartOptions' => true,
- *             'facetButtons' => true,
+ *             'maplibre'     => true,           // shared-map bundle + MapLibre
+ *             'wordcloud'    => true,           // the echarts-wordcloud plugin
+ *             'd3'           => true,           // shared-d3 (canvas force graphs)
+ *             'chartOptions' => true,           // shared-charts
+ *             'facetButtons' => true,           // any of these five: shared-ui
  *             'table'        => true,
  *             'pagination'   => true,
- *             'timeline'     => true,           // annotated time series
- *             'concordance'  => true,           // KWIC list (implies pagination)
- *             'layout'       => true,           // declarative dashboard layout
- *             'renderers'    => [               // which shared renderers to load
- *                 'calendar-heatmap',
- *                 'chord',
- *                 'radar-profile',
- *                 'sibling-sparkline',
- *                 'similar-items',
- *                 'sunburst',
- *                 'treemap',
- *             ],
+ *             'timeline'     => true,
+ *             'concordance'  => true,
+ *             'layout'       => true,           // shared-layout (dashboard layout
+ *                                               //   + every shared renderer)
  *         ],
- *         'panels'       => [
- *             'collection-overview/recent-additions',
- *             'collection-overview/languages',
- *             // ...
- *         ],
- *         'orchestrator' => 'collection-overview',
+ *         'bundle'       => 'collection-overview',
  *     ]); ?>
  *
- * Load order is fixed: stylesheets → CDN libs → IWAC i18n/theme/core →
- * shared primitives → dashboard-layout (if needed) → shared renderers
- * (if needed) → block panels → orchestrator. headScript/headLink
- * de-dupe by URL, so if two partial calls ever clash on a page, each
- * asset is still emitted only once.
+ * The JavaScript is loaded as bundles built by scripts/build-js.js from
+ * asset/js/bundles.json — the ONE place the load order lives. This partial
+ * decides only which bundles a block needs and their fixed order:
+ * shared-core (always) → shared-charts → shared-ui → shared-layout →
+ * shared-map → shared-d3 → the block's panel sets → the block bundle. What
+ * each bundle contains, and in what order, is the manifest's business; the
+ * build fails when a source is missing, listed twice, or in no bundle.
+ * headScript/headLink de-dupe by URL, so two blocks on one page share every
+ * bundle they have in common, and each is executed once.
+ *
+ * Until v1.62.0 the partial listed ~33 `.min.js` files per block one by one,
+ * with the order held here in PHP where nothing could check it.
  *
  * @var \Laminas\View\Renderer\PhpRenderer $this
  * @var string|array|null $blockCss  One sheet name under css/blocks/, or a list
  *                                   of them in load order.
  * @var array|null  $needs
- * @var array|null  $panels
- * @var string|null $orchestrator
+ * @var string|null $bundle     The block's entry in asset/js/bundles.json
+ *                              (`blocks.<name>`); its orchestrator loads last.
  */
 
 // -- CDN versions -------------------------------------------------------
@@ -98,8 +92,7 @@ $cdnD3 = [
 // -- Defaults -----------------------------------------------------------
 $blockCss     = isset($blockCss)     ? $blockCss     : null;
 $needs        = isset($needs)        ? (array) $needs : [];
-$panels       = isset($panels)       ? (array) $panels : [];
-$orchestrator = isset($orchestrator) ? $orchestrator : null;
+$bundle       = isset($bundle)       ? (string) $bundle : null;
 
 $needMaplibre   = !empty($needs['maplibre']);
 $needWordcloud  = !empty($needs['wordcloud']);
@@ -117,9 +110,32 @@ $needConcordance = !empty($needs['concordance']);
 if ($needConcordance) {
     $needPagination = true;
 }
-// Renderers imply the dashboard-layout module they register against.
-$rendererList   = isset($needs['renderers']) ? (array) $needs['renderers'] : [];
-$needLayout     = !empty($needs['layout']) || !empty($rendererList);
+// `renderers` (a pre-1.62.0 list of which shared renderers to load) implies
+// the layout bundle, which now carries every renderer.
+$needLayout     = !empty($needs['layout']) || !empty($needs['renderers']);
+// Any of the five small UI primitives brings the one bundle that holds them all.
+$needUi         = $needPagination || $needTable || $needFacets || $needTimeline || $needConcordance;
+
+// -- The bundle manifest --------------------------------------------------
+// Read once per request (static), so the partial can validate the block's
+// bundle name and follow its `uses` (panel sets shared between blocks). A
+// block naming a bundle the manifest does not have is a build-time error in
+// scripts/check-blocks.js; here it is a loud one, not a silently blank page.
+$manifest = (static function () {
+    static $cache = null;
+    if ($cache === null) {
+        $raw = @file_get_contents(__DIR__ . '/../../asset/js/bundles.json');
+        $decoded = $raw === false ? null : json_decode($raw, true);
+        $cache = is_array($decoded) ? $decoded : ['blocks' => [], 'panels' => []];
+    }
+    return $cache;
+})();
+if ($bundle !== null && !isset($manifest['blocks'][$bundle])) {
+    throw new \RuntimeException(sprintf(
+        'IwacVisualizations: no bundle "%s" in asset/js/bundles.json — add the block there and run npm run build:js',
+        $bundle
+    ));
+}
 
 $module = 'IwacVisualizations';
 
@@ -168,9 +184,9 @@ foreach ((array) $blockCss as $sheet) {
 // is found, the loader falls back to loading immediately, so a chart can never
 // be stranded behind its spinner.
 //
-// $scripts preserves the previous load order exactly: CDN libs → IWAC
-// infra (i18n → theme → core) → shared primitives → conditional features →
-// dashboard-layout + renderers → block panels → orchestrator (last).
+// $scripts is: CDN libs → shared-core → the shared bundles this block needs
+// → its panel sets → its own bundle (orchestrator last, inside it). Each is
+// built by scripts/build-js.js from asset/js/bundles.json.
 //
 // MapLibre is the one exception and is NOT in this list — see $lazyMjs. Being
 // ESM-only since v6 it cannot ride the classic queue, so it is imported
@@ -203,112 +219,47 @@ if ($needMaplibre) {
     $lazyCss[] = $this->assetUrl('css/iwac-maplibre.min.css', $module);
 }
 
-// IWAC infrastructure (i18n → theme → dashboard-core).
-$scripts[] = $this->assetUrl('js/iwac-i18n.min.js', $module);
-$scripts[] = $this->assetUrl('js/iwac-theme.min.js', $module);
-$scripts[] = $this->assetUrl('js/dashboard-core.min.js', $module);
-
-// Shared primitives — panels is the base for every other primitive;
-// panel-toolbar + responsive are tiny and universally useful. Heavier or
-// feature-specific primitives are opt-in via $needs.
-//
-// panels.js was split into four files in v1.23.0 (DOM/fetch/i18n/status/layout
-// core, then controls, map helpers, boot helpers). They all extend the same
-// IWACVis.panels object and none reads another at load time, so only the core
-// has to come first. Kept unconditional: every block boots through
-// panels-boot, and the other two are small enough that gating them on $needs
-// would buy less than the extra branch costs in reasoning.
-$scripts[] = $this->assetUrl('js/charts/shared/panels.min.js', $module);
-$scripts[] = $this->assetUrl('js/charts/shared/panels-controls.min.js', $module);
-// store.js: the block state store, the URL binding and the copy-link button
-// (v1.60.0). Every interactive block's controls patch a store, so it rides
-// with the other panels parts; it extends the same IWACVis.panels object.
-$scripts[] = $this->assetUrl('js/charts/shared/store.min.js', $module);
-$scripts[] = $this->assetUrl('js/charts/shared/panels-map.min.js', $module);
-$scripts[] = $this->assetUrl('js/charts/shared/panels-boot.min.js', $module);
-// chart-rows.js: a chart's option read back as rows, for the toolbar's
-// "View as table" / "Download CSV" (v1.61.0). Pure; before panel-toolbar.
-$scripts[] = $this->assetUrl('js/charts/shared/chart-rows.min.js', $module);
-$scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
-// embed.js: adds the per-panel "copy embed code" buttons on the live site and
-// drives single-panel selection inside an /iwac-embed/:block/:panel frame. It
-// self-inits and no-ops where neither applies, so it's universally enqueued
-// (after panel-toolbar, whose toolbar container it reuses).
-$scripts[] = $this->assetUrl('js/charts/shared/embed.min.js', $module);
-$scripts[] = $this->assetUrl('js/charts/shared/responsive.min.js', $module);
-// hijri.js owns the Umm al-Qura month-name table AND the probe-then-trust
-// Intl conversion of *today*. Unconditional for the same reason as
-// responsive.js above — it is 1.2 KB and has no dependencies — but here the
-// duplication argument matters more than the size one: three consumers need
-// the month names (the calendar-heatmap renderer, the dashboards' year ×
-// month panel, On This Day), and gating it on $needs is exactly how those
-// consumers ended up carrying private copies that could drift apart. One
-// table, always present, no coordination.
-$scripts[] = $this->assetUrl('js/charts/shared/hijri.min.js', $module);
+// IWAC bundles, in their fixed order. Every block carries shared-core
+// (i18n → theme → dashboard-core → the panels family → panel toolbar →
+// embed → responsive → hijri); the rest ride behind their $needs flag.
+$dist = 'js/dist/';
+$scripts[] = $this->assetUrl($dist . 'shared-core.min.js', $module);
 if ($needChartOpts) {
-    // chart-options core must load before its four family builders, which
-    // extend the same IWACVis.chartOptions namespace in any order.
-    $scripts[] = $this->assetUrl('js/charts/shared/chart-options.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-bar.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-hbar.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-graph.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/chart-options-special.min.js', $module);
+    $scripts[] = $this->assetUrl($dist . 'shared-charts.min.js', $module);
 }
-if ($needPagination) {
-    $scripts[] = $this->assetUrl('js/charts/shared/pagination.min.js', $module);
+if ($needUi) {
+    // pagination + table + facet buttons + faceted chart + annotated
+    // timeline + concordance: 17 KB minified, for any block that needs one.
+    $scripts[] = $this->assetUrl($dist . 'shared-ui.min.js', $module);
 }
-if ($needTable) {
-    $scripts[] = $this->assetUrl('js/charts/shared/table.min.js', $module);
-}
-if ($needFacets) {
-    $scripts[] = $this->assetUrl('js/charts/shared/facet-buttons.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/faceted-chart.min.js', $module);
-}
-// Annotated time series (event markLines + period markAreas), shared by the
-// Scary Terms and Laïcité blocks.
-if ($needTimeline) {
-    $scripts[] = $this->assetUrl('js/charts/shared/annotated-timeline.min.js', $module);
-}
-// KWIC / concordance list renderer — highlighted keyword-in-context lines.
-if ($needConcordance) {
-    $scripts[] = $this->assetUrl('js/charts/shared/concordance.min.js', $module);
+if ($needLayout) {
+    // The declarative dashboard layout, the dashboards' panel bridge and
+    // every shared renderer (each self-registers into the layout on load).
+    $scripts[] = $this->assetUrl($dist . 'shared-layout.min.js', $module);
 }
 if ($needMaplibre) {
-    $scripts[] = $this->assetUrl('js/charts/shared/maplibre.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/map-popup.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/choropleth.min.js', $module);
+    // The IWAC map helpers (factory, popup, choropleth) — not MapLibre
+    // itself, which is the ES module the loader imports in parallel.
+    $scripts[] = $this->assetUrl($dist . 'shared-map.min.js', $module);
 }
-// Canvas force-graph renderer. Strict order: the painter, then the
-// simulation/interaction controller that drives it, then the panel chrome,
-// then the IWAC entity vocabulary layered on top of all three.
 if ($needD3) {
-    $scripts[] = $this->assetUrl('js/charts/shared/graph-canvas.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/graph-force.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/graph-panel.min.js', $module);
-    $scripts[] = $this->assetUrl('js/charts/shared/entity-graph.min.js', $module);
+    // The canvas force-graph renderer over the d3-force globals above.
+    $scripts[] = $this->assetUrl($dist . 'shared-d3.min.js', $module);
 }
 
-// Dashboard layout system + opt-in renderers (each renderer self-registers
-// into dashboard-layout on load; only declared renderers are emitted).
-if ($needLayout) {
-    $scripts[] = $this->assetUrl('js/charts/shared/dashboard-layout.min.js', $module);
-    foreach ($rendererList as $renderer) {
-        // Sanitize: only [a-z0-9-] so the assetUrl path can't be coerced
-        // into a directory traversal.
-        $clean = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) $renderer));
-        if ($clean === '') {
-            continue;
+// The block: panel sets it shares with another block first (the person and
+// entity dashboards draw the same eleven panels), then its own bundle, whose
+// last file is the orchestrator.
+if ($bundle !== null) {
+    $entry = $manifest['blocks'][$bundle];
+    $uses = is_array($entry) && isset($entry['uses']) ? (array) $entry['uses'] : [];
+    foreach ($uses as $set) {
+        $clean = preg_replace('/[^a-z0-9\-]/', '', strtolower((string) $set));
+        if ($clean !== '') {
+            $scripts[] = $this->assetUrl($dist . 'panels/' . $clean . '.min.js', $module);
         }
-        $scripts[] = $this->assetUrl('js/charts/shared/renderers/' . $clean . '.min.js', $module);
     }
-}
-
-// Block-specific panel modules, then the orchestrator (LAST).
-foreach ($panels as $panel) {
-    $scripts[] = $this->assetUrl('js/charts/' . $panel . '.min.js', $module);
-}
-if ($orchestrator) {
-    $scripts[] = $this->assetUrl('js/charts/' . $orchestrator . '.min.js', $module);
+    $scripts[] = $this->assetUrl($dist . 'blocks/' . $bundle . '.min.js', $module);
 }
 
 // -- Nothing waits for MapLibre ----------------------------------------

@@ -148,11 +148,11 @@ function runLoader(payload, options = {}) {
 /** Resolve after the microtask queue has drained. */
 const flush = () => new Promise((resolve) => setImmediate(resolve));
 
-const ORCHESTRATOR = '/js/charts/collection-overview.min.js';
+const ORCHESTRATOR = '/js/dist/blocks/collection-overview.min.js';
 const MAP_PAYLOAD = {
     scripts: [
-        '/js/iwac-theme.min.js',
-        '/js/charts/shared/maplibre.min.js',
+        '/js/dist/shared-core.min.js',
+        '/js/dist/shared-map.min.js',
         ORCHESTRATOR,
     ],
     css: ['/css/iwac-maplibre.min.css'],
@@ -257,7 +257,7 @@ test('a failed MapLibre import rejects the promise and leaves the chain alone', 
 
 test('blocks without a map import nothing and expose no promise', () => {
     const run = runLoader({
-        scripts: ['/js/iwac-theme.min.js', '/js/charts/term-trends.min.js'],
+        scripts: ['/js/dist/shared-core.min.js', '/js/dist/blocks/term-trends.min.js'],
         css: [],
         mjs: null,
     });
@@ -266,8 +266,8 @@ test('blocks without a map import nothing and expose no promise', () => {
     assert.equal(run.sandbox.IWACVisLazy.mjsP, null,
         'no import was armed, so P.whenMaplibre() must reject rather than hang');
     assert.deepEqual(run.scripts().map((s) => s.src), [
-        '/js/iwac-theme.min.js',
-        '/js/charts/term-trends.min.js',
+        '/js/dist/shared-core.min.js',
+        '/js/dist/blocks/term-trends.min.js',
     ]);
 });
 
@@ -277,7 +277,7 @@ test('two blocks on one page merge into one queue and one import', async () => {
         pending: true,
         importMjs: () => Promise.resolve(namespace),
         alsoBlocks: [
-            { scripts: ['/js/iwac-theme.min.js', '/js/charts/term-trends.min.js'], css: [], mjs: null },
+            { scripts: ['/js/dist/shared-core.min.js', '/js/dist/blocks/term-trends.min.js'], css: [], mjs: null },
         ],
     });
 
@@ -288,7 +288,7 @@ test('two blocks on one page merge into one queue and one import', async () => {
     assert.equal(run.importCalls(), 1, 'one import serves every block on the page');
     assert.deepEqual(
         run.scripts().map((s) => s.src),
-        [...MAP_PAYLOAD.scripts, '/js/charts/term-trends.min.js'],
+        [...MAP_PAYLOAD.scripts, '/js/dist/blocks/term-trends.min.js'],
         'shared URLs are de-duped and later blocks join the end of the queue'
     );
 });
@@ -301,7 +301,7 @@ test('the orchestrator always rides the ordinary chain', () => {
     );
     assert.match(
         PARTIAL,
-        /if \(\$orchestrator\) \{\s*\$scripts\[\] = \$this->assetUrl\('js\/charts\/' \. \$orchestrator/,
-        'the orchestrator must be appended to the ungated chain'
+        /\$scripts\[\] = \$this->assetUrl\(\$dist \. 'blocks\/' \. \$bundle \. '\.min\.js'/,
+        'the block bundle (orchestrator last inside it) must be appended to the ungated chain'
     );
 });

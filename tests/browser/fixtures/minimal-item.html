@@ -130,12 +130,11 @@
             </div>
         </div>
     </main>
-    <script src="/asset/js/iwac-i18n.min.js"></script>
-    <script src="/asset/js/charts/shared/panels.min.js"></script>
-    <script src="/asset/js/charts/shared/panels-boot.min.js"></script>
-    <script src="/asset/js/charts/shared/dashboard-layout.min.js"></script>
-    <script src="/asset/js/charts/shared/renderers/sibling-sparkline.min.js"></script>
-    <script src="/asset/js/charts/shared/renderers/similar-items.min.js"></script>
-    <script src="/asset/js/charts/minimal-item-dashboard.min.js"></script>
+    <!-- The three bundles the block's template asks for, as production
+         serves them: shared-core, shared-layout (with every renderer), and the
+         block's own bundle with the orchestrator last. -->
+    <script src="/asset/js/dist/shared-core.min.js"></script>
+    <script src="/asset/js/dist/shared-layout.min.js"></script>
+    <script src="/asset/js/dist/blocks/minimal-item-dashboard.min.js"></script>
 </body>
 </html>

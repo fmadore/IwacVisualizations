@@ -28,26 +28,14 @@ echo $this->partial('common/iwac-block-shell', [
             'pagination'   => true,
             'layout'       => true,
         ],
-        // Reuse the person panel modules: the entity precompute wraps every
+        // Reuses the person panel modules: the entity precompute wraps every
         // section in `by_role.all` precisely so these modules work unchanged
-        // with a no-op facet. `dashboard-panels-bridge` registers thin
-        // wrappers into IWACVis.dashboardLayout — same source files load on
-        // person and entity pages, zero forked panel JS. `facet.js` is
-        // omitted here because entities don't have a role facet bar.
-        'panels' => [
-            'person-dashboard/stats',
-            'person-dashboard/timeline',
-            'person-dashboard/heatmap',
-            'person-dashboard/newspapers',
-            'person-dashboard/countries',
-            'person-dashboard/topics',
-            'person-dashboard/sentiment',
-            'person-dashboard/network',
-            'person-dashboard/cooccurrence',
-            'person-dashboard/map',
-            'shared/dashboard-panels-bridge',
-        ],
-        'orchestrator' => 'entity-dashboard',
+        // with a no-op facet. The manifest expresses that as `uses:
+        // ['person']` — the same panels/person bundle loads on person and
+        // entity pages, zero forked panel JS — and this bundle holds only
+        // the orchestrator. (`facet.js` rides along unused: entities have no
+        // role facet bar to mount it in.)
+        'bundle' => 'entity-dashboard',
     ],
     'blockClass'   => 'iwac-vis-entity',
     'heading'      => $this->translate('Visualisations'),

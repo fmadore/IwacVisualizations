@@ -21,6 +21,13 @@
  * and every non-abstract class in `src/Site/BlockLayout/` is in the registry,
  * so a block cannot be added to one place and forgotten in the others.
  *
+ * Since v1.62.0 the JavaScript is loaded as bundles named in
+ * `asset/js/bundles.json`, and every template (page blocks AND resource-page
+ * blocks) names its bundle with `'bundle' => '<name>'`. So, additionally:
+ *   6. every `bundle` a template names exists in the manifest's `blocks`;
+ *   7. every `blocks` entry in the manifest is named by at least one template
+ *      — a bundle nothing loads is dead weight the build keeps emitting.
+ *
  * Usage: node scripts/check-blocks.js
  * Exit code 1 on any inconsistency (with the offending slug), else 0.
  */
@@ -32,6 +39,11 @@ const REGISTRY = join(ROOT, 'src', 'Site', 'BlockRegistry.php');
 const CONFIG = join(ROOT, 'config', 'module.config.php');
 const LAYOUT_DIR = join(ROOT, 'src', 'Site', 'BlockLayout');
 const TEMPLATE_DIR = join(ROOT, 'view', 'common', 'block-layout');
+const RESOURCE_TEMPLATE_DIRS = [
+    join(ROOT, 'view', 'common', 'resource-page-block-layout'),
+    join(ROOT, 'view', 'common', 'resource-page-block-layout', 'visualizations'),
+];
+const MANIFEST = join(ROOT, 'asset', 'js', 'bundles.json');
 
 const problems = [];
 const fail = (msg) => problems.push(msg);
@@ -39,13 +51,13 @@ const fail = (msg) => problems.push(msg);
 /** Parse BlockRegistry::BLOCKS into { slug: {invokable, class, embeddable} }. */
 function parseRegistry() {
     const src = readFileSync(REGISTRY, 'utf8');
-    const body = /const BLOCKS = \[([\s\S]*?)\n    \];/.exec(src);
+    const body = /const BLOCKS = \[([\s\S]*?)\n {4}\];/.exec(src);
     if (!body) {
         fail('BlockRegistry::BLOCKS not found or not in the expected shape');
         return {};
     }
     const out = {};
-    const rowRe = /'([a-z0-9-]+)'\s*=>\s*\[([\s\S]*?)\n        \]/g;
+    const rowRe = /'([a-z0-9-]+)'\s*=>\s*\[([\s\S]*?)\n {8}\]/g;
     let m;
     while ((m = rowRe.exec(body[1])) !== null) {
         const [, slug, row] = m;
@@ -67,7 +79,7 @@ const slugs = Object.keys(registry);
 if (!slugs.length) fail('BlockRegistry::BLOCKS parsed as empty');
 
 const configSrc = existsSync(CONFIG) ? readFileSync(CONFIG, 'utf8') : '';
-const configBlock = /'block_layouts'\s*=>\s*\[[\s\S]*?'invokables'\s*=>\s*\[([\s\S]*?)\n        \]/.exec(configSrc);
+const configBlock = /'block_layouts'\s*=>\s*\[[\s\S]*?'invokables'\s*=>\s*\[([\s\S]*?)\n {8}\]/.exec(configSrc);
 const configMap = {};
 if (configBlock) {
     const re = /'(\w+)'\s*=>\s*Site\\BlockLayout\\(\w+)::class/g;
@@ -131,10 +143,41 @@ for (const file of readdirSync(LAYOUT_DIR)) {
     }
 }
 
+// 6-7. Templates ↔ bundle manifest.
+const manifest = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, 'utf8')) : null;
+if (!manifest || !manifest.blocks) {
+    fail('asset/js/bundles.json is missing or has no "blocks" — the templates load bundles from it');
+} else {
+    const named = new Set();
+    const templateFiles = [];
+    for (const dir of [TEMPLATE_DIR, ...RESOURCE_TEMPLATE_DIRS]) {
+        if (!existsSync(dir)) continue;
+        for (const file of readdirSync(dir)) {
+            if (file.endsWith('.phtml')) templateFiles.push(join(dir, file));
+        }
+    }
+    for (const file of templateFiles) {
+        const src = readFileSync(file, 'utf8');
+        const rel = file.slice(ROOT.length + 1);
+        if (/'(panels|orchestrator)'\s*=>/.test(src)) {
+            fail(`${rel}: declares 'panels' / 'orchestrator' — since v1.62.0 a template names its bundle ('bundle' => …) and asset/js/bundles.json holds the file list`);
+        }
+        const m = /'bundle'\s*=>\s*'([^']+)'/.exec(src);
+        if (!m) continue;
+        named.add(m[1]);
+        if (!(m[1] in manifest.blocks)) {
+            fail(`${rel}: bundle '${m[1]}' is not in asset/js/bundles.json`);
+        }
+    }
+    for (const name of Object.keys(manifest.blocks)) {
+        if (!named.has(name)) fail(`asset/js/bundles.json: blocks.${name} is loaded by no template`);
+    }
+}
+
 if (problems.length) {
     console.error(`\n✗ block registry guard: ${problems.length} problem(s)\n`);
     for (const p of problems) console.error(`  ${p}`);
     console.error('\nThe slug is the spine: registry key = class SLUG = template filename = embedSlug.\n');
     process.exit(1);
 }
-console.log(`✓ block registry guard: ${slugs.length} blocks consistent`);
+console.log(`✓ block registry guard: ${slugs.length} blocks consistent, ${Object.keys((manifest && manifest.blocks) || {}).length} bundles named by templates`);

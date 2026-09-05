@@ -77,9 +77,8 @@
             </div>
         </section>
     </main>
-    <script src="/asset/js/iwac-i18n.min.js"></script>
-    <script src="/asset/js/charts/shared/panels.min.js"></script>
-    <script src="/asset/js/charts/shared/panel-toolbar.min.js"></script>
-    <script src="/asset/js/charts/shared/embed.min.js"></script>
+    <!-- The bundle every block loads, as production serves it (i18n, theme,
+         dashboard-core, the panels family, the toolbar, embed). -->
+    <script src="/asset/js/dist/shared-core.min.js"></script>
 </body>
 </html>

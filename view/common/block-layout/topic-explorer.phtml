@@ -26,18 +26,12 @@ echo $this->partial('common/iwac-block-shell', [
             'facetButtons' => true,
             // The topic map is drawn by calling the BUILDER directly
             // (`ns.chartOptions.treemap`, which `chartOptions` above already
-            // supplies), not by dispatching a layout slot — so 'treemap' does
-            // NOT belong in this list. It sat here anyway and fetched
-            // renderers/treemap.min.js on every Topic Explorer page to
-            // register a renderer no slot has ever named. A renderer is
-            // needed here only when some slot carries `chart: '<key>'`.
-            'renderers'    => [
-                'calendar-heatmap',
-                'horizontal-bar',
-                'similar-items',
-            ],
+            // supplies), not by dispatching a layout slot. The per-topic
+            // detail slots (calendar heatmap, horizontal bar, similar items)
+            // are what `layout` is for: the shared-layout bundle carries
+            // every renderer.
         ],
-        'orchestrator' => 'topic-explorer',
+        'bundle' => 'topic-explorer',
     ],
     'blockClass'   => 'iwac-vis-topic-explorer',
     'embedSlug'    => 'topic-explorer',

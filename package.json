@@ -1,6 +1,6 @@
 {
   "name": "iwac-visualizations",
-  "version": "1.61.0",
+  "version": "1.62.0",
   "private": true,
   "description": "Build scripts for IWAC Visualizations module static assets.",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "build:pot": "node scripts/extract-pot.js",
     "test": "node --test tests/js/index.test.js",
     "test:browser": "playwright test",
+    "lint:js": "eslint .",
     "lint:theme": "node scripts/check-theme-tokens.js",
     "lint:blocks": "node scripts/check-blocks.js",
     "lint:maplibre": "node scripts/check-maplibre-gates.js",
@@ -26,13 +27,15 @@
     "lint:versions": "node scripts/check-versions.js",
     "lint:python-lock": "node scripts/python-lock.js --check",
     "lint:py": "node scripts/check-python.js",
-    "lint": "npm run lint:theme && npm run lint:blocks && npm run lint:maplibre && npm run lint:i18n && npm run lint:i18n-mo && npm run lint:i18n-pot && npm run lint:versions && npm run lint:python-lock && npm run lint:py",
+    "lint": "npm run lint:js && npm run lint:theme && npm run lint:blocks && npm run lint:maplibre && npm run lint:i18n && npm run lint:i18n-mo && npm run lint:i18n-pot && npm run lint:versions && npm run lint:python-lock && npm run lint:py",
     "lock:python": "node scripts/python-lock.js --update",
     "check:cdn": "node scripts/check-cdn-versions.js"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
     "csso": "^5.0.5",
-    "terser": "^5.49.0"
+    "esbuild": "0.27.4",
+    "eslint": "9.39.5",
+    "globals": "17.12.0"
   }
 }

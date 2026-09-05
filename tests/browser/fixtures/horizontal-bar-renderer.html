@@ -32,14 +32,16 @@
         window.IWACVis = { locale: 'en', t: function (k) { return k; },
                            formatNumber: function (n) { return String(n); } };
     </script>
-    <script src="/asset/js/iwac-theme.min.js"></script>
-    <script src="/asset/js/dashboard-core.min.js"></script>
-    <script src="/asset/js/charts/shared/panels.min.js"></script>
-    <script src="/asset/js/charts/shared/responsive.min.js"></script>
-    <script src="/asset/js/charts/shared/chart-options.min.js"></script>
-    <script src="/asset/js/charts/shared/chart-options-bar.min.js"></script>
-    <script src="/asset/js/charts/shared/chart-options-hbar.min.js"></script>
-    <script src="/asset/js/charts/shared/dashboard-layout.min.js"></script>
+    <!-- Sources, not bundles: the fixture stands in its own `t()` before
+         these load, and shared-core would replace it with the real i18n. -->
+    <script src="/asset/js/iwac-theme.js"></script>
+    <script src="/asset/js/dashboard-core.js"></script>
+    <script src="/asset/js/charts/shared/panels.js"></script>
+    <script src="/asset/js/charts/shared/responsive.js"></script>
+    <script src="/asset/js/charts/shared/chart-options.js"></script>
+    <script src="/asset/js/charts/shared/chart-options-bar.js"></script>
+    <script src="/asset/js/charts/shared/chart-options-hbar.js"></script>
+    <script src="/asset/js/charts/shared/dashboard-layout.js"></script>
     <script>
         // dashboard-layout keeps its renderers private; grab this one on the
         // way past rather than reaching into its internals.
@@ -50,7 +52,7 @@
             return _register.apply(this, arguments);
         };
     </script>
-    <script src="/asset/js/charts/shared/renderers/horizontal-bar.min.js"></script>
+    <script src="/asset/js/charts/shared/renderers/horizontal-bar.js"></script>
     <script>
         window.__warnings = [];
         var _warn = console.warn;

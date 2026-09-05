@@ -22,10 +22,7 @@ echo $this->partial('common/iwac-block-shell', [
         'needs' => [
             'chartOptions' => true,
         ],
-        'panels' => [
-            'lexical-metrics/i18n',
-        ],
-        'orchestrator' => 'lexical-metrics',
+        'bundle' => 'lexical-metrics',
     ],
     'blockClass' => 'iwac-vis-lexical-metrics',
     'embedSlug'  => 'lexical-metrics',

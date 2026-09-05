@@ -41,30 +41,11 @@ echo $this->partial('common/iwac-block-shell', [
             // table in the module.
             'table'        => true,
         ],
-        // Companion modules: i18n strings + stateless builders + the fourteen
-        // view modules + the controls row. All must load before the
-        // orchestrator (which aliases the builders and reads the
-        // registered translations).
-        'panels' => [
-            'laicite/i18n',
-            'laicite/helpers',
-            'laicite/overview',
-            'laicite/trends',
-            'laicite/documents',
-            'laicite/concordance',
-            'laicite/collocates',
-            'laicite/corpora',
-            'laicite/actors',
-            'laicite/arenas',
-            'laicite/sentiment',
-            'laicite/map',
-            'laicite/semantic',
-            'laicite/circulation',
-            'laicite/bylines',
-            'laicite/references',
-            'laicite/controls',
-        ],
-        'orchestrator' => 'laicite',
+        // The bundle: i18n strings + stateless builders + the fourteen view
+        // modules + the controls row, then the orchestrator (which aliases
+        // the builders and reads the registered translations). The file
+        // list and its order live in asset/js/bundles.json.
+        'bundle' => 'laicite',
     ],
     'blockClass' => 'iwac-vis-laicite',
     'embedSlug'  => 'laicite',

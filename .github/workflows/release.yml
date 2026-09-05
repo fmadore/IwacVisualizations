@@ -80,16 +80,17 @@ jobs:
 
       - run: npm ci
 
-      # asset/**/*.min.js and *.min.css are committed, because the production
-      # server has no Node toolchain and the templates reference the .min paths
-      # only. A tag whose minified assets are stale would ship stale CSS/JS to
-      # every install. Same guard build-check.yml runs on main, applied here to
-      # the exact tree being packaged.
+      # asset/js/dist/ (the esbuild bundles + sourcemaps) and *.min.css are
+      # committed, because the production server has no Node toolchain and
+      # the templates reference only those. A tag whose built assets are
+      # stale would ship stale CSS/JS to every install. Same guard
+      # build-check.yml runs on main, applied here to the exact tree being
+      # packaged.
       - name: Committed build artifacts must be current
         run: |
           npm run build
           if ! git diff --exit-code; then
-            echo "::error::minified assets are stale at this tag — run 'npm run build', commit the .min siblings and retag"
+            echo "::error::built assets are stale at this tag — run 'npm run build', commit asset/js/dist and the .min.css siblings, and retag"
             exit 1
           fi
 
@@ -110,7 +111,9 @@ jobs:
           # reads — fr.po is inert at runtime, so a missing .mo ships a module
           # that silently renders English on the French site.
           for f in Module.php config/module.ini config/module.config.php \
-                   asset/css/iwac-core.min.css language/fr.mo LICENSE README.md; do
+                   asset/css/iwac-core.min.css asset/js/bundles.json \
+                   asset/js/dist/shared-core.min.js asset/js/dist/blocks/laicite.min.js \
+                   language/fr.mo LICENSE README.md; do
             grep -qx "IwacVisualizations/$f" /tmp/list || { echo "::error::missing $f"; exit 1; }
           done
 

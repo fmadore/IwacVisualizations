@@ -29,12 +29,7 @@ echo $this->partial('common/iwac-block-shell', [
             // Implies pagination — table.js's own dependency.
             'table'        => true,
         ],
-        'panels' => [
-            'audiovisual-overview/i18n',
-            'audiovisual-overview/dual-measure',
-            'audiovisual-overview/recent',
-        ],
-        'orchestrator' => 'audiovisual-overview',
+        'bundle' => 'audiovisual-overview',
     ],
     'blockClass' => 'iwac-vis-audiovisual-overview',
     'embedSlug'  => 'audiovisual-overview',

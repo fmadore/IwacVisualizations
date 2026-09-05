@@ -74,8 +74,10 @@
             <div class="iwac-vis-chart" id="fixture-chart"></div>
         </article>
     </main>
-    <script src="/asset/js/iwac-i18n.min.js"></script>
-    <script src="/asset/js/charts/shared/panels.min.js"></script>
+    <!-- Sources, not bundles: this fixture isolates one panel module, and
+         the person bundle would boot the whole dashboard around it. -->
+    <script src="/asset/js/iwac-i18n.js"></script>
+    <script src="/asset/js/charts/shared/panels.js"></script>
     <script>
         (function () {
             var ns = window.IWACVis;
@@ -112,7 +114,7 @@
             };
         })();
     </script>
-    <script src="/asset/js/charts/person-dashboard/network.min.js"></script>
+    <script src="/asset/js/charts/person-dashboard/network.js"></script>
     <script>
         (function () {
             var TYPES = ['Personnes', 'Organisations', 'Lieux', 'Sujets', 'Événements'];

@@ -1266,6 +1266,31 @@ style swap; the spatial map's admin legend now builds through the same
 `P.buildChoroplethLegend`. **E17** is the 3× export only — the SVG path
 still needs the SVG renderer (E13).
 
+### Implemented in v1.62.0 (wave 4, the two steps that do not wait on 5.4)
+
+B1 step 1, B2 (1) and B8 are done; B1 step 2 (real `import`/`export`) and
+the ECharts self-host stay open behind the ROADMAP 5.4 decision, and B2's
+phpstan / ruff / stylelint / php-cs-fixer rows stay open. Two things landed
+differently from the write-up:
+
+- **B1** — the manifest is `asset/js/bundles.json` and the partial reads
+  it once per request to validate the block's bundle name and follow its
+  `uses`; it does not otherwise consult it, because the fixed part of the
+  order (core → charts → ui → layout → map → d3 → panel sets → block) is
+  the partial's, and the variable part (what each bundle holds, in what
+  order) is the manifest's. The shared bundles are six, not four: `ui`
+  (pagination, table, facets, faceted chart, annotated timeline,
+  concordance — 17 KB minified) and `layout` (the dashboard layout, the
+  panels bridge and every renderer — 24 KB) were carved out rather than
+  folded into `core`, so a block that needs none of them still pays
+  nothing. A panel set two blocks share (`panels/person`) is its own bundle
+  for the same reason shared code is: inlined into both, it would execute
+  twice. The per-file `.min.js` siblings are deleted; fixtures load a real
+  bundle where the set matches one and sources where they isolate a
+  module.
+- **B2 (1)** — eleven findings, all real, none a behaviour change:
+  six unused aliases, four regex escapes, one deliberate one annotated.
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -2250,6 +2275,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 ### B — Build, CI, tests
 
 - [ ] **B1 (Med, M step 1 / L step 2) — esbuild: order-preserving bundles
+      *(step 1 shipped in v1.62.0; step 2 and the self-host wait on ROADMAP 5.4)*
       first, ESM later; self-hosted ECharts settles ROADMAP 5.4.** Today: 153
       sources → 669 KB `.min.js`; ~33 files per block; the always-loaded set
       is 11 files / 111 KB (`iwac-i18n.min.js` 66 KB, 827 keys in both
@@ -2279,7 +2305,8 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       set ≈ 650–750 KB (~210–240 KB gz). The decisive argument is 5.4's
       GDPR / first-party point, `?v=` busting and SRI becoming moot, at the
       cost of jsDelivr's edge latency for the West-African audience.
-- [ ] **B2 (Med, S–M) — Lint gaps, ranked by value over noise.** (1) eslint
+- [ ] **B2 (Med, S–M) — Lint gaps, ranked by value over noise.** *((1) eslint
+      shipped in v1.62.0; 2–5 open)* (1) eslint
       `recommended`, `sourceType: script`, globals `IWACVis, echarts,
       maplibregl, d3` — `no-undef` / `no-unused-vars` cover the class of bug
       `check-maplibre-gates.js` hand-rolls in 283 lines; (2) phpstan level
@@ -2326,7 +2353,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
 - [x] **B7 (Low, S)** — `dependabot.yml` says pip is "intentionally
       unpinned" while `requirements.lock` + `--require-hashes` exist; update
       the comment or target the lock.
-- [ ] **B8 (Low, S)** — no sourcemaps (`build-js.js:30-37`) — folds into B1;
+- [x] **B8 (Low, S)** — no sourcemaps (`build-js.js:30-37`) — folds into B1;
       Playwright `retries: 2` should at least report flakes (JSON/GitHub
       reporter, fail on `flaky > 0`).
 
@@ -2366,7 +2393,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    table/CSV toolbar, choropleth legend, keyboard routes.
 4. **Build (B1 step 1 → B2 eslint → B1 step 2 + ECharts self-host):** the
    ROADMAP 5.4 decision is the owner's; steps 1 and eslint are independent
-   of it.
+   of it — *shipped as v1.62.0; step 2 and the self-host wait on 5.4*.
 5. **Consolidation (E6–E10, M10, M12, C1, P3–P7, S15, H5):** the duplication
    clusters, each verified with output diffs or the fixture suite.
 6. **Structural (P1 + P4, M13, M14, D1):** the generator runner and the

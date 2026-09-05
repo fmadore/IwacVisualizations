@@ -1,0 +1,242 @@
+{
+  "$comment": "The one place the JavaScript load order lives. `shared.<name>` bundles are loaded by view/common/iwac-assets.phtml behind a $needs flag (core: always; charts: chartOptions; ui: facetButtons|table|pagination|timeline|concordance; layout: layout; map: maplibre; d3: d3). `panels.<name>` are panel sets two blocks share. `blocks.<name>` is one block: either a list of sources with the orchestrator LAST, or {uses: [panel sets], files: [...]}. scripts/build-js.js writes dist/shared-<name>.min.js, dist/panels/<name>.min.js and dist/blocks/<name>.min.js and fails when a source is missing, listed twice, or in no bundle.",
+  "shared": {
+    "core": [
+      "iwac-i18n.js",
+      "iwac-theme.js",
+      "dashboard-core.js",
+      "charts/shared/panels.js",
+      "charts/shared/panels-controls.js",
+      "charts/shared/store.js",
+      "charts/shared/panels-map.js",
+      "charts/shared/panels-boot.js",
+      "charts/shared/chart-rows.js",
+      "charts/shared/panel-toolbar.js",
+      "charts/shared/embed.js",
+      "charts/shared/responsive.js",
+      "charts/shared/hijri.js"
+    ],
+    "charts": [
+      "charts/shared/chart-options.js",
+      "charts/shared/chart-options-bar.js",
+      "charts/shared/chart-options-hbar.js",
+      "charts/shared/chart-options-graph.js",
+      "charts/shared/chart-options-special.js"
+    ],
+    "ui": [
+      "charts/shared/pagination.js",
+      "charts/shared/table.js",
+      "charts/shared/facet-buttons.js",
+      "charts/shared/faceted-chart.js",
+      "charts/shared/annotated-timeline.js",
+      "charts/shared/concordance.js"
+    ],
+    "layout": [
+      "charts/shared/dashboard-layout.js",
+      "charts/shared/dashboard-panels-bridge.js",
+      "charts/shared/renderers/calendar-heatmap.js",
+      "charts/shared/renderers/chord.js",
+      "charts/shared/renderers/horizontal-bar.js",
+      "charts/shared/renderers/radar-profile.js",
+      "charts/shared/renderers/sibling-sparkline.js",
+      "charts/shared/renderers/similar-items.js",
+      "charts/shared/renderers/sunburst.js",
+      "charts/shared/renderers/treemap.js",
+      "charts/shared/renderers/word-cloud.js"
+    ],
+    "map": [
+      "charts/shared/maplibre.js",
+      "charts/shared/map-popup.js",
+      "charts/shared/choropleth.js"
+    ],
+    "d3": [
+      "charts/shared/graph-canvas.js",
+      "charts/shared/graph-force.js",
+      "charts/shared/graph-panel.js",
+      "charts/shared/entity-graph.js"
+    ]
+  },
+  "panels": {
+    "person": [
+      "charts/person-dashboard/stats.js",
+      "charts/person-dashboard/facet.js",
+      "charts/person-dashboard/timeline.js",
+      "charts/person-dashboard/heatmap.js",
+      "charts/person-dashboard/newspapers.js",
+      "charts/person-dashboard/countries.js",
+      "charts/person-dashboard/topics.js",
+      "charts/person-dashboard/sentiment.js",
+      "charts/person-dashboard/network.js",
+      "charts/person-dashboard/cooccurrence.js",
+      "charts/person-dashboard/map.js"
+    ]
+  },
+  "blocks": {
+    "article-dashboard": [
+      "charts/article-dashboard/network.js",
+      "charts/article-dashboard/further-reading.js",
+      "charts/article-dashboard/map.js",
+      "charts/article-dashboard.js"
+    ],
+    "audiovisual-overview": [
+      "charts/audiovisual-overview/i18n.js",
+      "charts/audiovisual-overview/dual-measure.js",
+      "charts/audiovisual-overview/recent.js",
+      "charts/audiovisual-overview.js"
+    ],
+    "collection-overview": [
+      "charts/collection-overview/recent-additions.js",
+      "charts/collection-overview/entities.js",
+      "charts/collection-overview/languages.js",
+      "charts/collection-overview/growth.js",
+      "charts/collection-overview/types-over-time.js",
+      "charts/collection-overview/gantt.js",
+      "charts/collection-overview/wordcloud.js",
+      "charts/collection-overview/map.js",
+      "charts/collection-overview/sources-map.js",
+      "charts/collection-overview.js"
+    ],
+    "compare-newspapers": [
+      "charts/compare-newspapers/helpers.js",
+      "charts/compare-newspapers/picker.js",
+      "charts/compare-newspapers/metrics.js",
+      "charts/compare-newspapers/overlap.js",
+      "charts/compare-newspapers/timeline.js",
+      "charts/compare-newspapers/subjects.js",
+      "charts/compare-newspapers/wordclouds.js",
+      "charts/compare-newspapers/map.js",
+      "charts/compare-newspapers/sentiment.js",
+      "charts/compare-newspapers/newspapers.js",
+      "charts/compare-newspapers.js"
+    ],
+    "distinctive-vocabulary": [
+      "charts/distinctive-vocabulary.js"
+    ],
+    "entity-dashboard": {
+      "uses": [
+        "person"
+      ],
+      "files": [
+        "charts/entity-dashboard.js"
+      ]
+    },
+    "entity-networks": [
+      "charts/entity-networks/graph.js",
+      "charts/entity-networks/details.js",
+      "charts/entity-networks.js"
+    ],
+    "index-overview": [
+      "charts/index-overview/stats.js",
+      "charts/index-overview/type-distribution.js",
+      "charts/index-overview/top-entities.js",
+      "charts/index-overview/lifespan.js",
+      "charts/index-overview/places-map.js",
+      "charts/index-overview/activity-gantt.js",
+      "charts/index-overview/index-table.js",
+      "charts/index-overview/keywords-state.js",
+      "charts/index-overview/keywords-filters.js",
+      "charts/index-overview/keywords-chart.js",
+      "charts/index-overview/keywords-table.js",
+      "charts/index-overview/keywords-bump.js",
+      "charts/index-overview/keywords-attention.js",
+      "charts/index-overview.js"
+    ],
+    "item-set-dashboard": [
+      "charts/item-set-dashboard.js"
+    ],
+    "laicite": [
+      "charts/laicite/i18n.js",
+      "charts/laicite/helpers.js",
+      "charts/laicite/overview.js",
+      "charts/laicite/trends.js",
+      "charts/laicite/documents.js",
+      "charts/laicite/concordance.js",
+      "charts/laicite/collocates.js",
+      "charts/laicite/corpora.js",
+      "charts/laicite/actors.js",
+      "charts/laicite/arenas.js",
+      "charts/laicite/sentiment.js",
+      "charts/laicite/map.js",
+      "charts/laicite/semantic.js",
+      "charts/laicite/circulation.js",
+      "charts/laicite/bylines.js",
+      "charts/laicite/references.js",
+      "charts/laicite/controls.js",
+      "charts/laicite.js"
+    ],
+    "lexical-metrics": [
+      "charts/lexical-metrics/i18n.js",
+      "charts/lexical-metrics.js"
+    ],
+    "minimal-item-dashboard": [
+      "charts/minimal-item-dashboard.js"
+    ],
+    "on-this-day": [
+      "charts/on-this-day/shared.js",
+      "charts/on-this-day/register.js",
+      "charts/on-this-day/decades.js",
+      "charts/on-this-day/clippings.js",
+      "charts/on-this-day.js"
+    ],
+    "org-cooccurrence": [
+      "charts/org-cooccurrence.js"
+    ],
+    "periodicals-overview": [
+      "charts/periodicals-overview/i18n.js",
+      "charts/periodicals-overview/topics.js",
+      "charts/periodicals-overview.js"
+    ],
+    "person-dashboard": {
+      "uses": [
+        "person"
+      ],
+      "files": [
+        "charts/person-dashboard.js"
+      ]
+    },
+    "press-bylines": [
+      "charts/press-bylines.js"
+    ],
+    "press-reprints": [
+      "charts/press-reprints.js"
+    ],
+    "publication-dashboard": [
+      "charts/publication-dashboard.js"
+    ],
+    "reference-dashboard": [
+      "charts/reference-dashboard.js"
+    ],
+    "references-overview": [
+      "charts/references-overview.js"
+    ],
+    "scary-terms": [
+      "charts/scary-terms/i18n.js",
+      "charts/scary-terms/helpers.js",
+      "charts/scary-terms/trends.js",
+      "charts/scary-terms/wordcloud.js",
+      "charts/scary-terms/map.js",
+      "charts/scary-terms/controls.js",
+      "charts/scary-terms.js"
+    ],
+    "semantic-landscape": [
+      "charts/semantic-landscape/i18n.js",
+      "charts/semantic-landscape.js"
+    ],
+    "sentiment-atlas": [
+      "charts/sentiment-atlas/i18n.js",
+      "charts/sentiment-atlas.js"
+    ],
+    "spatial-exploration": [
+      "charts/spatial-exploration/state.js",
+      "charts/spatial-exploration/picker.js",
+      "charts/spatial-exploration/map.js",
+      "charts/spatial-exploration.js"
+    ],
+    "term-trends": [
+      "charts/term-trends.js"
+    ],
+    "topic-explorer": [
+      "charts/topic-explorer.js"
+    ]
+  }
+}

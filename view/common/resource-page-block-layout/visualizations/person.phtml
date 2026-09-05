@@ -27,26 +27,13 @@ echo $this->partial('common/iwac-block-shell', [
             'pagination'   => true,
             'layout'       => true,
         ],
-        // Self-registering IIFE panels. Each file hangs a render function off
-        // IWACVis.personDashboard. `dashboard-panels-bridge` MUST load after
-        // every per-panel IIFE — it registers thin wrappers around them into
-        // IWACVis.dashboardLayout so the orchestrator can dispatch via
-        // declarative slot arrays.
-        'panels' => [
-            'person-dashboard/stats',
-            'person-dashboard/facet',
-            'person-dashboard/timeline',
-            'person-dashboard/heatmap',
-            'person-dashboard/newspapers',
-            'person-dashboard/countries',
-            'person-dashboard/topics',
-            'person-dashboard/sentiment',
-            'person-dashboard/network',
-            'person-dashboard/cooccurrence',
-            'person-dashboard/map',
-            'shared/dashboard-panels-bridge',
-        ],
-        'orchestrator' => 'person-dashboard',
+        // The panels (self-registering IIFEs, each hanging a render function
+        // off IWACVis.personDashboard) are the panels/person bundle the
+        // entity dashboard shares; this bundle is the orchestrator. The
+        // wrappers `dashboard-panels-bridge` registers into
+        // IWACVis.dashboardLayout ride the shared-layout bundle above. File
+        // list and order: asset/js/bundles.json.
+        'bundle' => 'person-dashboard',
     ],
     'blockClass'   => 'iwac-vis-person',
     'heading'      => $this->translate('Visualisations'),

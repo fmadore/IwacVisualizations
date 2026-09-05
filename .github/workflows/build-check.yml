@@ -1,12 +1,13 @@
 name: Build check (JS/CSS)
 
-# The repo commits both sources and their .min siblings, and the
-# theme-token guard runs only locally by convention — so a forgotten
-# `npm run build` (stale .min.js/.min.css) or a token violation used to
-# reach main unnoticed. This check rebuilds everything and fails when
-# the committed minified assets don't match the sources, or when
-# check-theme-tokens.js reports a violation (it runs first inside
-# `npm run build`).
+# The repo commits both sources and their built form (asset/js/dist/
+# bundles, .min.css siblings), and the lint gates run only locally by
+# convention — so a forgotten `npm run build` (stale bundles) or a token
+# violation used to reach main unnoticed. This check rebuilds everything and
+# fails when the committed built assets don't match the sources, or when any
+# gate in `npm run lint` (eslint, theme tokens, block registry ↔ manifest,
+# MapLibre gates, i18n, versions) reports a problem — they run first inside
+# `npm run build`.
 #
 # Deliberately narrow triggers: data regeneration has its own workflow
 # (regenerate-data.yml); Python/PHP-only pushes don't need a node build.
@@ -32,6 +33,7 @@ on:
       - "config/module.config.php"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
+      - "eslint.config.js"
       - "scripts/build-mo.js"
       - "scripts/check-*.js"
       - "scripts/gettext.js"
@@ -56,6 +58,7 @@ on:
       - "config/module.config.php"
       - "scripts/build-js.js"
       - "scripts/build-css.js"
+      - "eslint.config.js"
       - "scripts/build-mo.js"
       - "scripts/check-*.js"
       - "scripts/gettext.js"
@@ -98,12 +101,17 @@ jobs:
       - name: Browser rendering and embed contracts
         run: npm run test:browser
 
+      # `retries: 2` keeps a lost frame from blocking a release; this keeps
+      # a test that only passes on retry from hiding as a green run.
+      - name: Browser contracts must pass first time
+        run: node scripts/check-flakes.js test-results/report.json
+
       - name: Token guard + rebuild minified assets
         run: npm run build
 
       - name: Committed .min files must match the sources
         run: |
           if ! git diff --exit-code; then
-            echo "::error::Minified assets are stale — run 'npm run build' and commit the .min siblings."
+            echo "::error::Built assets are stale — run 'npm run build' and commit asset/js/dist and the .min.css siblings."
             exit 1
           fi
