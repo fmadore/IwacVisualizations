@@ -473,16 +473,12 @@
                 adminLegend.style.display = 'none';
                 return;
             }
-            adminLegend.appendChild(P.el('div', 'iwac-vis-spatial-admin-legend__title',
-                P.t(adminScale === 'sqrt' ? 'Square root' : adminScale === 'linear' ? 'Linear' : 'Quantile')));
-            items.forEach(function (item) {
-                var row = P.el('div', 'iwac-vis-spatial-admin-legend__row');
-                var swatch = P.el('span', 'iwac-vis-spatial-admin-legend__swatch');
-                swatch.style.background = item.color;
-                row.appendChild(swatch);
-                row.appendChild(P.el('span', null, item.label));
-                adminLegend.appendChild(row);
-            });
+            // The shared classed legend (the same element the country
+            // choropleth's gradient uses), in this map's own wrapper.
+            adminLegend.appendChild(P.buildChoroplethLegend({
+                title: P.t(adminScale === 'sqrt' ? 'Square root' : adminScale === 'linear' ? 'Linear' : 'Quantile'),
+                items: items
+            }));
             adminLegend.style.display = '';
         }
 
@@ -898,9 +894,11 @@
             }
             if (choropleth) choropleth.updateCounts(currentCountryCounts());
             updateStatus();
+            if (P.panelRowsChanged) P.panelRowsChanged(panelEl.panel);
         }
 
         function applyFocus() {
+            if (P.panelRowsChanged) P.panelRowsChanged(panelEl.panel);
             if (map.getLayer(LAYER)) {
                 map.setFilter(LAYER, countryFilter());
             }
@@ -920,6 +918,33 @@
                 map.easeTo({ center: [2, 10], zoom: 2.6, duration: 600 });
             }
             updateStatus();
+        }
+
+        // The places on the map, as rows — the toolbar's "View as table" and
+        // CSV, and the only route to them that needs no pointer. Follows
+        // the selection (collection vs one entity) and the country focus.
+        if (P.setPanelRows) {
+            P.setPanelRows(panelEl.panel, function () {
+                var focus = state.focusCountry;
+                var rows = places.filter(function (p) {
+                    return !focus || p.country === focus;
+                }).slice().sort(function (a, b) { return b.count - a.count; });
+                if (!rows.length) return null;
+                return {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Country'), numeric: false },
+                        { label: P.t('Count'), numeric: true }
+                    ],
+                    rows: rows.map(function (p) {
+                        return [
+                            ctx.siteBase && p.id ? { text: p.name, href: ctx.siteBase + '/item/' + p.id } : p.name,
+                            p.country || '',
+                            p.count
+                        ];
+                    })
+                };
+            });
         }
 
         state.subscribe(function (key) {

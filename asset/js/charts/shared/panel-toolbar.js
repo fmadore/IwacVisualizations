@@ -7,6 +7,12 @@
  *     so screenshots are self-describing instead of headless chart
  *     rectangles. Falls back to the raw `chart.getDataURL()` if
  *     compositing fails (e.g. tainted canvas, missing fonts).
+ *   - "View as table" and "Download CSV" (v1.61.0) — the chart's own
+ *     numbers, read back from the option it was painted with
+ *     (`P.optionToRows`), or from the rows a map panel registers with
+ *     `P.setPanelRows`. The table is the first route to a chart's data
+ *     that is neither the pixels nor a one-sentence description; on a
+ *     map it is the first route to the places that needs no pointer.
  *   - an optional Fullscreen toggle that uses the Fullscreen API on
  *     the panel element itself.
  *
@@ -36,6 +42,14 @@
 
     var TOOLBAR_CLASS = 'iwac-vis-panel-toolbar';
     var BTN_CLASS = 'iwac-vis-btn iwac-vis-panel-toolbar__btn';
+    // Device-pixel ratio of the PNG export and of the chrome composited
+    // around it — the two must agree or the title renders at a different
+    // DPI than the chart.
+    var EXPORT_SCALE = 3;
+    // Rows shown in the in-page table before the reader is pointed at the
+    // CSV. A 3,000-point scatter is a download, not a page.
+    var TABLE_ROW_CAP = 500;
+    var _tableUid = 0;
 
     /* ----------------------------------------------------------------- */
     /*  Raw image data URLs (no composite)                                */
@@ -52,11 +66,14 @@
         if (!live || !live.getDataURL) return null;
         var tokens = (ns.getChartTokens && ns.getChartTokens()) || {};
         try {
+            // 3× is the cheapest print-quality win available to a canvas
+            // renderer: a 900px panel comes out at 2700px, enough for a
+            // half-page figure at 300 dpi. (A vector export would need the
+            // SVG renderer, which the site does not load.)
             return live.getDataURL({
                 type: 'png',
-                pixelRatio: 2,
-                backgroundColor: tokens.surface || '#ffffff',
-                excludeComponents: ['toolbox']
+                pixelRatio: EXPORT_SCALE,
+                backgroundColor: tokens.surface || '#ffffff'
             });
         } catch (e) {
             console.error('IWACVis.panel-toolbar: getDataURL failed', e);
@@ -197,9 +214,9 @@
             var fontStack = tokens.fontFamily ||
                 '"Public Sans", system-ui, -apple-system, sans-serif';
 
-            // Match the chart's pixelRatio: 2 export so text and chrome
+            // Match the chart's pixelRatio export so text and chrome
             // render at the same DPI as the chart raster.
-            var SCALE = 2;
+            var SCALE = EXPORT_SCALE;
             var pad = 24 * SCALE;
             var titlePx = 16 * SCALE;
             var subPx = 11 * SCALE;
@@ -453,10 +470,199 @@
         return bar;
     };
 
+    /* ----------------------------------------------------------------- */
+    /*  Table + CSV                                                       */
+    /* ----------------------------------------------------------------- */
+
     /**
-     * Auto-wire hook called from `ns.registerChart`. Walks up from the
-     * chart element to the first `.iwac-vis-panel` ancestor and adds a
-     * Download button unless the panel opts out.
+     * Register the rows a panel's table and CSV are built from, for a
+     * panel whose data is not an ECharts option — the map panels. The
+     * provider is called at open time and after every `P.panelRowsChanged`,
+     * and returns `{ columns: [{label, numeric}], rows: [[cell…]] }` or null.
+     * A cell may be `{ text, href }` for a link, which is how a place row
+     * reaches the place's item page without a pointer.
+     *
+     * @param {HTMLElement} panelEl
+     * @param {function(): (Object|null)} provider
+     */
+    P.setPanelRows = function (panelEl, provider) {
+        if (!panelEl) return;
+        panelEl._iwacRows = typeof provider === 'function' ? provider : null;
+        refreshTableButtons(panelEl);
+    };
+
+    /** The rows behind a panel changed (a facet, a year): refresh the table. */
+    P.panelRowsChanged = function (panelEl) {
+        if (!panelEl || typeof panelEl.dispatchEvent !== 'function' || typeof CustomEvent !== 'function') return;
+        try { panelEl.dispatchEvent(new CustomEvent('iwac:repaint', { bubbles: false })); }
+        catch (e) { /* enhancement only */ }
+    };
+
+    /** The rows for a panel: its own provider first, else its chart's option. */
+    function rowsFor(panelEl, chartEl) {
+        if (typeof panelEl._iwacRows === 'function') {
+            try { return panelEl._iwacRows() || null; }
+            catch (e) { console.error('IWACVis.panel-toolbar: rows provider failed', e); return null; }
+        }
+        if (!P.optionToRows || !ns.lastOption) return null;
+        var option = ns.lastOption(chartEl);
+        return option ? P.optionToRows(option) : null;
+    }
+
+    /** Cheap: does the panel have anything a table could show right now? */
+    function hasRows(panelEl, chartEl) {
+        if (typeof panelEl._iwacRows === 'function') {
+            var table = rowsFor(panelEl, chartEl);
+            return !!(table && table.rows && table.rows.length);
+        }
+        if (!P.hasTabularOption || !ns.lastOption) return false;
+        return P.hasTabularOption(ns.lastOption(chartEl));
+    }
+
+    function refreshTableButtons(panelEl) {
+        var bar = panelEl.querySelector(':scope > .' + TOOLBAR_CLASS);
+        if (!bar || !bar._iwacRefreshTable) return;
+        bar._iwacRefreshTable();
+    }
+
+    /**
+     * The in-page table. Plain markup rather than `P.buildTable` — that
+     * builder is opt-in per block (pagination + card layout) and this has
+     * to work on every panel of every block; a capped table with a note
+     * pointing at the CSV is the right size for a chart's own numbers.
+     */
+    function renderTable(host, table) {
+        host.innerHTML = '';
+        if (!table || !table.rows || !table.rows.length) {
+            host.appendChild(P.el('p', 'iwac-vis-muted', P.t('No data available')));
+            return;
+        }
+        var wrap = P.el('div', 'iwac-vis-table-wrapper');
+        var tableEl = P.el('table', 'iwac-vis-table iwac-vis-panel-table__table');
+        var thead = P.el('thead');
+        var head = P.el('tr');
+        table.columns.forEach(function (col) {
+            var th = P.el('th', 'iwac-vis-table__header' + (col.numeric ? ' iwac-vis-panel-table__num' : ''),
+                col.label);
+            th.setAttribute('scope', 'col');
+            head.appendChild(th);
+        });
+        thead.appendChild(head);
+        tableEl.appendChild(thead);
+        var tbody = P.el('tbody');
+        var shown = table.rows.slice(0, TABLE_ROW_CAP);
+        shown.forEach(function (row) {
+            var tr = P.el('tr', 'iwac-vis-table__row');
+            row.forEach(function (cell, i) {
+                var numeric = table.columns[i] && table.columns[i].numeric;
+                var td = P.el('td', numeric ? 'iwac-vis-panel-table__num' : null);
+                if (cell != null && typeof cell === 'object' && !Array.isArray(cell)) {
+                    if (cell.href) {
+                        var a = P.el('a', null, cell.text != null ? String(cell.text) : '');
+                        a.href = cell.href;
+                        td.appendChild(a);
+                    } else {
+                        td.textContent = cell.text != null ? String(cell.text) : '';
+                    }
+                } else if (typeof cell === 'number') {
+                    td.textContent = P.formatNumber(cell);
+                } else {
+                    td.textContent = cell == null ? '' : String(cell);
+                }
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+        tableEl.appendChild(tbody);
+        wrap.appendChild(tableEl);
+        host.appendChild(wrap);
+        if (table.rows.length > shown.length) {
+            host.appendChild(P.el('p', 'iwac-vis-muted iwac-vis-panel-table__note',
+                P.t('table_rows_capped', {
+                    shown: P.formatNumber(shown.length),
+                    total: P.formatNumber(table.rows.length)
+                })));
+        }
+    }
+
+    function downloadCsv(panelEl, chartEl) {
+        var table = rowsFor(panelEl, chartEl);
+        if (!table || !P.rowsToCsv) return;
+        var csv = P.rowsToCsv(table);
+        var name = filenameFromPanel(panelEl) + '.csv';
+        if (typeof Blob !== 'undefined' && window.URL && URL.createObjectURL) {
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            var href = URL.createObjectURL(blob);
+            triggerDownload(href, name);
+            setTimeout(function () { URL.revokeObjectURL(href); }, 1000);
+        } else {
+            triggerDownload('data:text/csv;charset=utf-8,' + encodeURIComponent(csv), name);
+        }
+    }
+
+    /**
+     * Public helper: add "View as table" (a disclosure: `aria-expanded` +
+     * `aria-controls` on the button, the table under the chart) and
+     * "Download CSV" to the toolbar. Idempotent per panel. The buttons are
+     * disabled, not hidden, while the panel has no rows — a chart that is
+     * still loading gets them the moment it paints.
+     */
+    P.addTableButtons = function (panelEl, chartEl) {
+        if (!panelEl || !chartEl) return null;
+        var bar = ensureToolbar(panelEl);
+        if (bar.querySelector('.iwac-vis-panel-toolbar__btn--table')) return bar;
+
+        var tableHost = P.el('div', 'iwac-vis-panel-table');
+        tableHost.id = 'iwac-vis-panel-table-' + (++_tableUid);
+        tableHost.hidden = true;
+        panelEl.appendChild(tableHost);
+
+        var open = false;
+        var tableBtn = buildBtn('▤', P.t('View as table'), function () {
+            open = !open;
+            tableHost.hidden = !open;
+            tableBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            tableBtn.classList.toggle('iwac-vis-panel-toolbar__btn--pressed', open);
+            var label = open ? P.t('Hide table') : P.t('View as table');
+            tableBtn.setAttribute('aria-label', label);
+            tableBtn.title = label;
+            if (open) renderTable(tableHost, rowsFor(panelEl, chartEl));
+            else refresh();
+        });
+        tableBtn.classList.add('iwac-vis-panel-toolbar__btn--table');
+        tableBtn.setAttribute('aria-expanded', 'false');
+        tableBtn.setAttribute('aria-controls', tableHost.id);
+        bar.appendChild(tableBtn);
+
+        var csvBtn = buildBtn('CSV', P.t('Download CSV'), function () {
+            downloadCsv(panelEl, chartEl);
+        });
+        csvBtn.classList.add('iwac-vis-panel-toolbar__btn--csv');
+        bar.appendChild(csvBtn);
+
+        function refresh() {
+            var available = hasRows(panelEl, chartEl);
+            // An open table stays closable when the chart empties under it
+            // (a facet with no rows): the disclosure shows the empty note
+            // and its button keeps working; only a CLOSED one is disabled.
+            tableBtn.disabled = !available && !open;
+            csvBtn.disabled = !available;
+            if (open) renderTable(tableHost, available ? rowsFor(panelEl, chartEl) : null);
+        }
+        bar._iwacRefreshTable = refresh;
+        // The chart's own repaints bubble up from its host; a map panel's
+        // provider announces its changes on the panel itself.
+        panelEl.addEventListener('iwac:repaint', refresh);
+        refresh();
+        return bar;
+    };
+
+    /**
+     * Auto-wire hook called from `ns.registerChart` and `ns.registerMap`.
+     * Walks up from the chart element to the first `.iwac-vis-panel`
+     * ancestor and adds the Download, table and CSV buttons unless the
+     * panel opts out (`data-iwac-no-panel-toolbar` for all of them,
+     * `data-iwac-no-table` for the table pair).
      */
     P.autoAttachPanelToolbar = function (chartEl) {
         if (!chartEl || !chartEl.closest) return;
@@ -465,5 +671,7 @@
         if (!panel) return;
         if (panel.getAttribute && panel.getAttribute('data-iwac-no-panel-toolbar') === '1') return;
         P.addDownloadButton(panel, chartEl);
+        if (panel.getAttribute && panel.getAttribute('data-iwac-no-table') === '1') return;
+        P.addTableButtons(panel, chartEl);
     };
 })();

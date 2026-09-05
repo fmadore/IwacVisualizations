@@ -18,3 +18,4 @@ require('./gantt-window.test.js');
 require('./lifecycle.test.js');
 require('./store.test.js');
 require('./controls.test.js');
+require('./chart-rows.test.js');

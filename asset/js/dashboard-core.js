@@ -245,6 +245,11 @@
                     if (notMerge || !instance._iwacAriaDescription || seriesCarryData(series)) {
                         description = describeOption(el, base);
                         instance._iwacAriaDescription = description;
+                        // The same option is what "View as table" reads —
+                        // kept by reference, never cloned, and only when it
+                        // carries data (a legend nudge is not a repaint of
+                        // the numbers).
+                        instance._iwacLastOption = base;
                     } else {
                         description = instance._iwacAriaDescription;
                     }
@@ -253,9 +258,31 @@
             }
             var result = native.apply(instance, arguments);
             if (description && el && el.setAttribute) el.setAttribute('aria-label', description);
+            notifyRepaint(el);
             return result;
         };
     }
+
+    /**
+     * Tell the panel its chart was repainted. The toolbar's open table
+     * listens for this (it bubbles to the panel) and re-reads the option,
+     * so a facet change under an open table changes the table too.
+     */
+    function notifyRepaint(el) {
+        if (!el || typeof el.dispatchEvent !== 'function' || typeof CustomEvent !== 'function') return;
+        try { el.dispatchEvent(new CustomEvent('iwac:repaint', { bubbles: true })); }
+        catch (e) { /* enhancement only */ }
+    }
+
+    /**
+     * The option a chart host was last painted with data — the one the
+     * table and the CSV are built from. Null when the chart is gone or has
+     * only ever shown an empty state.
+     */
+    ns.lastOption = function (el) {
+        var live = ns.getLiveChart(el);
+        return live && live._iwacLastOption ? live._iwacLastOption : null;
+    };
 
     function makeChartFocusable(el) {
         if (!el || el._iwacKeyboard) return;

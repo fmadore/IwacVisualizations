@@ -117,15 +117,18 @@
     }
 
     /**
-     * Build the MapLibre `fill-color` expression for the polygon
-     * layer based on the current paint config + value range.
+     * The colour scale a paint config + value range resolve to — the ONE
+     * place the fill expression and the legend read from, so the legend
+     * can never say something the fill does not do.
      *
      *  - sequential (default) — surface→accent or the IWAC heatmap
      *    ramp; values clamp to [0, max].
      *  - diverging              — neg → neutral → pos centred on
      *    zero; works on signed counts (e.g. A − B per country).
+     *
+     * @returns {{mode: string, stops: Array<{value: number, color: string}>}}
      */
-    function buildFillExpression(paintConfig, counts) {
+    P.choroplethScale = function (paintConfig, counts) {
         var values = [];
         for (var k in counts) {
             if (Object.prototype.hasOwnProperty.call(counts, k)) {
@@ -139,12 +142,14 @@
                 if (Math.abs(values[v]) > maxAbs) maxAbs = Math.abs(values[v]);
             }
             var t = (ns.getChartTokens && ns.getChartTokens()) || {};
-            return [
-                'interpolate', ['linear'], ['get', '_iwac_count'],
-                -maxAbs, ml(paintConfig.negColor),
-                0,        ml(paintConfig.neutralColor || t.surface || '#fdfdfd'),
-                maxAbs,  ml(paintConfig.posColor)
-            ];
+            return {
+                mode: 'diverging',
+                stops: [
+                    { value: -maxAbs, color: ml(paintConfig.negColor) },
+                    { value: 0, color: ml(paintConfig.neutralColor || t.surface || '#fdfdfd') },
+                    { value: maxAbs, color: ml(paintConfig.posColor) }
+                ]
+            };
         }
 
         // Sequential: caller can override the ramp with a single
@@ -153,7 +158,7 @@
         // `paintConfig.fixedMax` pins the scale top instead of the
         // current counts' max — required when updateCounts() cycles a
         // time slider and colors must stay comparable across years.
-        var stops = (paintConfig && paintConfig.accentColor)
+        var ramp = (paintConfig && paintConfig.accentColor)
             ? buildAccentRamp(paintConfig.accentColor)
             : resolveRamp();
         var maxCount = 1;
@@ -164,12 +169,118 @@
                 if (values[w] > maxCount) maxCount = values[w];
             }
         }
-        var expr = ['interpolate', ['linear'], ['get', '_iwac_count']];
-        for (var i = 0; i < stops.length; i++) {
-            var step = stops.length === 1 ? 0 : (maxCount * i) / (stops.length - 1);
-            expr.push(step, stops[i]);
+        var stops = [];
+        for (var i = 0; i < ramp.length; i++) {
+            stops.push({
+                value: ramp.length === 1 ? 0 : (maxCount * i) / (ramp.length - 1),
+                color: ramp[i]
+            });
         }
+        return { mode: 'sequential', stops: stops };
+    };
+
+    /** The MapLibre `fill-color` expression for a scale. */
+    function buildFillExpression(paintConfig, counts) {
+        var scale = P.choroplethScale(paintConfig, counts);
+        var expr = ['interpolate', ['linear'], ['get', '_iwac_count']];
+        scale.stops.forEach(function (stop) {
+            expr.push(stop.value, stop.color);
+        });
         return expr;
+    }
+
+    /* ----------------------------------------------------------------- */
+    /*  Legend                                                            */
+    /* ----------------------------------------------------------------- */
+
+    /**
+     * A legend for a choropleth: the scale the fill is painted on, said
+     * out loud. Two forms, one element class:
+     *
+     *   - `{ stops }` — a continuous scale (from `P.choroplethScale`): a
+     *     gradient bar with the extremes labelled, and zero marked on a
+     *     diverging one;
+     *   - `{ items: [{ color, label }] }` — a classed scale: one swatch and
+     *     range per class (the spatial map's admin choropleth).
+     *
+     * Until v1.61.0 the shared choropleth normalised to `[0, max]` or
+     * `±maxAbs` and never said so: the same shade meant 4,000 mentions on
+     * one map and 40 on the next, and a reader had no way to tell. The
+     * spatial map carried a private legend for its admin mode; that is
+     * now this builder too.
+     *
+     * @param {Object} cfg
+     * @param {string} [cfg.title]
+     * @param {Array<{value: number, color: string}>} [cfg.stops]
+     * @param {Array<{color: string, label: string}>} [cfg.items]
+     * @param {function(number): string} [cfg.format]  default P.formatNumber
+     * @returns {HTMLElement}  `.iwac-vis-map-legend`
+     */
+    P.buildChoroplethLegend = function (cfg) {
+        cfg = cfg || {};
+        var format = cfg.format || P.formatNumber;
+        var root = P.el('div', 'iwac-vis-map-legend');
+        if (cfg.title) root.appendChild(P.el('div', 'iwac-vis-map-legend__title', cfg.title));
+
+        if (cfg.items && cfg.items.length) {
+            cfg.items.forEach(function (item) {
+                var row = P.el('div', 'iwac-vis-map-legend__row');
+                var swatch = P.el('span', 'iwac-vis-map-legend__swatch');
+                swatch.style.background = item.color;
+                row.appendChild(swatch);
+                row.appendChild(P.el('span', null, item.label));
+                root.appendChild(row);
+            });
+            return root;
+        }
+
+        var stops = cfg.stops || [];
+        if (!stops.length) return root;
+        var min = stops[0].value;
+        var max = stops[stops.length - 1].value;
+        var span = max - min || 1;
+        var bar = P.el('div', 'iwac-vis-map-legend__bar');
+        bar.style.background = 'linear-gradient(to right, ' + stops.map(function (stop) {
+            return stop.color + ' ' + Math.round(((stop.value - min) / span) * 100) + '%';
+        }).join(', ') + ')';
+        root.appendChild(bar);
+        var scale = P.el('div', 'iwac-vis-map-legend__scale');
+        var diverging = min < 0 && max > 0;
+        scale.appendChild(P.el('span', null, diverging ? '\u2212' + format(Math.abs(min)) : format(min)));
+        if (diverging) scale.appendChild(P.el('span', null, '0'));
+        scale.appendChild(P.el('span', null, (diverging ? '+' : '') + format(max)));
+        root.appendChild(scale);
+        return root;
+    };
+
+    /**
+     * A MapLibre control that hosts the legend at bottom-left — inside the
+     * map's own control layout, so it neither covers the attribution nor
+     * disappears with the style on a theme swap.
+     */
+    function buildLegendControl() {
+        function Control() {}
+        Control.prototype.onAdd = function (mapRef) {
+            this._map = mapRef;
+            var c = document.createElement('div');
+            c.className = 'maplibregl-ctrl iwac-vis-map-legend-ctrl';
+            c.style.display = 'none';
+            this._container = c;
+            return c;
+        };
+        Control.prototype.onRemove = function () {
+            if (this._container && this._container.parentNode) {
+                this._container.parentNode.removeChild(this._container);
+            }
+            this._map = null;
+        };
+        Control.prototype.show = function (legend) {
+            if (!this._container) return;
+            this._container.innerHTML = '';
+            if (legend) this._container.appendChild(legend);
+            this._container.style.display = legend ? '' : 'none';
+        };
+        return new Control();
     }
 
     function strokeColor() {
@@ -260,6 +371,10 @@
      * @param {boolean} [opts.hoverInfo=false]  Show a cursor-following
      *   popup with the hovered country's name + count while the
      *   choropleth fill is visible. Off by default.
+     * @param {boolean} [opts.legend=true]  Show the colour scale at the
+     *   map's bottom-left while the fill is visible. The title is
+     *   `labelKey` translated; pass `legendTitle` to override it.
+     * @param {string} [opts.legendTitle]
      * @param {Object} [opts.paint]  Initial paint config. When omitted,
      *   the default IWAC heatmap ramp is used.
      * @param {string} [opts.paint.mode='sequential']  `'sequential'`
@@ -288,6 +403,7 @@
         var hideDefaultControl = !!opts.hideDefaultControl;
         var currentPaint  = opts.paint || null;
         var hoverInfo     = !!opts.hoverInfo;
+        var showLegend    = opts.legend !== false;
 
         // Random suffix so multiple maps on the same page (e.g. compare-
         // newspapers' two corpora maps side-by-side) don't collide on
@@ -467,6 +583,16 @@
             });
         }
 
+        /** Paint the legend for the current scale, or hide it. */
+        function refreshLegend() {
+            if (!legendControl) return;
+            if (mode !== 'choropleth') { legendControl.show(null); return; }
+            legendControl.show(P.buildChoroplethLegend({
+                title: opts.legendTitle || P.t(labelKey),
+                stops: P.choroplethScale(currentPaint, countryCounts).stops
+            }));
+        }
+
         function setMode(next) {
             if (next !== 'bubbles' && next !== 'choropleth') return;
             if (next === mode) return;
@@ -476,8 +602,15 @@
                     if (control && typeof control.refresh === 'function') {
                         control.refresh(mode);
                     }
+                    refreshLegend();
                     if (typeof onModeChange === 'function') onModeChange(mode);
                 });
+        }
+
+        var legendControl = null;
+        if (showLegend) {
+            legendControl = buildLegendControl();
+            map.addControl(legendControl, 'bottom-left');
         }
 
         var control = null;
@@ -495,7 +628,12 @@
         // onStyleReady — we just (re-)hide them when we re-enter
         // choropleth mode.
         map.on('style.load', function () {
-            if (mode === 'choropleth') showChoropleth();
+            if (mode === 'choropleth') {
+                showChoropleth();
+                // The ramp is theme-resolved: repaint the legend in the
+                // new theme's colours along with the fill.
+                refreshLegend();
+            }
         });
 
         return {
@@ -527,10 +665,15 @@
                 if (map.getSource(SOURCE) && _geojsonCache) {
                     map.getSource(SOURCE).setData(annotate(_geojsonCache));
                 }
+                refreshLegend();
             },
             destroy: function () {
                 if (control) {
                     try { map.removeControl(control); }
+                    catch (e) { /* control may already be gone */ }
+                }
+                if (legendControl) {
+                    try { map.removeControl(legendControl); }
                     catch (e) { /* control may already be gone */ }
                 }
                 if (map.getLayer(FILL))   { try { map.removeLayer(FILL); } catch (e) {} }

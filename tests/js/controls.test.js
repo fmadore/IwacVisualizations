@@ -139,6 +139,7 @@ function load() {
     vm.runInContext(read('panels.js'), context, { filename: 'panels.js' });
     vm.runInContext(read('panels-controls.js'), context, { filename: 'panels-controls.js' });
     vm.runInContext(read('facet-buttons.js'), context, { filename: 'facet-buttons.js' });
+    vm.runInContext(read('choropleth.js'), context, { filename: 'choropleth.js' });
     return { P: context.window.IWACVis.panels, document };
 }
 
@@ -420,4 +421,40 @@ test('a single-facet bar renders an eyebrow label that names its select', () => 
     const select = bar.root.children[1].children[0];
     assert.equal(select.attrs['aria-labelledby'], eyebrow.id);
     assert.equal(select.value, 'b');
+});
+
+/* ------------------------------------------------------------------ */
+/*  Choropleth scale + legend                                          */
+/* ------------------------------------------------------------------ */
+
+test('the legend is built from the same scale as the fill', () => {
+    const { P } = load();
+    // No theme tokens in this harness: the ramp falls back to two stops.
+    const seq = P.choroplethScale(null, { 'Bénin': 40, Togo: 12 });
+    assert.equal(seq.mode, 'sequential');
+    assert.deepEqual(plain(seq.stops.map((s) => s.value)), [0, 40]);
+
+    const pinned = P.choroplethScale({ fixedMax: 100 }, { 'Bénin': 40 });
+    assert.deepEqual(plain(pinned.stops.map((s) => s.value)), [0, 100], 'fixedMax pins the top');
+
+    const div = P.choroplethScale({ mode: 'diverging', negColor: '#00f', posColor: '#f00' }, { a: -30, b: 12 });
+    assert.equal(div.mode, 'diverging');
+    assert.deepEqual(plain(div.stops.map((s) => s.value)), [-30, 0, 30]);
+
+    const legend = P.buildChoroplethLegend({ title: 'mentions', stops: seq.stops });
+    assert.equal(legend.className, 'iwac-vis-map-legend');
+    assert.equal(legend.children[0].textContent, 'mentions');
+    assert.match(legend.children[1].style.background, /^linear-gradient\(to right, .* 0%, .* 100%\)$/);
+    assert.deepEqual(legend.children[2].children.map((c) => c.textContent), ['0', '40']);
+
+    const divLegend = P.buildChoroplethLegend({ stops: div.stops });
+    assert.deepEqual(divLegend.children[1].children.map((c) => c.textContent), ['\u221230', '0', '+30'],
+        'a diverging scale is labelled from minus through zero to plus');
+
+    const classed = P.buildChoroplethLegend({ title: 'Quantile', items: [
+        { color: '#a', label: '1–4' }, { color: '#b', label: '5–20' },
+    ] });
+    assert.equal(classed.children.length, 3);
+    assert.equal(classed.children[1].children[0].style.background, '#a');
+    assert.equal(classed.children[2].children[1].textContent, '5–20');
 });

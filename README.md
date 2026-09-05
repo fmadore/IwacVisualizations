@@ -45,6 +45,20 @@ Every registered block is wired end-to-end with live data — twenty-one page bl
 
 Current version: see `config/module.ini` (`version = …`). This value drives the `?v=` query string Omeka appends to every asset URL, so bumping it is the canonical way to bust the browser cache after a source change.
 
+### v1.61.0 — the data back to the reader: every chart as a table, every choropleth with a scale
+
+The third wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S3, E17, M11, M18). A chart's numbers reached a reader in two forms until now: the pixels, and the one-sentence description a screen reader gets instead of ECharts' own recitation. Nothing on the site let anyone read the figures, sort them, or take them into a spreadsheet.
+
+**"View as table" and "Download CSV" on every panel.** The panel toolbar gained two buttons beside the PNG export. `P.optionToRows` (new `shared/chart-rows.js`) reads the option a chart was painted with back into rows — a category axis with N series, the heatmap matrix, name/value series with nested trees flattened, scatter points — and returns nothing for the shapes that have no honest table (graphs, custom series). The table opens under the chart as a disclosure (`aria-expanded`, `aria-controls`), follows every repaint (a facet change under an open table changes the table), and is capped at 500 rows with a note pointing at the CSV, which carries all of them. The CSV is RFC 4180 with a UTF-8 BOM and raw numbers; a cell that begins like a formula is neutralised. Panels opt out with `data-iwac-no-table="1"`. `dashboard-core` keeps the last data-bearing option by reference and announces each repaint on the host.
+
+**Maps have a route that needs no pointer.** The collection, places, person and spatial maps register their place lists with `P.setPanelRows`, so the same two buttons list the places with their counts — and, where a place has an authority record, a link to it. The rows follow the map's own facets (the collection map's "By country" and type, the places map's layer, the person map's role, the spatial map's selection and country focus). The sources map already carried a table; the laïcité and scary-terms maps keep their ranked lists.
+
+**Choropleths say what their colours mean.** The shared choropleth normalised to `[0, max]` or `±maxAbs` and never said so, so the same shade meant 4,000 mentions on one map and 40 on the next. `P.choroplethScale` is now the one place the fill expression and the legend read from; `P.buildChoroplethLegend` draws it — a gradient bar with the extremes labelled, zero marked on a diverging scale, or one swatch per class — as a MapLibre control at bottom-left that survives a theme swap and repaints in the new theme's colours. The spatial map's admin choropleth uses the same builder for its classed legend.
+
+**PNG exports at 3×.** The cheapest print-quality win a canvas renderer offers: a 900-pixel panel comes out at 2,700, enough for a half-page figure at 300 dpi. The composited title and footer scale with it.
+
+**Tests.** `tests/js/chart-rows.test.js` pins each option shape and the CSV; `lifecycle.test.js` covers the kept option and the repaint event; `controls.test.js` covers the scale and both legend forms. 134 JS tests, 31 Playwright contracts, 128 PHP checks.
+
 ### v1.60.0 — the reactive core: controls that keep your focus, views with an address
 
 The second wave of the 2026-09-05 audit ([REFACTORING.md](REFACTORING.md), Tier 8: S11, S1, S2, S7, S8, E3, E5, S25, and the `setActive` half of S19). Where v1.59.0 made the charts render honestly, this release makes the controls around them behave like an instrument rather than a form that reloads.
@@ -1398,7 +1412,7 @@ It runs monthly on a schedule (a red run is the notification) and on pull reques
 
 If you use this module in research, cite it via the `Cite this repository` button on GitHub, or from [CITATION.cff](CITATION.cff) directly.
 
-> Madore, Frédérick. *IWAC Visualizations* (version 1.60.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
+> Madore, Frédérick. *IWAC Visualizations* (version 1.61.0). University of Bayreuth, 2026. <https://github.com/fmadore/IwacVisualizations>
 
 ## License
 

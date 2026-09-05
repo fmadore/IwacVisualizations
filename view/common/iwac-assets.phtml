@@ -226,6 +226,9 @@ $scripts[] = $this->assetUrl('js/charts/shared/panels-controls.min.js', $module)
 $scripts[] = $this->assetUrl('js/charts/shared/store.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panels-map.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panels-boot.min.js', $module);
+// chart-rows.js: a chart's option read back as rows, for the toolbar's
+// "View as table" / "Download CSV" (v1.61.0). Pure; before panel-toolbar.
+$scripts[] = $this->assetUrl('js/charts/shared/chart-rows.min.js', $module);
 $scripts[] = $this->assetUrl('js/charts/shared/panel-toolbar.min.js', $module);
 // embed.js: adds the per-panel "copy embed code" buttons on the live site and
 // drives single-panel selection inside an /iwac-embed/:block/:panel frame. It

@@ -71,9 +71,43 @@
             onChange: function (evt) {
                 state.layer = evt.subFacet || LAYERS.BOTH;
                 applyVisibility();
+                if (P.panelRowsChanged) P.panelRowsChanged(panelEl.panel);
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
+
+        // The pins and bubbles as rows, following the layer facet — the
+        // toolbar's table / CSV, and the pointer-free route to the places.
+        // Authority places link to their item page; mentions have none.
+        if (P.setPanelRows) {
+            P.setPanelRows(panelEl.panel, function () {
+                var siteBase = ctx && ctx.siteBase ? ctx.siteBase : '';
+                var rows = [];
+                if (state.layer !== LAYERS.MENTIONS) {
+                    places.forEach(function (p) {
+                        rows.push([
+                            p.o_id && siteBase ? { text: p.title, href: siteBase + '/item/' + p.o_id } : p.title,
+                            P.t('Authority pins'),
+                            p.frequency || 0
+                        ]);
+                    });
+                }
+                if (state.layer !== LAYERS.AUTHORITY) {
+                    mentions.forEach(function (m) {
+                        rows.push([m.name, P.t('Mentions'), m.count || 0]);
+                    });
+                }
+                rows.sort(function (a, b) { return b[2] - a[2]; });
+                return rows.length ? {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Layer'), numeric: false },
+                        { label: P.t('Mentions'), numeric: true }
+                    ],
+                    rows: rows
+                } : null;
+            });
+        }
 
         var mapContainer = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(mapContainer);

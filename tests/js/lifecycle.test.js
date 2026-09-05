@@ -83,6 +83,7 @@ function loadCore() {
             },
             addEventListener() {},
         },
+        CustomEvent: class { constructor(type, init) { this.type = type; this.bubbles = !!(init && init.bubbles); } },
     };
     context.window.document = context.document;
     vm.createContext(context);
@@ -259,4 +260,31 @@ test('repaint on a disposed chart is a no-op', () => {
     instance.dispose();
     assert.equal(ns.repaint(instance, { series: [] }), false);
     assert.equal(instance.calls.length, 0);
+});
+
+/* ------------------------------------------------------------------ */
+/*  The option behind the table                                        */
+/* ------------------------------------------------------------------ */
+
+test('the last data-bearing option is kept for the table, and each repaint is announced', () => {
+    const { ns } = loadCore();
+    const events = [];
+    const el = element({ dispatchEvent(ev) { events.push([ev.type, ev.bubbles]); } });
+    const instance = ns.registerChart(el, (host, chart) => {
+        chart.setOption({ title: { text: 'No data' } }, true);
+    });
+    const empty = ns.lastOption(el);
+    assert.equal(empty.title.text, 'No data', 'a notMerge paint is recorded even without series');
+
+    const full = { xAxis: { type: 'category', data: ['a'] }, series: [{ data: [1] }] };
+    instance.setOption(full, { replaceMerge: ['series'] });
+    assert.equal(ns.lastOption(el), full, 'kept by reference, never cloned');
+
+    instance.setOption({ legend: { show: false } });
+    assert.equal(ns.lastOption(el), full, 'a merge without data does not replace it');
+
+    assert.deepEqual(events, [['iwac:repaint', true], ['iwac:repaint', true], ['iwac:repaint', true]]);
+
+    instance.dispose();
+    assert.equal(ns.lastOption(el), null);
 });

@@ -106,6 +106,7 @@
         typeSub[ALL_KEY] = P.t('All types');
         TYPE_KEYS.forEach(function (k) { typeSub[k] = P.t('item_type_' + k); });
 
+        var view = { facet: 'places', type: ALL_KEY };
         var facetBar = P.buildFacetButtons({
             facets: [
                 { key: 'places', label: P.t('Places') },
@@ -113,9 +114,12 @@
             ],
             activeKey: 'places',
             onChange: function (evt) {
+                view.facet = evt.facet;
+                view.type = evt.subFacet || ALL_KEY;
+                if (P.panelRowsChanged) P.panelRowsChanged(panelEl.panel);
                 if (!choropleth) return;
                 if (evt.facet === 'countries') {
-                    choropleth.updateCounts(countryCountsFor(evt.subFacet || ALL_KEY));
+                    choropleth.updateCounts(countryCountsFor(view.type));
                     choropleth.setMode('choropleth');
                 } else {
                     choropleth.setMode('bubbles');
@@ -123,6 +127,43 @@
             }
         });
         panelEl.panel.insertBefore(facetBar.root, panelEl.chart);
+
+        // What the map shows, as rows: the places with their counts, or —
+        // under "By country" — the per-country counts for the chosen type.
+        // The toolbar's table and CSV read this; it is also the only route
+        // to the map's data that needs no pointer.
+        if (P.setPanelRows) {
+            P.setPanelRows(panelEl.panel, function () {
+                if (view.facet === 'countries') {
+                    // Straight from country_counts, not from the fill's
+                    // counts: withAliases() adds a twin spelling of each
+                    // name for the polygon join, and a table lists a
+                    // country once.
+                    var counts = {};
+                    Object.keys(countryData).forEach(function (c) {
+                        var rec = countryData[c] || {};
+                        var v = view.type === ALL_KEY
+                            ? (rec.total || 0)
+                            : ((rec.by_type && rec.by_type[view.type]) || 0);
+                        if (v > 0) counts[c] = v;
+                    });
+                    var names = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+                    return names.length ? {
+                        columns: [{ label: P.t('Country'), numeric: false }, { label: P.t('Items'), numeric: true }],
+                        rows: names.map(function (c) { return [c, counts[c]]; })
+                    } : null;
+                }
+                var ranked = locations.slice().sort(function (a, b) { return (b.count || 0) - (a.count || 0); });
+                return ranked.length ? {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Country'), numeric: false },
+                        { label: P.t('Mentions'), numeric: true }
+                    ],
+                    rows: ranked.map(function (l) { return [l.name, l.country || '', l.count || 0]; })
+                } : null;
+            });
+        }
 
         var mapContainer = P.el('div', 'iwac-vis-map');
         panelEl.chart.appendChild(mapContainer);

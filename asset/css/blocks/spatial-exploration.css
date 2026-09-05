@@ -210,41 +210,17 @@
     color: var(--muted, #66696e);
 }
 
+/*  The admin choropleth's classed legend: the shared `.iwac-vis-map-legend`
+ *  (iwac-maplibre.css) built by P.buildChoroplethLegend, in a wrapper that
+ *  pins it to the map's lower-right so it does not collide with the
+ *  country choropleth's own bottom-left legend. */
 .iwac-vis-spatial-admin-legend {
     position: absolute;
     right: var(--space-3, 0.75rem);
     bottom: var(--space-8, 2rem);
     z-index: 2;
-    min-width: 9rem;
     max-width: min(13rem, calc(100% - 1.5rem));
-    padding: var(--space-2, 0.5rem);
-    background: var(--surface, #fdfcfb);
-    border: 1px solid var(--border, #ced1d6);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(9, 11, 15, 0.12), 0 1px 2px -1px rgba(20, 22, 27, 0.06));
-    font-size: var(--text-xs, 0.8125rem);
-    color: var(--ink, #13161c);
     pointer-events: none;
-}
-
-.iwac-vis-spatial-admin-legend__title {
-    margin-bottom: var(--space-1, 0.25rem);
-    font-weight: 600;
-    color: var(--ink-strong, #05070c);
-}
-
-.iwac-vis-spatial-admin-legend__row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1, 0.25rem);
-    line-height: 1.35;
-}
-
-.iwac-vis-spatial-admin-legend__swatch {
-    width: 0.9rem;
-    height: 0.9rem;
-    flex: 0 0 auto;
-    border: 1px solid var(--border-light, #e2e5e8);
 }
 
 /* Hover-popup "click for more" hint line. */

@@ -215,6 +215,29 @@
             });
         }
 
+        // The active role's places as rows — the toolbar's table / CSV and
+        // the pointer-free route to them. Places with an authority record
+        // link to it.
+        if (P.setPanelRows) {
+            P.setPanelRows(panelEl.panel, function () {
+                var ranked = currentLocations.slice().sort(function (a, b) {
+                    return (b.count || 0) - (a.count || 0);
+                });
+                return ranked.length ? {
+                    columns: [
+                        { label: P.t('Place'), numeric: false },
+                        { label: P.t('Mentions'), numeric: true }
+                    ],
+                    rows: ranked.map(function (loc) {
+                        return [
+                            loc.o_id && siteBase ? { text: loc.name, href: siteBase + '/item/' + loc.o_id } : loc.name,
+                            loc.count || 0
+                        ];
+                    })
+                } : null;
+            });
+        }
+
         facet.subscribe(function () {
             currentLocations = byRole[facet.role] || [];
             if (mapInstance) {
@@ -223,6 +246,7 @@
             }
             // Mirror the role-faceted counts into the choropleth fill.
             if (choropleth) choropleth.updateCounts(getCountryCounts(facet.role));
+            if (P.panelRowsChanged) P.panelRowsChanged(panelEl.panel);
         });
     }
 

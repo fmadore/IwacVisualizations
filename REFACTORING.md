@@ -1240,6 +1240,32 @@ contracts, 128 PHP checks, every `npm run lint:*` gate, and a real-DOM
 smoke run of both controls rows (36 assertions on focus survival, in-place
 repopulation, hidden toggles and the URL round-trip).
 
+### Implemented in v1.61.0 (wave 3)
+
+S3, E17, M11 and M18 are done and marked `[x]`. Two landed differently from
+how they were written up:
+
+- **S3** — the in-page table is plain markup in `panel-toolbar.js`, not
+  `P.buildTable`: that builder is opt-in per block (it needs
+  `pagination.js` and ships the card layout), and the table has to work on
+  every panel of every block. It is capped at 500 rows with a note that
+  points at the CSV, which is uncapped. The option is kept by reference in
+  `dashboard-core` (`ns.lastOption`) when a `setOption` carries series data
+  — never through `getOption()` — and a repaint is announced as an
+  `iwac:repaint` event on the host so an open table follows a facet change.
+- **M18** — no `<details>` list was added to the four maps. They register
+  their place rows with `P.setPanelRows` instead, so the toolbar's table and
+  CSV (S3) are the keyboard route: the same two buttons on every panel,
+  with links to the places' authority records where they exist. The
+  sources map already had a table and keeps it; laïcité and scary-terms
+  keep their ranked lists.
+
+Also: **M11**'s legend is a MapLibre control at bottom-left rather than an
+overlay in the panel, so it sits in the control layout and survives a
+style swap; the spatial map's admin legend now builds through the same
+`P.buildChoroplethLegend`. **E17** is the 3× export only — the SVG path
+still needs the SVG renderer (E13).
+
 ### The numbers that frame this tier
 
 | Measure | Value | How |
@@ -1476,7 +1502,7 @@ non-text content, and the thing a historian citing a figure actually needs
       rich-text *label* formatters, not HTML. `C.itemTooltip(title, lines)` is
       a nicety (≥ 15 copies of the `<strong>` + `<br>` shape;
       `dot(color)` at `hbar.js:666` duplicates `p.marker`).
-- [ ] **E17 (Low, M) — PNG export is raster-only.** `panel-toolbar.js:55-60`
+- [x] **E17 (Low, M) — PNG export is raster-only.** `panel-toolbar.js:55-60`
       (`pixelRatio: 2`, `excludeComponents: ['toolbox']` is moot),
       `panels-boot.js:353-357`. `getSvgDataURL` needs an SVG-renderer
       instance (E13). Cheapest print win: `pixelRatio: 3`.
@@ -1579,7 +1605,7 @@ non-text content, and the thing a historian citing a figure actually needs
       under the big one and are never hit-tested. One
       `P.countRadius(key, max, minPx, maxPx)` on sqrt + `circle-sort-key`
       big-first.
-- [ ] **M11 (Med, M) — Choropleths have no legend.** `choropleth.js` normalises
+- [x] **M11 (Med, M) — Choropleths have no legend.** `choropleth.js` normalises
       to `[0, max]` / `±maxAbs` (`:136-172`) and never says so;
       `spatial-exploration/map.js:142-168, 468-487` has a private legend for
       its admin mode. `P.buildChoroplethLegend(stops, domain)` shared by both.
@@ -1635,7 +1661,7 @@ non-text content, and the thing a historian citing a figure actually needs
 - [x] **M17 (Low, S)** — `addSource` without a `getSource` guard in
       `laicite/map.js:163` and `scary-terms/map.js:109` (the other ten guard);
       harmless today, the first landmine for M13.
-- [ ] **M18 (Low, M)** — no keyboard / non-pointer route to place data on the
+- [x] **M18 (Low, M)** — no keyboard / non-pointer route to place data on the
       collection, sources, places, person and spatial maps; laïcité, scary and
       keywords-attention already ship a `<details>` ranked list or slider —
       reuse it.
@@ -1714,7 +1740,7 @@ The inventory this section rests on — sixteen mechanisms, none shared:
       pre-set — no PHP change. Add "Copy link to this view" beside the
       per-panel "Copy embed code" (`embed.js:176-200`; `topic-explorer.js:
       669-684` does it by hand).
-- [ ] **S3 (High, M) — No chart offers its data as a table or CSV.** ✓
+- [x] **S3 (High, M) — No chart offers its data as a table or CSV.** ✓
       `panel-toolbar.js:383-409` exports PNG only; `dashboard-core.js:110-141`
       replaces the aria description with one sentence — by design the only
       thing assistive tech gets. `P.optionToRows(option)` (~60 lines: category
@@ -2336,8 +2362,8 @@ The inventory this section rests on — sixteen mechanisms, none shared:
    v1.60.0 minus S4:** store, URL state, focus-safe controls, the two
    accessible primitives, shape-aware repaints, S25's unit tests. S4 (the
    linked country facet) is next, on top of the store.
-3. **Data back to the reader (S3, E17, M11, M18):** table/CSV toolbar,
-   choropleth legend, keyboard routes.
+3. **Data back to the reader (S3, E17, M11, M18) — shipped as v1.61.0:**
+   table/CSV toolbar, choropleth legend, keyboard routes.
 4. **Build (B1 step 1 → B2 eslint → B1 step 2 + ECharts self-host):** the
    ROADMAP 5.4 decision is the owner's; steps 1 and eslint are independent
    of it.
